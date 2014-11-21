@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D746CBE7-7787-47FC-B773-F089A44DF8C9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Cinteros.Xrm.FetchXmlBuilder</RootNamespace>
+    <AssemblyName>Cinteros.Xrm.FetchXmlBuilder</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="McTools.Xrm.Connection">
+      <HintPath>..\..\..\TFS\Cinteros Utils\lib\Javista\McTools.Xrm.Connection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(TFSroot)Cinteros Utils\lib\Microsoft\Crm6\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Client, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(TFSroot)Cinteros Utils\lib\Microsoft\Crm6\Microsoft.Xrm.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Sdk">
+      <HintPath>$(TFSroot)Cinteros Utils\lib\Microsoft\Crm6\Microsoft.Xrm.Sdk.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="XrmToolBox, Version=1.2014.10.15, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(TFSroot)Cinteros Utils\lib\Javista\XrmToolBox.exe</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppCode\AttributeItem.cs" />
+    <Compile Include="AppCode\Clipboard.cs" />
+    <Compile Include="AppCode\EntityItem.cs" />
+    <Compile Include="AppCode\FetchNodeCapabilities.cs" />
+    <Compile Include="AppCode\EntityRelationship.cs" />
+    <Compile Include="AppCode\OperatorItem.cs" />
+    <Compile Include="AppCode\TreeNodeHelper.cs" />
+    <Compile Include="XMLViewer\CharacterEncoder.cs" />
+    <Compile Include="Controls\conditionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\conditionControl.Designer.cs">
+      <DependentUpon>conditionControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\attributeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\attributeControl.Designer.cs">
+      <DependentUpon>attributeControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\valueControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\valueControl.Designer.cs">
+      <DependentUpon>valueControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\filterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\filterControl.Designer.cs">
+      <DependentUpon>filterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\linkEntityControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\linkEntityControl.Designer.cs">
+      <DependentUpon>linkEntityControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\entityControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\entityControl.Designer.cs">
+      <DependentUpon>entityControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\fetchControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\fetchControl.Designer.cs">
+      <DependentUpon>fetchControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="XMLViewer\XMLViewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="XMLViewer\XMLViewerSettings.cs" />
+    <Compile Include="Forms\AddXmlForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AddXmlForm.designer.cs">
+      <DependentUpon>AddXmlForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\XmlContentDisplayDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\XmlContentDisplayDialog.designer.cs">
+      <DependentUpon>XmlContentDisplayDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FetchXmlBuilder.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FetchXmlBuilder.Designer.cs">
+      <DependentUpon>FetchXmlBuilder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\conditionControl.resx">
+      <DependentUpon>conditionControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\attributeControl.resx">
+      <DependentUpon>attributeControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\valueControl.resx">
+      <DependentUpon>valueControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\filterControl.resx">
+      <DependentUpon>filterControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\linkEntityControl.resx">
+      <DependentUpon>linkEntityControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\entityControl.resx">
+      <DependentUpon>entityControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\fetchControl.resx">
+      <DependentUpon>fetchControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FetchXmlBuilder.resx">
+      <DependentUpon>FetchXmlBuilder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AddXmlForm.resx">
+      <DependentUpon>AddXmlForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\XmlContentDisplayDialog.resx">
+      <DependentUpon>XmlContentDisplayDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XmlEditorUtils\XmlEditorUtils.csproj">
+      <Project>{9fc7bdf7-321c-4b96-9b70-d75a16bd7685}</Project>
+      <Name>XmlEditorUtils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\fetch.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
