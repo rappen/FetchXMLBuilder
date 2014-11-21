@@ -37,6 +37,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonPaste = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonView = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonValidate = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonExecute = new System.Windows.Forms.ToolStripButton();
@@ -64,7 +65,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripButtonView = new System.Windows.Forms.ToolStripButton();
             this.toolStripMain.SuspendLayout();
             this.gbProperties.SuspendLayout();
             this.toolStripItem.SuspendLayout();
@@ -145,6 +145,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripButtonPaste.ToolTipText = "Paste Fetch XML from any source";
             this.toolStripButtonPaste.Click += new System.EventHandler(this.toolStripButtonPaste_Click);
             // 
+            // toolStripButtonView
+            // 
+            this.toolStripButtonView.Enabled = false;
+            this.toolStripButtonView.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonView.Image")));
+            this.toolStripButtonView.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonView.Name = "toolStripButtonView";
+            this.toolStripButtonView.Size = new System.Drawing.Size(83, 22);
+            this.toolStripButtonView.Text = "Show XML";
+            this.toolStripButtonView.Click += new System.EventHandler(this.toolStripButtonView_Click);
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
@@ -211,7 +221,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.gbProperties.Size = new System.Drawing.Size(490, 599);
             this.gbProperties.TabIndex = 25;
             this.gbProperties.TabStop = false;
-            this.gbProperties.Text = "Properties";
+            this.gbProperties.Text = "Fetch XML node attributes";
             // 
             // toolStripItem
             // 
@@ -260,7 +270,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.gbSiteMap.Size = new System.Drawing.Size(394, 599);
             this.gbSiteMap.TabIndex = 24;
             this.gbSiteMap.TabStop = false;
-            this.gbSiteMap.Text = "ShuffleDefinition";
+            this.gbSiteMap.Text = "Fetch XML outline";
             // 
             // chkFriendlyNames
             // 
@@ -413,16 +423,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.pasteToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.pasteToolStripMenuItem.Tag = "Paste";
             this.pasteToolStripMenuItem.Text = "Paste";
-            // 
-            // toolStripButtonView
-            // 
-            this.toolStripButtonView.Enabled = false;
-            this.toolStripButtonView.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonView.Image")));
-            this.toolStripButtonView.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonView.Name = "toolStripButtonView";
-            this.toolStripButtonView.Size = new System.Drawing.Size(83, 22);
-            this.toolStripButtonView.Text = "Show XML";
-            this.toolStripButtonView.Click += new System.EventHandler(this.toolStripButtonView_Click);
             // 
             // FetchXmlBuilder
             // 
