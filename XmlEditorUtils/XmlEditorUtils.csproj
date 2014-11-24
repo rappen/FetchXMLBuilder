@@ -36,12 +36,16 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="XrmToolBox">
+      <HintPath>..\..\..\TFS\Cinteros Utils\lib\Javista\XrmToolBox.exe</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControlUtils.cs" />
@@ -50,6 +54,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveEventArgs.cs" />
     <Compile Include="TreeNodeCapabilities.cs" />
+    <Compile Include="XMLViewer\CharacterEncoder.cs" />
+    <Compile Include="XMLViewer\XMLViewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="XMLViewer\XMLViewerSettings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -223,7 +223,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void toolStripButtonMoveDown_Click(object sender, EventArgs e)
         {
-            toolStripButtonMoveDown.Enabled = false;
+            moveDownToolStripMenuItem.Enabled = false;
             TreeNode tnmNode = tvFetch.SelectedNode;
             TreeNode tnmNextNode = tnmNode.NextNode;
             if (tnmNextNode != null)
@@ -240,12 +240,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tvFetch.SelectedNode = tnmNode;
                 }
             }
-            toolStripButtonMoveDown.Enabled = true;
+            moveDownToolStripMenuItem.Enabled = true;
         }
 
         private void toolStripButtonMoveUp_Click(object sender, EventArgs e)
         {
-            toolStripButtonMoveUp.Enabled = false;
+            moveUpToolStripMenuItem.Enabled = false;
             TreeNode tnmNode = tvFetch.SelectedNode;
             TreeNode tnmPreviousNode = tnmNode.PrevNode;
             if (tnmPreviousNode != null)
@@ -262,12 +262,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tvFetch.SelectedNode = tnmNode;
                 }
             }
-            toolStripButtonMoveUp.Enabled = true;
-        }
-
-        private void tsbItemSave_Click(object sender, EventArgs e)
-        {
-            HandleControlSaved();
+            moveUpToolStripMenuItem.Enabled = true;
         }
 
         private void chkTechNames_CheckedChanged(object sender, EventArgs e)
@@ -388,10 +383,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void ManageMenuDisplay()
         {
             TreeNode selectedNode = tvFetch.SelectedNode;
-            tsbItemSave.Enabled = selectedNode != null;
-            toolStripButtonMoveUp.Enabled = selectedNode != null && selectedNode.Parent != null &&
+            moveUpToolStripMenuItem.Enabled = selectedNode != null && selectedNode.Parent != null &&
                                             selectedNode.Index != 0;
-            toolStripButtonMoveDown.Enabled = selectedNode != null && selectedNode.Parent != null &&
+            moveDownToolStripMenuItem.Enabled = selectedNode != null && selectedNode.Parent != null &&
                                               selectedNode.Index != selectedNode.Parent.Nodes.Count - 1;
         }
 
@@ -622,7 +616,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 default:
                     {
                         panelContainer.Controls.Clear();
-                        tsbItemSave.Visible = false;
                     }
                     break;
             }
@@ -633,7 +626,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 //ctrl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
                 ctrl.Dock = DockStyle.Fill;
                 if (existingControl != null) panelContainer.Controls.Remove(existingControl);
-                tsbItemSave.Visible = true;
             }
             ManageMenuDisplay();
         }
@@ -847,12 +839,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 }
             }
             return attributeName;
-        }
-
-        private void HandleControlSaved()
-        {
-            ((IDefinitionSavable)panelContainer.Controls[0]).Save();
-            var nodeAttributesCollection = (Dictionary<string, string>)tvFetch.SelectedNode.Tag;
         }
 
         private string GetTreeChecksum(TreeNode node)

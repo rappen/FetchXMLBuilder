@@ -78,7 +78,6 @@
     <Compile Include="Controls\orderControl.Designer.cs">
       <DependentUpon>orderControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="XMLViewer\CharacterEncoder.cs" />
     <Compile Include="Controls\conditionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -121,10 +120,6 @@
     <Compile Include="Controls\fetchControl.Designer.cs">
       <DependentUpon>fetchControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="XMLViewer\XMLViewer.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="XMLViewer\XMLViewerSettings.cs" />
     <Compile Include="Forms\XmlContentDisplayDialog.cs">
       <SubType>Form</SubType>
     </Compile>

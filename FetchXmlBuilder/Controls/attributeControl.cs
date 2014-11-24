@@ -104,10 +104,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             if (controlsCheckSum != ControlUtils.ControlsChecksum(this.Controls))
             {
-                if (MessageBox.Show("Save changes?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    Save();
-                }
+                Save();
             }
         }
 
