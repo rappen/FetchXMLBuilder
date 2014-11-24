@@ -72,6 +72,12 @@
     <Compile Include="AppCode\EntityRelationship.cs" />
     <Compile Include="AppCode\OperatorItem.cs" />
     <Compile Include="AppCode\TreeNodeHelper.cs" />
+    <Compile Include="Controls\orderControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\orderControl.Designer.cs">
+      <DependentUpon>orderControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="XMLViewer\CharacterEncoder.cs" />
     <Compile Include="Controls\conditionControl.cs">
       <SubType>UserControl</SubType>
@@ -145,6 +151,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\orderControl.resx">
+      <DependentUpon>orderControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\conditionControl.resx">
       <DependentUpon>conditionControl.cs</DependentUpon>
     </EmbeddedResource>

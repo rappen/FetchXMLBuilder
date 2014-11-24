@@ -591,6 +591,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     ctrl = new linkEntityControl(node, this);
                     break;
                 case "attribute":
+                case "order":
                     if (node.Parent != null)
                     {
                         switch (node.Parent.Name)
@@ -611,7 +612,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                                 {
                                     attributes = entities[entityName].Attributes;
                                 }
-                                ctrl = new attributeControl(node, attributes, this);
+                                if (node.Name == "attribute")
+                                {
+                                    ctrl = new attributeControl(node, attributes, this);
+                                }
+                                else if (node.Name == "order")
+                                {
+                                    ctrl = new orderControl(node, attributes, this);
+                                }
                                 break;
                         }
                     }

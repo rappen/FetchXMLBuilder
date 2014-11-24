@@ -75,6 +75,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     new Dictionary<string, string>();
             var agg = GetAttributeFromNode(node, "aggregate");
             var name = GetAttributeFromNode(node, "name");
+            var alias = GetAttributeFromNode(node, "alias");
             switch (node.Name)
             {
                 case "fetch":
@@ -86,7 +87,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case "entity":
                 case "link-entity":
                     text += " " + FetchXmlBuilder.GetEntityDisplayName(name);
-                    var alias = GetAttributeFromNode(node, "alias");
                     if (!string.IsNullOrEmpty(alias))
                     {
                         text += " (" + alias + ")";
@@ -122,29 +122,56 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
                     break;
                 case "condition":
-                    var ent = GetAttributeFromNode(node, "entityname");
-                    var attr = GetAttributeFromNode(node, "attribute");
-                    var oper = GetAttributeFromNode(node, "operator");
-                    var val = GetAttributeFromNode(node, "value");
-                    if (node.Parent != null && node.Parent.Parent != null)
                     {
-                        var parent = GetAttributeFromNode(node.Parent.Parent, "name");
-                        attr = FetchXmlBuilder.GetAttributeDisplayName(parent, attr);
+                        var ent = GetAttributeFromNode(node, "entityname");
+                        var attr = GetAttributeFromNode(node, "attribute");
+                        var oper = GetAttributeFromNode(node, "operator");
+                        var val = GetAttributeFromNode(node, "value");
+                        if (node.Parent != null && node.Parent.Parent != null)
+                        {
+                            var parent = GetAttributeFromNode(node.Parent.Parent, "name");
+                            attr = FetchXmlBuilder.GetAttributeDisplayName(parent, attr);
+                        }
+                        if (!string.IsNullOrEmpty(ent))
+                        {
+                            attr = ent + "." + attr;
+                        }
+                        if (oper.Contains("-x-"))
+                        {
+                            oper = oper.Replace("-x-", " " + val + " ");
+                            val = "";
+                        }
+                        text += (" " + attr + " " + oper + " " + val).TrimEnd();
                     }
-                    if (!string.IsNullOrEmpty(ent))
-                    {
-                        attr = ent + "." + attr;
-                    }
-                    if (oper.Contains("-x-"))
-                    {
-                        oper = oper.Replace("-x-", " " + val + " ");
-                        val = "";
-                    }
-                    text += (" " + attr + " " + oper + " " + val).TrimEnd();
                     break;
                 case "value":
                     var value = GetAttributeFromNode(node, "#text");
                     text += " " + value;
+                    break;
+                case "order":
+                    {
+                        var attr = GetAttributeFromNode(node, "attribute");
+                        var desc = GetAttributeFromNode(node, "descending");
+                        if (!string.IsNullOrEmpty(alias))
+                        {
+                            text += " " + alias;
+                        }
+                        else if (!string.IsNullOrEmpty(attr))
+                        {
+                            if (!string.IsNullOrEmpty(attr) && node.Parent != null)
+                            {
+                                var parent = GetAttributeFromNode(node.Parent, "name");
+                                attr = FetchXmlBuilder.GetAttributeDisplayName(parent, attr);
+                            }
+                            {
+                                text += " " + attr;
+                            }
+                        }
+                        if (desc == "true")
+                        {
+                            text += " Desc";
+                        }
+                    }
                     break;
             }
             if (FetchXmlBuilder.useFriendlyNames && !string.IsNullOrEmpty(text))
