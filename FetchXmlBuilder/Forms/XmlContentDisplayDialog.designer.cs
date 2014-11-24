@@ -29,36 +29,83 @@
         private void InitializeComponent()
         {
             CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings1 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.lblHeader = new System.Windows.Forms.Label();
+            this.panBottom = new System.Windows.Forms.Panel();
+            this.panOk = new System.Windows.Forms.Panel();
+            this.btnOk = new System.Windows.Forms.Button();
+            this.panCancel = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.txtXML = new CSRichTextBoxSyntaxHighlighting.XMLViewer();
-            this.panel1.SuspendLayout();
+            this.panBottom.SuspendLayout();
+            this.panOk.SuspendLayout();
+            this.panCancel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panel1
+            // panBottom
             // 
-            this.panel1.BackColor = System.Drawing.Color.White;
-            this.panel1.Controls.Add(this.lblHeader);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(809, 40);
-            this.panel1.TabIndex = 4;
+            this.panBottom.BackColor = System.Drawing.SystemColors.Control;
+            this.panBottom.Controls.Add(this.panOk);
+            this.panBottom.Controls.Add(this.panCancel);
+            this.panBottom.Controls.Add(this.button3);
+            this.panBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panBottom.Location = new System.Drawing.Point(0, 667);
+            this.panBottom.Name = "panBottom";
+            this.panBottom.Size = new System.Drawing.Size(809, 38);
+            this.panBottom.TabIndex = 4;
             // 
-            // lblHeader
+            // panOk
             // 
-            this.lblHeader.AutoSize = true;
-            this.lblHeader.Font = new System.Drawing.Font("Tahoma", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHeader.Location = new System.Drawing.Point(3, 9);
-            this.lblHeader.Name = "lblHeader";
-            this.lblHeader.Size = new System.Drawing.Size(97, 22);
-            this.lblHeader.TabIndex = 1;
-            this.lblHeader.Text = "XML Result";
+            this.panOk.Controls.Add(this.btnOk);
+            this.panOk.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panOk.Location = new System.Drawing.Point(627, 0);
+            this.panOk.Name = "panOk";
+            this.panOk.Size = new System.Drawing.Size(91, 38);
+            this.panOk.TabIndex = 4;
+            // 
+            // btnOk
+            // 
+            this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnOk.Location = new System.Drawing.Point(3, 8);
+            this.btnOk.Name = "btnOk";
+            this.btnOk.Size = new System.Drawing.Size(75, 23);
+            this.btnOk.TabIndex = 2;
+            this.btnOk.Text = "OK";
+            this.btnOk.UseVisualStyleBackColor = true;
+            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
+            // 
+            // panCancel
+            // 
+            this.panCancel.Controls.Add(this.button2);
+            this.panCancel.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panCancel.Location = new System.Drawing.Point(718, 0);
+            this.panCancel.Name = "panCancel";
+            this.panCancel.Size = new System.Drawing.Size(91, 38);
+            this.panCancel.TabIndex = 3;
+            // 
+            // button2
+            // 
+            this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button2.Location = new System.Drawing.Point(3, 8);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "Cancel";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(12, 8);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 2;
+            this.button3.Text = "Format XML";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // txtXML
             // 
             this.txtXML.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtXML.Location = new System.Drawing.Point(0, 40);
+            this.txtXML.Location = new System.Drawing.Point(0, 0);
             this.txtXML.Name = "txtXML";
             xmlViewerSettings1.AttributeKey = System.Drawing.Color.Red;
             xmlViewerSettings1.AttributeValue = System.Drawing.Color.Blue;
@@ -66,7 +113,7 @@
             xmlViewerSettings1.Tag = System.Drawing.Color.Blue;
             xmlViewerSettings1.Value = System.Drawing.Color.Black;
             this.txtXML.Settings = xmlViewerSettings1;
-            this.txtXML.Size = new System.Drawing.Size(809, 665);
+            this.txtXML.Size = new System.Drawing.Size(809, 667);
             this.txtXML.TabIndex = 6;
             this.txtXML.Text = "";
             // 
@@ -76,19 +123,24 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(809, 705);
             this.Controls.Add(this.txtXML);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panBottom);
             this.Name = "XmlContentDisplayDialog";
             this.ShowIcon = false;
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.panBottom.ResumeLayout(false);
+            this.panOk.ResumeLayout(false);
+            this.panCancel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label lblHeader;
+        private System.Windows.Forms.Panel panBottom;
         private CSRichTextBoxSyntaxHighlighting.XMLViewer txtXML;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Panel panOk;
+        private System.Windows.Forms.Button btnOk;
+        private System.Windows.Forms.Panel panCancel;
+        private System.Windows.Forms.Button button2;
     }
 }

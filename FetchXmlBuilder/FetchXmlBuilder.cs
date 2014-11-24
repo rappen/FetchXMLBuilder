@@ -161,19 +161,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
-        private void toolStripButtonPaste_Click(object sender, EventArgs e)
+        private void toolStripButtonView_Click(object sender, EventArgs e)
         {
-            if (!SaveIfChanged())
+            var xml = "";
+            if (tvFetch.Nodes.Count > 0)
             {
-                return;
+                var doc = GetFetchDocument();
+                xml = doc.OuterXml;
             }
-            var axForm = new AddXmlForm();
-            axForm.StartPosition = FormStartPosition.CenterParent;
-
-            if (axForm.ShowDialog() == DialogResult.OK)
+            var xcdDialog = new XmlContentDisplayDialog(xml, "Fetch XML", true);
+            xcdDialog.StartPosition = FormStartPosition.CenterParent;
+            if (xcdDialog.ShowDialog() == DialogResult.OK)
             {
                 EnableControls(false);
-                XmlNode resultNode = axForm.AddedXmlNode;
+                XmlNode resultNode = xcdDialog.result;
                 fetchDoc = new XmlDocument();
                 fetchDoc.LoadXml(resultNode.OuterXml);
                 treeChecksum = "";
@@ -183,33 +184,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     MessageBox.Show(this, "Invalid Xml: Definition XML root must be fetch!", "Error",
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-
                     toolStripButtonOpen.Enabled = true;
                 }
                 else
                 {
-                    //LoadUsedEntities();
                     fileName = "";
                     DisplayDefinition();
                     FetchChanged = true;
                     EnableControls(true);
                 }
-            }
-        }
-
-        private void toolStripButtonView_Click(object sender, EventArgs e)
-        {
-            var doc = GetFetchDocument();
-            var xcdDialog = new XmlContentDisplayDialog(doc.OuterXml, "Fetch XML");
-            xcdDialog.StartPosition = FormStartPosition.CenterParent;
-            xcdDialog.ShowDialog();
-        }
-
-        private void toolStripButtonValidate_Click(object sender, EventArgs e)
-        {
-            if (BuildAndValidateXml())
-            {
-                MessageBox.Show("Fetch validated ok!");
             }
         }
 
@@ -355,9 +338,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 toolStripButtonNew.Enabled = enabled;
                 toolStripButtonOpen.Enabled = enabled;
-                toolStripButtonPaste.Enabled = enabled;
-                toolStripButtonView.Enabled = enabled && tvFetch.Nodes.Count > 0;
-                toolStripButtonValidate.Enabled = enabled && tvFetch.Nodes.Count > 0;
+                toolStripButtonView.Enabled = enabled;
                 toolStripButtonExecute.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
                 toolStripButtonSave.Enabled = enabled && FetchChanged && !string.IsNullOrEmpty(fileName);
                 toolStripButtonSaveAs.Enabled = enabled;
@@ -417,7 +398,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private XmlDocument GetFetchDocument()
         {
             var doc = new XmlDocument();
-            //if (tvFetch.Nodes.Count > 0)
+            if (tvFetch.Nodes.Count > 0)
             {
                 XmlNode rootNode = doc.CreateElement("root");
                 doc.AppendChild(rootNode);
@@ -430,6 +411,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private bool BuildAndValidateXml(bool validate = true)
         {
+            if (tvFetch.Nodes.Count == 0)
+            {
+                return false;
+            }
             fetchDoc = GetFetchDocument();
             var result = "";
             if (validate)
@@ -944,7 +929,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         XmlDocument doc = new XmlDocument();
                         doc.LoadXml(completedargs.Result.ToString());
-                        var xcdDialog = new XmlContentDisplayDialog(doc.OuterXml, "Fetch XML result");
+                        var xcdDialog = new XmlContentDisplayDialog(doc.OuterXml, "Fetch XML result", false);
                         xcdDialog.StartPosition = FormStartPosition.CenterParent;
                         xcdDialog.ShowDialog();
                     }

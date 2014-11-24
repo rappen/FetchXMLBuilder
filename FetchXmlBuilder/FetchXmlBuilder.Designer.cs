@@ -36,10 +36,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonView = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButtonValidate = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonExecute = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
@@ -87,10 +85,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripSeparator4,
             this.toolStripButtonNew,
             this.toolStripButtonOpen,
-            this.toolStripButtonPaste,
             this.toolStripButtonView,
             this.toolStripSeparator2,
-            this.toolStripButtonValidate,
             this.toolStripButtonExecute,
             this.toolStripSeparator3,
             this.toolStripButtonSave,
@@ -135,42 +131,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripButtonOpen.ToolTipText = "Open Fetch XML file";
             this.toolStripButtonOpen.Click += new System.EventHandler(this.toolStripButtonOpen_Click);
             // 
-            // toolStripButtonPaste
-            // 
-            this.toolStripButtonPaste.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonPaste.Image")));
-            this.toolStripButtonPaste.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonPaste.Name = "toolStripButtonPaste";
-            this.toolStripButtonPaste.Size = new System.Drawing.Size(82, 22);
-            this.toolStripButtonPaste.Text = "Paste XML";
-            this.toolStripButtonPaste.ToolTipText = "Paste Fetch XML from any source";
-            this.toolStripButtonPaste.Click += new System.EventHandler(this.toolStripButtonPaste_Click);
-            // 
             // toolStripButtonView
             // 
-            this.toolStripButtonView.Enabled = false;
             this.toolStripButtonView.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonView.Image")));
             this.toolStripButtonView.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonView.Name = "toolStripButtonView";
-            this.toolStripButtonView.Size = new System.Drawing.Size(83, 22);
-            this.toolStripButtonView.Text = "Show XML";
+            this.toolStripButtonView.Size = new System.Drawing.Size(74, 22);
+            this.toolStripButtonView.Text = "Edit XML";
             this.toolStripButtonView.Click += new System.EventHandler(this.toolStripButtonView_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripButtonValidate
-            // 
-            this.toolStripButtonValidate.Enabled = false;
-            this.toolStripButtonValidate.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonValidate.Image")));
-            this.toolStripButtonValidate.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonValidate.Name = "toolStripButtonValidate";
-            this.toolStripButtonValidate.Size = new System.Drawing.Size(96, 22);
-            this.toolStripButtonValidate.Text = "Validate XML";
-            this.toolStripButtonValidate.ToolTipText = "Validate Fetch XML with fetch.xsd";
-            this.toolStripButtonValidate.Visible = false;
-            this.toolStripButtonValidate.Click += new System.EventHandler(this.toolStripButtonValidate_Click);
             // 
             // toolStripButtonExecute
             // 
@@ -470,7 +443,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.ToolStripButton toolStripButtonNew;
         internal System.Windows.Forms.ToolStripButton toolStripButtonOpen;
-        private System.Windows.Forms.ToolStripButton toolStripButtonValidate;
         internal System.Windows.Forms.ToolStripButton toolStripButtonSave;
         internal System.Windows.Forms.ContextMenuStrip nodeMenu;
         internal System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
@@ -482,7 +454,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dummyToolStripMenuItem;
         private System.Windows.Forms.CheckBox chkFriendlyNames;
-        private System.Windows.Forms.ToolStripButton toolStripButtonPaste;
         private System.Windows.Forms.ToolStripButton toolStripButtonExecute;
         internal System.Windows.Forms.ToolStripButton toolStripButtonSaveAs;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;

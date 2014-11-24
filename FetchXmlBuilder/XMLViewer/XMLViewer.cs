@@ -64,6 +64,10 @@ namespace CSRichTextBoxSyntaxHighlighting
         /// </param>
         public void Process(bool includeDeclaration)
         {
+            if (string.IsNullOrWhiteSpace(this.Text))
+            {
+                return;
+            }
             try
             {
                 // The Rtf contains 2 parts, header and content. The colortbl is a part of
