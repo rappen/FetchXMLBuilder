@@ -33,7 +33,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.label3 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.cmbAttribute = new System.Windows.Forms.ComboBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtAlias = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.cmbAggregate = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -98,15 +98,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbAttribute.TabIndex = 27;
             this.cmbAttribute.Tag = "name|true";
             // 
-            // textBox1
+            // txtAlias
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtAlias.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(191, 70);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(234, 20);
-            this.textBox1.TabIndex = 28;
-            this.textBox1.Tag = "alias";
+            this.txtAlias.Location = new System.Drawing.Point(191, 70);
+            this.txtAlias.Name = "txtAlias";
+            this.txtAlias.Size = new System.Drawing.Size(234, 20);
+            this.txtAlias.TabIndex = 28;
+            this.txtAlias.Tag = "alias";
             // 
             // label4
             // 
@@ -223,7 +223,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.label8.TabIndex = 36;
             this.label8.Text = "User time zone";
             // 
-            // entityAttributeControl
+            // attributeControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -236,13 +236,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Controls.Add(this.label5);
             this.Controls.Add(this.cmbAggregate);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtAlias);
             this.Controls.Add(this.cmbAttribute);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Name = "entityAttributeControl";
+            this.Name = "attributeControl";
             this.Size = new System.Drawing.Size(428, 317);
             this.Leave += new System.EventHandler(this.Control_Leave);
             this.ResumeLayout(false);
@@ -257,7 +257,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ComboBox cmbAttribute;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtAlias;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cmbAggregate;
         private System.Windows.Forms.Label label5;

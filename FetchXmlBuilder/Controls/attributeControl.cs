@@ -17,6 +17,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
     {
         private readonly Dictionary<string, string> collec;
         private string controlsCheckSum = "";
+        TreeNode node;
 
         #region Delegates
 
@@ -44,7 +45,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 collec = new Dictionary<string, string>();
             }
-
+            node = Node;
             PopulateControls(Node, attributes);
             ControlUtils.FillControls(collec, this.Controls);
             controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
@@ -75,14 +76,30 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             try
             {
-                Dictionary<string, string> collection = ControlUtils.GetAttributesCollection(this.Controls, true);
-                SendSaveMessage(collection);
+                if (ValidateForm())
+                {
+                    Dictionary<string, string> collection = ControlUtils.GetAttributesCollection(this.Controls, true);
+                    SendSaveMessage(collection);
+                    controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
+                }
             }
             catch (ArgumentNullException ex)
             {
                 MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
-            controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
+        }
+
+        private bool ValidateForm()
+        {
+            if (FetchXmlBuilder.IsFetchAggregate(node))
+            {
+                if (string.IsNullOrWhiteSpace(txtAlias.Text))
+                {
+                    MessageBox.Show("Alias mus be specified in aggregate queries", "Condition error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>

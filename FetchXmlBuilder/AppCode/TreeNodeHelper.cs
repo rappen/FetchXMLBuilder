@@ -83,6 +83,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     {
                         text += " count: " + attributes["count"];
                     }
+                    if (attributes.ContainsKey("aggregate") && attributes["aggregate"] == "true")
+                    {
+                        text += " aggregate";
+                    }
+                    if (attributes.ContainsKey("distinct") && attributes["distinct"] == "true")
+                    {
+                        text += " distinct";
+                    }
                     break;
                 case "entity":
                 case "link-entity":

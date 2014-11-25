@@ -15,6 +15,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             InitializeComponent();
             Text = string.IsNullOrEmpty(header) ? "FetchXmlBuilder" : header;
             panBottom.Visible = allowEdit;
+            if (xmlString.Length > 100000)
+            {
+                var dlgresult =MessageBox.Show("Huge result, this may take a while!\n" + xmlString.Length.ToString() + " characters in the XML document.\n\nTruncate XML?", "Huge result", 
+                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (dlgresult == DialogResult.Yes)
+                {
+                    xmlString = xmlString.Substring(0, 100000);
+                }
+                else if (dlgresult == DialogResult.Cancel)
+                {
+                    xmlString = "";
+                }
+            }
             txtXML.Text = xmlString;
             FormatXML();
         }

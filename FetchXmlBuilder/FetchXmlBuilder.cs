@@ -3,6 +3,7 @@ using Cinteros.Xrm.FetchXmlBuilder.Controls;
 using Cinteros.Xrm.FetchXmlBuilder.Forms;
 using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
@@ -12,9 +13,10 @@ using System.Configuration;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
-using XrmToolBox;
+using System.Xml.Linq;
 using XrmToolBox.Attributes;
 using Clipboard = Cinteros.Xrm.FetchXmlBuilder.AppCode.Clipboard;
 
@@ -198,7 +200,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void toolStripButtonExecute_Click(object sender, EventArgs e)
         {
-            ExecuteFetch();
+            FetchResults(((ToolStripItem)sender).Tag.ToString());
         }
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
@@ -885,7 +887,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return aggregate;
         }
 
-        private void ExecuteFetch()
+        private void FetchResults(string fetchType)
         {
             if (!BuildAndValidateXml(true))
             {
@@ -896,6 +898,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 MessageBox.Show("Please wait until current transaction is done.");
                 return;
             }
+
+            switch (fetchType)
+            {
+                case "FetchRequest":
+                    ExecuteFetch();
+                    break;
+                case "RetrieveMultiple":
+                    RetrieveMultiple();
+                    break;
+                default:
+                    MessageBox.Show("Invalid fetch method: " + fetchType, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
+            }
+        }
+
+        private void ExecuteFetch()
+        {
             working = true;
             WorkAsync("Executing FetchXML...",
                 (eventargs) =>
@@ -916,6 +935,34 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         XmlDocument doc = new XmlDocument();
                         doc.LoadXml(completedargs.Result.ToString());
                         var xcdDialog = new XmlContentDisplayDialog(doc.OuterXml, "Fetch XML result", false);
+                        xcdDialog.StartPosition = FormStartPosition.CenterParent;
+                        xcdDialog.ShowDialog();
+                    }
+                });
+        }
+
+        private void RetrieveMultiple()
+        {
+            working = true;
+            WorkAsync("Executing FetchXML...",
+                (eventargs) =>
+                {
+                    var fetchxml = GetFetchDocument().OuterXml;
+                    var resp = Service.RetrieveMultiple(new FetchExpression(fetchxml));
+                    var serialized = EntityCollectionSerializer.Serialize(resp);
+                    eventargs.Result = serialized.OuterXml;
+                },
+                (completedargs) =>
+                {
+                    working = false;
+                    if (completedargs.Error != null)
+                    {
+                        MessageBox.Show(completedargs.Error.Message);
+                    }
+                    else if (completedargs.Result is string)
+                    {
+                        var result = completedargs.Result.ToString();
+                        var xcdDialog = new XmlContentDisplayDialog(result, "Serialized FetchExpression result", false);
                         xcdDialog.StartPosition = FormStartPosition.CenterParent;
                         xcdDialog.ShowDialog();
                     }

@@ -186,7 +186,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 {
                     foreach (var attribute in FetchXmlBuilder.entities[linkentity].Attributes)
                     {
-                        if (attribute.IsPrimaryId == true || attribute.AttributeType == AttributeTypeCode.Lookup)
+                        if (attribute.IsPrimaryId == true ||
+                            attribute.AttributeType == AttributeTypeCode.Lookup ||
+                            attribute.AttributeType == AttributeTypeCode.Customer ||
+                            attribute.AttributeType == AttributeTypeCode.Owner)
                         {
                             cmbFrom.Items.Add(attribute.LogicalName);
                         }
@@ -201,7 +204,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 foreach (var attribute in FetchXmlBuilder.entities[parententity].Attributes)
                 {
-                    if (attribute.IsPrimaryId == true || attribute.AttributeType == AttributeTypeCode.Lookup || attribute.AttributeType == AttributeTypeCode.Customer)
+                    if (attribute.IsPrimaryId == true ||
+                        attribute.AttributeType == AttributeTypeCode.Lookup ||
+                        attribute.AttributeType == AttributeTypeCode.Customer ||
+                        attribute.AttributeType == AttributeTypeCode.Owner)
                     {
                         cmbTo.Items.Add(attribute.LogicalName);
                     }
@@ -221,17 +227,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     if (parent == om.ReferencedEntity)
                     {
                         cmbEntity.Text = om.ReferencingEntity;
+                        cmbFrom.Text = om.ReferencingAttribute;
+                        cmbTo.Text = om.ReferencedAttribute;
                     }
                     else if (parent == om.ReferencingEntity)
                     {
                         cmbEntity.Text = om.ReferencedEntity;
+                        cmbFrom.Text = om.ReferencedAttribute;
+                        cmbTo.Text = om.ReferencingAttribute;
                     }
                     else
                     {
                         MessageBox.Show("Not a valid relationship. Please enter entity and attributes manually.");
                     }
-                    cmbFrom.Text = om.ReferencedAttribute;
-                    cmbTo.Text = om.ReferencingAttribute;
                     chkIntersect.Checked = false;
                 }
                 else if (rel.Relationship is ManyToManyRelationshipMetadata)

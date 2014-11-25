@@ -179,7 +179,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     case AttributeTypeCode.PartyList:
                     case AttributeTypeCode.CalendarRules:
                     case AttributeTypeCode.ManagedProperty:
-                        error = "Unsupported condition attribute type: " + oper.ToString();
+                        error = "Unsupported condition attribute type: " + valueType;
                         break;
                 }
                 if (!string.IsNullOrWhiteSpace(error))

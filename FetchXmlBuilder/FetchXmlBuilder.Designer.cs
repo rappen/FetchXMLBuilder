@@ -38,7 +38,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonView = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButtonExecute = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSaveAs = new System.Windows.Forms.ToolStripButton();
@@ -60,6 +59,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripButtonExecute = new System.Windows.Forms.ToolStripDropDownButton();
+            this.fetchRequestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.retrieveMultipleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain.SuspendLayout();
             this.gbProperties.SuspendLayout();
             this.gbSiteMap.SuspendLayout();
@@ -139,17 +141,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripButtonExecute
-            // 
-            this.toolStripButtonExecute.Enabled = false;
-            this.toolStripButtonExecute.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonExecute.Image")));
-            this.toolStripButtonExecute.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonExecute.Name = "toolStripButtonExecute";
-            this.toolStripButtonExecute.Size = new System.Drawing.Size(99, 22);
-            this.toolStripButtonExecute.Text = "Execute Fetch";
-            this.toolStripButtonExecute.ToolTipText = "Execute Fetch XML to see the results";
-            this.toolStripButtonExecute.Click += new System.EventHandler(this.toolStripButtonExecute_Click);
             // 
             // toolStripSeparator3
             // 
@@ -339,6 +330,35 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.moveDownToolStripMenuItem.Text = "Move down";
             this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonMoveDown_Click);
             // 
+            // toolStripButtonExecute
+            // 
+            this.toolStripButtonExecute.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fetchRequestToolStripMenuItem,
+            this.retrieveMultipleToolStripMenuItem});
+            this.toolStripButtonExecute.Enabled = false;
+            this.toolStripButtonExecute.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonExecute.Image")));
+            this.toolStripButtonExecute.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonExecute.Name = "toolStripButtonExecute";
+            this.toolStripButtonExecute.Size = new System.Drawing.Size(108, 22);
+            this.toolStripButtonExecute.Text = "Execute Fetch";
+            this.toolStripButtonExecute.ToolTipText = "Execute Fetch XML to see the results";
+            // 
+            // fetchRequestToolStripMenuItem
+            // 
+            this.fetchRequestToolStripMenuItem.Name = "fetchRequestToolStripMenuItem";
+            this.fetchRequestToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.fetchRequestToolStripMenuItem.Tag = "FetchRequest";
+            this.fetchRequestToolStripMenuItem.Text = "FetchRequest";
+            this.fetchRequestToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonExecute_Click);
+            // 
+            // retrieveMultipleToolStripMenuItem
+            // 
+            this.retrieveMultipleToolStripMenuItem.Name = "retrieveMultipleToolStripMenuItem";
+            this.retrieveMultipleToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.retrieveMultipleToolStripMenuItem.Tag = "RetrieveMultiple";
+            this.retrieveMultipleToolStripMenuItem.Text = "RetrieveMultiple";
+            this.retrieveMultipleToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonExecute_Click);
+            // 
             // FetchXmlBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -388,7 +408,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dummyToolStripMenuItem;
         private System.Windows.Forms.CheckBox chkFriendlyNames;
-        private System.Windows.Forms.ToolStripButton toolStripButtonExecute;
         internal System.Windows.Forms.ToolStripButton toolStripButtonSaveAs;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
@@ -397,5 +416,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem moveUpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem moveDownToolStripMenuItem;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripButtonExecute;
+        private System.Windows.Forms.ToolStripMenuItem fetchRequestToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem retrieveMultipleToolStripMenuItem;
     }
 }
