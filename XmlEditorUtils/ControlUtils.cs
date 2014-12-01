@@ -62,7 +62,8 @@ namespace Cinteros.Xrm.XmlEditorUtils
         public static Dictionary<string, string> GetAttributesCollection(System.Windows.Forms.Control.ControlCollection controls, bool validate = false)
         {
             Dictionary<string, string> collection = new Dictionary<string, string>();
-            foreach (Control control in controls)
+
+            foreach (Control control in controls.Cast<Control>().Where(y => y.Tag != null).OrderBy(y => y.TabIndex))
             {
                 string attribute;
                 bool required;

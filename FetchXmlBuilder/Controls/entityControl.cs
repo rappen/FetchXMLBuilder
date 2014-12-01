@@ -36,24 +36,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             collec = new Dictionary<string, string>();
         }
 
-        public entityControl(Dictionary<string, string> collection, Dictionary<string, EntityMetadata> entities, FetchXmlBuilder fetchXmlBuilder)
+        public entityControl(Dictionary<string, string> collection, FetchXmlBuilder fetchXmlBuilder)
             : this()
         {
             if (collection != null)
                 collec = collection;
 
-            PopulateControls(entities);
+            PopulateControls();
             ControlUtils.FillControls(collec, this.Controls);
             controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
             Saved += fetchXmlBuilder.CtrlSaved;
         }
 
-        private void PopulateControls(Dictionary<string, EntityMetadata> entities)
+        private void PopulateControls()
         {
             cmbEntity.Items.Clear();
-            if (entities != null)
+            if (FetchXmlBuilder.entities != null)
             {
-                foreach (var entity in entities)
+                foreach (var entity in FetchXmlBuilder.entities)
                 {
                     cmbEntity.Items.Add(new EntityItem(entity.Value));
                 }

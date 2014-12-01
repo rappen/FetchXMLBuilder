@@ -32,11 +32,46 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private XmlDocument fetchDoc;
         internal static Dictionary<string, EntityMetadata> entities;
         internal static List<string> entityShitList = new List<string>();
-        private static string fetchTemplate = "<fetch><entity name=\"\"/></fetch>";
+        internal static Dictionary<string, List<Entity>> views;
+        private static string fetchTemplate = "<fetch count=\"50\"><entity name=\"\"/></fetch>";
         private string fileName;
+        internal string FileName
+        {
+            get { return fileName; }
+            set
+            {
+                fileName = value;
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    tsmiSaveFile.Text = "Save File: " + System.IO.Path.GetFileName(value);
+                }
+                else
+                {
+                    tsmiSaveFile.Text = "Save File";
+                }
+            }
+        }
+        private Entity view;
+        internal Entity View
+        {
+            get { return view; }
+            set
+            {
+                view = value;
+                if (view != null && view.Contains("name"))
+                {
+                    tsmiSaveView.Text = "Save View: " + view["name"];
+                }
+                else
+                {
+                    tsmiSaveView.Text = "Save View";
+                }
+            }
+        }
         internal bool working = false;
         internal static bool useFriendlyNames = false;
         private string treeChecksum = "";
+        private string attributesChecksum = "";
         private bool fetchChanged = false;
         private bool FetchChanged
         {
@@ -48,7 +83,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 //toolStripButtonSave.Enabled = value;
             }
         }
-        private bool buttonsEnabled = false;
+        private bool buttonsEnabled = true;
         private static int userLCID = 0;
 
         public FetchXmlBuilder()
@@ -107,10 +142,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void FetchXmlBuilder_Leave(object sender, EventArgs e)
         {
-            SaveSetting();
+            //SaveSetting();
         }
 
-        private void toolStripButtonNew_Click(object sender, EventArgs e)
+        private void tsbNew_Click(object sender, EventArgs e)
         {
             if (!SaveIfChanged())
             {
@@ -124,7 +159,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             EnableControls(true);
         }
 
-        private void toolStripButtonOpen_Click(object sender, EventArgs e)
+        private void tsmiOpenFile_Click(object sender, EventArgs e)
         {
             if (!SaveIfChanged())
             {
@@ -148,13 +183,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     MessageBox.Show(this, "Invalid Xml: Definition XML root must be fetch!", "Error",
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                    toolStripButtonOpen.Enabled = true;
                 }
                 else
                 {
                     //LoadUsedEntities();
-                    fileName = ofd.FileName;
+                    FileName = ofd.FileName;
                     DisplayDefinition();
                     treeChecksum = GetTreeChecksum(null);
                     FetchChanged = false;
@@ -163,14 +196,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
-        private void toolStripButtonView_Click(object sender, EventArgs e)
+        private void tsmiOpenView_Click(object sender, EventArgs e)
         {
-            var xml = "";
-            if (tvFetch.Nodes.Count > 0)
-            {
-                var doc = GetFetchDocument();
-                xml = doc.OuterXml;
-            }
+            OpenView();
+        }
+
+        private void tsbEdit_Click(object sender, EventArgs e)
+        {
+            var xml = GetFetchString();
             var xcdDialog = new XmlContentDisplayDialog(xml, "Fetch XML", true);
             xcdDialog.StartPosition = FormStartPosition.CenterParent;
             if (xcdDialog.ShowDialog() == DialogResult.OK)
@@ -186,11 +219,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     MessageBox.Show(this, "Invalid Xml: Definition XML root must be fetch!", "Error",
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    toolStripButtonOpen.Enabled = true;
                 }
                 else
                 {
-                    fileName = "";
                     DisplayDefinition();
                     FetchChanged = true;
                     EnableControls(true);
@@ -203,14 +234,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             FetchResults(((ToolStripItem)sender).Tag.ToString());
         }
 
-        private void toolStripButtonSave_Click(object sender, EventArgs e)
+        private void tsmiSaveFile_Click(object sender, EventArgs e)
         {
             SaveFetchXML(false, false);
         }
 
-        private void toolStripButtonSaveAs_Click(object sender, EventArgs e)
+        private void tsmiSaveFileAs_Click(object sender, EventArgs e)
         {
             SaveFetchXML(true, false);
+        }
+
+        private void tsmiSaveView_Click(object sender, EventArgs e)
+        {
+            SaveView();
         }
 
         private void nodeMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -279,10 +315,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         /// <summary>Saves various configurations to file for next session</summary>
         private void SaveSetting()
         {
+            var xml = GetFetchString();
             var map = new ExeConfigurationFileMap { ExeConfigFilename = settingfile };
             System.Configuration.Configuration config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
             config.AppSettings.Settings.Clear();
-            config.AppSettings.Settings.Add("mySetting", "myValue");
+            if (!string.IsNullOrEmpty(FileName))
+            {
+                config.AppSettings.Settings.Add("Filename", FileName);
+            }
+            if (!string.IsNullOrWhiteSpace(xml))
+            {
+                config.AppSettings.Settings.Add("FetchXML", xml);
+            }
             config.Save();
         }
 
@@ -291,7 +335,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             var map = new ExeConfigurationFileMap { ExeConfigFilename = settingfile };
             System.Configuration.Configuration config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
-            var myValue = config.AppSettings.Settings["mySetting"];
+            if (config.AppSettings.Settings["Filename"] != null)
+            {
+                FileName = config.AppSettings.Settings["Filename"].Value;
+            }
+            if (config.AppSettings.Settings["FetchXML"] != null)
+            {
+                var xml = config.AppSettings.Settings["FetchXML"].Value;
+                fetchDoc = new XmlDocument();
+                fetchDoc.LoadXml(xml);
+                DisplayDefinition();
+            }
         }
 
         private void DoThingsAsync()
@@ -333,14 +387,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             MethodInvoker mi = delegate
             {
-                toolStripButtonNew.Enabled = enabled;
-                toolStripButtonOpen.Enabled = enabled;
-                toolStripButtonView.Enabled = enabled;
-                toolStripButtonExecute.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
-                toolStripButtonSave.Enabled = enabled && FetchChanged && !string.IsNullOrEmpty(fileName);
-                toolStripButtonSaveAs.Enabled = enabled;
+                tsbNew.Enabled = enabled;
+                tsbEdit.Enabled = enabled;
+                tsbExecute.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
+                tsbOpen.Enabled = enabled;
+                tsmiOpenFile.Enabled = enabled;
+                tsmiOpenView.Enabled = enabled;
+                tsbSave.Enabled = enabled;
+                tsmiSaveFile.Enabled = enabled && FetchChanged && !string.IsNullOrEmpty(FileName);
+                tsmiSaveFileAs.Enabled = enabled && tvFetch.Nodes.Count > 0;
+                tsmiSaveView.Enabled = enabled && FetchChanged && View != null;
                 chkFriendlyNames.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
-                gbSiteMap.Enabled = enabled;
+                gbFetchTree.Enabled = enabled;
                 gbProperties.Enabled = enabled;
                 buttonsEnabled = enabled;
             };
@@ -368,11 +426,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 tvFetch.Nodes.Clear();
                 TreeNodeHelper.AddTreeViewNode(tvFetch, definitionXmlNode, this);
-                tvFetch.Nodes[0].Expand();
-                if (tvFetch.Nodes[0].Nodes.Count > 0)
-                {
-                    tvFetch.Nodes[0].Nodes[0].Expand();
-                }
+                tvFetch.ExpandAll();
                 ManageMenuDisplay();
             };
             if (tvFetch.InvokeRequired)
@@ -403,6 +457,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 doc.LoadXml(xmlbody);
             }
             return doc;
+        }
+
+        private string GetFetchString()
+        {
+            var xml = "";
+            if (tvFetch.Nodes.Count > 0)
+            {
+                var doc = GetFetchDocument();
+                xml = doc.OuterXml;
+            }
+            return xml;
         }
 
         private bool BuildAndValidateXml(bool validate = true)
@@ -469,26 +534,26 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private bool SaveFetchXML(bool prompt, bool silent)
         {
             bool result = false;
-            if (prompt || string.IsNullOrEmpty(fileName))
+            if (prompt || string.IsNullOrEmpty(FileName))
             {
                 var sfd = new SaveFileDialog
                 {
                     Title = "Select a location to save the FetchXML",
                     Filter = "Xml file (*.xml)|*.xml",
-                    FileName = System.IO.Path.GetFileName(fileName)
+                    FileName = System.IO.Path.GetFileName(FileName)
                 };
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
-                    fileName = sfd.FileName;
+                    FileName = sfd.FileName;
                 }
             }
-            if (!string.IsNullOrEmpty(fileName))
+            if (!string.IsNullOrEmpty(FileName))
             {
                 EnableControls(false);
 
                 BuildAndValidateXml();
                 {
-                    fetchDoc.Save(fileName);
+                    fetchDoc.Save(FileName);
                     treeChecksum = GetTreeChecksum(null);
                     FetchChanged = false;
                     if (!silent)
@@ -539,7 +604,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     ctrl = new fetchControl(collec, this);
                     break;
                 case "entity":
-                    ctrl = new entityControl(collec, entities, this);
+                    ctrl = new entityControl(collec, this);
                     break;
                 case "link-entity":
                     if (node.Parent != null)
@@ -967,6 +1032,173 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         xcdDialog.ShowDialog();
                     }
                 });
+        }
+
+        private void OpenView()
+        {
+            WorkAsync("Loading views...",
+            (eventargs) =>
+            {
+                EnableControls(false);
+                if (views == null || views.Count == 0)
+                {
+                    if (Service == null)
+                    {
+                        throw new Exception("Need a connection to load views.");
+                    }
+                    var qex = new QueryExpression("savedquery");
+                    qex.ColumnSet = new ColumnSet("name", "returnedtypecode", "fetchxml");
+                    qex.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
+                    qex.Criteria.AddCondition("querytype", ConditionOperator.In, 0, 32);
+                    qex.AddOrder("name", OrderType.Ascending);
+                    var sysviews = Service.RetrieveMultiple(qex);
+                    foreach (var view in sysviews.Entities)
+                    {
+                        var entityname = view["returnedtypecode"].ToString();
+                        if (!string.IsNullOrWhiteSpace(entityname) && entities.ContainsKey(entityname))
+                        {
+                            if (views == null)
+                            {
+                                views = new Dictionary<string, List<Entity>>();
+                            }
+                            if (!views.ContainsKey(entityname + "|S"))
+                            {
+                                views.Add(entityname + "|S", new List<Entity>());
+                            }
+                            views[entityname + "|S"].Add(view);
+                        }
+                    }
+                    qex.EntityName = "userquery";
+                    var userviews = Service.RetrieveMultiple(qex);
+                    foreach (var view in userviews.Entities)
+                    {
+                        var entityname = view["returnedtypecode"].ToString();
+                        if (!string.IsNullOrWhiteSpace(entityname) && entities.ContainsKey(entityname))
+                        {
+                            if (views == null)
+                            {
+                                views = new Dictionary<string, List<Entity>>();
+                            }
+                            if (!views.ContainsKey(entityname + "|U"))
+                            {
+                                views.Add(entityname + "|U", new List<Entity>());
+                            }
+                            views[entityname + "|U"].Add(view);
+                        }
+                    }
+                }
+            },
+            (completedargs) =>
+            {
+                EnableControls(true);
+                if (completedargs.Error != null)
+                {
+                    MessageBox.Show(completedargs.Error.Message);
+                }
+                else
+                {
+                    var viewselector = new SelectViewDialog(this);
+                    viewselector.StartPosition = FormStartPosition.CenterParent;
+                    if (viewselector.ShowDialog() == DialogResult.OK)
+                    {
+                        View = viewselector.View;
+                        fetchDoc = new XmlDocument();
+                        fetchDoc.LoadXml(View["fetchxml"].ToString());
+                        DisplayDefinition();
+                        attributesChecksum = GetAttributesSignature(null);
+                    }
+                }
+            });
+        }
+
+        private void SaveView()
+        {
+            var currentAttributes = GetAttributesSignature(null);
+            if (currentAttributes != attributesChecksum)
+            {
+                MessageBox.Show("Cannot save view, returned attributes must not be changed.\n\nExpected attributes:\n  " +
+                    attributesChecksum.Replace("\n", "\n  ") + "\nCurrent attributes:\n  " + currentAttributes.Replace("\n", "\n  "),
+                    "Cannot save view", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (View.LogicalName == "savedquery")
+            {
+                if (MessageBox.Show("This will update and publish the saved query in CRM.\n\nConfirm!", "Confirm",
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.Cancel)
+                {
+                    return;
+                }
+            }
+            var msg = View.LogicalName == "savedquery" ? "Saving and publishing {0}..." : "Saving {0}...";
+            WorkAsync(string.Format(msg, View["name"]),
+                (eventargs) =>
+                {
+                    var xml = GetFetchString();
+                    Entity newView = new Entity(View.LogicalName);
+                    newView.Id = View.Id;
+                    newView.Attributes.Add("fetchxml", xml);
+                    Service.Update(newView);
+                    if (View.LogicalName == "savedquery")
+                    {
+                        var pubRequest = new PublishXmlRequest();
+                        pubRequest.ParameterXml = string.Format(
+                            @"<importexportxml><entities><entity>{0}</entity></entities><nodes/><securityroles/><settings/><workflows/></importexportxml>",
+                            View["returnedtypecode"].ToString());
+                        Service.Execute(pubRequest);
+                    }
+                    View["fetchxml"] = xml;
+                },
+                (completedargs) =>
+                {
+                    if (completedargs.Error != null)
+                    {
+                        MessageBox.Show(completedargs.Error.Message, "Save view", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                });
+        }
+
+        private EntityMetadata GetEntity(int etc)
+        {
+            foreach (EntityMetadata entity in entities.Values)
+            {
+                if (entity.ObjectTypeCode == etc)
+                {
+                    return entity;
+                }
+            }
+            return null;
+        }
+
+        private string GetAttributesSignature(XmlNode entity)
+        {
+            var result = "";
+            if (entity == null)
+            {
+                var xml = GetFetchDocument();
+                entity = xml.SelectSingleNode("fetch/entity");
+            }
+            if (entity != null)
+            {
+                var alias = entity.Attributes["alias"] != null ? entity.Attributes["alias"].Value + "." : "";
+                var entityAttributes = entity.SelectNodes("attribute");
+                foreach (XmlNode attr in entityAttributes)
+                {
+                    if (attr.Attributes["alias"] != null)
+                    {
+                        result += alias + attr.Attributes["alias"].Value + "\n";
+                    }
+                    else if (attr.Attributes["name"] != null)
+                    {
+                        result += alias + attr.Attributes["name"].Value + "\n";
+                    }
+                }
+                var linkEntities = entity.SelectNodes("link-entity");
+                foreach (XmlNode link in linkEntities)
+                {
+                    result += GetAttributesSignature(link);
+                }
+            }
+            return result;
         }
     }
 }

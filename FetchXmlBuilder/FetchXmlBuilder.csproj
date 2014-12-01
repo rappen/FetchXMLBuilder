@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="AppCode\AttributeItem.cs" />
     <Compile Include="AppCode\Clipboard.cs" />
+    <Compile Include="AppCode\ViewItem.cs" />
     <Compile Include="AppCode\EntityItem.cs" />
     <Compile Include="AppCode\FetchNodeCapabilities.cs" />
     <Compile Include="AppCode\EntityRelationship.cs" />
@@ -120,6 +121,12 @@
     <Compile Include="Controls\fetchControl.Designer.cs">
       <DependentUpon>fetchControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SelectViewDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SelectViewDialog.Designer.cs">
+      <DependentUpon>SelectViewDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\XmlContentDisplayDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -166,6 +173,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FetchXmlBuilder.resx">
       <DependentUpon>FetchXmlBuilder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SelectViewDialog.resx">
+      <DependentUpon>SelectViewDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\XmlContentDisplayDialog.resx">
       <DependentUpon>XmlContentDisplayDialog.cs</DependentUpon>

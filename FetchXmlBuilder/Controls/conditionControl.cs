@@ -112,11 +112,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 var valueType = oper.GetValueType();
                 var value = txtValue.Text.Trim();
                 if (valueType == AttributeTypeCode.ManagedProperty)
-                {
+                {   // Type not defined by operator
                     if (cmbAttribute.SelectedItem != null && cmbAttribute.SelectedItem is AttributeItem)
-                    {
+                    {   // Get type from condition attribute
                         var attribute = (AttributeItem)cmbAttribute.SelectedItem;
                         valueType = attribute.Metadata.AttributeType;
+                    }
+                    else
+                    {   // Default, cannot determine type
+                        valueType = AttributeTypeCode.String;
                     }
                 }
                 var error = "";
@@ -264,10 +268,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void cmbOperator_SelectedIndexChanged(object sender, EventArgs e)
         {
+            UpdateValueField();
+        }
+
+        private void UpdateValueField()
+        {
+            btnGetGuid.Visible = false;
             if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem)
             {
                 var oper = (OperatorItem)cmbOperator.SelectedItem;
                 var valueType = oper.GetValueType();
+                if (valueType == AttributeTypeCode.ManagedProperty)
+                {
+                    if (cmbAttribute.SelectedItem != null && cmbAttribute.SelectedItem is AttributeItem)
+                    {
+                        var attribute = (AttributeItem)cmbAttribute.SelectedItem;
+                        valueType = attribute.Metadata.AttributeType;
+                    }
+                }
                 if (valueType == null)
                 {
                     txtValue.Text = "";
@@ -277,7 +295,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 {
                     txtValue.Enabled = true;
                 }
+                if (valueType == AttributeTypeCode.Lookup || valueType == AttributeTypeCode.Customer || valueType == AttributeTypeCode.Owner || valueType == AttributeTypeCode.Uniqueidentifier)
+                {
+                    btnGetGuid.Visible = true;
+                }
             }
+        }
+
+        private void btnGetGuid_Click(object sender, EventArgs e)
+        {
+            txtValue.Text = Guid.NewGuid().ToString();
+        }
+
+        private void cmbAttribute_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateValueField();
         }
     }
 

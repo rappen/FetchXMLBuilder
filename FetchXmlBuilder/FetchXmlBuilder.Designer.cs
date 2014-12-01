@@ -34,16 +34,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
             this.tsbCloseThisTab = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonView = new System.Windows.Forms.ToolStripButton();
+            this.tsbNew = new System.Windows.Forms.ToolStripButton();
+            this.tsbOpen = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsmiOpenFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiOpenView = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsbSave = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsmiSaveFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSaveFileAs = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSaveView = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsbEdit = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbExecute = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsmiFetchRequest = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiRetrieveMultiple = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonSaveAs = new System.Windows.Forms.ToolStripButton();
             this.gbProperties = new System.Windows.Forms.GroupBox();
             this.panelContainer = new System.Windows.Forms.Panel();
-            this.gbSiteMap = new System.Windows.Forms.GroupBox();
+            this.gbFetchTree = new System.Windows.Forms.GroupBox();
             this.tvFetch = new System.Windows.Forms.TreeView();
             this.chkFriendlyNames = new System.Windows.Forms.CheckBox();
             this.splitter1 = new System.Windows.Forms.Splitter();
@@ -59,12 +66,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripButtonExecute = new System.Windows.Forms.ToolStripDropDownButton();
-            this.fetchRequestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.retrieveMultipleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMain.SuspendLayout();
             this.gbProperties.SuspendLayout();
-            this.gbSiteMap.SuspendLayout();
+            this.gbFetchTree.SuspendLayout();
             this.nodeMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -80,14 +86,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbCloseThisTab,
             this.toolStripSeparator4,
-            this.toolStripButtonNew,
-            this.toolStripButtonOpen,
-            this.toolStripButtonView,
+            this.tsbNew,
+            this.tsbEdit,
             this.toolStripSeparator2,
-            this.toolStripButtonExecute,
+            this.tsbExecute,
             this.toolStripSeparator3,
-            this.toolStripButtonSave,
-            this.toolStripButtonSaveAs});
+            this.tsbOpen,
+            this.tsbSave});
             this.toolStripMain.Location = new System.Drawing.Point(0, 0);
             this.toolStripMain.Name = "toolStripMain";
             this.toolStripMain.Size = new System.Drawing.Size(884, 25);
@@ -108,67 +113,127 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
-            // toolStripButtonNew
+            // tsbNew
             // 
-            this.toolStripButtonNew.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonNew.Image")));
-            this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonNew.Name = "toolStripButtonNew";
-            this.toolStripButtonNew.Size = new System.Drawing.Size(51, 22);
-            this.toolStripButtonNew.Text = "New";
-            this.toolStripButtonNew.ToolTipText = "New Fetch XML";
-            this.toolStripButtonNew.Click += new System.EventHandler(this.toolStripButtonNew_Click);
+            this.tsbNew.Image = ((System.Drawing.Image)(resources.GetObject("tsbNew.Image")));
+            this.tsbNew.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbNew.Name = "tsbNew";
+            this.tsbNew.Size = new System.Drawing.Size(51, 22);
+            this.tsbNew.Text = "New";
+            this.tsbNew.ToolTipText = "New Fetch XML";
+            this.tsbNew.Click += new System.EventHandler(this.tsbNew_Click);
             // 
-            // toolStripButtonOpen
+            // tsbOpen
             // 
-            this.toolStripButtonOpen.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonOpen.Image")));
-            this.toolStripButtonOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonOpen.Name = "toolStripButtonOpen";
-            this.toolStripButtonOpen.Size = new System.Drawing.Size(75, 22);
-            this.toolStripButtonOpen.Text = "Open file";
-            this.toolStripButtonOpen.ToolTipText = "Open Fetch XML file";
-            this.toolStripButtonOpen.Click += new System.EventHandler(this.toolStripButtonOpen_Click);
+            this.tsbOpen.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiOpenFile,
+            this.toolStripSeparator1,
+            this.tsmiOpenView});
+            this.tsbOpen.Image = ((System.Drawing.Image)(resources.GetObject("tsbOpen.Image")));
+            this.tsbOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbOpen.Name = "tsbOpen";
+            this.tsbOpen.Size = new System.Drawing.Size(65, 22);
+            this.tsbOpen.Text = "Open";
+            this.tsbOpen.ToolTipText = "Open Fetch XML file";
             // 
-            // toolStripButtonView
+            // tsmiOpenFile
             // 
-            this.toolStripButtonView.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonView.Image")));
-            this.toolStripButtonView.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonView.Name = "toolStripButtonView";
-            this.toolStripButtonView.Size = new System.Drawing.Size(74, 22);
-            this.toolStripButtonView.Text = "Edit XML";
-            this.toolStripButtonView.Click += new System.EventHandler(this.toolStripButtonView_Click);
+            this.tsmiOpenFile.Name = "tsmiOpenFile";
+            this.tsmiOpenFile.Size = new System.Drawing.Size(140, 22);
+            this.tsmiOpenFile.Text = "Open File...";
+            this.tsmiOpenFile.Click += new System.EventHandler(this.tsmiOpenFile_Click);
+            // 
+            // tsmiOpenView
+            // 
+            this.tsmiOpenView.Name = "tsmiOpenView";
+            this.tsmiOpenView.Size = new System.Drawing.Size(140, 22);
+            this.tsmiOpenView.Text = "Open View...";
+            this.tsmiOpenView.Click += new System.EventHandler(this.tsmiOpenView_Click);
+            // 
+            // tsbSave
+            // 
+            this.tsbSave.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiSaveFile,
+            this.tsmiSaveFileAs,
+            this.toolStripSeparator5,
+            this.tsmiSaveView});
+            this.tsbSave.Image = ((System.Drawing.Image)(resources.GetObject("tsbSave.Image")));
+            this.tsbSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbSave.Name = "tsbSave";
+            this.tsbSave.Size = new System.Drawing.Size(60, 22);
+            this.tsbSave.Text = "Save";
+            this.tsbSave.ToolTipText = "Save Fetch XML";
+            // 
+            // tsmiSaveFile
+            // 
+            this.tsmiSaveFile.Enabled = false;
+            this.tsmiSaveFile.Name = "tsmiSaveFile";
+            this.tsmiSaveFile.Size = new System.Drawing.Size(152, 22);
+            this.tsmiSaveFile.Text = "Save File";
+            this.tsmiSaveFile.Click += new System.EventHandler(this.tsmiSaveFile_Click);
+            // 
+            // tsmiSaveFileAs
+            // 
+            this.tsmiSaveFileAs.Name = "tsmiSaveFileAs";
+            this.tsmiSaveFileAs.Size = new System.Drawing.Size(142, 22);
+            this.tsmiSaveFileAs.Text = "Save File as...";
+            this.tsmiSaveFileAs.Click += new System.EventHandler(this.tsmiSaveFileAs_Click);
+            // 
+            // tsmiSaveView
+            // 
+            this.tsmiSaveView.Enabled = false;
+            this.tsmiSaveView.Name = "tsmiSaveView";
+            this.tsmiSaveView.Size = new System.Drawing.Size(152, 22);
+            this.tsmiSaveView.Text = "Save View";
+            this.tsmiSaveView.Click += new System.EventHandler(this.tsmiSaveView_Click);
+            // 
+            // tsbEdit
+            // 
+            this.tsbEdit.Image = ((System.Drawing.Image)(resources.GetObject("tsbEdit.Image")));
+            this.tsbEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbEdit.Name = "tsbEdit";
+            this.tsbEdit.Size = new System.Drawing.Size(74, 22);
+            this.tsbEdit.Text = "Edit XML";
+            this.tsbEdit.Click += new System.EventHandler(this.tsbEdit_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
+            // tsbExecute
+            // 
+            this.tsbExecute.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiFetchRequest,
+            this.tsmiRetrieveMultiple});
+            this.tsbExecute.Enabled = false;
+            this.tsbExecute.Image = ((System.Drawing.Image)(resources.GetObject("tsbExecute.Image")));
+            this.tsbExecute.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbExecute.Name = "tsbExecute";
+            this.tsbExecute.Size = new System.Drawing.Size(108, 22);
+            this.tsbExecute.Text = "Execute Fetch";
+            this.tsbExecute.ToolTipText = "Execute Fetch XML to see the results";
+            // 
+            // tsmiFetchRequest
+            // 
+            this.tsmiFetchRequest.Name = "tsmiFetchRequest";
+            this.tsmiFetchRequest.Size = new System.Drawing.Size(160, 22);
+            this.tsmiFetchRequest.Tag = "FetchRequest";
+            this.tsmiFetchRequest.Text = "FetchRequest";
+            this.tsmiFetchRequest.Click += new System.EventHandler(this.toolStripButtonExecute_Click);
+            // 
+            // tsmiRetrieveMultiple
+            // 
+            this.tsmiRetrieveMultiple.Name = "tsmiRetrieveMultiple";
+            this.tsmiRetrieveMultiple.Size = new System.Drawing.Size(160, 22);
+            this.tsmiRetrieveMultiple.Tag = "RetrieveMultiple";
+            this.tsmiRetrieveMultiple.Text = "RetrieveMultiple";
+            this.tsmiRetrieveMultiple.Click += new System.EventHandler(this.toolStripButtonExecute_Click);
+            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripButtonSave
-            // 
-            this.toolStripButtonSave.Enabled = false;
-            this.toolStripButtonSave.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSave.Image")));
-            this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonSave.Name = "toolStripButtonSave";
-            this.toolStripButtonSave.Size = new System.Drawing.Size(70, 22);
-            this.toolStripButtonSave.Text = "Save file";
-            this.toolStripButtonSave.ToolTipText = "Save Fetch XML";
-            this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
-            // 
-            // toolStripButtonSaveAs
-            // 
-            this.toolStripButtonSaveAs.Enabled = false;
-            this.toolStripButtonSaveAs.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSaveAs.Image")));
-            this.toolStripButtonSaveAs.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonSaveAs.Name = "toolStripButtonSaveAs";
-            this.toolStripButtonSaveAs.Size = new System.Drawing.Size(86, 22);
-            this.toolStripButtonSaveAs.Tag = "1";
-            this.toolStripButtonSaveAs.Text = "Save file As";
-            this.toolStripButtonSaveAs.ToolTipText = "Save Fetch XML as new file";
-            this.toolStripButtonSaveAs.Click += new System.EventHandler(this.toolStripButtonSaveAs_Click);
             // 
             // gbProperties
             // 
@@ -190,16 +255,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.panelContainer.Size = new System.Drawing.Size(484, 580);
             this.panelContainer.TabIndex = 14;
             // 
-            // gbSiteMap
+            // gbFetchTree
             // 
-            this.gbSiteMap.Controls.Add(this.tvFetch);
-            this.gbSiteMap.Dock = System.Windows.Forms.DockStyle.Left;
-            this.gbSiteMap.Location = new System.Drawing.Point(0, 25);
-            this.gbSiteMap.Name = "gbSiteMap";
-            this.gbSiteMap.Size = new System.Drawing.Size(394, 599);
-            this.gbSiteMap.TabIndex = 24;
-            this.gbSiteMap.TabStop = false;
-            this.gbSiteMap.Text = "Fetch XML outline";
+            this.gbFetchTree.Controls.Add(this.tvFetch);
+            this.gbFetchTree.Dock = System.Windows.Forms.DockStyle.Left;
+            this.gbFetchTree.Location = new System.Drawing.Point(0, 25);
+            this.gbFetchTree.Name = "gbFetchTree";
+            this.gbFetchTree.Size = new System.Drawing.Size(394, 599);
+            this.gbFetchTree.TabIndex = 24;
+            this.gbFetchTree.TabStop = false;
+            this.gbFetchTree.Text = "Fetch XML outline";
             // 
             // tvFetch
             // 
@@ -330,34 +395,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.moveDownToolStripMenuItem.Text = "Move down";
             this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonMoveDown_Click);
             // 
-            // toolStripButtonExecute
+            // toolStripSeparator1
             // 
-            this.toolStripButtonExecute.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fetchRequestToolStripMenuItem,
-            this.retrieveMultipleToolStripMenuItem});
-            this.toolStripButtonExecute.Enabled = false;
-            this.toolStripButtonExecute.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonExecute.Image")));
-            this.toolStripButtonExecute.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonExecute.Name = "toolStripButtonExecute";
-            this.toolStripButtonExecute.Size = new System.Drawing.Size(108, 22);
-            this.toolStripButtonExecute.Text = "Execute Fetch";
-            this.toolStripButtonExecute.ToolTipText = "Execute Fetch XML to see the results";
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
-            // fetchRequestToolStripMenuItem
+            // toolStripSeparator5
             // 
-            this.fetchRequestToolStripMenuItem.Name = "fetchRequestToolStripMenuItem";
-            this.fetchRequestToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.fetchRequestToolStripMenuItem.Tag = "FetchRequest";
-            this.fetchRequestToolStripMenuItem.Text = "FetchRequest";
-            this.fetchRequestToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonExecute_Click);
-            // 
-            // retrieveMultipleToolStripMenuItem
-            // 
-            this.retrieveMultipleToolStripMenuItem.Name = "retrieveMultipleToolStripMenuItem";
-            this.retrieveMultipleToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.retrieveMultipleToolStripMenuItem.Tag = "RetrieveMultiple";
-            this.retrieveMultipleToolStripMenuItem.Text = "RetrieveMultiple";
-            this.retrieveMultipleToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonExecute_Click);
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(149, 6);
             // 
             // FetchXmlBuilder
             // 
@@ -366,7 +412,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.Controls.Add(this.chkFriendlyNames);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.gbProperties);
-            this.Controls.Add(this.gbSiteMap);
+            this.Controls.Add(this.gbFetchTree);
             this.Controls.Add(this.toolStripMain);
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "FetchXmlBuilder";
@@ -378,7 +424,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripMain.ResumeLayout(false);
             this.toolStripMain.PerformLayout();
             this.gbProperties.ResumeLayout(false);
-            this.gbSiteMap.ResumeLayout(false);
+            this.gbFetchTree.ResumeLayout(false);
             this.nodeMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -392,12 +438,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripButton tsbCloseThisTab;
         internal System.Windows.Forms.GroupBox gbProperties;
         internal System.Windows.Forms.Panel panelContainer;
-        internal System.Windows.Forms.GroupBox gbSiteMap;
+        internal System.Windows.Forms.GroupBox gbFetchTree;
         internal System.Windows.Forms.TreeView tvFetch;
         private System.Windows.Forms.Splitter splitter1;
-        private System.Windows.Forms.ToolStripButton toolStripButtonNew;
-        internal System.Windows.Forms.ToolStripButton toolStripButtonOpen;
-        internal System.Windows.Forms.ToolStripButton toolStripButtonSave;
+        private System.Windows.Forms.ToolStripButton tsbNew;
         internal System.Windows.Forms.ContextMenuStrip nodeMenu;
         internal System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         internal System.Windows.Forms.ToolStripSeparator toolStripSeparatorBeginOfEdition;
@@ -408,16 +452,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dummyToolStripMenuItem;
         private System.Windows.Forms.CheckBox chkFriendlyNames;
-        internal System.Windows.Forms.ToolStripButton toolStripButtonSaveAs;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripButton toolStripButtonView;
+        private System.Windows.Forms.ToolStripButton tsbEdit;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem moveUpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem moveDownToolStripMenuItem;
-        private System.Windows.Forms.ToolStripDropDownButton toolStripButtonExecute;
-        private System.Windows.Forms.ToolStripMenuItem fetchRequestToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem retrieveMultipleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripDropDownButton tsbExecute;
+        private System.Windows.Forms.ToolStripMenuItem tsmiFetchRequest;
+        private System.Windows.Forms.ToolStripMenuItem tsmiRetrieveMultiple;
+        internal System.Windows.Forms.ToolStripDropDownButton tsbOpen;
+        private System.Windows.Forms.ToolStripMenuItem tsmiOpenFile;
+        private System.Windows.Forms.ToolStripMenuItem tsmiOpenView;
+        internal System.Windows.Forms.ToolStripDropDownButton tsbSave;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSaveFile;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSaveFileAs;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSaveView;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
     }
 }

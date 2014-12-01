@@ -39,6 +39,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.label5 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.cmbEntity = new System.Windows.Forms.ComboBox();
+            this.btnGetGuid = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -93,6 +94,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbAttribute.Sorted = true;
             this.cmbAttribute.TabIndex = 2;
             this.cmbAttribute.Tag = "attribute|true";
+            this.cmbAttribute.SelectedIndexChanged += new System.EventHandler(this.cmbAttribute_SelectedIndexChanged);
             // 
             // txtValue
             // 
@@ -229,10 +231,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbEntity.Tag = "entityname";
             this.cmbEntity.SelectedIndexChanged += new System.EventHandler(this.cmbEtity_SelectedIndexChanged);
             // 
+            // btnGetGuid
+            // 
+            this.btnGetGuid.Location = new System.Drawing.Point(133, 130);
+            this.btnGetGuid.Name = "btnGetGuid";
+            this.btnGetGuid.Size = new System.Drawing.Size(52, 22);
+            this.btnGetGuid.TabIndex = 40;
+            this.btnGetGuid.Text = "Guid->";
+            this.btnGetGuid.UseVisualStyleBackColor = true;
+            this.btnGetGuid.Visible = false;
+            this.btnGetGuid.Click += new System.EventHandler(this.btnGetGuid_Click);
+            // 
             // conditionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnGetGuid);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.cmbEntity);
             this.Controls.Add(this.label5);
@@ -265,5 +279,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox cmbEntity;
+        private System.Windows.Forms.Button btnGetGuid;
     }
 }
