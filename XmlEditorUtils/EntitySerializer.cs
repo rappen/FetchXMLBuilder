@@ -78,6 +78,76 @@ namespace Cinteros.Xrm.XmlEditorUtils
             return result;
         }
 
+        public static string ToJSON(Entity entity, Formatting format, int indent)
+        {
+            StringBuilder sb = new StringBuilder();
+            var space = format == Formatting.Indented ? " " : "";
+            sb.Append(
+                Sep(format, indent + 0) + "{" + space +
+                Sep(format, indent + 1) + "\"entity\":" + space + "\"" + entity.LogicalName + "\"," +
+                Sep(format, indent + 1) + "\"id\":" + space + "\"{" + entity.Id.ToString() + "}\"," +
+                Sep(format, indent + 1) + "\"attributes\":" + space + "[");
+
+            bool first = true;
+            foreach (KeyValuePair<string, object> attribute in entity.Attributes)
+            {
+                Object value = attribute.Value;
+                if (attribute.Key == entity.LogicalName + "id")
+                {
+                    continue;
+                }
+                if (attribute.Key.EndsWith("_base") && entity.Contains(attribute.Key.Substring(0, attribute.Key.Length - 5)))
+                {
+                    continue;
+                }
+
+                if (first)
+                {
+                    sb.Append(Sep(format, indent + 2) + "{");
+                    first = false;
+                }
+                else
+                    sb.Append("," + Sep(format, indent + 2) + "{");
+
+                sb.Append(Sep(format, indent + 3) + "\"name\":" + space + "\"" + attribute.Key + "\",");
+                sb.Append(Sep(format, indent + 3) + "\"type\":" + space + "\"" + LastClassName(attribute.Value) + "\",");
+
+                if (value is AliasedValue)
+                {
+                    if (!string.IsNullOrEmpty(((AliasedValue)attribute.Value).AttributeLogicalName))
+                    {
+                        sb.Append(Sep(format, indent + 3) + "\"attributelogicalname\":" + space + "\"" + (((AliasedValue)attribute.Value).AttributeLogicalName) + "\",");
+                    }
+                    if (!string.IsNullOrEmpty(((AliasedValue)attribute.Value).EntityLogicalName))
+                    {
+                        sb.Append(Sep(format, indent + 3) + "\"entitylogicalname\":" + space + "\"" + (((AliasedValue)attribute.Value).EntityLogicalName) + "\",");
+                    }
+                    value = (((AliasedValue)attribute.Value).Value);
+                }
+
+                if (value is EntityReference)
+                {
+                    sb.Append(Sep(format, indent + 3) + "\"entity\":" + space + "\"" + ((EntityReference)attribute.Value).LogicalName + "\",");
+                    if (!string.IsNullOrEmpty(((EntityReference)attribute.Value).Name))
+                    {
+                        sb.Append(Sep(format, indent + 3) + "\"namevalue\":" + space + "\"" + ((EntityReference)attribute.Value).Name + "\",");
+                    }
+                    value = ((EntityReference)attribute.Value).Id;
+
+                }
+
+                if (value != null)
+                {
+                    sb.Append(string.Format(Sep(format, indent + 3) + "\"value\":" + space + "\"{0}\"", AttributeToBaseType(value)));
+                }
+
+                sb.Append(Sep(format, indent + 2) + "}");
+            }
+            sb.Append(Sep(format, indent + 1) + "]");
+            sb.Append(Sep(format, indent + 0) + "}");
+            return sb.ToString();
+        }
+
         private static string LastClassName(object obj)
         {
             string result = obj == null ? "null" : obj.GetType().ToString();
@@ -97,6 +167,15 @@ namespace Cinteros.Xrm.XmlEditorUtils
                 return ((Money)attribute).Value;
             else
                 return attribute;
+        }
+
+        internal static string Sep(Formatting format, int indent)
+        {
+            if (format == Formatting.None)
+            {
+                return "";
+            }
+            return "\n" + new string(' ', indent * 4);
         }
     }
 }

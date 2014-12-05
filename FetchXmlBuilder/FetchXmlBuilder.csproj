@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="AppCode\AttributeItem.cs" />
     <Compile Include="AppCode\Clipboard.cs" />
+    <Compile Include="AppCode\FindTextHandler.cs" />
     <Compile Include="AppCode\ViewItem.cs" />
     <Compile Include="AppCode\EntityItem.cs" />
     <Compile Include="AppCode\FetchNodeCapabilities.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Controls\fetchControl.Designer.cs">
       <DependentUpon>fetchControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppCode\Prompt.cs" />
     <Compile Include="Forms\SelectViewDialog.cs">
       <SubType>Form</SubType>
     </Compile>

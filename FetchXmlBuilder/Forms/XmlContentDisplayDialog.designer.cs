@@ -33,7 +33,7 @@
             this.panOk = new System.Windows.Forms.Panel();
             this.btnOk = new System.Windows.Forms.Button();
             this.panCancel = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.txtXML = new CSRichTextBoxSyntaxHighlighting.XMLViewer();
             this.panBottom.SuspendLayout();
@@ -75,22 +75,22 @@
             // 
             // panCancel
             // 
-            this.panCancel.Controls.Add(this.button2);
+            this.panCancel.Controls.Add(this.btnCancel);
             this.panCancel.Dock = System.Windows.Forms.DockStyle.Right;
             this.panCancel.Location = new System.Drawing.Point(718, 0);
             this.panCancel.Name = "panCancel";
             this.panCancel.Size = new System.Drawing.Size(91, 38);
             this.panCancel.TabIndex = 3;
             // 
-            // button2
+            // btnCancel
             // 
-            this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point(3, 8);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Cancel";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(3, 8);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 2;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
             // 
             // button3
             // 
@@ -105,6 +105,7 @@
             // txtXML
             // 
             this.txtXML.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtXML.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtXML.Location = new System.Drawing.Point(0, 0);
             this.txtXML.Name = "txtXML";
             xmlViewerSettings1.AttributeKey = System.Drawing.Color.Red;
@@ -121,11 +122,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(809, 705);
             this.Controls.Add(this.txtXML);
             this.Controls.Add(this.panBottom);
+            this.KeyPreview = true;
             this.Name = "XmlContentDisplayDialog";
             this.ShowIcon = false;
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.XmlContentDisplayDialog_KeyDown);
             this.panBottom.ResumeLayout(false);
             this.panOk.ResumeLayout(false);
             this.panCancel.ResumeLayout(false);
@@ -141,6 +145,6 @@
         private System.Windows.Forms.Panel panOk;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Panel panCancel;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnCancel;
     }
 }

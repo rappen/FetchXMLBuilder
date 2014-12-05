@@ -86,6 +86,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             catch (ArgumentNullException ex)
             {
                 MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                Focus();
             }
         }
 
@@ -95,7 +96,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 if (string.IsNullOrWhiteSpace(txtAlias.Text))
                 {
-                    MessageBox.Show("Alias mus be specified in aggregate queries", "Condition error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Alias must be specified in aggregate queries", "Condition error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    //txtAlias.Focus();
                     return false;
                 }
             }

@@ -33,5 +33,20 @@ namespace Cinteros.Xrm.XmlEditorUtils
             result.AppendChild(root);
             return result;
         }
+
+        public static string ToJSON(EntityCollection collection, Formatting format)
+        {
+            var space = format == Formatting.Indented ? " " : "";
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{" + EntitySerializer.Sep(format, 1) + "\"entities\":" + space + "[");
+            List<string> entities = new List<string>();
+            foreach (Entity entity in collection.Entities)
+            {
+                entities.Add(EntitySerializer.ToJSON(entity, format, 2));
+            }
+            sb.Append(string.Join(",", entities));
+            sb.Append(EntitySerializer.Sep(format, 1) + "]" + EntitySerializer.Sep(format, 0) + "}");
+            return sb.ToString();
+        }
     }
 }

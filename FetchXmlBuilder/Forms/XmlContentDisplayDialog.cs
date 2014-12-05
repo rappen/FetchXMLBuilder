@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using System;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -9,15 +10,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
     public partial class XmlContentDisplayDialog : Form
     {
         public XmlNode result;
+        private string findtext = "";
 
         public XmlContentDisplayDialog(string xmlString, string header, bool allowEdit)
         {
             InitializeComponent();
             Text = string.IsNullOrEmpty(header) ? "FetchXmlBuilder" : header;
-            panBottom.Visible = allowEdit;
+            panOk.Visible = allowEdit;
             if (xmlString.Length > 100000)
             {
-                var dlgresult =MessageBox.Show("Huge result, this may take a while!\n" + xmlString.Length.ToString() + " characters in the XML document.\n\nContinue?", "Huge result", 
+                var dlgresult = MessageBox.Show("Huge result, this may take a while!\n" + xmlString.Length.ToString() + " characters in the XML document.\n\nContinue?", "Huge result",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (dlgresult == DialogResult.No)
                 {
@@ -25,12 +27,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 }
             }
             txtXML.Text = xmlString;
-            FormatXML();
+            FormatXML(true);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            FormatXML();
+            FormatXML(false);
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -48,7 +50,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             }
         }
 
-        private void FormatXML()
+        private void FormatXML(bool silent)
         {
             try
             {
@@ -56,8 +58,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "XML Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (!silent)
+                {
+                    MessageBox.Show(ex.Message, "XML Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
+        }
+
+        private void XmlContentDisplayDialog_KeyDown(object sender, KeyEventArgs e)
+        {
+            RichTextBox textBox = txtXML;
+            findtext = FindTextHandler.HandleFindKeyPress(e, textBox, findtext);
         }
     }
 }

@@ -115,6 +115,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void FetchXmlBuilder_ConnectionUpdated(object sender, ConnectionUpdatedEventArgs e)
         {
+            View = null;
             if (!working)
             {
                 LoadEntities();
@@ -138,11 +139,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 CloseToolPrompt();
             }
-        }
-
-        private void FetchXmlBuilder_Leave(object sender, EventArgs e)
-        {
-            //SaveSetting();
         }
 
         private void tsbNew_Click(object sender, EventArgs e)
@@ -254,9 +250,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             HandleNodeMenuClick(e.ClickedItem);
         }
 
+        private void tvFetch_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            HandleNodeSelection(e.Node);
+        }
+
+        private void tvFetch_KeyDown(object sender, KeyEventArgs e)
+        {
+            HandleTVKeyDown(e);
+        }
+
         private void tvFetch_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            HandleNodeClick(e.Node);
+            if (e.Button == MouseButtons.Right)
+            {
+                HandleNodeSelection(e.Node);
+            }
         }
 
         private void toolStripButtonMoveDown_Click(object sender, EventArgs e)
@@ -303,11 +312,42 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             moveUpToolStripMenuItem.Enabled = true;
         }
 
-        private void chkTechNames_CheckedChanged(object sender, EventArgs e)
+        private void tsmiFriendly_CheckedChanged(object sender, EventArgs e)
         {
-            useFriendlyNames = chkFriendlyNames.Checked;
+            useFriendlyNames = tsmiFriendly.Checked;
             BuildAndValidateXml(false);
             DisplayDefinition();
+        }
+
+        private void tsmiJSONresult_CheckedChanged(object sender, EventArgs e)
+        {
+            tsmiXMLresult.Checked = !tsmiJSONresult.Checked;
+        }
+
+        private void tsmiXMLresult_CheckedChanged(object sender, EventArgs e)
+        {
+            tsmiJSONresult.Checked = !tsmiXMLresult.Checked;
+        }
+
+        private void toolStripMain_Click(object sender, EventArgs e)
+        {
+            tvFetch.Focus();
+        }
+
+        private void tsbAbout_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "FetchXml Builder for XrmToolbox\n\n" +
+                "Developed by Jonas Rapp at Cinteros AB\n\n" +
+                "Serialization to XML and JSON are custom developed to\n" +
+                "be compact transports of CRM entity information.\n" +
+                "There are deserialization methods as well...",
+                "About FetchXml Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void tsmiSaveCWPNew_Click(object sender, EventArgs e)
+        {
+            SaveCWPFeed();
         }
 
         #endregion Event handlers
@@ -327,6 +367,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 config.AppSettings.Settings.Add("FetchXML", xml);
             }
+            config.AppSettings.Settings.Add("JSON", tsmiJSONresult.Checked ? "1" : "0");
             config.Save();
         }
 
@@ -345,6 +386,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 fetchDoc = new XmlDocument();
                 fetchDoc.LoadXml(xml);
                 DisplayDefinition();
+            }
+            if (config.AppSettings.Settings["JSON"] != null && config.AppSettings.Settings["JSON"].Value == "1")
+            {
+                tsmiJSONresult.Checked = true;
+                tsmiXMLresult.Checked = false;
             }
         }
 
@@ -389,7 +435,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 tsbNew.Enabled = enabled;
                 tsbEdit.Enabled = enabled;
-                tsbExecute.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
                 tsbOpen.Enabled = enabled;
                 tsmiOpenFile.Enabled = enabled;
                 tsmiOpenView.Enabled = enabled;
@@ -397,7 +442,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 tsmiSaveFile.Enabled = enabled && FetchChanged && !string.IsNullOrEmpty(FileName);
                 tsmiSaveFileAs.Enabled = enabled && tvFetch.Nodes.Count > 0;
                 tsmiSaveView.Enabled = enabled && FetchChanged && View != null;
-                chkFriendlyNames.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
+                tsmiSaveCWPNew.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
+                tsbOptions.Enabled = enabled;
+                tsmiFriendly.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
+                tsbExecute.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
                 gbFetchTree.Enabled = enabled;
                 gbProperties.Enabled = enabled;
                 buttonsEnabled = enabled;
@@ -583,14 +631,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 string nodeText = ClickedItem.Tag.ToString();
                 var newNode = TreeNodeHelper.AddChildNode(tvFetch.SelectedNode, nodeText);
-                HandleNodeClick(newNode);
+                HandleNodeSelection(newNode);
             }
             FetchChanged = treeChecksum != GetTreeChecksum(null);
         }
 
-        private void HandleNodeClick(TreeNode node)
+        private void HandleNodeSelection(TreeNode node)
         {
-            node.TreeView.SelectedNode = node;
+            if (tvFetch.SelectedNode != node)
+            {
+                tvFetch.SelectedNode = node;
+            }
             var collec = (Dictionary<string, string>)node.Tag;
 
             TreeNodeHelper.AddContextMenu(node, this);
@@ -710,7 +761,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void RefreshSelectedNode()
         {
-            HandleNodeClick(tvFetch.SelectedNode);
+            HandleNodeSelection(tvFetch.SelectedNode);
         }
 
         private void LoadEntities()
@@ -970,7 +1021,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     ExecuteFetch();
                     break;
                 case "RetrieveMultiple":
-                    RetrieveMultiple();
+                    RetrieveMultiple(tsmiJSONresult.Checked);
                     break;
                 default:
                     MessageBox.Show("Invalid fetch method: " + fetchType, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1006,7 +1057,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 });
         }
 
-        private void RetrieveMultiple()
+        private void RetrieveMultiple(bool ToJSON)
         {
             working = true;
             WorkAsync("Executing FetchXML...",
@@ -1014,8 +1065,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     var fetchxml = GetFetchDocument().OuterXml;
                     var resp = Service.RetrieveMultiple(new FetchExpression(fetchxml));
-                    var serialized = EntityCollectionSerializer.Serialize(resp);
-                    eventargs.Result = serialized.OuterXml;
+                    if (ToJSON)
+                    {
+                        var json = EntityCollectionSerializer.ToJSON(resp, Formatting.Indented);
+                        eventargs.Result = json;
+                    }
+                    else
+                    {
+                        var serialized = EntityCollectionSerializer.Serialize(resp);
+                        eventargs.Result = serialized;
+                    }
                 },
                 (completedargs) =>
                 {
@@ -1024,10 +1083,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         MessageBox.Show(completedargs.Error.Message);
                     }
+                    else if (completedargs.Result is XmlDocument)
+                    {
+                        var result = ((XmlDocument)completedargs.Result).OuterXml;
+                        var xcdDialog = new XmlContentDisplayDialog(result, "XML Serialized RetrieveMultiple result", false);
+                        xcdDialog.StartPosition = FormStartPosition.CenterParent;
+                        xcdDialog.ShowDialog();
+                    }
                     else if (completedargs.Result is string)
                     {
                         var result = completedargs.Result.ToString();
-                        var xcdDialog = new XmlContentDisplayDialog(result, "Serialized FetchExpression result", false);
+                        var xcdDialog = new XmlContentDisplayDialog(result, "JSON Serialized RetrieveMultiple result", false);
                         xcdDialog.StartPosition = FormStartPosition.CenterParent;
                         xcdDialog.ShowDialog();
                     }
@@ -1199,6 +1265,58 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 }
             }
             return result;
+        }
+
+        private void HandleTVKeyDown(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                if (deleteToolStripMenuItem.Enabled)
+                {
+                    if (MessageBox.Show(deleteToolStripMenuItem.Text + " ?", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
+                    {
+                        HandleNodeMenuClick(deleteToolStripMenuItem);
+                    }
+                }
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
+            else if (e.KeyCode == Keys.Insert)
+            {
+                addMenu.Show(tvFetch.PointToScreen(tvFetch.Location));
+            }
+        }
+
+        private void SaveCWPFeed()
+        {
+            var feedid = Prompt.ShowDialog("Enter CWP Feed ID (enter existing ID to update feed)", "Save CWP Feed");
+            if (feedid == null)
+            {
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(feedid))
+            {
+                MessageBox.Show("Feed not saved.", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            var qeFeed = new QueryExpression("cint_feed");
+            qeFeed.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
+            qeFeed.Criteria.AddCondition("cint_id", ConditionOperator.Equal, feedid);
+            var feeds = Service.RetrieveMultiple(qeFeed);
+            Entity feed = feeds.Entities.Count > 0 ? feeds.Entities[0] : new Entity("cint_feed");
+            feed.Attributes.Add("cint_fetchxml", GetFetchString());
+            var verb = feed.Id.Equals(Guid.Empty) ? "created" : "updated";
+            if (feed.Id.Equals(Guid.Empty))
+            {
+                feed.Attributes.Add("cint_id", feedid);
+                feed.Attributes.Add("cint_description", "Created by FetchXml Builder for XrmToolbox");
+                Service.Create(feed);
+            }
+            else
+            {
+                Service.Update(feed);
+            }
+            MessageBox.Show("CWP Feed " + feedid + " has been " + verb + "!", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

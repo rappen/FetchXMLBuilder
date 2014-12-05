@@ -107,6 +107,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case "attribute":
                     if (!string.IsNullOrEmpty(name))
                     {
+                        text += " ";
                         if (node.Parent != null)
                         {
                             var parent = GetAttributeFromNode(node.Parent, "name");
@@ -114,11 +115,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         }
                         if (!string.IsNullOrEmpty(agg) && !string.IsNullOrEmpty(name))
                         {
-                            text += " " + agg + "(" + name + ")";
+                            if (!string.IsNullOrEmpty(alias))
+                            {
+                                text += alias + "=";
+                            }
+                            text += agg + "(" + name + ")";
+                        }
+                        else if (!string.IsNullOrEmpty(alias))
+                        {
+                            text += alias + " (" + name + ")";
                         }
                         else
                         {
-                            text += " " + name;
+                            text += name;
+                        }
+                        var grp = GetAttributeFromNode(node, "groupby");
+                        if (grp == "true")
+                        {
+                            text += " GRP";
                         }
                     }
                     break;
@@ -199,21 +213,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             //HideAllContextMenuItems(form.nodeMenu);
             //form.deleteToolStripMenuItem.Visible = true;
 
-            form.addToolStripMenuItem.DropDown.Items.Clear();
+            form.addMenu.Items.Clear();
 
             var nodecapabilities = new FetchNodeCapabilities(node);
             foreach (var childcapability in nodecapabilities.ChildTypes)
             {
                 if (childcapability.Multiple || !node.Nodes.ContainsKey(childcapability.Name))
                 {
-                    var additem = form.addToolStripMenuItem.DropDown.Items.Add(childcapability.Name);
+                    var additem = form.addMenu.Items.Add(childcapability.Name);
                     additem.Tag = childcapability.Name;
                 }
             }
-            //form.addToolStripMenuItem.Enabled = form.addToolStripMenuItem.DropDown.Items.Count > 0;
-            if (form.addToolStripMenuItem.DropDown.Items.Count == 0)
+            if (form.addMenu.Items.Count == 0)
             {
-                var dummy = form.addToolStripMenuItem.DropDown.Items.Add("nothing to add");
+                var dummy = form.addMenu.Items.Add("nothing to add");
                 dummy.Enabled = false;
             }
             var cutcopy = true;
