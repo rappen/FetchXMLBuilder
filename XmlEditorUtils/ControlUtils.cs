@@ -88,49 +88,54 @@ namespace Cinteros.Xrm.XmlEditorUtils
         {
             foreach (Control control in controls)
             {
-                string attribute;
-                bool required;
-                string defaultvalue;
-                if (ControlUtils.GetControlDefinition(control, out attribute, out required, out defaultvalue))
+                FillControl(collection, control);
+            }
+        }
+
+        public static void FillControl(Dictionary<string, string> collection, Control control)
+        {
+            string attribute;
+            bool required;
+            string defaultvalue;
+            if (ControlUtils.GetControlDefinition(control, out attribute, out required, out defaultvalue))
+            {
+                var value = collection.ContainsKey(attribute) ? collection[attribute] : defaultvalue;
+                if (control is CheckBox)
                 {
-                    var value = collection.ContainsKey(attribute) ? collection[attribute] : defaultvalue;
-                    if (control is CheckBox)
+                    var chk = false;
+                    bool.TryParse(value, out chk);
+                    ((CheckBox)control).Checked = chk;
+                }
+                else if (control is TextBox)
+                {
+                    ((TextBox)control).Text = value;
+                }
+                else if (control is ComboBox)
+                {
+                    var cmb = (ComboBox)control;
+                    object selitem = null;
+                    foreach (var item in cmb.Items)
                     {
-                        var chk = false;
-                        bool.TryParse(value, out chk);
-                        ((CheckBox)control).Checked = chk;
-                    }
-                    else if (control is TextBox)
-                    {
-                        ((TextBox)control).Text = value;
-                    }
-                    else if (control is ComboBox)
-                    {
-                        var cmb = (ComboBox)control;
-                        object selitem = null;
-                        foreach (var item in cmb.Items)
+                        if (item is IComboBoxItem)
                         {
-                            if (item is IComboBoxItem)
+                            if (((IComboBoxItem)item).GetValue() == value)
                             {
-                                if (((IComboBoxItem)item).GetValue() == value)
-                                {
-                                    selitem = item;
-                                    break;
-                                }
+                                selitem = item;
+                                break;
                             }
                         }
-                        if (selitem != null)
-                        {
-                            cmb.SelectedItem = selitem;
-                        }
-                        else if (cmb.Items.IndexOf(value) >= 0)
-                        {
-                            cmb.SelectedItem = value;
-                        }
-                        else
-                        {
-                            cmb.Text = value;
-                        }
+                    }
+                    if (selitem != null)
+                    {
+                        cmb.SelectedItem = selitem;
+                    }
+                    else if (cmb.Items.IndexOf(value) >= 0)
+                    {
+                        cmb.SelectedItem = value;
+                    }
+                    else
+                    {
+                        cmb.Text = value;
                     }
                 }
             }

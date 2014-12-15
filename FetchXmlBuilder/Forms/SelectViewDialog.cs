@@ -23,9 +23,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             InitializeComponent();
             Caller = caller;
             cmbEntity.Items.Clear();
-            if (FetchXmlBuilder.entities != null)
+            var entities = FetchXmlBuilder.GetDisplayEntities();
+            if (entities != null)
             {
-                foreach (var entity in FetchXmlBuilder.entities)
+                foreach (var entity in entities)
                 {
                     if (entity.Value.IsIntersect != true && FetchXmlBuilder.views.ContainsKey(entity.Value.LogicalName + "|S"))
                     {

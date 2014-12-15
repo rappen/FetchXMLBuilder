@@ -15,7 +15,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         public XmlContentDisplayDialog(string xmlString, string header, bool allowEdit)
         {
             InitializeComponent();
-            Text = string.IsNullOrEmpty(header) ? "FetchXmlBuilder" : header;
+            Text = string.IsNullOrEmpty(header) ? "FetchXML Builder" : header;
             panOk.Visible = allowEdit;
             if (xmlString.Length > 100000)
             {

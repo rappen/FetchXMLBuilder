@@ -51,9 +51,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void PopulateControls()
         {
             cmbEntity.Items.Clear();
-            if (FetchXmlBuilder.entities != null)
+            var entities = FetchXmlBuilder.GetDisplayEntities();
+            if (entities != null)
             {
-                foreach (var entity in FetchXmlBuilder.entities)
+                foreach (var entity in entities)
                 {
                     cmbEntity.Items.Add(new EntityItem(entity.Value));
                 }

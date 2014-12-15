@@ -26,12 +26,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder : XrmToolBox.PluginBase
     {
+        #region Declarations
         const string settingfile = "Cinteros.Xrm.FetchXmlBuilder.Settings.xml";
         internal Clipboard clipboard = new Clipboard();
         private bool Initializing = true;
         private XmlDocument fetchDoc;
-        internal static Dictionary<string, EntityMetadata> entities;
-        internal static List<string> entityShitList = new List<string>();
+        private static Dictionary<string, EntityMetadata> entities;
+        internal static List<string> entityShitList = new List<string>(); // Oops, did I name that one??
         internal static Dictionary<string, List<Entity>> views;
         private static string fetchTemplate = "<fetch count=\"50\"><entity name=\"\"/></fetch>";
         private string fileName;
@@ -70,6 +71,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         }
         internal bool working = false;
         internal static bool useFriendlyNames = false;
+        private static bool showEntitiesAll = true;
+        private static bool showEntitiesManaged = true;
+        private static bool showEntitiesUnmanaged = true;
+        private static bool showEntitiesCustomizable = true;
+        private static bool showEntitiesUncustomizable = true;
+        private static bool showEntitiesCustom = true;
+        private static bool showEntitiesStandard = true;
+        private static bool showEntitiesIntersect = true;
+        private static bool showEntitiesOnlyValidAF = true;
+        private static bool showAttributesAll = true;
+        private static bool showAttributesManaged = true;
+        private static bool showAttributesUnmanaged = true;
+        private static bool showAttributesCustomizable = true;
+        private static bool showAttributesUncustomizable = true;
+        private static bool showAttributesCustom = true;
+        private static bool showAttributesStandard = true;
+        private static bool showAttributesOnlyValidAF = true;
         private string treeChecksum = "";
         private string attributesChecksum = "";
         private bool fetchChanged = false;
@@ -84,7 +102,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
         private bool buttonsEnabled = true;
-        private static int userLCID = 0;
+        //private static int userLCID = 0;
+        #endregion Declarations
 
         public FetchXmlBuilder()
         {
@@ -101,16 +120,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         #region Event handlers
 
+        public override void ClosingPlugin(XrmToolBox.PluginCloseInfo info)
+        {
+            if (!SaveIfChanged())
+            {
+                info.Cancel = true;
+            }
+            else
+            {
+                SaveSetting();
+            }
+        }
+
         private void FetchXmlBuilder_Load(object sender, EventArgs e)
         {
             LoadSetting();
             Initializing = false;
-        }
-
-        private void FetchXmlBuilder_OnCloseTool(object sender, EventArgs e)
-        {
-            // Do things when the tool is closing
-            SaveSetting();
         }
 
         private void FetchXmlBuilder_ConnectionUpdated(object sender, ConnectionUpdatedEventArgs e)
@@ -135,10 +160,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsbCloseThisTab_Click(object sender, EventArgs e)
         {
-            if (SaveIfChanged())
-            {
-                CloseToolPrompt();
-            }
+            CloseTool();
         }
 
         private void tsbNew_Click(object sender, EventArgs e)
@@ -163,7 +185,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             var ofd = new OpenFileDialog
             {
-                Title = "Select an XML file containing Fetch XML",
+                Title = "Select an XML file containing FetchXML",
                 Filter = "XML file (*.xml)|*.xml"
             };
 
@@ -200,7 +222,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsbEdit_Click(object sender, EventArgs e)
         {
             var xml = GetFetchString();
-            var xcdDialog = new XmlContentDisplayDialog(xml, "Fetch XML", true);
+            var xcdDialog = new XmlContentDisplayDialog(xml, "FetchXML", true);
             xcdDialog.StartPosition = FormStartPosition.CenterParent;
             if (xcdDialog.ShowDialog() == DialogResult.OK)
             {
@@ -221,6 +243,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     DisplayDefinition();
                     FetchChanged = true;
                     EnableControls(true);
+                    BuildAndValidateXml(true);
                 }
             }
         }
@@ -317,6 +340,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             useFriendlyNames = tsmiFriendly.Checked;
             BuildAndValidateXml(false);
             DisplayDefinition();
+            HandleNodeSelection(tvFetch.SelectedNode);
         }
 
         private void tsmiJSONresult_CheckedChanged(object sender, EventArgs e)
@@ -337,12 +361,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsbAbout_Click(object sender, EventArgs e)
         {
             MessageBox.Show(
-                "FetchXml Builder for XrmToolbox\n\n" +
-                "Developed by Jonas Rapp at Cinteros AB\n\n" +
+                "FetchXML Builder for XrmToolbox\n\n" +
+                "Developed by Jonas Rapp at Cinteros AB.\n\n" +
                 "Serialization to XML and JSON are custom developed to\n" +
                 "be compact transports of CRM entity information.\n" +
                 "There are deserialization methods as well...",
-                "About FetchXml Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                "About FetchXML Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void tsmiSaveCWPNew_Click(object sender, EventArgs e)
@@ -350,7 +374,98 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             SaveCWPFeed();
         }
 
+        private void tsmiEntities_Click(object sender, EventArgs e)
+        {
+            if (sender != tsmiEntitiesAll)
+            {
+                tsmiEntitiesAll.Checked =
+                    tsmiEntitiesManaged.Checked &&
+                    tsmiEntitiesUnmanaged.Checked &&
+                    tsmiEntitiesCustomizable.Checked &&
+                    tsmiEntitiesUncustomizable.Checked &&
+                    tsmiEntitiesCustom.Checked &&
+                    tsmiEntitiesStandard.Checked &&
+                    tsmiEntitiesIntersect.Checked &&
+                    !tsmiEntitiesOnlyValidAF.Checked;
+            }
+            if (!tsmiEntitiesManaged.Checked && !tsmiEntitiesUnmanaged.Checked)
+            {   // Neither managed nor unmanaged is not such a good idea...
+                tsmiEntitiesUnmanaged.Checked = true;
+            }
+            if (!tsmiEntitiesCustomizable.Checked && !tsmiEntitiesUncustomizable.Checked)
+            {   // Neither customizable nor uncustomizable is not such a good idea...
+                tsmiEntitiesCustomizable.Checked = true;
+            }
+            if (!tsmiEntitiesCustom.Checked && !tsmiEntitiesStandard.Checked)
+            {   // Neither custom nor standard is not such a good idea...
+                tsmiEntitiesCustom.Checked = true;
+            }
+            tsmiEntitiesManaged.Enabled = !tsmiEntitiesAll.Checked;
+            tsmiEntitiesUnmanaged.Enabled = !tsmiEntitiesAll.Checked;
+            tsmiEntitiesCustomizable.Enabled = !tsmiEntitiesAll.Checked;
+            tsmiEntitiesUncustomizable.Enabled = !tsmiEntitiesAll.Checked;
+            tsmiEntitiesCustom.Enabled = !tsmiEntitiesAll.Checked;
+            tsmiEntitiesStandard.Enabled = !tsmiEntitiesAll.Checked;
+            tsmiEntitiesIntersect.Enabled = !tsmiEntitiesAll.Checked;
+            tsmiEntitiesOnlyValidAF.Enabled = !tsmiEntitiesAll.Checked;
+            showEntitiesAll = tsmiEntitiesAll.Checked;
+            showEntitiesManaged = tsmiEntitiesManaged.Checked;
+            showEntitiesUnmanaged = tsmiEntitiesUnmanaged.Checked;
+            showEntitiesCustomizable = tsmiEntitiesCustomizable.Checked;
+            showEntitiesUncustomizable = tsmiEntitiesUncustomizable.Checked;
+            showEntitiesCustom = tsmiEntitiesCustom.Checked;
+            showEntitiesStandard = tsmiEntitiesStandard.Checked;
+            showEntitiesIntersect = tsmiEntitiesIntersect.Checked;
+            showEntitiesOnlyValidAF = tsmiEntitiesOnlyValidAF.Checked;
+            HandleNodeSelection(tvFetch.SelectedNode);
+        }
+
+        private void tsmiAttributes_Click(object sender, EventArgs e)
+        {
+            if (sender != tsmiAttributesAll)
+            {
+                tsmiAttributesAll.Checked =
+                    tsmiAttributesManaged.Checked &&
+                    tsmiAttributesUnmanaged.Checked &&
+                    tsmiAttributesCustomizable.Checked &&
+                    tsmiAttributesUncustomizable.Checked &&
+                    tsmiAttributesCustom.Checked &&
+                    tsmiAttributesStandard.Checked &&
+                    !tsmiAttributesOnlyValidAF.Checked;
+            }
+            if (!tsmiAttributesManaged.Checked && !tsmiAttributesUnmanaged.Checked)
+            {   // Neither managed nor unmanaged is not such a good idea...
+                tsmiAttributesUnmanaged.Checked = true;
+            }
+            if (!tsmiAttributesCustomizable.Checked && !tsmiAttributesUncustomizable.Checked)
+            {   // Neither customizable nor uncustomizable is not such a good idea...
+                tsmiAttributesCustomizable.Checked = true;
+            }
+            if (!tsmiAttributesCustom.Checked && !tsmiAttributesStandard.Checked)
+            {   // Neither custom nor standard is not such a good idea...
+                tsmiAttributesCustom.Checked = true;
+            }
+            tsmiAttributesManaged.Enabled = !tsmiAttributesAll.Checked;
+            tsmiAttributesUnmanaged.Enabled = !tsmiAttributesAll.Checked;
+            tsmiAttributesCustomizable.Enabled = !tsmiAttributesAll.Checked;
+            tsmiAttributesUncustomizable.Enabled = !tsmiAttributesAll.Checked;
+            tsmiAttributesCustom.Enabled = !tsmiAttributesAll.Checked;
+            tsmiAttributesStandard.Enabled = !tsmiAttributesAll.Checked;
+            tsmiAttributesOnlyValidAF.Enabled = !tsmiAttributesAll.Checked;
+            showAttributesAll = tsmiAttributesAll.Checked;
+            showAttributesManaged = tsmiAttributesManaged.Checked;
+            showAttributesUnmanaged = tsmiAttributesUnmanaged.Checked;
+            showAttributesCustomizable = tsmiAttributesCustomizable.Checked;
+            showAttributesUncustomizable = tsmiAttributesUncustomizable.Checked;
+            showAttributesCustom = tsmiAttributesCustom.Checked;
+            showAttributesStandard = tsmiAttributesStandard.Checked;
+            showAttributesOnlyValidAF = tsmiAttributesOnlyValidAF.Checked;
+            HandleNodeSelection(tvFetch.SelectedNode);
+        }
+
         #endregion Event handlers
+
+        #region Instance methods
 
         /// <summary>Saves various configurations to file for next session</summary>
         private void SaveSetting()
@@ -367,8 +482,43 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 config.AppSettings.Settings.Add("FetchXML", xml);
             }
-            config.AppSettings.Settings.Add("JSON", tsmiJSONresult.Checked ? "1" : "0");
+            SaveControlValue(config, tsmiJSONresult);
+            SaveControlValue(config, tsmiEntitiesManaged);
+            SaveControlValue(config, tsmiEntitiesUnmanaged);
+            SaveControlValue(config, tsmiEntitiesCustomizable);
+            SaveControlValue(config, tsmiEntitiesUncustomizable);
+            SaveControlValue(config, tsmiEntitiesCustom);
+            SaveControlValue(config, tsmiEntitiesStandard);
+            SaveControlValue(config, tsmiEntitiesIntersect);
+            SaveControlValue(config, tsmiEntitiesOnlyValidAF);
+            SaveControlValue(config, tsmiAttributesManaged);
+            SaveControlValue(config, tsmiAttributesUnmanaged);
+            SaveControlValue(config, tsmiAttributesCustomizable);
+            SaveControlValue(config, tsmiAttributesUncustomizable);
+            SaveControlValue(config, tsmiAttributesCustom);
+            SaveControlValue(config, tsmiAttributesStandard);
+            SaveControlValue(config, tsmiAttributesOnlyValidAF);
             config.Save();
+        }
+
+        private void SaveControlValue(Configuration config, object control)
+        {
+            if (control is ToolStripMenuItem)
+            {
+                config.AppSettings.Settings.Add(((ToolStripMenuItem)control).Name, ((ToolStripMenuItem)control).Checked ? "1" : "0");
+            }
+        }
+
+        private void LoadControlValue(Configuration config, object control)
+        {
+            if (control is ToolStripMenuItem)
+            {
+                var name = ((ToolStripMenuItem)control).Name;
+                if (config.AppSettings.Settings[name] != null)
+                {
+                    ((ToolStripMenuItem)control).Checked = config.AppSettings.Settings[name].Value == "1";
+                }
+            }
         }
 
         /// <summary>Loads configurations from file</summary>
@@ -387,44 +537,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 fetchDoc.LoadXml(xml);
                 DisplayDefinition();
             }
-            if (config.AppSettings.Settings["JSON"] != null && config.AppSettings.Settings["JSON"].Value == "1")
-            {
-                tsmiJSONresult.Checked = true;
-                tsmiXMLresult.Checked = false;
-            }
-        }
-
-        private void DoThingsAsync()
-        {
-            if (Initializing)
-            {
-                return;
-            }
-            WorkAsync("Doing something...",
-                (eventargs) =>
-                {
-                    //var crmsvc = new CrmServiceProxy(Service);
-                    //var log = new PluginLogger("FetchXmlBuilder", true, "");
-                    // Do more things
-                    DoThingsThreadSafe();
-                },
-                (completedeventargs) =>
-                {
-                    if (completedeventargs.Error != null)
-                    {
-                        // Something went wrong
-                    }
-                });
-        }
-
-        private void DoThingsThreadSafe()
-        {
-            MethodInvoker mi = delegate
-            {
-                // Access controls on the form
-                // And do things
-            };
-            if (InvokeRequired) Invoke(mi); else mi();
+            LoadControlValue(config, tsmiJSONresult);
+            LoadControlValue(config, tsmiEntitiesManaged);
+            LoadControlValue(config, tsmiEntitiesUnmanaged);
+            LoadControlValue(config, tsmiEntitiesCustomizable);
+            LoadControlValue(config, tsmiEntitiesUncustomizable);
+            LoadControlValue(config, tsmiEntitiesCustom);
+            LoadControlValue(config, tsmiEntitiesStandard);
+            LoadControlValue(config, tsmiEntitiesIntersect);
+            LoadControlValue(config, tsmiEntitiesOnlyValidAF);
+            LoadControlValue(config, tsmiAttributesManaged);
+            LoadControlValue(config, tsmiAttributesUnmanaged);
+            LoadControlValue(config, tsmiAttributesCustomizable);
+            LoadControlValue(config, tsmiAttributesUncustomizable);
+            LoadControlValue(config, tsmiAttributesCustom);
+            LoadControlValue(config, tsmiAttributesStandard);
+            LoadControlValue(config, tsmiAttributesOnlyValidAF);
+            tsmiEntities_Click(null, null);
+            tsmiAttributes_Click(null, null);
         }
 
         /// <summary>Enables or disables all buttons on the form</summary>
@@ -433,24 +563,40 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             MethodInvoker mi = delegate
             {
-                tsbNew.Enabled = enabled;
-                tsbEdit.Enabled = enabled;
-                tsbOpen.Enabled = enabled;
-                tsmiOpenFile.Enabled = enabled;
-                tsmiOpenView.Enabled = enabled;
-                tsbSave.Enabled = enabled;
-                tsmiSaveFile.Enabled = enabled && FetchChanged && !string.IsNullOrEmpty(FileName);
-                tsmiSaveFileAs.Enabled = enabled && tvFetch.Nodes.Count > 0;
-                tsmiSaveView.Enabled = enabled && FetchChanged && View != null;
-                tsmiSaveCWPNew.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
-                tsbOptions.Enabled = enabled;
-                tsmiFriendly.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
-                tsbExecute.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
-                gbFetchTree.Enabled = enabled;
-                gbProperties.Enabled = enabled;
-                buttonsEnabled = enabled;
+                try
+                {
+                    tsbNew.Enabled = enabled;
+                    tsbEdit.Enabled = enabled;
+                    tsbOpen.Enabled = enabled;
+                    tsmiOpenFile.Enabled = enabled;
+                    tsmiOpenView.Enabled = enabled;
+                    tsbSave.Enabled = enabled;
+                    tsmiSaveFile.Enabled = enabled && FetchChanged && !string.IsNullOrEmpty(FileName);
+                    tsmiSaveFileAs.Enabled = enabled && tvFetch.Nodes.Count > 0;
+                    tsmiSaveView.Enabled = enabled && FetchChanged && View != null;
+                    tsmiSaveCWPNew.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
+                    tsbOptions.Enabled = enabled;
+                    tsmiFriendly.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
+                    tsmiShowEntities.Enabled = enabled && Service != null;
+                    tsmiShowAttributes.Enabled = enabled && Service != null;
+                    tsbExecute.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
+                    gbFetchTree.Enabled = enabled;
+                    gbProperties.Enabled = enabled;
+                    buttonsEnabled = enabled;
+                }
+                catch
+                {
+                    // Now what?
+                }
             };
-            if (InvokeRequired) { Invoke(mi); } else { mi(); }
+            if (InvokeRequired)
+            {
+                Invoke(mi);
+            }
+            else
+            {
+                mi();
+            }
         }
 
         /// <summary>Repopulate the entire tree from the xml document containing the FetchXML</summary>
@@ -563,7 +709,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             var ok = true;
             if (FetchChanged)
             {
-                var result = MessageBox.Show("Fetch XML has changed.\nSave changes?", "Confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                var result = MessageBox.Show("FetchXML has changed.\nSave changes?", "Confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                 if (result == DialogResult.Cancel)
                 {
                     ok = false;
@@ -598,7 +744,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (!string.IsNullOrEmpty(FileName))
             {
                 EnableControls(false);
-
                 BuildAndValidateXml();
                 {
                     fetchDoc.Save(FileName);
@@ -642,100 +787,99 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 tvFetch.SelectedNode = node;
             }
-            var collec = (Dictionary<string, string>)node.Tag;
-
-            TreeNodeHelper.AddContextMenu(node, this);
-            Control existingControl = panelContainer.Controls.Count > 0 ? panelContainer.Controls[0] : null;
-            this.deleteToolStripMenuItem.Text = "Delete " + node.Name;
 
             UserControl ctrl = null;
-            switch (node.Name)
+            Control existingControl = panelContainer.Controls.Count > 0 ? panelContainer.Controls[0] : null;
+            if (node != null)
             {
-                case "fetch":
-                    ctrl = new fetchControl(collec, this);
-                    break;
-                case "entity":
-                    ctrl = new entityControl(collec, this);
-                    break;
-                case "link-entity":
-                    if (node.Parent != null)
-                    {
-                        switch (node.Parent.Name)
+                TreeNodeHelper.AddContextMenu(node, this);
+                this.deleteToolStripMenuItem.Text = "Delete " + node.Name;
+                var collec = (Dictionary<string, string>)node.Tag;
+
+                switch (node.Name)
+                {
+                    case "fetch":
+                        ctrl = new fetchControl(collec, this);
+                        break;
+                    case "entity":
+                        ctrl = new entityControl(collec, this);
+                        break;
+                    case "link-entity":
+                        if (node.Parent != null)
                         {
-                            case "entity":
-                            case "link-entity":
-                                var entityName = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
-                                if (NeedToLoadEntity(entityName))
-                                {
-                                    if (!working)
+                            switch (node.Parent.Name)
+                            {
+                                case "entity":
+                                case "link-entity":
+                                    var entityName = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
+                                    if (NeedToLoadEntity(entityName))
                                     {
-                                        LoadEntityDetails(entityName, RefreshSelectedNode);
+                                        if (!working)
+                                        {
+                                            LoadEntityDetails(entityName, RefreshSelectedNode);
+                                        }
+                                        break;
                                     }
                                     break;
-                                }
-                                break;
+                            }
                         }
-                    }
-                    var linkEntityName = TreeNodeHelper.GetAttributeFromNode(node, "name");
-                    if (NeedToLoadEntity(linkEntityName))
-                    {
-                        if (!working)
+                        var linkEntityName = TreeNodeHelper.GetAttributeFromNode(node, "name");
+                        if (NeedToLoadEntity(linkEntityName))
                         {
-                            LoadEntityDetails(linkEntityName, RefreshSelectedNode);
+                            if (!working)
+                            {
+                                LoadEntityDetails(linkEntityName, RefreshSelectedNode);
+                            }
+                            break;
+                        }
+                        ctrl = new linkEntityControl(node, this);
+                        break;
+                    case "attribute":
+                    case "order":
+                        if (node.Parent != null)
+                        {
+                            switch (node.Parent.Name)
+                            {
+                                case "entity":
+                                case "link-entity":
+                                    var entityName = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
+                                    if (NeedToLoadEntity(entityName))
+                                    {
+                                        if (!working)
+                                        {
+                                            LoadEntityDetails(entityName, RefreshSelectedNode);
+                                        }
+                                        break;
+                                    }
+                                    AttributeMetadata[] attributes = GetDisplayAttributes(entityName);
+                                    if (node.Name == "attribute")
+                                    {
+                                        ctrl = new attributeControl(node, attributes, this);
+                                    }
+                                    else if (node.Name == "order")
+                                    {
+                                        ctrl = new orderControl(node, attributes, this);
+                                    }
+                                    break;
+                            }
                         }
                         break;
-                    }
-                    ctrl = new linkEntityControl(node, this);
-                    break;
-                case "attribute":
-                case "order":
-                    if (node.Parent != null)
-                    {
-                        switch (node.Parent.Name)
-                        {
-                            case "entity":
-                            case "link-entity":
-                                var entityName = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
-                                if (NeedToLoadEntity(entityName))
-                                {
-                                    if (!working)
-                                    {
-                                        LoadEntityDetails(entityName, RefreshSelectedNode);
-                                    }
-                                    break;
-                                }
-                                AttributeMetadata[] attributes = null;
-                                if (entities != null && entities.ContainsKey(entityName))
-                                {
-                                    attributes = entities[entityName].Attributes;
-                                }
-                                if (node.Name == "attribute")
-                                {
-                                    ctrl = new attributeControl(node, attributes, this);
-                                }
-                                else if (node.Name == "order")
-                                {
-                                    ctrl = new orderControl(node, attributes, this);
-                                }
-                                break;
-                        }
-                    }
-                    break;
-                case "filter":
-                    ctrl = new filterControl(collec, this);
-                    break;
-                case "condition":
-                    ctrl = new conditionControl(node, this);
-                    break;
-                case "value":
-                    ctrl = new valueControl(collec, this);
-                    break;
+                    case "filter":
+                        ctrl = new filterControl(collec, this);
+                        break;
+                    case "condition":
+                        ctrl = new conditionControl(node, this);
+                        break;
+                    case "value":
+                        ctrl = new valueControl(collec, this);
+                        break;
 
-                default:
-                    {
-                        panelContainer.Controls.Clear();
-                    }
-                    break;
+                    default:
+                        {
+                            panelContainer.Controls.Clear();
+                        }
+                        break;
+                }
             }
             if (ctrl != null)
             {
@@ -773,16 +917,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 (eventargs) =>
                 {
                     EnableControls(false);
-                    var whoamireq = (WhoAmIResponse)Service.Execute(new WhoAmIRequest());
-                    var queryuser = new QueryByAttribute("usersettings");
-                    queryuser.ColumnSet = new ColumnSet("uilanguageid");
-                    queryuser.AddAttributeValue("systemuserid", whoamireq.UserId);
-                    var result = Service.RetrieveMultiple(queryuser);
-                    if (result.Entities.Count > 0 && result.Entities[0].Attributes.Contains("uilanguageid"))
-                    {
-                        userLCID = result.Entities[0].GetAttributeValue<int>("uilanguageid");
-                    }
-
                     var req = new RetrieveAllEntitiesRequest()
                     {
                         EntityFilters = EntityFilters.Entity,
@@ -811,23 +945,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     EnableControls(true);
                 });
         }
-
-        //private void LoadUsedEntities()
-        //{
-        //    var usedEntities = new List<string>();
-        //    foreach (TreeNode node in tvFetch.Nodes)
-        //    {
-        //        if (node.Name == "entity" || node.Name == "link-entity")
-        //        {
-        //            var entityname = TreeNodeHelper.GetAttributeFromNode(node, "name");
-        //            if (NeedToLoadEntity(entityname))
-        //            {
-        //                LoadEntityDetails(entityname, LoadUsedEntities);
-        //                return;
-        //            }
-        //        }
-        //    }
-        //}
 
         internal void LoadEntityDetails(string entityName, Action detailsLoaded)
         {
@@ -866,97 +983,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             }
                         }
                         working = false;
+                        TreeNodeHelper.SetNodeText(tvFetch.SelectedNode);
                         detailsLoaded();
                     }
                     working = false;
                 });
-        }
-
-        internal static string GetEntityDisplayName(string entityName)
-        {
-            if (!useFriendlyNames)
-            {
-                return entityName;
-            }
-            if (entities != null && entities.ContainsKey(entityName))
-            {
-                entityName = GetEntityDisplayName(entities[entityName]);
-            }
-            return entityName;
-        }
-
-        internal static string GetEntityDisplayName(EntityMetadata entity)
-        {
-            var result = entity.LogicalName;
-            if (useFriendlyNames)
-            {
-                foreach (var label in entity.DisplayName.LocalizedLabels)
-                {
-                    if (label.LanguageCode == userLCID)
-                    {
-                        result = label.Label;
-                        break;
-                    }
-                }
-                if (result == entity.LogicalName && entity.DisplayName.LocalizedLabels.Count > 0)
-                {
-                    result = entity.DisplayName.LocalizedLabels[0].Label;
-                }
-            }
-            return result;
-        }
-
-        internal static AttributeMetadata GetAttribute(string entityName, string attributeName)
-        {
-            if (entities != null && entities.ContainsKey(entityName))
-            {
-                if (entities[entityName].Attributes != null)
-                {
-                    foreach (var attribute in entities[entityName].Attributes)
-                    {
-                        if (attribute.LogicalName == attributeName)
-                        {
-                            return attribute;
-                        }
-                    }
-                }
-            }
-            return null;
-        }
-
-        internal static string GetAttributeDisplayName(string entityName, string attributeName)
-        {
-            if (!useFriendlyNames)
-            {
-                return attributeName;
-            }
-            var attribute = GetAttribute(entityName, attributeName);
-            if (attribute != null)
-            {
-                attributeName = GetAttributeDisplayName(attribute);
-            }
-            return attributeName;
-        }
-
-        internal static string GetAttributeDisplayName(AttributeMetadata attribute)
-        {
-            string attributeName = attribute.LogicalName;
-            if (useFriendlyNames)
-            {
-                foreach (var label in attribute.DisplayName.LocalizedLabels)
-                {
-                    if (label.LanguageCode == userLCID)
-                    {
-                        attributeName = label.Label;
-                        break;
-                    }
-                }
-                if (attributeName == attribute.LogicalName && attribute.DisplayName.LocalizedLabels.Count > 0)
-                {
-                    attributeName = attribute.DisplayName.LocalizedLabels[0].Label;
-                }
-            }
-            return attributeName;
         }
 
         private string GetTreeChecksum(TreeNode node)
@@ -988,21 +1019,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return result;
         }
 
-        internal static bool IsFetchAggregate(TreeNode node)
-        {
-            var aggregate = false;
-            var parent = node.Parent;
-            while (parent != null && parent.Name != "fetch")
-            {
-                parent = parent.Parent;
-            }
-            if (parent != null && parent.Name == "fetch")
-            {
-                aggregate = TreeNodeHelper.GetAttributeFromNode(parent, "aggregate") == "true";
-            }
-            return aggregate;
-        }
-
         private void FetchResults(string fetchType)
         {
             if (!BuildAndValidateXml(true))
@@ -1011,7 +1027,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             if (working)
             {
-                MessageBox.Show("Please wait until current transaction is done.");
+                MessageBox.Show("Busy doing something...\n\nPlease wait until current transaction is done.");
                 return;
             }
 
@@ -1050,7 +1066,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         XmlDocument doc = new XmlDocument();
                         doc.LoadXml(completedargs.Result.ToString());
-                        var xcdDialog = new XmlContentDisplayDialog(doc.OuterXml, "Fetch XML result", false);
+                        var xcdDialog = new XmlContentDisplayDialog(doc.OuterXml, "FetchXML result", false);
                         xcdDialog.StartPosition = FormStartPosition.CenterParent;
                         xcdDialog.ShowDialog();
                     }
@@ -1318,5 +1334,176 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             MessageBox.Show("CWP Feed " + feedid + " has been " + verb + "!", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        #endregion Instance methods
+
+        #region Static methods
+
+        internal static string GetEntityDisplayName(string entityName)
+        {
+            if (!useFriendlyNames)
+            {
+                return entityName;
+            }
+            if (entities != null && entities.ContainsKey(entityName))
+            {
+                entityName = GetEntityDisplayName(entities[entityName]);
+            }
+            return entityName;
+        }
+
+        internal static string GetEntityDisplayName(EntityMetadata entity)
+        {
+            var result = entity.LogicalName;
+            if (useFriendlyNames)
+            {
+                if (entity.DisplayName.UserLocalizedLabel != null)
+                {
+                    result = entity.DisplayName.UserLocalizedLabel.Label;
+                }
+                //else
+                //{
+                //    foreach (var label in entity.DisplayName.LocalizedLabels)
+                //    {
+                //        if (label.LanguageCode == userLCID)
+                //        {
+                //            result = label.Label;
+                //            break;
+                //        }
+                //    }
+                //}
+                if (result == entity.LogicalName && entity.DisplayName.LocalizedLabels.Count > 0)
+                {
+                    result = entity.DisplayName.LocalizedLabels[0].Label;
+                }
+            }
+            return result;
+        }
+
+        internal static AttributeMetadata GetAttribute(string entityName, string attributeName)
+        {
+            if (entities != null && entities.ContainsKey(entityName))
+            {
+                if (entities[entityName].Attributes != null)
+                {
+                    foreach (var attribute in entities[entityName].Attributes)
+                    {
+                        if (attribute.LogicalName == attributeName)
+                        {
+                            return attribute;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        internal static string GetAttributeDisplayName(string entityName, string attributeName)
+        {
+            if (!useFriendlyNames)
+            {
+                return attributeName;
+            }
+            var attribute = GetAttribute(entityName, attributeName);
+            if (attribute != null)
+            {
+                attributeName = GetAttributeDisplayName(attribute);
+            }
+            return attributeName;
+        }
+
+        internal static string GetAttributeDisplayName(AttributeMetadata attribute)
+        {
+            string attributeName = attribute.LogicalName;
+            if (useFriendlyNames)
+            {
+                if (attribute.DisplayName.UserLocalizedLabel != null)
+                {
+                    attributeName = attribute.DisplayName.UserLocalizedLabel.Label;
+                }
+                //else
+                //{
+                //    foreach (var label in attribute.DisplayName.LocalizedLabels)
+                //    {
+                //        if (label.LanguageCode == userLCID)
+                //        {
+                //            attributeName = label.Label;
+                //            break;
+                //        }
+                //    }
+                //}
+                if (attributeName == attribute.LogicalName && attribute.DisplayName.LocalizedLabels.Count > 0)
+                {
+                    attributeName = attribute.DisplayName.LocalizedLabels[0].Label;
+                }
+            }
+            return attributeName;
+        }
+
+        internal static bool IsFetchAggregate(TreeNode node)
+        {
+            var aggregate = false;
+            var parent = node.Parent;
+            while (parent != null && parent.Name != "fetch")
+            {
+                parent = parent.Parent;
+            }
+            if (parent != null && parent.Name == "fetch")
+            {
+                aggregate = TreeNodeHelper.GetAttributeFromNode(parent, "aggregate") == "true";
+            }
+            return aggregate;
+        }
+
+        internal static Dictionary<string, EntityMetadata> GetDisplayEntities()
+        {
+            var result = new Dictionary<string, EntityMetadata>();
+            if (entities != null)
+            {
+                foreach (var entity in entities)
+                {
+                    if (!showEntitiesAll)
+                    {
+                        if (!showEntitiesManaged && entity.Value.IsManaged == true) { continue; }
+                        if (!showEntitiesUnmanaged && entity.Value.IsManaged == false) { continue; }
+                        if (!showEntitiesCustomizable && entity.Value.IsCustomizable.Value) { continue; }
+                        if (!showEntitiesUncustomizable && !entity.Value.IsCustomizable.Value) { continue; }
+                        if (!showEntitiesStandard && entity.Value.IsCustomEntity == false) { continue; }
+                        if (!showEntitiesCustom && entity.Value.IsCustomEntity == true) { continue; }
+                        if (!showEntitiesIntersect && entity.Value.IsIntersect == true) { continue; }
+                        if (showEntitiesOnlyValidAF && entity.Value.IsValidForAdvancedFind == false) { continue; }
+                    }
+                    result.Add(entity.Key, entity.Value);
+                }
+            }
+            return result;
+        }
+
+        internal static AttributeMetadata[] GetDisplayAttributes(string entityName)
+        {
+            var result = new List<AttributeMetadata>();
+            AttributeMetadata[] attributes = null;
+            if (entities != null && entities.ContainsKey(entityName))
+            {
+                attributes = entities[entityName].Attributes;
+                foreach (var attribute in attributes)
+                {
+                    if (!showAttributesAll)
+                    {
+                        if (!showAttributesManaged && attribute.IsManaged == true) { continue; }
+                        if (!showAttributesUnmanaged && attribute.IsManaged == false) { continue; }
+                        if (!showAttributesCustomizable && attribute.IsCustomizable.Value) { continue; }
+                        if (!showAttributesUncustomizable && !attribute.IsCustomizable.Value) { continue; }
+                        if (!showAttributesStandard && attribute.IsCustomAttribute == false) { continue; }
+                        if (!showAttributesCustom && attribute.IsCustomAttribute == true) { continue; }
+                        if (showAttributesOnlyValidAF && attribute.IsValidForAdvancedFind.Value == false) { continue; }
+                    }
+                    result.Add(attribute);
+                }
+            }
+            return result.ToArray();
+        }
+
+        #endregion Static methods
     }
 }

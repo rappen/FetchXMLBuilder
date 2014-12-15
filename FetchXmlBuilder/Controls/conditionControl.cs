@@ -109,13 +109,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem)
             {
                 var oper = (OperatorItem)cmbOperator.SelectedItem;
-                var valueType = oper.GetValueType();
+                AttributeItem attribute = null;
+                if (cmbAttribute.SelectedItem != null && cmbAttribute.SelectedItem is AttributeItem)
+                {   // Get type from condition attribute
+                    attribute = (AttributeItem)cmbAttribute.SelectedItem;
+                }
+                var valueType = oper.ValueType;
+                var attributeType = oper.AttributeType;
                 var value = txtValue.Text.Trim();
                 if (valueType == AttributeTypeCode.ManagedProperty)
                 {   // Type not defined by operator
-                    if (cmbAttribute.SelectedItem != null && cmbAttribute.SelectedItem is AttributeItem)
+                    if (attribute != null)
                     {   // Get type from condition attribute
-                        var attribute = (AttributeItem)cmbAttribute.SelectedItem;
                         valueType = attribute.Metadata.AttributeType;
                     }
                     else
@@ -124,6 +129,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     }
                 }
                 var error = "";
+                if (attributeType != null && attribute != null)
+                {
+                    if (attributeType != attribute.Metadata.AttributeType)
+                    {
+                        if (attributeType != AttributeTypeCode.Lookup ||
+                            (attribute.Metadata.AttributeType != AttributeTypeCode.Owner &&
+                             attribute.Metadata.AttributeType != AttributeTypeCode.Customer))
+                        {
+                            error = "Operator " + oper.ToString() + " is not valid for attribute of type " + attribute.Metadata.AttributeType.ToString();
+                        }
+                    }
+                }
                 switch (valueType)
                 {
                     case null:
@@ -186,6 +203,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                         error = "Unsupported condition attribute type: " + valueType;
                         break;
                 }
+
                 if (!string.IsNullOrWhiteSpace(error))
                 {
                     MessageBox.Show(error, "Condition error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -242,18 +260,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 {
                     form.LoadEntityDetails(entityName, RefreshAttributes);
                 }
+                return;
             }
-            else if (FetchXmlBuilder.entities != null && FetchXmlBuilder.entities.ContainsKey(entityName))
+            var entities = FetchXmlBuilder.GetDisplayEntities();
+            var attributes = FetchXmlBuilder.GetDisplayAttributes(entityName);
+            foreach (var attribute in attributes)
             {
-                var attributes = FetchXmlBuilder.entities[entityName].Attributes;
-                if (attributes != null)
-                {
-                    foreach (var attribute in attributes)
-                    {
-                        AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, true);
-                    }
-                }
+                AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, true);
             }
+            // RefreshFill now that attributes are loaded
+            ControlUtils.FillControl(collec, cmbAttribute);
         }
 
         private static TreeNode GetClosestEntityNode(TreeNode node)
@@ -277,7 +293,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem)
             {
                 var oper = (OperatorItem)cmbOperator.SelectedItem;
-                var valueType = oper.GetValueType();
+                var valueType = oper.ValueType;
                 if (valueType == AttributeTypeCode.ManagedProperty)
                 {
                     if (cmbAttribute.SelectedItem != null && cmbAttribute.SelectedItem is AttributeItem)

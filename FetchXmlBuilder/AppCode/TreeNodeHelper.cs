@@ -83,6 +83,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     {
                         text += " count: " + attributes["count"];
                     }
+                    if (attributes.ContainsKey("page"))
+                    {
+                        text += " page: " + attributes["page"];
+                    }
+                    if (attributes.ContainsKey("returntotalrecordcount") && attributes["returntotalrecordcount"] == "true")
+                    {
+                        text += " RTRC";
+                    }
                     if (attributes.ContainsKey("aggregate") && attributes["aggregate"] == "true")
                     {
                         text += " aggregate";

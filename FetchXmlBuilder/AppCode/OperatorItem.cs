@@ -13,6 +13,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     {
         ConditionOperator oper = ConditionOperator.Equal;
 
+        /// <summary>Property that indicates what type the value must have for the condition to be valid</summary>
+        public AttributeTypeCode? ValueType { get { return GetValueType(); } }
+        /// <summary>Property that indicates what type the attribute must be of for the condition to be valid</summary>
+        public AttributeTypeCode? AttributeType { get { return GetAttributeType(); } }
+
         public OperatorItem(ConditionOperator Operator)
         {
             oper = Operator;
@@ -52,6 +57,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     return "eq-userteams";
                 case ConditionOperator.EqualUserOrUserTeams:
                     return "eq-useroruserteams";
+                case ConditionOperator.Last7Days:
+                    return "last-seven-days";
+                case ConditionOperator.Next7Days:
+                    return "next-seven-days";
             }
             var coname = oper.ToString();
             var result = coname.Substring(0, 1).ToLowerInvariant();
@@ -75,9 +84,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return System.Enum.GetName(typeof(ConditionOperator), oper);
         }
 
-        public AttributeTypeCode? GetValueType()
+        private AttributeTypeCode? GetValueType()
         {
+            // Default type to indicate "it depends on the attribute"
             AttributeTypeCode? result = AttributeTypeCode.ManagedProperty;
+
             switch (oper)
             {
                 case ConditionOperator.EqualUserId:
@@ -143,6 +154,73 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case ConditionOperator.NextXFiscalYears:
                 case ConditionOperator.NextXFiscalPeriods:
                     result = AttributeTypeCode.Integer;
+                    break;
+            }
+            return result;
+        }
+
+        private AttributeTypeCode? GetAttributeType()
+        {
+            // Default type to indicate "it depends on the attribute"
+            AttributeTypeCode? result = null;
+
+            switch (oper)
+            {
+                case ConditionOperator.EqualUserId:
+                case ConditionOperator.NotEqualUserId:
+                case ConditionOperator.EqualUserTeams:
+                case ConditionOperator.EqualUserOrUserTeams:
+                case ConditionOperator.EqualBusinessId:
+                case ConditionOperator.NotEqualBusinessId:
+                case ConditionOperator.EqualUserLanguage:
+                    result = AttributeTypeCode.Lookup;
+                    break;
+                case ConditionOperator.Yesterday:
+                case ConditionOperator.Today:
+                case ConditionOperator.Tomorrow:
+                case ConditionOperator.Last7Days:
+                case ConditionOperator.Next7Days:
+                case ConditionOperator.LastWeek:
+                case ConditionOperator.ThisWeek:
+                case ConditionOperator.NextWeek:
+                case ConditionOperator.LastMonth:
+                case ConditionOperator.ThisMonth:
+                case ConditionOperator.NextMonth:
+                case ConditionOperator.LastYear:
+                case ConditionOperator.ThisYear:
+                case ConditionOperator.NextYear:
+                case ConditionOperator.ThisFiscalYear:
+                case ConditionOperator.ThisFiscalPeriod:
+                case ConditionOperator.NextFiscalYear:
+                case ConditionOperator.NextFiscalPeriod:
+                case ConditionOperator.LastFiscalYear:
+                case ConditionOperator.LastFiscalPeriod:
+                case ConditionOperator.On:
+                case ConditionOperator.OnOrBefore:
+                case ConditionOperator.OnOrAfter:
+                case ConditionOperator.NotOn:
+                case ConditionOperator.LastXHours:
+                case ConditionOperator.NextXHours:
+                case ConditionOperator.LastXDays:
+                case ConditionOperator.NextXDays:
+                case ConditionOperator.LastXWeeks:
+                case ConditionOperator.NextXWeeks:
+                case ConditionOperator.LastXMonths:
+                case ConditionOperator.NextXMonths:
+                case ConditionOperator.LastXYears:
+                case ConditionOperator.NextXYears:
+                case ConditionOperator.OlderThanXMonths:
+                case ConditionOperator.LastXFiscalYears:
+                case ConditionOperator.LastXFiscalPeriods:
+                case ConditionOperator.NextXFiscalYears:
+                case ConditionOperator.NextXFiscalPeriods:
+                    result = AttributeTypeCode.DateTime;
+                    break;
+                case ConditionOperator.Like:
+                case ConditionOperator.NotLike:
+                case ConditionOperator.Contains:
+                case ConditionOperator.DoesNotContain:
+                    result = AttributeTypeCode.String;
                     break;
             }
             return result;

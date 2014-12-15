@@ -50,10 +50,39 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveFileAs = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiSaveView = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSaveCWPNew = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbAbout = new System.Windows.Forms.ToolStripButton();
             this.tsbOptions = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiFriendly = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiShowEntities = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiEntitiesAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiEntitiesManaged = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiEntitiesUnmanaged = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiEntitiesCustomizable = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiEntitiesUncustomizable = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiEntitiesStandard = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiEntitiesCustom = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiEntitiesIntersect = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiEntitiesOnlyValidAF = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowAttributes = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiAttributesAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiAttributesManaged = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiAttributesUnmanaged = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiAttributesCustomizable = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiAttributesUncustomizable = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiAttributesStandard = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiAttributesCustom = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiAttributesOnlyValidAF = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiXMLresult = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiJSONresult = new System.Windows.Forms.ToolStripMenuItem();
@@ -74,7 +103,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiSaveCWPNew = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain.SuspendLayout();
             this.gbProperties.SuspendLayout();
             this.gbFetchTree.SuspendLayout();
@@ -132,7 +160,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbNew.Name = "tsbNew";
             this.tsbNew.Size = new System.Drawing.Size(51, 22);
             this.tsbNew.Text = "New";
-            this.tsbNew.ToolTipText = "New Fetch XML";
+            this.tsbNew.ToolTipText = "New FetchXML";
             this.tsbNew.Click += new System.EventHandler(this.tsbNew_Click);
             // 
             // tsbEdit
@@ -160,7 +188,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbExecute.Name = "tsbExecute";
             this.tsbExecute.Size = new System.Drawing.Size(108, 22);
             this.tsbExecute.Text = "Execute Fetch";
-            this.tsbExecute.ToolTipText = "Execute Fetch XML to see the results";
+            this.tsbExecute.ToolTipText = "Execute FetchXML to see the results";
             // 
             // tsmiFetchRequest
             // 
@@ -194,7 +222,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbOpen.Name = "tsbOpen";
             this.tsbOpen.Size = new System.Drawing.Size(65, 22);
             this.tsbOpen.Text = "Open";
-            this.tsbOpen.ToolTipText = "Open Fetch XML file";
+            this.tsbOpen.ToolTipText = "Open FetchXML file";
             // 
             // tsmiOpenFile
             // 
@@ -228,7 +256,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbSave.Name = "tsbSave";
             this.tsbSave.Size = new System.Drawing.Size(60, 22);
             this.tsbSave.Text = "Save";
-            this.tsbSave.ToolTipText = "Save Fetch XML";
+            this.tsbSave.ToolTipText = "Save FetchXML";
             // 
             // tsmiSaveFile
             // 
@@ -258,6 +286,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveView.Text = "Save View";
             this.tsmiSaveView.Click += new System.EventHandler(this.tsmiSaveView_Click);
             // 
+            // tsmiSaveCWPNew
+            // 
+            this.tsmiSaveCWPNew.Name = "tsmiSaveCWPNew";
+            this.tsmiSaveCWPNew.Size = new System.Drawing.Size(178, 22);
+            this.tsmiSaveCWPNew.Text = "Save as CWP Feed...";
+            this.tsmiSaveCWPNew.Click += new System.EventHandler(this.tsmiSaveCWPNew_Click);
+            // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
@@ -277,6 +312,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsbOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiFriendly,
+            this.toolStripSeparator12,
+            this.tsmiShowEntities,
+            this.tsmiShowAttributes,
             this.toolStripSeparator7,
             this.tsmiXMLresult,
             this.tsmiJSONresult});
@@ -290,14 +328,279 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiFriendly.CheckOnClick = true;
             this.tsmiFriendly.Name = "tsmiFriendly";
-            this.tsmiFriendly.Size = new System.Drawing.Size(154, 22);
+            this.tsmiFriendly.Size = new System.Drawing.Size(156, 22);
             this.tsmiFriendly.Text = "Friendly names";
             this.tsmiFriendly.CheckedChanged += new System.EventHandler(this.tsmiFriendly_CheckedChanged);
+            // 
+            // toolStripSeparator12
+            // 
+            this.toolStripSeparator12.Name = "toolStripSeparator12";
+            this.toolStripSeparator12.Size = new System.Drawing.Size(153, 6);
+            // 
+            // tsmiShowEntities
+            // 
+            this.tsmiShowEntities.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiEntitiesAll,
+            this.toolStripSeparator8,
+            this.tsmiEntitiesManaged,
+            this.tsmiEntitiesUnmanaged,
+            this.toolStripSeparator9,
+            this.tsmiEntitiesCustomizable,
+            this.tsmiEntitiesUncustomizable,
+            this.toolStripSeparator10,
+            this.tsmiEntitiesStandard,
+            this.tsmiEntitiesCustom,
+            this.toolStripSeparator11,
+            this.tsmiEntitiesIntersect,
+            this.tsmiEntitiesOnlyValidAF});
+            this.tsmiShowEntities.Name = "tsmiShowEntities";
+            this.tsmiShowEntities.Size = new System.Drawing.Size(156, 22);
+            this.tsmiShowEntities.Text = "Show entities";
+            // 
+            // tsmiEntitiesAll
+            // 
+            this.tsmiEntitiesAll.Checked = true;
+            this.tsmiEntitiesAll.CheckOnClick = true;
+            this.tsmiEntitiesAll.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiEntitiesAll.Name = "tsmiEntitiesAll";
+            this.tsmiEntitiesAll.Size = new System.Drawing.Size(195, 22);
+            this.tsmiEntitiesAll.Text = "All";
+            this.tsmiEntitiesAll.Click += new System.EventHandler(this.tsmiEntities_Click);
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(192, 6);
+            // 
+            // tsmiEntitiesManaged
+            // 
+            this.tsmiEntitiesManaged.Checked = true;
+            this.tsmiEntitiesManaged.CheckOnClick = true;
+            this.tsmiEntitiesManaged.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiEntitiesManaged.Enabled = false;
+            this.tsmiEntitiesManaged.Name = "tsmiEntitiesManaged";
+            this.tsmiEntitiesManaged.Size = new System.Drawing.Size(195, 22);
+            this.tsmiEntitiesManaged.Text = "Managed";
+            this.tsmiEntitiesManaged.Click += new System.EventHandler(this.tsmiEntities_Click);
+            // 
+            // tsmiEntitiesUnmanaged
+            // 
+            this.tsmiEntitiesUnmanaged.Checked = true;
+            this.tsmiEntitiesUnmanaged.CheckOnClick = true;
+            this.tsmiEntitiesUnmanaged.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiEntitiesUnmanaged.Enabled = false;
+            this.tsmiEntitiesUnmanaged.Name = "tsmiEntitiesUnmanaged";
+            this.tsmiEntitiesUnmanaged.Size = new System.Drawing.Size(195, 22);
+            this.tsmiEntitiesUnmanaged.Text = "Unmanaged";
+            this.tsmiEntitiesUnmanaged.Click += new System.EventHandler(this.tsmiEntities_Click);
+            // 
+            // toolStripSeparator9
+            // 
+            this.toolStripSeparator9.Name = "toolStripSeparator9";
+            this.toolStripSeparator9.Size = new System.Drawing.Size(192, 6);
+            // 
+            // tsmiEntitiesCustomizable
+            // 
+            this.tsmiEntitiesCustomizable.Checked = true;
+            this.tsmiEntitiesCustomizable.CheckOnClick = true;
+            this.tsmiEntitiesCustomizable.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiEntitiesCustomizable.Enabled = false;
+            this.tsmiEntitiesCustomizable.Name = "tsmiEntitiesCustomizable";
+            this.tsmiEntitiesCustomizable.Size = new System.Drawing.Size(195, 22);
+            this.tsmiEntitiesCustomizable.Text = "Customizable";
+            this.tsmiEntitiesCustomizable.Click += new System.EventHandler(this.tsmiEntities_Click);
+            // 
+            // tsmiEntitiesUncustomizable
+            // 
+            this.tsmiEntitiesUncustomizable.Checked = true;
+            this.tsmiEntitiesUncustomizable.CheckOnClick = true;
+            this.tsmiEntitiesUncustomizable.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiEntitiesUncustomizable.Enabled = false;
+            this.tsmiEntitiesUncustomizable.Name = "tsmiEntitiesUncustomizable";
+            this.tsmiEntitiesUncustomizable.Size = new System.Drawing.Size(195, 22);
+            this.tsmiEntitiesUncustomizable.Text = "Uncustomizable";
+            this.tsmiEntitiesUncustomizable.Click += new System.EventHandler(this.tsmiEntities_Click);
+            // 
+            // toolStripSeparator10
+            // 
+            this.toolStripSeparator10.Name = "toolStripSeparator10";
+            this.toolStripSeparator10.Size = new System.Drawing.Size(192, 6);
+            // 
+            // tsmiEntitiesStandard
+            // 
+            this.tsmiEntitiesStandard.Checked = true;
+            this.tsmiEntitiesStandard.CheckOnClick = true;
+            this.tsmiEntitiesStandard.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiEntitiesStandard.Enabled = false;
+            this.tsmiEntitiesStandard.Name = "tsmiEntitiesStandard";
+            this.tsmiEntitiesStandard.Size = new System.Drawing.Size(195, 22);
+            this.tsmiEntitiesStandard.Text = "Standard";
+            this.tsmiEntitiesStandard.Click += new System.EventHandler(this.tsmiEntities_Click);
+            // 
+            // tsmiEntitiesCustom
+            // 
+            this.tsmiEntitiesCustom.Checked = true;
+            this.tsmiEntitiesCustom.CheckOnClick = true;
+            this.tsmiEntitiesCustom.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiEntitiesCustom.Enabled = false;
+            this.tsmiEntitiesCustom.Name = "tsmiEntitiesCustom";
+            this.tsmiEntitiesCustom.Size = new System.Drawing.Size(195, 22);
+            this.tsmiEntitiesCustom.Text = "Custom";
+            this.tsmiEntitiesCustom.Click += new System.EventHandler(this.tsmiEntities_Click);
+            // 
+            // toolStripSeparator11
+            // 
+            this.toolStripSeparator11.Name = "toolStripSeparator11";
+            this.toolStripSeparator11.Size = new System.Drawing.Size(192, 6);
+            // 
+            // tsmiEntitiesIntersect
+            // 
+            this.tsmiEntitiesIntersect.Checked = true;
+            this.tsmiEntitiesIntersect.CheckOnClick = true;
+            this.tsmiEntitiesIntersect.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiEntitiesIntersect.Enabled = false;
+            this.tsmiEntitiesIntersect.Name = "tsmiEntitiesIntersect";
+            this.tsmiEntitiesIntersect.Size = new System.Drawing.Size(195, 22);
+            this.tsmiEntitiesIntersect.Text = "Intersect";
+            this.tsmiEntitiesIntersect.Click += new System.EventHandler(this.tsmiEntities_Click);
+            // 
+            // tsmiEntitiesOnlyValidAF
+            // 
+            this.tsmiEntitiesOnlyValidAF.CheckOnClick = true;
+            this.tsmiEntitiesOnlyValidAF.Enabled = false;
+            this.tsmiEntitiesOnlyValidAF.Name = "tsmiEntitiesOnlyValidAF";
+            this.tsmiEntitiesOnlyValidAF.Size = new System.Drawing.Size(195, 22);
+            this.tsmiEntitiesOnlyValidAF.Text = "Only valid for Adv.Find";
+            this.tsmiEntitiesOnlyValidAF.Click += new System.EventHandler(this.tsmiEntities_Click);
+            // 
+            // tsmiShowAttributes
+            // 
+            this.tsmiShowAttributes.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiAttributesAll,
+            this.toolStripSeparator13,
+            this.tsmiAttributesManaged,
+            this.tsmiAttributesUnmanaged,
+            this.toolStripSeparator14,
+            this.tsmiAttributesCustomizable,
+            this.tsmiAttributesUncustomizable,
+            this.toolStripSeparator15,
+            this.tsmiAttributesStandard,
+            this.tsmiAttributesCustom,
+            this.toolStripSeparator16,
+            this.tsmiAttributesOnlyValidAF});
+            this.tsmiShowAttributes.Name = "tsmiShowAttributes";
+            this.tsmiShowAttributes.Size = new System.Drawing.Size(156, 22);
+            this.tsmiShowAttributes.Text = "Show attributes";
+            // 
+            // tsmiAttributesAll
+            // 
+            this.tsmiAttributesAll.Checked = true;
+            this.tsmiAttributesAll.CheckOnClick = true;
+            this.tsmiAttributesAll.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiAttributesAll.Name = "tsmiAttributesAll";
+            this.tsmiAttributesAll.Size = new System.Drawing.Size(195, 22);
+            this.tsmiAttributesAll.Text = "All";
+            this.tsmiAttributesAll.Click += new System.EventHandler(this.tsmiAttributes_Click);
+            // 
+            // toolStripSeparator13
+            // 
+            this.toolStripSeparator13.Name = "toolStripSeparator13";
+            this.toolStripSeparator13.Size = new System.Drawing.Size(192, 6);
+            // 
+            // tsmiAttributesManaged
+            // 
+            this.tsmiAttributesManaged.Checked = true;
+            this.tsmiAttributesManaged.CheckOnClick = true;
+            this.tsmiAttributesManaged.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiAttributesManaged.Enabled = false;
+            this.tsmiAttributesManaged.Name = "tsmiAttributesManaged";
+            this.tsmiAttributesManaged.Size = new System.Drawing.Size(195, 22);
+            this.tsmiAttributesManaged.Text = "Managed";
+            this.tsmiAttributesManaged.Click += new System.EventHandler(this.tsmiAttributes_Click);
+            // 
+            // tsmiAttributesUnmanaged
+            // 
+            this.tsmiAttributesUnmanaged.Checked = true;
+            this.tsmiAttributesUnmanaged.CheckOnClick = true;
+            this.tsmiAttributesUnmanaged.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiAttributesUnmanaged.Enabled = false;
+            this.tsmiAttributesUnmanaged.Name = "tsmiAttributesUnmanaged";
+            this.tsmiAttributesUnmanaged.Size = new System.Drawing.Size(195, 22);
+            this.tsmiAttributesUnmanaged.Text = "Unmanaged";
+            this.tsmiAttributesUnmanaged.Click += new System.EventHandler(this.tsmiAttributes_Click);
+            // 
+            // toolStripSeparator14
+            // 
+            this.toolStripSeparator14.Name = "toolStripSeparator14";
+            this.toolStripSeparator14.Size = new System.Drawing.Size(192, 6);
+            // 
+            // tsmiAttributesCustomizable
+            // 
+            this.tsmiAttributesCustomizable.Checked = true;
+            this.tsmiAttributesCustomizable.CheckOnClick = true;
+            this.tsmiAttributesCustomizable.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiAttributesCustomizable.Enabled = false;
+            this.tsmiAttributesCustomizable.Name = "tsmiAttributesCustomizable";
+            this.tsmiAttributesCustomizable.Size = new System.Drawing.Size(195, 22);
+            this.tsmiAttributesCustomizable.Text = "Customizable";
+            this.tsmiAttributesCustomizable.Click += new System.EventHandler(this.tsmiAttributes_Click);
+            // 
+            // tsmiAttributesUncustomizable
+            // 
+            this.tsmiAttributesUncustomizable.Checked = true;
+            this.tsmiAttributesUncustomizable.CheckOnClick = true;
+            this.tsmiAttributesUncustomizable.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiAttributesUncustomizable.Enabled = false;
+            this.tsmiAttributesUncustomizable.Name = "tsmiAttributesUncustomizable";
+            this.tsmiAttributesUncustomizable.Size = new System.Drawing.Size(195, 22);
+            this.tsmiAttributesUncustomizable.Text = "Uncustomizable";
+            this.tsmiAttributesUncustomizable.Click += new System.EventHandler(this.tsmiAttributes_Click);
+            // 
+            // toolStripSeparator15
+            // 
+            this.toolStripSeparator15.Name = "toolStripSeparator15";
+            this.toolStripSeparator15.Size = new System.Drawing.Size(192, 6);
+            // 
+            // tsmiAttributesStandard
+            // 
+            this.tsmiAttributesStandard.Checked = true;
+            this.tsmiAttributesStandard.CheckOnClick = true;
+            this.tsmiAttributesStandard.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiAttributesStandard.Enabled = false;
+            this.tsmiAttributesStandard.Name = "tsmiAttributesStandard";
+            this.tsmiAttributesStandard.Size = new System.Drawing.Size(195, 22);
+            this.tsmiAttributesStandard.Text = "Standard";
+            this.tsmiAttributesStandard.Click += new System.EventHandler(this.tsmiAttributes_Click);
+            // 
+            // tsmiAttributesCustom
+            // 
+            this.tsmiAttributesCustom.Checked = true;
+            this.tsmiAttributesCustom.CheckOnClick = true;
+            this.tsmiAttributesCustom.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiAttributesCustom.Enabled = false;
+            this.tsmiAttributesCustom.Name = "tsmiAttributesCustom";
+            this.tsmiAttributesCustom.Size = new System.Drawing.Size(195, 22);
+            this.tsmiAttributesCustom.Text = "Custom";
+            this.tsmiAttributesCustom.Click += new System.EventHandler(this.tsmiAttributes_Click);
+            // 
+            // toolStripSeparator16
+            // 
+            this.toolStripSeparator16.Name = "toolStripSeparator16";
+            this.toolStripSeparator16.Size = new System.Drawing.Size(192, 6);
+            // 
+            // tsmiAttributesOnlyValidAF
+            // 
+            this.tsmiAttributesOnlyValidAF.CheckOnClick = true;
+            this.tsmiAttributesOnlyValidAF.Enabled = false;
+            this.tsmiAttributesOnlyValidAF.Name = "tsmiAttributesOnlyValidAF";
+            this.tsmiAttributesOnlyValidAF.Size = new System.Drawing.Size(195, 22);
+            this.tsmiAttributesOnlyValidAF.Text = "Only valid for Adv.Find";
+            this.tsmiAttributesOnlyValidAF.Click += new System.EventHandler(this.tsmiAttributes_Click);
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(151, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(153, 6);
             // 
             // tsmiXMLresult
             // 
@@ -305,7 +608,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiXMLresult.CheckOnClick = true;
             this.tsmiXMLresult.CheckState = System.Windows.Forms.CheckState.Checked;
             this.tsmiXMLresult.Name = "tsmiXMLresult";
-            this.tsmiXMLresult.Size = new System.Drawing.Size(154, 22);
+            this.tsmiXMLresult.Size = new System.Drawing.Size(156, 22);
             this.tsmiXMLresult.Text = "XML result";
             this.tsmiXMLresult.CheckedChanged += new System.EventHandler(this.tsmiXMLresult_CheckedChanged);
             // 
@@ -313,7 +616,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiJSONresult.CheckOnClick = true;
             this.tsmiJSONresult.Name = "tsmiJSONresult";
-            this.tsmiJSONresult.Size = new System.Drawing.Size(154, 22);
+            this.tsmiJSONresult.Size = new System.Drawing.Size(156, 22);
             this.tsmiJSONresult.Text = "JSON result";
             this.tsmiJSONresult.CheckedChanged += new System.EventHandler(this.tsmiJSONresult_CheckedChanged);
             // 
@@ -326,7 +629,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.gbProperties.Size = new System.Drawing.Size(490, 599);
             this.gbProperties.TabIndex = 25;
             this.gbProperties.TabStop = false;
-            this.gbProperties.Text = "Fetch XML node attributes";
+            this.gbProperties.Text = "FetchXML node attributes";
             // 
             // panelContainer
             // 
@@ -346,7 +649,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.gbFetchTree.Size = new System.Drawing.Size(394, 599);
             this.gbFetchTree.TabIndex = 24;
             this.gbFetchTree.TabStop = false;
-            this.gbFetchTree.Text = "Fetch XML outline";
+            this.gbFetchTree.Text = "FetchXML outline";
             // 
             // tvFetch
             // 
@@ -477,13 +780,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.moveDownToolStripMenuItem.Text = "Move down";
             this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonMoveDown_Click);
             // 
-            // tsmiSaveCWPNew
-            // 
-            this.tsmiSaveCWPNew.Name = "tsmiSaveCWPNew";
-            this.tsmiSaveCWPNew.Size = new System.Drawing.Size(178, 22);
-            this.tsmiSaveCWPNew.Text = "Save as CWP Feed...";
-            this.tsmiSaveCWPNew.Click += new System.EventHandler(this.tsmiSaveCWPNew_Click);
-            // 
             // FetchXmlBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -496,7 +792,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "FetchXmlBuilder";
             this.Size = new System.Drawing.Size(884, 624);
-            this.OnCloseTool += new System.EventHandler(this.FetchXmlBuilder_OnCloseTool);
             this.ConnectionUpdated += new XrmToolBox.PluginBase.ConnectionUpdatedHandler(this.FetchXmlBuilder_ConnectionUpdated);
             this.Load += new System.EventHandler(this.FetchXmlBuilder_Load);
             this.toolStripMain.ResumeLayout(false);
@@ -556,5 +851,33 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiXMLresult;
         private System.Windows.Forms.ToolStripMenuItem tsmiJSONresult;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveCWPNew;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowEntities;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowAttributes;
+        internal System.Windows.Forms.ToolStripMenuItem tsmiEntitiesAll;
+        internal System.Windows.Forms.ToolStripMenuItem tsmiEntitiesManaged;
+        internal System.Windows.Forms.ToolStripMenuItem tsmiEntitiesUnmanaged;
+        internal System.Windows.Forms.ToolStripMenuItem tsmiEntitiesCustomizable;
+        internal System.Windows.Forms.ToolStripMenuItem tsmiEntitiesCustom;
+        internal System.Windows.Forms.ToolStripMenuItem tsmiEntitiesIntersect;
+        internal System.Windows.Forms.ToolStripMenuItem tsmiEntitiesOnlyValidAF;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
+        private System.Windows.Forms.ToolStripMenuItem tsmiEntitiesUncustomizable;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
+        private System.Windows.Forms.ToolStripMenuItem tsmiEntitiesStandard;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
+        internal System.Windows.Forms.ToolStripMenuItem tsmiAttributesAll;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
+        internal System.Windows.Forms.ToolStripMenuItem tsmiAttributesManaged;
+        internal System.Windows.Forms.ToolStripMenuItem tsmiAttributesUnmanaged;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator14;
+        internal System.Windows.Forms.ToolStripMenuItem tsmiAttributesCustomizable;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAttributesUncustomizable;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator15;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAttributesStandard;
+        internal System.Windows.Forms.ToolStripMenuItem tsmiAttributesCustom;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator16;
+        internal System.Windows.Forms.ToolStripMenuItem tsmiAttributesOnlyValidAF;
     }
 }

@@ -82,5 +82,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 Save();
             }
         }
+
+        private void textBox4_Leave(object sender, EventArgs e)
+        {
+            textBox4.Text = textBox4.Text.Replace("&lt;", "<").Replace("&gt;", ">").Replace("&quot;", "\"");
+        }
     }
 }

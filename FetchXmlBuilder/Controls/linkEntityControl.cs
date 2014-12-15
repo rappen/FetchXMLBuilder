@@ -57,9 +57,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void PopulateControls()
         {
             cmbEntity.Items.Clear();
-            if (FetchXmlBuilder.entities != null)
+            var entities = FetchXmlBuilder.GetDisplayEntities();
+            if (entities != null)
             {
-                foreach (var entity in FetchXmlBuilder.entities)
+                foreach (var entity in entities)
                 {
                     cmbEntity.Items.Add(entity.Value.LogicalName);
                 }
@@ -138,9 +139,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             cmbRelationship.Items.Clear();
             var parententityname = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
-            if (FetchXmlBuilder.entities != null && FetchXmlBuilder.entities.ContainsKey(parententityname))
+            var entities = FetchXmlBuilder.GetDisplayEntities();
+            if (entities != null && entities.ContainsKey(parententityname))
             {
-                var parententity = FetchXmlBuilder.entities[parententityname];
+                var parententity = entities[parententityname];
                 var mo = parententity.ManyToOneRelationships;
                 var om = parententity.OneToManyRelationships;
                 var mm = parententity.ManyToManyRelationships;
@@ -176,41 +178,32 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             cmbFrom.Items.Clear();
             cmbTo.Items.Clear();
+            var entities = FetchXmlBuilder.GetDisplayEntities();
             if (cmbEntity.SelectedItem != null)
             {
                 var linkentity = cmbEntity.SelectedItem.ToString();
-                if (!string.IsNullOrEmpty(linkentity) &&
-                    FetchXmlBuilder.entities != null &&
-                    FetchXmlBuilder.entities.ContainsKey(linkentity) &&
-                    FetchXmlBuilder.entities[linkentity].Attributes != null)
-                {
-                    foreach (var attribute in FetchXmlBuilder.entities[linkentity].Attributes)
-                    {
-                        if (attribute.IsPrimaryId == true ||
-                            attribute.AttributeType == AttributeTypeCode.Lookup ||
-                            attribute.AttributeType == AttributeTypeCode.Customer ||
-                            attribute.AttributeType == AttributeTypeCode.Owner)
-                        {
-                            cmbFrom.Items.Add(attribute.LogicalName);
-                        }
-                    }
-                }
-            }
-            var parententity = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
-            if (!string.IsNullOrEmpty(parententity) &&
-                FetchXmlBuilder.entities != null &&
-                FetchXmlBuilder.entities.ContainsKey(parententity) &&
-                FetchXmlBuilder.entities[parententity].Attributes != null)
-            {
-                foreach (var attribute in FetchXmlBuilder.entities[parententity].Attributes)
+                var linkAttributes = FetchXmlBuilder.GetDisplayAttributes(linkentity);
+                foreach (var attribute in linkAttributes)
                 {
                     if (attribute.IsPrimaryId == true ||
                         attribute.AttributeType == AttributeTypeCode.Lookup ||
                         attribute.AttributeType == AttributeTypeCode.Customer ||
                         attribute.AttributeType == AttributeTypeCode.Owner)
                     {
-                        cmbTo.Items.Add(attribute.LogicalName);
+                        cmbFrom.Items.Add(attribute.LogicalName);
                     }
+                }
+            }
+            var parententity = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
+            var parentAttributes = FetchXmlBuilder.GetDisplayAttributes(parententity);
+            foreach (var attribute in parentAttributes)
+            {
+                if (attribute.IsPrimaryId == true ||
+                    attribute.AttributeType == AttributeTypeCode.Lookup ||
+                    attribute.AttributeType == AttributeTypeCode.Customer ||
+                    attribute.AttributeType == AttributeTypeCode.Owner)
+                {
+                    cmbTo.Items.Add(attribute.LogicalName);
                 }
             }
         }

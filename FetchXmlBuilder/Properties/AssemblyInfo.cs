@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FetchXml Builder")]
-[assembly: AssemblyDescription("Build and test Fetch XML with all capabilities supported by the CRM platform")]
+[assembly: AssemblyTitle("FetchXML Builder")]
+[assembly: AssemblyDescription("Build and test FetchXML with all capabilities supported by the CRM platform")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Cinteros AB, Jonas Rapp")]
-[assembly: AssemblyProduct("FetchXmlBuilder")]
+[assembly: AssemblyProduct("FetchXML Builder")]
 [assembly: AssemblyCopyright("Copyright © Cinteros AB 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
