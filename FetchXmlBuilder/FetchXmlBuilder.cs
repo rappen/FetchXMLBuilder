@@ -766,12 +766,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 return;
             else if (ClickedItem.Tag.ToString() == "Delete")
                 tvFetch.SelectedNode.Remove();
-            else if (ClickedItem.Tag.ToString() == "Cut")
-                clipboard.Cut(tvFetch.SelectedNode);
-            else if (ClickedItem.Tag.ToString() == "Copy")
-                clipboard.Copy(tvFetch.SelectedNode);
-            else if (ClickedItem.Tag.ToString() == "Paste")
-                clipboard.Paste(tvFetch.SelectedNode);
+            //else if (ClickedItem.Tag.ToString() == "Cut")
+            //    clipboard.Cut(tvFetch.SelectedNode);
+            //else if (ClickedItem.Tag.ToString() == "Copy")
+            //    clipboard.Copy(tvFetch.SelectedNode);
+            //else if (ClickedItem.Tag.ToString() == "Paste")
+            //    clipboard.Paste(tvFetch.SelectedNode);
+            else if (ClickedItem.Tag.ToString() == "Attributes...")
+            {
+                AddAttributes();
+            }
             else
             {
                 string nodeText = ClickedItem.Tag.ToString();
@@ -1335,6 +1339,74 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             MessageBox.Show("CWP Feed " + feedid + " has been " + verb + "!", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private void AddAttributes()
+        {
+            if (Service == null)
+            {
+                MessageBox.Show("Must be connected to CRM", "Add attributes", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            var entityNode = tvFetch.SelectedNode;
+            if (entityNode.Name != "entity" &&
+                entityNode.Name != "link-entity")
+            {
+                MessageBox.Show("Cannot add attributes to node " + entityNode.Name, "Add attributes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            var entityName = TreeNodeHelper.GetAttributeFromNode(entityNode, "name");
+            if (string.IsNullOrWhiteSpace(entityName))
+            {
+                MessageBox.Show("Cannot find valid entity name from node " + entityNode.Name, "Add attributes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (NeedToLoadEntity(entityName))
+            {
+                LoadEntityDetails(entityName, AddAttributes);
+                return;
+            }
+            var attributes = new List<AttributeMetadata>(GetDisplayAttributes(entityName));
+            var selected = new List<string>();
+            foreach (TreeNode subnode in entityNode.Nodes)
+            {
+                if (subnode.Name == "attribute")
+                {
+                    var attr = TreeNodeHelper.GetAttributeFromNode(subnode, "name");
+                    if (!string.IsNullOrEmpty(attr))
+                    {
+                        selected.Add(attr);
+                    }
+                }
+            }
+            var selectAttributesDlg = new SelectAttributesDialog(attributes, selected);
+            selectAttributesDlg.StartPosition = FormStartPosition.CenterParent;
+            if (selectAttributesDlg.ShowDialog() == DialogResult.OK)
+            {
+                var i = 0;
+                while (i < entityNode.Nodes.Count)
+                {
+                    TreeNode subnode = entityNode.Nodes[i];
+                    if (subnode.Name == "attribute")
+                    {
+                        entityNode.Nodes.Remove(subnode);
+                    }
+                    else
+                    {
+                        i++;
+                    }
+                }
+                var selectedAttributes = selectAttributesDlg.GetSelectedAttributes();
+                foreach (var attribute in selectedAttributes)
+                {
+                    var attrNode = TreeNodeHelper.AddChildNode(entityNode, "attribute");
+                    var coll = new Dictionary<string, string>();
+                    coll.Add("name", attribute.LogicalName);
+                    attrNode.Tag = coll;
+                    TreeNodeHelper.SetNodeText(attrNode);
+                }
+                FetchChanged = treeChecksum != GetTreeChecksum(null);
+            }
+        }
+
         #endregion Instance methods
 
         #region Static methods
@@ -1486,19 +1558,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (entities != null && entities.ContainsKey(entityName))
             {
                 attributes = entities[entityName].Attributes;
-                foreach (var attribute in attributes)
+                if (attributes != null)
                 {
-                    if (!showAttributesAll)
+                    foreach (var attribute in attributes)
                     {
-                        if (!showAttributesManaged && attribute.IsManaged == true) { continue; }
-                        if (!showAttributesUnmanaged && attribute.IsManaged == false) { continue; }
-                        if (!showAttributesCustomizable && attribute.IsCustomizable.Value) { continue; }
-                        if (!showAttributesUncustomizable && !attribute.IsCustomizable.Value) { continue; }
-                        if (!showAttributesStandard && attribute.IsCustomAttribute == false) { continue; }
-                        if (!showAttributesCustom && attribute.IsCustomAttribute == true) { continue; }
-                        if (showAttributesOnlyValidAF && attribute.IsValidForAdvancedFind.Value == false) { continue; }
+                        if (!showAttributesAll)
+                        {
+                            if (!string.IsNullOrEmpty(attribute.AttributeOf)) { continue; }
+                            if (!showAttributesManaged && attribute.IsManaged == true) { continue; }
+                            if (!showAttributesUnmanaged && attribute.IsManaged == false) { continue; }
+                            if (!showAttributesCustomizable && attribute.IsCustomizable.Value) { continue; }
+                            if (!showAttributesUncustomizable && !attribute.IsCustomizable.Value) { continue; }
+                            if (!showAttributesStandard && attribute.IsCustomAttribute == false) { continue; }
+                            if (!showAttributesCustom && attribute.IsCustomAttribute == true) { continue; }
+                            if (showAttributesOnlyValidAF && attribute.IsValidForAdvancedFind.Value == false) { continue; }
+                        }
+                        result.Add(attribute);
                     }
-                    result.Add(attribute);
                 }
             }
             return result.ToArray();

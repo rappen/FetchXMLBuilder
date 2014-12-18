@@ -226,7 +226,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             var nodecapabilities = new FetchNodeCapabilities(node);
             foreach (var childcapability in nodecapabilities.ChildTypes)
             {
-                if (childcapability.Multiple || !node.Nodes.ContainsKey(childcapability.Name))
+                if (childcapability.Name == "-")
+                {
+                    form.addMenu.Items.Add(new ToolStripSeparator());
+                }
+                else if (childcapability.Multiple || !node.Nodes.ContainsKey(childcapability.Name))
                 {
                     var additem = form.addMenu.Items.Add(childcapability.Name);
                     additem.Tag = childcapability.Name;
