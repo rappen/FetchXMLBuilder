@@ -15,6 +15,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         public XmlContentDisplayDialog(string xmlString, string header, bool allowEdit)
         {
             InitializeComponent();
+            if (FetchXmlBuilder.xmlWinSize != null && FetchXmlBuilder.xmlWinSize.Width > 0 && FetchXmlBuilder.xmlWinSize.Height > 0)
+            {
+                Width = FetchXmlBuilder.xmlWinSize.Width;
+                Height = FetchXmlBuilder.xmlWinSize.Height;
+            }
             Text = string.IsNullOrEmpty(header) ? "FetchXML Builder" : header;
             panOk.Visible = allowEdit;
             if (xmlString.Length > 100000)
@@ -69,6 +74,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             RichTextBox textBox = txtXML;
             findtext = FindTextHandler.HandleFindKeyPress(e, textBox, findtext);
+        }
+
+        private void XmlContentDisplayDialog_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            FetchXmlBuilder.xmlWinSize = new System.Drawing.Size(Width, Height);
         }
     }
 }

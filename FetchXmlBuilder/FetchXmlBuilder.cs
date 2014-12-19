@@ -102,7 +102,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
         private bool buttonsEnabled = true;
-        //private static int userLCID = 0;
+        internal static Size xmlWinSize;
         #endregion Declarations
 
         public FetchXmlBuilder()
@@ -483,6 +483,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 config.AppSettings.Settings.Add("FetchXML", xml);
             }
+            if (xmlWinSize != null)
+            {
+                config.AppSettings.Settings.Add("XmlWinWidth", xmlWinSize.Width.ToString());
+                config.AppSettings.Settings.Add("XmlWinHeight", xmlWinSize.Height.ToString());
+            }
             SaveControlValue(config, tsmiJSONresult);
             SaveControlValue(config, tsmiEntitiesManaged);
             SaveControlValue(config, tsmiEntitiesUnmanaged);
@@ -537,6 +542,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 fetchDoc = new XmlDocument();
                 fetchDoc.LoadXml(xml);
                 DisplayDefinition();
+            }
+            if (config.AppSettings.Settings["XmlWinWidth"] != null && config.AppSettings.Settings["XmlWinHeight"] != null)
+            {
+                var w = 0;
+                var h = 0;
+                if (int.TryParse(config.AppSettings.Settings["XmlWinWidth"].Value, out w) &&
+                    int.TryParse(config.AppSettings.Settings["XmlWinHeight"].Value, out h))
+                {
+                    xmlWinSize = new Size(w, h);
+                }
             }
             LoadControlValue(config, tsmiJSONresult);
             LoadControlValue(config, tsmiEntitiesManaged);

@@ -68,7 +68,7 @@
             this.btnOk.Location = new System.Drawing.Point(3, 8);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
-            this.btnOk.TabIndex = 2;
+            this.btnOk.TabIndex = 3;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
@@ -88,7 +88,7 @@
             this.btnCancel.Location = new System.Drawing.Point(3, 8);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 2;
+            this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
@@ -115,7 +115,7 @@
             xmlViewerSettings1.Value = System.Drawing.Color.Black;
             this.txtXML.Settings = xmlViewerSettings1;
             this.txtXML.Size = new System.Drawing.Size(809, 667);
-            this.txtXML.TabIndex = 6;
+            this.txtXML.TabIndex = 1;
             this.txtXML.Text = "";
             // 
             // XmlContentDisplayDialog
@@ -129,6 +129,7 @@
             this.KeyPreview = true;
             this.Name = "XmlContentDisplayDialog";
             this.ShowIcon = false;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.XmlContentDisplayDialog_FormClosing);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.XmlContentDisplayDialog_KeyDown);
             this.panBottom.ResumeLayout(false);
             this.panOk.ResumeLayout(false);
