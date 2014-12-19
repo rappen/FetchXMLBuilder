@@ -221,7 +221,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsbEdit_Click(object sender, EventArgs e)
         {
-            var xml = GetFetchString();
+            var xml = GetFetchString(false);
             var xcdDialog = new XmlContentDisplayDialog(xml, "FetchXML", true);
             xcdDialog.StartPosition = FormStartPosition.CenterParent;
             if (xcdDialog.ShowDialog() == DialogResult.OK)
@@ -361,7 +361,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsbAbout_Click(object sender, EventArgs e)
         {
             MessageBox.Show(
-                "FetchXML Builder for XrmToolbox\n\n" +
+                "FetchXML Builder for XrmToolbox\n" +
+                "Version: " + Assembly.GetExecutingAssembly().GetName().Version + "\n\n" +
                 "Developed by Jonas Rapp at Cinteros AB.\n\n" +
                 "Serialization to XML and JSON are custom developed to\n" +
                 "be compact transports of CRM entity information.\n" +
@@ -470,7 +471,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         /// <summary>Saves various configurations to file for next session</summary>
         private void SaveSetting()
         {
-            var xml = GetFetchString();
+            var xml = GetFetchString(false);
             var map = new ExeConfigurationFileMap { ExeConfigFilename = settingfile };
             System.Configuration.Configuration config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
             config.AppSettings.Settings.Clear();
@@ -653,13 +654,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return doc;
         }
 
-        private string GetFetchString()
+        private string GetFetchString(bool format)
         {
             var xml = "";
             if (tvFetch.Nodes.Count > 0)
             {
                 var doc = GetFetchDocument();
                 xml = doc.OuterXml;
+            }
+            if (format)
+            {
+                XDocument doc = XDocument.Parse(xml);
+                xml = doc.ToString();
             }
             return xml;
         }
@@ -1219,7 +1225,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             WorkAsync(string.Format(msg, View["name"]),
                 (eventargs) =>
                 {
-                    var xml = GetFetchString();
+                    var xml = GetFetchString(false);
                     Entity newView = new Entity(View.LogicalName);
                     newView.Id = View.Id;
                     newView.Attributes.Add("fetchxml", xml);
@@ -1324,7 +1330,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             qeFeed.Criteria.AddCondition("cint_id", ConditionOperator.Equal, feedid);
             var feeds = Service.RetrieveMultiple(qeFeed);
             Entity feed = feeds.Entities.Count > 0 ? feeds.Entities[0] : new Entity("cint_feed");
-            feed.Attributes.Add("cint_fetchxml", GetFetchString());
+            feed.Attributes.Add("cint_fetchxml", GetFetchString(true));
             var verb = feed.Id.Equals(Guid.Empty) ? "created" : "updated";
             if (feed.Id.Equals(Guid.Empty))
             {
