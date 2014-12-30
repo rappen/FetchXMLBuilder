@@ -57,6 +57,7 @@
     <Compile Include="EntitySerializer.cs" />
     <Compile Include="IDefinitionSavable.cs" />
     <Compile Include="IComboBoxItem.cs" />
+    <Compile Include="ListViewItemComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveEventArgs.cs" />
     <Compile Include="TreeNodeCapabilities.cs" />

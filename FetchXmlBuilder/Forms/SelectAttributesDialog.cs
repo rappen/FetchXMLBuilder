@@ -16,6 +16,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 {
     public partial class SelectAttributesDialog : Form
     {
+        private int sortcolumn = 0;
+
         public SelectAttributesDialog(List<AttributeMetadata> attributes, List<string> selectedAttributes)
         {
             InitializeComponent();
@@ -48,6 +50,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             {
                 item.Checked = checkBox1.Checked;
             }
+        }
+
+        private void lvAttributes_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            if (e.Column == sortcolumn)
+            {
+                lvAttributes.Sorting = lvAttributes.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+            }
+            else
+            {
+                lvAttributes.Sorting = SortOrder.Ascending;
+            }
+            lvAttributes.ListViewItemSorter = new ListViewItemComparer(e.Column, lvAttributes.Sorting);
+            sortcolumn = e.Column;
         }
     }
 }
