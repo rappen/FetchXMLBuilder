@@ -45,17 +45,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiOpenFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiOpenView = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiOpenCWP = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbSave = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiSaveFile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveFileAs = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiSaveView = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiSaveCWPNew = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSaveCWP = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbAbout = new System.Windows.Forms.ToolStripButton();
             this.tsbOptions = new System.Windows.Forms.ToolStripDropDownButton();
-            this.tsmiLiveUpdate = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiFriendly = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiShowEntities = new System.Windows.Forms.ToolStripMenuItem();
@@ -88,6 +87,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiXMLresult = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiJSONresult = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiLiveUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.gbProperties = new System.Windows.Forms.GroupBox();
             this.panelContainer = new System.Windows.Forms.Panel();
             this.gbFetchTree = new System.Windows.Forms.GroupBox();
@@ -218,7 +219,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbOpen.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiOpenFile,
             this.toolStripSeparator1,
-            this.tsmiOpenView});
+            this.tsmiOpenView,
+            this.tsmiOpenCWP});
             this.tsbOpen.Image = ((System.Drawing.Image)(resources.GetObject("tsbOpen.Image")));
             this.tsbOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbOpen.Name = "tsbOpen";
@@ -229,21 +231,28 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // tsmiOpenFile
             // 
             this.tsmiOpenFile.Name = "tsmiOpenFile";
-            this.tsmiOpenFile.Size = new System.Drawing.Size(140, 22);
+            this.tsmiOpenFile.Size = new System.Drawing.Size(169, 22);
             this.tsmiOpenFile.Text = "Open File...";
             this.tsmiOpenFile.Click += new System.EventHandler(this.tsmiOpenFile_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(137, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(166, 6);
             // 
             // tsmiOpenView
             // 
             this.tsmiOpenView.Name = "tsmiOpenView";
-            this.tsmiOpenView.Size = new System.Drawing.Size(140, 22);
+            this.tsmiOpenView.Size = new System.Drawing.Size(169, 22);
             this.tsmiOpenView.Text = "Open View...";
             this.tsmiOpenView.Click += new System.EventHandler(this.tsmiOpenView_Click);
+            // 
+            // tsmiOpenCWP
+            // 
+            this.tsmiOpenCWP.Name = "tsmiOpenCWP";
+            this.tsmiOpenCWP.Size = new System.Drawing.Size(169, 22);
+            this.tsmiOpenCWP.Text = "Open CWP Feed...";
+            this.tsmiOpenCWP.Click += new System.EventHandler(this.tsmiOpenCWP_Click);
             // 
             // tsbSave
             // 
@@ -252,7 +261,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveFileAs,
             this.toolStripSeparator5,
             this.tsmiSaveView,
-            this.tsmiSaveCWPNew});
+            this.tsmiSaveCWP});
             this.tsbSave.Image = ((System.Drawing.Image)(resources.GetObject("tsbSave.Image")));
             this.tsbSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSave.Name = "tsbSave";
@@ -288,12 +297,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveView.Text = "Save View";
             this.tsmiSaveView.Click += new System.EventHandler(this.tsmiSaveView_Click);
             // 
-            // tsmiSaveCWPNew
+            // tsmiSaveCWP
             // 
-            this.tsmiSaveCWPNew.Name = "tsmiSaveCWPNew";
-            this.tsmiSaveCWPNew.Size = new System.Drawing.Size(178, 22);
-            this.tsmiSaveCWPNew.Text = "Save as CWP Feed...";
-            this.tsmiSaveCWPNew.Click += new System.EventHandler(this.tsmiSaveCWPNew_Click);
+            this.tsmiSaveCWP.Name = "tsmiSaveCWP";
+            this.tsmiSaveCWP.Size = new System.Drawing.Size(178, 22);
+            this.tsmiSaveCWP.Text = "Save as CWP Feed...";
+            this.tsmiSaveCWP.Click += new System.EventHandler(this.tsmiSaveCWP_Click);
             // 
             // toolStripSeparator6
             // 
@@ -327,19 +336,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbOptions.Name = "tsbOptions";
             this.tsbOptions.Size = new System.Drawing.Size(78, 22);
             this.tsbOptions.Text = "Options";
-            // 
-            // tsmiLiveUpdate
-            // 
-            this.tsmiLiveUpdate.CheckOnClick = true;
-            this.tsmiLiveUpdate.Name = "tsmiLiveUpdate";
-            this.tsmiLiveUpdate.Size = new System.Drawing.Size(163, 22);
-            this.tsmiLiveUpdate.Text = "Live XML Update";
-            this.tsmiLiveUpdate.CheckedChanged += new System.EventHandler(this.tsmiLiveUpdate_CheckedChanged);
-            // 
-            // toolStripSeparator17
-            // 
-            this.toolStripSeparator17.Name = "toolStripSeparator17";
-            this.toolStripSeparator17.Size = new System.Drawing.Size(160, 6);
             // 
             // tsmiFriendly
             // 
@@ -637,6 +633,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiJSONresult.Text = "JSON result";
             this.tsmiJSONresult.CheckedChanged += new System.EventHandler(this.tsmiJSONresult_CheckedChanged);
             // 
+            // toolStripSeparator17
+            // 
+            this.toolStripSeparator17.Name = "toolStripSeparator17";
+            this.toolStripSeparator17.Size = new System.Drawing.Size(160, 6);
+            // 
+            // tsmiLiveUpdate
+            // 
+            this.tsmiLiveUpdate.CheckOnClick = true;
+            this.tsmiLiveUpdate.Name = "tsmiLiveUpdate";
+            this.tsmiLiveUpdate.Size = new System.Drawing.Size(163, 22);
+            this.tsmiLiveUpdate.Text = "Live XML Update";
+            this.tsmiLiveUpdate.CheckedChanged += new System.EventHandler(this.tsmiLiveUpdate_CheckedChanged);
+            // 
             // gbProperties
             // 
             this.gbProperties.Controls.Add(this.panelContainer);
@@ -867,7 +876,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripMenuItem tsmiXMLresult;
         private System.Windows.Forms.ToolStripMenuItem tsmiJSONresult;
-        private System.Windows.Forms.ToolStripMenuItem tsmiSaveCWPNew;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSaveCWP;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowEntities;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowAttributes;
@@ -898,5 +907,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal System.Windows.Forms.ToolStripMenuItem tsmiAttributesOnlyValidAF;
         private System.Windows.Forms.ToolStripMenuItem tsmiLiveUpdate;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator17;
+        private System.Windows.Forms.ToolStripMenuItem tsmiOpenCWP;
     }
 }

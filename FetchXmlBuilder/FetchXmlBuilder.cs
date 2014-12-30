@@ -29,7 +29,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         #region Declarations
         const string settingfile = "Cinteros.Xrm.FetchXmlBuilder.Settings.xml";
         internal Clipboard clipboard = new Clipboard();
-        private bool Initializing = true;
         private XmlDocument fetchDoc;
         private static Dictionary<string, EntityMetadata> entities;
         internal static List<string> entityShitList = new List<string>(); // Oops, did I name that one??
@@ -45,6 +44,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     tsmiSaveFile.Text = "Save File: " + System.IO.Path.GetFileName(value);
+                    View = null;
+                    CWPFeed = null;
                 }
                 else
                 {
@@ -62,10 +63,31 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 if (view != null && view.Contains("name"))
                 {
                     tsmiSaveView.Text = "Save View: " + view["name"];
+                    FileName = null;
+                    CWPFeed = null;
                 }
                 else
                 {
                     tsmiSaveView.Text = "Save View";
+                }
+            }
+        }
+        private string cwpfeed;
+        internal string CWPFeed
+        {
+            get { return cwpfeed; }
+            set
+            {
+                cwpfeed = value;
+                if (!string.IsNullOrWhiteSpace(cwpfeed))
+                {
+                    tsmiSaveCWP.Text = "Save CWP Feed: " + cwpfeed;
+                    FileName = null;
+                    View = null;
+                }
+                else
+                {
+                    tsmiSaveCWP.Text = "Save as CWP Feed...";
                 }
             }
         }
@@ -136,7 +158,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void FetchXmlBuilder_Load(object sender, EventArgs e)
         {
             LoadSetting();
-            Initializing = false;
         }
 
         private void FetchXmlBuilder_ConnectionUpdated(object sender, ConnectionUpdatedEventArgs e)
@@ -222,6 +243,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsmiOpenView_Click(object sender, EventArgs e)
         {
             OpenView();
+        }
+
+        private void tsmiOpenCWP_Click(object sender, EventArgs e)
+        {
+            OpenCWPFeed();
         }
 
         private void tsbEdit_Click(object sender, EventArgs e)
@@ -359,7 +385,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 "About FetchXML Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void tsmiSaveCWPNew_Click(object sender, EventArgs e)
+        private void tsmiSaveCWP_Click(object sender, EventArgs e)
         {
             SaveCWPFeed();
         }
@@ -609,11 +635,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsbOpen.Enabled = enabled;
                     tsmiOpenFile.Enabled = enabled;
                     tsmiOpenView.Enabled = enabled;
+                    tsmiOpenCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
                     tsbSave.Enabled = enabled;
                     tsmiSaveFile.Enabled = enabled && FetchChanged && !string.IsNullOrEmpty(FileName);
                     tsmiSaveFileAs.Enabled = enabled && tvFetch.Nodes.Count > 0;
                     tsmiSaveView.Enabled = enabled && FetchChanged && View != null;
-                    tsmiSaveCWPNew.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
+                    tsmiSaveCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
                     tsbOptions.Enabled = enabled;
                     tsmiFriendly.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
                     tsmiShowEntities.Enabled = enabled && Service != null;
@@ -1352,28 +1379,60 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
-        private void SaveCWPFeed()
+        private void OpenCWPFeed()
         {
-            var feedid = Prompt.ShowDialog("Enter CWP Feed ID (enter existing ID to update feed)", "Save CWP Feed");
-            if (feedid == null)
-            {
-                return;
-            }
+            var feedid = Prompt.ShowDialog("Enter CWP Feed ID", "Open CWP Feed");
             if (string.IsNullOrWhiteSpace(feedid))
             {
-                MessageBox.Show("Feed not saved.", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            var qeFeed = new QueryExpression("cint_feed");
-            qeFeed.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
-            qeFeed.Criteria.AddCondition("cint_id", ConditionOperator.Equal, feedid);
-            var feeds = Service.RetrieveMultiple(qeFeed);
-            Entity feed = feeds.Entities.Count > 0 ? feeds.Entities[0] : new Entity("cint_feed");
+            Entity feed = GetCWPFeed(feedid);
+            if (feed == null)
+            {
+                MessageBox.Show("Feed not found.", "Open CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            if (feed.Contains("cint_fetchxml"))
+            {
+                CWPFeed = feed.Contains("cint_id") ? feed["cint_id"].ToString() : feedid;
+                var fetch = feed["cint_fetchxml"].ToString();
+                fetchDoc = new XmlDocument();
+                fetchDoc.LoadXml(fetch);
+                DisplayDefinition();
+                attributesChecksum = GetAttributesSignature(null);
+            }
+        }
+
+        private void SaveCWPFeed()
+        {
+            if (string.IsNullOrWhiteSpace(CWPFeed))
+            {
+                var feedid = Prompt.ShowDialog("Enter CWP Feed ID (enter existing ID to update feed)", "Save CWP Feed");
+                if (feedid == null)
+                {
+                    return;
+                }
+                if (string.IsNullOrWhiteSpace(feedid))
+                {
+                    MessageBox.Show("Feed not saved.", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
+                }
+                CWPFeed = feedid;
+            }
+            Entity feed = GetCWPFeed(CWPFeed);
+            if (feed == null)
+            {
+                feed = new Entity("cint_feed");
+            }
+            if (feed.Contains("cint_fetchxml"))
+            {
+                feed.Attributes.Remove("cint_fetchxml");
+            }
             feed.Attributes.Add("cint_fetchxml", GetFetchString(true));
             var verb = feed.Id.Equals(Guid.Empty) ? "created" : "updated";
             if (feed.Id.Equals(Guid.Empty))
             {
-                feed.Attributes.Add("cint_id", feedid);
+                feed.Attributes.Add("cint_id", CWPFeed);
                 feed.Attributes.Add("cint_description", "Created by FetchXml Builder for XrmToolbox");
                 Service.Create(feed);
             }
@@ -1381,7 +1440,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 Service.Update(feed);
             }
-            MessageBox.Show("CWP Feed " + feedid + " has been " + verb + "!", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("CWP Feed " + CWPFeed + " has been " + verb + "!", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private Entity GetCWPFeed(string feedid)
+        {
+            var qeFeed = new QueryExpression("cint_feed");
+            qeFeed.ColumnSet.AddColumns("cint_id", "cint_fetchxml");
+            qeFeed.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
+            qeFeed.Criteria.AddCondition("cint_id", ConditionOperator.Equal, feedid);
+            var feeds = Service.RetrieveMultiple(qeFeed);
+            Entity feed = feeds.Entities.Count > 0 ? feeds.Entities[0] : null;
+            return feed;
         }
 
         private void AddAttributes()
