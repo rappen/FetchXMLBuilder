@@ -103,6 +103,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         }
         private bool buttonsEnabled = true;
         internal static Size xmlWinSize;
+        private XmlContentDisplayDialog xmlLiveUpdate;
         #endregion Declarations
 
         public FetchXmlBuilder()
@@ -156,6 +157,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             tvFetch.SelectedNode.Tag = e.AttributeCollection;
             TreeNodeHelper.SetNodeText(tvFetch.SelectedNode);
             FetchChanged = treeChecksum != GetTreeChecksum(null);
+            if (tsmiLiveUpdate.Checked)
+            {
+                UpdateLiveXML();
+            }
         }
 
         private void tsbCloseThisTab_Click(object sender, EventArgs e)
@@ -228,23 +233,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 EnableControls(false);
                 XmlNode resultNode = xcdDialog.result;
-                fetchDoc = new XmlDocument();
-                fetchDoc.LoadXml(resultNode.OuterXml);
-                treeChecksum = "";
-                if (fetchDoc.DocumentElement.Name != "fetch" ||
-                    fetchDoc.DocumentElement.ChildNodes.Count > 0 &&
-                    fetchDoc.DocumentElement.ChildNodes[0].Name == "fetch")
-                {
-                    MessageBox.Show(this, "Invalid Xml: Definition XML root must be fetch!", "Error",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    DisplayDefinition();
-                    FetchChanged = true;
-                    EnableControls(true);
-                    BuildAndValidateXml(true);
-                }
+                ParseXML(resultNode.OuterXml, true);
             }
         }
 
@@ -462,6 +451,40 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             showAttributesStandard = tsmiAttributesStandard.Checked;
             showAttributesOnlyValidAF = tsmiAttributesOnlyValidAF.Checked;
             HandleNodeSelection(tvFetch.SelectedNode);
+        }
+
+        private void tsmiLiveUpdate_CheckedChanged(object sender, EventArgs e)
+        {
+            if (tsmiLiveUpdate.Checked)
+            {
+                UpdateLiveXML();
+            }
+            else if (xmlLiveUpdate != null)
+            {
+                xmlLiveUpdate.Close();
+                xmlLiveUpdate = null;
+            }
+        }
+
+        void LiveXML_Disposed(object sender, EventArgs e)
+        {
+            tsmiLiveUpdate.Checked = false;
+        }
+
+        void LiveXML_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (xmlLiveUpdate != null && xmlLiveUpdate.txtXML != null && xmlLiveUpdate.Visible && !e.Handled)
+            {
+                try
+                {
+                    XmlDocument doc = new XmlDocument();
+                    doc.LoadXml(xmlLiveUpdate.txtXML.Text);
+                    ParseXML(xmlLiveUpdate.txtXML.Text, false);
+                }
+                catch (Exception)
+                {
+                }
+            }
         }
 
         #endregion Event handlers
@@ -1135,6 +1158,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         var result = completedargs.Result.ToString();
                         var xcdDialog = new XmlContentDisplayDialog(result, "JSON Serialized RetrieveMultiple result", false);
+                        xcdDialog.btnFormat.Visible = false;
                         xcdDialog.StartPosition = FormStartPosition.CenterParent;
                         xcdDialog.ShowDialog();
                     }
@@ -1425,6 +1449,57 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     TreeNodeHelper.SetNodeText(attrNode);
                 }
                 FetchChanged = treeChecksum != GetTreeChecksum(null);
+            }
+        }
+
+        private void ParseXML(string xml, bool validate)
+        {
+            fetchDoc = new XmlDocument();
+            fetchDoc.LoadXml(xml);
+            treeChecksum = "";
+            if (fetchDoc.DocumentElement.Name != "fetch" ||
+                fetchDoc.DocumentElement.ChildNodes.Count > 0 &&
+                fetchDoc.DocumentElement.ChildNodes[0].Name == "fetch")
+            {
+                MessageBox.Show(this, "Invalid Xml: Definition XML root must be fetch!", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                DisplayDefinition();
+                FetchChanged = true;
+                EnableControls(true);
+                BuildAndValidateXml(validate);
+            }
+        }
+
+        private void UpdateLiveXML()
+        {
+            var xml = GetFetchString(false);
+            if (xmlLiveUpdate == null)
+            {
+                xmlLiveUpdate = new XmlContentDisplayDialog(xml, "FetchXML Live Update", false);
+                xmlLiveUpdate.Disposed += LiveXML_Disposed;
+                xmlLiveUpdate.txtXML.KeyUp += LiveXML_KeyUp;
+                xmlLiveUpdate.Visible = true;
+                AlignLiveXML();
+            }
+            else
+            {
+                xmlLiveUpdate.UpdateXML(xml);
+            }
+        }
+
+        private void AlignLiveXML()
+        {
+            if (xmlLiveUpdate != null && xmlLiveUpdate.Visible)
+            {
+                Control topparent = this;
+                while (topparent.Parent != null)
+                {
+                    topparent = topparent.Parent;
+                }
+                xmlLiveUpdate.Location = new Point(topparent.Location.X + topparent.Size.Width, topparent.Location.Y);
             }
         }
 

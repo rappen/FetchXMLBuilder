@@ -28,13 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings1 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
+            CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings2 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
             this.panBottom = new System.Windows.Forms.Panel();
             this.panOk = new System.Windows.Forms.Panel();
             this.btnOk = new System.Windows.Forms.Button();
             this.panCancel = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.btnFormat = new System.Windows.Forms.Button();
             this.txtXML = new CSRichTextBoxSyntaxHighlighting.XMLViewer();
             this.panBottom.SuspendLayout();
             this.panOk.SuspendLayout();
@@ -46,7 +46,7 @@
             this.panBottom.BackColor = System.Drawing.SystemColors.Control;
             this.panBottom.Controls.Add(this.panOk);
             this.panBottom.Controls.Add(this.panCancel);
-            this.panBottom.Controls.Add(this.button3);
+            this.panBottom.Controls.Add(this.btnFormat);
             this.panBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panBottom.Location = new System.Drawing.Point(0, 667);
             this.panBottom.Name = "panBottom";
@@ -91,16 +91,17 @@
             this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // button3
+            // btnFormat
             // 
-            this.button3.Location = new System.Drawing.Point(12, 8);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "Format XML";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.btnFormat.Location = new System.Drawing.Point(12, 8);
+            this.btnFormat.Name = "btnFormat";
+            this.btnFormat.Size = new System.Drawing.Size(75, 23);
+            this.btnFormat.TabIndex = 2;
+            this.btnFormat.Text = "Format XML";
+            this.btnFormat.UseVisualStyleBackColor = true;
+            this.btnFormat.Click += new System.EventHandler(this.button3_Click);
             // 
             // txtXML
             // 
@@ -108,12 +109,12 @@
             this.txtXML.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtXML.Location = new System.Drawing.Point(0, 0);
             this.txtXML.Name = "txtXML";
-            xmlViewerSettings1.AttributeKey = System.Drawing.Color.Red;
-            xmlViewerSettings1.AttributeValue = System.Drawing.Color.Blue;
-            xmlViewerSettings1.Element = System.Drawing.Color.DarkRed;
-            xmlViewerSettings1.Tag = System.Drawing.Color.Blue;
-            xmlViewerSettings1.Value = System.Drawing.Color.Black;
-            this.txtXML.Settings = xmlViewerSettings1;
+            xmlViewerSettings2.AttributeKey = System.Drawing.Color.Red;
+            xmlViewerSettings2.AttributeValue = System.Drawing.Color.Blue;
+            xmlViewerSettings2.Element = System.Drawing.Color.DarkRed;
+            xmlViewerSettings2.Tag = System.Drawing.Color.Blue;
+            xmlViewerSettings2.Value = System.Drawing.Color.Black;
+            this.txtXML.Settings = xmlViewerSettings2;
             this.txtXML.Size = new System.Drawing.Size(809, 667);
             this.txtXML.TabIndex = 1;
             this.txtXML.Text = "";
@@ -141,11 +142,11 @@
         #endregion
 
         private System.Windows.Forms.Panel panBottom;
-        private CSRichTextBoxSyntaxHighlighting.XMLViewer txtXML;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Panel panOk;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Panel panCancel;
         private System.Windows.Forms.Button btnCancel;
+        internal CSRichTextBoxSyntaxHighlighting.XMLViewer txtXML;
+        internal System.Windows.Forms.Button btnFormat;
     }
 }

@@ -33,13 +33,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.label3 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.cmbAttribute = new System.Windows.Forms.ComboBox();
-            this.txtValue = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.cmbOperator = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.cmbEntity = new System.Windows.Forms.ComboBox();
             this.btnGetGuid = new System.Windows.Forms.Button();
+            this.cmbValue = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // label1
@@ -95,16 +95,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbAttribute.TabIndex = 2;
             this.cmbAttribute.Tag = "attribute|true";
             this.cmbAttribute.SelectedIndexChanged += new System.EventHandler(this.cmbAttribute_SelectedIndexChanged);
-            // 
-            // txtValue
-            // 
-            this.txtValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtValue.Location = new System.Drawing.Point(191, 130);
-            this.txtValue.Name = "txtValue";
-            this.txtValue.Size = new System.Drawing.Size(234, 20);
-            this.txtValue.TabIndex = 4;
-            this.txtValue.Tag = "value";
             // 
             // label4
             // 
@@ -242,17 +232,31 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.btnGetGuid.Visible = false;
             this.btnGetGuid.Click += new System.EventHandler(this.btnGetGuid_Click);
             // 
+            // cmbValue
+            // 
+            this.cmbValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbValue.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cmbValue.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cmbValue.FormattingEnabled = true;
+            this.cmbValue.Location = new System.Drawing.Point(191, 130);
+            this.cmbValue.Name = "cmbValue";
+            this.cmbValue.Size = new System.Drawing.Size(234, 21);
+            this.cmbValue.Sorted = true;
+            this.cmbValue.TabIndex = 4;
+            this.cmbValue.Tag = "value";
+            // 
             // conditionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.cmbValue);
             this.Controls.Add(this.btnGetGuid);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.cmbEntity);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.cmbOperator);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.txtValue);
             this.Controls.Add(this.cmbAttribute);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label3);
@@ -273,12 +277,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ComboBox cmbAttribute;
-        private System.Windows.Forms.TextBox txtValue;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cmbOperator;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox cmbEntity;
         private System.Windows.Forms.Button btnGetGuid;
+        private System.Windows.Forms.ComboBox cmbValue;
     }
 }

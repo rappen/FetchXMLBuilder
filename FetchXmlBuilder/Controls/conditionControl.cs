@@ -116,7 +116,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
                 var valueType = oper.ValueType;
                 var attributeType = oper.AttributeType;
-                var value = txtValue.Text.Trim();
+                var value = ControlUtils.GetValueFromControl(cmbValue).Trim();
                 if (valueType == AttributeTypeCode.ManagedProperty)
                 {   // Type not defined by operator
                     if (attribute != null)
@@ -270,6 +270,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
             // RefreshFill now that attributes are loaded
             ControlUtils.FillControl(collec, cmbAttribute);
+            ControlUtils.FillControl(collec, cmbValue);
         }
 
         private static TreeNode GetClosestEntityNode(TreeNode node)
@@ -290,26 +291,40 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void UpdateValueField()
         {
             btnGetGuid.Visible = false;
+            cmbValue.Items.Clear();
+            cmbValue.DropDownStyle = ComboBoxStyle.Simple;
             if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem)
             {
                 var oper = (OperatorItem)cmbOperator.SelectedItem;
                 var valueType = oper.ValueType;
                 if (valueType == AttributeTypeCode.ManagedProperty)
-                {
+                {   // Indicates value type is determined by selected attribute
                     if (cmbAttribute.SelectedItem != null && cmbAttribute.SelectedItem is AttributeItem)
                     {
                         var attribute = (AttributeItem)cmbAttribute.SelectedItem;
                         valueType = attribute.Metadata.AttributeType;
+                        if (attribute.Metadata is EnumAttributeMetadata)
+                        {
+                            var options = ((EnumAttributeMetadata)attribute.Metadata).OptionSet;
+                            if (options != null)
+                            {
+                                foreach (var option in options.Options)
+                                {
+                                    cmbValue.Items.Add(new OptionsetItem(option));
+                                }
+                            }
+                            cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
+                        }
                     }
                 }
                 if (valueType == null)
                 {
-                    txtValue.Text = "";
-                    txtValue.Enabled = false;
+                    cmbValue.Text = "";
+                    cmbValue.Enabled = false;
                 }
                 else
                 {
-                    txtValue.Enabled = true;
+                    cmbValue.Enabled = true;
                 }
                 if (valueType == AttributeTypeCode.Lookup || valueType == AttributeTypeCode.Customer || valueType == AttributeTypeCode.Owner || valueType == AttributeTypeCode.Uniqueidentifier)
                 {
@@ -320,7 +335,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void btnGetGuid_Click(object sender, EventArgs e)
         {
-            txtValue.Text = Guid.NewGuid().ToString();
+            cmbValue.Text = Guid.NewGuid().ToString();
         }
 
         private void cmbAttribute_SelectedIndexChanged(object sender, EventArgs e)

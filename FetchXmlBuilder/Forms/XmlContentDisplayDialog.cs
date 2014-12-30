@@ -22,6 +22,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             }
             Text = string.IsNullOrEmpty(header) ? "FetchXML Builder" : header;
             panOk.Visible = allowEdit;
+            if (!allowEdit)
+            {
+                btnCancel.Text = "Close";
+            }
             if (xmlString.Length > 100000)
             {
                 var dlgresult = MessageBox.Show("Huge result, this may take a while!\n" + xmlString.Length.ToString() + " characters in the XML document.\n\nContinue?", "Huge result",
@@ -79,6 +83,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private void XmlContentDisplayDialog_FormClosing(object sender, FormClosingEventArgs e)
         {
             FetchXmlBuilder.xmlWinSize = new System.Drawing.Size(Width, Height);
+        }
+
+        public void UpdateXML(string xmlString)
+        {
+            txtXML.Text = xmlString;
+            FormatXML(true);
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

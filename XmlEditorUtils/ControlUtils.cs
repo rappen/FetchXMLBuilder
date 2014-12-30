@@ -86,7 +86,7 @@ namespace Cinteros.Xrm.XmlEditorUtils
 
         public static void FillControls(Dictionary<string, string> collection, System.Windows.Forms.Control.ControlCollection controls)
         {
-            foreach (Control control in controls)
+            foreach (Control control in controls.Cast<Control>().Where(y => y.Tag != null).OrderBy(y => y.TabIndex))
             {
                 FillControl(collection, control);
             }
@@ -140,6 +140,5 @@ namespace Cinteros.Xrm.XmlEditorUtils
                 }
             }
         }
-
     }
 }

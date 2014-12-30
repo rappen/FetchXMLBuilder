@@ -54,6 +54,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbAbout = new System.Windows.Forms.ToolStripButton();
             this.tsbOptions = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsmiLiveUpdate = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiFriendly = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiShowEntities = new System.Windows.Forms.ToolStripMenuItem();
@@ -317,25 +319,40 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiShowAttributes,
             this.toolStripSeparator7,
             this.tsmiXMLresult,
-            this.tsmiJSONresult});
+            this.tsmiJSONresult,
+            this.toolStripSeparator17,
+            this.tsmiLiveUpdate});
             this.tsbOptions.Image = ((System.Drawing.Image)(resources.GetObject("tsbOptions.Image")));
             this.tsbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbOptions.Name = "tsbOptions";
             this.tsbOptions.Size = new System.Drawing.Size(78, 22);
             this.tsbOptions.Text = "Options";
             // 
+            // tsmiLiveUpdate
+            // 
+            this.tsmiLiveUpdate.CheckOnClick = true;
+            this.tsmiLiveUpdate.Name = "tsmiLiveUpdate";
+            this.tsmiLiveUpdate.Size = new System.Drawing.Size(163, 22);
+            this.tsmiLiveUpdate.Text = "Live XML Update";
+            this.tsmiLiveUpdate.CheckedChanged += new System.EventHandler(this.tsmiLiveUpdate_CheckedChanged);
+            // 
+            // toolStripSeparator17
+            // 
+            this.toolStripSeparator17.Name = "toolStripSeparator17";
+            this.toolStripSeparator17.Size = new System.Drawing.Size(160, 6);
+            // 
             // tsmiFriendly
             // 
             this.tsmiFriendly.CheckOnClick = true;
             this.tsmiFriendly.Name = "tsmiFriendly";
-            this.tsmiFriendly.Size = new System.Drawing.Size(156, 22);
+            this.tsmiFriendly.Size = new System.Drawing.Size(163, 22);
             this.tsmiFriendly.Text = "Friendly names";
             this.tsmiFriendly.CheckedChanged += new System.EventHandler(this.tsmiFriendly_CheckedChanged);
             // 
             // toolStripSeparator12
             // 
             this.toolStripSeparator12.Name = "toolStripSeparator12";
-            this.toolStripSeparator12.Size = new System.Drawing.Size(153, 6);
+            this.toolStripSeparator12.Size = new System.Drawing.Size(160, 6);
             // 
             // tsmiShowEntities
             // 
@@ -354,7 +371,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiEntitiesIntersect,
             this.tsmiEntitiesOnlyValidAF});
             this.tsmiShowEntities.Name = "tsmiShowEntities";
-            this.tsmiShowEntities.Size = new System.Drawing.Size(156, 22);
+            this.tsmiShowEntities.Size = new System.Drawing.Size(163, 22);
             this.tsmiShowEntities.Text = "Show entities";
             // 
             // tsmiEntitiesAll
@@ -489,7 +506,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripSeparator16,
             this.tsmiAttributesOnlyValidAF});
             this.tsmiShowAttributes.Name = "tsmiShowAttributes";
-            this.tsmiShowAttributes.Size = new System.Drawing.Size(156, 22);
+            this.tsmiShowAttributes.Size = new System.Drawing.Size(163, 22);
             this.tsmiShowAttributes.Text = "Show attributes";
             // 
             // tsmiAttributesAll
@@ -600,7 +617,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(153, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(160, 6);
             // 
             // tsmiXMLresult
             // 
@@ -608,7 +625,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiXMLresult.CheckOnClick = true;
             this.tsmiXMLresult.CheckState = System.Windows.Forms.CheckState.Checked;
             this.tsmiXMLresult.Name = "tsmiXMLresult";
-            this.tsmiXMLresult.Size = new System.Drawing.Size(156, 22);
+            this.tsmiXMLresult.Size = new System.Drawing.Size(163, 22);
             this.tsmiXMLresult.Text = "XML result";
             this.tsmiXMLresult.CheckedChanged += new System.EventHandler(this.tsmiXMLresult_CheckedChanged);
             // 
@@ -616,7 +633,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiJSONresult.CheckOnClick = true;
             this.tsmiJSONresult.Name = "tsmiJSONresult";
-            this.tsmiJSONresult.Size = new System.Drawing.Size(156, 22);
+            this.tsmiJSONresult.Size = new System.Drawing.Size(163, 22);
             this.tsmiJSONresult.Text = "JSON result";
             this.tsmiJSONresult.CheckedChanged += new System.EventHandler(this.tsmiJSONresult_CheckedChanged);
             // 
@@ -879,5 +896,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal System.Windows.Forms.ToolStripMenuItem tsmiAttributesCustom;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator16;
         internal System.Windows.Forms.ToolStripMenuItem tsmiAttributesOnlyValidAF;
+        private System.Windows.Forms.ToolStripMenuItem tsmiLiveUpdate;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator17;
     }
 }
