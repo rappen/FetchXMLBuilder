@@ -1154,16 +1154,32 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             WorkAsync("Executing FetchXML...",
                 (eventargs) =>
                 {
+                    EntityCollection resultCollection = null;
                     var fetchxml = GetFetchDocument().OuterXml;
-                    var resp = Service.RetrieveMultiple(new FetchExpression(fetchxml));
+                    try
+                    {
+                        var convert = (FetchXmlToQueryExpressionResponse)Service.Execute(new FetchXmlToQueryExpressionRequest() { FetchXml = fetchxml });
+                        resultCollection = Service.RetrieveMultiple(convert.Query);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (MessageBox.Show("Failed to convert and execute as QueryExpression.\n\nTry as FetchExpression?", "RetrieveMultiple", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                        {
+                            resultCollection = Service.RetrieveMultiple(new FetchExpression(fetchxml));
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
                     if (ToJSON)
                     {
-                        var json = EntityCollectionSerializer.ToJSON(resp, Formatting.Indented);
+                        var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented);
                         eventargs.Result = json;
                     }
                     else
                     {
-                        var serialized = EntityCollectionSerializer.Serialize(resp);
+                        var serialized = EntityCollectionSerializer.Serialize(resultCollection);
                         eventargs.Result = serialized;
                     }
                 },
