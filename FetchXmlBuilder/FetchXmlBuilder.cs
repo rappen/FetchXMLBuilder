@@ -14,6 +14,7 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -513,6 +514,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
+        private void tsmiToQureyExpression_Click(object sender, EventArgs e)
+        {
+            DisplayQExCode();
+        }
+
         #endregion Event handlers
 
         #region Instance methods
@@ -641,6 +647,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiSaveFileAs.Enabled = enabled && tvFetch.Nodes.Count > 0;
                     tsmiSaveView.Enabled = enabled && FetchChanged && View != null;
                     tsmiSaveCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
+                    tsmiToQureyExpression.Enabled = enabled && Service != null;
                     tsbOptions.Enabled = enabled;
                     tsmiFriendly.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
                     tsmiShowEntities.Enabled = enabled && Service != null;
@@ -1155,23 +1162,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 (eventargs) =>
                 {
                     EntityCollection resultCollection = null;
-                    var fetchxml = GetFetchDocument().OuterXml;
-                    try
-                    {
-                        var convert = (FetchXmlToQueryExpressionResponse)Service.Execute(new FetchXmlToQueryExpressionRequest() { FetchXml = fetchxml });
-                        resultCollection = Service.RetrieveMultiple(convert.Query);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (MessageBox.Show("Failed to convert and execute as QueryExpression.\n\nTry as FetchExpression?", "RetrieveMultiple", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
-                        {
-                            resultCollection = Service.RetrieveMultiple(new FetchExpression(fetchxml));
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
+                    var query = GetQueryExpression();
+                    resultCollection = Service.RetrieveMultiple(query);
                     if (ToJSON)
                     {
                         var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented);
@@ -1535,6 +1527,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     TreeNodeHelper.SetNodeText(attrNode);
                 }
                 FetchChanged = treeChecksum != GetTreeChecksum(null);
+                UpdateLiveXML();
             }
         }
 
@@ -1587,6 +1580,43 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 }
                 xmlLiveUpdate.Location = new Point(topparent.Location.X + topparent.Size.Width, topparent.Location.Y);
             }
+        }
+
+        private void DisplayQExCode()
+        {
+            try
+            {
+                var QEx = GetQueryExpression();
+                var code = QueryExpressionCodeGenerator.GetCSharpQueryExpression(QEx);
+                var view = new XmlContentDisplayDialog(code, "QueryExpression Code", false);
+                view.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to generate C# QueryExpression code.\n\n" + ex.Message, "QueryExpression", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private QueryExpression GetQueryExpression()
+        {
+            var QEx = new QueryExpression();
+            var xml = GetFetchDocument();
+            var fetch = xml.SelectSingleNode("fetch");
+            if (fetch != null)
+            {
+                var aggr = fetch.Attributes["aggregate"];
+                if (aggr != null && aggr.Value != null && aggr.Value.ToLower() == "true")
+                {
+                    throw new Exception("Aggregate queries cannot be converted to QueryExpression.");
+                }
+            }
+            if (Service == null)
+            {
+                throw new Exception("Must be connected to CRM to convert to QueryExpression.");
+            }
+            var convert = (FetchXmlToQueryExpressionResponse)Service.Execute(new FetchXmlToQueryExpressionRequest() { FetchXml = xml.OuterXml });
+            QEx = convert.Query;
+            return QEx;
         }
 
         #endregion Instance methods

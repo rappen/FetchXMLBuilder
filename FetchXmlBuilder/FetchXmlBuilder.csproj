@@ -74,6 +74,7 @@
     <Compile Include="AppCode\Clipboard.cs" />
     <Compile Include="AppCode\FindTextHandler.cs" />
     <Compile Include="AppCode\OptionsetItem.cs" />
+    <Compile Include="AppCode\QueryExpressionCodeGenerator.cs" />
     <Compile Include="AppCode\ViewItem.cs" />
     <Compile Include="AppCode\EntityItem.cs" />
     <Compile Include="AppCode\FetchNodeCapabilities.cs" />

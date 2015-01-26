@@ -52,6 +52,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiSaveView = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveCWP = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiToQureyExpression = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbAbout = new System.Windows.Forms.ToolStripButton();
             this.tsbOptions = new System.Windows.Forms.ToolStripDropDownButton();
@@ -261,7 +262,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveFileAs,
             this.toolStripSeparator5,
             this.tsmiSaveView,
-            this.tsmiSaveCWP});
+            this.tsmiSaveCWP,
+            this.tsmiToQureyExpression});
             this.tsbSave.Image = ((System.Drawing.Image)(resources.GetObject("tsbSave.Image")));
             this.tsbSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSave.Name = "tsbSave";
@@ -273,36 +275,45 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiSaveFile.Enabled = false;
             this.tsmiSaveFile.Name = "tsmiSaveFile";
-            this.tsmiSaveFile.Size = new System.Drawing.Size(178, 22);
+            this.tsmiSaveFile.Size = new System.Drawing.Size(217, 22);
             this.tsmiSaveFile.Text = "Save File";
             this.tsmiSaveFile.Click += new System.EventHandler(this.tsmiSaveFile_Click);
             // 
             // tsmiSaveFileAs
             // 
             this.tsmiSaveFileAs.Name = "tsmiSaveFileAs";
-            this.tsmiSaveFileAs.Size = new System.Drawing.Size(178, 22);
+            this.tsmiSaveFileAs.Size = new System.Drawing.Size(217, 22);
             this.tsmiSaveFileAs.Text = "Save File as...";
             this.tsmiSaveFileAs.Click += new System.EventHandler(this.tsmiSaveFileAs_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(175, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(214, 6);
             // 
             // tsmiSaveView
             // 
             this.tsmiSaveView.Enabled = false;
             this.tsmiSaveView.Name = "tsmiSaveView";
-            this.tsmiSaveView.Size = new System.Drawing.Size(178, 22);
+            this.tsmiSaveView.Size = new System.Drawing.Size(217, 22);
             this.tsmiSaveView.Text = "Save View";
             this.tsmiSaveView.Click += new System.EventHandler(this.tsmiSaveView_Click);
             // 
             // tsmiSaveCWP
             // 
+            this.tsmiSaveCWP.Enabled = false;
             this.tsmiSaveCWP.Name = "tsmiSaveCWP";
-            this.tsmiSaveCWP.Size = new System.Drawing.Size(178, 22);
+            this.tsmiSaveCWP.Size = new System.Drawing.Size(217, 22);
             this.tsmiSaveCWP.Text = "Save as CWP Feed...";
             this.tsmiSaveCWP.Click += new System.EventHandler(this.tsmiSaveCWP_Click);
+            // 
+            // tsmiToQureyExpression
+            // 
+            this.tsmiToQureyExpression.Enabled = false;
+            this.tsmiToQureyExpression.Name = "tsmiToQureyExpression";
+            this.tsmiToQureyExpression.Size = new System.Drawing.Size(217, 22);
+            this.tsmiToQureyExpression.Text = "QueryExpression C# code...";
+            this.tsmiToQureyExpression.Click += new System.EventHandler(this.tsmiToQureyExpression_Click);
             // 
             // toolStripSeparator6
             // 
@@ -711,7 +722,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.moveUpToolStripMenuItem,
             this.moveDownToolStripMenuItem});
             this.nodeMenu.Name = "nodeMenu";
-            this.nodeMenu.Size = new System.Drawing.Size(203, 170);
+            this.nodeMenu.Size = new System.Drawing.Size(203, 192);
             this.nodeMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
             // addToolStripMenuItem
@@ -755,9 +766,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             // cutToolStripMenuItem
             // 
+            this.cutToolStripMenuItem.Enabled = false;
             this.cutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("cutToolStripMenuItem.Image")));
             this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
-            this.cutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
             this.cutToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.cutToolStripMenuItem.Tag = "Cut";
             this.cutToolStripMenuItem.Text = "Cut";
@@ -765,9 +776,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             // copyToolStripMenuItem
             // 
+            this.copyToolStripMenuItem.Enabled = false;
             this.copyToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("copyToolStripMenuItem.Image")));
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
             this.copyToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.copyToolStripMenuItem.Tag = "Copy";
             this.copyToolStripMenuItem.Text = "Copy";
@@ -775,9 +786,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             // pasteToolStripMenuItem
             // 
+            this.pasteToolStripMenuItem.Enabled = false;
             this.pasteToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("pasteToolStripMenuItem.Image")));
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
             this.pasteToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.pasteToolStripMenuItem.Tag = "Paste";
             this.pasteToolStripMenuItem.Text = "Paste";
@@ -908,5 +919,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiLiveUpdate;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator17;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenCWP;
+        private System.Windows.Forms.ToolStripMenuItem tsmiToQureyExpression;
     }
 }
