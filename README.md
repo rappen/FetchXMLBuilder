@@ -2,7 +2,9 @@
 
 ## A tool to create and run advanced FetchXML queries
 
-This tool is a plugin to the XrmToolbox by Tanguy Touzard.
+*This tool is a plugin to the XrmToolbox by Tanguy Touzard.*
+
+_Written by Jonas Rapp at Cinteros AB, Stockholm, Sweden._
 
 ### Background
 
