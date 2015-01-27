@@ -1,10 +1,10 @@
 # FetchXML Builder for XrmToolbox
 
+_Written by Jonas Rapp at Cinteros AB, Stockholm, Sweden._
+
 ## A tool to create and run advanced FetchXML queries
 
-*This tool is a plugin to the XrmToolbox by Tanguy Touzard.*
-
-_Written by Jonas Rapp at Cinteros AB, Stockholm, Sweden._
+This tool is a plugin to the XrmToolbox by Tanguy Touzard.
 
 ### Background
 

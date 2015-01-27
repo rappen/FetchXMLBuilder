@@ -23,6 +23,7 @@ using Clipboard = Cinteros.Xrm.FetchXmlBuilder.AppCode.Clipboard;
 
 [assembly: BackgroundColor("#000000")]
 
+// My first Git comment!
 namespace Cinteros.Xrm.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder : XrmToolBox.PluginBase
