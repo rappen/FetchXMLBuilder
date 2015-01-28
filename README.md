@@ -41,6 +41,3 @@ Feel free to add or vote up issues you would like to see!
 ### Credits
 
 This tool was "inspired by" the Sitemap Editor and a few other tools written by Tanguy and inherits the PluginBase class by Daryl LaBar.
-
-
-jjjjj
