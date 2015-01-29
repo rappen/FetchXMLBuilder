@@ -1,5 +1,7 @@
 # FetchXML Builder for XrmToolbox
+
 _**A tool to create and run advanced FetchXML queries**_
+
 *Written by Jonas Rapp at Cinteros AB, Stockholm, Sweden.*
 
 ## *Go straight to [Releases to Download](http://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder/releases)!*
@@ -24,9 +26,11 @@ Constructing FetchXML in ways that Advanced Find cannot
 - "has no"-queries
 - attributes from linked entities
 - join on other fields than relationships
+
 Querying CRM for information not (easily) found in the CRM UI
 - system entities
 - "hidden" attributes
+
 Developer assistance
 - Generate C# QueryExpression code from fetch xml
 
@@ -37,8 +41,9 @@ To make it more appealing, there is also the possibility to have it show "Friend
 ### Information
 
 Some screen shots are available under [Wiki](http://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder/wiki). More info will be posted :) 
+
 Feedback is much appreciated, post issues and suggestions under  [Issues](http://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder/issues)!
 
 ### Credits
 
-This tool was "inspired by" the [Sitemap](http://download-codeplex.sec.s-msft.com/Download?ProjectName=xrmtoolbox&DownloadId=776491) Editor and a few other tools written by Tanguy and inherits the [PluginBase](http://xrmtoolbox.codeplex.com/SourceControl/latest#XrmToolBox/XrmToolBox/PluginBase.cs) class by [Daryl LaBar](http://www.codeplex.com/site/users/view/hulk2484).
+This tool was "inspired by" the [Sitemap](http://download-codeplex.sec.s-msft.com/Download?ProjectName=xrmtoolbox&DownloadId=776491) Editor and a few other tools written by Tanguy and inherits the [`PluginBase`](http://xrmtoolbox.codeplex.com/SourceControl/latest#XrmToolBox/XrmToolBox/PluginBase.cs) class by [Daryl LaBar](http://www.codeplex.com/site/users/view/hulk2484).
