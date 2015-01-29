@@ -4,6 +4,8 @@ _Written by Jonas Rapp at Cinteros AB, Stockholm, Sweden._
 
 ## A tool to create and run advanced FetchXML queries
 
+## *Go straight to [Releases to Download](http://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder/releases)!*
+
 This tool is a plugin to the XrmToolbox by Tanguy Touzard.
 
 ### Background
