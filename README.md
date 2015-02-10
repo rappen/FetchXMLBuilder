@@ -1,4 +1,4 @@
-# FetchXML Builder for XrmToolbox
+# FetchXML Builder for XrmToolBox
 
 _**A tool to create and run advanced FetchXML queries**_
 
@@ -6,7 +6,7 @@ _**A tool to create and run advanced FetchXML queries**_
 
 ## *Go straight to [Releases to Download](http://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder/releases)!*
 
-This tool is a plugin to the [XrmToolbox](http://xrmtoolbox.codeplex.com/) by [Tanguy Touzard](https://www.codeplex.com/site/users/view/tanguy92).
+This tool is a plugin to the [XrmToolBox](http://xrmtoolbox.codeplex.com/) by [Tanguy Touzard](https://www.codeplex.com/site/users/view/tanguy92).
 
 ### Background
 
@@ -14,7 +14,7 @@ As many other CRM developers, I used to use **Stunnware Tools** extensively to q
 
 Unfortunately, this tool was discontinued, and I have found no good substitute. So the time was ripe to do something about it myself!
 
-The easiest way to get a jump start is – of course – to create it as a plugin to the XrmToolbox. Then I wouldn't have to deal with the hassles of connecting to CRM, storing configurations etc. And it would also provide a platform that is recognized throughout the CRM community, which of course would help spreading the tool.
+The easiest way to get a jump start is – of course – to create it as a plugin to the XrmToolBox. Then I wouldn't have to deal with the hassles of connecting to CRM, storing configurations etc. And it would also provide a platform that is recognized throughout the CRM community, which of course would help spreading the tool.
 
 ### Project Description
 
