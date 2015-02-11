@@ -1,176 +1,134 @@
-﻿<!doctype html>
+<!doctype html>
 <!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
 <!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="javascripts/script.js"></script>
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen">
+  <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="javascripts/script.js"></script>
 
-    <title>FetchXML Builder for XrmToolBox</title>
-    <meta name="description" content="FetchXML Builder for XrmToolBox">
+  <title>FetchXML Builder</title>
+  <meta name="description" content="for XrmToolbox - create and run advanced FetchXML queries">
 
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
 
 </head>
 
 <body>
 
-    <div class="wrapper">
-        <header>
-            <h1 class="title">FetchXML Builder</h1>
-        </header>
-        <div id="container">
-            <p class="tagline">FetchXML Builder for XrmToolBox</p>
-            <div id="main" role="main">
-                <div class="download-bar">
-                    <div class="inner">
-                        <a href="https://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder/tarball/master" class="download-button tar"><span>Download</span></a>
-                        <a href="https://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder/zipball/master" class="download-button zip"><span>Download</span></a>
-                        <a href="https://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder" class="code">View FXB on GitHub</a>
-                    </div>
-                    <span class="blc"></span><span class="trc"></span>
-                </div>
-                <article class="markdown-body">
-                    <h1>
-                        <a id="fetchxml-builder-for-xrmtoolbox" class="anchor" href="#fetchxml-builder-for-xrmtoolbox" aria-hidden="true"><span class="octicon octicon-link"></span></a>FetchXML Builder for XrmToolBox
-                    </h1>
-
-                    <p><em><strong>A tool to create and run advanced FetchXML queries</strong></em></p>
-
-                    <p><em>Written by Jonas Rapp at Cinteros AB, Stockholm, Sweden.</em></p>
-
-                    <p>This tool is a plugin to the <a href="http://xrmtoolbox.codeplex.com/">XrmToolbox</a> by <a href="https://www.codeplex.com/site/users/view/tanguy92">Tanguy Touzard</a>.</p>
-
-                    <h2>
-                        <a id="download-here" class="anchor" href="#download-here" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>&gt; <a href="http://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder/releases">Download here</a> &lt;</em>
-                    </h2>
-
-                    <h3>
-                        <a id="background" class="anchor" href="#background" aria-hidden="true"><span class="octicon octicon-link"></span></a>Background
-                    </h3>
-
-                    <p>As many other CRM developers, I used to use <strong>Stunnware Tools</strong> extensively to query the CRM database for information and to assist me when creating fetch xml to be used in our solutions.</p>
-
-                    <p>Unfortunately, this tool was discontinued, and I have found no good substitute. So the time was ripe to do something about it myself!</p>
-
-                    <p>The easiest way to get a jump start is – of course – to create it as a plugin to the XrmToolBox. Then I wouldn't have to deal with the hassles of connecting to CRM, storing configurations etc. And it would also provide a platform that is recognized throughout the CRM community, which of course would help spreading the tool.</p>
-
-                    <h3>
-                        <a id="project-description" class="anchor" href="#project-description" aria-hidden="true"><span class="octicon octicon-link"></span></a>Project Description
-                    </h3>
-
-                    <p>The goal is to create a tool that will assist you in the following areas:</p>
-
-                    <p>Constructing FetchXML in ways that Advanced Find cannot</p>
-
-                    <ul>
-                        <li>aggregates</li>
-                        <li>outer joins</li>
-                        <li>"has no"-queries</li>
-                        <li>attributes from linked entities</li>
-                        <li>join on other fields than relationships</li>
-                    </ul>
-
-                    <p>Querying CRM for information not (easily) found in the CRM UI</p>
-
-                    <ul>
-                        <li>system entities</li>
-                        <li>"hidden" attributes</li>
-                    </ul>
-
-                    <p>Developer assistance</p>
-
-                    <ul>
-                        <li>Generate C# QueryExpression code from fetch xml</li>
-                    </ul>
-
-                    <p>The tool reads metadata from CRM to assist with selecting entities, attributes, relations and to perform validation of condition values.</p>
-
-                    <p>To make it more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.</p>
-
-                    <h3>
-                        <a id="information" class="anchor" href="#information" aria-hidden="true"><span class="octicon octicon-link"></span></a>Information
-                    </h3>
-
-                    <p>Some screen shots are available under <a href="http://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder/wiki">Wiki</a>. More info will be posted :) </p>
-
-                    <p>Feedback is much appreciated, post issues and suggestions under  <a href="http://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder/issues">Issues</a>!</p>
-
-                    <h3>
-                        <a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits
-                    </h3>
-
-                    <p>This tool was "inspired by" the <a href="http://download-codeplex.sec.s-msft.com/Download?ProjectName=xrmtoolbox&amp;DownloadId=776491">Sitemap</a> Editor and a few other tools written by Tanguy and inherits the <a href="http://xrmtoolbox.codeplex.com/SourceControl/latest#XrmToolBox/XrmToolBox/PluginBase.cs"><code>PluginBase</code></a> class by <a href="http://www.codeplex.com/site/users/view/hulk2484">Daryl LaBar</a>.</p>
-                </article>
-            </div>
+  <div class="wrapper">
+    <header>
+      <h1 class="title">FetchXML Builder</h1>
+    </header>
+    <div id="container">
+      <p class="tagline">for XrmToolbox - create and run advanced FetchXML queries</p>
+      <div id="main" role="main">
+        <div class="download-bar">
+        <div class="inner">
+          <a href="https://github.com/Cinteros/FetchXMLBuilder/tarball/master" class="download-button tar"><span>Download</span></a>
+          <a href="https://github.com/Cinteros/FetchXMLBuilder/zipball/master" class="download-button zip"><span>Download</span></a>
+          <a href="https://github.com/Cinteros/FetchXMLBuilder" class="code">View FetchXML Builder on GitHub</a>
         </div>
-        <footer>
-            <div class="owner">
-                <p><a href="https://github.com/cinteros" class="avatar"><img src="https://avatars2.githubusercontent.com/u/1914472?v=3&amp;s=60" width="48" height="48"></a> <a href="https://github.com/cinteros">cinteros</a> maintains <a href="https://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder">FXB</a></p>
+        <span class="blc"></span><span class="trc"></span>
+        </div>
+        <article class="markdown-body">
+          <h1>
+<a id="fetchxml-builder-for-xrmtoolbox" class="anchor" href="#fetchxml-builder-for-xrmtoolbox" aria-hidden="true"><span class="octicon octicon-link"></span></a>FetchXML Builder for XrmToolBox</h1>
 
+<p><em>Written by Jonas Rapp at Cinteros AB, Stockholm, Sweden.</em></p>
 
-            </div>
-            <div class="creds">
-                <small>This page generated using <a href="http://pages.github.com/">GitHub Pages</a><br>theme by <a href="https://twitter.com/jonrohan/">Jon Rohan</a></small>
-            </div>
-        </footer>
+<p>This tool is a plugin to the <a href="http://xrmtoolbox.codeplex.com/">XrmToolBox</a> by <a href="https://www.codeplex.com/site/users/view/tanguy92">Tanguy Touzard</a>.</p>
+
+<h2>
+<a id="-download-here-" class="anchor" href="#-download-here-" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>&gt; <a href="http://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder/releases">Download here</a> &lt;</em>
+</h2>
+
+<h3>
+<a id="background" class="anchor" href="#background" aria-hidden="true"><span class="octicon octicon-link"></span></a>Background</h3>
+
+<p>As many other CRM developers, I used to use <strong>Stunnware Tools</strong> extensively to query the CRM database for information and to assist me when creating fetch xml to be used in our solutions.</p>
+
+<p>Unfortunately, this tool was discontinued, and I have found no good substitute. So the time was ripe to do something about it myself!</p>
+
+<p>The easiest way to get a jump start is – of course – to create it as a plugin to the XrmToolBox. Then I wouldn't have to deal with the hassles of connecting to CRM, storing configurations etc. And it would also provide a platform that is recognized throughout the CRM community, which of course would help spreading the tool.</p>
+
+<h3>
+<a id="project-description" class="anchor" href="#project-description" aria-hidden="true"><span class="octicon octicon-link"></span></a>Project Description</h3>
+
+<p><em>The goal is to create a tool that will assist you in the following areas:</em></p>
+
+<p>Constructing FetchXML in ways that Advanced Find cannot</p>
+
+<ul>
+<li>aggregates</li>
+<li>outer joins</li>
+<li>"has no"-queries</li>
+<li>attributes from linked entities</li>
+<li>join on other fields than relationships</li>
+</ul>
+
+<p>Querying CRM for information not (easily) found in the CRM UI</p>
+
+<ul>
+<li>system entities</li>
+<li>"hidden" attributes</li>
+</ul>
+
+<p>Developer assistance</p>
+
+<ul>
+<li>Generate C# QueryExpression code from fetch xml</li>
+</ul>
+
+<p>The tool reads metadata from CRM to assist with selecting entities, attributes, relations and to perform validation of condition values.</p>
+
+<p>To make it more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.</p>
+
+<h3>
+<a id="information" class="anchor" href="#information" aria-hidden="true"><span class="octicon octicon-link"></span></a>Information</h3>
+
+<p>Some screen shots are available under <a href="http://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder/wiki">Wiki</a>. More info will be posted :) </p>
+
+<p>Feedback is much appreciated, post issues and suggestions under  <a href="http://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder/issues">Issues</a>!</p>
+
+<h3>
+<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h3>
+
+<p>This tool was "inspired by" the <a href="http://download-codeplex.sec.s-msft.com/Download?ProjectName=xrmtoolbox&amp;DownloadId=776491">Sitemap</a> Editor and a few other tools written by Tanguy and inherits the <a href="http://xrmtoolbox.codeplex.com/SourceControl/latest#XrmToolBox/XrmToolBox/PluginBase.cs"><code>PluginBase</code></a> class by <a href="http://www.codeplex.com/site/users/view/hulk2484">Daryl LaBar</a>.</p>
+        </article>
+      </div>
     </div>
-    <div class="current-section">
-        <a href="#top">Scroll to top</a>
-        <a href="https://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder/tarball/master" class="tar">tar</a><a href="https://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
-        <p class="name"></p>
-    </div>
+    <footer>
+      <div class="owner">
+      <p><a href="https://github.com/Cinteros" class="avatar"><img src="https://avatars2.githubusercontent.com/u/1914472?v=3&amp;s=60" width="48" height="48"></a> <a href="https://github.com/Cinteros">Cinteros</a> maintains <a href="https://github.com/Cinteros/FetchXMLBuilder">FetchXML Builder</a></p>
 
-    <script type="text/javascript">
-        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-    </script>
-    <script type="text/javascript">
-        try {
-            var pageTracker = _gat._getTracker("UA-41153925-6");
+
+      </div>
+      <div class="creds">
+        <small>This page generated using <a href="http://pages.github.com/">GitHub Pages</a><br>theme by <a href="https://twitter.com/jonrohan/">Jon Rohan</a></small>
+      </div>
+    </footer>
+  </div>
+  <div class="current-section">
+    <a href="#top">Scroll to top</a>
+    <a href="https://github.com/Cinteros/FetchXMLBuilder/tarball/master" class="tar">tar</a><a href="https://github.com/Cinteros/FetchXMLBuilder/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
+    <p class="name"></p>
+  </div>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-41153925-6");
             pageTracker._trackPageview();
-        } catch (err) { }
-    </script>
-    <script>
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date(); a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+            } catch(err) {}
+          </script>
 
-        ga('create', 'UA-41153925-6', 'auto');
-        ga('send', 'pageview');
-
-    </script>
-    <!-- Start of StatCounter Code for Default Guide -->
-    <script type="text/javascript">
-        var sc_project = 8164424;
-        var sc_invisible = 1;
-        var sc_security = "d71f5ed7";
-        var sc_https = 1;
-        var scJsHost = (("https:" == document.location.protocol) ?
-        "https://secure." : "http://www.");
-        document.write("<sc" + "ript type='text/javascript' src='" +
-        scJsHost +
-        "statcounter.com/counter/counter.js'></" + "script>");
-    </script>
-    <noscript>
-        <div class="statcounter">
-            <a title="web statistics"
-               href="http://statcounter.com/free-web-stats/"
-               target="_blank">
-                <img class="statcounter"
-                     src="http://c.statcounter.com/8164424/0/d71f5ed7/1/"
-                     alt="web statistics">
-            </a>
-        </div>
-    </noscript>
-    <!-- End of StatCounter Code for Default Guide -->
 </body>
 </html>
