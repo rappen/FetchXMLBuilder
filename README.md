@@ -4,7 +4,7 @@ _**A tool to create and run advanced FetchXML queries**_
 
 *Written by Jonas Rapp at Cinteros AB, Stockholm, Sweden.*
 
-## *Go straight to [Releases to Download](http://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder/releases)!*
+## *> [Download here](http://github.com/cinteros/Cinteros.XrmToolbox.FetchXMLBuilder/releases) <*
 
 This tool is a plugin to the [XrmToolBox](http://xrmtoolbox.codeplex.com/) by [Tanguy Touzard](https://www.codeplex.com/site/users/view/tanguy92).
 
@@ -18,7 +18,7 @@ The easiest way to get a jump start is – of course – to create it as a plugi
 
 ### Project Description
 
-The goal is to create a tool that will assist you in the following areas:
+*The goal is to create a tool that will assist you in the following areas:*
 
 Constructing FetchXML in ways that Advanced Find cannot
 - aggregates
