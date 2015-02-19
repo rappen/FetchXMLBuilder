@@ -13,6 +13,17 @@
     <meta name="description" content="FetchXML Builder, an XrmToolbox plugin to create and run advanced FetchXML queries">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="icon" type="image/x-icon"  href="http://fxb.xrmtoolbox.com/favicon.ico">
+     <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: 'https://api.github.com/repos/Cinteros/FetchXMLBuilder/releases',
+                success: function(data) {
+                    $("a#current-version span").text("Get latest version " + data[0].tag_name + " (downloaded " + data[0].assets[0].download_count + " times)");
+                    $("a#current-version").attr('href', data[0].assets[0].browser_download_url);
+                }
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="wrapper">
@@ -25,9 +36,8 @@
             <div id="main" role="main">
                 <div class="download-bar">
                     <div class="inner">
-                        <a href="https://github.com/Cinteros/FetchXMLBuilder/releases" class="download-button cint"><span>All Releases</span></a>
-                        <a href="https://github.com/Cinteros/FetchXMLBuilder/releases/download/1.2015.1.10/FetchXMLBuilder.1.2015.1.10.zip" class="download-button zip"><span>Download Now</span></a>
-                        <a href="https://github.com/Cinteros/FetchXMLBuilder" class="code">FetchXML Builder on GitHub</a>
+                        <a class="download-button zip" id="current-version"><span></span></a>
+                        <a href="https://github.com/Cinteros/FetchXMLBuilder" class="code">View on GitHub</a>
                     </div>
                     <span class="blc"></span><span class="trc"></span>
                 </div>
