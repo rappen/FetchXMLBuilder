@@ -450,8 +450,7 @@ h1.title {
   margin: 30px 20px 10px;
   font-size: 60px;
   font-weight: bold;
-  font-style: italic;
-  font-family: 'Arial Rounded MT';
+  font-family: Arial, Helvetica, sans-serif;
   text-align: center;
 }
 
@@ -467,7 +466,7 @@ h1.title {
 }
 
 p.tagline {
-  padding: 20px 20px 0;
+  padding: 5px 20px 0;
   color: #fff;
   font-size: 17px;
 }
@@ -623,8 +622,8 @@ a.zip span {
 a.cint,
 a.cint span {
   background: transparent url(../images/Cinteros20.png) no-repeat 0 0;
-  width: 30px;
-  height: 21px;
+  width: 20px;
+  height: 20px;
   display: inline-block;
   text-indent: -10000px;
   opacity: 0.8;
