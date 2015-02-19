@@ -88,6 +88,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiXMLresult = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiJSONresult = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiGridresult = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiLiveUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.gbProperties = new System.Windows.Forms.GroupBox();
@@ -340,6 +341,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripSeparator7,
             this.tsmiXMLresult,
             this.tsmiJSONresult,
+            this.tsmiGridresult,
             this.toolStripSeparator17,
             this.tsmiLiveUpdate});
             this.tsbOptions.Image = ((System.Drawing.Image)(resources.GetObject("tsbOptions.Image")));
@@ -634,7 +636,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiXMLresult.Name = "tsmiXMLresult";
             this.tsmiXMLresult.Size = new System.Drawing.Size(163, 22);
             this.tsmiXMLresult.Text = "XML result";
-            this.tsmiXMLresult.CheckedChanged += new System.EventHandler(this.tsmiXMLresult_CheckedChanged);
+            this.tsmiXMLresult.CheckedChanged += new System.EventHandler(this.tsmiResult_CheckedChanged);
             // 
             // tsmiJSONresult
             // 
@@ -642,7 +644,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiJSONresult.Name = "tsmiJSONresult";
             this.tsmiJSONresult.Size = new System.Drawing.Size(163, 22);
             this.tsmiJSONresult.Text = "JSON result";
-            this.tsmiJSONresult.CheckedChanged += new System.EventHandler(this.tsmiJSONresult_CheckedChanged);
+            this.tsmiJSONresult.CheckedChanged += new System.EventHandler(this.tsmiResult_CheckedChanged);
+            // 
+            // tsmiGridresult
+            // 
+            this.tsmiGridresult.CheckOnClick = true;
+            this.tsmiGridresult.Name = "tsmiGridresult";
+            this.tsmiGridresult.Size = new System.Drawing.Size(163, 22);
+            this.tsmiGridresult.Text = "Grid result";
+            this.tsmiGridresult.CheckedChanged += new System.EventHandler(this.tsmiResult_CheckedChanged);
             // 
             // toolStripSeparator17
             // 
@@ -722,7 +732,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.moveUpToolStripMenuItem,
             this.moveDownToolStripMenuItem});
             this.nodeMenu.Name = "nodeMenu";
-            this.nodeMenu.Size = new System.Drawing.Size(203, 192);
+            this.nodeMenu.Size = new System.Drawing.Size(203, 170);
             this.nodeMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
             // addToolStripMenuItem
@@ -920,5 +930,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator17;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenCWP;
         private System.Windows.Forms.ToolStripMenuItem tsmiToQureyExpression;
+        private System.Windows.Forms.ToolStripMenuItem tsmiGridresult;
     }
 }

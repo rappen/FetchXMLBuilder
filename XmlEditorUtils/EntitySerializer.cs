@@ -155,7 +155,7 @@ namespace Cinteros.Xrm.XmlEditorUtils
             return result;
         }
 
-        private static object AttributeToBaseType(object attribute)
+        public static object AttributeToBaseType(object attribute)
         {
             if (attribute is AliasedValue)
                 return AttributeToBaseType(((AliasedValue)attribute).Value);

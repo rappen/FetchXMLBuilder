@@ -23,7 +23,6 @@ using Clipboard = Cinteros.Xrm.FetchXmlBuilder.AppCode.Clipboard;
 
 [assembly: BackgroundColor("#000000")]
 
-// My first Git comment!
 namespace Cinteros.Xrm.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder : XrmToolBox.PluginBase
@@ -128,6 +127,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private bool buttonsEnabled = true;
         internal static Size xmlWinSize;
         private XmlContentDisplayDialog xmlLiveUpdate;
+        private bool OptionsChanging = false;
         #endregion Declarations
 
         public FetchXmlBuilder()
@@ -360,14 +360,49 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             HandleNodeSelection(tvFetch.SelectedNode);
         }
 
-        private void tsmiJSONresult_CheckedChanged(object sender, EventArgs e)
+        private void tsmiResult_CheckedChanged(object sender, EventArgs e)
         {
-            tsmiXMLresult.Checked = !tsmiJSONresult.Checked;
-        }
-
-        private void tsmiXMLresult_CheckedChanged(object sender, EventArgs e)
-        {
-            tsmiJSONresult.Checked = !tsmiXMLresult.Checked;
+            if (!OptionsChanging)
+            {
+                OptionsChanging = true;
+                if (sender == tsmiXMLresult)
+                {
+                    if (tsmiXMLresult.Checked)
+                    {
+                        tsmiJSONresult.Checked = false;
+                        tsmiGridresult.Checked = false;
+                    }
+                    else
+                    {
+                        tsmiJSONresult.Checked = true;
+                    }
+                }
+                else if (sender == tsmiJSONresult)
+                {
+                    if (tsmiJSONresult.Checked)
+                    {
+                        tsmiXMLresult.Checked = false;
+                        tsmiGridresult.Checked = false;
+                    }
+                    else
+                    {
+                        tsmiXMLresult.Checked = true;
+                    }
+                }
+                else if (sender == tsmiGridresult)
+                {
+                    if (tsmiGridresult.Checked)
+                    {
+                        tsmiXMLresult.Checked = false;
+                        tsmiJSONresult.Checked = false;
+                    }
+                    else
+                    {
+                        tsmiXMLresult.Checked = true;
+                    }
+                }
+                OptionsChanging = false;
+            }
         }
 
         private void toolStripMain_Click(object sender, EventArgs e)
@@ -1120,7 +1155,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     ExecuteFetch();
                     break;
                 case "RetrieveMultiple":
-                    RetrieveMultiple(tsmiJSONresult.Checked);
+                    RetrieveMultiple();
                     break;
                 default:
                     MessageBox.Show("Invalid fetch method: " + fetchType, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1156,24 +1191,26 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 });
         }
 
-        private void RetrieveMultiple(bool ToJSON)
+        private void RetrieveMultiple()
         {
             working = true;
+            bool toxml = tsmiXMLresult.Checked;
+            bool tojson = tsmiJSONresult.Checked;
+            bool togrid = tsmiGridresult.Checked;
             WorkAsync("Executing FetchXML...",
                 (eventargs) =>
                 {
                     EntityCollection resultCollection = null;
                     var query = GetQueryExpression();
                     resultCollection = Service.RetrieveMultiple(query);
-                    if (ToJSON)
+                    if (tojson)
                     {
                         var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented);
                         eventargs.Result = json;
                     }
                     else
                     {
-                        var serialized = EntityCollectionSerializer.Serialize(resultCollection);
-                        eventargs.Result = serialized;
+                        eventargs.Result = resultCollection;
                     }
                 },
                 (completedargs) =>
@@ -1183,14 +1220,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         MessageBox.Show(completedargs.Error.Message);
                     }
-                    else if (completedargs.Result is XmlDocument)
+                    else if (toxml && completedargs.Result is EntityCollection)
                     {
-                        var result = ((XmlDocument)completedargs.Result).OuterXml;
-                        var xcdDialog = new XmlContentDisplayDialog(result, "XML Serialized RetrieveMultiple result", false);
+                        var serialized = EntityCollectionSerializer.Serialize((EntityCollection)completedargs.Result);
+                        var xcdDialog = new XmlContentDisplayDialog(serialized.OuterXml, "XML Serialized RetrieveMultiple result", false);
                         xcdDialog.StartPosition = FormStartPosition.CenterParent;
                         xcdDialog.ShowDialog();
                     }
-                    else if (completedargs.Result is string)
+                    else if (togrid && completedargs.Result is EntityCollection)
+                    {
+                        var gridDialog = new ResultGrid((EntityCollection)completedargs.Result);
+                        gridDialog.StartPosition = FormStartPosition.CenterParent;
+                        gridDialog.ShowDialog();
+                    }
+                    else if (tojson && completedargs.Result is string)
                     {
                         var result = completedargs.Result.ToString();
                         var xcdDialog = new XmlContentDisplayDialog(result, "JSON Serialized RetrieveMultiple result", false);
@@ -1528,7 +1571,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     TreeNodeHelper.SetNodeText(attrNode);
                 }
                 FetchChanged = treeChecksum != GetTreeChecksum(null);
-                UpdateLiveXML();
+                if (tsmiLiveUpdate.Checked)
+                {
+                    UpdateLiveXML();
+                }
             }
         }
 

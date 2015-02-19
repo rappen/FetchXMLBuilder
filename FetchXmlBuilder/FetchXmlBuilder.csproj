@@ -130,6 +130,12 @@
       <DependentUpon>fetchControl.cs</DependentUpon>
     </Compile>
     <Compile Include="AppCode\Prompt.cs" />
+    <Compile Include="Forms\ResultGrid.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ResultGrid.Designer.cs">
+      <DependentUpon>ResultGrid.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SelectAttributesDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -188,6 +194,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FetchXmlBuilder.resx">
       <DependentUpon>FetchXmlBuilder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ResultGrid.resx">
+      <DependentUpon>ResultGrid.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SelectAttributesDialog.resx">
       <DependentUpon>SelectAttributesDialog.cs</DependentUpon>
