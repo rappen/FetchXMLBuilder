@@ -25,7 +25,7 @@ using Clipboard = Cinteros.Xrm.FetchXmlBuilder.AppCode.Clipboard;
 
 namespace Cinteros.Xrm.FetchXmlBuilder
 {
-    public partial class FetchXmlBuilder : XrmToolBox.PluginBase
+    public partial class FetchXmlBuilder : XrmToolBox.PluginBase, XrmToolBox.IGitHubPlugin, XrmToolBox.IPayPalPlugin
     {
         #region Declarations
         const string settingfile = "Cinteros.Xrm.FetchXmlBuilder.Settings.xml";
@@ -141,6 +141,26 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 return imageList1.Images[0];
             }
+        }
+
+        public string RepositoryName
+        {
+            get { return "FetchXMLBuilder"; }
+        }
+
+        public string UserName
+        {
+            get { return "Cinteros"; }
+        }
+
+        public string DonationDescription
+        {
+            get { return "FetchXML Builder Fan Club"; }
+        }
+
+        public string EmailAccount
+        {
+            get { return "jonas@rappen.net"; }
         }
 
         #region Event handlers
@@ -413,7 +433,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsbAbout_Click(object sender, EventArgs e)
         {
             MessageBox.Show(
-                "FetchXML Builder for XrmToolbox\n" +
+                "FetchXML Builder for XrmToolBox\n" +
                 "Version: " + Assembly.GetExecutingAssembly().GetName().Version + "\n\n" +
                 "Developed by Jonas Rapp at Cinteros AB.\n\n" +
                 "Serialization to XML and JSON are custom developed to\n" +
@@ -1485,7 +1505,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (feed.Id.Equals(Guid.Empty))
             {
                 feed.Attributes.Add("cint_id", CWPFeed);
-                feed.Attributes.Add("cint_description", "Created by FetchXml Builder for XrmToolbox");
+                feed.Attributes.Add("cint_description", "Created by FetchXML Builder for XrmToolBox");
                 Service.Create(feed);
             }
             else

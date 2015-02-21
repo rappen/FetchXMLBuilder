@@ -38,20 +38,21 @@
     <ApplicationIcon>Cinteros.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="McTools.Xrm.Connection">
-      <HintPath>..\..\..\TFS\Cinteros Utils\lib\Javista\McTools.Xrm.Connection.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="McTools.Xrm.Connection, Version=1.0.3315.606, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\TFS\Cinteros Utils\lib\Microsoft\Crm7\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+      <HintPath>..\..\XrmToolBox\XrmToolBox\bin\Release\McTools.Xrm.Connection.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Client, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\TFS\Cinteros Utils\lib\Microsoft\Crm7\Microsoft.Xrm.Client.dll</HintPath>
+      <HintPath>..\..\XrmToolBox\XrmToolBox\bin\Release\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Sdk, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Xrm.Client, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\TFS\Cinteros Utils\lib\Microsoft\Crm7\Microsoft.Xrm.Sdk.dll</HintPath>
+      <HintPath>..\..\XrmToolBox\XrmToolBox\bin\Release\Microsoft.Xrm.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Sdk, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\XrmToolBox\XrmToolBox\bin\Release\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -64,9 +65,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="XrmToolBox, Version=1.2014.10.15, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="XrmToolBox, Version=1.2015.1.19, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(TFSroot)Cinteros Utils\lib\Javista\XrmToolBox.exe</HintPath>
+      <HintPath>..\..\XrmToolBox\XrmToolBox\bin\Release\XrmToolBox.exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -213,18 +214,18 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XmlEditorUtils\XmlEditorUtils.csproj">
-      <Project>{9fc7bdf7-321c-4b96-9b70-d75a16bd7685}</Project>
-      <Name>XmlEditorUtils</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\fetch.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Cinteros.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XmlEditorUtils\XmlEditorUtils.csproj">
+      <Project>{9fc7bdf7-321c-4b96-9b70-d75a16bd7685}</Project>
+      <Name>XmlEditorUtils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
