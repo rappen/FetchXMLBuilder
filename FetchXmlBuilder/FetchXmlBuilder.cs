@@ -615,6 +615,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             SaveControlValue(config, tsmiAttributesCustom);
             SaveControlValue(config, tsmiAttributesStandard);
             SaveControlValue(config, tsmiAttributesOnlyValidAF);
+            SaveControlValue(config, tsmiXMLresult);
+            SaveControlValue(config, tsmiJSONresult);
+            SaveControlValue(config, tsmiGridresult);
             config.Save();
         }
 
@@ -680,6 +683,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             LoadControlValue(config, tsmiAttributesCustom);
             LoadControlValue(config, tsmiAttributesStandard);
             LoadControlValue(config, tsmiAttributesOnlyValidAF);
+            LoadControlValue(config, tsmiXMLresult);
+            LoadControlValue(config, tsmiJSONresult);
+            LoadControlValue(config, tsmiGridresult);
             tsmiEntities_Click(null, null);
             tsmiAttributes_Click(null, null);
         }
@@ -1249,7 +1255,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     else if (togrid && completedargs.Result is EntityCollection)
                     {
-                        var gridDialog = new ResultGrid((EntityCollection)completedargs.Result);
+                        var gridDialog = new ResultGrid((EntityCollection)completedargs.Result, ConnectionDetail);
                         gridDialog.StartPosition = FormStartPosition.CenterParent;
                         gridDialog.ShowDialog();
                     }

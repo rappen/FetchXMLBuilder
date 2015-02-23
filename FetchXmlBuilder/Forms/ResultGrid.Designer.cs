@@ -28,32 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.lvGrid = new System.Windows.Forms.ListView();
             this.panBottom = new System.Windows.Forms.Panel();
             this.panCancel = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
             this.panBottom.SuspendLayout();
             this.panCancel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panel1
-            // 
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(731, 49);
-            this.panel1.TabIndex = 1;
-            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.lvGrid);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(0, 49);
+            this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(731, 419);
+            this.panel2.Size = new System.Drawing.Size(731, 468);
             this.panel2.TabIndex = 2;
             // 
             // lvGrid
@@ -63,14 +55,16 @@
             this.lvGrid.GridLines = true;
             this.lvGrid.Location = new System.Drawing.Point(0, 0);
             this.lvGrid.Name = "lvGrid";
-            this.lvGrid.Size = new System.Drawing.Size(731, 419);
+            this.lvGrid.Size = new System.Drawing.Size(731, 468);
             this.lvGrid.TabIndex = 1;
             this.lvGrid.UseCompatibleStateImageBehavior = false;
             this.lvGrid.View = System.Windows.Forms.View.Details;
+            this.lvGrid.DoubleClick += new System.EventHandler(this.lvGrid_DoubleClick);
             // 
             // panBottom
             // 
             this.panBottom.BackColor = System.Drawing.SystemColors.Control;
+            this.panBottom.Controls.Add(this.label1);
             this.panBottom.Controls.Add(this.panCancel);
             this.panBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panBottom.Location = new System.Drawing.Point(0, 430);
@@ -97,6 +91,16 @@
             this.btnCancel.Text = "Close";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(12, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(185, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Double-click a row to open the record";
+            // 
             // ResultGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -104,11 +108,11 @@
             this.ClientSize = new System.Drawing.Size(731, 468);
             this.Controls.Add(this.panBottom);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
             this.Name = "ResultGrid";
             this.Text = "ResultGrid";
             this.panel2.ResumeLayout(false);
             this.panBottom.ResumeLayout(false);
+            this.panBottom.PerformLayout();
             this.panCancel.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -116,11 +120,11 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.ListView lvGrid;
         private System.Windows.Forms.Panel panBottom;
         private System.Windows.Forms.Panel panCancel;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Label label1;
     }
 }

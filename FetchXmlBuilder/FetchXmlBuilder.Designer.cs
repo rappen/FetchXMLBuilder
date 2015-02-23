@@ -652,7 +652,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiGridresult.Name = "tsmiGridresult";
             this.tsmiGridresult.Size = new System.Drawing.Size(163, 22);
             this.tsmiGridresult.Text = "Grid result";
-            this.tsmiGridresult.Visible = false;
             this.tsmiGridresult.CheckedChanged += new System.EventHandler(this.tsmiResult_CheckedChanged);
             // 
             // toolStripSeparator17
