@@ -126,6 +126,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         }
         private bool buttonsEnabled = true;
         internal static Size xmlWinSize;
+        internal static Size gridWinSize;
         private XmlContentDisplayDialog xmlLiveUpdate;
         private bool OptionsChanging = false;
         #endregion Declarations
@@ -435,10 +436,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             MessageBox.Show(
                 "FetchXML Builder for XrmToolBox\n" +
                 "Version: " + Assembly.GetExecutingAssembly().GetName().Version + "\n\n" +
-                "Developed by Jonas Rapp at Cinteros AB.\n\n" +
-                "Serialization to XML and JSON are custom developed to\n" +
-                "be compact transports of CRM entity information.\n" +
-                "There are deserialization methods as well...",
+                "Developed by Jonas Rapp at Cinteros AB.",
                 "About FetchXML Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -599,6 +597,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 config.AppSettings.Settings.Add("XmlWinWidth", xmlWinSize.Width.ToString());
                 config.AppSettings.Settings.Add("XmlWinHeight", xmlWinSize.Height.ToString());
             }
+            if (gridWinSize != null)
+            {
+                config.AppSettings.Settings.Add("gridWinWidth", gridWinSize.Width.ToString());
+                config.AppSettings.Settings.Add("gridWinHeight", gridWinSize.Height.ToString());
+            }
             SaveControlValue(config, tsmiJSONresult);
             SaveControlValue(config, tsmiEntitiesManaged);
             SaveControlValue(config, tsmiEntitiesUnmanaged);
@@ -665,6 +668,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     int.TryParse(config.AppSettings.Settings["XmlWinHeight"].Value, out h))
                 {
                     xmlWinSize = new Size(w, h);
+                }
+            }
+            if (config.AppSettings.Settings["gridWinWidth"] != null && config.AppSettings.Settings["gridWinHeight"] != null)
+            {
+                var w = 0;
+                var h = 0;
+                if (int.TryParse(config.AppSettings.Settings["gridWinWidth"].Value, out w) &&
+                    int.TryParse(config.AppSettings.Settings["gridWinHeight"].Value, out h))
+                {
+                    gridWinSize = new Size(w, h);
                 }
             }
             LoadControlValue(config, tsmiJSONresult);

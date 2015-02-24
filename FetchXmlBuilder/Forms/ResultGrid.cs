@@ -23,6 +23,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         public ResultGrid(EntityCollection Entities, ConnectionDetail Connection)
         {
             InitializeComponent();
+            if (FetchXmlBuilder.gridWinSize != null && FetchXmlBuilder.gridWinSize.Width > 0 && FetchXmlBuilder.gridWinSize.Height > 0)
+            {
+                Width = FetchXmlBuilder.gridWinSize.Width;
+                Height = FetchXmlBuilder.gridWinSize.Height;
+            }
             entities = Entities;
             connection = Connection;
             SetupColumns();
@@ -121,6 +126,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
                 Process.Start(url);
             }
+        }
+
+        private void ResultGrid_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            FetchXmlBuilder.gridWinSize = new System.Drawing.Size(Width, Height);
         }
     }
 }
