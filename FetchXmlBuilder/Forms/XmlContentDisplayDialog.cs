@@ -12,7 +12,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         public XmlNode result;
         private string findtext = "";
 
-        public XmlContentDisplayDialog(string xmlString, string header, bool allowEdit)
+        public XmlContentDisplayDialog(string xmlString, string header, bool allowEdit, bool allowFormat)
         {
             InitializeComponent();
             if (FetchXmlBuilder.xmlWinSize != null && FetchXmlBuilder.xmlWinSize.Width > 0 && FetchXmlBuilder.xmlWinSize.Height > 0)
@@ -26,6 +26,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             {
                 btnCancel.Text = "Close";
             }
+            btnFormat.Visible = allowFormat;
             if (xmlString.Length > 100000)
             {
                 var dlgresult = MessageBox.Show("Huge result, this may take a while!\n" + xmlString.Length.ToString() + " characters in the XML document.\n\nContinue?", "Huge result",
