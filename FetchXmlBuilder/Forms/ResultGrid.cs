@@ -53,8 +53,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 }
             }
             lvGrid.Columns.Clear();
-            var nohdr = lvGrid.Columns.Add("#");
-            nohdr.TextAlign = HorizontalAlignment.Right;
+            var nohdr = lvGrid.Columns.Add("#", 20, HorizontalAlignment.Right);
             lvGrid.Columns.Add("Id");
             foreach (var col in columns)
             {

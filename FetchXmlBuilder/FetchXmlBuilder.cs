@@ -276,7 +276,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsbEdit_Click(object sender, EventArgs e)
         {
             var xml = GetFetchString(false);
-            var xcdDialog = new XmlContentDisplayDialog(xml, "FetchXML", true);
+            var xcdDialog = new XmlContentDisplayDialog(xml, "FetchXML", true, true);
             xcdDialog.StartPosition = FormStartPosition.CenterParent;
             if (xcdDialog.ShowDialog() == DialogResult.OK)
             {
@@ -286,9 +286,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
-        private void toolStripButtonExecute_Click(object sender, EventArgs e)
+        private void tsbExecute_Click(object sender, EventArgs e)
         {
-            FetchResults(((ToolStripItem)sender).Tag.ToString());
+            FetchResults();
         }
 
         private void tsmiSaveFile_Click(object sender, EventArgs e)
@@ -379,51 +379,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             BuildAndValidateXml(false);
             DisplayDefinition();
             HandleNodeSelection(tvFetch.SelectedNode);
-        }
-
-        private void tsmiResult_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!OptionsChanging)
-            {
-                OptionsChanging = true;
-                if (sender == tsmiXMLresult)
-                {
-                    if (tsmiXMLresult.Checked)
-                    {
-                        tsmiJSONresult.Checked = false;
-                        tsmiGridresult.Checked = false;
-                    }
-                    else
-                    {
-                        tsmiJSONresult.Checked = true;
-                    }
-                }
-                else if (sender == tsmiJSONresult)
-                {
-                    if (tsmiJSONresult.Checked)
-                    {
-                        tsmiXMLresult.Checked = false;
-                        tsmiGridresult.Checked = false;
-                    }
-                    else
-                    {
-                        tsmiXMLresult.Checked = true;
-                    }
-                }
-                else if (sender == tsmiGridresult)
-                {
-                    if (tsmiGridresult.Checked)
-                    {
-                        tsmiXMLresult.Checked = false;
-                        tsmiJSONresult.Checked = false;
-                    }
-                    else
-                    {
-                        tsmiXMLresult.Checked = true;
-                    }
-                }
-                OptionsChanging = false;
-            }
         }
 
         private void toolStripMain_Click(object sender, EventArgs e)
@@ -584,10 +539,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             var map = new ExeConfigurationFileMap { ExeConfigFilename = settingfile };
             System.Configuration.Configuration config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
             config.AppSettings.Settings.Clear();
-            if (!string.IsNullOrEmpty(FileName))
-            {
-                config.AppSettings.Settings.Add("Filename", FileName);
-            }
             if (!string.IsNullOrWhiteSpace(xml))
             {
                 config.AppSettings.Settings.Add("FetchXML", xml);
@@ -602,7 +553,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 config.AppSettings.Settings.Add("gridWinWidth", gridWinSize.Width.ToString());
                 config.AppSettings.Settings.Add("gridWinHeight", gridWinSize.Height.ToString());
             }
-            SaveControlValue(config, tsmiJSONresult);
             SaveControlValue(config, tsmiEntitiesManaged);
             SaveControlValue(config, tsmiEntitiesUnmanaged);
             SaveControlValue(config, tsmiEntitiesCustomizable);
@@ -618,9 +568,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             SaveControlValue(config, tsmiAttributesCustom);
             SaveControlValue(config, tsmiAttributesStandard);
             SaveControlValue(config, tsmiAttributesOnlyValidAF);
-            SaveControlValue(config, tsmiXMLresult);
-            SaveControlValue(config, tsmiJSONresult);
-            SaveControlValue(config, tsmiGridresult);
+            SaveControlValue(config, tsmiResultOption);
             config.Save();
         }
 
@@ -629,6 +577,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (control is ToolStripMenuItem)
             {
                 config.AppSettings.Settings.Add(((ToolStripMenuItem)control).Name, ((ToolStripMenuItem)control).Checked ? "1" : "0");
+            }
+            else if (control is ToolStripComboBox)
+            {
+                config.AppSettings.Settings.Add(((ToolStripComboBox)control).Name, ((ToolStripComboBox)control).SelectedIndex.ToString());
             }
         }
 
@@ -642,6 +594,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     ((ToolStripMenuItem)control).Checked = config.AppSettings.Settings[name].Value == "1";
                 }
             }
+            else if (control is ToolStripComboBox)
+            {
+                var name = ((ToolStripComboBox)control).Name;
+                if (config.AppSettings.Settings[name] != null)
+                {
+                    var index = 0;
+                    if (int.TryParse(config.AppSettings.Settings[name].Value, out index) && ((ToolStripComboBox)control).Items.Count > index)
+                    {
+                        ((ToolStripComboBox)control).SelectedIndex = index;
+                    }
+                }
+            }
         }
 
         /// <summary>Loads configurations from file</summary>
@@ -649,10 +613,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             var map = new ExeConfigurationFileMap { ExeConfigFilename = settingfile };
             System.Configuration.Configuration config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
-            if (config.AppSettings.Settings["Filename"] != null)
-            {
-                FileName = config.AppSettings.Settings["Filename"].Value;
-            }
             if (config.AppSettings.Settings["FetchXML"] != null)
             {
                 var xml = config.AppSettings.Settings["FetchXML"].Value;
@@ -680,7 +640,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     gridWinSize = new Size(w, h);
                 }
             }
-            LoadControlValue(config, tsmiJSONresult);
             LoadControlValue(config, tsmiEntitiesManaged);
             LoadControlValue(config, tsmiEntitiesUnmanaged);
             LoadControlValue(config, tsmiEntitiesCustomizable);
@@ -696,9 +655,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             LoadControlValue(config, tsmiAttributesCustom);
             LoadControlValue(config, tsmiAttributesStandard);
             LoadControlValue(config, tsmiAttributesOnlyValidAF);
-            LoadControlValue(config, tsmiXMLresult);
-            LoadControlValue(config, tsmiJSONresult);
-            LoadControlValue(config, tsmiGridresult);
+            LoadControlValue(config, tsmiResultOption);
             tsmiEntities_Click(null, null);
             tsmiAttributes_Click(null, null);
         }
@@ -881,6 +838,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private bool SaveFetchXML(bool prompt, bool silent)
         {
             bool result = false;
+            var newfile = "";
             if (prompt || string.IsNullOrEmpty(FileName))
             {
                 var sfd = new SaveFileDialog
@@ -891,23 +849,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 };
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
-                    FileName = sfd.FileName;
+                    newfile = sfd.FileName;
                 }
             }
-            if (!string.IsNullOrEmpty(FileName))
+            if (!string.IsNullOrEmpty(newfile))
             {
                 EnableControls(false);
+                FileName = newfile;
                 BuildAndValidateXml();
+                fetchDoc.Save(FileName);
+                treeChecksum = GetTreeChecksum(null);
+                FetchChanged = false;
+                if (!silent)
                 {
-                    fetchDoc.Save(FileName);
-                    treeChecksum = GetTreeChecksum(null);
-                    FetchChanged = false;
-                    if (!silent)
-                    {
-                        MessageBox.Show(this, "FetchXML saved!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    result = true;
+                    MessageBox.Show(this, "FetchXML saved!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+                result = true;
                 EnableControls(true);
             }
             return result;
@@ -1176,8 +1133,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return result;
         }
 
-        private void FetchResults(string fetchType)
+        private void FetchResults()
         {
+            if (!tsbExecute.Enabled)
+            {
+                return;
+            }
             if (!BuildAndValidateXml(true))
             {
                 return;
@@ -1187,17 +1148,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 MessageBox.Show("Busy doing something...\n\nPlease wait until current transaction is done.");
                 return;
             }
-
+            var fetchType = tsmiResultOption.SelectedIndex;
             switch (fetchType)
             {
-                case "FetchRequest":
-                    ExecuteFetch();
-                    break;
-                case "RetrieveMultiple":
+                case 0:
+                case 1:
+                case 2:
                     RetrieveMultiple();
                     break;
+                case 3:
+                    ExecuteFetch();
+                    break;
                 default:
-                    MessageBox.Show("Invalid fetch method: " + fetchType, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Select valid output type under Options.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
             }
         }
@@ -1223,7 +1186,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         XmlDocument doc = new XmlDocument();
                         doc.LoadXml(completedargs.Result.ToString());
-                        var xcdDialog = new XmlContentDisplayDialog(doc.OuterXml, "FetchXML result", false);
+                        var xcdDialog = new XmlContentDisplayDialog(doc.OuterXml, "FetchXML result", false, false);
                         xcdDialog.StartPosition = FormStartPosition.CenterParent;
                         xcdDialog.ShowDialog();
                     }
@@ -1233,16 +1196,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void RetrieveMultiple()
         {
             working = true;
-            bool toxml = tsmiXMLresult.Checked;
-            bool tojson = tsmiJSONresult.Checked;
-            bool togrid = tsmiGridresult.Checked;
+            var outputtype = tsmiResultOption.SelectedIndex;
             WorkAsync("Executing FetchXML...",
                 (eventargs) =>
                 {
                     EntityCollection resultCollection = null;
                     var query = GetQueryExpression();
                     resultCollection = Service.RetrieveMultiple(query);
-                    if (tojson)
+                    if (outputtype == 1)
                     {
                         var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented);
                         eventargs.Result = json;
@@ -1259,23 +1220,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         MessageBox.Show(completedargs.Error.Message);
                     }
-                    else if (toxml && completedargs.Result is EntityCollection)
+                    else if (outputtype == 0 && completedargs.Result is EntityCollection)
                     {
                         var serialized = EntityCollectionSerializer.Serialize((EntityCollection)completedargs.Result);
-                        var xcdDialog = new XmlContentDisplayDialog(serialized.OuterXml, "XML Serialized RetrieveMultiple result", false);
+                        var xcdDialog = new XmlContentDisplayDialog(serialized.OuterXml, "XML Serialized RetrieveMultiple result", false, false);
                         xcdDialog.StartPosition = FormStartPosition.CenterParent;
                         xcdDialog.ShowDialog();
                     }
-                    else if (togrid && completedargs.Result is EntityCollection)
+                    else if (outputtype == 2 && completedargs.Result is EntityCollection)
                     {
                         var gridDialog = new ResultGrid((EntityCollection)completedargs.Result, ConnectionDetail);
                         gridDialog.StartPosition = FormStartPosition.CenterParent;
                         gridDialog.ShowDialog();
                     }
-                    else if (tojson && completedargs.Result is string)
+                    else if (outputtype == 1 && completedargs.Result is string)
                     {
                         var result = completedargs.Result.ToString();
-                        var xcdDialog = new XmlContentDisplayDialog(result, "JSON Serialized RetrieveMultiple result", false);
+                        var xcdDialog = new XmlContentDisplayDialog(result, "JSON Serialized RetrieveMultiple result", false, false);
                         xcdDialog.btnFormat.Visible = false;
                         xcdDialog.StartPosition = FormStartPosition.CenterParent;
                         xcdDialog.ShowDialog();
@@ -1643,7 +1604,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             var xml = GetFetchString(false);
             if (xmlLiveUpdate == null)
             {
-                xmlLiveUpdate = new XmlContentDisplayDialog(xml, "FetchXML Live Update", false);
+                xmlLiveUpdate = new XmlContentDisplayDialog(xml, "FetchXML Live Update", false, true);
                 xmlLiveUpdate.Disposed += LiveXML_Disposed;
                 xmlLiveUpdate.txtXML.KeyUp += LiveXML_KeyUp;
                 xmlLiveUpdate.Visible = true;
@@ -1674,7 +1635,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 var QEx = GetQueryExpression();
                 var code = QueryExpressionCodeGenerator.GetCSharpQueryExpression(QEx);
-                var view = new XmlContentDisplayDialog(code, "QueryExpression Code", false);
+                var view = new XmlContentDisplayDialog(code, "QueryExpression Code", false, false);
                 view.ShowDialog();
             }
             catch (Exception ex)
