@@ -656,6 +656,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             LoadControlValue(config, tsmiAttributesStandard);
             LoadControlValue(config, tsmiAttributesOnlyValidAF);
             LoadControlValue(config, tsmiResultOption);
+            if (tsmiResultOption.SelectedIndex == -1)
+            {
+                tsmiResultOption.SelectedIndex = 0;
+            }
             tsmiEntities_Click(null, null);
             tsmiAttributes_Click(null, null);
         }
