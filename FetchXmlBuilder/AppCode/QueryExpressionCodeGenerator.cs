@@ -87,7 +87,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             code.AppendLine();
             code.AppendLine("// Add link-entity " + linkname);
             var join = link.JoinOperator == JoinOperator.Inner ? "" : ", JoinOperator." + link.JoinOperator.ToString();
-            code.AppendLine("var " + linkname + " = " + LineStart + ".AddLink(\"" + link.LinkToEntityName + "\", \"" + link.LinkFromAttributeName + "\", \"" + link.LinkToEntityName + "\"" + join + ");");
+            code.AppendLine("var " + linkname + " = " + LineStart + ".AddLink(\"" + link.LinkToEntityName + "\", \"" + link.LinkFromAttributeName + "\", \"" + link.LinkToAttributeName + "\"" + join + ");");
             if (!string.IsNullOrWhiteSpace(link.EntityAlias))
             {
                 code.AppendLine(linkname + ".EntityAlias = \"" + link.EntityAlias + "\";");
