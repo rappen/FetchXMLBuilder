@@ -340,7 +340,143 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void cmbAttribute_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (cmbAttribute.SelectedItem != null)
+            {
+                var attributeType = ((AttributeItem) cmbAttribute.SelectedItem).Metadata.AttributeType;
+                if (attributeType.HasValue)
+                {
+                    ConditionsByValueType(attributeType.Value);
+                }
+            }
             UpdateValueField();
+        }
+        public void ConditionsByValueType(AttributeTypeCode valueType)
+        {
+            cmbOperator.SelectedItem = null;
+            cmbOperator.Items.Clear();
+            cmbOperator.Items.Add(new OperatorItem(ConditionOperator.Equal));
+            cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NotEqual));
+            cmbOperator.Items.Add(new OperatorItem(ConditionOperator.In));
+            cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NotIn));
+            cmbOperator.Items.Add(new OperatorItem(ConditionOperator.Null));
+            cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NotNull));
+
+            if (valueType != AttributeTypeCode.Boolean &&
+                valueType != AttributeTypeCode.DateTime &&
+                valueType != AttributeTypeCode.Integer &&
+                valueType != AttributeTypeCode.State &&
+                valueType != AttributeTypeCode.Status &&
+                valueType != AttributeTypeCode.Picklist &&
+                valueType != AttributeTypeCode.BigInt &&
+                valueType != AttributeTypeCode.Decimal &&
+                valueType != AttributeTypeCode.Double &&
+                valueType != AttributeTypeCode.Money &&
+                valueType != AttributeTypeCode.Money &&
+                valueType != AttributeTypeCode.Lookup &&
+                valueType != AttributeTypeCode.Customer &&
+                valueType != AttributeTypeCode.Owner &&
+                valueType != AttributeTypeCode.Uniqueidentifier)
+            {
+                cmbOperator.Items.Add(new OperatorItem(ConditionOperator.BeginsWith));
+                cmbOperator.Items.Add(new OperatorItem(ConditionOperator.DoesNotBeginWith));
+                cmbOperator.Items.Add(new OperatorItem(ConditionOperator.Contains));
+                cmbOperator.Items.Add(new OperatorItem(ConditionOperator.DoesNotContain));
+                cmbOperator.Items.Add(new OperatorItem(ConditionOperator.EndsWith));
+                cmbOperator.Items.Add(new OperatorItem(ConditionOperator.DoesNotEndWith));
+
+                cmbOperator.Items.Add(new OperatorItem(ConditionOperator.Like));
+                cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NotLike));
+            }
+            if (valueType == AttributeTypeCode.DateTime ||
+                valueType == AttributeTypeCode.Integer ||
+                valueType == AttributeTypeCode.State ||
+                valueType == AttributeTypeCode.Status ||
+                valueType == AttributeTypeCode.Picklist ||
+                valueType == AttributeTypeCode.BigInt ||
+                valueType == AttributeTypeCode.Decimal ||
+                valueType == AttributeTypeCode.Double ||
+                valueType == AttributeTypeCode.Money ||
+                valueType == AttributeTypeCode.Lookup ||
+                valueType == AttributeTypeCode.Customer ||
+                valueType == AttributeTypeCode.Owner ||
+                valueType == AttributeTypeCode.Uniqueidentifier)
+            {
+                cmbOperator.Items.Add(new OperatorItem(ConditionOperator.Between));
+                cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NotBetween));
+                cmbOperator.Items.Add(new OperatorItem(ConditionOperator.GreaterThan));
+                cmbOperator.Items.Add(new OperatorItem(ConditionOperator.GreaterEqual));
+                cmbOperator.Items.Add(new OperatorItem(ConditionOperator.LessThan));
+                cmbOperator.Items.Add(new OperatorItem(ConditionOperator.LessEqual));
+            }
+            switch (valueType)
+            {
+                case AttributeTypeCode.DateTime:
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.InFiscalPeriod));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.InFiscalPeriodAndYear));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.InFiscalYear));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.InOrAfterFiscalPeriodAndYear));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.InOrBeforeFiscalPeriodAndYear));
+
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.Last7Days));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.LastFiscalPeriod));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.LastFiscalYear));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.LastMonth));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.LastWeek));
+
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.LastXDays));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.LastXFiscalPeriods));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.LastXFiscalYears));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.LastXHours));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.LastXMonths));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.LastXWeeks));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.LastXYears));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.LastYear));
+
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.Next7Days));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NextFiscalPeriod));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NextFiscalYear));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NextMonth));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NextWeek));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NextXDays));
+
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NextXFiscalPeriods));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NextXFiscalYears));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NextXHours));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NextXMonths));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NextXWeeks));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NextXYears));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NextYear));
+
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.OlderThanXMonths));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.On));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.OnOrAfter));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.OnOrBefore));
+
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.ThisFiscalPeriod));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.ThisFiscalYear));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.ThisMonth));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.ThisWeek));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.ThisYear));
+
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.Today));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.Tomorrow));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.Yesterday));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NotOn));
+
+                    break;
+                case AttributeTypeCode.Lookup:
+                case AttributeTypeCode.Customer:
+                case AttributeTypeCode.Owner:
+                case AttributeTypeCode.Uniqueidentifier:
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.EqualBusinessId));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.EqualUserId));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.Above));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.AboveOrEqual));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.Under));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.UnderOrEqual));
+                    cmbOperator.Items.Add(new OperatorItem(ConditionOperator.NotUnder));
+                    break;
+            }
         }
     }
 
