@@ -15,10 +15,12 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using XrmToolBox.Attributes;
+using XrmToolBox.Forms;
 using Clipboard = Cinteros.Xrm.FetchXmlBuilder.AppCode.Clipboard;
 
 [assembly: BackgroundColor("#000000")]
@@ -181,6 +183,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void FetchXmlBuilder_Load(object sender, EventArgs e)
         {
             LoadSetting();
+            var tasks = new List<Task>
+            {
+                this.LaunchVersionCheck()
+            };
+            tasks.ForEach(x => x.Start());
         }
 
         private void FetchXmlBuilder_ConnectionUpdated(object sender, ConnectionUpdatedEventArgs e)
@@ -676,12 +683,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsbEdit.Enabled = enabled;
                     tsbOpen.Enabled = enabled;
                     tsmiOpenFile.Enabled = enabled;
-                    tsmiOpenView.Enabled = enabled;
+                    tsmiOpenView.Enabled = enabled && Service != null;
                     tsmiOpenCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
                     tsbSave.Enabled = enabled;
                     tsmiSaveFile.Enabled = enabled && FetchChanged && !string.IsNullOrEmpty(FileName);
                     tsmiSaveFileAs.Enabled = enabled && tvFetch.Nodes.Count > 0;
-                    tsmiSaveView.Enabled = enabled && FetchChanged && View != null;
+                    tsmiSaveView.Enabled = enabled && Service != null && FetchChanged && View != null;
                     tsmiSaveCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
                     tsmiToQureyExpression.Enabled = enabled && Service != null;
                     tsbOptions.Enabled = enabled;
@@ -1670,6 +1677,26 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return QEx;
         }
 
+        private Task LaunchVersionCheck()
+        {
+            return new Task(() =>
+            {
+                var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                var cvc = new GithubVersionChecker(currentVersion);
+
+                cvc.Run();
+
+                if (GithubVersionChecker.Cpi != null && !string.IsNullOrEmpty(GithubVersionChecker.Cpi.Version))
+                {
+                        this.Invoke(new Action(() =>
+                        {
+                            var nvForm = new NewVersionForm(currentVersion, GithubVersionChecker.Cpi.Version, GithubVersionChecker.Cpi.Description);
+                            nvForm.ShowDialog(this);
+                        }));
+                }
+            });
+        }
+        
         #endregion Instance methods
 
         #region Static methods
