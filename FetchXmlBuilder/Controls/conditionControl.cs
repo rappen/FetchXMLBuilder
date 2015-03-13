@@ -340,6 +340,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void cmbAttribute_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (cmbAttribute.SelectedItem != null)
+            {
+                var attributeType = ((AttributeItem) cmbAttribute.SelectedItem).Metadata.AttributeType;
+                if (attributeType.HasValue)
+                {
+                    cmbOperator.SelectedItem = null;
+                    cmbOperator.Items.Clear();
+                    cmbOperator.Items.AddRange(OperatorItem.GetConditionsByAttributeType(attributeType.Value));
+                }
+            }
             UpdateValueField();
         }
     }
