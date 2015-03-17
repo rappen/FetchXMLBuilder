@@ -15,6 +15,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         /// <summary>Property that indicates what type the value must have for the condition to be valid</summary>
         public AttributeTypeCode? ValueType { get { return GetValueType(); } }
+
+        /// <summary>Property that indicates if operator allows "values" collection</summary>
+        public bool IsMultipleValuesType { get { return GetIsMultipleValuesType(); } }
+
         /// <summary>Property that indicates what type the attribute must be of for the condition to be valid</summary>
         public AttributeTypeCode? AttributeType { get { return GetAttributeType(); } }
 
@@ -98,10 +102,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case ConditionOperator.EqualUserLanguage:
                 case ConditionOperator.EqualUserTeams:
                 case ConditionOperator.EqualUserOrUserTeams:
-                case ConditionOperator.In:
-                case ConditionOperator.NotIn:
-                case ConditionOperator.Between:
-                case ConditionOperator.NotBetween:
                 case ConditionOperator.Null:
                 case ConditionOperator.NotNull:
                 case ConditionOperator.Yesterday:
@@ -154,6 +154,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case ConditionOperator.NextXFiscalYears:
                 case ConditionOperator.NextXFiscalPeriods:
                     result = AttributeTypeCode.Integer;
+                    break;
+            }
+            return result;
+        }
+
+        private bool GetIsMultipleValuesType()
+        {
+            var result = false;
+            switch (oper)
+            {
+                case ConditionOperator.In:
+                case ConditionOperator.NotIn:
+                case ConditionOperator.Between:
+                case ConditionOperator.NotBetween:
+                    result = true;
                     break;
             }
             return result;

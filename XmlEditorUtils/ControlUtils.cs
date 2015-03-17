@@ -71,7 +71,7 @@ namespace Cinteros.Xrm.XmlEditorUtils
                 if (ControlUtils.GetControlDefinition(control, out attribute, out required, out defaultvalue))
                 {
                     var value = ControlUtils.GetValueFromControl(control);
-                    if (required && string.IsNullOrEmpty(value))
+                    if (validate && required && string.IsNullOrEmpty(value))
                     {
                         throw new ArgumentNullException(attribute, "Field cannot be empty");
                     }

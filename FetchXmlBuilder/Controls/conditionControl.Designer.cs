@@ -40,6 +40,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbEntity = new System.Windows.Forms.ComboBox();
             this.btnGetGuid = new System.Windows.Forms.Button();
             this.cmbValue = new System.Windows.Forms.ComboBox();
+            this.lblValueHint = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -213,6 +214,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbEntity.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbEntity.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cmbEntity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbEntity.FormattingEnabled = true;
             this.cmbEntity.Location = new System.Drawing.Point(191, 40);
             this.cmbEntity.Name = "cmbEntity";
@@ -246,10 +248,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbValue.TabIndex = 4;
             this.cmbValue.Tag = "value";
             // 
+            // lblValueHint
+            // 
+            this.lblValueHint.AutoSize = true;
+            this.lblValueHint.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblValueHint.Location = new System.Drawing.Point(191, 158);
+            this.lblValueHint.Name = "lblValueHint";
+            this.lblValueHint.Size = new System.Drawing.Size(53, 13);
+            this.lblValueHint.TabIndex = 41;
+            this.lblValueHint.Text = "ValueHint";
+            this.lblValueHint.Visible = false;
+            // 
             // conditionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lblValueHint);
             this.Controls.Add(this.cmbValue);
             this.Controls.Add(this.btnGetGuid);
             this.Controls.Add(this.label9);
@@ -284,5 +298,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.ComboBox cmbEntity;
         private System.Windows.Forms.Button btnGetGuid;
         private System.Windows.Forms.ComboBox cmbValue;
+        private System.Windows.Forms.Label lblValueHint;
     }
 }
