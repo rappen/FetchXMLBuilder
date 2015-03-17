@@ -189,6 +189,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 this.LaunchVersionCheck()
             };
             tasks.ForEach(x => x.Start());
+            EnableControls(true);
         }
 
         private void FetchXmlBuilder_ConnectionUpdated(object sender, ConnectionUpdatedEventArgs e)
