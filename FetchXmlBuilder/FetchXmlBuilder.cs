@@ -31,6 +31,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
     {
         #region Declarations
         const string settingfile = "Cinteros.Xrm.FetchXmlBuilder.Settings.xml";
+        private string dontRemindVersion = "";
         internal Clipboard clipboard = new Clipboard();
         private XmlDocument fetchDoc;
         private static Dictionary<string, EntityMetadata> entities;
@@ -555,6 +556,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             var map = new ExeConfigurationFileMap { ExeConfigFilename = settingfile };
             System.Configuration.Configuration config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
             config.AppSettings.Settings.Clear();
+            config.AppSettings.Settings.Add("HideNewVersion", dontRemindVersion);
             if (!string.IsNullOrWhiteSpace(xml))
             {
                 config.AppSettings.Settings.Add("FetchXML", xml);
@@ -629,6 +631,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             var map = new ExeConfigurationFileMap { ExeConfigFilename = settingfile };
             System.Configuration.Configuration config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+            if (config.AppSettings.Settings["HideNewVersion"] != null)
+            {
+                dontRemindVersion = config.AppSettings.Settings["HideNewVersion"].Value;
+            }
             if (config.AppSettings.Settings["FetchXML"] != null)
             {
                 var xml = config.AppSettings.Settings["FetchXML"].Value;
@@ -1715,17 +1721,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return new Task(() =>
             {
                 var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                var cvc = new GithubVersionChecker(currentVersion);
+                var cvc = new GithubVersionChecker(currentVersion, "Cinteros", "FetchXMLBuilder");
 
                 cvc.Run();
 
                 if (GithubVersionChecker.Cpi != null && !string.IsNullOrEmpty(GithubVersionChecker.Cpi.Version))
                 {
-                    this.Invoke(new Action(() =>
+                    if (GithubVersionChecker.Cpi.Version != dontRemindVersion)
                     {
-                        var nvForm = new NewVersionForm(currentVersion, GithubVersionChecker.Cpi.Version, GithubVersionChecker.Cpi.Description);
-                        nvForm.ShowDialog(this);
-                    }));
+                        this.Invoke(new Action(() =>
+                        {
+                            var nvForm = new Cinteros.Xrm.FetchXmlBuilder.Forms.NewVersionForm(currentVersion, GithubVersionChecker.Cpi.Version, GithubVersionChecker.Cpi.Description,
+                                new Uri("http://fxb.xrmtoolbox.com"));
+                            if (nvForm.ShowDialog(this) == DialogResult.Ignore)
+                            {
+                                dontRemindVersion = GithubVersionChecker.Cpi.Version;
+                            }
+                        }));
+                    }
                 }
             });
         }

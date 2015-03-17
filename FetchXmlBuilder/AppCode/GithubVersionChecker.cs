@@ -15,13 +15,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         private static int currentMinorVersion;
         private static int currentBuildVersion;
         private static int currentRevisionVersion;
-        public GithubVersionChecker(string currentVersion)
+        private static string ghUser;
+        private static string ghRepo;
+
+        public GithubVersionChecker(string currentVersion, string githubUser, string githubRepo)
         {
             var versionParts = currentVersion.Split('.');
             currentMajorVersion = int.Parse(versionParts[0]);
             currentMinorVersion = int.Parse(versionParts[1]);
             currentBuildVersion = int.Parse(versionParts[2]);
-            currentRevisionVersion = int.Parse(versionParts[3]); 
+            currentRevisionVersion = int.Parse(versionParts[3]);
+            ghUser = githubUser;
+            ghRepo = githubRepo;
         }
 
         public static GithubInformation Cpi { get; set; }
@@ -40,11 +45,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     client.BaseAddress = new Uri("https://api.github.com/");
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.Add("User-Agent", "Cinteros");
+                    client.DefaultRequestHeaders.Add("User-Agent", ghUser);
 
                     HttpResponseMessage response =
                         await
-                            client.GetAsync("repos/Cinteros/FetchXMLBuilder/releases")
+                            client.GetAsync(string.Format("repos/{0}/{1}/releases", ghUser, ghRepo))
                                 .ConfigureAwait(continueOnCapturedContext: false);
                     response.EnsureSuccessStatusCode();
                     if (response.IsSuccessStatusCode)
