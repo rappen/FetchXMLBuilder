@@ -192,7 +192,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void FetchXmlBuilder_ConnectionUpdated(object sender, ConnectionUpdatedEventArgs e)
         {
+            entities = null;
+            entityShitList.Clear();
             View = null;
+            views = null;
             if (!working)
             {
                 LoadEntities();
@@ -1265,7 +1268,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 });
         }
 
-        private void OpenView()
+        internal void LoadViews(Action viewsLoaded)
         {
             WorkAsync("Loading views...",
             (eventargs) =>
@@ -1328,18 +1331,31 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 }
                 else
                 {
-                    var viewselector = new SelectViewDialog(this);
-                    viewselector.StartPosition = FormStartPosition.CenterParent;
-                    if (viewselector.ShowDialog() == DialogResult.OK)
-                    {
-                        View = viewselector.View;
-                        fetchDoc = new XmlDocument();
-                        fetchDoc.LoadXml(View["fetchxml"].ToString());
-                        DisplayDefinition();
-                        attributesChecksum = GetAttributesSignature(null);
-                    }
+                    viewsLoaded();
                 }
             });
+
+        }
+
+        private void OpenView()
+        {
+            if (views == null || views.Count == 0)
+            {
+                LoadViews(OpenView);
+            }
+            else
+            {
+                var viewselector = new SelectViewDialog(this);
+                viewselector.StartPosition = FormStartPosition.CenterParent;
+                if (viewselector.ShowDialog() == DialogResult.OK)
+                {
+                    View = viewselector.View;
+                    fetchDoc = new XmlDocument();
+                    fetchDoc.LoadXml(View["fetchxml"].ToString());
+                    DisplayDefinition();
+                    attributesChecksum = GetAttributesSignature(null);
+                }
+            }
         }
 
         private void SaveView()

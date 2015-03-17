@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings1 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
+            CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings2 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
             this.panel1 = new System.Windows.Forms.Panel();
             this.cmbView = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -41,6 +41,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.txtFetch = new CSRichTextBoxSyntaxHighlighting.XMLViewer();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panOk.SuspendLayout();
@@ -64,8 +65,7 @@
             // 
             this.cmbView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbView.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cmbView.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cmbView.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbView.FormattingEnabled = true;
             this.cmbView.Location = new System.Drawing.Point(112, 39);
             this.cmbView.Name = "cmbView";
@@ -107,6 +107,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.btnRefresh);
             this.panel2.Controls.Add(this.panOk);
             this.panel2.Controls.Add(this.panCancel);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -170,15 +171,25 @@
             this.txtFetch.Location = new System.Drawing.Point(0, 0);
             this.txtFetch.Name = "txtFetch";
             this.txtFetch.ReadOnly = true;
-            xmlViewerSettings1.AttributeKey = System.Drawing.Color.Red;
-            xmlViewerSettings1.AttributeValue = System.Drawing.Color.Blue;
-            xmlViewerSettings1.Element = System.Drawing.Color.DarkRed;
-            xmlViewerSettings1.Tag = System.Drawing.Color.Blue;
-            xmlViewerSettings1.Value = System.Drawing.Color.Black;
-            this.txtFetch.Settings = xmlViewerSettings1;
+            xmlViewerSettings2.AttributeKey = System.Drawing.Color.Red;
+            xmlViewerSettings2.AttributeValue = System.Drawing.Color.Blue;
+            xmlViewerSettings2.Element = System.Drawing.Color.DarkRed;
+            xmlViewerSettings2.Tag = System.Drawing.Color.Blue;
+            xmlViewerSettings2.Value = System.Drawing.Color.Black;
+            this.txtFetch.Settings = xmlViewerSettings2;
             this.txtFetch.Size = new System.Drawing.Size(566, 313);
             this.txtFetch.TabIndex = 3;
             this.txtFetch.Text = "";
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Location = new System.Drawing.Point(12, 8);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(102, 23);
+            this.btnRefresh.TabIndex = 7;
+            this.btnRefresh.Text = "Refresh Views";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // SelectViewDialog
             // 
@@ -214,6 +225,7 @@
         private System.Windows.Forms.Panel panCancel;
         private System.Windows.Forms.Button button2;
         internal CSRichTextBoxSyntaxHighlighting.XMLViewer txtFetch;
+        private System.Windows.Forms.Button btnRefresh;
 
     }
 }

@@ -22,6 +22,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             InitializeComponent();
             Caller = caller;
+            PopulateForm();
+        }
+
+        private void PopulateForm()
+        {
             cmbEntity.Items.Clear();
             var entities = FetchXmlBuilder.GetDisplayEntities();
             if (entities != null)
@@ -34,6 +39,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                     }
                 }
             }
+            Enabled = true;
         }
 
         private void cmbEntity_SelectedIndexChanged(object sender, EventArgs e)
@@ -93,6 +99,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 txtFetch.Text = "";
                 btnOk.Enabled = false;
             }
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            Enabled = false;
+            cmbView.SelectedIndex = -1;
+            cmbEntity.SelectedIndex = -1;
+            txtFetch.Text = "";
+            FetchXmlBuilder.views = null;
+            Caller.LoadViews(PopulateForm);
         }
     }
 }
