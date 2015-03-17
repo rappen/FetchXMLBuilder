@@ -130,6 +130,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal static Size xmlWinSize;
         internal static Size gridWinSize;
         private XmlContentDisplayDialog xmlLiveUpdate;
+        private string liveUpdateXml = "";
         private bool OptionsChanging = false;
         #endregion Declarations
 
@@ -525,7 +526,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     XmlDocument doc = new XmlDocument();
                     doc.LoadXml(xmlLiveUpdate.txtXML.Text);
-                    ParseXML(xmlLiveUpdate.txtXML.Text, false);
+                    if (doc.OuterXml != liveUpdateXml)
+                    {
+                        ParseXML(xmlLiveUpdate.txtXML.Text, false);
+                    }
+                    liveUpdateXml = doc.OuterXml;
                 }
                 catch (Exception)
                 {
@@ -907,6 +912,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 HandleNodeSelection(newNode);
             }
             FetchChanged = treeChecksum != GetTreeChecksum(null);
+            if (tsmiLiveUpdate.Checked)
+            {
+                UpdateLiveXML();
+            }
         }
 
         private void HandleNodeSelection(TreeNode node)
@@ -1638,10 +1647,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void UpdateLiveXML()
         {
-            var xml = GetFetchString(false);
+            liveUpdateXml = GetFetchString(false);
             if (xmlLiveUpdate == null)
             {
-                xmlLiveUpdate = new XmlContentDisplayDialog(xml, "FetchXML Live Update", false, true);
+                xmlLiveUpdate = new XmlContentDisplayDialog(liveUpdateXml, "FetchXML Live Update", false, true);
                 xmlLiveUpdate.Disposed += LiveXML_Disposed;
                 xmlLiveUpdate.txtXML.KeyUp += LiveXML_KeyUp;
                 xmlLiveUpdate.Visible = true;
@@ -1649,7 +1658,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             else
             {
-                xmlLiveUpdate.UpdateXML(xml);
+                xmlLiveUpdate.UpdateXML(liveUpdateXml);
             }
         }
 
