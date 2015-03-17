@@ -43,6 +43,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     Delete = true;
                     ChildTypes.Add(new ChildNodeCapabilities("value", true));
                     break;
+                case "value":
+                    Delete = true;
+                    break;
             }
         }
     }

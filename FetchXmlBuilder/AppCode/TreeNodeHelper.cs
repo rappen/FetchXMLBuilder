@@ -216,11 +216,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         /// <param name="form">Current application form</param>
         public static void AddContextMenu(TreeNode node, FetchXmlBuilder form)
         {
-            var collec = (Dictionary<string, string>)node.Tag;
-
-            //HideAllContextMenuItems(form.nodeMenu);
-            //form.deleteToolStripMenuItem.Visible = true;
-
             form.addMenu.Items.Clear();
 
             var nodecapabilities = new FetchNodeCapabilities(node);
