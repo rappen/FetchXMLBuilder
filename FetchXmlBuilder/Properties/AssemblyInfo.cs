@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("FetchXML Builder")]
 [assembly: AssemblyDescription("Build and test FetchXML with all capabilities supported by the CRM platform")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Cinteros AB, Jonas Rapp")]
+[assembly: AssemblyCompany("Jonas Rapp, Cinteros AB")]
 [assembly: AssemblyProduct("FetchXML Builder")]
 [assembly: AssemblyCopyright("Copyright © Cinteros AB 2014")]
 [assembly: AssemblyTrademark("")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.2015.2.12")]
-[assembly: AssemblyFileVersion("1.2015.2.12")]
+[assembly: AssemblyVersion("1.2015.3.13")]
+[assembly: AssemblyFileVersion("1.2015.3.13")]

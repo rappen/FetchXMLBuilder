@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("XmlEditorUtils")]
 [assembly: AssemblyDescription("Utilities for Xml Editor plugins to XrmToolbox")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Cinteros AB, Jonas Rapp")]
+[assembly: AssemblyCompany("Jonas Rapp, Cinteros AB")]
 [assembly: AssemblyProduct("XmlEditorUtils")]
 [assembly: AssemblyCopyright("Copyright © Cinteros AB 2014")]
 [assembly: AssemblyTrademark("")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.2015.1.10")]
-[assembly: AssemblyFileVersion("1.2015.1.10")]
+[assembly: AssemblyVersion("1.2015.3.13")]
+[assembly: AssemblyFileVersion("1.2015.3.13")]
