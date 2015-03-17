@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="AppCode\AttributeItem.cs" />
     <Compile Include="AppCode\Clipboard.cs" />
+    <Compile Include="AppCode\FetchIsAggregateException.cs" />
     <Compile Include="AppCode\FindTextHandler.cs" />
     <Compile Include="AppCode\Github.cs" />
     <Compile Include="AppCode\GithubInformation.cs" />

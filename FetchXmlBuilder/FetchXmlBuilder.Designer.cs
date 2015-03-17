@@ -84,6 +84,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiAttributesOnlyValidAF = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.outputTypeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiResultOption = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiLiveUpdate = new System.Windows.Forms.ToolStripMenuItem();
@@ -105,7 +106,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.executeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.outputTypeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain.SuspendLayout();
             this.gbProperties.SuspendLayout();
             this.gbFetchTree.SuspendLayout();
@@ -127,12 +127,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbCloseThisTab,
             this.toolStripSeparator4,
             this.tsbNew,
+            this.tsbOpen,
+            this.tsbSave,
             this.tsbEdit,
             this.toolStripSeparator2,
             this.tsbExecute,
             this.toolStripSeparator3,
-            this.tsbOpen,
-            this.tsbSave,
             this.toolStripSeparator6,
             this.tsbAbout,
             this.tsbOptions});
@@ -222,19 +222,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(166, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(173, 6);
             // 
             // tsmiOpenView
             // 
             this.tsmiOpenView.Name = "tsmiOpenView";
-            this.tsmiOpenView.Size = new System.Drawing.Size(169, 22);
+            this.tsmiOpenView.Size = new System.Drawing.Size(176, 22);
             this.tsmiOpenView.Text = "Open View...";
             this.tsmiOpenView.Click += new System.EventHandler(this.tsmiOpenView_Click);
             // 
             // tsmiOpenCWP
             // 
             this.tsmiOpenCWP.Name = "tsmiOpenCWP";
-            this.tsmiOpenCWP.Size = new System.Drawing.Size(169, 22);
+            this.tsmiOpenCWP.Size = new System.Drawing.Size(176, 22);
             this.tsmiOpenCWP.Text = "Open CWP Feed...";
             this.tsmiOpenCWP.Click += new System.EventHandler(this.tsmiOpenCWP_Click);
             // 
@@ -611,6 +611,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripSeparator7.Name = "toolStripSeparator7";
             this.toolStripSeparator7.Size = new System.Drawing.Size(220, 6);
             // 
+            // outputTypeToolStripMenuItem
+            // 
+            this.outputTypeToolStripMenuItem.Enabled = false;
+            this.outputTypeToolStripMenuItem.Name = "outputTypeToolStripMenuItem";
+            this.outputTypeToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.outputTypeToolStripMenuItem.Text = "Output Type:";
+            // 
             // tsmiResultOption
             // 
             this.tsmiResultOption.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -804,13 +811,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.executeToolStripMenuItem.Text = "hidden execute";
             this.executeToolStripMenuItem.Visible = false;
             this.executeToolStripMenuItem.Click += new System.EventHandler(this.tsbExecute_Click);
-            // 
-            // outputTypeToolStripMenuItem
-            // 
-            this.outputTypeToolStripMenuItem.Enabled = false;
-            this.outputTypeToolStripMenuItem.Name = "outputTypeToolStripMenuItem";
-            this.outputTypeToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.outputTypeToolStripMenuItem.Text = "Output Type:";
             // 
             // FetchXmlBuilder
             // 

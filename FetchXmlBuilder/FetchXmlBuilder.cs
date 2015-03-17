@@ -1229,7 +1229,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     working = false;
                     if (completedargs.Error != null)
                     {
-                        MessageBox.Show(completedargs.Error.Message);
+                        if (completedargs.Error is FetchIsAggregateException)
+                        {
+                            if (MessageBox.Show(completedargs.Error.Message + "\n\nTry with result as ExecuteFetch?", "Execute", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
+                            {
+                                ExecuteFetch();
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show(completedargs.Error.Message);
+                        }
                     }
                     else if (outputtype == 0 && completedargs.Result is EntityCollection)
                     {
@@ -1649,6 +1659,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 var view = new XmlContentDisplayDialog(code, "QueryExpression Code", false, false);
                 view.ShowDialog();
             }
+            catch (FetchIsAggregateException ex)
+            {
+                MessageBox.Show("This FetchXML is not possible to convert to QueryExpression in the current version of the SDK.\n\n" + ex.Message, "QueryExpression", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             catch (Exception ex)
             {
                 MessageBox.Show("Failed to generate C# QueryExpression code.\n\n" + ex.Message, "QueryExpression", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1657,24 +1671,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private QueryExpression GetQueryExpression()
         {
-            var QEx = new QueryExpression();
-            var xml = GetFetchDocument();
-            var fetch = xml.SelectSingleNode("fetch");
-            if (fetch != null)
+            if (IsFetchAggregate(tvFetch.Nodes.Count > 0 ? tvFetch.Nodes[0] : null))
             {
-                var aggr = fetch.Attributes["aggregate"];
-                if (aggr != null && aggr.Value != null && aggr.Value.ToLower() == "true")
-                {
-                    throw new Exception("Aggregate queries cannot be converted to QueryExpression.");
-                }
+                throw new FetchIsAggregateException("QueryExpression does not support aggregate queries.");
             }
+            var xml = GetFetchDocument();
             if (Service == null)
             {
                 throw new Exception("Must be connected to CRM to convert to QueryExpression.");
             }
             var convert = (FetchXmlToQueryExpressionResponse)Service.Execute(new FetchXmlToQueryExpressionRequest() { FetchXml = xml.OuterXml });
-            QEx = convert.Query;
-            return QEx;
+            return convert.Query;
         }
 
         private Task LaunchVersionCheck()
@@ -1688,15 +1695,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
                 if (GithubVersionChecker.Cpi != null && !string.IsNullOrEmpty(GithubVersionChecker.Cpi.Version))
                 {
-                        this.Invoke(new Action(() =>
-                        {
-                            var nvForm = new NewVersionForm(currentVersion, GithubVersionChecker.Cpi.Version, GithubVersionChecker.Cpi.Description);
-                            nvForm.ShowDialog(this);
-                        }));
+                    this.Invoke(new Action(() =>
+                    {
+                        var nvForm = new NewVersionForm(currentVersion, GithubVersionChecker.Cpi.Version, GithubVersionChecker.Cpi.Description);
+                        nvForm.ShowDialog(this);
+                    }));
                 }
             });
         }
-        
+
         #endregion Instance methods
 
         #region Static methods
@@ -1805,14 +1812,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal static bool IsFetchAggregate(TreeNode node)
         {
             var aggregate = false;
-            var parent = node.Parent;
-            while (parent != null && parent.Name != "fetch")
+            while (node != null && node.Name != "fetch")
             {
-                parent = parent.Parent;
+                node = node.Parent;
             }
-            if (parent != null && parent.Name == "fetch")
+            if (node != null && node.Name == "fetch")
             {
-                aggregate = TreeNodeHelper.GetAttributeFromNode(parent, "aggregate") == "true";
+                aggregate = TreeNodeHelper.GetAttributeFromNode(node, "aggregate") == "true";
             }
             return aggregate;
         }
