@@ -76,7 +76,6 @@
     <Compile Include="AppCode\AttributeItem.cs" />
     <Compile Include="AppCode\Clipboard.cs" />
     <Compile Include="AppCode\FetchIsAggregateException.cs" />
-    <Compile Include="AppCode\FindTextHandler.cs" />
     <Compile Include="AppCode\Github.cs" />
     <Compile Include="AppCode\GithubInformation.cs" />
     <Compile Include="AppCode\GithubVersionChecker.cs" />
@@ -137,7 +136,6 @@
     <Compile Include="Controls\fetchControl.Designer.cs">
       <DependentUpon>fetchControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppCode\Prompt.cs" />
     <Compile Include="Forms\NewVersionForm.cs">
       <SubType>Form</SubType>
     </Compile>

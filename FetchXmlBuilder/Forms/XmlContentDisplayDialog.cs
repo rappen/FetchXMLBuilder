@@ -1,4 +1,5 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Cinteros.Xrm.XmlEditorUtils;
 using System;
 using System.IO;
 using System.Text;

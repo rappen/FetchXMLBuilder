@@ -1,14 +1,13 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.Forms;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Cinteros.Xrm.XmlEditorUtils
 {
-    class FindTextHandler
+    public class FindTextHandler
     {
         public static string HandleFindKeyPress(KeyEventArgs e, RichTextBox textBox, string findtext)
         {

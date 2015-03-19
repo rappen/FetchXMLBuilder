@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Cinteros.Xrm.XmlEditorUtils
 {
     public static class Prompt
     {
