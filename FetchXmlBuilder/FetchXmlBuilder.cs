@@ -401,11 +401,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsbAbout_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(
-                "FetchXML Builder for XrmToolBox\n" +
-                "Version: " + Assembly.GetExecutingAssembly().GetName().Version + "\n\n" +
-                "Developed by Jonas Rapp at Cinteros AB.",
-                "About FetchXML Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            var about = new About();
+            about.StartPosition = FormStartPosition.CenterParent;
+            about.ShowDialog();
         }
 
         private void tsmiSaveCWP_Click(object sender, EventArgs e)
@@ -1231,7 +1229,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 (eventargs) =>
                 {
                     EntityCollection resultCollection = null;
-                    var query = GetQueryExpression();
+                    QueryBase query;
+                    try
+                    {
+                        query = GetQueryExpression();
+                    }
+                    catch (FetchIsAggregateException)
+                    {
+                        query = new FetchExpression(GetFetchString(false));
+                    }
                     resultCollection = Service.RetrieveMultiple(query);
                     if (outputtype == 1)
                     {
@@ -1248,16 +1254,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     working = false;
                     if (completedargs.Error != null)
                     {
-                        if (completedargs.Error is FetchIsAggregateException)
+                        if (MessageBox.Show(completedargs.Error.Message + "\n\nTry with result as ExecuteFetch?", "Execute", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
                         {
-                            if (MessageBox.Show(completedargs.Error.Message + "\n\nTry with result as ExecuteFetch?", "Execute", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
-                            {
-                                ExecuteFetch();
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show(completedargs.Error.Message);
+                            ExecuteFetch();
                         }
                     }
                     else if (outputtype == 0 && completedargs.Result is EntityCollection)

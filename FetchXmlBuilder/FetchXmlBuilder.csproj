@@ -136,6 +136,12 @@
     <Compile Include="Controls\fetchControl.Designer.cs">
       <DependentUpon>fetchControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\NewVersionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -207,6 +213,9 @@
     <EmbeddedResource Include="FetchXmlBuilder.resx">
       <DependentUpon>FetchXmlBuilder.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\NewVersionForm.resx">
       <DependentUpon>NewVersionForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -234,6 +243,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Cinteros.ico" />
+    <None Include="Resources\FXB-100.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XmlEditorUtils\XmlEditorUtils.csproj">

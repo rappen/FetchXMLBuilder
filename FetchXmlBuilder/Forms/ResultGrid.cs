@@ -68,7 +68,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             foreach (var entity in entities.Entities)
             {
                 var item = lvGrid.Items.Add((++no).ToString());
-                item.SubItems.Add(entity.Id.ToString());
+                item.SubItems.Add(entity.Id.Equals(Guid.Empty) ? "" : entity.Id.ToString());
                 for (var i = 0; i < columns.Count; i++)
                 {
                     var col = columns[i];
@@ -106,7 +106,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             }
             var index = lvGrid.SelectedIndices[0];
             var entity = entities[index];
-            if (entity != null)
+            if (entity != null && !entity.Id.Equals(Guid.Empty))
             {
                 var url = connection.WebApplicationUrl;
                 if (string.IsNullOrEmpty(url))
