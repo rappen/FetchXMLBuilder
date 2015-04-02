@@ -132,7 +132,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal static Size gridWinSize;
         private XmlContentDisplayDialog xmlLiveUpdate;
         private string liveUpdateXml = "";
-        private bool OptionsChanging = false;
         #endregion Declarations
 
         public FetchXmlBuilder()

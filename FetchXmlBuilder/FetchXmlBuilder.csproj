@@ -86,7 +86,6 @@
     <Compile Include="AppCode\Github.cs" />
     <Compile Include="AppCode\GithubInformation.cs" />
     <Compile Include="AppCode\GithubVersionChecker.cs" />
-    <Compile Include="AppCode\Markdown.cs" />
     <Compile Include="AppCode\OptionsetItem.cs" />
     <Compile Include="AppCode\QueryExpressionCodeGenerator.cs" />
     <Compile Include="AppCode\ViewItem.cs" />
