@@ -40,19 +40,27 @@
   <ItemGroup>
     <Reference Include="McTools.Xrm.Connection, Version=1.0.3315.606, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\XrmToolBox\XrmToolBox\bin\Release\McTools.Xrm.Connection.dll</HintPath>
+      <HintPath>..\Dependencies\McTools.Xrm.Connection.dll</HintPath>
+    </Reference>
+    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\McTools.Xrm.Connection.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\XrmToolBox\XrmToolBox\bin\Release\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+      <HintPath>..\Dependencies\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Client, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\XrmToolBox\XrmToolBox\bin\Release\Microsoft.Xrm.Client.dll</HintPath>
+      <HintPath>..\Dependencies\Microsoft.Xrm.Client.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\XrmToolBox\XrmToolBox\bin\Release\Microsoft.Xrm.Sdk.dll</HintPath>
+      <HintPath>..\Dependencies\Microsoft.Xrm.Sdk.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Sdk.Deployment, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -64,12 +72,11 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="XrmToolBox, Version=1.2015.1.19, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="XrmToolBox, Version=1.2015.3.10, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\XrmToolBox\XrmToolBox\bin\Release\XrmToolBox.exe</HintPath>
+      <HintPath>..\Dependencies\XrmToolBox.exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
