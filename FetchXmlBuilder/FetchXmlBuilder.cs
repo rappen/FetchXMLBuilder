@@ -1364,11 +1364,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 viewselector.StartPosition = FormStartPosition.CenterParent;
                 if (viewselector.ShowDialog() == DialogResult.OK)
                 {
-                    View = viewselector.View;
-                    fetchDoc = new XmlDocument();
-                    fetchDoc.LoadXml(View["fetchxml"].ToString());
-                    DisplayDefinition();
-                    attributesChecksum = GetAttributesSignature(null);
+                    if (viewselector.View.Contains("fetchxml") && !string.IsNullOrEmpty(viewselector.View["fetchxml"].ToString()))
+                    {
+                        View = viewselector.View;
+                        fetchDoc = new XmlDocument();
+                        fetchDoc.LoadXml(View["fetchxml"].ToString());
+                        DisplayDefinition();
+                        attributesChecksum = GetAttributesSignature(null);
+                    }
+                    else
+                    {
+                        if (MessageBox.Show("The selected view does not contain any FetchXML.\nPlease select another one.", "Open View",
+                            MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
+                        {
+                            OpenView();
+                        }
+                    }
                 }
             }
         }
