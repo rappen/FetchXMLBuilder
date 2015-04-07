@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
+using XrmToolBox;
 using XrmToolBox.Attributes;
 using XrmToolBox.Forms;
 using Clipboard = Cinteros.Xrm.FetchXmlBuilder.AppCode.Clipboard;
@@ -27,11 +28,10 @@ using Clipboard = Cinteros.Xrm.FetchXmlBuilder.AppCode.Clipboard;
 
 namespace Cinteros.Xrm.FetchXmlBuilder
 {
-    public partial class FetchXmlBuilder : XrmToolBox.PluginBase, XrmToolBox.IGitHubPlugin, XrmToolBox.IPayPalPlugin
+    public partial class FetchXmlBuilder : PluginBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost
     {
         #region Declarations
         const string settingfile = "Cinteros.Xrm.FetchXmlBuilder.Settings.xml";
-        private string dontRemindVersion = "";
         internal Clipboard clipboard = new Clipboard();
         private XmlDocument fetchDoc;
         private static Dictionary<string, EntityMetadata> entities;
@@ -130,8 +130,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private bool buttonsEnabled = true;
         internal static Size xmlWinSize;
         internal static Size gridWinSize;
+        private DateTime lastUpdateCheck;
+
         private XmlContentDisplayDialog xmlLiveUpdate;
         private string liveUpdateXml = "";
+        private MessageBusEventArgs calledArgs = null;
         #endregion Declarations
 
         public FetchXmlBuilder()
@@ -169,7 +172,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         #region Event handlers
 
-        public override void ClosingPlugin(XrmToolBox.PluginCloseInfo info)
+        public event EventHandler<MessageBusEventArgs> OnOutgoingMessage;
+
+        public override void ClosingPlugin(PluginCloseInfo info)
         {
             if (!SaveIfChanged())
             {
@@ -203,6 +208,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 LoadEntities();
             }
             EnableControls(buttonsEnabled);
+        }
+
+        public void OnIncomingMessage(MessageBusEventArgs message)
+        {
+            calledArgs = message;
+            if (message.TargetArgument != null && message.TargetArgument is string)
+            {
+                ParseXML((string)message.TargetArgument, false);
+            }
+            tsbReturnToCaller.ToolTipText = "Return FetchXML to " + calledArgs.SourcePlugin;
+            EnableControls(true);
         }
 
         /// <summary>When SiteMap component properties are saved, they arecopied in the current selected TreeNode</summary>
@@ -402,6 +418,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             var about = new About();
             about.StartPosition = FormStartPosition.CenterParent;
+            about.lblVersion.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             about.ShowDialog();
         }
 
@@ -542,6 +559,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             DisplayQExCode();
         }
 
+        private void tsbReturnToCaller_Click(object sender, EventArgs e)
+        {
+            ReturnToCaller();
+        }
+
         #endregion Event handlers
 
         #region Instance methods
@@ -553,7 +575,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             var map = new ExeConfigurationFileMap { ExeConfigFilename = settingfile };
             System.Configuration.Configuration config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
             config.AppSettings.Settings.Clear();
-            config.AppSettings.Settings.Add("HideNewVersion", dontRemindVersion);
             if (!string.IsNullOrWhiteSpace(xml))
             {
                 config.AppSettings.Settings.Add("FetchXML", xml);
@@ -568,6 +589,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 config.AppSettings.Settings.Add("gridWinWidth", gridWinSize.Width.ToString());
                 config.AppSettings.Settings.Add("gridWinHeight", gridWinSize.Height.ToString());
             }
+            config.AppSettings.Settings.Add("LastUpdateCheck", lastUpdateCheck.ToString());
             SaveControlValue(config, tsmiEntitiesManaged);
             SaveControlValue(config, tsmiEntitiesUnmanaged);
             SaveControlValue(config, tsmiEntitiesCustomizable);
@@ -628,10 +650,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             var map = new ExeConfigurationFileMap { ExeConfigFilename = settingfile };
             System.Configuration.Configuration config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
-            if (config.AppSettings.Settings["HideNewVersion"] != null)
-            {
-                dontRemindVersion = config.AppSettings.Settings["HideNewVersion"].Value;
-            }
             if (config.AppSettings.Settings["FetchXML"] != null)
             {
                 var xml = config.AppSettings.Settings["FetchXML"].Value;
@@ -658,6 +676,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     gridWinSize = new Size(w, h);
                 }
+            }
+            if (config.AppSettings.Settings["LastUpdateCheck"] != null)
+            {
+                DateTime.TryParse(config.AppSettings.Settings["LastUpdateCheck"].Value, out lastUpdateCheck);
             }
             LoadControlValue(config, tsmiEntitiesManaged);
             LoadControlValue(config, tsmiEntitiesUnmanaged);
@@ -697,6 +719,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiOpenFile.Enabled = enabled;
                     tsmiOpenView.Enabled = enabled && Service != null;
                     tsmiOpenCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
+                    tsbReturnToCaller.Visible = calledArgs != null && tvFetch.Nodes.Count > 0;
                     tsbSave.Enabled = enabled;
                     tsmiSaveFile.Enabled = enabled && FetchChanged && !string.IsNullOrEmpty(FileName);
                     tsmiSaveFileAs.Enabled = enabled && tvFetch.Nodes.Count > 0;
@@ -1730,26 +1753,36 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return new Task(() =>
             {
                 var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                var cvc = new GithubVersionChecker(currentVersion, "Cinteros", "FetchXMLBuilder");
+                var cvc = new XrmToolBox.AppCode.GithubVersionChecker(currentVersion, "Cinteros", "FetchXMLBuilder");
 
                 cvc.Run();
 
-                if (GithubVersionChecker.Cpi != null && !string.IsNullOrEmpty(GithubVersionChecker.Cpi.Version))
+                if (cvc.Cpi != null && !string.IsNullOrEmpty(cvc.Cpi.Version))
                 {
-                    if (GithubVersionChecker.Cpi.Version != dontRemindVersion)
+                    if (lastUpdateCheck.Date != DateTime.Now.Date)
                     {
                         this.Invoke(new Action(() =>
                         {
-                            var nvForm = new Cinteros.Xrm.FetchXmlBuilder.Forms.NewVersionForm(currentVersion, GithubVersionChecker.Cpi.Version, GithubVersionChecker.Cpi.Description,
-                                new Uri("http://fxb.xrmtoolbox.com"));
-                            if (nvForm.ShowDialog(this) == DialogResult.Ignore)
-                            {
-                                dontRemindVersion = GithubVersionChecker.Cpi.Version;
-                            }
+                            var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description, "Cinteros", "FetchXMLBuilder", new Uri("http://fxb.xrmtoolbox.com"));
+                            nvForm.ShowDialog(this);
                         }));
                     }
                 }
+                lastUpdateCheck = DateTime.Now;
             });
+        }
+
+        private void ReturnToCaller()
+        {
+            if (calledArgs == null)
+            {
+                return;
+            }
+            var message = new MessageBusEventArgs(calledArgs.SourcePlugin)
+            {
+                TargetArgument = GetFetchString(true)
+            };
+            OnOutgoingMessage(this, message);
         }
 
         #endregion Instance methods

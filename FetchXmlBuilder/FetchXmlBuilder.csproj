@@ -83,9 +83,6 @@
     <Compile Include="AppCode\AttributeItem.cs" />
     <Compile Include="AppCode\Clipboard.cs" />
     <Compile Include="AppCode\FetchIsAggregateException.cs" />
-    <Compile Include="AppCode\Github.cs" />
-    <Compile Include="AppCode\GithubInformation.cs" />
-    <Compile Include="AppCode\GithubVersionChecker.cs" />
     <Compile Include="AppCode\OptionsetItem.cs" />
     <Compile Include="AppCode\QueryExpressionCodeGenerator.cs" />
     <Compile Include="AppCode\ViewItem.cs" />
@@ -147,12 +144,6 @@
     </Compile>
     <Compile Include="Forms\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\NewVersionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\NewVersionForm.designer.cs">
-      <DependentUpon>NewVersionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ResultGrid.cs">
       <SubType>Form</SubType>
@@ -221,9 +212,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\About.resx">
       <DependentUpon>About.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\NewVersionForm.resx">
-      <DependentUpon>NewVersionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ResultGrid.resx">
       <DependentUpon>ResultGrid.cs</DependentUpon>

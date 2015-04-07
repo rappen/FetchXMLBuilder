@@ -38,6 +38,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.linkLabel4 = new System.Windows.Forms.LinkLabel();
             this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.lblVersion = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -150,12 +152,32 @@
             this.label4.TabIndex = 8;
             this.label4.Text = "Twitter:";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(174, 194);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(45, 13);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Version:";
+            // 
+            // lblVersion
+            // 
+            this.lblVersion.AutoSize = true;
+            this.lblVersion.Location = new System.Drawing.Point(271, 194);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(22, 13);
+            this.lblVersion.TabIndex = 11;
+            this.lblVersion.Text = "1.0";
+            // 
             // About
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.button1;
             this.ClientSize = new System.Drawing.Size(517, 389);
+            this.Controls.Add(this.lblVersion);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.linkLabel4);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.button1);
@@ -189,5 +211,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.LinkLabel linkLabel4;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        internal System.Windows.Forms.Label lblVersion;
     }
 }
