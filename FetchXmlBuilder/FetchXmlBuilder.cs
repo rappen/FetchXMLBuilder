@@ -191,7 +191,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             LoadSetting();
             var tasks = new List<Task>
             {
-                this.LaunchVersionCheck()
+                this.LaunchVersionCheck("Cinteros", "FetchXMLBuilder", "http://fxb.xrmtoolbox.com/?src=FXB.{0}")
             };
             tasks.ForEach(x => x.Start());
             EnableControls(true);
@@ -1748,12 +1748,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return convert.Query;
         }
 
-        private Task LaunchVersionCheck()
+        private Task LaunchVersionCheck(string ghUser, string ghRepo, string dlUrl)
         {
             return new Task(() =>
             {
                 var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                var cvc = new XrmToolBox.AppCode.GithubVersionChecker(currentVersion, "Cinteros", "FetchXMLBuilder");
+                var cvc = new XrmToolBox.AppCode.GithubVersionChecker(currentVersion, ghUser, ghRepo);
 
                 cvc.Run();
 
@@ -1763,7 +1763,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         this.Invoke(new Action(() =>
                         {
-                            var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description, "Cinteros", "FetchXMLBuilder", new Uri("http://fxb.xrmtoolbox.com"));
+                            var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description, ghUser, ghRepo, new Uri(string.Format(dlUrl, currentVersion)));
                             nvForm.ShowDialog(this);
                         }));
                     }
