@@ -9,17 +9,22 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlEditorUtils", "XmlEditor
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug All Cinteros XTB|Any CPU = Debug All Cinteros XTB|Any CPU
 		Debug Without GemBox|Any CPU = Debug Without GemBox|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D746CBE7-7787-47FC-B773-F089A44DF8C9}.Debug All Cinteros XTB|Any CPU.ActiveCfg = Debug All Cinteros XTB|Any CPU
+		{D746CBE7-7787-47FC-B773-F089A44DF8C9}.Debug All Cinteros XTB|Any CPU.Build.0 = Debug All Cinteros XTB|Any CPU
 		{D746CBE7-7787-47FC-B773-F089A44DF8C9}.Debug Without GemBox|Any CPU.ActiveCfg = Debug|Any CPU
 		{D746CBE7-7787-47FC-B773-F089A44DF8C9}.Debug Without GemBox|Any CPU.Build.0 = Debug|Any CPU
 		{D746CBE7-7787-47FC-B773-F089A44DF8C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D746CBE7-7787-47FC-B773-F089A44DF8C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D746CBE7-7787-47FC-B773-F089A44DF8C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D746CBE7-7787-47FC-B773-F089A44DF8C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FC7BDF7-321C-4B96-9B70-D75A16BD7685}.Debug All Cinteros XTB|Any CPU.ActiveCfg = Debug All Cinteros XTB|Any CPU
+		{9FC7BDF7-321C-4B96-9B70-D75A16BD7685}.Debug All Cinteros XTB|Any CPU.Build.0 = Debug All Cinteros XTB|Any CPU
 		{9FC7BDF7-321C-4B96-9B70-D75A16BD7685}.Debug Without GemBox|Any CPU.ActiveCfg = Debug|Any CPU
 		{9FC7BDF7-321C-4B96-9B70-D75A16BD7685}.Debug Without GemBox|Any CPU.Build.0 = Debug|Any CPU
 		{9FC7BDF7-321C-4B96-9B70-D75A16BD7685}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

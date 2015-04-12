@@ -37,6 +37,15 @@
   <PropertyGroup>
     <ApplicationIcon>Cinteros.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug All Cinteros XTB|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\CintXTB\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="McTools.Xrm.Connection, Version=1.0.3315.606, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -50,6 +59,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Xrm.Client, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Microsoft.Xrm.Client.dll</HintPath>
@@ -169,6 +179,7 @@
     <Compile Include="Forms\XmlContentDisplayDialog.designer.cs">
       <DependentUpon>XmlContentDisplayDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppCode\FXBMessageBusArgument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FetchXmlBuilder.cs">
       <SubType>UserControl</SubType>

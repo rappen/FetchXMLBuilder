@@ -134,7 +134,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private XmlContentDisplayDialog xmlLiveUpdate;
         private string liveUpdateXml = "";
-        private MessageBusEventArgs calledArgs = null;
+        private MessageBusEventArgs callerArgs = null;
         #endregion Declarations
 
         public FetchXmlBuilder()
@@ -212,12 +212,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         public void OnIncomingMessage(MessageBusEventArgs message)
         {
-            calledArgs = message;
-            if (message.TargetArgument != null && message.TargetArgument is string)
+            if (message.TargetArgument != null && message.TargetArgument is FXBMessageBusArgument)
             {
-                ParseXML((string)message.TargetArgument, false);
+                callerArgs = message;
+                var fxbArg = (FXBMessageBusArgument)message.TargetArgument;
+                if (!string.IsNullOrWhiteSpace(fxbArg.FetchXML))
+                {
+                    ParseXML(fxbArg.FetchXML, false);
+                }
+                tsbReturnToCaller.ToolTipText = "Return " + fxbArg.Request.ToString() + " to " + callerArgs.SourcePlugin;
             }
-            tsbReturnToCaller.ToolTipText = "Return FetchXML to " + calledArgs.SourcePlugin;
             EnableControls(true);
         }
 
@@ -719,7 +723,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiOpenFile.Enabled = enabled;
                     tsmiOpenView.Enabled = enabled && Service != null;
                     tsmiOpenCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
-                    tsbReturnToCaller.Visible = calledArgs != null && tvFetch.Nodes.Count > 0;
+                    tsbReturnToCaller.Visible = tvFetch.Nodes.Count > 0 && CallerWantsResults();
                     tsbSave.Enabled = enabled;
                     tsmiSaveFile.Enabled = enabled && FetchChanged && !string.IsNullOrEmpty(FileName);
                     tsmiSaveFileAs.Enabled = enabled && tvFetch.Nodes.Count > 0;
@@ -748,6 +752,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 mi();
             }
+        }
+
+        private bool CallerWantsResults()
+        {
+            return
+                callerArgs != null &&
+                callerArgs.TargetArgument is FXBMessageBusArgument &&
+                ((FXBMessageBusArgument)callerArgs.TargetArgument).Request != FXBMessageBusRequest.None;
         }
 
         /// <summary>Repopulate the entire tree from the xml document containing the FetchXML</summary>
@@ -1748,6 +1760,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return convert.Query;
         }
 
+        private string GetOData()
+        {
+            throw new NotImplementedException("OData output is not yet implemented.");
+        }
+
         private Task LaunchVersionCheck(string ghUser, string ghRepo, string dlUrl)
         {
             return new Task(() =>
@@ -1774,14 +1791,32 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void ReturnToCaller()
         {
-            if (calledArgs == null)
+            if (callerArgs == null)
             {
                 return;
             }
-            var message = new MessageBusEventArgs(calledArgs.SourcePlugin)
+            var message = new MessageBusEventArgs(callerArgs.SourcePlugin);
+            if (callerArgs.TargetArgument is FXBMessageBusArgument)
             {
-                TargetArgument = GetFetchString(true)
-            };
+                var fxbArgs = (FXBMessageBusArgument)callerArgs.TargetArgument;
+                switch (fxbArgs.Request)
+                {
+                    case FXBMessageBusRequest.FetchXML:
+                        fxbArgs.FetchXML = GetFetchString(true);
+                        break;
+                    case FXBMessageBusRequest.QueryExpression:
+                        fxbArgs.QueryExpression = GetQueryExpression();
+                        break;
+                    case FXBMessageBusRequest.OData:
+                        fxbArgs.OData = GetOData();
+                        break;
+                }
+                message.TargetArgument = fxbArgs;
+            }
+            else
+            {
+                message.TargetArgument = GetFetchString(true);
+            }
             OnOutgoingMessage(this, message);
         }
 
