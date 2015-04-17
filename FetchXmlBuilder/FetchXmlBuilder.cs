@@ -13,8 +13,6 @@ using System.Configuration;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
-using System.Runtime.Serialization;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
@@ -183,6 +181,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             else
             {
                 SaveSetting();
+                LogUse("Close");
             }
         }
 
@@ -191,7 +190,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             LoadSetting();
             var tasks = new List<Task>
             {
-                this.LaunchVersionCheck("Cinteros", "FetchXMLBuilder", "http://fxb.xrmtoolbox.com/?src=FXB.{0}")
+                this.LaunchVersionCheck("Cinteros", "FetchXMLBuilder", "http://fxb.xrmtoolbox.com/?src=FXB.{0}"),
+                this.LogUsageTask("Load")
             };
             tasks.ForEach(x => x.Start());
             EnableControls(true);
@@ -1253,6 +1253,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         xcdDialog.ShowDialog();
                     }
                 });
+            LogUse("ExecuteFetch");
         }
 
         private void RetrieveMultiple()
@@ -1315,6 +1316,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         xcdDialog.ShowDialog();
                     }
                 });
+            LogUse("RetrieveMultiple-" + outputtype.ToString());
         }
 
         internal void LoadViews(Action viewsLoaded)
@@ -1405,6 +1407,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         fetchDoc.LoadXml(View["fetchxml"].ToString());
                         DisplayDefinition();
                         attributesChecksum = GetAttributesSignature(null);
+                        LogUse("OpenView");
                     }
                     else
                     {
@@ -1452,6 +1455,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             @"<importexportxml><entities><entity>{0}</entity></entities><nodes/><securityroles/><settings/><workflows/></importexportxml>",
                             View["returnedtypecode"].ToString());
                         Service.Execute(pubRequest);
+                        LogUse("SaveView");
                     }
                     View["fetchxml"] = xml;
                 },
@@ -1549,6 +1553,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 fetchDoc.LoadXml(fetch);
                 DisplayDefinition();
                 attributesChecksum = GetAttributesSignature(null);
+                LogUse("OpenCWPFeed");
             }
         }
 
@@ -1589,6 +1594,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 Service.Update(feed);
             }
+            LogUse("SaveCWPFeed");
             MessageBox.Show("CWP Feed " + CWPFeed + " has been " + verb + "!", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -1733,6 +1739,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 var QEx = GetQueryExpression();
                 var code = QueryExpressionCodeGenerator.GetCSharpQueryExpression(QEx);
                 var view = new XmlContentDisplayDialog(code, "QueryExpression Code", false, false);
+                LogUse("DisplayQExCode");
                 view.ShowDialog();
             }
             catch (FetchIsAggregateException ex)
@@ -1789,12 +1796,26 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             });
         }
 
+        private Task LogUsageTask(string action)
+        {
+            return new Task(() =>
+            {
+                LogUse(action);
+            });
+        }
+
+        private void LogUse(string action)
+        {
+            LogUsage.DoLog(ConnectionDetail, action);
+        }
+
         private void ReturnToCaller()
         {
             if (callerArgs == null)
             {
                 return;
             }
+            LogUse("ReturnTo." + callerArgs.SourcePlugin);
             var message = new MessageBusEventArgs(callerArgs.SourcePlugin);
             if (callerArgs.TargetArgument is FXBMessageBusArgument)
             {
