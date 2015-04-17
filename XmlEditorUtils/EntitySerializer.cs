@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -167,6 +168,33 @@ namespace Cinteros.Xrm.XmlEditorUtils
                 return ((Money)attribute).Value;
             else
                 return attribute;
+        }
+
+        public static string AttributeToString(object attribute, AttributeMetadata meta)
+        {
+            if (attribute is AliasedValue)
+                return AttributeToString(((AliasedValue)attribute).Value, meta);
+            else if (attribute is EntityReference)
+                return ((EntityReference)attribute).Name;
+            else if (attribute is OptionSetValue)
+            {
+                var value = ((OptionSetValue)attribute).Value;
+                if (meta != null && meta is EnumAttributeMetadata)
+                {
+                    foreach (var osv in ((EnumAttributeMetadata)meta).OptionSet.Options)
+                    {
+                        if (osv.Value == value)
+                        {
+                            return osv.Label.UserLocalizedLabel.Label;
+                        }
+                    }
+                }
+                return value.ToString();
+            }
+            else if (attribute is Money)
+                return ((Money)attribute).Value.ToString();
+            else
+                return attribute.ToString();
         }
 
         internal static string Sep(Formatting format, int indent)

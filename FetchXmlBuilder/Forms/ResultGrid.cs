@@ -1,4 +1,5 @@
-﻿using Cinteros.Xrm.XmlEditorUtils;
+﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Cinteros.Xrm.XmlEditorUtils;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using System;
@@ -17,26 +18,46 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
     public partial class ResultGrid : Form
     {
         private EntityCollection entities = null;
-        private List<string> columns = null;
-        ConnectionDetail connection = null;
+        private Dictionary<string, AttributeItem> columns = null;
+        FetchXmlBuilder form;
 
-        public ResultGrid(EntityCollection Entities, ConnectionDetail Connection)
+        public ResultGrid(EntityCollection Entities, FetchXmlBuilder fetchXmlBuilder)
         {
             InitializeComponent();
-            if (FetchXmlBuilder.gridWinSize != null && FetchXmlBuilder.gridWinSize.Width > 0 && FetchXmlBuilder.gridWinSize.Height > 0)
-            {
-                Width = FetchXmlBuilder.gridWinSize.Width;
-                Height = FetchXmlBuilder.gridWinSize.Height;
-            }
             entities = Entities;
-            connection = Connection;
-            SetupColumns();
-            FillData();
+            form = fetchXmlBuilder;
+            var size = form.gridWinSize;
+            if (size != null && size.Width > 0 && size.Height > 0)
+            {
+                Width = size.Width;
+                Height = size.Height; ;
+            }
+            if (form.gridFriendly)
+            {   // This pretty stupid if/else because setting the Friendly flag will trigger RefreshAll, and we don't want it twice.
+                chkFriendly.Checked = true;
+            }
+            else
+            {
+                RefreshAll();
+            }
+        }
+
+        private void RefreshAll()
+        {
+            if (form.gridFriendly && form.NeedToLoadEntity(entities.EntityName))
+            {
+                form.LoadEntityDetails(entities.EntityName, RefreshAll);
+            }
+            else
+            {
+                SetupColumns();
+                FillData();
+            }
         }
 
         private void SetupColumns()
         {
-            columns = new List<string>();
+            columns = new Dictionary<string, AttributeItem>();
             foreach (var entity in entities.Entities)
             {
                 foreach (var attribute in entity.Attributes.Keys)
@@ -45,11 +66,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                     {
                         continue;
                     }
-                    if (columns.Contains(attribute))
+                    if (columns.ContainsKey(attribute))
                     {
                         continue;
                     }
-                    columns.Add(attribute);
+                    var meta = FetchXmlBuilder.GetAttribute(entities.EntityName, attribute);
+                    columns.Add(attribute, new AttributeItem(meta));
                 }
             }
             lvGrid.Columns.Clear();
@@ -57,7 +79,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             lvGrid.Columns.Add("Id");
             foreach (var col in columns)
             {
-                lvGrid.Columns.Add(col);
+                lvGrid.Columns.Add(form.gridFriendly && col.Value.Metadata != null ? col.Value.Metadata.DisplayName.UserLocalizedLabel.Label : col.Key);
             }
         }
 
@@ -69,9 +91,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             {
                 var item = lvGrid.Items.Add((++no).ToString());
                 item.SubItems.Add(entity.Id.Equals(Guid.Empty) ? "" : entity.Id.ToString());
-                for (var i = 0; i < columns.Count; i++)
+                foreach (var column in columns)
                 {
-                    var col = columns[i];
+                    var col = column.Key;
                     var valuestr = "";
                     if (entity.Contains(col))
                     {
@@ -80,7 +102,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                         {
                             try
                             {
-                                valuestr = EntitySerializer.AttributeToBaseType(value).ToString();
+                                if (form.gridFriendly)
+                                {
+                                    valuestr = EntitySerializer.AttributeToString(value, column.Value.Metadata);
+                                }
+                                else
+                                {
+                                    valuestr = EntitySerializer.AttributeToBaseType(value).ToString();
+                                }
                             }
                             catch
                             {
@@ -108,10 +137,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             var entity = entities[index];
             if (entity != null && !entity.Id.Equals(Guid.Empty))
             {
-                var url = connection.WebApplicationUrl;
+                var url = form.ConnectionDetail.WebApplicationUrl;
                 if (string.IsNullOrEmpty(url))
                 {
-                    url = string.Concat(connection.ServerName, "/", connection.Organization);
+                    url = string.Concat(form.ConnectionDetail.ServerName, "/", form.ConnectionDetail.Organization);
                     if (!url.ToLower().StartsWith("http"))
                     {
                         url = string.Concat("http://", url);
@@ -129,7 +158,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void ResultGrid_FormClosing(object sender, FormClosingEventArgs e)
         {
-            FetchXmlBuilder.gridWinSize = new System.Drawing.Size(Width, Height);
+            form.gridWinSize = new System.Drawing.Size(Width, Height);
+        }
+
+        private void chkFriendly_CheckedChanged(object sender, EventArgs e)
+        {
+            form.gridFriendly = chkFriendly.Checked;
+            RefreshAll();
         }
     }
 }

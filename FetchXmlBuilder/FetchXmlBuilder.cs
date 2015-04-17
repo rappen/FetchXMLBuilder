@@ -127,7 +127,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         }
         private bool buttonsEnabled = true;
         internal static Size xmlWinSize;
-        internal static Size gridWinSize;
+        internal Size gridWinSize;
+        internal bool gridFriendly;
         private DateTime lastUpdateCheck;
 
         private XmlContentDisplayDialog xmlLiveUpdate;
@@ -593,6 +594,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 config.AppSettings.Settings.Add("gridWinWidth", gridWinSize.Width.ToString());
                 config.AppSettings.Settings.Add("gridWinHeight", gridWinSize.Height.ToString());
             }
+            config.AppSettings.Settings.Add("gridFriendly", gridFriendly ? "1" : "0");
             config.AppSettings.Settings.Add("LastUpdateCheck", lastUpdateCheck.ToString());
             SaveControlValue(config, tsmiEntitiesManaged);
             SaveControlValue(config, tsmiEntitiesUnmanaged);
@@ -680,6 +682,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     gridWinSize = new Size(w, h);
                 }
+            }
+            if (config.AppSettings.Settings["gridFriendly"] != null)
+            {
+                gridFriendly = config.AppSettings.Settings["gridFriendly"].Value == "1";
             }
             if (config.AppSettings.Settings["LastUpdateCheck"] != null)
             {
@@ -1303,7 +1309,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     else if (outputtype == 2 && completedargs.Result is EntityCollection)
                     {
-                        var gridDialog = new ResultGrid((EntityCollection)completedargs.Result, ConnectionDetail);
+                        var gridDialog = new ResultGrid((EntityCollection)completedargs.Result, this);
                         gridDialog.StartPosition = FormStartPosition.CenterParent;
                         gridDialog.ShowDialog();
                     }
