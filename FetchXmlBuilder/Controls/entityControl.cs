@@ -17,6 +17,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
     {
         private readonly Dictionary<string, string> collec;
         private string controlsCheckSum = "";
+        private FetchXmlBuilder fxb;
 
         #region Delegates
 
@@ -39,6 +40,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         public entityControl(Dictionary<string, string> collection, FetchXmlBuilder fetchXmlBuilder)
             : this()
         {
+            fxb = fetchXmlBuilder;
             if (collection != null)
                 collec = collection;
 
@@ -51,7 +53,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void PopulateControls()
         {
             cmbEntity.Items.Clear();
-            var entities = FetchXmlBuilder.GetDisplayEntities();
+            var entities = fxb.GetDisplayEntities();
             if (entities != null)
             {
                 foreach (var entity in entities)

@@ -26,13 +26,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             InitializeComponent();
             entities = Entities;
             form = fetchXmlBuilder;
-            var size = form.gridWinSize;
+            var size = form.currentSettings.gridWinSize;
             if (size != null && size.Width > 0 && size.Height > 0)
             {
                 Width = size.Width;
                 Height = size.Height; ;
             }
-            if (form.gridFriendly)
+            if (form.currentSettings.gridFriendly)
             {   // This pretty stupid if/else because setting the Friendly flag will trigger RefreshAll, and we don't want it twice.
                 chkFriendly.Checked = true;
             }
@@ -44,7 +44,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void RefreshAll()
         {
-            if (form.gridFriendly && form.NeedToLoadEntity(entities.EntityName))
+            if (form.currentSettings.gridFriendly && form.NeedToLoadEntity(entities.EntityName))
             {
                 form.LoadEntityDetails(entities.EntityName, RefreshAll);
             }
@@ -79,7 +79,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             lvGrid.Columns.Add("Id");
             foreach (var col in columns)
             {
-                lvGrid.Columns.Add(form.gridFriendly && col.Value.Metadata != null ? col.Value.Metadata.DisplayName.UserLocalizedLabel.Label : col.Key);
+                lvGrid.Columns.Add(form.currentSettings.gridFriendly && col.Value.Metadata != null ? col.Value.Metadata.DisplayName.UserLocalizedLabel.Label : col.Key);
             }
         }
 
@@ -102,7 +102,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                         {
                             try
                             {
-                                if (form.gridFriendly)
+                                if (form.currentSettings.gridFriendly)
                                 {
                                     valuestr = EntitySerializer.AttributeToString(value, column.Value.Metadata);
                                 }
@@ -158,12 +158,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void ResultGrid_FormClosing(object sender, FormClosingEventArgs e)
         {
-            form.gridWinSize = new System.Drawing.Size(Width, Height);
+            form.currentSettings.gridWinSize = new System.Drawing.Size(Width, Height);
         }
 
         private void chkFriendly_CheckedChanged(object sender, EventArgs e)
         {
-            form.gridFriendly = chkFriendly.Checked;
+            form.currentSettings.gridFriendly = chkFriendly.Checked;
             RefreshAll();
         }
     }

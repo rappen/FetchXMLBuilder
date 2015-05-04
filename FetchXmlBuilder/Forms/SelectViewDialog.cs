@@ -28,7 +28,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private void PopulateForm()
         {
             cmbEntity.Items.Clear();
-            var entities = FetchXmlBuilder.GetDisplayEntities();
+            var entities = Caller.GetDisplayEntities();
             if (entities != null)
             {
                 foreach (var entity in entities)

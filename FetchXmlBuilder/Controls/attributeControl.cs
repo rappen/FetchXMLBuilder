@@ -59,7 +59,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 foreach (var attribute in attributes)
                 {
-                    AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, false);
+                    AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, false, FetchXmlBuilder.friendlyNames);
                 }
             }
             var aggregate = FetchXmlBuilder.IsFetchAggregate(node);

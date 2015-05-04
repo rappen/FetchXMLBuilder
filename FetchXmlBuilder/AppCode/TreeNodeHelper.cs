@@ -53,7 +53,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         AddTreeViewNode(node, childNode, form);
                     }
                 }
-                SetNodeText(node);
+                SetNodeText(node, FetchXmlBuilder.friendlyNames);
             }
             else if (xmlNode is XmlText && parentObject is TreeNode)
             {
@@ -66,7 +66,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
         }
 
-        public static void SetNodeText(TreeNode node)
+        public static void SetNodeText(TreeNode node, bool friendly)
         {
             var text = node.Name;
             Dictionary<string, string> attributes =
@@ -204,7 +204,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
                     break;
             }
-            if (FetchXmlBuilder.useFriendlyNames && !string.IsNullOrEmpty(text))
+            if (friendly && !string.IsNullOrEmpty(text))
             {
                 text = text.Substring(0, 1).ToUpper() + text.Substring(1);
             }
