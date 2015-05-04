@@ -12,14 +12,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
     {
         public XmlNode result;
         private string findtext = "";
+        FetchXmlBuilder fxb;
 
-        public XmlContentDisplayDialog(string xmlString, string header, bool allowEdit, bool allowFormat)
+        public XmlContentDisplayDialog(string xmlString, string header, bool allowEdit, bool allowFormat, FetchXmlBuilder caller)
         {
             InitializeComponent();
-            if (FetchXmlBuilder.xmlWinSize != null && FetchXmlBuilder.xmlWinSize.Width > 0 && FetchXmlBuilder.xmlWinSize.Height > 0)
+            fxb = caller;
+            if (fxb.currentSettings.xmlWinSize != null && fxb.currentSettings.xmlWinSize.Width > 0 && fxb.currentSettings.xmlWinSize.Height > 0)
             {
-                Width = FetchXmlBuilder.xmlWinSize.Width;
-                Height = FetchXmlBuilder.xmlWinSize.Height;
+                Width = fxb.currentSettings.xmlWinSize.Width;
+                Height = fxb.currentSettings.xmlWinSize.Height;
             }
             Text = string.IsNullOrEmpty(header) ? "FetchXML Builder" : header;
             panOk.Visible = allowEdit;
@@ -84,7 +86,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void XmlContentDisplayDialog_FormClosing(object sender, FormClosingEventArgs e)
         {
-            FetchXmlBuilder.xmlWinSize = new System.Drawing.Size(Width, Height);
+            fxb.currentSettings.xmlWinSize = new System.Drawing.Size(Width, Height);
         }
 
         public void UpdateXML(string xmlString)

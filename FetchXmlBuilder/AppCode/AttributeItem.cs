@@ -42,10 +42,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return meta.LogicalName;
         }
 
-        public static void AddAttributeToComboBox(ComboBox cmb, AttributeMetadata meta, bool allowvirtual)
+        public static void AddAttributeToComboBox(ComboBox cmb, AttributeMetadata meta, bool allowvirtual, bool friendly)
         {
             var add = false;
-            if (!FetchXmlBuilder.useFriendlyNames)
+            if (!friendly)
             {
                 add = true;
             }

@@ -93,7 +93,7 @@
     <Compile Include="AppCode\AttributeItem.cs" />
     <Compile Include="AppCode\Clipboard.cs" />
     <Compile Include="AppCode\FetchIsAggregateException.cs" />
-    <Compile Include="AppCode\LogUsage.cs" />
+    <Compile Include="AppCode\FXBSettings.cs" />
     <Compile Include="AppCode\OptionsetItem.cs" />
     <Compile Include="AppCode\QueryExpressionCodeGenerator.cs" />
     <Compile Include="AppCode\ViewItem.cs" />

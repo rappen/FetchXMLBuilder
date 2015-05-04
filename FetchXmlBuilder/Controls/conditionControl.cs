@@ -106,7 +106,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                                 var coll = new Dictionary<string, string>();
                                 coll.Add("#text", value);
                                 attrNode.Tag = coll;
-                                TreeNodeHelper.SetNodeText(attrNode);
+                                TreeNodeHelper.SetNodeText(attrNode, form.currentSettings.useFriendlyNames);
                             }
                             cmbValue.Text = "";
                         }
@@ -287,11 +287,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
                 return;
             }
-            var entities = FetchXmlBuilder.GetDisplayEntities();
-            var attributes = FetchXmlBuilder.GetDisplayAttributes(entityName);
+            var entities = form.GetDisplayEntities();
+            var attributes = form.GetDisplayAttributes(entityName);
             foreach (var attribute in attributes)
             {
-                AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, true);
+                AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, true, form.currentSettings.useFriendlyNames);
             }
             // RefreshFill now that attributes are loaded
             ControlUtils.FillControl(collec, cmbAttribute);
