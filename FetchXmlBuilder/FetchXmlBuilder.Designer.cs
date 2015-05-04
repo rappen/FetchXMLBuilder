@@ -50,6 +50,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbEdit = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbExecute = new System.Windows.Forms.ToolStripButton();
+            this.tsbReturnToCaller = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbAbout = new System.Windows.Forms.ToolStripButton();
             this.tsbOptions = new System.Windows.Forms.ToolStripDropDownButton();
@@ -105,7 +106,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.executeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsbReturnToCaller = new System.Windows.Forms.ToolStripButton();
             this.toolStripMain.SuspendLayout();
             this.gbProperties.SuspendLayout();
             this.gbFetchTree.SuspendLayout();
@@ -296,6 +296,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbExecute.Text = "Execute (F5)";
             this.tsbExecute.ToolTipText = "Execute FetchXML to see the results";
             this.tsbExecute.Click += new System.EventHandler(this.tsbExecute_Click);
+            // 
+            // tsbReturnToCaller
+            // 
+            this.tsbReturnToCaller.Image = ((System.Drawing.Image)(resources.GetObject("tsbReturnToCaller.Image")));
+            this.tsbReturnToCaller.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbReturnToCaller.Name = "tsbReturnToCaller";
+            this.tsbReturnToCaller.Size = new System.Drawing.Size(118, 22);
+            this.tsbReturnToCaller.Text = "Return FetchXML";
+            this.tsbReturnToCaller.Visible = false;
+            this.tsbReturnToCaller.Click += new System.EventHandler(this.tsbReturnToCaller_Click);
             // 
             // toolStripSeparator3
             // 
@@ -619,10 +629,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiResultOption.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.tsmiResultOption.Items.AddRange(new object[] {
-            "Result as serialized XML",
-            "Result as serialized JSON",
-            "Result in grid",
-            "Result from ExecuteFetch"});
+            "Grid",
+            "XML",
+            "JSON",
+            "FetchResult"});
             this.tsmiResultOption.Name = "tsmiResultOption";
             this.tsmiResultOption.Size = new System.Drawing.Size(163, 23);
             // 
@@ -808,16 +818,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.executeToolStripMenuItem.Text = "hidden execute";
             this.executeToolStripMenuItem.Visible = false;
             this.executeToolStripMenuItem.Click += new System.EventHandler(this.tsbExecute_Click);
-            // 
-            // tsbReturnToCaller
-            // 
-            this.tsbReturnToCaller.Image = ((System.Drawing.Image)(resources.GetObject("tsbReturnToCaller.Image")));
-            this.tsbReturnToCaller.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbReturnToCaller.Name = "tsbReturnToCaller";
-            this.tsbReturnToCaller.Size = new System.Drawing.Size(118, 22);
-            this.tsbReturnToCaller.Text = "Return FetchXML";
-            this.tsbReturnToCaller.Visible = false;
-            this.tsbReturnToCaller.Click += new System.EventHandler(this.tsbReturnToCaller_Click);
             // 
             // FetchXmlBuilder
             // 

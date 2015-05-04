@@ -57,7 +57,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void PopulateControls()
         {
             cmbEntity.Items.Clear();
-            var entities = FetchXmlBuilder.GetDisplayEntities();
+            var entities = form.GetDisplayEntities();
             if (entities != null)
             {
                 foreach (var entity in entities)
@@ -139,7 +139,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             cmbRelationship.Items.Clear();
             var parententityname = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
-            var entities = FetchXmlBuilder.GetDisplayEntities();
+            var entities = form.GetDisplayEntities();
             if (entities != null && entities.ContainsKey(parententityname))
             {
                 var parententity = entities[parententityname];
@@ -178,11 +178,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             cmbFrom.Items.Clear();
             cmbTo.Items.Clear();
-            var entities = FetchXmlBuilder.GetDisplayEntities();
+            var entities = form.GetDisplayEntities();
             if (cmbEntity.SelectedItem != null)
             {
                 var linkentity = cmbEntity.SelectedItem.ToString();
-                var linkAttributes = FetchXmlBuilder.GetDisplayAttributes(linkentity);
+                var linkAttributes = form.GetDisplayAttributes(linkentity);
                 foreach (var attribute in linkAttributes)
                 {
                     if (attribute.IsPrimaryId == true ||
@@ -195,7 +195,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
             }
             var parententity = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
-            var parentAttributes = FetchXmlBuilder.GetDisplayAttributes(parententity);
+            var parentAttributes = form.GetDisplayAttributes(parententity);
             foreach (var attribute in parentAttributes)
             {
                 if (attribute.IsPrimaryId == true ||

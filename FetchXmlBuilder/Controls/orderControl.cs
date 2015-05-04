@@ -17,6 +17,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
     {
         private readonly Dictionary<string, string> collec;
         private string controlsCheckSum = "";
+        private bool friendly;
 
         #region Delegates
 
@@ -39,6 +40,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         public orderControl(TreeNode Node, AttributeMetadata[] attributes, FetchXmlBuilder fetchXmlBuilder)
             : this()
         {
+            friendly = fetchXmlBuilder.currentSettings.useFriendlyNames;
             collec = (Dictionary<string, string>)Node.Tag;
             if (collec == null)
             {
@@ -58,7 +60,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 foreach (var attribute in attributes)
                 {
-                    AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, false);
+                    AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, false, friendly);
                 }
             }
             var aggregate = FetchXmlBuilder.IsFetchAggregate(node);
