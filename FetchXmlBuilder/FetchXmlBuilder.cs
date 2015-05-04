@@ -202,6 +202,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     ParseXML(fxbArg.FetchXML, false);
                 }
                 tsbReturnToCaller.ToolTipText = "Return " + fxbArg.Request.ToString() + " to " + callerArgs.SourcePlugin;
+                LogUse("CalledBy." + callerArgs.SourcePlugin);
             }
             EnableControls(true);
         }
@@ -559,7 +560,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             currentSettings.resultOption = tsmiResultOption.SelectedIndex;
             currentSettings.fetchxml = GetFetchString(false);
             currentSettings.Save();
-            }
+        }
 
         //private void SaveControlValue(Configuration config, object control)
         //{
@@ -627,6 +628,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             tsmiResultOption.SelectedIndex = currentSettings.resultOption;
             tsmiEntities_Click(null, null);
             tsmiAttributes_Click(null, null);
+            var ass = Assembly.GetExecutingAssembly().GetName();
+            var version = ass.Version.ToString();
+            if (!version.Equals(currentSettings.currentVersion))
+            {
+                // Reset some settings when new version is deployed
+                currentSettings.logUsage = null;
+
+                currentSettings.currentVersion = version;
+            }
+            if (currentSettings.logUsage == null)
+            {
+                currentSettings.logUsage = LogUsage.PromptToLog();
+                if (!currentSettings.logUsage == true)
+                {
+                    LogUse("Deny", true);
+                }
+            }
         }
 
         /// <summary>Enables or disables all buttons on the form</summary>
@@ -1180,6 +1198,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             working = true;
             var outputtype = tsmiResultOption.SelectedIndex;
+            var outputtypestring = tsmiResultOption.SelectedItem.ToString();
             WorkAsync("Executing FetchXML...",
                 (eventargs) =>
                 {
@@ -1194,7 +1213,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         query = new FetchExpression(GetFetchString(false));
                     }
                     resultCollection = Service.RetrieveMultiple(query);
-                    if (outputtype == 1)
+                    if (outputtype == 2)
                     {
                         var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented);
                         eventargs.Result = json;
@@ -1216,18 +1235,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     else if (outputtype == 0 && completedargs.Result is EntityCollection)
                     {
+                        var gridDialog = new ResultGrid((EntityCollection)completedargs.Result, this);
+                        gridDialog.StartPosition = FormStartPosition.CenterParent;
+                        gridDialog.ShowDialog();
+                    }
+                    else if (outputtype == 1 && completedargs.Result is EntityCollection)
+                    {
                         var serialized = EntityCollectionSerializer.Serialize((EntityCollection)completedargs.Result);
                         var xcdDialog = new XmlContentDisplayDialog(serialized.OuterXml, "XML Serialized RetrieveMultiple result", false, false, this);
                         xcdDialog.StartPosition = FormStartPosition.CenterParent;
                         xcdDialog.ShowDialog();
                     }
-                    else if (outputtype == 2 && completedargs.Result is EntityCollection)
-                    {
-                        var gridDialog = new ResultGrid((EntityCollection)completedargs.Result, this);
-                        gridDialog.StartPosition = FormStartPosition.CenterParent;
-                        gridDialog.ShowDialog();
-                    }
-                    else if (outputtype == 1 && completedargs.Result is string)
+                    else if (outputtype == 2 && completedargs.Result is string)
                     {
                         var result = completedargs.Result.ToString();
                         var xcdDialog = new XmlContentDisplayDialog(result, "JSON Serialized RetrieveMultiple result", false, false, this);
@@ -1236,7 +1255,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         xcdDialog.ShowDialog();
                     }
                 });
-            LogUse("RetrieveMultiple-" + outputtype.ToString());
+            LogUse("RetrieveMultiple-" + outputtypestring);
         }
 
         internal void LoadViews(Action viewsLoaded)
@@ -1658,7 +1677,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 var QEx = GetQueryExpression();
                 var code = QueryExpressionCodeGenerator.GetCSharpQueryExpression(QEx);
-                var view = new XmlContentDisplayDialog(code, "QueryExpression Code", false, false);
+                var view = new XmlContentDisplayDialog(code, "QueryExpression Code", false, false, this);
                 LogUse("DisplayQExCode");
                 view.ShowDialog();
             }
@@ -1724,9 +1743,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             });
         }
 
-        private void LogUse(string action)
+        private void LogUse(string action, bool forceLog = false)
         {
-            LogUsage.DoLog(ConnectionDetail, action);
+            if (currentSettings.logUsage == true || forceLog)
+            {
+                LogUsage.DoLog(action);
+            }
         }
 
         private void ReturnToCaller()
