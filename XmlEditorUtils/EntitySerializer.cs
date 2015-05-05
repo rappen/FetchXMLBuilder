@@ -162,6 +162,56 @@ namespace Cinteros.Xrm.XmlEditorUtils
                 return AttributeToBaseType(((AliasedValue)attribute).Value);
             else if (attribute is EntityReference)
                 return ((EntityReference)attribute).Id;
+            else if (attribute is EntityReferenceCollection)
+            {
+                var referencedEntity = "";
+                foreach (var er in (EntityReferenceCollection)attribute)
+                {
+                    if (referencedEntity == "")
+                    {
+                        referencedEntity = er.LogicalName;
+                    }
+                    else if (referencedEntity != er.LogicalName)
+                    {
+                        referencedEntity = "";
+                        break;
+                    }
+                }
+                var result = "";
+                foreach (var er in (EntityReferenceCollection)attribute)
+                {
+                    if (result != "")
+                    {
+                        result += ",";
+                    }
+                    if (referencedEntity != "")
+                    {
+                        result += er.Id.ToString();
+                    }
+                    else
+                    {
+                        result += er.LogicalName + ":" + er.Id.ToString();
+                    }
+                }
+                return result;
+            }
+            else if (attribute is EntityCollection)
+            {
+                var result = "";
+                if (((EntityCollection)attribute).Entities.Count > 0)
+                {
+                    foreach (var entity in ((EntityCollection)attribute).Entities)
+                    {
+                        if (result != "")
+                        {
+                            result += ",";
+                        }
+                        result += entity.Id.ToString();
+                    }
+                    result = ((EntityCollection)attribute).EntityName + ":" + result;
+                }
+                return result;
+            }
             else if (attribute is OptionSetValue)
                 return ((OptionSetValue)attribute).Value;
             else if (attribute is Money)
@@ -176,6 +226,35 @@ namespace Cinteros.Xrm.XmlEditorUtils
                 return AttributeToString(((AliasedValue)attribute).Value, meta);
             else if (attribute is EntityReference)
                 return ((EntityReference)attribute).Name;
+            else if (attribute is EntityCollection && ((EntityCollection)attribute).EntityName == "activityparty")
+            {
+                var result = "";
+                if (((EntityCollection)attribute).Entities.Count > 0)
+                {
+                    foreach (var entity in ((EntityCollection)attribute).Entities)
+                    {
+                        var party = "";
+                        if (entity.Contains("partyid") && entity["partyid"] is EntityReference)
+                        {
+                            party = ((EntityReference)entity["partyid"]).Name;
+                        }
+                        if (string.IsNullOrEmpty(party) && entity.Contains("addressused"))
+                        {
+                            party = entity["addressused"].ToString();
+                        }
+                        if (string.IsNullOrEmpty(party))
+                        {
+                            party = entity.Id.ToString();
+                        }
+                        if (!string.IsNullOrEmpty(result))
+                        {
+                            result += ", ";
+                        }
+                        result += party;
+                    }
+                }
+                return result;
+            }
             else if (attribute is OptionSetValue)
             {
                 var value = ((OptionSetValue)attribute).Value;
