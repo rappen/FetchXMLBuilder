@@ -161,6 +161,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             else
             {
+                if (xmlLiveUpdate != null)
+                {
+                    xmlLiveUpdate.Close();
+                    xmlLiveUpdate = null;
+                }
                 SaveSetting();
                 LogUse("Close");
             }
