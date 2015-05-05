@@ -68,9 +68,11 @@
             this.lvGrid.Location = new System.Drawing.Point(0, 0);
             this.lvGrid.Name = "lvGrid";
             this.lvGrid.Size = new System.Drawing.Size(731, 430);
+            this.lvGrid.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvGrid.TabIndex = 2;
             this.lvGrid.UseCompatibleStateImageBehavior = false;
             this.lvGrid.View = System.Windows.Forms.View.Details;
+            this.lvGrid.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvGrid_ColumnClick);
             this.lvGrid.DoubleClick += new System.EventHandler(this.lvGrid_DoubleClick);
             // 
             // panBottom

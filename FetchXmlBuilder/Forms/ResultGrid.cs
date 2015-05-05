@@ -19,6 +19,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
     {
         private EntityCollection entities = null;
         private Dictionary<string, AttributeItem> columns = null;
+        private int sortcolumn = 0;
         FetchXmlBuilder form;
 
         public ResultGrid(EntityCollection Entities, FetchXmlBuilder fetchXmlBuilder)
@@ -50,8 +51,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             }
             else
             {
+                var sort = lvGrid.Sorting;
+                lvGrid.Sorting = SortOrder.None;
                 SetupColumns();
                 FillData();
+                lvGrid.Sorting = sort;
             }
         }
 
@@ -165,6 +169,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             form.currentSettings.gridFriendly = chkFriendly.Checked;
             RefreshAll();
+        }
+
+        private void lvGrid_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            if (e.Column == sortcolumn)
+            {
+                lvGrid.Sorting = lvGrid.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+            }
+            else
+            {
+                lvGrid.Sorting = SortOrder.Ascending;
+            }
+            lvGrid.ListViewItemSorter = new ListViewItemComparer(e.Column, lvGrid.Sorting);
+            sortcolumn = e.Column;
         }
     }
 }
