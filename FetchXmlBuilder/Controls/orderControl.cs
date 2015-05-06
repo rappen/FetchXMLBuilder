@@ -18,6 +18,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private readonly Dictionary<string, string> collec;
         private string controlsCheckSum = "";
         private bool friendly;
+        FetchXmlBuilder form;
 
         #region Delegates
 
@@ -40,6 +41,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         public orderControl(TreeNode Node, AttributeMetadata[] attributes, FetchXmlBuilder fetchXmlBuilder)
             : this()
         {
+            form = fetchXmlBuilder;
             friendly = fetchXmlBuilder.currentSettings.useFriendlyNames;
             collec = (Dictionary<string, string>)Node.Tag;
             if (collec == null)
@@ -55,16 +57,50 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void PopulateControls(TreeNode node, AttributeMetadata[] attributes)
         {
-            cmbAttribute.Items.Clear();
-            if (attributes != null)
+            var aggregate = FetchXmlBuilder.IsFetchAggregate(node);
+            if (!aggregate)
             {
-                foreach (var attribute in attributes)
+                cmbAttribute.Items.Clear();
+                if (attributes != null)
                 {
-                    AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, false, friendly);
+                    foreach (var attribute in attributes)
+                    {
+                        AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, false, friendly);
+                    }
                 }
             }
-            var aggregate = FetchXmlBuilder.IsFetchAggregate(node);
-            textAlias.Enabled = aggregate;
+            else
+            {
+                cmbAlias.Items.Clear();
+                cmbAlias.Items.Add("");
+                cmbAlias.Items.AddRange(GetAliases(form.tvFetch.Nodes[0]).ToArray());
+            }
+            cmbAttribute.Enabled = !aggregate;
+            cmbAlias.Enabled = aggregate;
+        }
+
+        private List<string> GetAliases(TreeNode node)
+        {
+            var result = new List<string>();
+            if (node.Name == "entity" || node.Name == "link-entity")
+            {
+                foreach (TreeNode child in node.Nodes)
+                {
+                    if (child.Name == "attribute")
+                    {
+                        var alias = TreeNodeHelper.GetAttributeFromNode(child, "alias");
+                        if (!string.IsNullOrEmpty(alias))
+                        {
+                            result.Add(alias);
+                        }
+                    }
+                }
+            }
+            foreach (TreeNode child in node.Nodes)
+            {
+                result.AddRange(GetAliases(child));
+            }
+            return result;
         }
 
         public void Save()
