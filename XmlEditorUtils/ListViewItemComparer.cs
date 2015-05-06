@@ -75,10 +75,23 @@ namespace Cinteros.Xrm.XmlEditorUtils
         {
             if (innerOrder == SortOrder.Ascending)
             {
-                return String.CompareOrdinal(x.SubItems[col].Text, y.SubItems[col].Text);
+                return Compare(x.SubItems[col].Text, y.SubItems[col].Text);
             }
+            else
+            {
+                return Compare(y.SubItems[col].Text, x.SubItems[col].Text);
+            }
+        }
 
-            return String.CompareOrdinal(y.SubItems[col].Text, x.SubItems[col].Text);
+        public int Compare(string x, string y)
+        {
+            var xdec = 0M;
+            var ydec = 0M;
+            if (decimal.TryParse(x, out xdec) && decimal.TryParse(y, out ydec))
+            {
+                return xdec == ydec ? 0 : xdec > ydec ? 1 : -1;
+            }
+            return String.CompareOrdinal(x, y);
         }
 
         #endregion

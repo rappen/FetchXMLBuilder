@@ -19,7 +19,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
     {
         private EntityCollection entities = null;
         private Dictionary<string, AttributeItem> columns = null;
-        private int sortcolumn = 0;
+        private int sortcolumn = -1;
         FetchXmlBuilder form;
 
         public ResultGrid(EntityCollection Entities, FetchXmlBuilder fetchXmlBuilder)
