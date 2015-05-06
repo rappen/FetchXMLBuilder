@@ -83,7 +83,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             lvGrid.Columns.Add("Id");
             foreach (var col in columns)
             {
-                lvGrid.Columns.Add(form.currentSettings.gridFriendly && col.Value.Metadata != null ? col.Value.Metadata.DisplayName.UserLocalizedLabel.Label : col.Key);
+                lvGrid.Columns.Add(
+                    form.currentSettings.gridFriendly &&
+                    col.Value.Metadata != null &&
+                    col.Value.Metadata.DisplayName != null &&
+                    col.Value.Metadata.DisplayName.UserLocalizedLabel != null &&
+                    col.Value.Metadata.DisplayName.UserLocalizedLabel.Label != null ?
+                    col.Value.Metadata.DisplayName.UserLocalizedLabel.Label : col.Key);
             }
         }
 

@@ -68,6 +68,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         public static void SetNodeText(TreeNode node, bool friendly)
         {
+            if (node == null)
+            {
+                return;
+            }
             var text = node.Name;
             Dictionary<string, string> attributes =
                 node.Tag is Dictionary<string, string> ?
