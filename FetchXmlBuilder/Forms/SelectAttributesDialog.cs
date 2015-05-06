@@ -17,11 +17,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
     public partial class SelectAttributesDialog : Form
     {
         private int sortcolumn = 0;
+        List<ListViewItem> allItems;
 
         public SelectAttributesDialog(List<AttributeMetadata> attributes, List<string> selectedAttributes)
         {
             InitializeComponent();
-            lvAttributes.Items.Clear();
+            GenerateAllItems(attributes, selectedAttributes);
+            PopulateAttributes();
+        }
+
+        private void GenerateAllItems(List<AttributeMetadata> attributes, List<string> selectedAttributes)
+        {
+            allItems = new List<ListViewItem>();
             foreach (var attribute in attributes)
             {
                 var name = attribute.DisplayName.UserLocalizedLabel != null ? attribute.DisplayName.UserLocalizedLabel.Label : attribute.LogicalName;
@@ -30,16 +37,33 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 item.Text = name;
                 item.Tag = attribute;
                 item.Checked = selectedAttributes.Contains(attribute.LogicalName);
-                lvAttributes.Items.Add(item);
+                var filter = txtFilter.Text.ToUpperInvariant();
+                allItems.Add(item);
+            }
+        }
+
+        private void PopulateAttributes()
+        {
+            lvAttributes.Items.Clear();
+            foreach (var item in allItems)
+            {
+                var filter = txtFilter.Text.ToUpperInvariant();
+                if (string.IsNullOrWhiteSpace(filter) || item.Name.ToUpperInvariant().Contains(filter) || item.Text.ToUpperInvariant().Contains(filter))
+                {
+                    lvAttributes.Items.Add(item);
+                }
             }
         }
 
         public List<AttributeMetadata> GetSelectedAttributes()
         {
             var result = new List<AttributeMetadata>();
-            foreach (ListViewItem item in lvAttributes.CheckedItems)
+            foreach (var item in allItems)
             {
-                result.Add((AttributeMetadata)item.Tag);
+                if (item.Checked)
+                {
+                    result.Add((AttributeMetadata)item.Tag);
+                }
             }
             return result;
         }
@@ -64,6 +88,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             }
             lvAttributes.ListViewItemSorter = new ListViewItemComparer(e.Column, lvAttributes.Sorting);
             sortcolumn = e.Column;
+        }
+
+        private void txtFilter_TextChanged(object sender, EventArgs e)
+        {
+            PopulateAttributes();
         }
     }
 }
