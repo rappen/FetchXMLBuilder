@@ -161,7 +161,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                     entities.EntityName,
                     "&pagetype=entityrecord&id=",
                     entity.Id.ToString());
-
+                form.LogUse("OpenRecord");
                 Process.Start(url);
             }
         }

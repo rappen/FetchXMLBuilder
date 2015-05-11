@@ -645,7 +645,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (currentSettings.logUsage == null)
             {
                 currentSettings.logUsage = LogUsage.PromptToLog();
-                if (!currentSettings.logUsage == true)
+                if (currentSettings.logUsage == true)
+                {
+                    LogUse("Accept", true);
+                }
+                else if (!currentSettings.logUsage == true)
                 {
                     LogUse("Deny", true);
                 }
@@ -1748,7 +1752,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             });
         }
 
-        private void LogUse(string action, bool forceLog = false)
+        internal void LogUse(string action, bool forceLog = false)
         {
             if (currentSettings.logUsage == true || forceLog)
             {
