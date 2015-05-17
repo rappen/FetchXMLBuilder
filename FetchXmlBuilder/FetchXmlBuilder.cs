@@ -732,6 +732,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 TreeNodeHelper.AddTreeViewNode(tvFetch, definitionXmlNode, this);
                 tvFetch.ExpandAll();
                 ManageMenuDisplay();
+                if (tsmiLiveUpdate.Checked)
+                {
+                    UpdateLiveXML();
+                }
             };
             if (tvFetch.InvokeRequired)
                 tvFetch.Invoke(miFillTreeView);
