@@ -420,7 +420,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsmiEntities_Click(object sender, EventArgs e)
         {
-            if (sender != tsmiEntitiesAll)
+            if (sender != null && sender != tsmiEntitiesAll)
             {
                 tsmiEntitiesAll.Checked =
                     tsmiEntitiesManaged.Checked &&
@@ -466,7 +466,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsmiAttributes_Click(object sender, EventArgs e)
         {
-            if (sender != tsmiAttributesAll)
+            if (sender != null && sender != tsmiAttributesAll)
             {
                 tsmiAttributesAll.Checked =
                     tsmiAttributesManaged.Checked &&
