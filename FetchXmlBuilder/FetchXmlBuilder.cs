@@ -173,6 +173,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void FetchXmlBuilder_Load(object sender, EventArgs e)
         {
+            if (ParentForm != null)
+            {
+                ParentForm.LocationChanged += FetchXmlBuilder_FormChanged;
+            }
             LoadSetting();
             var tasks = new List<Task>
             {
@@ -1969,7 +1973,31 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             return result.ToArray();
         }
-
+        
         #endregion Static methods
+
+        private void FetchXmlBuilder_FormChanged(object sender, EventArgs e)
+        {
+            if (tsmiLiveUpdate.Checked && xmlLiveUpdate != null)
+            {
+                AlignLiveXML();
+            }
+        }
+
+        private void FetchXmlBuilder_Leave(object sender, EventArgs e)
+        {
+            if (tsmiLiveUpdate.Checked && xmlLiveUpdate != null)
+            {
+                xmlLiveUpdate.Visible = false;
+            }
+        }
+
+        private void FetchXmlBuilder_Enter(object sender, EventArgs e)
+        {
+            if (tsmiLiveUpdate.Checked && xmlLiveUpdate != null)
+            {
+                xmlLiveUpdate.Visible = true;
+            }
+        }
     }
 }
