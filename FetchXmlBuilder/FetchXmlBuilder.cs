@@ -307,6 +307,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsbExecute_Click(object sender, EventArgs e)
         {
+            tvFetch.Focus();
             FetchResults();
         }
 
