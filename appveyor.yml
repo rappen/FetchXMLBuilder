@@ -2,6 +2,7 @@ version: '{build}'
 branches:
   only:
   - master
+skip_tags: true
 configuration: Release
 init:
 - ps: Update-AppveyorBuild -Version "1.$(Get-Date -format yyyy.M).$env:appveyor_build_number"
