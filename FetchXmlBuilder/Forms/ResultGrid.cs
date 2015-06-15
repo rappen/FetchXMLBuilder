@@ -118,7 +118,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                                 }
                                 else
                                 {
-                                    valuestr = EntitySerializer.AttributeToBaseType(value).ToString();
+                                    var basevalue = EntitySerializer.AttributeToBaseType(value);
+                                    valuestr = basevalue != null ? basevalue.ToString() : "";
                                 }
                             }
                             catch

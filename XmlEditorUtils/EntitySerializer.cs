@@ -222,6 +222,8 @@ namespace Cinteros.Xrm.XmlEditorUtils
 
         public static string AttributeToString(object attribute, AttributeMetadata meta)
         {
+            if (attribute == null)
+                return "";
             if (attribute is AliasedValue)
                 return AttributeToString(((AliasedValue)attribute).Value, meta);
             else if (attribute is EntityReference)
