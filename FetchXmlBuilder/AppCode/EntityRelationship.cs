@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
-    public class EntityRelationship
+    public class EntityRelationship : IComparable
     {
         public RelationshipMetadataBase Relationship;
         public string Name = "";
@@ -49,12 +49,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         mm.Entity2LogicalName + "." + mm.Entity2IntersectAttribute;
                 }
             }
-            //Name = Name.Replace(FetchXmlBuilder.GetEntityDisplayName(originatingEntity) + ".", "");
         }
 
         public override string ToString()
         {
             return Name;
+        }
+
+        public int CompareTo(object obj)
+        {
+            return ToString().CompareTo(obj.ToString());
         }
     }
 }

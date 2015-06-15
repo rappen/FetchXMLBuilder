@@ -146,30 +146,40 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 var mo = parententity.ManyToOneRelationships;
                 var om = parententity.OneToManyRelationships;
                 var mm = parententity.ManyToManyRelationships;
+                var list = new List<EntityRelationship>();
                 if (mo.Length > 0)
                 {
                     cmbRelationship.Items.Add("- M:1 -");
+                    list.Clear();
                     foreach (var rel in mo)
                     {
-                        cmbRelationship.Items.Add(new EntityRelationship(rel, parententityname));
+                        list.Add(new EntityRelationship(rel, parententityname));
                     }
+                    list.Sort();
+                    cmbRelationship.Items.AddRange(list.ToArray());
                 }
                 if (om.Length > 0)
                 {
                     cmbRelationship.Items.Add("- 1:M -");
+                    list.Clear();
                     foreach (var rel in om)
                     {
-                        cmbRelationship.Items.Add(new EntityRelationship(rel, parententityname));
+                        list.Add(new EntityRelationship(rel, parententityname));
                     }
+                    list.Sort();
+                    cmbRelationship.Items.AddRange(list.ToArray());
                 }
                 if (mm.Length > 0)
                 {
                     var greatparententityname = node.Parent.Parent != null ? TreeNodeHelper.GetAttributeFromNode(node.Parent.Parent, "name") : "";
                     cmbRelationship.Items.Add("- M:M -");
+                    list.Clear();
                     foreach (var rel in mm)
                     {
-                        cmbRelationship.Items.Add(new EntityRelationship(rel, parententityname, greatparententityname));
+                        list.Add(new EntityRelationship(rel, parententityname, greatparententityname));
                     }
+                    list.Sort();
+                    cmbRelationship.Items.AddRange(list.ToArray());
                 }
             }
         }
