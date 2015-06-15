@@ -1953,6 +1953,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         if (!currentSettings.showAttributesAll)
                         {
+                            if (attribute.IsValidForRead == false) { continue; }
                             if (!string.IsNullOrEmpty(attribute.AttributeOf)) { continue; }
                             if (!currentSettings.showAttributesManaged && attribute.IsManaged == true) { continue; }
                             if (!currentSettings.showAttributesUnmanaged && attribute.IsManaged == false) { continue; }
