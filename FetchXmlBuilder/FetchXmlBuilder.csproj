@@ -73,6 +73,7 @@
       <HintPath>..\Dependencies\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -87,6 +88,9 @@
     <Reference Include="XrmToolBox, Version=1.2015.3.10, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\XrmToolBox.exe</HintPath>
+    </Reference>
+    <Reference Include="XrmToolBox.Extensibility">
+      <HintPath>..\Dependencies\XrmToolBox.Extensibility.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +155,7 @@
     <Compile Include="Controls\fetchControl.Designer.cs">
       <DependentUpon>fetchControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="FetchXMLBuilderPlugin.cs" />
     <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -250,6 +255,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Cinteros.ico" />
+    <Content Include="Resources\FXB-32.png" />
     <None Include="Resources\FXB-100.png" />
   </ItemGroup>
   <ItemGroup>
@@ -259,6 +265,10 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy *.dll Plugins /Y
+xcopy *.pdb Plugins /Y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

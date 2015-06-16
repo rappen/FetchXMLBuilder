@@ -9,7 +9,6 @@ using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
@@ -17,16 +16,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using XrmToolBox;
-using XrmToolBox.Attributes;
+using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Forms;
 using Clipboard = Cinteros.Xrm.FetchXmlBuilder.AppCode.Clipboard;
 
-[assembly: BackgroundColor("#000000")]
-
 namespace Cinteros.Xrm.FetchXmlBuilder
 {
-    public partial class FetchXmlBuilder : PluginBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost
+    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost
     {
         #region Declarations
         const string settingfile = "Cinteros.Xrm.FetchXmlBuilder.Settings.xml";
@@ -119,14 +116,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         public FetchXmlBuilder()
         {
             InitializeComponent();
-        }
-
-        public override Image PluginLogo
-        {
-            get
-            {
-                return imageList1.Images[0];
-            }
         }
 
         public string RepositoryName

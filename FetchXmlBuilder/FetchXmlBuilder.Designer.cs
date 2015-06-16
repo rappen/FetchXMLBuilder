@@ -30,7 +30,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FetchXmlBuilder));
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
             this.tsbCloseThisTab = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -112,13 +111,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.nodeMenu.SuspendLayout();
             this.addMenu.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // imageList1
-            // 
-            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList1.Images.SetKeyName(0, "FXB-100.png");
-            this.imageList1.Images.SetKeyName(1, "Cinteros 100 transp.png");
             // 
             // toolStripMain
             // 
@@ -831,7 +823,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "FetchXmlBuilder";
             this.Size = new System.Drawing.Size(884, 624);
-            this.ConnectionUpdated += new XrmToolBox.PluginBase.ConnectionUpdatedHandler(this.FetchXmlBuilder_ConnectionUpdated);
+            this.ConnectionUpdated += new XrmToolBox.Extensibility.PluginControlBase.ConnectionUpdatedHandler(this.FetchXmlBuilder_ConnectionUpdated);
             this.Load += new System.EventHandler(this.FetchXmlBuilder_Load);
             this.SizeChanged += new System.EventHandler(this.FetchXmlBuilder_FormChanged);
             this.VisibleChanged += new System.EventHandler(this.FetchXmlBuilder_FormChanged);
@@ -849,7 +841,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         #endregion
 
-        private System.Windows.Forms.ImageList imageList1;
         internal System.Windows.Forms.ToolStrip toolStripMain;
         private System.Windows.Forms.ToolStripButton tsbCloseThisTab;
         internal System.Windows.Forms.GroupBox gbProperties;
