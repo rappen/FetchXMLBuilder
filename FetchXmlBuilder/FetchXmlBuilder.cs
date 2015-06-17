@@ -23,7 +23,7 @@ using Clipboard = Cinteros.Xrm.FetchXmlBuilder.AppCode.Clipboard;
 
 namespace Cinteros.Xrm.FetchXmlBuilder
 {
-    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost
+    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin
     {
         #region Declarations
         const string settingfile = "Cinteros.Xrm.FetchXmlBuilder.Settings.xml";
@@ -136,6 +136,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         public string EmailAccount
         {
             get { return "jonas@rappen.net"; }
+        }
+
+        public string HelpUrl
+        {
+            get { return "http://jonasrapp.cinteros.se/p/fxb.html?src=FXBhelp"; }
         }
 
         #region Event handlers
