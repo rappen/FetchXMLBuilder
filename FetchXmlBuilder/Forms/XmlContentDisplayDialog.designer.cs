@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings2 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlContentDisplayDialog));
+            CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings1 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
             this.panBottom = new System.Windows.Forms.Panel();
+            this.btnExecute = new System.Windows.Forms.Button();
             this.panOk = new System.Windows.Forms.Panel();
             this.btnOk = new System.Windows.Forms.Button();
             this.panCancel = new System.Windows.Forms.Panel();
@@ -44,6 +46,7 @@
             // panBottom
             // 
             this.panBottom.BackColor = System.Drawing.SystemColors.Control;
+            this.panBottom.Controls.Add(this.btnExecute);
             this.panBottom.Controls.Add(this.panOk);
             this.panBottom.Controls.Add(this.panCancel);
             this.panBottom.Controls.Add(this.btnFormat);
@@ -52,6 +55,20 @@
             this.panBottom.Name = "panBottom";
             this.panBottom.Size = new System.Drawing.Size(809, 38);
             this.panBottom.TabIndex = 4;
+            // 
+            // btnExecute
+            // 
+            this.btnExecute.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnExecute.Image = ((System.Drawing.Image)(resources.GetObject("btnExecute.Image")));
+            this.btnExecute.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnExecute.Location = new System.Drawing.Point(93, 8);
+            this.btnExecute.Name = "btnExecute";
+            this.btnExecute.Size = new System.Drawing.Size(99, 23);
+            this.btnExecute.TabIndex = 5;
+            this.btnExecute.Text = "Execute XML";
+            this.btnExecute.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnExecute.UseVisualStyleBackColor = true;
+            this.btnExecute.Click += new System.EventHandler(this.btnExecute_Click);
             // 
             // panOk
             // 
@@ -109,12 +126,12 @@
             this.txtXML.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtXML.Location = new System.Drawing.Point(0, 0);
             this.txtXML.Name = "txtXML";
-            xmlViewerSettings2.AttributeKey = System.Drawing.Color.Red;
-            xmlViewerSettings2.AttributeValue = System.Drawing.Color.Blue;
-            xmlViewerSettings2.Element = System.Drawing.Color.DarkRed;
-            xmlViewerSettings2.Tag = System.Drawing.Color.Blue;
-            xmlViewerSettings2.Value = System.Drawing.Color.Black;
-            this.txtXML.Settings = xmlViewerSettings2;
+            xmlViewerSettings1.AttributeKey = System.Drawing.Color.Red;
+            xmlViewerSettings1.AttributeValue = System.Drawing.Color.Blue;
+            xmlViewerSettings1.Element = System.Drawing.Color.DarkRed;
+            xmlViewerSettings1.Tag = System.Drawing.Color.Blue;
+            xmlViewerSettings1.Value = System.Drawing.Color.Black;
+            this.txtXML.Settings = xmlViewerSettings1;
             this.txtXML.Size = new System.Drawing.Size(809, 667);
             this.txtXML.TabIndex = 1;
             this.txtXML.Text = "";
@@ -148,5 +165,6 @@
         private System.Windows.Forms.Button btnCancel;
         internal CSRichTextBoxSyntaxHighlighting.XMLViewer txtXML;
         internal System.Windows.Forms.Button btnFormat;
+        internal System.Windows.Forms.Button btnExecute;
     }
 }

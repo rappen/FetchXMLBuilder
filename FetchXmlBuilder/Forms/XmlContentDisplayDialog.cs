@@ -11,13 +11,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
     public partial class XmlContentDisplayDialog : Form
     {
         public XmlNode result;
+        public bool execute;
         private string findtext = "";
         FetchXmlBuilder fxb;
 
-        public XmlContentDisplayDialog(string xmlString, string header, bool allowEdit, bool allowFormat, FetchXmlBuilder caller)
+        public XmlContentDisplayDialog(string xmlString, string header, bool allowEdit, bool allowFormat, bool allowExecute, FetchXmlBuilder caller)
         {
             InitializeComponent();
             fxb = caller;
+            result = null;
+            execute = false;
             if (fxb.currentSettings.xmlWinSize != null && fxb.currentSettings.xmlWinSize.Width > 0 && fxb.currentSettings.xmlWinSize.Height > 0)
             {
                 Width = fxb.currentSettings.xmlWinSize.Width;
@@ -30,6 +33,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 btnCancel.Text = "Close";
             }
             btnFormat.Visible = allowFormat;
+            btnExecute.Visible = allowExecute;
             if (xmlString.Length > 100000)
             {
                 var dlgresult = MessageBox.Show("Huge result, this may take a while!\n" + xmlString.Length.ToString() + " characters in the XML document.\n\nContinue?", "Huge result",
@@ -49,6 +53,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         }
 
         private void btnOk_Click(object sender, EventArgs e)
+        {
+            SetResult();
+        }
+
+        private void SetResult()
         {
             try
             {
@@ -98,6 +107,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void btnExecute_Click(object sender, EventArgs e)
+        {
+            SetResult();
+            execute = true;
         }
     }
 }

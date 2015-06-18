@@ -293,13 +293,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsbEdit_Click(object sender, EventArgs e)
         {
             var xml = GetFetchString(false);
-            var xcdDialog = new XmlContentDisplayDialog(xml, "FetchXML", true, true, this);
+            var xcdDialog = new XmlContentDisplayDialog(xml, "FetchXML", true, true, Service != null, this);
             xcdDialog.StartPosition = FormStartPosition.CenterParent;
             if (xcdDialog.ShowDialog() == DialogResult.OK)
             {
-                EnableControls(false);
                 XmlNode resultNode = xcdDialog.result;
-                ParseXML(resultNode.OuterXml, true);
+                EnableControls(false);
+                ParseXML(resultNode.OuterXml, !xcdDialog.execute);
+                if (xcdDialog.execute)
+                {
+                    FetchResults(resultNode.OuterXml);
+                }
             }
         }
 
@@ -1145,15 +1149,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return result;
         }
 
-        private void FetchResults()
+        private void FetchResults(string fetch = "")
         {
             if (!tsbExecute.Enabled)
             {
                 return;
             }
-            if (!BuildAndValidateXml(true))
+            if (string.IsNullOrEmpty(fetch))
             {
-                return;
+                if (!BuildAndValidateXml(true))
+                {
+                    return;
+                }
+                fetch = GetFetchString(false);
             }
             if (working)
             {
@@ -1166,10 +1174,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 case 0:
                 case 1:
                 case 2:
-                    RetrieveMultiple();
+                    RetrieveMultiple(fetch);
                     break;
                 case 3:
-                    ExecuteFetch();
+                    ExecuteFetch(fetch);
                     break;
                 default:
                     MessageBox.Show("Select valid output type under Options.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1177,14 +1185,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
-        private void ExecuteFetch()
+        private void ExecuteFetch(string fetch)
         {
             working = true;
             WorkAsync("Executing FetchXML...",
                 (eventargs) =>
                 {
-                    var fetchxml = GetFetchDocument().OuterXml;
-                    var resp = (ExecuteFetchResponse)Service.Execute(new ExecuteFetchRequest() { FetchXml = fetchxml });
+                    //var fetchxml = GetFetchDocument().OuterXml;
+                    var resp = (ExecuteFetchResponse)Service.Execute(new ExecuteFetchRequest() { FetchXml = fetch });
                     eventargs.Result = resp.FetchXmlResult;
                 },
                 (completedargs) =>
@@ -1198,7 +1206,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         XmlDocument doc = new XmlDocument();
                         doc.LoadXml(completedargs.Result.ToString());
-                        var xcdDialog = new XmlContentDisplayDialog(doc.OuterXml, "FetchXML result", false, false, this);
+                        var xcdDialog = new XmlContentDisplayDialog(doc.OuterXml, "FetchXML result", false, false, false, this);
                         xcdDialog.StartPosition = FormStartPosition.CenterParent;
                         xcdDialog.ShowDialog();
                     }
@@ -1206,7 +1214,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             LogUse("ExecuteFetch");
         }
 
-        private void RetrieveMultiple()
+        private void RetrieveMultiple(string fetch)
         {
             working = true;
             var outputtype = tsmiResultOption.SelectedIndex;
@@ -1222,7 +1230,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     catch (FetchIsAggregateException)
                     {
-                        query = new FetchExpression(GetFetchString(false));
+                        query = new FetchExpression(fetch);
                     }
                     resultCollection = Service.RetrieveMultiple(query);
                     if (outputtype == 2)
@@ -1242,7 +1250,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         if (MessageBox.Show(completedargs.Error.Message + "\n\nTry with result as ExecuteFetch?", "Execute", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
                         {
-                            ExecuteFetch();
+                            ExecuteFetch(fetch);
                         }
                     }
                     else if (outputtype == 0 && completedargs.Result is EntityCollection)
@@ -1254,14 +1262,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     else if (outputtype == 1 && completedargs.Result is EntityCollection)
                     {
                         var serialized = EntityCollectionSerializer.Serialize((EntityCollection)completedargs.Result);
-                        var xcdDialog = new XmlContentDisplayDialog(serialized.OuterXml, "XML Serialized RetrieveMultiple result", false, false, this);
+                        var xcdDialog = new XmlContentDisplayDialog(serialized.OuterXml, "XML Serialized RetrieveMultiple result", false, false, false, this);
                         xcdDialog.StartPosition = FormStartPosition.CenterParent;
                         xcdDialog.ShowDialog();
                     }
                     else if (outputtype == 2 && completedargs.Result is string)
                     {
                         var result = completedargs.Result.ToString();
-                        var xcdDialog = new XmlContentDisplayDialog(result, "JSON Serialized RetrieveMultiple result", false, false, this);
+                        var xcdDialog = new XmlContentDisplayDialog(result, "JSON Serialized RetrieveMultiple result", false, false, false, this);
                         xcdDialog.btnFormat.Visible = false;
                         xcdDialog.StartPosition = FormStartPosition.CenterParent;
                         xcdDialog.ShowDialog();
@@ -1658,7 +1666,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             liveUpdateXml = GetFetchString(false);
             if (xmlLiveUpdate == null)
             {
-                xmlLiveUpdate = new XmlContentDisplayDialog(liveUpdateXml, "FetchXML Live Update", false, true, this);
+                xmlLiveUpdate = new XmlContentDisplayDialog(liveUpdateXml, "FetchXML Live Update", false, true, false, this);
                 xmlLiveUpdate.Disposed += LiveXML_Disposed;
                 xmlLiveUpdate.txtXML.KeyUp += LiveXML_KeyUp;
                 xmlLiveUpdate.Visible = true;
@@ -1689,7 +1697,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 var QEx = GetQueryExpression();
                 var code = QueryExpressionCodeGenerator.GetCSharpQueryExpression(QEx);
-                var view = new XmlContentDisplayDialog(code, "QueryExpression Code", false, false, this);
+                var view = new XmlContentDisplayDialog(code, "QueryExpression Code", false, false, false, this);
                 LogUse("DisplayQExCode");
                 view.ShowDialog();
             }
@@ -1967,7 +1975,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             return result.ToArray();
         }
-        
+
         #endregion Static methods
 
         private void FetchXmlBuilder_FormChanged(object sender, EventArgs e)
