@@ -39,7 +39,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public Size gridWinSize { get; set; }
         public bool gridFriendly { get; set; }
         public DateTime lastUpdateCheck { get; set; }
-        public string fetchxml { get; set; }
+        public List<string> fetchxml { get; set; }
         public bool? logUsage { get; set; }
         public string currentVersion { get; set; }
 

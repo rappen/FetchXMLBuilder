@@ -595,56 +595,39 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         /// <summary>Saves various configurations to file for next session</summary>
         private void SaveSetting()
         {
+            var conn = ConnectionDetail != null ? ConnectionDetail.ConnectionName : "<none>";
             currentSettings.resultOption = tsmiResultOption.SelectedIndex;
-            currentSettings.fetchxml = GetFetchString(false);
+            if (currentSettings.fetchxml == null)
+            {
+                currentSettings.fetchxml = new List<string>();
+            }
+            RemoveConnectionFetchFromSettings(conn);
+            currentSettings.fetchxml.Add(conn + "||" + GetFetchString(false));
             currentSettings.Save();
         }
 
-        //private void SaveControlValue(Configuration config, object control)
-        //{
-        //    if (control is ToolStripMenuItem)
-        //    {
-        //        config.AppSettings.Settings.Add(((ToolStripMenuItem)control).Name, ((ToolStripMenuItem)control).Checked ? "1" : "0");
-        //    }
-        //    else if (control is ToolStripComboBox)
-        //    {
-        //        config.AppSettings.Settings.Add(((ToolStripComboBox)control).Name, ((ToolStripComboBox)control).SelectedIndex.ToString());
-        //    }
-        //}
+        private void RemoveConnectionFetchFromSettings(string conn)
+        {
+            var i = 0;
+            while (i < currentSettings.fetchxml.Count && !currentSettings.fetchxml[i].StartsWith(conn + "||"))
+            {
+                i++;
+            }
+            if (i < currentSettings.fetchxml.Count)
+            {
+                currentSettings.fetchxml.RemoveAt(i);
+            }
+        }
 
-        //private void LoadControlValue(Configuration config, object control)
-        //{
-        //    if (control is ToolStripMenuItem)
-        //    {
-        //        var name = ((ToolStripMenuItem)control).Name;
-        //        if (config.AppSettings.Settings[name] != null)
-        //        {
-        //            ((ToolStripMenuItem)control).Checked = config.AppSettings.Settings[name].Value == "1";
-        //        }
-        //    }
-        //    else if (control is ToolStripComboBox)
-        //    {
-        //        var name = ((ToolStripComboBox)control).Name;
-        //        if (config.AppSettings.Settings[name] != null)
-        //        {
-        //            var index = 0;
-        //            if (int.TryParse(config.AppSettings.Settings[name].Value, out index) && ((ToolStripComboBox)control).Items.Count > index)
-        //            {
-        //                ((ToolStripComboBox)control).SelectedIndex = index;
-        //            }
-        //        }
-        //    }
-        //}
 
         /// <summary>Loads configurations from file</summary>
         private void LoadSetting()
         {
             currentSettings = FXBSettings.Load();
-            if (!string.IsNullOrEmpty(currentSettings.fetchxml))
+            var conn = ConnectionDetail != null ? ConnectionDetail.ConnectionName : "<none>";
+            if (!LoadFetchFromSettings(conn))
             {
-                fetchDoc = new XmlDocument();
-                fetchDoc.LoadXml(currentSettings.fetchxml);
-                DisplayDefinition();
+                LoadFetchFromSettings("");
             }
             tsmiEntitiesAll.Checked = currentSettings.showEntitiesAll;
             tsmiEntitiesManaged.Checked = currentSettings.showEntitiesManaged;
@@ -687,6 +670,25 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     LogUse("Deny", true);
                 }
             }
+        }
+
+        private bool LoadFetchFromSettings(string conn)
+        {
+            if (currentSettings != null && currentSettings.fetchxml != null)
+            {
+                foreach (var fetch in currentSettings.fetchxml)
+                {
+                    if (fetch.StartsWith(conn + "||"))
+                    {
+                        fetchDoc = new XmlDocument();
+                        var fetchxml = fetch.Substring(fetch.IndexOf("||") + 2);
+                        fetchDoc.LoadXml(fetchxml);
+                        DisplayDefinition();
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         /// <summary>Enables or disables all buttons on the form</summary>
