@@ -91,7 +91,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             if (cmbView.SelectedItem is ViewItem)
             {
                 txtFetch.Text = ((ViewItem)cmbView.SelectedItem).GetFetch();
-                txtFetch.Process(true);
+                txtFetch.Process();
                 btnOk.Enabled = true;
             }
             else

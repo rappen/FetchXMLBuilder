@@ -95,7 +95,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppCode\AttributeItem.cs" />
-    <Compile Include="AppCode\Clipboard.cs" />
     <Compile Include="AppCode\FetchIsAggregateException.cs" />
     <Compile Include="AppCode\FXBSettings.cs" />
     <Compile Include="AppCode\LogUsage.cs" />
@@ -107,6 +106,12 @@
     <Compile Include="AppCode\EntityRelationship.cs" />
     <Compile Include="AppCode\OperatorItem.cs" />
     <Compile Include="AppCode\TreeNodeHelper.cs" />
+    <Compile Include="Controls\commentControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\commentControl.Designer.cs">
+      <DependentUpon>commentControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\orderControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -201,6 +206,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\commentControl.resx">
+      <DependentUpon>commentControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\orderControl.resx">
       <DependentUpon>orderControl.cs</DependentUpon>
     </EmbeddedResource>

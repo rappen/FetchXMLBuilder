@@ -98,10 +98,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.nothingToAddToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparatorBeginOfEdition = new System.Windows.Forms.ToolStripSeparator();
-            this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.commentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uncommentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.executeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -699,15 +698,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.addToolStripMenuItem,
             this.deleteToolStripMenuItem,
             this.toolStripSeparatorBeginOfEdition,
-            this.cutToolStripMenuItem,
-            this.copyToolStripMenuItem,
-            this.pasteToolStripMenuItem,
-            this.toolStripMenuItem2,
+            this.commentToolStripMenuItem,
+            this.uncommentToolStripMenuItem,
+            this.toolStripMenuItem1,
             this.moveUpToolStripMenuItem,
             this.moveDownToolStripMenuItem,
             this.executeToolStripMenuItem});
             this.nodeMenu.Name = "nodeMenu";
-            this.nodeMenu.Size = new System.Drawing.Size(203, 192);
+            this.nodeMenu.Size = new System.Drawing.Size(203, 170);
             this.nodeMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
             // addToolStripMenuItem
@@ -747,42 +745,25 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.toolStripSeparatorBeginOfEdition.Name = "toolStripSeparatorBeginOfEdition";
             this.toolStripSeparatorBeginOfEdition.Size = new System.Drawing.Size(199, 6);
-            this.toolStripSeparatorBeginOfEdition.Visible = false;
             // 
-            // cutToolStripMenuItem
+            // commentToolStripMenuItem
             // 
-            this.cutToolStripMenuItem.Enabled = false;
-            this.cutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("cutToolStripMenuItem.Image")));
-            this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
-            this.cutToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.cutToolStripMenuItem.Tag = "Cut";
-            this.cutToolStripMenuItem.Text = "Cut";
-            this.cutToolStripMenuItem.Visible = false;
+            this.commentToolStripMenuItem.Name = "commentToolStripMenuItem";
+            this.commentToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.commentToolStripMenuItem.Tag = "Comment";
+            this.commentToolStripMenuItem.Text = "Comment";
             // 
-            // copyToolStripMenuItem
+            // uncommentToolStripMenuItem
             // 
-            this.copyToolStripMenuItem.Enabled = false;
-            this.copyToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("copyToolStripMenuItem.Image")));
-            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.copyToolStripMenuItem.Tag = "Copy";
-            this.copyToolStripMenuItem.Text = "Copy";
-            this.copyToolStripMenuItem.Visible = false;
+            this.uncommentToolStripMenuItem.Name = "uncommentToolStripMenuItem";
+            this.uncommentToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.uncommentToolStripMenuItem.Tag = "Uncomment";
+            this.uncommentToolStripMenuItem.Text = "Uncomment";
             // 
-            // pasteToolStripMenuItem
+            // toolStripMenuItem1
             // 
-            this.pasteToolStripMenuItem.Enabled = false;
-            this.pasteToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("pasteToolStripMenuItem.Image")));
-            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.pasteToolStripMenuItem.Tag = "Paste";
-            this.pasteToolStripMenuItem.Text = "Paste";
-            this.pasteToolStripMenuItem.Visible = false;
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(199, 6);
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(199, 6);
             // 
             // moveUpToolStripMenuItem
             // 
@@ -852,15 +833,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal System.Windows.Forms.ContextMenuStrip nodeMenu;
         internal System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         internal System.Windows.Forms.ToolStripSeparator toolStripSeparatorBeginOfEdition;
-        internal System.Windows.Forms.ToolStripMenuItem cutToolStripMenuItem;
-        internal System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
-        internal System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton tsbEdit;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem moveUpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem moveDownToolStripMenuItem;
         internal System.Windows.Forms.ToolStripDropDownButton tsbOpen;
@@ -916,5 +893,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem executeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem outputTypeToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton tsbReturnToCaller;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        internal System.Windows.Forms.ToolStripMenuItem commentToolStripMenuItem;
+        internal System.Windows.Forms.ToolStripMenuItem uncommentToolStripMenuItem;
     }
 }

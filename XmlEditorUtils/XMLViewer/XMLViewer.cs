@@ -21,8 +21,8 @@
 
 using System;
 using System.Text;
-using System.Xml.Linq;
 using System.Drawing;
+using System.Xml;
 
 namespace CSRichTextBoxSyntaxHighlighting
 {
@@ -42,6 +42,7 @@ namespace CSRichTextBoxSyntaxHighlighting
                     {
                         AttributeKey = Color.Red,
                         AttributeValue = Color.Blue,
+                        Comment = Color.Green,
                         Tag = Color.Blue,
                         Element = Color.DarkRed,
                         Value = Color.Black,
@@ -62,7 +63,7 @@ namespace CSRichTextBoxSyntaxHighlighting
         /// <param name="includeDeclaration">
         /// Specify whether include the declaration.
         /// </param>
-        public void Process(bool includeDeclaration)
+        public void Process()
         {
             if (string.IsNullOrWhiteSpace(this.Text))
             {
@@ -79,30 +80,13 @@ namespace CSRichTextBoxSyntaxHighlighting
 {1}}}";
 
                 // Get the XDocument from the Text property.
-                var xmlDoc = XDocument.Parse(this.Text, LoadOptions.None);
+                var xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(this.Text);
 
                 StringBuilder xmlRtfContent = new StringBuilder();
 
-                // If includeDeclaration is true and the XDocument has declaration,
-                // then add the declaration to the content.
-                if (includeDeclaration && xmlDoc.Declaration != null)
-                {
-
-                    // The constants in XMLViewerSettings are used to specify the order 
-                    // in colortbl of the Rtf.
-                    xmlRtfContent.AppendFormat(@"
-\cf{0} <?\cf{1} xml \cf{2} version\cf{0} =\cf0 ""\cf{3} {4}\cf0 "" 
-\cf{2} encoding\cf{0} =\cf0 ""\cf{3} {5}\cf0 ""\cf{0} ?>\par",
-                        XMLViewerSettings.TagID,
-                        XMLViewerSettings.ElementID,
-                        XMLViewerSettings.AttributeKeyID,
-                        XMLViewerSettings.AttributeValueID,
-                        xmlDoc.Declaration.Version,
-                        xmlDoc.Declaration.Encoding);
-                }
-
                 // Get the Rtf of the root element.
-                string rootRtfContent = ProcessElement(xmlDoc.Root, 0);
+                string rootRtfContent = ProcessElement(xmlDoc.DocumentElement, 0);
 
                 xmlRtfContent.Append(rootRtfContent);
 
@@ -124,16 +108,8 @@ namespace CSRichTextBoxSyntaxHighlighting
         }
 
         // Get the Rtf of the xml element.
-        private string ProcessElement(XElement element, int level)
+        private string ProcessElement(XmlNode element, int level)
         {
-
-            // This viewer does not support the Xml file that has Namespace.
-            if (!string.IsNullOrEmpty(element.Name.Namespace.NamespaceName))
-            {
-                throw new ApplicationException(
-                    "This viewer does not support the Xml file that has Namespace.");
-            }
-
             string elementRtfFormat = string.Empty;
             StringBuilder childElementsRtfContent = new StringBuilder();
             StringBuilder attributesRtfContent = new StringBuilder();
@@ -144,7 +120,7 @@ namespace CSRichTextBoxSyntaxHighlighting
             // If the element has child elements or value, then add the element to the 
             // Rtf. {{0}} will be replaced with the attributes and {{1}} will be replaced
             // with the child elements or value.
-            if (element.HasElements)
+            if (element.ChildNodes.Count > 0 && !(element.ChildNodes.Count==1 && element.ChildNodes[0] is XmlText))
             {
                 elementRtfFormat = string.Format(@"
 {0}\cf{1} <\cf{2} {3}{{0}}\cf{1} >\par
@@ -156,12 +132,46 @@ namespace CSRichTextBoxSyntaxHighlighting
                     element.Name);
 
                 // Construct the Rtf of child elements.
-                foreach (var childElement in element.Elements())
+                foreach (XmlNode childElement in element.ChildNodes)
                 {
                     string childElementRtfContent =
                         ProcessElement(childElement, level + 1);
                     childElementsRtfContent.Append(childElementRtfContent);
                 }
+            }
+
+            else if (element is XmlComment)
+            {
+                elementRtfFormat = string.Format(@"
+{0}\cf{1} <!--{{0}} 
+{{1}}
+\cf{1} -->\par",
+                    indent,
+                    XMLViewerSettings.TagID);
+
+                childElementsRtfContent.AppendFormat(@"{0}\cf{1} {2}",
+                    new string(' ', 2 * (0 /*level + 1*/)),
+                    XMLViewerSettings.CommentID,
+                    element.Value.Replace("\r\n", "\n").Replace("\n", "\\line "));
+            }
+
+            // If !string.IsNullOrWhiteSpace(element.Value), then construct the Rtf 
+            // of the value.
+            else if (element.ChildNodes.Count == 1 && element.ChildNodes[0] is XmlText)
+            {
+                elementRtfFormat = string.Format(@"
+{0}\cf{1} <\cf{2} {3}{{0}}\cf{1} >
+{{1}}
+\cf{1} </\cf{2} {3}\cf{1} >\par",
+                    indent,
+                    XMLViewerSettings.TagID,
+                    XMLViewerSettings.ElementID,
+                    element.Name);
+
+                childElementsRtfContent.AppendFormat(@"{0}\cf{1} {2}",
+                    new string(' ', 2 * (0 /*level + 1*/)),
+                    XMLViewerSettings.ValueID,
+                    CharacterEncoder.Encode(((XmlText)element.ChildNodes[0]).Value.Trim()));
             }
 
             // If !string.IsNullOrWhiteSpace(element.Value), then construct the Rtf 
@@ -176,12 +186,13 @@ namespace CSRichTextBoxSyntaxHighlighting
                     XMLViewerSettings.TagID,
                     XMLViewerSettings.ElementID,
                     element.Name);
+
                 childElementsRtfContent.AppendFormat(@"{0}\cf{1} {2}",
                     new string(' ', 2 * (0 /*level + 1*/)),
                     XMLViewerSettings.ValueID,
                     CharacterEncoder.Encode(element.Value.Trim()));
             }
-            
+
             // This element only has attributes. {{0}} will be replaced with the attributes.
             else
             {
@@ -195,9 +206,9 @@ namespace CSRichTextBoxSyntaxHighlighting
             }
 
             // Construct the Rtf of the attributes.
-            if (element.HasAttributes)
+            if (element.Attributes != null && element.Attributes.Count > 0)
             {
-                foreach (XAttribute attribute in element.Attributes())
+                foreach (XmlAttribute attribute in element.Attributes)
                 {
                     string attributeRtfContent = string.Format(
                         @" \cf{0} {3}\cf{1} =\cf0 ""\cf{2} {4}\cf0 """,
@@ -214,6 +225,5 @@ namespace CSRichTextBoxSyntaxHighlighting
             return string.Format(elementRtfFormat, attributesRtfContent,
                 childElementsRtfContent);
         }
-
     }
 }

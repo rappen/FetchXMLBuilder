@@ -18,7 +18,7 @@
 using System.Drawing;
 using System.Text;
 
-namespace CSRichTextBoxSyntaxHighlighting 
+namespace CSRichTextBoxSyntaxHighlighting
 {
     public class XMLViewerSettings
     {
@@ -27,6 +27,7 @@ namespace CSRichTextBoxSyntaxHighlighting
         public const int AttributeKeyID = 3;
         public const int AttributeValueID = 4;
         public const int TagID = 5;
+        public const int CommentID = 6;
 
         /// <summary>
         /// The color of an Xml element name.
@@ -49,6 +50,11 @@ namespace CSRichTextBoxSyntaxHighlighting
         public Color AttributeValue { get; set; }
 
         /// <summary>
+        /// The color of comment content
+        /// </summary>
+        public Color Comment { get; set; }
+
+        /// <summary>
         /// The color of the tags and operators like "<,/> and =".
         /// </summary>
         public Color Tag { get; set; }
@@ -65,13 +71,10 @@ namespace CSRichTextBoxSyntaxHighlighting
 
             rtfFormatString.AppendFormat(format, Element.R, Element.G, Element.B);
             rtfFormatString.AppendFormat(format, Value.R, Value.G, Value.B);
-            rtfFormatString.AppendFormat(format,
-                AttributeKey.R, 
-                AttributeKey.G, 
-                AttributeKey.B);
-            rtfFormatString.AppendFormat(format, AttributeValue.R, 
-                AttributeValue.G, AttributeValue.B);
+            rtfFormatString.AppendFormat(format, AttributeKey.R, AttributeKey.G, AttributeKey.B);
+            rtfFormatString.AppendFormat(format, AttributeValue.R, AttributeValue.G, AttributeValue.B);
             rtfFormatString.AppendFormat(format, Tag.R, Tag.G, Tag.B);
+            rtfFormatString.AppendFormat(format, Comment.R, Comment.G, Comment.B);
 
             return rtfFormatString.ToString();
 

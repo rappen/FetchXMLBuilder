@@ -17,15 +17,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         /// <param name="xmlNode">Xml node from the sitemap</param>
         /// <param name="form">Current application form</param>
         /// <param name="isDisabled"> </param>
-        public static void AddTreeViewNode(object parentObject, XmlNode xmlNode, FetchXmlBuilder form, bool isDisabled = false)
+        public static void AddTreeViewNode(object parentObject, XmlNode xmlNode, FetchXmlBuilder form, int index = -1)
         {
-            if (xmlNode is XmlElement)
+            if (xmlNode is XmlElement || xmlNode is XmlComment)
             {
                 TreeNode node = new TreeNode(xmlNode.Name);
                 node.Name = xmlNode.Name;
                 Dictionary<string, string> attributes = new Dictionary<string, string>();
 
-                if (xmlNode.Attributes != null)
+                if (xmlNode.NodeType == XmlNodeType.Comment)
+                {
+                    attributes.Add("#comment", xmlNode.Value);
+                    node.ForeColor = System.Drawing.Color.Gray;
+                }
+                else if (xmlNode.Attributes != null)
                 {
                     foreach (XmlAttribute attr in xmlNode.Attributes)
                     {
@@ -38,7 +43,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 }
                 else if (parentObject is TreeNode)
                 {
-                    ((TreeNode)parentObject).Nodes.Add(node);
+                    if (index == -1)
+                    {
+                        ((TreeNode)parentObject).Nodes.Add(node);
+                    }
+                    else
+                    {
+                        ((TreeNode)parentObject).Nodes.Insert(index, node);
+                    }
                 }
                 else
                 {
@@ -48,10 +60,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 AddContextMenu(node, form);
                 foreach (XmlNode childNode in xmlNode.ChildNodes)
                 {
-                    if (childNode.NodeType != XmlNodeType.Comment)
-                    {
-                        AddTreeViewNode(node, childNode, form);
-                    }
+                    AddTreeViewNode(node, childNode, form);
                 }
                 SetNodeText(node, FetchXmlBuilder.friendlyNames);
             }
@@ -207,6 +216,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         }
                     }
                     break;
+                case "#comment":
+                    text = GetAttributeFromNode(node, "#comment").Trim().Replace("\r\n", "  ");
+                    if (string.IsNullOrWhiteSpace(text))
+                    {
+                        text = " - comment - ";
+                    }
+                    break;
             }
             if (friendly && !string.IsNullOrEmpty(text))
             {
@@ -240,12 +256,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 var dummy = form.addMenu.Items.Add("nothing to add");
                 dummy.Enabled = false;
             }
-            var cutcopy = true;
 
             form.deleteToolStripMenuItem.Enabled = nodecapabilities.Delete;
-            form.cutToolStripMenuItem.Enabled = cutcopy;
-            form.copyToolStripMenuItem.Enabled = cutcopy;
-            form.pasteToolStripMenuItem.Enabled = form.clipboard.IsValidForPaste(node);
+            form.commentToolStripMenuItem.Enabled = nodecapabilities.Comment;
+            form.uncommentToolStripMenuItem.Enabled = nodecapabilities.Uncomment;
 
             node.ContextMenuStrip = form.nodeMenu;
         }
@@ -278,35 +292,41 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         /// <param name="parentXmlNode">Parent xml node</param>
         internal static void AddXmlNode(TreeNode currentNode, XmlNode parentXmlNode)
         {
-            XmlNode newNode = parentXmlNode.OwnerDocument.CreateElement(currentNode.Name);
-
             var collec = (Dictionary<string, string>)currentNode.Tag;
-
-            foreach (string key in collec.Keys)
+            XmlNode newNode;
+            if (currentNode.Name == "#comment")
             {
-                if (key == "#text")
-                {
-                    XmlText newText = parentXmlNode.OwnerDocument.CreateTextNode(collec[key]);
-                    newNode.AppendChild(newText);
-                }
-                else
-                {
-                    XmlAttribute attr = parentXmlNode.OwnerDocument.CreateAttribute(key);
-                    attr.Value = collec[key];
-                    newNode.Attributes.Append(attr);
-                }
+                newNode = parentXmlNode.OwnerDocument.CreateComment(collec.ContainsKey("#comment") ? collec["#comment"] : "");
             }
-
-            var others = new List<TreeNode>();
-
-            foreach (TreeNode childNode in currentNode.Nodes)
+            else
             {
-                others.Add(childNode);
-            }
+                newNode = parentXmlNode.OwnerDocument.CreateElement(currentNode.Name);
+                foreach (string key in collec.Keys)
+                {
+                    if (key == "#text")
+                    {
+                        XmlText newText = parentXmlNode.OwnerDocument.CreateTextNode(collec[key]);
+                        newNode.AppendChild(newText);
+                    }
+                    else
+                    {
+                        XmlAttribute attr = parentXmlNode.OwnerDocument.CreateAttribute(key);
+                        attr.Value = collec[key];
+                        newNode.Attributes.Append(attr);
+                    }
+                }
 
-            foreach (TreeNode otherNode in others)
-            {
-                AddXmlNode(otherNode, newNode);
+                var others = new List<TreeNode>();
+
+                foreach (TreeNode childNode in currentNode.Nodes)
+                {
+                    others.Add(childNode);
+                }
+
+                foreach (TreeNode otherNode in others)
+                {
+                    AddXmlNode(otherNode, newNode);
+                }
             }
 
             parentXmlNode.AppendChild(newNode);
@@ -317,6 +337,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             var childNode = new TreeNode(name);
             childNode.Tag = new Dictionary<string, string>();
             childNode.Name = childNode.Text.Replace(" ", "");
+            if (name == "#comment")
+            {
+                childNode.ForeColor = System.Drawing.Color.Gray;
+            }
             if (parentNode != null)
             {
                 var parentCap = new FetchNodeCapabilities(parentNode);

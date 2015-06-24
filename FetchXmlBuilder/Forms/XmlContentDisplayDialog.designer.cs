@@ -129,6 +129,7 @@
             xmlViewerSettings1.AttributeKey = System.Drawing.Color.Red;
             xmlViewerSettings1.AttributeValue = System.Drawing.Color.Blue;
             xmlViewerSettings1.Element = System.Drawing.Color.DarkRed;
+            xmlViewerSettings1.Comment = System.Drawing.Color.Green;
             xmlViewerSettings1.Tag = System.Drawing.Color.Blue;
             xmlViewerSettings1.Value = System.Drawing.Color.Black;
             this.txtXML.Settings = xmlViewerSettings1;

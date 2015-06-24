@@ -62,7 +62,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             try
             {
                 XmlDocument doc = new XmlDocument();
-                doc.LoadXml(txtXML.Text);
+                doc.LoadXml(txtXML.Text.Replace("\n", "\r\n"));
                 result = doc.DocumentElement;
             }
             catch (Exception error)
@@ -76,7 +76,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             try
             {
-                txtXML.Process(true);
+                txtXML.Process();
             }
             catch (Exception ex)
             {

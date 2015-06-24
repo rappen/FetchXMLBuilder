@@ -11,6 +11,8 @@ namespace Cinteros.Xrm.XmlEditorUtils
     {
         public string Name = "";
         public bool Delete = false;
+        public bool Comment = true;
+        public bool Uncomment = false;
         public List<ChildNodeCapabilities> ChildTypes = new List<ChildNodeCapabilities>();
 
         public TreeNodeCapabilities() { }

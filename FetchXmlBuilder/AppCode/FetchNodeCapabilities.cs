@@ -16,7 +16,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             switch (Name)
             {
                 case "fetch":
+                    Comment = false;
                     ChildTypes.Add(new ChildNodeCapabilities("entity", false));
+                    ChildTypes.Add(new ChildNodeCapabilities("-", true));
+                    ChildTypes.Add(new ChildNodeCapabilities("#comment", true));
                     break;
                 case "entity":
                 case "link-entity":
@@ -28,23 +31,36 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     ChildTypes.Add(new ChildNodeCapabilities("filter", false));
                     ChildTypes.Add(new ChildNodeCapabilities("order", true));
                     ChildTypes.Add(new ChildNodeCapabilities("link-entity", true));
+                    ChildTypes.Add(new ChildNodeCapabilities("-", true));
+                    ChildTypes.Add(new ChildNodeCapabilities("#comment", true));
                     break;
                 case "all-attributes":
                 case "attribute":
                 case "order":
                     Delete = true;
+                    ChildTypes.Add(new ChildNodeCapabilities("#comment", true));
                     break;
                 case "filter":
                     Delete = true;
                     ChildTypes.Add(new ChildNodeCapabilities("condition", true));
                     ChildTypes.Add(new ChildNodeCapabilities("filter", true));
+                    ChildTypes.Add(new ChildNodeCapabilities("-", true));
+                    ChildTypes.Add(new ChildNodeCapabilities("#comment", true));
                     break;
                 case "condition":
                     Delete = true;
                     ChildTypes.Add(new ChildNodeCapabilities("value", true));
+                    ChildTypes.Add(new ChildNodeCapabilities("-", true));
+                    ChildTypes.Add(new ChildNodeCapabilities("#comment", true));
                     break;
                 case "value":
                     Delete = true;
+                    ChildTypes.Add(new ChildNodeCapabilities("#comment", true));
+                    break;
+                case "#comment":
+                    Delete = true;
+                    Comment = false;
+                    Uncomment = true;
                     break;
             }
         }

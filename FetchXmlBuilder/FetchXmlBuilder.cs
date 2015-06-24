@@ -19,7 +19,6 @@ using System.Xml.Linq;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Forms;
-using Clipboard = Cinteros.Xrm.FetchXmlBuilder.AppCode.Clipboard;
 
 namespace Cinteros.Xrm.FetchXmlBuilder
 {
@@ -27,7 +26,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
     {
         #region Declarations
         const string settingfile = "Cinteros.Xrm.FetchXmlBuilder.Settings.xml";
-        internal Clipboard clipboard = new Clipboard();
         private XmlDocument fetchDoc;
         private static Dictionary<string, EntityMetadata> entities;
         internal static List<string> entityShitList = new List<string>(); // Oops, did I name that one??
@@ -221,6 +219,30 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (tsmiLiveUpdate.Checked)
             {
                 UpdateLiveXML();
+            }
+        }
+
+        private void FetchXmlBuilder_FormChanged(object sender, EventArgs e)
+        {
+            if (tsmiLiveUpdate.Checked && xmlLiveUpdate != null)
+            {
+                AlignLiveXML();
+            }
+        }
+
+        private void FetchXmlBuilder_Leave(object sender, EventArgs e)
+        {
+            if (tsmiLiveUpdate.Checked && xmlLiveUpdate != null)
+            {
+                xmlLiveUpdate.Visible = false;
+            }
+        }
+
+        private void FetchXmlBuilder_Enter(object sender, EventArgs e)
+        {
+            if (tsmiLiveUpdate.Checked && xmlLiveUpdate != null)
+            {
+                xmlLiveUpdate.Visible = true;
             }
         }
 
@@ -887,13 +909,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (ClickedItem == null || ClickedItem.Tag == null || ClickedItem.Tag.ToString() == "Add")
                 return;
             else if (ClickedItem.Tag.ToString() == "Delete")
+            {
                 tvFetch.SelectedNode.Remove();
-            //else if (ClickedItem.Tag.ToString() == "Cut")
-            //    clipboard.Cut(tvFetch.SelectedNode);
-            //else if (ClickedItem.Tag.ToString() == "Copy")
-            //    clipboard.Copy(tvFetch.SelectedNode);
-            //else if (ClickedItem.Tag.ToString() == "Paste")
-            //    clipboard.Paste(tvFetch.SelectedNode);
+            }
+            else if (ClickedItem.Tag.ToString() == "Comment")
+            {
+                CommentNode();
+            }
+            else if (ClickedItem.Tag.ToString() == "Uncomment")
+            {
+                UncommentNode();
+            }
             else if (ClickedItem.Tag.ToString() == "Attributes...")
             {
                 AddAttributes();
@@ -1002,6 +1028,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         break;
                     case "value":
                         ctrl = new valueControl(collec, this);
+                        break;
+                    case "#comment":
+                        ctrl = new commentControl(collec, this);
                         break;
 
                     default:
@@ -1640,6 +1669,52 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
+        private void CommentNode()
+        {
+            var node = tvFetch.SelectedNode;
+            if (node != null)
+            {
+                var doc = new XmlDocument();
+                XmlNode rootNode = doc.CreateElement("root");
+                doc.AppendChild(rootNode);
+                TreeNodeHelper.AddXmlNode(node, rootNode);
+                XDocument xdoc = XDocument.Parse(rootNode.InnerXml);
+                var comment = xdoc.ToString();
+                if (node.Nodes != null && node.Nodes.Count > 0)
+                {
+                    comment = "\r\n" + comment + "\r\n";
+                }
+                var commentNode = doc.CreateComment(comment);
+                TreeNodeHelper.AddTreeViewNode(node.Parent, commentNode, this, node.Index);
+                node.Parent.Nodes.Remove(node);
+            }
+        }
+
+        private void UncommentNode()
+        {
+            var node = tvFetch.SelectedNode;
+            if (node != null && node.Tag is Dictionary<string, string>)
+            {
+                var coll = node.Tag as Dictionary<string, string>;
+                if (coll.ContainsKey("#comment"))
+                {
+                    var comment = coll["#comment"];
+                    var doc = new XmlDocument();
+                    try
+                    {
+                        doc.LoadXml(comment);
+                        TreeNodeHelper.AddTreeViewNode(node.Parent, doc.DocumentElement, this, node.Index);
+                        node.Parent.Nodes.Remove(node);
+                    }
+                    catch (XmlException ex)
+                    {
+                        var msg = "Comment does contain well formatted xml.\nError description:\n\n" + ex.Message;
+                        MessageBox.Show(msg, "Uncomment", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+            }
+        }
+
         private void ParseXML(string xml, bool validate)
         {
             fetchDoc = new XmlDocument();
@@ -1977,29 +2052,5 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         }
 
         #endregion Static methods
-
-        private void FetchXmlBuilder_FormChanged(object sender, EventArgs e)
-        {
-            if (tsmiLiveUpdate.Checked && xmlLiveUpdate != null)
-            {
-                AlignLiveXML();
-            }
-        }
-
-        private void FetchXmlBuilder_Leave(object sender, EventArgs e)
-        {
-            if (tsmiLiveUpdate.Checked && xmlLiveUpdate != null)
-            {
-                xmlLiveUpdate.Visible = false;
-            }
-        }
-
-        private void FetchXmlBuilder_Enter(object sender, EventArgs e)
-        {
-            if (tsmiLiveUpdate.Checked && xmlLiveUpdate != null)
-            {
-                xmlLiveUpdate.Visible = true;
-            }
-        }
     }
 }
