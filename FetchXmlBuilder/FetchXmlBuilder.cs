@@ -390,6 +390,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tnmNodeParent.Nodes.Insert(idxBegin, tnmNextNode);
                     tnmNodeParent.Nodes.Insert(idxEnd, tnmNode);
                     tvFetch.SelectedNode = tnmNode;
+                    if (tsmiLiveUpdate.Checked)
+                    {
+                        UpdateLiveXML();
+                    }
                 }
             }
             moveDownToolStripMenuItem.Enabled = true;
@@ -412,6 +416,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tnmNodeParent.Nodes.Insert(idxEnd, tnmNode);
                     tnmNodeParent.Nodes.Insert(idxBegin, tnmPreviousNode);
                     tvFetch.SelectedNode = tnmNode;
+                    if (tsmiLiveUpdate.Checked)
+                    {
+                        UpdateLiveXML();
+                    }
                 }
             }
             moveUpToolStripMenuItem.Enabled = true;
