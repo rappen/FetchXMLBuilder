@@ -104,6 +104,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.executeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hiddenEditToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain.SuspendLayout();
             this.gbProperties.SuspendLayout();
             this.gbFetchTree.SuspendLayout();
@@ -335,6 +336,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiFriendly.CheckOnClick = true;
             this.tsmiFriendly.Name = "tsmiFriendly";
+            this.tsmiFriendly.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
             this.tsmiFriendly.Size = new System.Drawing.Size(223, 22);
             this.tsmiFriendly.Text = "Friendly names";
             this.tsmiFriendly.CheckedChanged += new System.EventHandler(this.tsmiFriendly_CheckedChanged);
@@ -636,6 +638,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiLiveUpdate.CheckOnClick = true;
             this.tsmiLiveUpdate.Name = "tsmiLiveUpdate";
+            this.tsmiLiveUpdate.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
             this.tsmiLiveUpdate.Size = new System.Drawing.Size(223, 22);
             this.tsmiLiveUpdate.Text = "Live XML Update";
             this.tsmiLiveUpdate.CheckedChanged += new System.EventHandler(this.tsmiLiveUpdate_CheckedChanged);
@@ -703,9 +706,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripMenuItem1,
             this.moveUpToolStripMenuItem,
             this.moveDownToolStripMenuItem,
-            this.executeToolStripMenuItem});
+            this.executeToolStripMenuItem,
+            this.hiddenEditToolStripMenuItem});
             this.nodeMenu.Name = "nodeMenu";
-            this.nodeMenu.Size = new System.Drawing.Size(203, 170);
+            this.nodeMenu.Size = new System.Drawing.Size(203, 214);
             this.nodeMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
             // addToolStripMenuItem
@@ -791,6 +795,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.executeToolStripMenuItem.Text = "hidden execute";
             this.executeToolStripMenuItem.Visible = false;
             this.executeToolStripMenuItem.Click += new System.EventHandler(this.tsbExecute_Click);
+            // 
+            // hiddenEditToolStripMenuItem
+            // 
+            this.hiddenEditToolStripMenuItem.Name = "hiddenEditToolStripMenuItem";
+            this.hiddenEditToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+            this.hiddenEditToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.hiddenEditToolStripMenuItem.Text = "hidden edit";
+            this.hiddenEditToolStripMenuItem.Visible = false;
+            this.hiddenEditToolStripMenuItem.Click += new System.EventHandler(this.tsbEdit_Click);
             // 
             // FetchXmlBuilder
             // 
@@ -896,5 +909,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         internal System.Windows.Forms.ToolStripMenuItem commentToolStripMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem uncommentToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem hiddenEditToolStripMenuItem;
     }
 }
