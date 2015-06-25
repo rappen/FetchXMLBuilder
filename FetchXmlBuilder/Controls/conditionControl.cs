@@ -224,7 +224,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             break;
                         case AttributeTypeCode.PartyList:
                         case AttributeTypeCode.CalendarRules:
-                        case AttributeTypeCode.ManagedProperty:
+                        //case AttributeTypeCode.ManagedProperty:   // ManagedProperty is a bit "undefined", so let's accept all values for now... ref issue #67
                             error = "Unsupported condition attribute type: " + valueType;
                             break;
                     }

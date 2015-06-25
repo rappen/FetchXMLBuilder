@@ -216,6 +216,8 @@ namespace Cinteros.Xrm.XmlEditorUtils
                 return ((OptionSetValue)attribute).Value;
             else if (attribute is Money)
                 return ((Money)attribute).Value;
+            else if (attribute is BooleanManagedProperty)
+                return ((BooleanManagedProperty)attribute).Value;
             else
                 return attribute;
         }
@@ -227,7 +229,10 @@ namespace Cinteros.Xrm.XmlEditorUtils
             if (attribute is AliasedValue)
                 return AttributeToString(((AliasedValue)attribute).Value, meta);
             else if (attribute is EntityReference)
-                return ((EntityReference)attribute).Name;
+                if (!string.IsNullOrEmpty(((EntityReference)attribute).Name))
+                    return ((EntityReference)attribute).Name;
+                else
+                    return ((EntityReference)attribute).Id.ToString();
             else if (attribute is EntityCollection && ((EntityCollection)attribute).EntityName == "activityparty")
             {
                 var result = "";
@@ -274,6 +279,8 @@ namespace Cinteros.Xrm.XmlEditorUtils
             }
             else if (attribute is Money)
                 return ((Money)attribute).Value.ToString();
+            else if (attribute is BooleanManagedProperty)
+                return ((BooleanManagedProperty)attribute).Value.ToString();
             else
                 return attribute.ToString();
         }
