@@ -6,6 +6,7 @@ using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
@@ -109,6 +110,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private XmlContentDisplayDialog xmlLiveUpdate;
         private string liveUpdateXml = "";
         private MessageBusEventArgs callerArgs = null;
+        String[] entityProperties = { "LogicalName", "DisplayName", "ObjectTypeCode", "IsManaged", "IsCustomizable", "IsCustomEntity", "IsIntersect", "IsValidForAdvancedFind" };
+        String[] entityDetails = { "Attributes", "ManyToOneRelationships", "OneToManyRelationships", "ManyToManyRelationships" };
+        String[] attributeProperties = { "DisplayName", "AttributeType", "IsValidForRead", "AttributeOf", "IsManaged", "IsCustomizable", "IsCustomAttribute", "IsValidForAdvancedFind", "IsPrimaryId", "OptionSet" };
         #endregion Declarations
 
         public FetchXmlBuilder()
@@ -619,7 +623,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
-
         /// <summary>Loads configurations from file</summary>
         private void LoadSetting()
         {
@@ -952,6 +955,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (tvFetch.SelectedNode != node)
             {
                 tvFetch.SelectedNode = node;
+                return;
             }
 
             UserControl ctrl = null;
@@ -1086,10 +1090,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 (eventargs) =>
                 {
                     EnableControls(false);
-                    var req = new RetrieveAllEntitiesRequest()
+
+                    var eqe = new EntityQueryExpression();
+                    eqe.Properties = new MetadataPropertiesExpression(entityProperties);
+                    var req = new RetrieveMetadataChangesRequest()
                     {
-                        EntityFilters = EntityFilters.Entity,
-                        RetrieveAsIfPublished = true
+                        Query = eqe,
+                        ClientVersionStamp = null
                     };
                     eventargs.Result = Service.Execute(req);
                 },
@@ -1101,10 +1108,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     else
                     {
-                        if (completedargs.Result is RetrieveAllEntitiesResponse)
+                        if (completedargs.Result is RetrieveMetadataChangesResponse)
                         {
                             entities = new Dictionary<string, EntityMetadata>();
-                            foreach (var entity in ((RetrieveAllEntitiesResponse)completedargs.Result).EntityMetadata)
+                            foreach (var entity in ((RetrieveMetadataChangesResponse)completedargs.Result).EntityMetadata)
                             {
                                 entities.Add(entity.LogicalName, entity);
                             }
@@ -1122,11 +1129,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             WorkAsync("Loading " + name + "...",
                 (eventargs) =>
                 {
-                    var req = new RetrieveEntityRequest()
+                    var eqe = new EntityQueryExpression();
+                    eqe.Properties = new MetadataPropertiesExpression(entityProperties);
+                    eqe.Properties.PropertyNames.AddRange(entityDetails);
+                    eqe.Criteria.Conditions.Add(new MetadataConditionExpression("LogicalName", MetadataConditionOperator.Equals, entityName));
+                    var aqe = new AttributeQueryExpression();
+                    aqe.Properties = new MetadataPropertiesExpression(attributeProperties);
+                    eqe.AttributeQuery = aqe;
+                    var req = new RetrieveMetadataChangesRequest()
                     {
-                        LogicalName = entityName,
-                        EntityFilters = EntityFilters.Attributes | EntityFilters.Relationships,
-                        RetrieveAsIfPublished = true
+                        Query = eqe,
+                        ClientVersionStamp = null
                     };
                     eventargs.Result = Service.Execute(req);
                 },
@@ -1139,16 +1152,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     else
                     {
-                        if (completedargs.Result is RetrieveEntityResponse)
+                        if (completedargs.Result is RetrieveMetadataChangesResponse)
                         {
-                            var resp = (RetrieveEntityResponse)completedargs.Result;
-                            if (entities.ContainsKey(entityName))
+                            var resp = (RetrieveMetadataChangesResponse)completedargs.Result;
+                            if (resp.EntityMetadata.Count == 1)
                             {
-                                entities[entityName] = resp.EntityMetadata;
-                            }
-                            else
-                            {
-                                entities.Add(entityName, resp.EntityMetadata);
+                                if (entities.ContainsKey(entityName))
+                                {
+                                    entities[entityName] = resp.EntityMetadata[0];
+                                }
+                                else
+                                {
+                                    entities.Add(entityName, resp.EntityMetadata[0]);
+                                }
                             }
                         }
                         working = false;
@@ -1914,17 +1930,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     result = entity.DisplayName.UserLocalizedLabel.Label;
                 }
-                //else
-                //{
-                //    foreach (var label in entity.DisplayName.LocalizedLabels)
-                //    {
-                //        if (label.LanguageCode == userLCID)
-                //        {
-                //            result = label.Label;
-                //            break;
-                //        }
-                //    }
-                //}
                 if (result == entity.LogicalName && entity.DisplayName.LocalizedLabels.Count > 0)
                 {
                     result = entity.DisplayName.LocalizedLabels[0].Label;
@@ -1974,17 +1979,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     attributeName = attribute.DisplayName.UserLocalizedLabel.Label;
                 }
-                //else
-                //{
-                //    foreach (var label in attribute.DisplayName.LocalizedLabels)
-                //    {
-                //        if (label.LanguageCode == userLCID)
-                //        {
-                //            attributeName = label.Label;
-                //            break;
-                //        }
-                //    }
-                //}
                 if (attributeName == attribute.LogicalName && attribute.DisplayName.LocalizedLabels.Count > 0)
                 {
                     attributeName = attribute.DisplayName.LocalizedLabels[0].Label;
