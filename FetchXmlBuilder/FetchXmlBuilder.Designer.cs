@@ -753,6 +753,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // commentToolStripMenuItem
             // 
             this.commentToolStripMenuItem.Name = "commentToolStripMenuItem";
+            this.commentToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.K)));
             this.commentToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.commentToolStripMenuItem.Tag = "Comment";
             this.commentToolStripMenuItem.Text = "Comment";
@@ -760,6 +761,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // uncommentToolStripMenuItem
             // 
             this.uncommentToolStripMenuItem.Name = "uncommentToolStripMenuItem";
+            this.uncommentToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
             this.uncommentToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.uncommentToolStripMenuItem.Tag = "Uncomment";
             this.uncommentToolStripMenuItem.Text = "Uncomment";
