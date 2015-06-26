@@ -380,6 +380,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void toolStripButtonMoveDown_Click(object sender, EventArgs e)
         {
             moveDownToolStripMenuItem.Enabled = false;
+            working = true;
             TreeNode tnmNode = tvFetch.SelectedNode;
             TreeNode tnmNextNode = tnmNode.NextNode;
             if (tnmNextNode != null)
@@ -400,12 +401,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                 }
             }
+            working = false;
             moveDownToolStripMenuItem.Enabled = true;
         }
 
         private void toolStripButtonMoveUp_Click(object sender, EventArgs e)
         {
             moveUpToolStripMenuItem.Enabled = false;
+            working = true;
             TreeNode tnmNode = tvFetch.SelectedNode;
             TreeNode tnmPreviousNode = tnmNode.PrevNode;
             if (tnmPreviousNode != null)
@@ -426,6 +429,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                 }
             }
+            working = false;
             moveUpToolStripMenuItem.Enabled = true;
         }
 
@@ -921,8 +925,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             if (ClickedItem == null || ClickedItem.Tag == null || ClickedItem.Tag.ToString() == "Add")
                 return;
-            else if (ClickedItem.Tag.ToString() == "Delete")
+            TreeNode updateNode = null;
+            if (ClickedItem.Tag.ToString() == "Delete")
             {
+                updateNode = tvFetch.SelectedNode.Parent;
                 tvFetch.SelectedNode.Remove();
             }
             else if (ClickedItem.Tag.ToString() == "Comment")
@@ -940,8 +946,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             else
             {
                 string nodeText = ClickedItem.Tag.ToString();
-                var newNode = TreeNodeHelper.AddChildNode(tvFetch.SelectedNode, nodeText);
-                HandleNodeSelection(newNode);
+                updateNode = TreeNodeHelper.AddChildNode(tvFetch.SelectedNode, nodeText);
+                HandleNodeSelection(updateNode);
+            }
+            if (updateNode != null)
+            {
+                TreeNodeHelper.SetNodeTooltip(updateNode);
             }
             FetchChanged = treeChecksum != GetTreeChecksum(null);
             if (tsmiLiveUpdate.Checked)
@@ -952,115 +962,118 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void HandleNodeSelection(TreeNode node)
         {
-            if (tvFetch.SelectedNode != node)
+            if (!working)
             {
-                tvFetch.SelectedNode = node;
-                return;
-            }
-
-            UserControl ctrl = null;
-            Control existingControl = panelContainer.Controls.Count > 0 ? panelContainer.Controls[0] : null;
-            if (node != null)
-            {
-                TreeNodeHelper.AddContextMenu(node, this);
-                this.deleteToolStripMenuItem.Text = "Delete " + node.Name;
-                var collec = (Dictionary<string, string>)node.Tag;
-
-                switch (node.Name)
+                if (tvFetch.SelectedNode != node)
                 {
-                    case "fetch":
-                        ctrl = new fetchControl(collec, this);
-                        break;
-                    case "entity":
-                        ctrl = new entityControl(collec, this);
-                        break;
-                    case "link-entity":
-                        if (node.Parent != null)
-                        {
-                            switch (node.Parent.Name)
+                    tvFetch.SelectedNode = node;
+                    return;
+                }
+
+                UserControl ctrl = null;
+                Control existingControl = panelContainer.Controls.Count > 0 ? panelContainer.Controls[0] : null;
+                if (node != null)
+                {
+                    TreeNodeHelper.AddContextMenu(node, this);
+                    this.deleteToolStripMenuItem.Text = "Delete " + node.Name;
+                    var collec = (Dictionary<string, string>)node.Tag;
+
+                    switch (node.Name)
+                    {
+                        case "fetch":
+                            ctrl = new fetchControl(collec, this);
+                            break;
+                        case "entity":
+                            ctrl = new entityControl(collec, this);
+                            break;
+                        case "link-entity":
+                            if (node.Parent != null)
                             {
-                                case "entity":
-                                case "link-entity":
-                                    var entityName = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
-                                    if (NeedToLoadEntity(entityName))
-                                    {
-                                        if (!working)
+                                switch (node.Parent.Name)
+                                {
+                                    case "entity":
+                                    case "link-entity":
+                                        var entityName = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
+                                        if (NeedToLoadEntity(entityName))
                                         {
-                                            LoadEntityDetails(entityName, RefreshSelectedNode);
+                                            if (!working)
+                                            {
+                                                LoadEntityDetails(entityName, RefreshSelectedNode);
+                                            }
+                                            break;
                                         }
                                         break;
-                                    }
-                                    break;
+                                }
                             }
-                        }
-                        var linkEntityName = TreeNodeHelper.GetAttributeFromNode(node, "name");
-                        if (NeedToLoadEntity(linkEntityName))
-                        {
-                            if (!working)
+                            var linkEntityName = TreeNodeHelper.GetAttributeFromNode(node, "name");
+                            if (NeedToLoadEntity(linkEntityName))
                             {
-                                LoadEntityDetails(linkEntityName, RefreshSelectedNode);
+                                if (!working)
+                                {
+                                    LoadEntityDetails(linkEntityName, RefreshSelectedNode);
+                                }
+                                break;
+                            }
+                            ctrl = new linkEntityControl(node, this);
+                            break;
+                        case "attribute":
+                        case "order":
+                            if (node.Parent != null)
+                            {
+                                switch (node.Parent.Name)
+                                {
+                                    case "entity":
+                                    case "link-entity":
+                                        var entityName = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
+                                        if (NeedToLoadEntity(entityName))
+                                        {
+                                            if (!working)
+                                            {
+                                                LoadEntityDetails(entityName, RefreshSelectedNode);
+                                            }
+                                            break;
+                                        }
+                                        AttributeMetadata[] attributes = GetDisplayAttributes(entityName);
+                                        if (node.Name == "attribute")
+                                        {
+                                            ctrl = new attributeControl(node, attributes, this);
+                                        }
+                                        else if (node.Name == "order")
+                                        {
+                                            ctrl = new orderControl(node, attributes, this);
+                                        }
+                                        break;
+                                }
                             }
                             break;
-                        }
-                        ctrl = new linkEntityControl(node, this);
-                        break;
-                    case "attribute":
-                    case "order":
-                        if (node.Parent != null)
-                        {
-                            switch (node.Parent.Name)
-                            {
-                                case "entity":
-                                case "link-entity":
-                                    var entityName = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
-                                    if (NeedToLoadEntity(entityName))
-                                    {
-                                        if (!working)
-                                        {
-                                            LoadEntityDetails(entityName, RefreshSelectedNode);
-                                        }
-                                        break;
-                                    }
-                                    AttributeMetadata[] attributes = GetDisplayAttributes(entityName);
-                                    if (node.Name == "attribute")
-                                    {
-                                        ctrl = new attributeControl(node, attributes, this);
-                                    }
-                                    else if (node.Name == "order")
-                                    {
-                                        ctrl = new orderControl(node, attributes, this);
-                                    }
-                                    break;
-                            }
-                        }
-                        break;
-                    case "filter":
-                        ctrl = new filterControl(collec, this);
-                        break;
-                    case "condition":
-                        ctrl = new conditionControl(node, this);
-                        break;
-                    case "value":
-                        ctrl = new valueControl(collec, this);
-                        break;
-                    case "#comment":
-                        ctrl = new commentControl(collec, this);
-                        break;
+                        case "filter":
+                            ctrl = new filterControl(collec, this);
+                            break;
+                        case "condition":
+                            ctrl = new conditionControl(node, this);
+                            break;
+                        case "value":
+                            ctrl = new valueControl(collec, this);
+                            break;
+                        case "#comment":
+                            ctrl = new commentControl(collec, this);
+                            break;
 
-                    default:
-                        {
-                            panelContainer.Controls.Clear();
-                        }
-                        break;
+                        default:
+                            {
+                                panelContainer.Controls.Clear();
+                            }
+                            break;
+                    }
                 }
-            }
-            if (ctrl != null)
-            {
-                panelContainer.Controls.Add(ctrl);
-                ctrl.BringToFront();
-                //ctrl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
-                ctrl.Dock = DockStyle.Fill;
-                if (existingControl != null) panelContainer.Controls.Remove(existingControl);
+                if (ctrl != null)
+                {
+                    panelContainer.Controls.Add(ctrl);
+                    ctrl.BringToFront();
+                    //ctrl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
+                    ctrl.Dock = DockStyle.Fill;
+                    if (existingControl != null) panelContainer.Controls.Remove(existingControl);
+                }
             }
             ManageMenuDisplay();
         }
@@ -1711,8 +1724,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     comment = "\r\n" + comment + "\r\n";
                 }
                 var commentNode = doc.CreateComment(comment);
-                TreeNodeHelper.AddTreeViewNode(node.Parent, commentNode, this, node.Index);
+                var parent = node.Parent;
+                var index = node.Index;
                 node.Parent.Nodes.Remove(node);
+                TreeNodeHelper.AddTreeViewNode(parent, commentNode, this, index);
             }
         }
 
@@ -1729,8 +1744,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     try
                     {
                         doc.LoadXml(comment);
-                        TreeNodeHelper.AddTreeViewNode(node.Parent, doc.DocumentElement, this, node.Index);
+                        var parent = node.Parent;
+                        var index = node.Index;
                         node.Parent.Nodes.Remove(node);
+                        TreeNodeHelper.AddTreeViewNode(parent, doc.DocumentElement, this, index);
                     }
                     catch (XmlException ex)
                     {

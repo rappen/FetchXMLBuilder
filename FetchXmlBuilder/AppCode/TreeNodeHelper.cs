@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
@@ -229,6 +230,33 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 text = text.Substring(0, 1).ToUpper() + text.Substring(1);
             }
             node.Text = text;
+            SetNodeTooltip(node);
+        }
+
+        internal static void SetNodeTooltip(TreeNode node)
+        {
+            if (node != null)
+            {
+                var doc = new XmlDocument();
+                XmlNode rootNode = doc.CreateElement("root");
+                doc.AppendChild(rootNode);
+                TreeNodeHelper.AddXmlNode(node, rootNode);
+                var tooltip = "";
+                try
+                {
+                    XDocument xdoc = XDocument.Parse(rootNode.InnerXml);
+                    tooltip = xdoc.ToString();
+                }
+                catch
+                {
+                    tooltip = rootNode.InnerXml;
+                }
+                node.ToolTipText = tooltip;
+                if (node.Parent != null)
+                {
+                    SetNodeTooltip(node.Parent);
+                }
+            }
         }
 
         /// <summary>Adds a context menu to a TreeNode control</summary>
