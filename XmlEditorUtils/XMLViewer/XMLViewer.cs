@@ -143,7 +143,7 @@ namespace CSRichTextBoxSyntaxHighlighting
             else if (element is XmlComment)
             {
                 elementRtfFormat = string.Format(@"
-{0}\cf{1} <!--{{0}} 
+{0}\cf{1} <!--
 {{1}}
 \cf{1} -->\par",
                     indent,

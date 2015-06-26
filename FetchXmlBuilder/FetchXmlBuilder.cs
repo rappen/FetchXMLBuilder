@@ -220,10 +220,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             tvFetch.SelectedNode.Tag = e.AttributeCollection;
             TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, currentSettings.useFriendlyNames);
             FetchChanged = treeChecksum != GetTreeChecksum(null);
-            if (tsmiLiveUpdate.Checked)
-            {
-                UpdateLiveXML();
-            }
+            UpdateLiveXML();
         }
 
         private void FetchXmlBuilder_FormChanged(object sender, EventArgs e)
@@ -264,6 +261,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             fetchDoc = new XmlDocument();
             fetchDoc.LoadXml(fetchTemplate);
             DisplayDefinition();
+            UpdateLiveXML();
             treeChecksum = GetTreeChecksum(null);
             FetchChanged = false;
             EnableControls(true);
@@ -299,6 +297,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     //LoadUsedEntities();
                     FileName = ofd.FileName;
                     DisplayDefinition();
+                    UpdateLiveXML();
                     treeChecksum = GetTreeChecksum(null);
                     FetchChanged = false;
                     EnableControls(true);
@@ -395,10 +394,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tnmNodeParent.Nodes.Insert(idxBegin, tnmNextNode);
                     tnmNodeParent.Nodes.Insert(idxEnd, tnmNode);
                     tvFetch.SelectedNode = tnmNode;
-                    if (tsmiLiveUpdate.Checked)
-                    {
-                        UpdateLiveXML();
-                    }
+                    UpdateLiveXML();
                 }
             }
             working = false;
@@ -423,10 +419,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tnmNodeParent.Nodes.Insert(idxEnd, tnmNode);
                     tnmNodeParent.Nodes.Insert(idxBegin, tnmPreviousNode);
                     tvFetch.SelectedNode = tnmNode;
-                    if (tsmiLiveUpdate.Checked)
-                    {
-                        UpdateLiveXML();
-                    }
+                    UpdateLiveXML();
                 }
             }
             working = false;
@@ -691,6 +684,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         var fetchxml = fetch.Substring(fetch.IndexOf("||") + 2);
                         fetchDoc.LoadXml(fetchxml);
                         DisplayDefinition();
+                        UpdateLiveXML();
                         return true;
                     }
                 }
@@ -774,10 +768,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 TreeNodeHelper.AddTreeViewNode(tvFetch, definitionXmlNode, this);
                 tvFetch.ExpandAll();
                 ManageMenuDisplay();
-                if (tsmiLiveUpdate.Checked)
-                {
-                    UpdateLiveXML();
-                }
             };
             if (tvFetch.InvokeRequired)
                 tvFetch.Invoke(miFillTreeView);
@@ -954,10 +944,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 TreeNodeHelper.SetNodeTooltip(updateNode);
             }
             FetchChanged = treeChecksum != GetTreeChecksum(null);
-            if (tsmiLiveUpdate.Checked)
-            {
-                UpdateLiveXML();
-            }
+            UpdateLiveXML();
         }
 
         private void HandleNodeSelection(TreeNode node)
@@ -1433,6 +1420,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         fetchDoc = new XmlDocument();
                         fetchDoc.LoadXml(View["fetchxml"].ToString());
                         DisplayDefinition();
+                        UpdateLiveXML();
                         attributesChecksum = GetAttributesSignature(null);
                         LogUse("OpenView");
                     }
@@ -1579,6 +1567,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 fetchDoc = new XmlDocument();
                 fetchDoc.LoadXml(fetch);
                 DisplayDefinition();
+                UpdateLiveXML();
                 attributesChecksum = GetAttributesSignature(null);
                 LogUse("OpenCWPFeed");
             }
@@ -1701,10 +1690,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     TreeNodeHelper.SetNodeText(attrNode, currentSettings.useFriendlyNames);
                 }
                 FetchChanged = treeChecksum != GetTreeChecksum(null);
-                if (tsmiLiveUpdate.Checked)
-                {
-                    UpdateLiveXML();
-                }
+                UpdateLiveXML();
             }
         }
 
@@ -1723,6 +1709,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     comment = "\r\n" + comment + "\r\n";
                 }
+                if (comment.Contains("--"))
+                {
+                    comment = comment.Replace("--", "~~");
+                }
+                if (comment.EndsWith("-"))
+                {
+                    comment = comment.Substring(0, comment.Length - 1) + "~";
+                }
                 var commentNode = doc.CreateComment(comment);
                 var parent = node.Parent;
                 var index = node.Index;
@@ -1740,6 +1734,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 if (coll.ContainsKey("#comment"))
                 {
                     var comment = coll["#comment"];
+                    if (comment.Contains("~~"))
+                    {
+                        comment = comment.Replace("~~", "--");
+                    }
+                    if (comment.EndsWith("~"))
+                    {
+                        comment = comment.Substring(0, comment.Length - 1) + "-";
+                    }
                     var doc = new XmlDocument();
                     try
                     {
@@ -1781,18 +1783,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void UpdateLiveXML()
         {
-            liveUpdateXml = GetFetchString(false);
-            if (xmlLiveUpdate == null)
+            if (tsmiLiveUpdate.Checked)
             {
-                xmlLiveUpdate = new XmlContentDisplayDialog(liveUpdateXml, "FetchXML Live Update", false, true, false, this);
-                xmlLiveUpdate.Disposed += LiveXML_Disposed;
-                xmlLiveUpdate.txtXML.KeyUp += LiveXML_KeyUp;
-                xmlLiveUpdate.Visible = true;
-                AlignLiveXML();
-            }
-            else
-            {
-                xmlLiveUpdate.UpdateXML(liveUpdateXml);
+                liveUpdateXml = GetFetchString(false);
+                if (xmlLiveUpdate == null)
+                {
+                    xmlLiveUpdate = new XmlContentDisplayDialog(liveUpdateXml, "FetchXML Live Update", false, true, false, this);
+                    xmlLiveUpdate.Disposed += LiveXML_Disposed;
+                    xmlLiveUpdate.txtXML.KeyUp += LiveXML_KeyUp;
+                    xmlLiveUpdate.Visible = true;
+                    AlignLiveXML();
+                }
+                else
+                {
+                    xmlLiveUpdate.UpdateXML(liveUpdateXml);
+                }
             }
         }
 
