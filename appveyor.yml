@@ -5,7 +5,7 @@ branches:
 skip_tags: true
 configuration: Release
 init:
-- ps: Update-AppveyorBuild -Version "1.$(Get-Date -format yyyy.M).$env:appveyor_build_number"
+- ps: Update-AppveyorBuild -Version "2.$(Get-Date -format yyyy.M).$env:appveyor_build_number"
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
