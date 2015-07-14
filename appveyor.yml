@@ -1,7 +1,7 @@
 version: '{build}'
 branches:
   only:
-  - master
+  - noautobuilds
 skip_tags: true
 configuration: Release
 init:
