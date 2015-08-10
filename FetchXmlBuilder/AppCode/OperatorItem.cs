@@ -275,7 +275,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 validConditionsList.Add(new OperatorItem(ConditionOperator.DoesNotContain));
                 validConditionsList.Add(new OperatorItem(ConditionOperator.EndsWith));
                 validConditionsList.Add(new OperatorItem(ConditionOperator.DoesNotEndWith));
-
                 validConditionsList.Add(new OperatorItem(ConditionOperator.Like));
                 validConditionsList.Add(new OperatorItem(ConditionOperator.NotLike));
             }
@@ -362,6 +361,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     validConditionsList.Add(new OperatorItem(ConditionOperator.Under));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.UnderOrEqual));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.NotUnder));
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.EqualBusinessId));
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserId));
                     break;
                 case AttributeTypeCode.Lookup:
                 case AttributeTypeCode.Customer:

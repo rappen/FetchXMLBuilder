@@ -160,7 +160,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                         {
                             if (attributeType != AttributeTypeCode.Lookup ||
                                 (attribute.Metadata.AttributeType != AttributeTypeCode.Owner &&
-                                 attribute.Metadata.AttributeType != AttributeTypeCode.Customer))
+                                 attribute.Metadata.AttributeType != AttributeTypeCode.Customer &&
+                                 attribute.Metadata.AttributeType != AttributeTypeCode.Uniqueidentifier))
                             {
                                 error = "Operator " + oper.ToString() + " is not valid for attribute of type " + attribute.Metadata.AttributeType.ToString();
                             }

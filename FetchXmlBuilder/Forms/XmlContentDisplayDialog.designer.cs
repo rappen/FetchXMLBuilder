@@ -86,7 +86,7 @@
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
             this.btnOk.TabIndex = 3;
-            this.btnOk.Text = "OK";
+            this.btnOk.Text = "&OK";
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
@@ -128,8 +128,8 @@
             this.txtXML.Name = "txtXML";
             xmlViewerSettings1.AttributeKey = System.Drawing.Color.Red;
             xmlViewerSettings1.AttributeValue = System.Drawing.Color.Blue;
-            xmlViewerSettings1.Element = System.Drawing.Color.DarkRed;
             xmlViewerSettings1.Comment = System.Drawing.Color.Green;
+            xmlViewerSettings1.Element = System.Drawing.Color.DarkRed;
             xmlViewerSettings1.Tag = System.Drawing.Color.Blue;
             xmlViewerSettings1.Value = System.Drawing.Color.Black;
             this.txtXML.Settings = xmlViewerSettings1;
