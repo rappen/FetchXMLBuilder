@@ -300,8 +300,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     UpdateLiveXML();
                     treeChecksum = GetTreeChecksum(null);
                     FetchChanged = false;
-                    EnableControls(true);
                 }
+                EnableControls(true);
             }
         }
 
@@ -325,6 +325,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 XmlNode resultNode = xcdDialog.result;
                 EnableControls(false);
                 ParseXML(resultNode.OuterXml, !xcdDialog.execute);
+                UpdateLiveXML();
                 if (xcdDialog.execute)
                 {
                     FetchResults(resultNode.OuterXml);
@@ -629,6 +630,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 LoadFetchFromSettings("");
             }
+            tsmiFriendly.Checked = currentSettings.useFriendlyNames;
             tsmiEntitiesAll.Checked = currentSettings.showEntitiesAll;
             tsmiEntitiesManaged.Checked = currentSettings.showEntitiesManaged;
             tsmiEntitiesUnmanaged.Checked = currentSettings.showEntitiesUnmanaged;
@@ -682,10 +684,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         fetchDoc = new XmlDocument();
                         var fetchxml = fetch.Substring(fetch.IndexOf("||") + 2);
-                        fetchDoc.LoadXml(fetchxml);
-                        DisplayDefinition();
-                        UpdateLiveXML();
-                        return true;
+                        if (!string.IsNullOrWhiteSpace(fetchxml.Trim()))
+                        {
+                            fetchDoc.LoadXml(fetchxml);
+                            DisplayDefinition();
+                            UpdateLiveXML();
+                            return true;
+                        }
                     }
                 }
             }
@@ -752,27 +757,35 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 return;
             }
-            XmlNode definitionXmlNode = null;
-            MethodInvoker miReadDefinition = delegate
-            {
-                definitionXmlNode = fetchDoc.DocumentElement;
-            };
-            if (InvokeRequired)
-                Invoke(miReadDefinition);
-            else
-                miReadDefinition();
+            XmlNode definitionXmlNode = fetchDoc.DocumentElement;
+            tvFetch.Nodes.Clear();
+            TreeNodeHelper.AddTreeViewNode(tvFetch, definitionXmlNode, this);
+            tvFetch.ExpandAll();
+            ManageMenuDisplay();
+        }
 
-            MethodInvoker miFillTreeView = delegate
+        private List<string> GetEntitiesFromFetch(XmlNode definitionXmlNode, List<string> result = null)
+        {
+            if (result == null)
             {
-                tvFetch.Nodes.Clear();
-                TreeNodeHelper.AddTreeViewNode(tvFetch, definitionXmlNode, this);
-                tvFetch.ExpandAll();
-                ManageMenuDisplay();
-            };
-            if (tvFetch.InvokeRequired)
-                tvFetch.Invoke(miFillTreeView);
-            else
-                miFillTreeView();
+                result = new List<string>();
+            }
+            if (definitionXmlNode.Name == "entity" || definitionXmlNode.Name == "link-entity")
+            {
+                var entity = definitionXmlNode.Attributes["name"] != null ? definitionXmlNode.Attributes["name"].Value : "";
+                if (!string.IsNullOrEmpty(entity) && !result.Contains(entity))
+                {
+                    result.Add(entity);
+                }
+            }
+            foreach (var child in definitionXmlNode.ChildNodes)
+            {
+                if (child is XmlNode)
+                {
+                    GetEntitiesFromFetch((XmlNode)child, result);
+                }
+            }
+            return result;
         }
 
         /// <summary>Enables buttons relevant for currently selected node</summary>

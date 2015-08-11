@@ -709,7 +709,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.executeToolStripMenuItem,
             this.hiddenEditToolStripMenuItem});
             this.nodeMenu.Name = "nodeMenu";
-            this.nodeMenu.Size = new System.Drawing.Size(203, 214);
+            this.nodeMenu.Size = new System.Drawing.Size(203, 192);
             this.nodeMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
             // addToolStripMenuItem
