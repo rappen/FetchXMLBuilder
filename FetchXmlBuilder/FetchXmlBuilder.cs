@@ -1996,6 +1996,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void RestoreHistoryPosition(int position)
         {
+            LogUse(position > historyIndex ? "Undo" : "Redo");
             historyIndex = position;
             var fetch = editHistory[historyIndex].Item1;
             ParseXML(fetch, false);
