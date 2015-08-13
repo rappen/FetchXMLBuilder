@@ -28,6 +28,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         #region Declarations
         const string settingfile = "Cinteros.Xrm.FetchXmlBuilder.Settings.xml";
         private XmlDocument fetchDoc;
+        private List<Tuple<string, string>> editHistory = new List<Tuple<string, string>>();
+        private int historyIndex = 0;
         private static Dictionary<string, EntityMetadata> entities;
         internal static List<string> entityShitList = new List<string>(); // Oops, did I name that one??
         internal static Dictionary<string, List<Entity>> views;
@@ -205,6 +207,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 if (!string.IsNullOrWhiteSpace(fxbArg.FetchXML))
                 {
                     ParseXML(fxbArg.FetchXML, false);
+                    RecordHistory("called from " + message.SourcePlugin);
                 }
                 tsbReturnToCaller.ToolTipText = "Return " + fxbArg.Request.ToString() + " to " + callerArgs.SourcePlugin;
                 LogUse("CalledBy." + callerArgs.SourcePlugin);
@@ -220,6 +223,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             tvFetch.SelectedNode.Tag = e.AttributeCollection;
             TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, currentSettings.useFriendlyNames);
             FetchChanged = treeChecksum != GetTreeChecksum(null);
+            var origin = "";
+            if (sender is IDefinitionSavable)
+            {
+                origin = sender.ToString().Replace("Cinteros.Xrm.FetchXmlBuilder.Controls.", "").Replace("Control", "");
+                foreach (var attr in e.AttributeCollection)
+                {
+                    origin += "\n  " + attr.Key + "=" + attr.Value;
+                }
+            }
+            RecordHistory(origin);
             UpdateLiveXML();
         }
 
@@ -265,6 +278,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             treeChecksum = GetTreeChecksum(null);
             FetchChanged = false;
             EnableControls(true);
+            RecordHistory("new");
         }
 
         private void tsmiOpenFile_Click(object sender, EventArgs e)
@@ -300,6 +314,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     UpdateLiveXML();
                     treeChecksum = GetTreeChecksum(null);
                     FetchChanged = false;
+                    RecordHistory("open file");
                 }
                 EnableControls(true);
             }
@@ -326,6 +341,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 EnableControls(false);
                 ParseXML(resultNode.OuterXml, !xcdDialog.execute);
                 UpdateLiveXML();
+                RecordHistory("manual edit");
                 if (xcdDialog.execute)
                 {
                     FetchResults(resultNode.OuterXml);
@@ -396,6 +412,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tnmNodeParent.Nodes.Insert(idxEnd, tnmNode);
                     tvFetch.SelectedNode = tnmNode;
                     UpdateLiveXML();
+                    RecordHistory("move down " + tnmNode.Name);
                 }
             }
             working = false;
@@ -421,6 +438,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tnmNodeParent.Nodes.Insert(idxBegin, tnmPreviousNode);
                     tvFetch.SelectedNode = tnmNode;
                     UpdateLiveXML();
+                    RecordHistory("move up " + tnmNode.Name);
                 }
             }
             working = false;
@@ -590,6 +608,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             ReturnToCaller();
         }
 
+        private void tsbUndo_Click(object sender, EventArgs e)
+        {
+            if (editHistory.Count - 1 > historyIndex)
+            {
+                RestoreHistoryPosition(historyIndex + 1);
+            }
+        }
+
+        private void tsbRedo_Click(object sender, EventArgs e)
+        {
+            if (historyIndex > 0)
+            {
+                RestoreHistoryPosition(historyIndex - 1);
+            }
+        }
+
         #endregion Event handlers
 
         #region Instance methods
@@ -689,6 +723,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             fetchDoc.LoadXml(fetchxml);
                             DisplayDefinition();
                             UpdateLiveXML();
+                            RecordHistory("loaded from last session");
                             return true;
                         }
                     }
@@ -1070,10 +1105,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     panelContainer.Controls.Add(ctrl);
                     ctrl.BringToFront();
-                    //ctrl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
                     ctrl.Dock = DockStyle.Fill;
-                    if (existingControl != null) panelContainer.Controls.Remove(existingControl);
                 }
+                if (existingControl != null) panelContainer.Controls.Remove(existingControl);
             }
             ManageMenuDisplay();
         }
@@ -1436,6 +1470,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         UpdateLiveXML();
                         attributesChecksum = GetAttributesSignature(null);
                         LogUse("OpenView");
+                        RecordHistory("open view");
                     }
                     else
                     {
@@ -1583,6 +1618,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 UpdateLiveXML();
                 attributesChecksum = GetAttributesSignature(null);
                 LogUse("OpenCWPFeed");
+                RecordHistory("open CWP feed");
             }
         }
 
@@ -1704,6 +1740,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 }
                 FetchChanged = treeChecksum != GetTreeChecksum(null);
                 UpdateLiveXML();
+                RecordHistory("add attributes");
             }
         }
 
@@ -1735,6 +1772,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 var index = node.Index;
                 node.Parent.Nodes.Remove(node);
                 TreeNodeHelper.AddTreeViewNode(parent, commentNode, this, index);
+                RecordHistory("comment");
             }
         }
 
@@ -1763,6 +1801,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         var index = node.Index;
                         node.Parent.Nodes.Remove(node);
                         TreeNodeHelper.AddTreeViewNode(parent, doc.DocumentElement, this, index);
+                        RecordHistory("uncomment");
                     }
                     catch (XmlException ex)
                     {
@@ -1937,6 +1976,55 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 message.TargetArgument = GetFetchString(true);
             }
             OnOutgoingMessage(this, message);
+        }
+
+        private void RecordHistory(string origin)
+        {
+            if (historyIndex > 0)
+            {
+                // New history to be recorded, so if we had undone anything, all redo possibilities must be removed.
+                while (historyIndex > 0)
+                {
+                    historyIndex--;
+                    editHistory.RemoveAt(0);
+                }
+            }
+            var fetch = GetFetchString(false);
+            editHistory.Insert(0, new Tuple<string, string>(fetch, origin));
+            EnableDisableHistoryButtons();
+        }
+
+        private void RestoreHistoryPosition(int position)
+        {
+            historyIndex = position;
+            var fetch = editHistory[historyIndex].Item1;
+            ParseXML(fetch, false);
+            RefreshSelectedNode();
+            EnableDisableHistoryButtons();
+        }
+
+        private void EnableDisableHistoryButtons()
+        {
+            tsbUndo.Enabled = historyIndex < editHistory.Count - 1;
+            tsbRedo.Enabled = historyIndex > 0;
+            if (tsbUndo.Enabled)
+            {
+                var undoitem = editHistory[historyIndex];
+                tsbUndo.ToolTipText = "Undo (Ctrl+Z)\n\n" + undoitem.Item2;
+            }
+            else
+            {
+                tsbUndo.ToolTipText = "Nothing to undo (Ctrl+Z)";
+            }
+            if (tsbRedo.Enabled)
+            {
+                var redoitem = editHistory[historyIndex - 1];
+                tsbRedo.ToolTipText = "Redo (Ctrl+Y)\n\n" + redoitem.Item2;
+            }
+            else
+            {
+                tsbRedo.ToolTipText = "Nothing to redo (Ctrl+Y)";
+            }
         }
 
         #endregion Instance methods

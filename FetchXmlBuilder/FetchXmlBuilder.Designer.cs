@@ -105,6 +105,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.executeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hiddenEditToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsbUndo = new System.Windows.Forms.ToolStripButton();
+            this.tsbRedo = new System.Windows.Forms.ToolStripButton();
+            this.hiddenUndoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hiddenRedoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain.SuspendLayout();
             this.gbProperties.SuspendLayout();
             this.gbFetchTree.SuspendLayout();
@@ -123,6 +127,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbSave,
             this.tsbEdit,
             this.toolStripSeparator2,
+            this.tsbUndo,
+            this.tsbRedo,
             this.tsbExecute,
             this.tsbReturnToCaller,
             this.toolStripSeparator3,
@@ -707,9 +713,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.moveUpToolStripMenuItem,
             this.moveDownToolStripMenuItem,
             this.executeToolStripMenuItem,
-            this.hiddenEditToolStripMenuItem});
+            this.hiddenEditToolStripMenuItem,
+            this.hiddenUndoToolStripMenuItem,
+            this.hiddenRedoToolStripMenuItem});
             this.nodeMenu.Name = "nodeMenu";
-            this.nodeMenu.Size = new System.Drawing.Size(203, 192);
+            this.nodeMenu.Size = new System.Drawing.Size(203, 236);
             this.nodeMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
             // addToolStripMenuItem
@@ -806,6 +814,48 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.hiddenEditToolStripMenuItem.Text = "hidden edit";
             this.hiddenEditToolStripMenuItem.Visible = false;
             this.hiddenEditToolStripMenuItem.Click += new System.EventHandler(this.tsbEdit_Click);
+            // 
+            // tsbUndo
+            // 
+            this.tsbUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbUndo.Enabled = false;
+            this.tsbUndo.Image = ((System.Drawing.Image)(resources.GetObject("tsbUndo.Image")));
+            this.tsbUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbUndo.Name = "tsbUndo";
+            this.tsbUndo.Size = new System.Drawing.Size(23, 22);
+            this.tsbUndo.Text = "Undo";
+            this.tsbUndo.ToolTipText = "Undo (Ctrl+Z)";
+            this.tsbUndo.Click += new System.EventHandler(this.tsbUndo_Click);
+            // 
+            // tsbRedo
+            // 
+            this.tsbRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbRedo.Enabled = false;
+            this.tsbRedo.Image = ((System.Drawing.Image)(resources.GetObject("tsbRedo.Image")));
+            this.tsbRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbRedo.Name = "tsbRedo";
+            this.tsbRedo.Size = new System.Drawing.Size(23, 22);
+            this.tsbRedo.Text = "Redo";
+            this.tsbRedo.ToolTipText = "Redo (Ctrl+Y)";
+            this.tsbRedo.Click += new System.EventHandler(this.tsbRedo_Click);
+            // 
+            // hiddenUndoToolStripMenuItem
+            // 
+            this.hiddenUndoToolStripMenuItem.Name = "hiddenUndoToolStripMenuItem";
+            this.hiddenUndoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
+            this.hiddenUndoToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.hiddenUndoToolStripMenuItem.Text = "hidden undo";
+            this.hiddenUndoToolStripMenuItem.Visible = false;
+            this.hiddenUndoToolStripMenuItem.Click += new System.EventHandler(this.tsbUndo_Click);
+            // 
+            // hiddenRedoToolStripMenuItem
+            // 
+            this.hiddenRedoToolStripMenuItem.Name = "hiddenRedoToolStripMenuItem";
+            this.hiddenRedoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
+            this.hiddenRedoToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.hiddenRedoToolStripMenuItem.Text = "hidden redo";
+            this.hiddenRedoToolStripMenuItem.Visible = false;
+            this.hiddenRedoToolStripMenuItem.Click += new System.EventHandler(this.tsbRedo_Click);
             // 
             // FetchXmlBuilder
             // 
@@ -912,5 +962,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal System.Windows.Forms.ToolStripMenuItem commentToolStripMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem uncommentToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hiddenEditToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton tsbUndo;
+        private System.Windows.Forms.ToolStripButton tsbRedo;
+        private System.Windows.Forms.ToolStripMenuItem hiddenUndoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem hiddenRedoToolStripMenuItem;
     }
 }
