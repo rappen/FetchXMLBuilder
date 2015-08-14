@@ -65,7 +65,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap FXB_100 {
             get {
-                object obj = ResourceManager.GetObject("FXB-100", resourceCulture);
+                object obj = ResourceManager.GetObject("FXB_100", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

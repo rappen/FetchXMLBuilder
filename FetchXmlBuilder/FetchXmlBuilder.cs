@@ -758,6 +758,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiShowEntities.Enabled = enabled && Service != null;
                     tsmiShowAttributes.Enabled = enabled && Service != null;
                     tsbExecute.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
+                    selectAttributesToolStripMenuItem.Enabled = enabled && Service != null;
                     gbFetchTree.Enabled = enabled;
                     gbProperties.Enabled = enabled;
                     buttonsEnabled = enabled;
@@ -966,8 +967,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             TreeNode updateNode = null;
             if (ClickedItem.Tag.ToString() == "Delete")
             {
-                updateNode = tvFetch.SelectedNode.Parent;
-                tvFetch.SelectedNode.Remove();
+                updateNode = DeleteNode();
             }
             else if (ClickedItem.Tag.ToString() == "Comment")
             {
@@ -977,14 +977,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 UncommentNode();
             }
-            else if (ClickedItem.Tag.ToString() == "Attributes...")
+            else if (ClickedItem.Tag.ToString() == "SelectAttributes")
             {
-                AddAttributes();
+                SelectAttributes();
             }
             else
             {
                 string nodeText = ClickedItem.Tag.ToString();
                 updateNode = TreeNodeHelper.AddChildNode(tvFetch.SelectedNode, nodeText);
+                RecordHistory("add " + updateNode.Name);
                 HandleNodeSelection(updateNode);
             }
             if (updateNode != null)
@@ -1674,29 +1675,29 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return feed;
         }
 
-        private void AddAttributes()
+        private void SelectAttributes()
         {
             if (Service == null)
             {
-                MessageBox.Show("Must be connected to CRM", "Add attributes", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Must be connected to CRM", "Select attributes", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             var entityNode = tvFetch.SelectedNode;
             if (entityNode.Name != "entity" &&
                 entityNode.Name != "link-entity")
             {
-                MessageBox.Show("Cannot add attributes to node " + entityNode.Name, "Add attributes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Cannot select attributes for node " + entityNode.Name, "Select attributes", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             var entityName = TreeNodeHelper.GetAttributeFromNode(entityNode, "name");
             if (string.IsNullOrWhiteSpace(entityName))
             {
-                MessageBox.Show("Cannot find valid entity name from node " + entityNode.Name, "Add attributes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Cannot find valid entity name from node " + entityNode.Name, "Select attributes", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (NeedToLoadEntity(entityName))
             {
-                LoadEntityDetails(entityName, AddAttributes);
+                LoadEntityDetails(entityName, SelectAttributes);
                 return;
             }
             var attributes = new List<AttributeMetadata>(GetDisplayAttributes(entityName));
@@ -1740,8 +1741,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 }
                 FetchChanged = treeChecksum != GetTreeChecksum(null);
                 UpdateLiveXML();
-                RecordHistory("add attributes");
+                RecordHistory("select attributes");
             }
+        }
+
+        private TreeNode DeleteNode()
+        {
+            var node = tvFetch.SelectedNode;
+            var updateNode = node.Parent;
+            node.Remove();
+            RecordHistory("delete " + node.Name);
+            return updateNode;
         }
 
         private void CommentNode()
@@ -1771,7 +1781,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 var parent = node.Parent;
                 var index = node.Index;
                 node.Parent.Nodes.Remove(node);
-                TreeNodeHelper.AddTreeViewNode(parent, commentNode, this, index);
+                tvFetch.SelectedNode = TreeNodeHelper.AddTreeViewNode(parent, commentNode, this, index);
                 RecordHistory("comment");
             }
         }
@@ -1800,7 +1810,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         var parent = node.Parent;
                         var index = node.Index;
                         node.Parent.Nodes.Remove(node);
-                        TreeNodeHelper.AddTreeViewNode(parent, doc.DocumentElement, this, index);
+                        tvFetch.SelectedNode = TreeNodeHelper.AddTreeViewNode(parent, doc.DocumentElement, this, index);
+                        tvFetch.SelectedNode.Expand();
                         RecordHistory("uncomment");
                     }
                     catch (XmlException ex)

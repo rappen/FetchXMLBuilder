@@ -48,6 +48,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiToQureyExpression = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbEdit = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbUndo = new System.Windows.Forms.ToolStripButton();
+            this.tsbRedo = new System.Windows.Forms.ToolStripButton();
             this.tsbExecute = new System.Windows.Forms.ToolStripButton();
             this.tsbReturnToCaller = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -93,6 +95,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tvFetch = new System.Windows.Forms.TreeView();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.nodeMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.selectAttributesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.nothingToAddToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -105,8 +108,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.executeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hiddenEditToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsbUndo = new System.Windows.Forms.ToolStripButton();
-            this.tsbRedo = new System.Windows.Forms.ToolStripButton();
             this.hiddenUndoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hiddenRedoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain.SuspendLayout();
@@ -227,6 +228,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // tsmiSaveFile
             // 
             this.tsmiSaveFile.Enabled = false;
+            this.tsmiSaveFile.Image = ((System.Drawing.Image)(resources.GetObject("tsmiSaveFile.Image")));
             this.tsmiSaveFile.Name = "tsmiSaveFile";
             this.tsmiSaveFile.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.tsmiSaveFile.Size = new System.Drawing.Size(217, 22);
@@ -235,6 +237,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             // tsmiSaveFileAs
             // 
+            this.tsmiSaveFileAs.Image = ((System.Drawing.Image)(resources.GetObject("tsmiSaveFileAs.Image")));
             this.tsmiSaveFileAs.Name = "tsmiSaveFileAs";
             this.tsmiSaveFileAs.ShortcutKeys = System.Windows.Forms.Keys.F12;
             this.tsmiSaveFileAs.Size = new System.Drawing.Size(217, 22);
@@ -265,6 +268,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // tsmiToQureyExpression
             // 
             this.tsmiToQureyExpression.Enabled = false;
+            this.tsmiToQureyExpression.Image = ((System.Drawing.Image)(resources.GetObject("tsmiToQureyExpression.Image")));
             this.tsmiToQureyExpression.Name = "tsmiToQureyExpression";
             this.tsmiToQureyExpression.Size = new System.Drawing.Size(217, 22);
             this.tsmiToQureyExpression.Text = "QueryExpression C# code...";
@@ -283,6 +287,30 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tsbUndo
+            // 
+            this.tsbUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbUndo.Enabled = false;
+            this.tsbUndo.Image = ((System.Drawing.Image)(resources.GetObject("tsbUndo.Image")));
+            this.tsbUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbUndo.Name = "tsbUndo";
+            this.tsbUndo.Size = new System.Drawing.Size(23, 22);
+            this.tsbUndo.Text = "Undo";
+            this.tsbUndo.ToolTipText = "Undo (Ctrl+Z)";
+            this.tsbUndo.Click += new System.EventHandler(this.tsbUndo_Click);
+            // 
+            // tsbRedo
+            // 
+            this.tsbRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbRedo.Enabled = false;
+            this.tsbRedo.Image = ((System.Drawing.Image)(resources.GetObject("tsbRedo.Image")));
+            this.tsbRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbRedo.Name = "tsbRedo";
+            this.tsbRedo.Size = new System.Drawing.Size(23, 22);
+            this.tsbRedo.Text = "Redo";
+            this.tsbRedo.ToolTipText = "Redo (Ctrl+Y)";
+            this.tsbRedo.Click += new System.EventHandler(this.tsbRedo_Click);
             // 
             // tsbExecute
             // 
@@ -704,6 +732,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // nodeMenu
             // 
             this.nodeMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.selectAttributesToolStripMenuItem,
             this.addToolStripMenuItem,
             this.deleteToolStripMenuItem,
             this.toolStripSeparatorBeginOfEdition,
@@ -717,12 +746,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.hiddenUndoToolStripMenuItem,
             this.hiddenRedoToolStripMenuItem});
             this.nodeMenu.Name = "nodeMenu";
-            this.nodeMenu.Size = new System.Drawing.Size(203, 236);
+            this.nodeMenu.Size = new System.Drawing.Size(203, 258);
             this.nodeMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
+            // 
+            // selectAttributesToolStripMenuItem
+            // 
+            this.selectAttributesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("selectAttributesToolStripMenuItem.Image")));
+            this.selectAttributesToolStripMenuItem.Name = "selectAttributesToolStripMenuItem";
+            this.selectAttributesToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.selectAttributesToolStripMenuItem.Tag = "SelectAttributes";
+            this.selectAttributesToolStripMenuItem.Text = "Select attributes...";
             // 
             // addToolStripMenuItem
             // 
             this.addToolStripMenuItem.DropDown = this.addMenu;
+            this.addToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("addToolStripMenuItem.Image")));
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
             this.addToolStripMenuItem.ShortcutKeyDisplayString = "Ins";
             this.addToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
@@ -734,7 +772,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.addMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.nothingToAddToolStripMenuItem});
             this.addMenu.Name = "addMenu";
-            this.addMenu.OwnerItem = this.addToolStripMenuItem;
             this.addMenu.Size = new System.Drawing.Size(154, 26);
             this.addMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
@@ -760,6 +797,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             // commentToolStripMenuItem
             // 
+            this.commentToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("commentToolStripMenuItem.Image")));
             this.commentToolStripMenuItem.Name = "commentToolStripMenuItem";
             this.commentToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.K)));
             this.commentToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
@@ -768,6 +806,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             // uncommentToolStripMenuItem
             // 
+            this.uncommentToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("uncommentToolStripMenuItem.Image")));
             this.uncommentToolStripMenuItem.Name = "uncommentToolStripMenuItem";
             this.uncommentToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
             this.uncommentToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
@@ -814,30 +853,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.hiddenEditToolStripMenuItem.Text = "hidden edit";
             this.hiddenEditToolStripMenuItem.Visible = false;
             this.hiddenEditToolStripMenuItem.Click += new System.EventHandler(this.tsbEdit_Click);
-            // 
-            // tsbUndo
-            // 
-            this.tsbUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbUndo.Enabled = false;
-            this.tsbUndo.Image = ((System.Drawing.Image)(resources.GetObject("tsbUndo.Image")));
-            this.tsbUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbUndo.Name = "tsbUndo";
-            this.tsbUndo.Size = new System.Drawing.Size(23, 22);
-            this.tsbUndo.Text = "Undo";
-            this.tsbUndo.ToolTipText = "Undo (Ctrl+Z)";
-            this.tsbUndo.Click += new System.EventHandler(this.tsbUndo_Click);
-            // 
-            // tsbRedo
-            // 
-            this.tsbRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbRedo.Enabled = false;
-            this.tsbRedo.Image = ((System.Drawing.Image)(resources.GetObject("tsbRedo.Image")));
-            this.tsbRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbRedo.Name = "tsbRedo";
-            this.tsbRedo.Size = new System.Drawing.Size(23, 22);
-            this.tsbRedo.Text = "Redo";
-            this.tsbRedo.ToolTipText = "Redo (Ctrl+Y)";
-            this.tsbRedo.Click += new System.EventHandler(this.tsbRedo_Click);
             // 
             // hiddenUndoToolStripMenuItem
             // 
@@ -966,5 +981,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripButton tsbRedo;
         private System.Windows.Forms.ToolStripMenuItem hiddenUndoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hiddenRedoToolStripMenuItem;
+        internal System.Windows.Forms.ToolStripMenuItem selectAttributesToolStripMenuItem;
     }
 }

@@ -18,11 +18,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         /// <param name="xmlNode">Xml node from the sitemap</param>
         /// <param name="form">Current application form</param>
         /// <param name="isDisabled"> </param>
-        public static void AddTreeViewNode(object parentObject, XmlNode xmlNode, FetchXmlBuilder form, int index = -1)
+        public static TreeNode AddTreeViewNode(object parentObject, XmlNode xmlNode, FetchXmlBuilder form, int index = -1)
         {
+            TreeNode node = null;
             if (xmlNode is XmlElement || xmlNode is XmlComment)
             {
-                TreeNode node = new TreeNode(xmlNode.Name);
+                node = new TreeNode(xmlNode.Name);
                 node.Name = xmlNode.Name;
                 Dictionary<string, string> attributes = new Dictionary<string, string>();
 
@@ -74,6 +75,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     attributes.Add("#text", ((XmlText)xmlNode).Value);
                 }
             }
+            return node;
         }
 
         public static void SetNodeText(TreeNode node, bool friendly)
@@ -285,6 +287,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 dummy.Enabled = false;
             }
 
+            form.selectAttributesToolStripMenuItem.Visible = nodecapabilities.Attributes;
             form.deleteToolStripMenuItem.Enabled = nodecapabilities.Delete;
             form.commentToolStripMenuItem.Enabled = nodecapabilities.Comment;
             form.uncommentToolStripMenuItem.Enabled = nodecapabilities.Uncomment;
