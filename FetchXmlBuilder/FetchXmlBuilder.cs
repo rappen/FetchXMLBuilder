@@ -1179,6 +1179,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                                     entities.Add(entityName, resp.EntityMetadata[0]);
                                 }
                             }
+                            else
+                            {
+                                entityShitList.Add(entityName);
+                                MessageBox.Show("Metadata not found for entity " + name, "Load attribute metadata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
                         }
                         working = false;
                         TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, currentSettings.useFriendlyNames);
