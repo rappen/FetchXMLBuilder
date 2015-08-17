@@ -176,7 +176,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             LoadSetting();
             var tasks = new List<Task>
             {
-                VersionCheck.LaunchVersionCheck("Cinteros", "FetchXMLBuilder", "http://fxb.xrmtoolbox.com/?src=FXB.{0}", currentSettings.lastUpdateCheck.Date, this),
+                VersionCheck.LaunchVersionCheck(Assembly.GetExecutingAssembly().GetName().Version.ToString(), "Cinteros", "FetchXMLBuilder", "http://fxb.xrmtoolbox.com/?src=FXB.{0}", currentSettings.lastUpdateCheck.Date, this),
                 this.LogUsageTask("Load")
             };
             currentSettings.lastUpdateCheck = DateTime.Now;

@@ -11,11 +11,10 @@ namespace Cinteros.Xrm.XmlEditorUtils
 {
     public static class VersionCheck
     {
-        public static Task LaunchVersionCheck(string ghUser, string ghRepo, string dlUrl, DateTime lastCheck, UserControl sender)
+        public static Task LaunchVersionCheck(string currentVersion, string ghUser, string ghRepo, string dlUrl, DateTime lastCheck, UserControl sender)
         {
             return new Task(() =>
             {
-                var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 var cvc = new XrmToolBox.AppCode.GithubVersionChecker(currentVersion, ghUser, ghRepo);
 
                 cvc.Run();
