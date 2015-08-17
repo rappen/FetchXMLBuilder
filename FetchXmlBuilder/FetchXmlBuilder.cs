@@ -176,9 +176,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             LoadSetting();
             var tasks = new List<Task>
             {
-                this.LaunchVersionCheck("Cinteros", "FetchXMLBuilder", "http://fxb.xrmtoolbox.com/?src=FXB.{0}"),
+                VersionCheck.LaunchVersionCheck("Cinteros", "FetchXMLBuilder", "http://fxb.xrmtoolbox.com/?src=FXB.{0}", currentSettings.lastUpdateCheck.Date, this),
                 this.LogUsageTask("Load")
             };
+            currentSettings.lastUpdateCheck = DateTime.Now;
             tasks.ForEach(x => x.Start());
             EnableControls(true);
         }
@@ -1870,30 +1871,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private string GetOData()
         {
             throw new NotImplementedException("OData output is not yet implemented.");
-        }
-
-        private Task LaunchVersionCheck(string ghUser, string ghRepo, string dlUrl)
-        {
-            return new Task(() =>
-            {
-                var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                var cvc = new XrmToolBox.AppCode.GithubVersionChecker(currentVersion, ghUser, ghRepo);
-
-                cvc.Run();
-
-                if (cvc.Cpi != null && !string.IsNullOrEmpty(cvc.Cpi.Version))
-                {
-                    if (currentSettings.lastUpdateCheck.Date != DateTime.Now.Date)
-                    {
-                        this.Invoke(new Action(() =>
-                        {
-                            var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description, ghUser, ghRepo, new Uri(string.Format(dlUrl, currentVersion)));
-                            nvForm.ShowDialog(this);
-                        }));
-                    }
-                }
-                currentSettings.lastUpdateCheck = DateTime.Now;
-            });
         }
 
         private Task LogUsageTask(string action)
