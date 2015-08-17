@@ -38,6 +38,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 return view["fetchxml"].ToString();
             }
+            else if (view.Contains("query"))
+            {
+                return view["query"].ToString();
+            }
             return "";
         }
     }

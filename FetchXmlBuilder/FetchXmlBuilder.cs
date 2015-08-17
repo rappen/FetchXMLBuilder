@@ -178,10 +178,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             LoadSetting();
             var tasks = new List<Task>
             {
-                this.LaunchVersionCheck("Cinteros", "FetchXMLBuilder", "http://fxb.xrmtoolbox.com/?src=FXB.{0}"),
+                VersionCheck.LaunchVersionCheck("Cinteros", "FetchXMLBuilder", "http://fxb.xrmtoolbox.com/?src=FXB.{0}", currentSettings.lastUpdateCheck.Date, this),
                 this.LogUsageTask("Load")
             };
             tasks.ForEach(x => x.Start());
+            currentSettings.lastUpdateCheck = DateTime.Now;
             EnableControls(true);
         }
 
@@ -323,6 +324,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsmiOpenView_Click(object sender, EventArgs e)
         {
             OpenView();
+        }
+
+        private void tsmiOpenML_Click(object sender, EventArgs e)
+        {
+            OpenML();
         }
 
         private void tsmiOpenCWP_Click(object sender, EventArgs e)
@@ -1485,6 +1491,34 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
+        private void OpenML()
+        {
+            var viewselector = new SelectViewDialog(this);
+            viewselector.StartPosition = FormStartPosition.CenterParent;
+            if (viewselector.ShowDialog() == DialogResult.OK)
+            {
+                if (viewselector.View.Contains("fetchxml") && !string.IsNullOrEmpty(viewselector.View["fetchxml"].ToString()))
+                {
+                    View = viewselector.View;
+                    fetchDoc = new XmlDocument();
+                    fetchDoc.LoadXml(View["fetchxml"].ToString());
+                    DisplayDefinition();
+                    UpdateLiveXML();
+                    attributesChecksum = GetAttributesSignature(null);
+                    LogUse("OpenView");
+                    RecordHistory("open view");
+                }
+                else
+                {
+                    if (MessageBox.Show("The selected view does not contain any FetchXML.\nPlease select another one.", "Open View",
+                        MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
+                    {
+                        OpenView();
+                    }
+                }
+            }
+        }
+
         private void SaveView()
         {
             var currentAttributes = GetAttributesSignature(null);
@@ -1915,30 +1949,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private string GetOData()
         {
             throw new NotImplementedException("OData output is not yet implemented.");
-        }
-
-        private Task LaunchVersionCheck(string ghUser, string ghRepo, string dlUrl)
-        {
-            return new Task(() =>
-            {
-                var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                var cvc = new XrmToolBox.AppCode.GithubVersionChecker(currentVersion, ghUser, ghRepo);
-
-                cvc.Run();
-
-                if (cvc.Cpi != null && !string.IsNullOrEmpty(cvc.Cpi.Version))
-                {
-                    if (currentSettings.lastUpdateCheck.Date != DateTime.Now.Date)
-                    {
-                        this.Invoke(new Action(() =>
-                        {
-                            var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description, ghUser, ghRepo, new Uri(string.Format(dlUrl, currentVersion)));
-                            nvForm.ShowDialog(this);
-                        }));
-                    }
-                }
-                currentSettings.lastUpdateCheck = DateTime.Now;
-            });
         }
 
         private Task LogUsageTask(string action)
