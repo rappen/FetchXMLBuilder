@@ -179,6 +179,12 @@
     <Compile Include="Forms\SelectAttributesDialog.Designer.cs">
       <DependentUpon>SelectAttributesDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SelectMLDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SelectMLDialog.Designer.cs">
+      <DependentUpon>SelectMLDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SelectViewDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -244,6 +250,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SelectAttributesDialog.resx">
       <DependentUpon>SelectAttributesDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SelectMLDialog.resx">
+      <DependentUpon>SelectMLDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SelectViewDialog.resx">
       <DependentUpon>SelectViewDialog.cs</DependentUpon>

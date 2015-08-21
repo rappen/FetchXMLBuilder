@@ -28,6 +28,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         #region Declarations
         const string settingfile = "Cinteros.Xrm.FetchXmlBuilder.Settings.xml";
         private XmlDocument fetchDoc;
+        private List<Tuple<string, string>> editHistory = new List<Tuple<string, string>>();
+        private int historyIndex = 0;
         private static Dictionary<string, EntityMetadata> entities;
         internal static List<string> entityShitList = new List<string>(); // Oops, did I name that one??
         internal static Dictionary<string, List<Entity>> views;
@@ -38,12 +40,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             get { return fileName; }
             set
             {
+                if (value != null)
+                {
+                    ResetSourcePointers();
+                }
                 fileName = value;
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     tsmiSaveFile.Text = "Save File: " + System.IO.Path.GetFileName(value);
-                    View = null;
-                    CWPFeed = null;
                 }
                 else
                 {
@@ -57,16 +61,39 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             get { return view; }
             set
             {
+                if (value != null)
+                {
+                    ResetSourcePointers();
+                }
                 view = value;
                 if (view != null && view.Contains("name"))
                 {
                     tsmiSaveView.Text = "Save View: " + view["name"];
-                    FileName = null;
-                    CWPFeed = null;
                 }
                 else
                 {
                     tsmiSaveView.Text = "Save View";
+                }
+            }
+        }
+        private Entity dynml;
+        internal Entity DynML
+        {
+            get { return dynml; }
+            set
+            {
+                if (value != null)
+                {
+                    ResetSourcePointers();
+                }
+                dynml = value;
+                if (dynml != null && dynml.Contains("listname"))
+                {
+                    tsmiSaveML.Text = "Save Marketing List: " + dynml["listname"];
+                }
+                else
+                {
+                    tsmiSaveML.Text = "Save Marketing List";
                 }
             }
         }
@@ -76,12 +103,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             get { return cwpfeed; }
             set
             {
+                if (value != null)
+                {
+                    ResetSourcePointers();
+                }
                 cwpfeed = value;
                 if (!string.IsNullOrWhiteSpace(cwpfeed))
                 {
                     tsmiSaveCWP.Text = "Save CWP Feed: " + cwpfeed;
-                    FileName = null;
-                    View = null;
                 }
                 else
                 {
@@ -206,6 +235,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 if (!string.IsNullOrWhiteSpace(fxbArg.FetchXML))
                 {
                     ParseXML(fxbArg.FetchXML, false);
+                    RecordHistory("called from " + message.SourcePlugin);
                 }
                 tsbReturnToCaller.ToolTipText = "Return " + fxbArg.Request.ToString() + " to " + callerArgs.SourcePlugin;
                 LogUse("CalledBy." + callerArgs.SourcePlugin);
@@ -221,6 +251,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             tvFetch.SelectedNode.Tag = e.AttributeCollection;
             TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, currentSettings.useFriendlyNames);
             FetchChanged = treeChecksum != GetTreeChecksum(null);
+            var origin = "";
+            if (sender is IDefinitionSavable)
+            {
+                origin = sender.ToString().Replace("Cinteros.Xrm.FetchXmlBuilder.Controls.", "").Replace("Control", "");
+                foreach (var attr in e.AttributeCollection)
+                {
+                    origin += "\n  " + attr.Key + "=" + attr.Value;
+                }
+            }
+            RecordHistory(origin);
             UpdateLiveXML();
         }
 
@@ -266,49 +306,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             treeChecksum = GetTreeChecksum(null);
             FetchChanged = false;
             EnableControls(true);
+            RecordHistory("new");
         }
 
         private void tsmiOpenFile_Click(object sender, EventArgs e)
         {
-            if (!SaveIfChanged())
-            {
-                return;
+            OpenFile();
             }
-            var ofd = new OpenFileDialog
-            {
-                Title = "Select an XML file containing FetchXML",
-                Filter = "XML file (*.xml)|*.xml"
-            };
-
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                EnableControls(false);
-                fetchDoc = new XmlDocument();
-                fetchDoc.Load(ofd.FileName);
-
-                if (fetchDoc.DocumentElement.Name != "fetch" ||
-                    fetchDoc.DocumentElement.ChildNodes.Count > 0 &&
-                    fetchDoc.DocumentElement.ChildNodes[0].Name == "fetch")
-                {
-                    MessageBox.Show(this, "Invalid Xml: Definition XML root must be fetch!", "Error",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    //LoadUsedEntities();
-                    FileName = ofd.FileName;
-                    DisplayDefinition();
-                    UpdateLiveXML();
-                    treeChecksum = GetTreeChecksum(null);
-                    FetchChanged = false;
-                }
-                EnableControls(true);
-            }
-        }
 
         private void tsmiOpenView_Click(object sender, EventArgs e)
-        {
+                {
             OpenView();
+        }
+
+        private void tsmiOpenML_Click(object sender, EventArgs e)
+        {
+            OpenML();
         }
 
         private void tsmiOpenCWP_Click(object sender, EventArgs e)
@@ -327,6 +340,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 EnableControls(false);
                 ParseXML(resultNode.OuterXml, !xcdDialog.execute);
                 UpdateLiveXML();
+                RecordHistory("manual edit");
                 if (xcdDialog.execute)
                 {
                     FetchResults(resultNode.OuterXml);
@@ -353,6 +367,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsmiSaveView_Click(object sender, EventArgs e)
         {
             SaveView();
+        }
+
+        private void tsmiSaveML_Click(object sender, EventArgs e)
+        {
+            SaveML();
         }
 
         private void nodeMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -397,6 +416,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tnmNodeParent.Nodes.Insert(idxEnd, tnmNode);
                     tvFetch.SelectedNode = tnmNode;
                     UpdateLiveXML();
+                    RecordHistory("move down " + tnmNode.Name);
                 }
             }
             working = false;
@@ -422,6 +442,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tnmNodeParent.Nodes.Insert(idxBegin, tnmPreviousNode);
                     tvFetch.SelectedNode = tnmNode;
                     UpdateLiveXML();
+                    RecordHistory("move up " + tnmNode.Name);
                 }
             }
             working = false;
@@ -591,9 +612,33 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             ReturnToCaller();
         }
 
+        private void tsbUndo_Click(object sender, EventArgs e)
+        {
+            if (editHistory.Count - 1 > historyIndex)
+            {
+                RestoreHistoryPosition(historyIndex + 1);
+            }
+        }
+
+        private void tsbRedo_Click(object sender, EventArgs e)
+        {
+            if (historyIndex > 0)
+            {
+                RestoreHistoryPosition(historyIndex - 1);
+            }
+        }
+
         #endregion Event handlers
 
         #region Instance methods
+
+        private void ResetSourcePointers()
+        {
+            FileName = null;
+            CWPFeed = null;
+            View = null;
+            DynML = null;
+        }
 
         /// <summary>Saves various configurations to file for next session</summary>
         private void SaveSetting()
@@ -690,6 +735,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             fetchDoc.LoadXml(fetchxml);
                             DisplayDefinition();
                             UpdateLiveXML();
+                            RecordHistory("loaded from last session");
                             return true;
                         }
                     }
@@ -711,12 +757,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsbOpen.Enabled = enabled;
                     tsmiOpenFile.Enabled = enabled;
                     tsmiOpenView.Enabled = enabled && Service != null;
+                    tsmiOpenML.Enabled = enabled && Service != null;
                     tsmiOpenCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
                     tsbReturnToCaller.Visible = tvFetch.Nodes.Count > 0 && CallerWantsResults();
                     tsbSave.Enabled = enabled;
                     tsmiSaveFile.Enabled = enabled && FetchChanged && !string.IsNullOrEmpty(FileName);
                     tsmiSaveFileAs.Enabled = enabled && tvFetch.Nodes.Count > 0;
-                    tsmiSaveView.Enabled = enabled && Service != null && FetchChanged && View != null;
+                    tsmiSaveView.Enabled = enabled && Service != null && View != null;
+                    tsmiSaveML.Enabled = enabled && Service != null && DynML != null;
                     tsmiSaveCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
                     tsmiToQureyExpression.Enabled = enabled && Service != null;
                     tsbOptions.Enabled = enabled;
@@ -724,6 +772,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiShowEntities.Enabled = enabled && Service != null;
                     tsmiShowAttributes.Enabled = enabled && Service != null;
                     tsbExecute.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
+                    selectAttributesToolStripMenuItem.Enabled = enabled && Service != null;
                     gbFetchTree.Enabled = enabled;
                     gbProperties.Enabled = enabled;
                     buttonsEnabled = enabled;
@@ -932,8 +981,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             TreeNode updateNode = null;
             if (ClickedItem.Tag.ToString() == "Delete")
             {
-                updateNode = tvFetch.SelectedNode.Parent;
-                tvFetch.SelectedNode.Remove();
+                updateNode = DeleteNode();
             }
             else if (ClickedItem.Tag.ToString() == "Comment")
             {
@@ -943,14 +991,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 UncommentNode();
             }
-            else if (ClickedItem.Tag.ToString() == "Attributes...")
+            else if (ClickedItem.Tag.ToString() == "SelectAttributes")
             {
-                AddAttributes();
+                SelectAttributes();
             }
             else
             {
                 string nodeText = ClickedItem.Tag.ToString();
                 updateNode = TreeNodeHelper.AddChildNode(tvFetch.SelectedNode, nodeText);
+                RecordHistory("add " + updateNode.Name);
                 HandleNodeSelection(updateNode);
             }
             if (updateNode != null)
@@ -1071,11 +1120,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     panelContainer.Controls.Add(ctrl);
                     ctrl.BringToFront();
-                    //ctrl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
                     ctrl.Dock = DockStyle.Fill;
+                }
                     if (existingControl != null) panelContainer.Controls.Remove(existingControl);
                 }
-            }
             ManageMenuDisplay();
         }
 
@@ -1184,7 +1232,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             {
                                 entityShitList.Add(entityName);
                                 MessageBox.Show("Metadata not found for entity " + name, "Load attribute metadata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            }
+                        }
                         }
                         working = false;
                         TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, currentSettings.useFriendlyNames);
@@ -1421,8 +1469,52 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         }
 
+        private void OpenFile()
+        {
+            if (!SaveIfChanged())
+            {
+                return;
+            }
+            var ofd = new OpenFileDialog
+            {
+                Title = "Select an XML file containing FetchXML",
+                Filter = "XML file (*.xml)|*.xml"
+            };
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                EnableControls(false);
+                fetchDoc = new XmlDocument();
+                fetchDoc.Load(ofd.FileName);
+
+                if (fetchDoc.DocumentElement.Name != "fetch" ||
+                    fetchDoc.DocumentElement.ChildNodes.Count > 0 &&
+                    fetchDoc.DocumentElement.ChildNodes[0].Name == "fetch")
+                {
+                    MessageBox.Show(this, "Invalid Xml: Definition XML root must be fetch!", "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    //LoadUsedEntities();
+                    FileName = ofd.FileName;
+                    DisplayDefinition();
+                    UpdateLiveXML();
+                    treeChecksum = GetTreeChecksum(null);
+                    FetchChanged = false;
+                    LogUse("OpenFile");
+                    RecordHistory("open file");
+                }
+            }
+            EnableControls(true);
+        }
+
         private void OpenView()
         {
+            if (!SaveIfChanged())
+            {
+                return;
+            }
             if (views == null || views.Count == 0)
             {
                 LoadViews(OpenView);
@@ -1440,8 +1532,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         fetchDoc.LoadXml(View["fetchxml"].ToString());
                         DisplayDefinition();
                         UpdateLiveXML();
+                        treeChecksum = GetTreeChecksum(null);
+                        FetchChanged = false;
                         attributesChecksum = GetAttributesSignature(null);
                         LogUse("OpenView");
+                        RecordHistory("open view");
                     }
                     else
                     {
@@ -1453,6 +1548,74 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                 }
             }
+            EnableControls(true);
+        }
+
+        private void OpenML()
+        {
+            if (!SaveIfChanged())
+            {
+                return;
+            }
+            var mlselector = new SelectMLDialog(this);
+            mlselector.StartPosition = FormStartPosition.CenterParent;
+            if (mlselector.ShowDialog() == DialogResult.OK)
+            {
+                if (mlselector.View.Contains("query") && !string.IsNullOrEmpty(mlselector.View["query"].ToString()))
+                {
+                    DynML = mlselector.View;
+                    fetchDoc = new XmlDocument();
+                    fetchDoc.LoadXml(DynML["query"].ToString());
+                    DisplayDefinition();
+                    UpdateLiveXML();
+                    treeChecksum = GetTreeChecksum(null);
+                    FetchChanged = false;
+                    LogUse("OpenML");
+                    RecordHistory("open marketing list");
+                }
+                else
+                {
+                    if (MessageBox.Show("The selected marketing list does not contain any FetchXML.\nPlease select another one.", "Open Marketing List",
+                        MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
+                    {
+                        OpenView();
+                    }
+                }
+            }
+            EnableControls(true);
+        }
+
+        private void OpenCWPFeed()
+        {
+            if (!SaveIfChanged())
+            {
+                return;
+            }
+            var feedid = Prompt.ShowDialog("Enter CWP Feed ID", "Open CWP Feed");
+            if (string.IsNullOrWhiteSpace(feedid))
+            {
+                return;
+            }
+            Entity feed = GetCWPFeed(feedid);
+            if (feed == null)
+            {
+                MessageBox.Show("Feed not found.", "Open CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            if (feed.Contains("cint_fetchxml"))
+            {
+                CWPFeed = feed.Contains("cint_id") ? feed["cint_id"].ToString() : feedid;
+                var fetch = feed["cint_fetchxml"].ToString();
+                fetchDoc = new XmlDocument();
+                fetchDoc.LoadXml(fetch);
+                DisplayDefinition();
+                UpdateLiveXML();
+                treeChecksum = GetTreeChecksum(null);
+                FetchChanged = false;
+                LogUse("OpenCWP");
+                RecordHistory("open CWP feed");
+            }
+            EnableControls(true);
         }
 
         private void SaveView()
@@ -1500,6 +1663,69 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         MessageBox.Show(completedargs.Error.Message, "Save view", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 });
+        }
+
+        private void SaveML()
+        {
+            var msg = "Saving {0}...";
+            WorkAsync(string.Format(msg, DynML["listname"]),
+                (eventargs) =>
+                {
+                    var xml = GetFetchString(false);
+                    Entity newView = new Entity(DynML.LogicalName);
+                    newView.Id = DynML.Id;
+                    newView.Attributes.Add("query", xml);
+                    Service.Update(newView);
+                    DynML["query"] = xml;
+                },
+                (completedargs) =>
+                {
+                    if (completedargs.Error != null)
+                    {
+                        MessageBox.Show(completedargs.Error.Message, "Save Marketing List", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                });
+        }
+
+        private void SaveCWPFeed()
+        {
+            if (string.IsNullOrWhiteSpace(CWPFeed))
+            {
+                var feedid = Prompt.ShowDialog("Enter CWP Feed ID (enter existing ID to update feed)", "Save CWP Feed");
+                if (feedid == null)
+                {
+                    return;
+                }
+                if (string.IsNullOrWhiteSpace(feedid))
+                {
+                    MessageBox.Show("Feed not saved.", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
+                }
+                CWPFeed = feedid;
+            }
+            Entity feed = GetCWPFeed(CWPFeed);
+            if (feed == null)
+            {
+                feed = new Entity("cint_feed");
+            }
+            if (feed.Contains("cint_fetchxml"))
+            {
+                feed.Attributes.Remove("cint_fetchxml");
+            }
+            feed.Attributes.Add("cint_fetchxml", GetFetchString(true));
+            var verb = feed.Id.Equals(Guid.Empty) ? "created" : "updated";
+            if (feed.Id.Equals(Guid.Empty))
+            {
+                feed.Attributes.Add("cint_id", CWPFeed);
+                feed.Attributes.Add("cint_description", "Created by FetchXML Builder for XrmToolBox");
+                Service.Create(feed);
+            }
+            else
+            {
+                Service.Update(feed);
+            }
+            LogUse("SaveCWPFeed");
+            MessageBox.Show("CWP Feed " + CWPFeed + " has been " + verb + "!", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private EntityMetadata GetEntity(int etc)
@@ -1564,74 +1790,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 addMenu.Show(tvFetch.PointToScreen(tvFetch.Location));
             }
-        }
-
-        private void OpenCWPFeed()
-        {
-            var feedid = Prompt.ShowDialog("Enter CWP Feed ID", "Open CWP Feed");
-            if (string.IsNullOrWhiteSpace(feedid))
-            {
-                return;
             }
-            Entity feed = GetCWPFeed(feedid);
-            if (feed == null)
-            {
-                MessageBox.Show("Feed not found.", "Open CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-            if (feed.Contains("cint_fetchxml"))
-            {
-                CWPFeed = feed.Contains("cint_id") ? feed["cint_id"].ToString() : feedid;
-                var fetch = feed["cint_fetchxml"].ToString();
-                fetchDoc = new XmlDocument();
-                fetchDoc.LoadXml(fetch);
-                DisplayDefinition();
-                UpdateLiveXML();
-                attributesChecksum = GetAttributesSignature(null);
-                LogUse("OpenCWPFeed");
-            }
-        }
-
-        private void SaveCWPFeed()
-        {
-            if (string.IsNullOrWhiteSpace(CWPFeed))
-            {
-                var feedid = Prompt.ShowDialog("Enter CWP Feed ID (enter existing ID to update feed)", "Save CWP Feed");
-                if (feedid == null)
-                {
-                    return;
-                }
-                if (string.IsNullOrWhiteSpace(feedid))
-                {
-                    MessageBox.Show("Feed not saved.", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return;
-                }
-                CWPFeed = feedid;
-            }
-            Entity feed = GetCWPFeed(CWPFeed);
-            if (feed == null)
-            {
-                feed = new Entity("cint_feed");
-            }
-            if (feed.Contains("cint_fetchxml"))
-            {
-                feed.Attributes.Remove("cint_fetchxml");
-            }
-            feed.Attributes.Add("cint_fetchxml", GetFetchString(true));
-            var verb = feed.Id.Equals(Guid.Empty) ? "created" : "updated";
-            if (feed.Id.Equals(Guid.Empty))
-            {
-                feed.Attributes.Add("cint_id", CWPFeed);
-                feed.Attributes.Add("cint_description", "Created by FetchXML Builder for XrmToolBox");
-                Service.Create(feed);
-            }
-            else
-            {
-                Service.Update(feed);
-            }
-            LogUse("SaveCWPFeed");
-            MessageBox.Show("CWP Feed " + CWPFeed + " has been " + verb + "!", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
 
         private Entity GetCWPFeed(string feedid)
         {
@@ -1644,29 +1803,29 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return feed;
         }
 
-        private void AddAttributes()
+        private void SelectAttributes()
         {
             if (Service == null)
             {
-                MessageBox.Show("Must be connected to CRM", "Add attributes", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Must be connected to CRM", "Select attributes", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             var entityNode = tvFetch.SelectedNode;
             if (entityNode.Name != "entity" &&
                 entityNode.Name != "link-entity")
             {
-                MessageBox.Show("Cannot add attributes to node " + entityNode.Name, "Add attributes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Cannot select attributes for node " + entityNode.Name, "Select attributes", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             var entityName = TreeNodeHelper.GetAttributeFromNode(entityNode, "name");
             if (string.IsNullOrWhiteSpace(entityName))
             {
-                MessageBox.Show("Cannot find valid entity name from node " + entityNode.Name, "Add attributes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Cannot find valid entity name from node " + entityNode.Name, "Select attributes", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (NeedToLoadEntity(entityName))
             {
-                LoadEntityDetails(entityName, AddAttributes);
+                LoadEntityDetails(entityName, SelectAttributes);
                 return;
             }
             var attributes = new List<AttributeMetadata>(GetDisplayAttributes(entityName));
@@ -1710,7 +1869,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 }
                 FetchChanged = treeChecksum != GetTreeChecksum(null);
                 UpdateLiveXML();
+                RecordHistory("select attributes");
             }
+            }
+
+        private TreeNode DeleteNode()
+        {
+            var node = tvFetch.SelectedNode;
+            var updateNode = node.Parent;
+            node.Remove();
+            RecordHistory("delete " + node.Name);
+            return updateNode;
         }
 
         private void CommentNode()
@@ -1740,7 +1909,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 var parent = node.Parent;
                 var index = node.Index;
                 node.Parent.Nodes.Remove(node);
-                TreeNodeHelper.AddTreeViewNode(parent, commentNode, this, index);
+                tvFetch.SelectedNode = TreeNodeHelper.AddTreeViewNode(parent, commentNode, this, index);
+                RecordHistory("comment");
             }
         }
 
@@ -1768,7 +1938,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         var parent = node.Parent;
                         var index = node.Index;
                         node.Parent.Nodes.Remove(node);
-                        TreeNodeHelper.AddTreeViewNode(parent, doc.DocumentElement, this, index);
+                        tvFetch.SelectedNode = TreeNodeHelper.AddTreeViewNode(parent, doc.DocumentElement, this, index);
+                        tvFetch.SelectedNode.Expand();
+                        RecordHistory("uncomment");
                     }
                     catch (XmlException ex)
                     {
@@ -1919,6 +2091,56 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 message.TargetArgument = GetFetchString(true);
             }
             OnOutgoingMessage(this, message);
+        }
+
+        private void RecordHistory(string origin)
+        {
+            if (historyIndex > 0)
+            {
+                // New history to be recorded, so if we had undone anything, all redo possibilities must be removed.
+                while (historyIndex > 0)
+                {
+                    historyIndex--;
+                    editHistory.RemoveAt(0);
+                }
+            }
+            var fetch = GetFetchString(false);
+            editHistory.Insert(0, new Tuple<string, string>(fetch, origin));
+            EnableDisableHistoryButtons();
+        }
+
+        private void RestoreHistoryPosition(int position)
+        {
+            LogUse(position > historyIndex ? "Undo" : "Redo");
+            historyIndex = position;
+            var fetch = editHistory[historyIndex].Item1;
+            ParseXML(fetch, false);
+            RefreshSelectedNode();
+            EnableDisableHistoryButtons();
+        }
+
+        private void EnableDisableHistoryButtons()
+        {
+            tsbUndo.Enabled = historyIndex < editHistory.Count - 1;
+            tsbRedo.Enabled = historyIndex > 0;
+            if (tsbUndo.Enabled)
+            {
+                var undoitem = editHistory[historyIndex];
+                tsbUndo.ToolTipText = "Undo (Ctrl+Z)\n\n" + undoitem.Item2;
+            }
+            else
+            {
+                tsbUndo.ToolTipText = "Nothing to undo (Ctrl+Z)";
+            }
+            if (tsbRedo.Enabled)
+            {
+                var redoitem = editHistory[historyIndex - 1];
+                tsbRedo.ToolTipText = "Redo (Ctrl+Y)\n\n" + redoitem.Item2;
+            }
+            else
+            {
+                tsbRedo.ToolTipText = "Nothing to redo (Ctrl+Y)";
+            }
         }
 
         #endregion Instance methods

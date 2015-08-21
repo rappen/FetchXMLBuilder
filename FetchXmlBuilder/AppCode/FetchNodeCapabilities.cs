@@ -24,7 +24,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case "entity":
                 case "link-entity":
                     Delete = true;
-                    ChildTypes.Add(new ChildNodeCapabilities("Attributes...", true));
+                    Attributes = true;
                     ChildTypes.Add(new ChildNodeCapabilities("-", true));
                     ChildTypes.Add(new ChildNodeCapabilities("all-attributes", false));
                     ChildTypes.Add(new ChildNodeCapabilities("attribute", true));
