@@ -46,29 +46,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             QElist.AddOrder("listname", OrderType.Ascending);
 
             //// Define filter QElist.Criteria
-            //QElist.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
-            //QElist.Criteria.AddCondition("type", ConditionOperator.Equal, True);
-            //QElist.Criteria.AddCondition("query", ConditionOperator.NotNull);
+            QElist.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
+            QElist.Criteria.AddCondition("type", ConditionOperator.Equal, true);
+            QElist.Criteria.AddCondition("query", ConditionOperator.NotNull);
 
-             
-            //if (FetchXmlBuilder.views.ContainsKey(entity + "|S"))
-            //{
-            //    var views = FetchXmlBuilder.views[entity + "|S"];
-            //    cmbML.Items.Add("-- System Views --");
-            //    foreach (var view in views)
-            //    {
-            //        cmbML.Items.Add(new ViewItem(view));
-            //    }
-            //}
-            //if (FetchXmlBuilder.views.ContainsKey(entity + "|U"))
-            //{
-            //    var views = FetchXmlBuilder.views[entity + "|U"];
-            //    cmbML.Items.Add("-- Personal Views --");
-            //    foreach (var view in views)
-            //    {
-            //        cmbML.Items.Add(new ViewItem(view));
-            //    }
-            //}
+            var lists = Caller.Service.RetrieveMultiple(QElist);
+            foreach (var list in lists.Entities)
+            {
+                cmbML.Items.Add(new ViewItem(list));
+            }
+            Enabled = true;
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -102,10 +89,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             Enabled = false;
             cmbML.SelectedIndex = -1;
-            //cmbEntity.SelectedIndex = -1;
             txtFetch.Text = "";
-            FetchXmlBuilder.views = null;
-            Caller.LoadViews(PopulateForm);
+            UpdateMLs();
         }
     }
 }

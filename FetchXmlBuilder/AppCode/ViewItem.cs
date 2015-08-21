@@ -19,7 +19,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         public override string ToString()
         {
-            return view["name"].ToString();
+            return view.Contains("name") ? view["name"].ToString() : view.Contains("listname") ? view["listname"].ToString() : "?";
         }
 
         public Entity GetView()

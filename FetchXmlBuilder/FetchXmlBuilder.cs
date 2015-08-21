@@ -40,12 +40,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             get { return fileName; }
             set
             {
+                if (value != null)
+                {
+                    ResetSourcePointers();
+                }
                 fileName = value;
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     tsmiSaveFile.Text = "Save File: " + System.IO.Path.GetFileName(value);
-                    View = null;
-                    CWPFeed = null;
                 }
                 else
                 {
@@ -59,16 +61,39 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             get { return view; }
             set
             {
+                if (value != null)
+                {
+                    ResetSourcePointers();
+                }
                 view = value;
                 if (view != null && view.Contains("name"))
                 {
                     tsmiSaveView.Text = "Save View: " + view["name"];
-                    FileName = null;
-                    CWPFeed = null;
                 }
                 else
                 {
                     tsmiSaveView.Text = "Save View";
+                }
+            }
+        }
+        private Entity dynml;
+        internal Entity DynML
+        {
+            get { return dynml; }
+            set
+            {
+                if (value != null)
+                {
+                    ResetSourcePointers();
+                }
+                dynml = value;
+                if (dynml != null && dynml.Contains("listname"))
+                {
+                    tsmiSaveML.Text = "Save Marketing List: " + dynml["listname"];
+                }
+                else
+                {
+                    tsmiSaveML.Text = "Save Marketing List";
                 }
             }
         }
@@ -78,12 +103,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             get { return cwpfeed; }
             set
             {
+                if (value != null)
+                {
+                    ResetSourcePointers();
+                }
                 cwpfeed = value;
                 if (!string.IsNullOrWhiteSpace(cwpfeed))
                 {
                     tsmiSaveCWP.Text = "Save CWP Feed: " + cwpfeed;
-                    FileName = null;
-                    View = null;
                 }
                 else
                 {
@@ -284,41 +311,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsmiOpenFile_Click(object sender, EventArgs e)
         {
-            if (!SaveIfChanged())
-            {
-                return;
-            }
-            var ofd = new OpenFileDialog
-            {
-                Title = "Select an XML file containing FetchXML",
-                Filter = "XML file (*.xml)|*.xml"
-            };
-
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                EnableControls(false);
-                fetchDoc = new XmlDocument();
-                fetchDoc.Load(ofd.FileName);
-
-                if (fetchDoc.DocumentElement.Name != "fetch" ||
-                    fetchDoc.DocumentElement.ChildNodes.Count > 0 &&
-                    fetchDoc.DocumentElement.ChildNodes[0].Name == "fetch")
-                {
-                    MessageBox.Show(this, "Invalid Xml: Definition XML root must be fetch!", "Error",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    //LoadUsedEntities();
-                    FileName = ofd.FileName;
-                    DisplayDefinition();
-                    UpdateLiveXML();
-                    treeChecksum = GetTreeChecksum(null);
-                    FetchChanged = false;
-                    RecordHistory("open file");
-                }
-                EnableControls(true);
-            }
+            OpenFile();
         }
 
         private void tsmiOpenView_Click(object sender, EventArgs e)
@@ -374,6 +367,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsmiSaveView_Click(object sender, EventArgs e)
         {
             SaveView();
+        }
+
+        private void tsmiSaveML_Click(object sender, EventArgs e)
+        {
+            SaveML();
         }
 
         private void nodeMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -634,6 +632,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         #region Instance methods
 
+        private void ResetSourcePointers()
+        {
+            FileName = null;
+            CWPFeed = null;
+            View = null;
+            DynML = null;
+        }
+
         /// <summary>Saves various configurations to file for next session</summary>
         private void SaveSetting()
         {
@@ -751,12 +757,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsbOpen.Enabled = enabled;
                     tsmiOpenFile.Enabled = enabled;
                     tsmiOpenView.Enabled = enabled && Service != null;
+                    tsmiOpenML.Enabled = enabled && Service != null;
                     tsmiOpenCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
                     tsbReturnToCaller.Visible = tvFetch.Nodes.Count > 0 && CallerWantsResults();
                     tsbSave.Enabled = enabled;
                     tsmiSaveFile.Enabled = enabled && FetchChanged && !string.IsNullOrEmpty(FileName);
                     tsmiSaveFileAs.Enabled = enabled && tvFetch.Nodes.Count > 0;
-                    tsmiSaveView.Enabled = enabled && Service != null && FetchChanged && View != null;
+                    tsmiSaveView.Enabled = enabled && Service != null && View != null;
+                    tsmiSaveML.Enabled = enabled && Service != null && DynML != null;
                     tsmiSaveCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
                     tsmiToQureyExpression.Enabled = enabled && Service != null;
                     tsbOptions.Enabled = enabled;
@@ -1456,8 +1464,52 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         }
 
+        private void OpenFile()
+        {
+            if (!SaveIfChanged())
+            {
+                return;
+            }
+            var ofd = new OpenFileDialog
+            {
+                Title = "Select an XML file containing FetchXML",
+                Filter = "XML file (*.xml)|*.xml"
+            };
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                EnableControls(false);
+                fetchDoc = new XmlDocument();
+                fetchDoc.Load(ofd.FileName);
+
+                if (fetchDoc.DocumentElement.Name != "fetch" ||
+                    fetchDoc.DocumentElement.ChildNodes.Count > 0 &&
+                    fetchDoc.DocumentElement.ChildNodes[0].Name == "fetch")
+                {
+                    MessageBox.Show(this, "Invalid Xml: Definition XML root must be fetch!", "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    //LoadUsedEntities();
+                    FileName = ofd.FileName;
+                    DisplayDefinition();
+                    UpdateLiveXML();
+                    treeChecksum = GetTreeChecksum(null);
+                    FetchChanged = false;
+                    LogUse("OpenFile");
+                    RecordHistory("open file");
+                }
+            }
+            EnableControls(true);
+        }
+
         private void OpenView()
         {
+            if (!SaveIfChanged())
+            {
+                return;
+            }
             if (views == null || views.Count == 0)
             {
                 LoadViews(OpenView);
@@ -1475,6 +1527,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         fetchDoc.LoadXml(View["fetchxml"].ToString());
                         DisplayDefinition();
                         UpdateLiveXML();
+                        treeChecksum = GetTreeChecksum(null);
+                        FetchChanged = false;
                         attributesChecksum = GetAttributesSignature(null);
                         LogUse("OpenView");
                         RecordHistory("open view");
@@ -1489,34 +1543,74 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                 }
             }
+            EnableControls(true);
         }
 
         private void OpenML()
         {
-            var viewselector = new SelectViewDialog(this);
-            viewselector.StartPosition = FormStartPosition.CenterParent;
-            if (viewselector.ShowDialog() == DialogResult.OK)
+            if (!SaveIfChanged())
             {
-                if (viewselector.View.Contains("fetchxml") && !string.IsNullOrEmpty(viewselector.View["fetchxml"].ToString()))
+                return;
+            }
+            var mlselector = new SelectMLDialog(this);
+            mlselector.StartPosition = FormStartPosition.CenterParent;
+            if (mlselector.ShowDialog() == DialogResult.OK)
+            {
+                if (mlselector.View.Contains("query") && !string.IsNullOrEmpty(mlselector.View["query"].ToString()))
                 {
-                    View = viewselector.View;
+                    DynML = mlselector.View;
                     fetchDoc = new XmlDocument();
-                    fetchDoc.LoadXml(View["fetchxml"].ToString());
+                    fetchDoc.LoadXml(DynML["query"].ToString());
                     DisplayDefinition();
                     UpdateLiveXML();
-                    attributesChecksum = GetAttributesSignature(null);
-                    LogUse("OpenView");
-                    RecordHistory("open view");
+                    treeChecksum = GetTreeChecksum(null);
+                    FetchChanged = false;
+                    LogUse("OpenML");
+                    RecordHistory("open marketing list");
                 }
                 else
                 {
-                    if (MessageBox.Show("The selected view does not contain any FetchXML.\nPlease select another one.", "Open View",
+                    if (MessageBox.Show("The selected marketing list does not contain any FetchXML.\nPlease select another one.", "Open Marketing List",
                         MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
                     {
                         OpenView();
                     }
                 }
             }
+            EnableControls(true);
+        }
+
+        private void OpenCWPFeed()
+        {
+            if (!SaveIfChanged())
+            {
+                return;
+            }
+            var feedid = Prompt.ShowDialog("Enter CWP Feed ID", "Open CWP Feed");
+            if (string.IsNullOrWhiteSpace(feedid))
+            {
+                return;
+            }
+            Entity feed = GetCWPFeed(feedid);
+            if (feed == null)
+            {
+                MessageBox.Show("Feed not found.", "Open CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            if (feed.Contains("cint_fetchxml"))
+            {
+                CWPFeed = feed.Contains("cint_id") ? feed["cint_id"].ToString() : feedid;
+                var fetch = feed["cint_fetchxml"].ToString();
+                fetchDoc = new XmlDocument();
+                fetchDoc.LoadXml(fetch);
+                DisplayDefinition();
+                UpdateLiveXML();
+                treeChecksum = GetTreeChecksum(null);
+                FetchChanged = false;
+                LogUse("OpenCWP");
+                RecordHistory("open CWP feed");
+            }
+            EnableControls(true);
         }
 
         private void SaveView()
@@ -1564,6 +1658,69 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         MessageBox.Show(completedargs.Error.Message, "Save view", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 });
+        }
+
+        private void SaveML()
+        {
+            var msg = "Saving {0}...";
+            WorkAsync(string.Format(msg, DynML["listname"]),
+                (eventargs) =>
+                {
+                    var xml = GetFetchString(false);
+                    Entity newView = new Entity(DynML.LogicalName);
+                    newView.Id = DynML.Id;
+                    newView.Attributes.Add("query", xml);
+                    Service.Update(newView);
+                    DynML["query"] = xml;
+                },
+                (completedargs) =>
+                {
+                    if (completedargs.Error != null)
+                    {
+                        MessageBox.Show(completedargs.Error.Message, "Save Marketing List", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                });
+        }
+
+        private void SaveCWPFeed()
+        {
+            if (string.IsNullOrWhiteSpace(CWPFeed))
+            {
+                var feedid = Prompt.ShowDialog("Enter CWP Feed ID (enter existing ID to update feed)", "Save CWP Feed");
+                if (feedid == null)
+                {
+                    return;
+                }
+                if (string.IsNullOrWhiteSpace(feedid))
+                {
+                    MessageBox.Show("Feed not saved.", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
+                }
+                CWPFeed = feedid;
+            }
+            Entity feed = GetCWPFeed(CWPFeed);
+            if (feed == null)
+            {
+                feed = new Entity("cint_feed");
+            }
+            if (feed.Contains("cint_fetchxml"))
+            {
+                feed.Attributes.Remove("cint_fetchxml");
+            }
+            feed.Attributes.Add("cint_fetchxml", GetFetchString(true));
+            var verb = feed.Id.Equals(Guid.Empty) ? "created" : "updated";
+            if (feed.Id.Equals(Guid.Empty))
+            {
+                feed.Attributes.Add("cint_id", CWPFeed);
+                feed.Attributes.Add("cint_description", "Created by FetchXML Builder for XrmToolBox");
+                Service.Create(feed);
+            }
+            else
+            {
+                Service.Update(feed);
+            }
+            LogUse("SaveCWPFeed");
+            MessageBox.Show("CWP Feed " + CWPFeed + " has been " + verb + "!", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private EntityMetadata GetEntity(int etc)
@@ -1628,74 +1785,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 addMenu.Show(tvFetch.PointToScreen(tvFetch.Location));
             }
-        }
-
-        private void OpenCWPFeed()
-        {
-            var feedid = Prompt.ShowDialog("Enter CWP Feed ID", "Open CWP Feed");
-            if (string.IsNullOrWhiteSpace(feedid))
-            {
-                return;
-            }
-            Entity feed = GetCWPFeed(feedid);
-            if (feed == null)
-            {
-                MessageBox.Show("Feed not found.", "Open CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-            if (feed.Contains("cint_fetchxml"))
-            {
-                CWPFeed = feed.Contains("cint_id") ? feed["cint_id"].ToString() : feedid;
-                var fetch = feed["cint_fetchxml"].ToString();
-                fetchDoc = new XmlDocument();
-                fetchDoc.LoadXml(fetch);
-                DisplayDefinition();
-                UpdateLiveXML();
-                attributesChecksum = GetAttributesSignature(null);
-                LogUse("OpenCWPFeed");
-                RecordHistory("open CWP feed");
-            }
-        }
-
-        private void SaveCWPFeed()
-        {
-            if (string.IsNullOrWhiteSpace(CWPFeed))
-            {
-                var feedid = Prompt.ShowDialog("Enter CWP Feed ID (enter existing ID to update feed)", "Save CWP Feed");
-                if (feedid == null)
-                {
-                    return;
-                }
-                if (string.IsNullOrWhiteSpace(feedid))
-                {
-                    MessageBox.Show("Feed not saved.", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return;
-                }
-                CWPFeed = feedid;
-            }
-            Entity feed = GetCWPFeed(CWPFeed);
-            if (feed == null)
-            {
-                feed = new Entity("cint_feed");
-            }
-            if (feed.Contains("cint_fetchxml"))
-            {
-                feed.Attributes.Remove("cint_fetchxml");
-            }
-            feed.Attributes.Add("cint_fetchxml", GetFetchString(true));
-            var verb = feed.Id.Equals(Guid.Empty) ? "created" : "updated";
-            if (feed.Id.Equals(Guid.Empty))
-            {
-                feed.Attributes.Add("cint_id", CWPFeed);
-                feed.Attributes.Add("cint_description", "Created by FetchXML Builder for XrmToolBox");
-                Service.Create(feed);
-            }
-            else
-            {
-                Service.Update(feed);
-            }
-            LogUse("SaveCWPFeed");
-            MessageBox.Show("CWP Feed " + CWPFeed + " has been " + verb + "!", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private Entity GetCWPFeed(string feedid)
