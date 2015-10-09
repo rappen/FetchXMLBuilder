@@ -1415,7 +1415,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     var qex = new QueryExpression("savedquery");
                     qex.ColumnSet = new ColumnSet("name", "returnedtypecode", "fetchxml");
                     qex.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
-                    qex.Criteria.AddCondition("querytype", ConditionOperator.In, 0, 32);
+                    qex.Criteria.AddCondition("querytype", ConditionOperator.In, 0, 1, 32);
                     qex.AddOrder("name", OrderType.Ascending);
                     var sysviews = Service.RetrieveMultiple(qex);
                     foreach (var view in sysviews.Entities)
