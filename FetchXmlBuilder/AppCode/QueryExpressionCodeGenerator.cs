@@ -87,7 +87,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             code.AppendLine();
             code.AppendLine("// Add link-entity " + linkname);
             var join = link.JoinOperator == JoinOperator.Inner ? "" : ", JoinOperator." + link.JoinOperator.ToString();
-            code.AppendLine("var " + linkname + " = " + LineStart + ".AddLink(\"" + link.LinkToEntityName + "\", \"" + link.LinkFromAttributeName + "\", \"" + link.LinkToAttributeName + "\"" + join + ");");
+            code.AppendLine($"var {linkname} = {LineStart}.AddLink(\"{link.LinkToEntityName}\", \"{link.LinkToAttributeName}\", \"{link.LinkFromAttributeName}\"{join});");
             if (!string.IsNullOrWhiteSpace(link.EntityAlias))
             {
                 code.AppendLine(linkname + ".EntityAlias = \"" + link.EntityAlias + "\";");
@@ -124,14 +124,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     {
                         values = ", " + GetConditionValues(cond.Values);
                     }
-                    code.AppendLine(LineStart + ".AddCondition(" + entity + "\"" + cond.AttributeName + "\", ConditionOperator." + cond.Operator.ToString() + values + ");");
+                    code.AppendLine($"{LineStart}.AddCondition({entity}\"{cond.AttributeName}\", ConditionOperator.{cond.Operator.ToString()}{values});");
                 }
                 var i = 0;
                 foreach (var subfilter in filterExpression.Filters)
                 {
                     var filtername = GetVarName(LineStart.Replace(".", "_") + "_" + i.ToString());
-                    code.AppendLine("var " + filtername + " = new FilterExpression(LogicalOperator." + subfilter.FilterOperator + ");");
-                    code.AppendLine(LineStart + ".AddFilter(" + filtername + ");");
+                    code.AppendLine($"var {filtername} = new FilterExpression(LogicalOperator.{subfilter.FilterOperator});");
+                    code.AppendLine($"{LineStart}.AddFilter({filtername});");
                     code.Append(GetFilter(subfilter, filtername));
                     i++;
                 }

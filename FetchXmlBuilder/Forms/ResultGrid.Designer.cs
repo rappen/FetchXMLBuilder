@@ -136,7 +136,7 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panBottom);
             this.Name = "ResultGrid";
-            this.Text = "ResultGrid";
+            this.Text = "FetchXML Builder - Result Grid";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ResultGrid_FormClosing);
             this.panel2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
