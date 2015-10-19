@@ -130,7 +130,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 foreach (var subfilter in filterExpression.Filters)
                 {
                     var filtername = GetVarName(LineStart.Replace(".", "_") + "_" + i.ToString());
-                    code.AppendLine($"var {filtername} = new FilterExpression(LogicalOperator.{subfilter.FilterOperator});");
+                    code.AppendLine($"var {filtername} = new FilterExpression();");
                     code.AppendLine($"{LineStart}.AddFilter({filtername});");
                     code.Append(GetFilter(subfilter, filtername));
                     i++;
@@ -147,6 +147,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 if (value is string || value is Guid)
                 {
                     strings.Add("\"" + value.ToString() + "\"");
+                }
+                else if (value is bool)
+                {
+                    strings.Add((bool)value ? "true" : "false");
                 }
                 else
                 {
