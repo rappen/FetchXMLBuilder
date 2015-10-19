@@ -220,9 +220,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void cmbRelationship_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var rel = (EntityRelationship)cmbRelationship.SelectedItem;
-            if (rel != null)
+            if (cmbRelationship.SelectedItem != null && cmbRelationship.SelectedItem is EntityRelationship)
             {
+                var rel = (EntityRelationship)cmbRelationship.SelectedItem;
                 var parent = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
                 if (rel.Relationship is OneToManyRelationshipMetadata)
                 {
