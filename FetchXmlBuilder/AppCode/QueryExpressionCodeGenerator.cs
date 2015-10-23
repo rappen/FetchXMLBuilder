@@ -87,7 +87,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             code.AppendLine();
             code.AppendLine("// Add link-entity " + linkname);
             var join = link.JoinOperator == JoinOperator.Inner ? "" : ", JoinOperator." + link.JoinOperator.ToString();
-            code.AppendLine($"var {linkname} = {LineStart}.AddLink(\"{link.LinkToEntityName}\", \"{link.LinkToAttributeName}\", \"{link.LinkFromAttributeName}\"{join});");
+            code.AppendLine(string.Format("var {0} = {1}.AddLink(\"{2}\", \"{3}\", \"{4}\"{5});", linkname, LineStart, link.LinkToEntityName, link.LinkToAttributeName, link.LinkFromAttributeName, join));
             if (!string.IsNullOrWhiteSpace(link.EntityAlias))
             {
                 code.AppendLine(linkname + ".EntityAlias = \"" + link.EntityAlias + "\";");
@@ -124,14 +124,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     {
                         values = ", " + GetConditionValues(cond.Values);
                     }
-                    code.AppendLine($"{LineStart}.AddCondition({entity}\"{cond.AttributeName}\", ConditionOperator.{cond.Operator.ToString()}{values});");
+                    code.AppendLine(string.Format("{0}.AddCondition({1}\"{2}\", ConditionOperator.{3}{4});", LineStart, entity, cond.AttributeName, cond.Operator.ToString(), values));
                 }
                 var i = 0;
                 foreach (var subfilter in filterExpression.Filters)
                 {
                     var filtername = GetVarName(LineStart.Replace(".", "_") + "_" + i.ToString());
-                    code.AppendLine($"var {filtername} = new FilterExpression();");
-                    code.AppendLine($"{LineStart}.AddFilter({filtername});");
+                    code.AppendLine(string.Format("var {0} = new FilterExpression();", filtername));
+                    code.AppendLine(string.Format("{0}.AddFilter({1});", LineStart, filtername));
                     code.Append(GetFilter(subfilter, filtername));
                     i++;
                 }

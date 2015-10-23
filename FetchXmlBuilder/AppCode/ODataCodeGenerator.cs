@@ -148,7 +148,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 var attrMeta = FetchXmlBuilder.GetAttribute(entity.name, condition.attribute);
                 if (attrMeta == null)
                 {
-                    throw new Exception($"No metadata for attribute: {entity.name}.{condition.attribute}");
+                    throw new Exception(string.Format("No metadata for attribute: {0}.{1}", entity.name, condition.attribute));
                 }
                 result = attrMeta.SchemaName;
                 switch (attrMeta.AttributeType)
@@ -171,7 +171,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         result += " ne ";
                         break;
                     //case @operator.like:
-                    //    result = $"substringof('{condition.value}', {attrMeta.SchemaName})";
+                    //    result = string.Format(substringof('{condition.value}', {attrMeta.SchemaName})";
                     //    break;
                     case @operator.@null:
                         result += " eq null";
@@ -185,9 +185,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     case @operator.le:
                     case @operator.gt:
                     case @operator.ge:
-                        throw new Exception($"Condition operator '{condition.@operator}' is not yet supported by the OData generator");
+                        throw new Exception(string.Format("Condition operator '{0}' is not yet supported by the OData generator", condition.@operator));
                     default:
-                        throw new Exception($"Unsupported OData condition operator '{condition.@operator}'");
+                        throw new Exception(string.Format("Unsupported OData condition operator '{0}'", condition.@operator));
                 }
                 if (!string.IsNullOrEmpty(condition.value))
                 {
@@ -198,10 +198,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                             result += condition.value;
                             break;
                         case AttributeTypeCode.Lookup:
-                            result += $"(guid'{condition.value}')";
+                            result += string.Format("(guid'{0}')", condition.value);
                             break;
                         default:
-                            result += $"'{condition.value}'";
+                            result += string.Format("'{0}'", condition.value);
                             break;
                     }
                 }
@@ -238,7 +238,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             var attrMeta = FetchXmlBuilder.GetAttribute(entity, attribute);
             if (attrMeta == null)
             {
-                throw new Exception($"No metadata for attribute: {entity}.{attribute}");
+                throw new Exception(string.Format("No metadata for attribute: {0}.{1}", entity, attribute));
             }
             return attrMeta.SchemaName;
         }
@@ -251,9 +251,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
             if (!FetchXmlBuilder.entities.ContainsKey(entity))
             {
-                throw new Exception($"No metadata for entity: {entity}");
+                throw new Exception(string.Format("No metadata for entity: {0}", entity));
             }
         }
-
     }
 }
