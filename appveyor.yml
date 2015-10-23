@@ -3,6 +3,7 @@ branches:
   only:
   - noautobuilds
 skip_tags: true
+os: Visual Studio 2015
 configuration: Release
 init:
 - ps: Update-AppveyorBuild -Version "1.$(Get-Date -format yyyy.M).$env:appveyor_build_number"
@@ -13,7 +14,7 @@ assembly_info:
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
 build:
-  verbosity: minimal
+  verbosity: normal
 after_build:
 - 7z a FetchXMLBuilder_%APPVEYOR_BUILD_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\FetchXMLBuilder\bin\%CONFIGURATION%\Cinteros.Xrm.*.dll
 - appveyor PushArtifact FetchXMLBuilder_%APPVEYOR_BUILD_VERSION%.zip
