@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Forms;
@@ -30,7 +31,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private XmlDocument fetchDoc;
         private List<Tuple<string, string>> editHistory = new List<Tuple<string, string>>();
         private int historyIndex = 0;
-        private static Dictionary<string, EntityMetadata> entities;
+        internal static Dictionary<string, EntityMetadata> entities;
         internal static List<string> entityShitList = new List<string>(); // Oops, did I name that one??
         internal static Dictionary<string, List<Entity>> views;
         private static string fetchTemplate = "<fetch count=\"50\"><entity name=\"\"/></fetch>";
@@ -140,8 +141,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private string liveUpdateXml = "";
         private MessageBusEventArgs callerArgs = null;
         String[] entityProperties = { "LogicalName", "DisplayName", "ObjectTypeCode", "IsManaged", "IsCustomizable", "IsCustomEntity", "IsIntersect", "IsValidForAdvancedFind" };
-        String[] entityDetails = { "Attributes", "ManyToOneRelationships", "OneToManyRelationships", "ManyToManyRelationships" };
-        String[] attributeProperties = { "DisplayName", "AttributeType", "IsValidForRead", "AttributeOf", "IsManaged", "IsCustomizable", "IsCustomAttribute", "IsValidForAdvancedFind", "IsPrimaryId", "OptionSet" };
+        String[] entityDetails = { "Attributes", "ManyToOneRelationships", "OneToManyRelationships", "ManyToManyRelationships", "SchemaName" };
+        String[] attributeProperties = { "DisplayName", "AttributeType", "IsValidForRead", "AttributeOf", "IsManaged", "IsCustomizable", "IsCustomAttribute", "IsValidForAdvancedFind", "IsPrimaryId", "OptionSet", "SchemaName" };
         #endregion Declarations
 
         public FetchXmlBuilder()
@@ -312,10 +313,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsmiOpenFile_Click(object sender, EventArgs e)
         {
             OpenFile();
-            }
+        }
 
         private void tsmiOpenView_Click(object sender, EventArgs e)
-                {
+        {
             OpenView();
         }
 
@@ -602,6 +603,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
+        private void tsmiShowOData_CheckedChanged(object sender, EventArgs e)
+        {
+            panOData.Visible = tsmiShowOData.Checked;
+            UpdateLiveXML();
+        }
+
         private void tsmiToQureyExpression_Click(object sender, EventArgs e)
         {
             DisplayQExCode();
@@ -625,6 +632,38 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (historyIndex > 0)
             {
                 RestoreHistoryPosition(historyIndex - 1);
+            }
+        }
+
+        private void linkOData_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && e.Link.Enabled)
+            {
+                System.Diagnostics.Process.Start(e.Link.LinkData as string);
+            }
+        }
+
+        private void menuODataExecute_Click(object sender, EventArgs e)
+        {
+            if (linkOData.Links.Count > 0 && linkOData.Links[0].Enabled)
+            {
+                System.Diagnostics.Process.Start(linkOData.Links[0].LinkData as string);
+            }
+            else
+            {
+                MessageBox.Show("No link to execute");
+            }
+        }
+
+        private void menuODataCopy_Click(object sender, EventArgs e)
+        {
+            if (linkOData.Links.Count > 0 && linkOData.Links[0].Enabled)
+            {
+                Clipboard.SetText(linkOData.Links[0].LinkData as string);
+            }
+            else
+            {
+                MessageBox.Show("No link to copy");
             }
         }
 
@@ -1122,8 +1161,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     ctrl.BringToFront();
                     ctrl.Dock = DockStyle.Fill;
                 }
-                    if (existingControl != null) panelContainer.Controls.Remove(existingControl);
-                }
+                if (existingControl != null) panelContainer.Controls.Remove(existingControl);
+            }
             ManageMenuDisplay();
         }
 
@@ -1184,62 +1223,94 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 });
         }
 
-        internal void LoadEntityDetails(string entityName, Action detailsLoaded)
+        internal void LoadEntityDetails(string entityName, Action detailsLoaded, bool async = true)
         {
+            if (detailsLoaded != null && !async)
+            {
+                throw new ArgumentException("Cannot handle call-back method for synchronous loading.", "detailsLoaded");
+            }
             working = true;
             var name = GetEntityDisplayName(entityName);
-            WorkAsync("Loading " + name + "...",
-                (eventargs) =>
-                {
-                    var eqe = new EntityQueryExpression();
-                    eqe.Properties = new MetadataPropertiesExpression(entityProperties);
-                    eqe.Properties.PropertyNames.AddRange(entityDetails);
-                    eqe.Criteria.Conditions.Add(new MetadataConditionExpression("LogicalName", MetadataConditionOperator.Equals, entityName));
-                    var aqe = new AttributeQueryExpression();
-                    aqe.Properties = new MetadataPropertiesExpression(attributeProperties);
-                    eqe.AttributeQuery = aqe;
-                    var req = new RetrieveMetadataChangesRequest()
+            if (async)
+            {
+                WorkAsync("Loading " + name + "...",
+                    (eventargs) =>
                     {
-                        Query = eqe,
-                        ClientVersionStamp = null
-                    };
-                    eventargs.Result = Service.Execute(req);
-                },
-                (completedargs) =>
-                {
-                    if (completedargs.Error != null)
+                        eventargs.Result = LoadEntityDetails(entityName);
+                    },
+                    (completedargs) =>
                     {
-                        entityShitList.Add(entityName);
-                        MessageBox.Show(completedargs.Error.Message, "Load attribute metadata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        LoadEntityDetailsCompleted(entityName, completedargs.Result as OrganizationResponse, completedargs.Error);
+                        if (completedargs.Error == null && detailsLoaded != null)
+                        {
+                            detailsLoaded();
+                        }
+                    });
+            }
+            else
+            {
+                try
+                {
+                    var resp = LoadEntityDetails(entityName);
+                    LoadEntityDetailsCompleted(entityName, resp, null);
+                }
+                catch (Exception e)
+                {
+                    LoadEntityDetailsCompleted(entityName, null, e);
+                }
+            }
+        }
+
+        private OrganizationResponse LoadEntityDetails(string entityName)
+        {
+            var eqe = new EntityQueryExpression();
+            eqe.Properties = new MetadataPropertiesExpression(entityProperties);
+            eqe.Properties.PropertyNames.AddRange(entityDetails);
+            eqe.Criteria.Conditions.Add(new MetadataConditionExpression("LogicalName", MetadataConditionOperator.Equals, entityName));
+            var aqe = new AttributeQueryExpression();
+            aqe.Properties = new MetadataPropertiesExpression(attributeProperties);
+            eqe.AttributeQuery = aqe;
+            var req = new RetrieveMetadataChangesRequest()
+            {
+                Query = eqe,
+                ClientVersionStamp = null
+            };
+            return Service.Execute(req);
+        }
+
+        private void LoadEntityDetailsCompleted(string entityName, OrganizationResponse Result, Exception Error)
+        {
+            if (Error != null)
+            {
+                entityShitList.Add(entityName);
+                MessageBox.Show(Error.Message, "Load attribute metadata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                if (Result is RetrieveMetadataChangesResponse)
+                {
+                    var resp = (RetrieveMetadataChangesResponse)Result;
+                    if (resp.EntityMetadata.Count == 1)
+                    {
+                        if (entities.ContainsKey(entityName))
+                        {
+                            entities[entityName] = resp.EntityMetadata[0];
+                        }
+                        else
+                        {
+                            entities.Add(entityName, resp.EntityMetadata[0]);
+                        }
                     }
                     else
                     {
-                        if (completedargs.Result is RetrieveMetadataChangesResponse)
-                        {
-                            var resp = (RetrieveMetadataChangesResponse)completedargs.Result;
-                            if (resp.EntityMetadata.Count == 1)
-                            {
-                                if (entities.ContainsKey(entityName))
-                                {
-                                    entities[entityName] = resp.EntityMetadata[0];
-                                }
-                                else
-                                {
-                                    entities.Add(entityName, resp.EntityMetadata[0]);
-                                }
-                            }
-                            else
-                            {
-                                entityShitList.Add(entityName);
-                                MessageBox.Show("Metadata not found for entity " + name, "Load attribute metadata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        }
-                        }
-                        working = false;
-                        TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, currentSettings.useFriendlyNames);
-                        detailsLoaded();
+                        entityShitList.Add(entityName);
+                        MessageBox.Show("Metadata not found for entity " + entityName, "Load attribute metadata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
-                    working = false;
-                });
+                }
+                working = false;
+                TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, currentSettings.useFriendlyNames);
+            }
+            working = false;
         }
 
         private string GetTreeChecksum(TreeNode node)
@@ -1790,7 +1861,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 addMenu.Show(tvFetch.PointToScreen(tvFetch.Location));
             }
-            }
+        }
 
         private Entity GetCWPFeed(string feedid)
         {
@@ -1871,7 +1942,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 UpdateLiveXML();
                 RecordHistory("select attributes");
             }
-            }
+        }
 
         private TreeNode DeleteNode()
         {
@@ -1990,6 +2061,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     xmlLiveUpdate.UpdateXML(liveUpdateXml);
                 }
             }
+            if (tsmiShowOData.Checked)
+            {
+                DisplayOData();
+            }
         }
 
         private void AlignLiveXML()
@@ -2040,9 +2115,48 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return convert.Query;
         }
 
+        private void DisplayOData()
+        {
+            try
+            {
+                var prefix = "OData: ";
+                var url = GetOData();
+                linkOData.Text = prefix + url;
+                linkOData.LinkArea = new LinkArea(prefix.Length, url.Length);
+                if (linkOData.Links.Count > 0)
+                {
+                    linkOData.Links[0].LinkData = url;
+                }
+            }
+            catch (Exception ex)
+            {
+                linkOData.Text = ex.Message;
+                linkOData.Links.Clear();
+            }
+        }
+
         private string GetOData()
         {
-            throw new NotImplementedException("OData output is not yet implemented.");
+            if (Service == null || ConnectionDetail == null || ConnectionDetail.OrganizationServiceUrl == null)
+            {
+                throw new Exception("Must have an active connection to CRM to compose OData query.");
+            }
+            FetchType fetch = GetFetchType();
+            var ODataSvcUrl = ConnectionDetail.OrganizationServiceUrl.Replace("Organization.svc", "OrganizationData.svc");
+            var odata = ODataCodeGenerator.GetODataQuery(fetch, ODataSvcUrl, this);
+            return odata;
+        }
+
+        private FetchType GetFetchType()
+        {
+            var fetchstr = GetFetchString(false);
+            var serializer = new XmlSerializer(typeof(FetchType));
+            object result;
+            using (TextReader reader = new StringReader(fetchstr))
+            {
+                result = serializer.Deserialize(reader);
+            }
+            return result as FetchType;
         }
 
         private Task LogUsageTask(string action)

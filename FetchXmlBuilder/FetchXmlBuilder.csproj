@@ -98,6 +98,7 @@
     <Compile Include="AppCode\FetchIsAggregateException.cs" />
     <Compile Include="AppCode\FXBSettings.cs" />
     <Compile Include="AppCode\LogUsage.cs" />
+    <Compile Include="AppCode\ODataCodeGenerator.cs" />
     <Compile Include="AppCode\OptionsetItem.cs" />
     <Compile Include="AppCode\QueryExpressionCodeGenerator.cs" />
     <Compile Include="AppCode\ViewItem.cs" />
@@ -209,6 +210,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\fetch.cs">
+      <DependentUpon>fetch.xsd</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
