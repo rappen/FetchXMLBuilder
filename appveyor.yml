@@ -14,7 +14,7 @@ assembly_info:
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
 build:
-  verbosity: minimal
+  verbosity: normal
 after_build:
 - 7z a FetchXMLBuilder_%APPVEYOR_BUILD_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\FetchXMLBuilder\bin\%CONFIGURATION%\Cinteros.Xrm.*.dll
 - appveyor PushArtifact FetchXMLBuilder_%APPVEYOR_BUILD_VERSION%.zip
