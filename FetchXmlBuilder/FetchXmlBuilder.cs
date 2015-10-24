@@ -606,6 +606,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsmiShowOData_CheckedChanged(object sender, EventArgs e)
         {
             panOData.Visible = tsmiShowOData.Checked;
+            if (tsmiShowOData.Checked)
+            {
+                LogUse("ShowOdata");
+            }
             UpdateLiveXML();
         }
 
@@ -640,6 +644,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (e.Button == MouseButtons.Left && e.Link.Enabled)
             {
                 System.Diagnostics.Process.Start(e.Link.LinkData as string);
+                LogUse("ExecuteOData");
             }
         }
 
@@ -648,6 +653,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (linkOData.Links.Count > 0 && linkOData.Links[0].Enabled)
             {
                 System.Diagnostics.Process.Start(linkOData.Links[0].LinkData as string);
+                LogUse("ExecuteOData");
             }
             else
             {
@@ -660,6 +666,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (linkOData.Links.Count > 0 && linkOData.Links[0].Enabled)
             {
                 Clipboard.SetText(linkOData.Links[0].LinkData as string);
+                LogUse("CopyOData");
             }
             else
             {
