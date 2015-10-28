@@ -214,6 +214,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 {
                     case AttributeTypeCode.Picklist:
                     case AttributeTypeCode.Money:
+                    case AttributeTypeCode.State:
+                    case AttributeTypeCode.Status:
                         result += "/Value";
                         break;
                     case AttributeTypeCode.Lookup:
