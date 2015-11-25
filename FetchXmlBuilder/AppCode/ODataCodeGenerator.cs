@@ -268,6 +268,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         case AttributeTypeCode.Picklist:
                             result += condition.value;
                             break;
+                        case AttributeTypeCode.Uniqueidentifier:
                         case AttributeTypeCode.Lookup:
                         case AttributeTypeCode.Customer:
                         case AttributeTypeCode.Owner:
