@@ -27,19 +27,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             url += "/" + LogicalToSchemaName(entity.name, sender) + "Set";
 
             var query = "";
-            var select = GetSelect(entity, sender);
-            var order = GetOrder(entity, sender);
-            var expand = GetExpand(entity, sender, ref select);
-            var filter = GetFilter(entity, sender);
-
             if (!string.IsNullOrEmpty(fetch.top))
             {
                 query = AppendQuery(query, "$top", fetch.top);
             }
-            query = AppendQuery(query, "$select", select);
-            query = AppendQuery(query, "$orderby", order);
-            query = AppendQuery(query, "$expand", expand);
-            query = AppendQuery(query, "$filter", filter);
+            if (entity.Items != null)
+            {
+                var select = GetSelect(entity, sender);
+                var order = GetOrder(entity, sender);
+                var expand = GetExpand(entity, sender, ref select);
+                var filter = GetFilter(entity, sender);
+                query = AppendQuery(query, "$select", select);
+                query = AppendQuery(query, "$orderby", order);
+                query = AppendQuery(query, "$expand", expand);
+                query = AppendQuery(query, "$filter", filter);
+            }
 
             if (!string.IsNullOrEmpty(query))
             {
