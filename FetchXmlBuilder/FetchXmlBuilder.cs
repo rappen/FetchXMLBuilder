@@ -1194,7 +1194,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             working = true;
             entities = null;
             entityShitList = new List<string>();
-            WorkAsync("Loading entities...",
+            WorkAsync(new WorkAsyncInfo("Loading entities...",
                 (eventargs) =>
                 {
                     EnableControls(false);
@@ -1207,8 +1207,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         ClientVersionStamp = null
                     };
                     eventargs.Result = Service.Execute(req);
-                },
-                (completedargs) =>
+                })
+            {
+                PostWorkCallBack = (completedargs) =>
                 {
                     if (completedargs.Error != null)
                     {
@@ -1227,7 +1228,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     working = false;
                     EnableControls(true);
-                });
+                }
+            });
         }
 
         internal void LoadEntityDetails(string entityName, Action detailsLoaded, bool async = true)
@@ -1240,19 +1242,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             var name = GetEntityDisplayName(entityName);
             if (async)
             {
-                WorkAsync("Loading " + name + "...",
+                WorkAsync(new WorkAsyncInfo($"Loading {name}...",
                     (eventargs) =>
                     {
                         eventargs.Result = LoadEntityDetails(entityName);
-                    },
-                    (completedargs) =>
+                    })
+                {
+                    PostWorkCallBack = (completedargs) =>
                     {
                         LoadEntityDetailsCompleted(entityName, completedargs.Result as OrganizationResponse, completedargs.Error);
                         if (completedargs.Error == null && detailsLoaded != null)
                         {
                             detailsLoaded();
                         }
-                    });
+                    }
+                });
             }
             else
             {
@@ -1388,14 +1392,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void ExecuteFetch(string fetch)
         {
             working = true;
-            WorkAsync("Executing FetchXML...",
+            WorkAsync(new WorkAsyncInfo("Executing FetchXML...",
                 (eventargs) =>
                 {
                     //var fetchxml = GetFetchDocument().OuterXml;
                     var resp = (ExecuteFetchResponse)Service.Execute(new ExecuteFetchRequest() { FetchXml = fetch });
                     eventargs.Result = resp.FetchXmlResult;
-                },
-                (completedargs) =>
+                })
+            {
+                PostWorkCallBack = (completedargs) =>
                 {
                     working = false;
                     if (completedargs.Error != null)
@@ -1410,7 +1415,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         xcdDialog.StartPosition = FormStartPosition.CenterParent;
                         xcdDialog.ShowDialog();
                     }
-                });
+                }
+            });
             LogUse("ExecuteFetch");
         }
 
@@ -1419,7 +1425,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             working = true;
             var outputtype = tsmiResultOption.SelectedIndex;
             var outputtypestring = tsmiResultOption.SelectedItem.ToString();
-            WorkAsync("Executing FetchXML...",
+            WorkAsync(new WorkAsyncInfo("Executing FetchXML...",
                 (eventargs) =>
                 {
                     EntityCollection resultCollection = null;
@@ -1442,8 +1448,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         eventargs.Result = resultCollection;
                     }
-                },
-                (completedargs) =>
+                })
+            {
+                PostWorkCallBack = (completedargs) =>
                 {
                     working = false;
                     if (completedargs.Error != null)
@@ -1474,13 +1481,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         xcdDialog.StartPosition = FormStartPosition.CenterParent;
                         xcdDialog.ShowDialog();
                     }
-                });
+                }
+            });
             LogUse("RetrieveMultiple-" + outputtypestring);
         }
 
         internal void LoadViews(Action viewsLoaded)
         {
-            WorkAsync("Loading views...",
+            WorkAsync(new WorkAsyncInfo("Loading views...",
             (eventargs) =>
             {
                 EnableControls(false);
@@ -1531,20 +1539,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         }
                     }
                 }
-            },
-            (completedargs) =>
+            })
             {
-                EnableControls(true);
-                if (completedargs.Error != null)
-                {
-                    MessageBox.Show(completedargs.Error.Message);
-                }
-                else
-                {
-                    viewsLoaded();
-                }
+                PostWorkCallBack = (completedargs) =>
+                  {
+                      EnableControls(true);
+                      if (completedargs.Error != null)
+                      {
+                          MessageBox.Show(completedargs.Error.Message);
+                      }
+                      else
+                      {
+                          viewsLoaded();
+                      }
+                  }
             });
-
         }
 
         private void OpenFile()
@@ -1715,7 +1724,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 }
             }
             var msg = View.LogicalName == "savedquery" ? "Saving and publishing {0}..." : "Saving {0}...";
-            WorkAsync(string.Format(msg, View["name"]),
+            WorkAsync(new WorkAsyncInfo(string.Format(msg, View["name"]),
                 (eventargs) =>
                 {
                     var xml = GetFetchString(false);
@@ -1733,20 +1742,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         LogUse("SaveView");
                     }
                     View["fetchxml"] = xml;
-                },
-                (completedargs) =>
+                })
+            {
+                PostWorkCallBack = (completedargs) =>
                 {
                     if (completedargs.Error != null)
                     {
                         MessageBox.Show(completedargs.Error.Message, "Save view", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                });
+                }
+            });
         }
 
         private void SaveML()
         {
             var msg = "Saving {0}...";
-            WorkAsync(string.Format(msg, DynML["listname"]),
+            WorkAsync(new WorkAsyncInfo(string.Format(msg, DynML["listname"]),
                 (eventargs) =>
                 {
                     var xml = GetFetchString(false);
@@ -1755,14 +1766,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     newView.Attributes.Add("query", xml);
                     Service.Update(newView);
                     DynML["query"] = xml;
-                },
-                (completedargs) =>
+                })
+            {
+                PostWorkCallBack = (completedargs) =>
                 {
                     if (completedargs.Error != null)
                     {
                         MessageBox.Show(completedargs.Error.Message, "Save Marketing List", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                });
+                }
+            });
         }
 
         private void SaveCWPFeed()
@@ -2144,13 +2157,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private string GetOData()
         {
-            if (Service == null || ConnectionDetail == null || ConnectionDetail.OrganizationServiceUrl == null)
+            if (Service == null || ConnectionDetail == null || ConnectionDetail.OrganizationDataServiceUrl == null)
             {
                 throw new Exception("Must have an active connection to CRM to compose OData query.");
             }
             FetchType fetch = GetFetchType();
-            var ODataSvcUrl = ConnectionDetail.OrganizationServiceUrl.Replace("Organization.svc", "OrganizationData.svc");
-            var odata = ODataCodeGenerator.GetODataQuery(fetch, ODataSvcUrl, this);
+            var odata = ODataCodeGenerator.GetODataQuery(fetch, ConnectionDetail.OrganizationDataServiceUrl, this);
             return odata;
         }
 

@@ -60,10 +60,6 @@
       <HintPath>..\Dependencies\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Xrm.Client, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Microsoft.Xrm.Client.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Xrm.Sdk, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Microsoft.Xrm.Sdk.dll</HintPath>
