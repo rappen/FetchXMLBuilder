@@ -21,10 +21,11 @@ using System.Xml.Serialization;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Forms;
+using XrmToolBox.Extensibility.Args;
 
 namespace Cinteros.Xrm.FetchXmlBuilder
 {
-    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin
+    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessager
     {
         #region Declarations
         const string settingfile = "Cinteros.Xrm.FetchXmlBuilder.Settings.xml";
@@ -178,6 +179,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         #region Event handlers
 
         public event EventHandler<MessageBusEventArgs> OnOutgoingMessage;
+        public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
 
         public override void ClosingPlugin(PluginCloseInfo info)
         {
