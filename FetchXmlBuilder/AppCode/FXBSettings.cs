@@ -43,6 +43,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool? logUsage { get; set; }
         public string currentVersion { get; set; }
 
+        public FXBSettings()
+        {
+            showEntitiesAll = true;
+            showAttributesAll = true;
+        }
+
         public static FXBSettings Load()
         {
             if (File.Exists(filename))
