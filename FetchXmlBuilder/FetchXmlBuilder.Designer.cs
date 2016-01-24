@@ -90,10 +90,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.outputTypeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiResultOption = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiLiveUpdate = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowQuickActions = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowOData = new System.Windows.Forms.ToolStripMenuItem();
-            this.gbProperties = new System.Windows.Forms.GroupBox();
-            this.panelContainer = new System.Windows.Forms.Panel();
+            this.tsmiLiveUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.gbFetchTree = new System.Windows.Forms.GroupBox();
             this.tvFetch = new System.Windows.Forms.TreeView();
             this.nodeMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -121,8 +120,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.panODataLabel = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.splitter2 = new System.Windows.Forms.Splitter();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.gbProperties = new System.Windows.Forms.GroupBox();
+            this.panelContainer = new System.Windows.Forms.Panel();
+            this.panelButtonSpacer = new System.Windows.Forms.Panel();
+            this.gbQuickActions = new System.Windows.Forms.GroupBox();
+            this.menuControl = new System.Windows.Forms.MenuStrip();
             this.toolStripMain.SuspendLayout();
-            this.gbProperties.SuspendLayout();
             this.gbFetchTree.SuspendLayout();
             this.nodeMenu.SuspendLayout();
             this.addMenu.SuspendLayout();
@@ -130,6 +134,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.menuOData.SuspendLayout();
             this.panODataLabel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panel1.SuspendLayout();
+            this.gbProperties.SuspendLayout();
+            this.gbQuickActions.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStripMain
@@ -391,8 +398,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.outputTypeToolStripMenuItem,
             this.tsmiResultOption,
             this.toolStripSeparator17,
-            this.tsmiLiveUpdate,
-            this.tsmiShowOData});
+            this.tsmiShowQuickActions,
+            this.tsmiShowOData,
+            this.tsmiLiveUpdate});
             this.tsbOptions.Image = ((System.Drawing.Image)(resources.GetObject("tsbOptions.Image")));
             this.tsbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbOptions.Name = "tsbOptions";
@@ -701,14 +709,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripSeparator17.Name = "toolStripSeparator17";
             this.toolStripSeparator17.Size = new System.Drawing.Size(220, 6);
             // 
-            // tsmiLiveUpdate
+            // tsmiShowQuickActions
             // 
-            this.tsmiLiveUpdate.CheckOnClick = true;
-            this.tsmiLiveUpdate.Name = "tsmiLiveUpdate";
-            this.tsmiLiveUpdate.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
-            this.tsmiLiveUpdate.Size = new System.Drawing.Size(223, 22);
-            this.tsmiLiveUpdate.Text = "Live XML Update";
-            this.tsmiLiveUpdate.CheckedChanged += new System.EventHandler(this.tsmiLiveUpdate_CheckedChanged);
+            this.tsmiShowQuickActions.CheckOnClick = true;
+            this.tsmiShowQuickActions.Name = "tsmiShowQuickActions";
+            this.tsmiShowQuickActions.Size = new System.Drawing.Size(223, 22);
+            this.tsmiShowQuickActions.Text = "Show Quick Actions";
+            this.tsmiShowQuickActions.CheckedChanged += new System.EventHandler(this.tsmiShowQuickActions_CheckedChanged);
             // 
             // tsmiShowOData
             // 
@@ -718,25 +725,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiShowOData.Text = "Show OData Equivalent";
             this.tsmiShowOData.CheckedChanged += new System.EventHandler(this.tsmiShowOData_CheckedChanged);
             // 
-            // gbProperties
+            // tsmiLiveUpdate
             // 
-            this.gbProperties.Controls.Add(this.panelContainer);
-            this.gbProperties.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gbProperties.Location = new System.Drawing.Point(394, 25);
-            this.gbProperties.Name = "gbProperties";
-            this.gbProperties.Size = new System.Drawing.Size(490, 551);
-            this.gbProperties.TabIndex = 25;
-            this.gbProperties.TabStop = false;
-            this.gbProperties.Text = "FetchXML node attributes";
-            // 
-            // panelContainer
-            // 
-            this.panelContainer.BackColor = System.Drawing.SystemColors.Control;
-            this.panelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContainer.Location = new System.Drawing.Point(3, 16);
-            this.panelContainer.Name = "panelContainer";
-            this.panelContainer.Size = new System.Drawing.Size(484, 532);
-            this.panelContainer.TabIndex = 14;
+            this.tsmiLiveUpdate.CheckOnClick = true;
+            this.tsmiLiveUpdate.Name = "tsmiLiveUpdate";
+            this.tsmiLiveUpdate.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+            this.tsmiLiveUpdate.Size = new System.Drawing.Size(223, 22);
+            this.tsmiLiveUpdate.Text = "Live XML Update";
+            this.tsmiLiveUpdate.CheckedChanged += new System.EventHandler(this.tsmiLiveUpdate_CheckedChanged);
             // 
             // gbFetchTree
             // 
@@ -744,7 +740,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.gbFetchTree.Dock = System.Windows.Forms.DockStyle.Left;
             this.gbFetchTree.Location = new System.Drawing.Point(0, 25);
             this.gbFetchTree.Name = "gbFetchTree";
-            this.gbFetchTree.Size = new System.Drawing.Size(394, 551);
+            this.gbFetchTree.Size = new System.Drawing.Size(394, 548);
             this.gbFetchTree.TabIndex = 24;
             this.gbFetchTree.TabStop = false;
             this.gbFetchTree.Text = "FetchXML outline";
@@ -757,7 +753,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tvFetch.Location = new System.Drawing.Point(3, 16);
             this.tvFetch.Name = "tvFetch";
             this.tvFetch.ShowNodeToolTips = true;
-            this.tvFetch.Size = new System.Drawing.Size(388, 532);
+            this.tvFetch.Size = new System.Drawing.Size(388, 529);
             this.tvFetch.TabIndex = 0;
             this.tvFetch.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvFetch_AfterSelect);
             this.tvFetch.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvFetch_NodeMouseClick);
@@ -911,7 +907,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.splitter1.Location = new System.Drawing.Point(394, 25);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 551);
+            this.splitter1.Size = new System.Drawing.Size(3, 548);
             this.splitter1.TabIndex = 26;
             this.splitter1.TabStop = false;
             // 
@@ -988,18 +984,79 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // splitter2
             // 
             this.splitter2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.splitter2.Location = new System.Drawing.Point(46, 39);
+            this.splitter2.Location = new System.Drawing.Point(0, 573);
             this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(832, 3);
+            this.splitter2.Size = new System.Drawing.Size(884, 3);
             this.splitter2.TabIndex = 4;
             this.splitter2.TabStop = false;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.gbProperties);
+            this.panel1.Controls.Add(this.panelButtonSpacer);
+            this.panel1.Controls.Add(this.gbQuickActions);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(397, 25);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(487, 548);
+            this.panel1.TabIndex = 30;
+            // 
+            // gbProperties
+            // 
+            this.gbProperties.Controls.Add(this.panelContainer);
+            this.gbProperties.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gbProperties.Location = new System.Drawing.Point(0, 71);
+            this.gbProperties.Name = "gbProperties";
+            this.gbProperties.Size = new System.Drawing.Size(487, 477);
+            this.gbProperties.TabIndex = 30;
+            this.gbProperties.TabStop = false;
+            this.gbProperties.Text = "FetchXML node attributes";
+            // 
+            // panelContainer
+            // 
+            this.panelContainer.BackColor = System.Drawing.SystemColors.Control;
+            this.panelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelContainer.Location = new System.Drawing.Point(3, 16);
+            this.panelContainer.Name = "panelContainer";
+            this.panelContainer.Size = new System.Drawing.Size(481, 458);
+            this.panelContainer.TabIndex = 14;
+            // 
+            // panelButtonSpacer
+            // 
+            this.panelButtonSpacer.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelButtonSpacer.Location = new System.Drawing.Point(0, 50);
+            this.panelButtonSpacer.Name = "panelButtonSpacer";
+            this.panelButtonSpacer.Size = new System.Drawing.Size(487, 21);
+            this.panelButtonSpacer.TabIndex = 32;
+            // 
+            // gbQuickActions
+            // 
+            this.gbQuickActions.Controls.Add(this.menuControl);
+            this.gbQuickActions.Dock = System.Windows.Forms.DockStyle.Top;
+            this.gbQuickActions.Location = new System.Drawing.Point(0, 0);
+            this.gbQuickActions.Name = "gbQuickActions";
+            this.gbQuickActions.Size = new System.Drawing.Size(487, 50);
+            this.gbQuickActions.TabIndex = 31;
+            this.gbQuickActions.TabStop = false;
+            this.gbQuickActions.Text = "Quick Actions";
+            // 
+            // menuControl
+            // 
+            this.menuControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.menuControl.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.menuControl.Location = new System.Drawing.Point(3, 16);
+            this.menuControl.Name = "menuControl";
+            this.menuControl.Size = new System.Drawing.Size(481, 31);
+            this.menuControl.TabIndex = 16;
+            this.menuControl.Text = "menuStrip1";
+            this.menuControl.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
             // FetchXmlBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.splitter1);
-            this.Controls.Add(this.gbProperties);
             this.Controls.Add(this.gbFetchTree);
             this.Controls.Add(this.toolStripMain);
             this.Controls.Add(this.splitter2);
@@ -1015,7 +1072,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.Leave += new System.EventHandler(this.FetchXmlBuilder_Leave);
             this.toolStripMain.ResumeLayout(false);
             this.toolStripMain.PerformLayout();
-            this.gbProperties.ResumeLayout(false);
             this.gbFetchTree.ResumeLayout(false);
             this.nodeMenu.ResumeLayout(false);
             this.addMenu.ResumeLayout(false);
@@ -1023,6 +1079,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.menuOData.ResumeLayout(false);
             this.panODataLabel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.gbProperties.ResumeLayout(false);
+            this.gbQuickActions.ResumeLayout(false);
+            this.gbQuickActions.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1031,8 +1091,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         internal System.Windows.Forms.ToolStrip toolStripMain;
         private System.Windows.Forms.ToolStripButton tsbCloseThisTab;
-        internal System.Windows.Forms.GroupBox gbProperties;
-        internal System.Windows.Forms.Panel panelContainer;
         internal System.Windows.Forms.GroupBox gbFetchTree;
         internal System.Windows.Forms.TreeView tvFetch;
         private System.Windows.Forms.Splitter splitter1;
@@ -1120,5 +1178,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem menuODataExecute;
         private System.Windows.Forms.ToolStripMenuItem menuODataCopy;
         private System.Windows.Forms.Splitter splitter2;
+        private System.Windows.Forms.Panel panel1;
+        internal System.Windows.Forms.GroupBox gbProperties;
+        internal System.Windows.Forms.Panel panelContainer;
+        private System.Windows.Forms.Panel panelButtonSpacer;
+        private System.Windows.Forms.GroupBox gbQuickActions;
+        internal System.Windows.Forms.MenuStrip menuControl;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowQuickActions;
     }
 }

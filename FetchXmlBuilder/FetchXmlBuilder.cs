@@ -20,7 +20,6 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
-using XrmToolBox.Forms;
 using XrmToolBox.Extensibility.Args;
 
 namespace Cinteros.Xrm.FetchXmlBuilder
@@ -213,6 +212,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             };
             currentSettings.lastUpdateCheck = DateTime.Now;
             tasks.ForEach(x => x.Start());
+            TreeNodeHelper.AddContextMenu(null, this);
             EnableControls(true);
         }
 
@@ -676,6 +676,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
+        private void tsmiShowQuickActions_CheckedChanged(object sender, EventArgs e)
+        {
+            currentSettings.showQuickActions = tsmiShowQuickActions.Checked;
+            ShowQuickActions();
+        }
+
         #endregion Event handlers
 
         #region Instance methods
@@ -745,6 +751,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             tsmiResultOption.SelectedIndex = currentSettings.resultOption;
             tsmiEntities_Click(null, null);
             tsmiAttributes_Click(null, null);
+            tsmiShowQuickActions.Checked = currentSettings.showQuickActions;
+            ShowQuickActions();
             var ass = Assembly.GetExecutingAssembly().GetName();
             var version = ass.Version.ToString();
             if (!version.Equals(currentSettings.currentVersion))
@@ -2276,6 +2284,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 tsbRedo.ToolTipText = "Nothing to redo (Ctrl+Y)";
             }
+        }
+
+        private void ShowQuickActions()
+        {
+            gbQuickActions.Visible = currentSettings.showQuickActions;
+            panelButtonSpacer.Visible = currentSettings.showQuickActions;
         }
 
         #endregion Instance methods

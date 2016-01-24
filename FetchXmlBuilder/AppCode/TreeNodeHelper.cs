@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -267,32 +264,58 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public static void AddContextMenu(TreeNode node, FetchXmlBuilder form)
         {
             form.addMenu.Items.Clear();
-
-            var nodecapabilities = new FetchNodeCapabilities(node);
-            foreach (var childcapability in nodecapabilities.ChildTypes)
+            form.menuControl.Items.Clear();
+            if (node == null && form.tvFetch.Nodes.Count > 0)
             {
-                if (childcapability.Name == "-")
-                {
-                    form.addMenu.Items.Add(new ToolStripSeparator());
-                }
-                else if (childcapability.Multiple || !node.Nodes.ContainsKey(childcapability.Name))
-                {
-                    var additem = form.addMenu.Items.Add(childcapability.Name);
-                    additem.Tag = childcapability.Name;
-                }
+                node = form.tvFetch.Nodes[0];
             }
-            if (form.addMenu.Items.Count == 0)
+            if (node != null)
             {
-                var dummy = form.addMenu.Items.Add("nothing to add");
-                dummy.Enabled = false;
+                var nodecapabilities = new FetchNodeCapabilities(node);
+
+                foreach (var childcapability in nodecapabilities.ChildTypes)
+                {
+                    if (childcapability.Name == "-")
+                    {
+                        form.addMenu.Items.Add(new ToolStripSeparator());
+                        //form.menuControl.Items.Add(new ToolStripSeparator());
+                    }
+                    else if (childcapability.Multiple || !node.Nodes.ContainsKey(childcapability.Name))
+                    {
+                        AddMenuFromCapability(form.addMenu, childcapability.Name);
+                        AddMenuFromCapability(form.menuControl, childcapability.Name, childcapability.Name == "#comment", "Add ");
+                    }
+                }
+                if (form.addMenu.Items.Count == 0)
+                {
+                    var dummy = form.addMenu.Items.Add("nothing to add");
+                    dummy.Enabled = false;
+                }
+
+                form.selectAttributesToolStripMenuItem.Visible = nodecapabilities.Attributes;
+                form.deleteToolStripMenuItem.Enabled = nodecapabilities.Delete;
+                form.commentToolStripMenuItem.Enabled = nodecapabilities.Comment;
+                form.uncommentToolStripMenuItem.Enabled = nodecapabilities.Uncomment;
+
+                if (nodecapabilities.Attributes && form.selectAttributesToolStripMenuItem.Enabled)
+                {
+                    var selattr = new ToolStripMenuItem("Select Attributes");
+                    selattr.Tag = "SelectAttributes";
+                    form.menuControl.Items.Insert(0, selattr);
+                }
+
+                node.ContextMenuStrip = form.nodeMenu;
             }
+        }
 
-            form.selectAttributesToolStripMenuItem.Visible = nodecapabilities.Attributes;
-            form.deleteToolStripMenuItem.Enabled = nodecapabilities.Delete;
-            form.commentToolStripMenuItem.Enabled = nodecapabilities.Comment;
-            form.uncommentToolStripMenuItem.Enabled = nodecapabilities.Uncomment;
-
-            node.ContextMenuStrip = form.nodeMenu;
+        private static void AddMenuFromCapability(ToolStrip owner, string name, bool alignright = false, string prefix = "")
+        {
+            var additem = owner.Items.Add(prefix + name);
+            additem.Tag = name;
+            if (alignright)
+            {
+                additem.Alignment = ToolStripItemAlignment.Right;
+            }
         }
 
         /// <summary>

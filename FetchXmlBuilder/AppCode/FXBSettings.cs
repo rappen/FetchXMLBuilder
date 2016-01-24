@@ -42,11 +42,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public List<string> fetchxml { get; set; }
         public bool? logUsage { get; set; }
         public string currentVersion { get; set; }
+        public bool showQuickActions { get; set; }
 
         public FXBSettings()
         {
             showEntitiesAll = true;
             showAttributesAll = true;
+            showQuickActions = true;
         }
 
         public static FXBSettings Load()
