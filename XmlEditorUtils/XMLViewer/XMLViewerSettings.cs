@@ -60,6 +60,16 @@ namespace CSRichTextBoxSyntaxHighlighting
         public Color Tag { get; set; }
 
         /// <summary>
+        /// Defines quote character in xml. Default double quotes "
+        /// </summary>
+        public char QuoteCharacter { get; set; }
+
+        public XMLViewerSettings()
+        {
+            QuoteCharacter = '"';
+        }
+
+        /// <summary>
         /// Convert the settings to Rtf color definitions.
         /// </summary>
         public string ToRtfFormatString()
@@ -77,7 +87,6 @@ namespace CSRichTextBoxSyntaxHighlighting
             rtfFormatString.AppendFormat(format, Comment.R, Comment.G, Comment.B);
 
             return rtfFormatString.ToString();
-
         }
     }
 }

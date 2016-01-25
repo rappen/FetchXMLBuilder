@@ -43,6 +43,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool? logUsage { get; set; }
         public string currentVersion { get; set; }
         public bool showQuickActions { get; set; }
+        public bool useSingleQuotation { get; set; }
 
         public FXBSettings()
         {

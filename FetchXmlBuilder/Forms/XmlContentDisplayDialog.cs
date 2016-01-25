@@ -43,8 +43,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                     xmlString = "";
                 }
             }
-            txtXML.Text = xmlString;
-            FormatXML(true);
+            UpdateXML(xmlString);
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -101,6 +100,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         public void UpdateXML(string xmlString)
         {
             txtXML.Text = xmlString;
+            txtXML.Settings.QuoteCharacter = fxb.currentSettings.useSingleQuotation ? '\'' : '"';
             FormatXML(true);
         }
 

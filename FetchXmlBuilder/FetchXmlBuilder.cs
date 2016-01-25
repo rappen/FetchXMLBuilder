@@ -682,6 +682,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             ShowQuickActions();
         }
 
+        private void tsmiUseSingleQuotes_CheckedChanged(object sender, EventArgs e)
+        {
+            currentSettings.useSingleQuotation = tsmiUseSingleQuotes.Checked;
+            UpdateLiveXML();
+        }
+
         #endregion Event handlers
 
         #region Instance methods
@@ -749,6 +755,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             tsmiAttributesStandard.Checked = currentSettings.showAttributesStandard;
             tsmiAttributesOnlyValidAF.Checked = currentSettings.showAttributesOnlyValidAF;
             tsmiResultOption.SelectedIndex = currentSettings.resultOption;
+            tsmiUseSingleQuotes.Checked = currentSettings.useSingleQuotation;
             tsmiEntities_Click(null, null);
             tsmiAttributes_Click(null, null);
             tsmiShowQuickActions.Checked = currentSettings.showQuickActions;
@@ -925,6 +932,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 var doc = GetFetchDocument();
                 xml = doc.OuterXml;
+                if (currentSettings.useSingleQuotation)
+                {
+                    xml = xml.Replace("'", "&apos;");
+                    xml = xml.Replace("\"", "'");
+                }
             }
             if (format)
             {

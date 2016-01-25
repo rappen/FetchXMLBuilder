@@ -126,6 +126,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.panelButtonSpacer = new System.Windows.Forms.Panel();
             this.gbQuickActions = new System.Windows.Forms.GroupBox();
             this.menuControl = new System.Windows.Forms.MenuStrip();
+            this.tsmiUseSingleQuotes = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMain.SuspendLayout();
             this.gbFetchTree.SuspendLayout();
             this.nodeMenu.SuspendLayout();
@@ -397,6 +399,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripSeparator7,
             this.outputTypeToolStripMenuItem,
             this.tsmiResultOption,
+            this.toolStripMenuItem2,
+            this.tsmiUseSingleQuotes,
             this.toolStripSeparator17,
             this.tsmiShowQuickActions,
             this.tsmiShowOData,
@@ -1051,6 +1055,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.menuControl.Text = "menuStrip1";
             this.menuControl.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
+            // tsmiUseSingleQuotes
+            // 
+            this.tsmiUseSingleQuotes.CheckOnClick = true;
+            this.tsmiUseSingleQuotes.Name = "tsmiUseSingleQuotes";
+            this.tsmiUseSingleQuotes.Size = new System.Drawing.Size(223, 22);
+            this.tsmiUseSingleQuotes.Text = "Single Quotation";
+            this.tsmiUseSingleQuotes.CheckedChanged += new System.EventHandler(this.tsmiUseSingleQuotes_CheckedChanged);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(220, 6);
+            // 
             // FetchXmlBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1185,5 +1202,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.GroupBox gbQuickActions;
         internal System.Windows.Forms.MenuStrip menuControl;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowQuickActions;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem tsmiUseSingleQuotes;
     }
 }

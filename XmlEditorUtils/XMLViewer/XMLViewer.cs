@@ -120,7 +120,7 @@ namespace CSRichTextBoxSyntaxHighlighting
             // If the element has child elements or value, then add the element to the 
             // Rtf. {{0}} will be replaced with the attributes and {{1}} will be replaced
             // with the child elements or value.
-            if (element.ChildNodes.Count > 0 && !(element.ChildNodes.Count==1 && element.ChildNodes[0] is XmlText))
+            if (element.ChildNodes.Count > 0 && !(element.ChildNodes.Count == 1 && element.ChildNodes[0] is XmlText))
             {
                 elementRtfFormat = string.Format(@"
 {0}\cf{1} <\cf{2} {3}{{0}}\cf{1} >\par
@@ -211,12 +211,13 @@ namespace CSRichTextBoxSyntaxHighlighting
                 foreach (XmlAttribute attribute in element.Attributes)
                 {
                     string attributeRtfContent = string.Format(
-                        @" \cf{0} {3}\cf{1} =\cf0 ""\cf{2} {4}\cf0 """,
+                        @" \cf{0} {3}\cf{1} =\cf0 {5}\cf{2} {4}\cf0 {5}",
                         XMLViewerSettings.AttributeKeyID,
                         XMLViewerSettings.TagID,
                         XMLViewerSettings.AttributeValueID,
                         attribute.Name,
-                       CharacterEncoder.Encode(attribute.Value));
+                        CharacterEncoder.Encode(attribute.Value),
+                        settings.QuoteCharacter);
                     attributesRtfContent.Append(attributeRtfContent);
                 }
                 attributesRtfContent.Append(" ");
