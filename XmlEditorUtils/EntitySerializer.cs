@@ -110,30 +110,30 @@ namespace Cinteros.Xrm.XmlEditorUtils
                 else
                     sb.Append("," + Sep(format, indent + 2) + "{");
 
-                sb.Append(Sep(format, indent + 3) + "\"name\":" + space + "\"" + attribute.Key + "\",");
-                sb.Append(Sep(format, indent + 3) + "\"type\":" + space + "\"" + LastClassName(attribute.Value) + "\",");
-
                 if (value is AliasedValue)
                 {
-                    if (!string.IsNullOrEmpty(((AliasedValue)attribute.Value).AttributeLogicalName))
+                    if (!string.IsNullOrEmpty(((AliasedValue)value).AttributeLogicalName))
                     {
-                        sb.Append(Sep(format, indent + 3) + "\"attributelogicalname\":" + space + "\"" + (((AliasedValue)attribute.Value).AttributeLogicalName) + "\",");
+                        sb.Append(Sep(format, indent + 3) + "\"attributelogicalname\":" + space + "\"" + (((AliasedValue)value).AttributeLogicalName) + "\",");
                     }
-                    if (!string.IsNullOrEmpty(((AliasedValue)attribute.Value).EntityLogicalName))
+                    if (!string.IsNullOrEmpty(((AliasedValue)value).EntityLogicalName))
                     {
-                        sb.Append(Sep(format, indent + 3) + "\"entitylogicalname\":" + space + "\"" + (((AliasedValue)attribute.Value).EntityLogicalName) + "\",");
+                        sb.Append(Sep(format, indent + 3) + "\"entitylogicalname\":" + space + "\"" + (((AliasedValue)value).EntityLogicalName) + "\",");
                     }
-                    value = (((AliasedValue)attribute.Value).Value);
+                    value = (((AliasedValue)value).Value);
                 }
+
+                sb.Append(Sep(format, indent + 3) + "\"name\":" + space + "\"" + attribute.Key + "\",");
+                sb.Append(Sep(format, indent + 3) + "\"type\":" + space + "\"" + LastClassName(value) + "\",");
 
                 if (value is EntityReference)
                 {
-                    sb.Append(Sep(format, indent + 3) + "\"entity\":" + space + "\"" + ((EntityReference)attribute.Value).LogicalName + "\",");
-                    if (!string.IsNullOrEmpty(((EntityReference)attribute.Value).Name))
+                    sb.Append(Sep(format, indent + 3) + "\"entity\":" + space + "\"" + ((EntityReference)value).LogicalName + "\",");
+                    if (!string.IsNullOrEmpty(((EntityReference)value).Name))
                     {
-                        sb.Append(Sep(format, indent + 3) + "\"namevalue\":" + space + "\"" + ((EntityReference)attribute.Value).Name + "\",");
+                        sb.Append(Sep(format, indent + 3) + "\"namevalue\":" + space + "\"" + ((EntityReference)value).Name + "\",");
                     }
-                    value = ((EntityReference)attribute.Value).Id;
+                    value = ((EntityReference)value).Id;
 
                 }
 
