@@ -310,6 +310,7 @@
     <Content Include="Resources\FXB-32.png" />
     <None Include="packages.config" />
     <None Include="Resources\FXB-100.png" />
+    <None Include="Resources\XSD fetch.cs.cmd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XmlEditorUtils\XmlEditorUtils.csproj">
