@@ -67,6 +67,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     return "next-seven-days";
             }
             var coname = oper.ToString();
+            if (coname.StartsWith("OlderThan"))
+            {   // "olderthan" is written together, not "older-than" in fetchxml
+                coname = coname.Replace("OlderThan", "Olderthan");
+            }
             var result = coname.Substring(0, 1).ToLowerInvariant();
             for (var i = 1; i < coname.Length; i++)
             {
@@ -148,7 +152,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case ConditionOperator.NextXMonths:
                 case ConditionOperator.LastXYears:
                 case ConditionOperator.NextXYears:
+                case ConditionOperator.OlderThanXYears:
                 case ConditionOperator.OlderThanXMonths:
+                case ConditionOperator.OlderThanXWeeks:
+                case ConditionOperator.OlderThanXDays:
+                case ConditionOperator.OlderThanXHours:
+                case ConditionOperator.OlderThanXMinutes:
                 case ConditionOperator.LastXFiscalYears:
                 case ConditionOperator.LastXFiscalPeriods:
                 case ConditionOperator.NextXFiscalYears:
@@ -224,7 +233,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case ConditionOperator.NextXMonths:
                 case ConditionOperator.LastXYears:
                 case ConditionOperator.NextXYears:
+                case ConditionOperator.OlderThanXYears:
                 case ConditionOperator.OlderThanXMonths:
+                case ConditionOperator.OlderThanXWeeks:
+                case ConditionOperator.OlderThanXDays:
+                case ConditionOperator.OlderThanXHours:
+                case ConditionOperator.OlderThanXMinutes:
                 case ConditionOperator.LastXFiscalYears:
                 case ConditionOperator.LastXFiscalPeriods:
                 case ConditionOperator.NextXFiscalYears:
@@ -338,7 +352,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     validConditionsList.Add(new OperatorItem(ConditionOperator.NextXYears));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.NextYear));
 
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.OlderThanXYears));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.OlderThanXMonths));
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.OlderThanXWeeks));
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.OlderThanXDays));
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.OlderThanXHours));
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.OlderThanXMinutes));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.On));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.OnOrAfter));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.OnOrBefore));
