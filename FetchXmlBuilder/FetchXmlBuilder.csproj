@@ -60,10 +60,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=2.18.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.2.18.206251556\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
       <Private>True</Private>
@@ -78,10 +74,6 @@
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk.Deployment, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CrmSdk.Deployment.8.0.0\lib\net45\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Xrm.Sdk.Workflow, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.Workflow.8.0.0\lib\net45\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Xrm.Tooling.Connector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -309,10 +301,15 @@
     <Content Include="Cinteros.ico" />
     <Content Include="Resources\FXB-32.png" />
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\Cinteros.Xrm.FetchXmlBuilder.Forms.ResultGrid.datasource" />
     <None Include="Resources\FXB-100.png" />
     <None Include="Resources\XSD fetch.cs.cmd" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CRMWinForm\CRMWinForm.csproj">
+      <Project>{5bbece21-558f-48c5-9da2-fa104299dc67}</Project>
+      <Name>CRMWinForm</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XmlEditorUtils\XmlEditorUtils.csproj">
       <Project>{9fc7bdf7-321c-4b96-9b70-d75a16bd7685}</Project>
       <Name>XmlEditorUtils</Name>
@@ -320,8 +317,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Debug xcopy *.dll Plugins /Y
-if $(ConfigurationName) == Debug xcopy *.pdb Plugins /Y</PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName) == Debug (
+  move /Y Cinteros.Xrm.*.dll Plugins
+  move /Y Cinteros.Xrm.*.pdb Plugins
+)</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

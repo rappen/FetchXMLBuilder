@@ -6,7 +6,6 @@ using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
@@ -21,6 +20,7 @@ using System.Xml.Serialization;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Extensibility.Args;
+using Cinteros.Xrm.CRMWinForm;
 
 namespace Cinteros.Xrm.FetchXmlBuilder
 {
@@ -140,9 +140,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private XmlContentDisplayDialog xmlLiveUpdate;
         private string liveUpdateXml = "";
         private MessageBusEventArgs callerArgs = null;
-        String[] entityProperties = { "LogicalName", "DisplayName", "ObjectTypeCode", "IsManaged", "IsCustomizable", "IsCustomEntity", "IsIntersect", "IsValidForAdvancedFind" };
-        String[] entityDetails = { "Attributes", "ManyToOneRelationships", "OneToManyRelationships", "ManyToManyRelationships", "SchemaName" };
-        String[] attributeProperties = { "DisplayName", "AttributeType", "IsValidForRead", "AttributeOf", "IsManaged", "IsCustomizable", "IsCustomAttribute", "IsValidForAdvancedFind", "IsPrimaryId", "OptionSet", "SchemaName" };
         #endregion Declarations
 
         public FetchXmlBuilder()
@@ -1220,15 +1217,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 (eventargs) =>
                 {
                     EnableControls(false);
-
-                    var eqe = new EntityQueryExpression();
-                    eqe.Properties = new MetadataPropertiesExpression(entityProperties);
-                    var req = new RetrieveMetadataChangesRequest()
-                    {
-                        Query = eqe,
-                        ClientVersionStamp = null
-                    };
-                    eventargs.Result = Service.Execute(req);
+                    eventargs.Result = MetadataHelper.LoadEntities(Service);
                 })
             {
                 PostWorkCallBack = (completedargs) =>
@@ -1267,7 +1256,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 WorkAsync(new WorkAsyncInfo($"Loading {name}...",
                     (eventargs) =>
                     {
-                        eventargs.Result = LoadEntityDetails(entityName);
+                        eventargs.Result = MetadataHelper.LoadEntityDetails(Service, entityName);
                     })
                 {
                     PostWorkCallBack = (completedargs) =>
@@ -1284,7 +1273,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 try
                 {
-                    var resp = LoadEntityDetails(entityName);
+                    var resp = MetadataHelper.LoadEntityDetails(Service, entityName);
                     LoadEntityDetailsCompleted(entityName, resp, null);
                 }
                 catch (Exception e)
@@ -1292,23 +1281,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     LoadEntityDetailsCompleted(entityName, null, e);
                 }
             }
-        }
-
-        private OrganizationResponse LoadEntityDetails(string entityName)
-        {
-            var eqe = new EntityQueryExpression();
-            eqe.Properties = new MetadataPropertiesExpression(entityProperties);
-            eqe.Properties.PropertyNames.AddRange(entityDetails);
-            eqe.Criteria.Conditions.Add(new MetadataConditionExpression("LogicalName", MetadataConditionOperator.Equals, entityName));
-            var aqe = new AttributeQueryExpression();
-            aqe.Properties = new MetadataPropertiesExpression(attributeProperties);
-            eqe.AttributeQuery = aqe;
-            var req = new RetrieveMetadataChangesRequest()
-            {
-                Query = eqe,
-                ClientVersionStamp = null
-            };
-            return Service.Execute(req);
         }
 
         private void LoadEntityDetailsCompleted(string entityName, OrganizationResponse Result, Exception Error)
