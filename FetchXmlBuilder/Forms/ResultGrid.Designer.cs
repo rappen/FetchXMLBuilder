@@ -28,18 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.lvGrid = new System.Windows.Forms.ListView();
-            this.panBottom = new System.Windows.Forms.Panel();
-            this.chkFriendly = new System.Windows.Forms.CheckBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.panCancel = new System.Windows.Forms.Panel();
-            this.btnCancel = new System.Windows.Forms.Button();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.displayOptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuFriendly = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuIdColumn = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuIndexColumn = new System.Windows.Forms.ToolStripMenuItem();
+            this.hintsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.doubleClickARowToOpenRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copySelectedCellsUsingCTRLCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.crmGridView1 = new Cinteros.Xrm.CRMWinForm.CRMGridView();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.panBottom.SuspendLayout();
-            this.panCancel.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // panel2
@@ -48,101 +52,125 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(731, 430);
+            this.panel2.Size = new System.Drawing.Size(731, 468);
             this.panel2.TabIndex = 2;
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.lvGrid);
+            this.panel1.Controls.Add(this.crmGridView1);
+            this.panel1.Controls.Add(this.menuStrip1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(731, 430);
+            this.panel1.Size = new System.Drawing.Size(731, 468);
             this.panel1.TabIndex = 2;
             // 
-            // lvGrid
+            // menuStrip1
             // 
-            this.lvGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lvGrid.FullRowSelect = true;
-            this.lvGrid.GridLines = true;
-            this.lvGrid.Location = new System.Drawing.Point(0, 0);
-            this.lvGrid.Name = "lvGrid";
-            this.lvGrid.Size = new System.Drawing.Size(731, 430);
-            this.lvGrid.TabIndex = 2;
-            this.lvGrid.UseCompatibleStateImageBehavior = false;
-            this.lvGrid.View = System.Windows.Forms.View.Details;
-            this.lvGrid.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvGrid_ColumnClick);
-            this.lvGrid.DoubleClick += new System.EventHandler(this.lvGrid_DoubleClick);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.displayOptionsToolStripMenuItem,
+            this.hintsToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(731, 24);
+            this.menuStrip1.TabIndex = 2;
+            this.menuStrip1.Text = "menuStrip1";
             // 
-            // panBottom
+            // displayOptionsToolStripMenuItem
             // 
-            this.panBottom.BackColor = System.Drawing.SystemColors.Control;
-            this.panBottom.Controls.Add(this.chkFriendly);
-            this.panBottom.Controls.Add(this.label1);
-            this.panBottom.Controls.Add(this.panCancel);
-            this.panBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panBottom.Location = new System.Drawing.Point(0, 430);
-            this.panBottom.Name = "panBottom";
-            this.panBottom.Size = new System.Drawing.Size(731, 38);
-            this.panBottom.TabIndex = 5;
+            this.displayOptionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuFriendly,
+            this.menuIdColumn,
+            this.menuIndexColumn});
+            this.displayOptionsToolStripMenuItem.Name = "displayOptionsToolStripMenuItem";
+            this.displayOptionsToolStripMenuItem.Size = new System.Drawing.Size(102, 20);
+            this.displayOptionsToolStripMenuItem.Text = "Display Options";
             // 
-            // chkFriendly
+            // menuFriendly
             // 
-            this.chkFriendly.AutoSize = true;
-            this.chkFriendly.Location = new System.Drawing.Point(12, 12);
-            this.chkFriendly.Name = "chkFriendly";
-            this.chkFriendly.Size = new System.Drawing.Size(151, 17);
-            this.chkFriendly.TabIndex = 5;
-            this.chkFriendly.Text = "Friendly names and values";
-            this.chkFriendly.UseVisualStyleBackColor = true;
-            this.chkFriendly.CheckedChanged += new System.EventHandler(this.chkFriendly_CheckedChanged);
+            this.menuFriendly.CheckOnClick = true;
+            this.menuFriendly.Name = "menuFriendly";
+            this.menuFriendly.Size = new System.Drawing.Size(215, 22);
+            this.menuFriendly.Text = "Friendly Names and Values";
+            this.menuFriendly.CheckedChanged += new System.EventHandler(this.menuFriendly_CheckedChanged);
             // 
-            // label1
+            // menuIdColumn
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(427, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(185, 13);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Double-click a row to open the record";
+            this.menuIdColumn.CheckOnClick = true;
+            this.menuIdColumn.Name = "menuIdColumn";
+            this.menuIdColumn.Size = new System.Drawing.Size(215, 22);
+            this.menuIdColumn.Text = "Record ID column";
+            this.menuIdColumn.CheckedChanged += new System.EventHandler(this.menuIdColumn_CheckedChanged);
             // 
-            // panCancel
+            // menuIndexColumn
             // 
-            this.panCancel.Controls.Add(this.btnCancel);
-            this.panCancel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panCancel.Location = new System.Drawing.Point(640, 0);
-            this.panCancel.Name = "panCancel";
-            this.panCancel.Size = new System.Drawing.Size(91, 38);
-            this.panCancel.TabIndex = 3;
+            this.menuIndexColumn.CheckOnClick = true;
+            this.menuIndexColumn.Name = "menuIndexColumn";
+            this.menuIndexColumn.Size = new System.Drawing.Size(215, 22);
+            this.menuIndexColumn.Text = "Index column";
+            this.menuIndexColumn.CheckedChanged += new System.EventHandler(this.menuIndexColumn_CheckedChanged);
             // 
-            // btnCancel
+            // hintsToolStripMenuItem
             // 
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(3, 8);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 4;
-            this.btnCancel.Text = "Close";
-            this.btnCancel.UseVisualStyleBackColor = true;
+            this.hintsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.doubleClickARowToOpenRecordToolStripMenuItem,
+            this.copySelectedCellsUsingCTRLCToolStripMenuItem});
+            this.hintsToolStripMenuItem.Name = "hintsToolStripMenuItem";
+            this.hintsToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+            this.hintsToolStripMenuItem.Text = "Hints...";
+            // 
+            // doubleClickARowToOpenRecordToolStripMenuItem
+            // 
+            this.doubleClickARowToOpenRecordToolStripMenuItem.Name = "doubleClickARowToOpenRecordToolStripMenuItem";
+            this.doubleClickARowToOpenRecordToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
+            this.doubleClickARowToOpenRecordToolStripMenuItem.Text = "Double click a row to open record";
+            // 
+            // copySelectedCellsUsingCTRLCToolStripMenuItem
+            // 
+            this.copySelectedCellsUsingCTRLCToolStripMenuItem.Name = "copySelectedCellsUsingCTRLCToolStripMenuItem";
+            this.copySelectedCellsUsingCTRLCToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
+            this.copySelectedCellsUsingCTRLCToolStripMenuItem.Text = "Copy selected cells using <CTRL>+C";
+            // 
+            // crmGridView1
+            // 
+            this.crmGridView1.AllowUserToAddRows = false;
+            this.crmGridView1.AllowUserToDeleteRows = false;
+            this.crmGridView1.AllowUserToOrderColumns = true;
+            this.crmGridView1.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Azure;
+            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.crmGridView1.AutoRefresh = true;
+            this.crmGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.crmGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.crmGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.crmGridView1.EnableHeadersVisualStyles = false;
+            this.crmGridView1.EntityCollection = null;
+            this.crmGridView1.Location = new System.Drawing.Point(0, 24);
+            this.crmGridView1.Name = "crmGridView1";
+            this.crmGridView1.OrganizationService = null;
+            this.crmGridView1.ReadOnly = true;
+            this.crmGridView1.RowHeadersWidth = 24;
+            this.crmGridView1.Size = new System.Drawing.Size(731, 444);
+            this.crmGridView1.TabIndex = 1;
+            this.crmGridView1.RecordDoubleClick += new Cinteros.Xrm.CRMWinForm.CRMRecordEventHandler(this.crmGridView1_RecordDoubleClick);
             // 
             // ResultGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(731, 468);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panBottom);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "ResultGrid";
             this.Text = "FetchXML Builder - Result Grid";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ResultGrid_FormClosing);
+            this.Load += new System.EventHandler(this.ResultGrid_Load);
             this.panel2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panBottom.ResumeLayout(false);
-            this.panBottom.PerformLayout();
-            this.panCancel.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -150,12 +178,15 @@
         #endregion
 
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel panBottom;
-        private System.Windows.Forms.Panel panCancel;
-        private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.ListView lvGrid;
-        private System.Windows.Forms.CheckBox chkFriendly;
+        private CRMWinForm.CRMGridView crmGridView1;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem displayOptionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuFriendly;
+        private System.Windows.Forms.ToolStripMenuItem menuIdColumn;
+        private System.Windows.Forms.ToolStripMenuItem menuIndexColumn;
+        private System.Windows.Forms.ToolStripMenuItem hintsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem doubleClickARowToOpenRecordToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copySelectedCellsUsingCTRLCToolStripMenuItem;
     }
 }
