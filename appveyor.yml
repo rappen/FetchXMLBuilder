@@ -21,7 +21,7 @@ build:
 after_build:
 - 7z a FetchXMLBuilder_%APPVEYOR_BUILD_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\FetchXMLBuilder\bin\%CONFIGURATION%\Cinteros.Xrm.*.dll
 - appveyor PushArtifact FetchXMLBuilder_%APPVEYOR_BUILD_VERSION%.zip
-- cmd: nuget pack '**\*.nuspec'
+- cmd: nuget pack Cinteros.Xrm.CRMWinForm.nuspec
 deploy:
 - provider: Environment
   name: GitHubFXB
