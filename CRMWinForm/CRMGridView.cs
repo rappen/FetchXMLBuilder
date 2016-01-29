@@ -29,7 +29,7 @@ namespace Cinteros.Xrm.CRMWinForm
             CellDoubleClick += HandleRecordDoubleClick;
         }
 
-        [Category("CRM")]
+        [Category("Data")]
         public IOrganizationService OrganizationService
         {
             get { return organizationService; }
@@ -43,15 +43,16 @@ namespace Cinteros.Xrm.CRMWinForm
             }
         }
 
-        [Category("CRM")]
-        [Description("Set this run-time to populate the grid with CRM data.")]
-        public EntityCollection EntityCollection
+        [Category("Data")]
+        [Description("Indicates the source of data (EntityCollection) for the CRMGridView control.")]
+        public new object DataSource
         {
-            get { return entityCollection; }
+            get { return base.DataSource; }
             set
             {
-                entityCollection = value;
-                if (autoRefresh)
+                base.DataSource = value;
+                entityCollection = value as EntityCollection;
+                if (entityCollection != null && autoRefresh)
                 {
                     Refresh();
                 }
@@ -127,7 +128,6 @@ namespace Cinteros.Xrm.CRMWinForm
         public override void Refresh()
         {
             Columns.Clear();
-            DataSource = null;
             if (entityCollection != null)
             {
                 var cols = GetTableColumns(entityCollection);
@@ -188,10 +188,7 @@ namespace Cinteros.Xrm.CRMWinForm
         private List<DataColumn> GetTableColumns(EntityCollection entities)
         {
             var columns = new List<DataColumn>();
-            if (showIndexColumn)
-            {
-                columns.Add(new DataColumn("#no", typeof(int)) { Caption = "#", AutoIncrement = true, AutoIncrementSeed = 1 });
-            }
+            columns.Add(new DataColumn("#no", typeof(int)) { Caption = "#", AutoIncrement = true, AutoIncrementSeed = 1 });
             columns.Add(new DataColumn("#id", typeof(Guid)) { Caption = "Id" });
             var addedColumns = new List<string>();
             foreach (var entity in entities.Entities)
@@ -294,7 +291,7 @@ namespace Cinteros.Xrm.CRMWinForm
         private void BindData(DataTable dTable)
         {
             SuspendLayout();
-            DataSource = dTable;
+            base.DataSource = dTable;
             foreach (DataGridViewColumn col in Columns)
             {
                 var datacolumn = dTable.Columns[col.Name];
@@ -308,9 +305,13 @@ namespace Cinteros.Xrm.CRMWinForm
                 {
                     col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 }
-                if (datacolumn.ColumnName == "#id" && !showIdColumn)
+                if (datacolumn.ColumnName == "#no")
                 {
-                    col.Visible = false;
+                    col.Visible = showIndexColumn;
+                }
+                if (datacolumn.ColumnName == "#id")
+                {
+                    col.Visible = showIdColumn;
                 }
                 if (datacolumn.ColumnName == "#entity")
                 {

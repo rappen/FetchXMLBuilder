@@ -144,7 +144,6 @@
             this.crmGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.crmGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.crmGridView1.EnableHeadersVisualStyles = false;
-            this.crmGridView1.EntityCollection = null;
             this.crmGridView1.Location = new System.Drawing.Point(0, 24);
             this.crmGridView1.Name = "crmGridView1";
             this.crmGridView1.OrganizationService = null;

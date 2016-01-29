@@ -27,7 +27,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             crmGridView1.ShowIdColumn = form.currentSettings.gridId;
             crmGridView1.ShowIndexColumn = form.currentSettings.gridIndex;
             crmGridView1.OrganizationService = form.Service;
-            crmGridView1.EntityCollection = entities;
+            crmGridView1.DataSource = entities;
         }
 
         private void ResultGrid_Load(object sender, EventArgs e)
