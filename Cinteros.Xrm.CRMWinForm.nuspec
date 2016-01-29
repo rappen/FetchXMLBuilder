@@ -16,6 +16,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="CRMWinForm\bin\Release\Cinteros.Xrm.CRMForWinForm.dll" target="lib"/>
+    <file src="CRMWinForm\bin\Release\Cinteros.Xrm.CRMWinForm.dll" target="lib"/>
   </files>
 </package>
