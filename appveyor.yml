@@ -19,9 +19,14 @@ build:
   publish_nuget: true
   verbosity: normal
 after_build:
-- cmd: nuget pack Cinteros.Xrm.CRMWinForm.nuspec
-- 7z a FetchXMLBuilder_%APPVEYOR_BUILD_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\FetchXMLBuilder\bin\%CONFIGURATION%\Cinteros.Xrm.*.dll
-- appveyor PushArtifact FetchXMLBuilder_%APPVEYOR_BUILD_VERSION%.zip
+- cmd: >-
+    nuget pack Cinteros.Xrm.CRMWinForm.nuspec
+
+    7z a FetchXMLBuilder_%APPVEYOR_BUILD_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\FetchXMLBuilder\bin\%CONFIGURATION%\Cinteros.Xrm.*.dll
+
+    appveyor PushArtifact FetchXMLBuilder_%APPVEYOR_BUILD_VERSION%.zip
+artifacts:
+- path: '**\Cinteros.*.nupkg'
 deploy:
 - provider: Environment
   name: GitHubFXB
@@ -36,3 +41,4 @@ deploy:
   api_key:
     secure: e85PnghtumEbD21fvXX7r3CO36xJeFS3kwrPx25rlpa57M5ztBvFjlKAbP85icZA
   skip_symbols: true
+  artifact: /.*\.nupkg/
