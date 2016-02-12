@@ -4,7 +4,7 @@
     <id>Cinteros.Xrm.CRMWinForm</id>
     <version>2016.1.1</version>
     <title>Cinteros Xrm CRMWinForm</title>
-    <authors>Jonas Rapp</authors>
+    <authors>Jonas Rapp, Cinteros AB</authors>
     <owners>Cinteros</owners>
     <iconUrl>http://rappen.net/Cinteros/cinteros.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

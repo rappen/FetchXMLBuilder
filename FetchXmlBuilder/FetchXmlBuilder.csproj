@@ -47,6 +47,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cinteros.Xrm.CRMWinForm, Version=1.2016.2.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cinteros.Xrm.CRMWinForm.2016.1.2\lib\Cinteros.Xrm.CRMWinForm.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="McTools.Xrm.Connection, Version=1.2016.1.7, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\XrmToolBoxPackage.1.2015.12.20\lib\net\McTools.Xrm.Connection.dll</HintPath>
       <Private>True</Private>
@@ -308,10 +312,6 @@
     <None Include="Resources\XSD fetch.cs.cmd" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CRMWinForm\CRMWinForm.csproj">
-      <Project>{5bbece21-558f-48c5-9da2-fa104299dc67}</Project>
-      <Name>CRMWinForm</Name>
-    </ProjectReference>
     <ProjectReference Include="..\XmlEditorUtils\XmlEditorUtils.csproj">
       <Project>{9fc7bdf7-321c-4b96-9b70-d75a16bd7685}</Project>
       <Name>XmlEditorUtils</Name>
