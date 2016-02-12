@@ -51,12 +51,12 @@
       <HintPath>..\packages\Cinteros.Xrm.CRMWinForm.2016.1.2\lib\Cinteros.Xrm.CRMWinForm.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="McTools.Xrm.Connection, Version=1.2016.1.7, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2015.12.20\lib\net\McTools.Xrm.Connection.dll</HintPath>
+    <Reference Include="McTools.Xrm.Connection, Version=1.2016.1.30, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2016.1.30\lib\net\McTools.Xrm.Connection.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.2016.1.7, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2015.12.20\lib\net\McTools.Xrm.Connection.WinForms.dll</HintPath>
+    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.2016.1.30, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2016.1.30\lib\net\McTools.Xrm.Connection.WinForms.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -111,12 +111,12 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="XrmToolBox, Version=1.2016.1.7, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2015.12.20\lib\net\XrmToolBox.exe</HintPath>
+    <Reference Include="XrmToolBox, Version=1.2016.1.30, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\XrmToolBoxPackage.1.2016.1.30\lib\net\XrmToolBox.exe</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="XrmToolBox.Extensibility, Version=1.2016.1.7, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2015.12.20\lib\net\XrmToolBox.Extensibility.dll</HintPath>
+    <Reference Include="XrmToolBox.Extensibility, Version=1.2016.1.30, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\XrmToolBoxPackage.1.2016.1.30\lib\net\XrmToolBox.Extensibility.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
