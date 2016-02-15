@@ -47,8 +47,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cinteros.Xrm.CRMWinForm, Version=1.2016.2.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Cinteros.Xrm.CRMWinForm.2016.1.2\lib\Cinteros.Xrm.CRMWinForm.dll</HintPath>
+    <Reference Include="Cinteros.Xrm.CRMWinForm, Version=2016.2.12.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cinteros.Xrm.CRMWinForm.2016.2.12.3\lib\Cinteros.Xrm.CRMWinForm.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="McTools.Xrm.Connection, Version=1.2016.1.30, Culture=neutral, processorArchitecture=MSIL">
