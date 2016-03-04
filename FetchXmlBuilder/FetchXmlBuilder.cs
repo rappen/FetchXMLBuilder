@@ -1492,12 +1492,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         throw new Exception("Need a connection to load views.");
                     }
-                    var qex = new QueryExpression("savedquery");
-                    qex.ColumnSet = new ColumnSet("name", "returnedtypecode", "fetchxml");
-                    qex.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
-                    qex.Criteria.AddCondition("querytype", ConditionOperator.In, 0, 1, 32);
-                    qex.AddOrder("name", OrderType.Ascending);
-                    var sysviews = Service.RetrieveMultiple(qex);
+                    var qexs = new QueryExpression("savedquery");
+                    qexs.ColumnSet = new ColumnSet("name", "returnedtypecode", "fetchxml");
+                    qexs.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
+                    qexs.Criteria.AddCondition("iscustomizable", ConditionOperator.Equal, true);
+                    qexs.AddOrder("name", OrderType.Ascending);
+                    var sysviews = Service.RetrieveMultiple(qexs);
                     foreach (var view in sysviews.Entities)
                     {
                         var entityname = view["returnedtypecode"].ToString();
@@ -1514,8 +1514,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             views[entityname + "|S"].Add(view);
                         }
                     }
-                    qex.EntityName = "userquery";
-                    var userviews = Service.RetrieveMultiple(qex);
+                    var qexu = new QueryExpression("userquery");
+                    qexu.ColumnSet = new ColumnSet("name", "returnedtypecode", "fetchxml");
+                    qexu.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
+                    qexu.AddOrder("name", OrderType.Ascending);
+                    var userviews = Service.RetrieveMultiple(qexu);
                     foreach (var view in userviews.Entities)
                     {
                         var entityname = view["returnedtypecode"].ToString();
