@@ -37,7 +37,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void crmGridView1_RecordDoubleClick(object sender, CRMRecordEventArgs e)
         {
-            if (e.Entity != null && !e.Entity.Id.Equals(Guid.Empty))
+            if (e.Entity != null)
             {
                 var url = form.ConnectionDetail.WebApplicationUrl;
                 if (string.IsNullOrEmpty(url))
@@ -48,13 +48,39 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                         url = string.Concat("http://", url);
                     }
                 }
-                url = string.Concat(url,
-                    "/main.aspx?etn=",
-                    e.Entity.LogicalName,
-                    "&pagetype=entityrecord&id=",
-                    e.Entity.Id.ToString());
-                form.LogUse("OpenRecord");
-                Process.Start(url);
+                var entity = e.Entity.LogicalName;
+                var id = e.Entity.Id;
+                switch (e.Entity.LogicalName)
+                {
+                    case "activitypointer":
+                            if (!e.Entity.Contains("activitytypecode"))
+                            {
+                                MessageBox.Show("To open records of type activitypointer, attribute 'activitytypecode' must be included in the query.", "Open Record", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+                            entity = e.Entity["activitytypecode"].ToString();
+                        break;
+                    case "activityparty":
+                        if (!e.Entity.Contains("partyid"))
+                        {
+                            MessageBox.Show("To open records of type activityparty, attribute 'partyid' must be included in the query.", "Open Record", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        var party = (EntityReference)e.Entity["partyid"];
+                        entity = party.LogicalName;
+                        id = party.Id;
+                        break;
+                }
+                if (!string.IsNullOrEmpty(entity) && !id.Equals(Guid.Empty))
+                {
+                    url = string.Concat(url,
+                        "/main.aspx?etn=",
+                        entity,
+                        "&pagetype=entityrecord&id=",
+                        id.ToString());
+                    form.LogUse("OpenRecord");
+                    Process.Start(url);
+                }
             }
         }
 
