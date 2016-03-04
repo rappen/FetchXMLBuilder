@@ -31,6 +31,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.crmGridView1 = new Cinteros.Xrm.CRMWinForm.CRMGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.displayOptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuFriendly = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,11 +40,10 @@
             this.hintsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.doubleClickARowToOpenRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copySelectedCellsUsingCTRLCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.crmGridView1 = new Cinteros.Xrm.CRMWinForm.CRMGridView();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel2
@@ -64,6 +64,28 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(731, 468);
             this.panel1.TabIndex = 2;
+            // 
+            // crmGridView1
+            // 
+            this.crmGridView1.AllowUserToAddRows = false;
+            this.crmGridView1.AllowUserToDeleteRows = false;
+            this.crmGridView1.AllowUserToOrderColumns = true;
+            this.crmGridView1.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Azure;
+            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.crmGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.crmGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.crmGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.crmGridView1.EnableHeadersVisualStyles = false;
+            this.crmGridView1.EntityReferenceClickable = true;
+            this.crmGridView1.Location = new System.Drawing.Point(0, 24);
+            this.crmGridView1.Name = "crmGridView1";
+            this.crmGridView1.ReadOnly = true;
+            this.crmGridView1.RowHeadersWidth = 24;
+            this.crmGridView1.Size = new System.Drawing.Size(731, 444);
+            this.crmGridView1.TabIndex = 1;
+            this.crmGridView1.RecordClick += new Cinteros.Xrm.CRMWinForm.CRMRecordEventHandler(this.crmGridView1_RecordClick);
+            this.crmGridView1.RecordDoubleClick += new Cinteros.Xrm.CRMWinForm.CRMRecordEventHandler(this.crmGridView1_RecordDoubleClick);
             // 
             // menuStrip1
             // 
@@ -131,28 +153,6 @@
             this.copySelectedCellsUsingCTRLCToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
             this.copySelectedCellsUsingCTRLCToolStripMenuItem.Text = "Copy selected cells using <CTRL>+C";
             // 
-            // crmGridView1
-            // 
-            this.crmGridView1.AllowUserToAddRows = false;
-            this.crmGridView1.AllowUserToDeleteRows = false;
-            this.crmGridView1.AllowUserToOrderColumns = true;
-            this.crmGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Azure;
-            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.crmGridView1.AutoRefresh = true;
-            this.crmGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
-            this.crmGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.crmGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.crmGridView1.EnableHeadersVisualStyles = false;
-            this.crmGridView1.Location = new System.Drawing.Point(0, 24);
-            this.crmGridView1.Name = "crmGridView1";
-            this.crmGridView1.OrganizationService = null;
-            this.crmGridView1.ReadOnly = true;
-            this.crmGridView1.RowHeadersWidth = 24;
-            this.crmGridView1.Size = new System.Drawing.Size(731, 444);
-            this.crmGridView1.TabIndex = 1;
-            this.crmGridView1.RecordDoubleClick += new Cinteros.Xrm.CRMWinForm.CRMRecordEventHandler(this.crmGridView1_RecordDoubleClick);
-            // 
             // ResultGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -167,9 +167,9 @@
             this.panel2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }

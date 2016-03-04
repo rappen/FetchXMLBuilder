@@ -39,6 +39,52 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             if (e.Entity != null)
             {
+                string url = GetEntityUrl(e.Entity);
+                if (!string.IsNullOrEmpty(url))
+                {
+                    form.LogUse("OpenRecord");
+                    Process.Start(url);
+                }
+            }
+        }
+
+        private string GetEntityUrl(Entity entity)
+        {
+            var entref = entity.ToEntityReference();
+            switch (entref.LogicalName)
+            {
+                case "activitypointer":
+                    if (!entity.Contains("activitytypecode"))
+                    {
+                        MessageBox.Show("To open records of type activitypointer, attribute 'activitytypecode' must be included in the query.", "Open Record", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        entref.LogicalName = string.Empty;
+                    }
+                    else
+                    {
+                        entref.LogicalName = entity["activitytypecode"].ToString();
+                    }
+                    break;
+                case "activityparty":
+                    if (!entity.Contains("partyid"))
+                    {
+                        MessageBox.Show("To open records of type activityparty, attribute 'partyid' must be included in the query.", "Open Record", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        entref.LogicalName = string.Empty;
+                    }
+                    else
+                    {
+                        var party = (EntityReference)entity["partyid"];
+                        entref.LogicalName = party.LogicalName;
+                        entref.Id = party.Id;
+                    }
+                    break;
+            }
+            return GetEntityReferenceUrl(entref);
+        }
+
+        private string GetEntityReferenceUrl(EntityReference entref)
+        {
+            if (!string.IsNullOrEmpty(entref.LogicalName) && !entref.Id.Equals(Guid.Empty))
+            {
                 var url = form.ConnectionDetail.WebApplicationUrl;
                 if (string.IsNullOrEmpty(url))
                 {
@@ -48,40 +94,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                         url = string.Concat("http://", url);
                     }
                 }
-                var entity = e.Entity.LogicalName;
-                var id = e.Entity.Id;
-                switch (e.Entity.LogicalName)
-                {
-                    case "activitypointer":
-                            if (!e.Entity.Contains("activitytypecode"))
-                            {
-                                MessageBox.Show("To open records of type activitypointer, attribute 'activitytypecode' must be included in the query.", "Open Record", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                return;
-                            }
-                            entity = e.Entity["activitytypecode"].ToString();
-                        break;
-                    case "activityparty":
-                        if (!e.Entity.Contains("partyid"))
-                        {
-                            MessageBox.Show("To open records of type activityparty, attribute 'partyid' must be included in the query.", "Open Record", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-                        var party = (EntityReference)e.Entity["partyid"];
-                        entity = party.LogicalName;
-                        id = party.Id;
-                        break;
-                }
-                if (!string.IsNullOrEmpty(entity) && !id.Equals(Guid.Empty))
-                {
-                    url = string.Concat(url,
-                        "/main.aspx?etn=",
-                        entity,
-                        "&pagetype=entityrecord&id=",
-                        id.ToString());
-                    form.LogUse("OpenRecord");
-                    Process.Start(url);
-                }
+                url = string.Concat(url,
+                    "/main.aspx?etn=",
+                    entref.LogicalName,
+                    "&pagetype=entityrecord&id=",
+                    entref.Id.ToString());
+                return url;
             }
+            return string.Empty;
         }
 
         private void ResultGrid_FormClosing(object sender, FormClosingEventArgs e)
@@ -105,6 +125,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private void menuIndexColumn_CheckedChanged(object sender, EventArgs e)
         {
             crmGridView1.ShowIndexColumn = menuIndexColumn.Checked;
+        }
+
+        private void crmGridView1_RecordClick(object sender, CRMRecordEventArgs e)
+        {
+            if (e.Value is EntityReference)
+            {
+                string url = GetEntityReferenceUrl(e.Value as EntityReference);
+                if (!string.IsNullOrEmpty(url))
+                {
+                    form.LogUse("OpenParentRecord");
+                    Process.Start(url);
+                }
+            }
         }
     }
 }
