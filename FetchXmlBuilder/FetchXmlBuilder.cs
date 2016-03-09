@@ -826,6 +826,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiSaveView.Enabled = enabled && Service != null && View != null;
                     tsmiSaveML.Enabled = enabled && Service != null && DynML != null;
                     tsmiSaveCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
+                    tsmiSaveCWP.Enabled = enabled && Service != null && FetchChanged && !string.IsNullOrEmpty(CWPFeed);
                     tsmiToQureyExpression.Enabled = enabled && Service != null;
                     tsbOptions.Enabled = enabled;
                     tsmiFriendly.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
