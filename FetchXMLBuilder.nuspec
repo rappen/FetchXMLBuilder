@@ -6,7 +6,7 @@
     <title>FetchXML Builder for XrmToolBox</title>
     <authors>Jonas Rapp</authors>
     <owners>Cinteros</owners>
-    <projectUrl>https://github.com/Cinteros/FetchXMLBuilder</projectUrl>
+    <projectUrl>http://fxb.xrmtoolbox.com</projectUrl>
     <iconUrl>http://rappen.net/Cinteros/FXB.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>FetchXML Builder for XrmToolBox</description>
