@@ -277,7 +277,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                             result += $"(guid'{condition.value}')";
                             break;
                         case AttributeTypeCode.DateTime:
-                            result += $"datetime'{condition.value}'";
+                            var date = DateTime.Parse(condition.value);
+                            var datestr = string.Empty;
+                            if (date.Equals(date.Date))
+                            {
+                                datestr = date.ToString("yyyy-MM-dd");
+                            }
+                            else
+                            {
+                                datestr = date.ToString("o");
+                            }
+                            result += $"datetime'{datestr}'";
                             break;
                         default:
                             result += $"'{condition.value}'";
