@@ -65,6 +65,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     return "last-seven-days";
                 case ConditionOperator.Next7Days:
                     return "next-seven-days";
+                case ConditionOperator.AboveOrEqual:
+                    return "eq-or-above";
+                case ConditionOperator.UnderOrEqual:
+                    return "eq-or-under";
             }
             var coname = oper.ToString();
             if (coname.StartsWith("OlderThan"))
