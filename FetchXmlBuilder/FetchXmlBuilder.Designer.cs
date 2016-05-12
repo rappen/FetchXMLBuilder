@@ -89,6 +89,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.outputTypeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiResultOption = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiUseSingleQuotes = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiShowQuickActions = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowOData = new System.Windows.Forms.ToolStripMenuItem();
@@ -126,8 +128,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.panelButtonSpacer = new System.Windows.Forms.Panel();
             this.gbQuickActions = new System.Windows.Forms.GroupBox();
             this.menuControl = new System.Windows.Forms.MenuStrip();
-            this.tsmiUseSingleQuotes = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiAttributesOnlyValidRead = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain.SuspendLayout();
             this.gbFetchTree.SuspendLayout();
             this.nodeMenu.SuspendLayout();
@@ -575,7 +576,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiAttributesStandard,
             this.tsmiAttributesCustom,
             this.toolStripSeparator16,
-            this.tsmiAttributesOnlyValidAF});
+            this.tsmiAttributesOnlyValidAF,
+            this.tsmiAttributesOnlyValidRead});
             this.tsmiShowAttributes.Name = "tsmiShowAttributes";
             this.tsmiShowAttributes.Size = new System.Drawing.Size(223, 22);
             this.tsmiShowAttributes.Text = "Show attributes";
@@ -707,6 +709,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             "FetchResult"});
             this.tsmiResultOption.Name = "tsmiResultOption";
             this.tsmiResultOption.Size = new System.Drawing.Size(163, 23);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(220, 6);
+            // 
+            // tsmiUseSingleQuotes
+            // 
+            this.tsmiUseSingleQuotes.CheckOnClick = true;
+            this.tsmiUseSingleQuotes.Name = "tsmiUseSingleQuotes";
+            this.tsmiUseSingleQuotes.Size = new System.Drawing.Size(223, 22);
+            this.tsmiUseSingleQuotes.Text = "Single Quotation";
+            this.tsmiUseSingleQuotes.CheckedChanged += new System.EventHandler(this.tsmiUseSingleQuotes_CheckedChanged);
             // 
             // toolStripSeparator17
             // 
@@ -1055,18 +1070,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.menuControl.Text = "menuStrip1";
             this.menuControl.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
-            // tsmiUseSingleQuotes
+            // tsmiAttributesOnlyValidRead
             // 
-            this.tsmiUseSingleQuotes.CheckOnClick = true;
-            this.tsmiUseSingleQuotes.Name = "tsmiUseSingleQuotes";
-            this.tsmiUseSingleQuotes.Size = new System.Drawing.Size(223, 22);
-            this.tsmiUseSingleQuotes.Text = "Single Quotation";
-            this.tsmiUseSingleQuotes.CheckedChanged += new System.EventHandler(this.tsmiUseSingleQuotes_CheckedChanged);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(220, 6);
+            this.tsmiAttributesOnlyValidRead.CheckOnClick = true;
+            this.tsmiAttributesOnlyValidRead.Enabled = false;
+            this.tsmiAttributesOnlyValidRead.Name = "tsmiAttributesOnlyValidRead";
+            this.tsmiAttributesOnlyValidRead.Size = new System.Drawing.Size(195, 22);
+            this.tsmiAttributesOnlyValidRead.Text = "Only valid for Read";
+            this.tsmiAttributesOnlyValidRead.Click += new System.EventHandler(this.tsmiAttributes_Click);
             // 
             // FetchXmlBuilder
             // 
@@ -1204,5 +1215,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiShowQuickActions;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem tsmiUseSingleQuotes;
+        internal System.Windows.Forms.ToolStripMenuItem tsmiAttributesOnlyValidRead;
     }
 }

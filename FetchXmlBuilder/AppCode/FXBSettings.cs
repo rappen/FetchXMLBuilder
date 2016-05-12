@@ -34,6 +34,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool showAttributesCustom { get; set; }
         public bool showAttributesStandard { get; set; }
         public bool showAttributesOnlyValidAF { get; set; }
+        public bool showAttributesOnlyValidRead { get; set; }
         public int resultOption { get; set; }
         public Size xmlWinSize { get; set; }
         public Size gridWinSize { get; set; }

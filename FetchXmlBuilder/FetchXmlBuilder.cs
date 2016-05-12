@@ -532,7 +532,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiAttributesUncustomizable.Checked &&
                     tsmiAttributesCustom.Checked &&
                     tsmiAttributesStandard.Checked &&
-                    !tsmiAttributesOnlyValidAF.Checked;
+                    !tsmiAttributesOnlyValidAF.Checked &&
+                    !tsmiAttributesOnlyValidRead.Checked;
             }
             if (!tsmiAttributesManaged.Checked && !tsmiAttributesUnmanaged.Checked)
             {   // Neither managed nor unmanaged is not such a good idea...
@@ -553,6 +554,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             tsmiAttributesCustom.Enabled = !tsmiAttributesAll.Checked;
             tsmiAttributesStandard.Enabled = !tsmiAttributesAll.Checked;
             tsmiAttributesOnlyValidAF.Enabled = !tsmiAttributesAll.Checked;
+            tsmiAttributesOnlyValidRead.Enabled = !tsmiAttributesAll.Checked;
             currentSettings.showAttributesAll = tsmiAttributesAll.Checked;
             currentSettings.showAttributesManaged = tsmiAttributesManaged.Checked;
             currentSettings.showAttributesUnmanaged = tsmiAttributesUnmanaged.Checked;
@@ -561,6 +563,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             currentSettings.showAttributesCustom = tsmiAttributesCustom.Checked;
             currentSettings.showAttributesStandard = tsmiAttributesStandard.Checked;
             currentSettings.showAttributesOnlyValidAF = tsmiAttributesOnlyValidAF.Checked;
+            currentSettings.showAttributesOnlyValidRead = tsmiAttributesOnlyValidRead.Checked;
             HandleNodeSelection(tvFetch.SelectedNode);
         }
 
@@ -751,6 +754,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             tsmiAttributesCustom.Checked = currentSettings.showAttributesCustom;
             tsmiAttributesStandard.Checked = currentSettings.showAttributesStandard;
             tsmiAttributesOnlyValidAF.Checked = currentSettings.showAttributesOnlyValidAF;
+            tsmiAttributesOnlyValidRead.Checked = currentSettings.showAttributesOnlyValidRead;
             tsmiResultOption.SelectedIndex = currentSettings.resultOption;
             tsmiUseSingleQuotes.Checked = currentSettings.useSingleQuotation;
             tsmiEntities_Click(null, null);
@@ -2423,6 +2427,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             if (!currentSettings.showAttributesStandard && attribute.IsCustomAttribute == false) { continue; }
                             if (!currentSettings.showAttributesCustom && attribute.IsCustomAttribute == true) { continue; }
                             if (currentSettings.showAttributesOnlyValidAF && attribute.IsValidForAdvancedFind.Value == false) { continue; }
+                            if (currentSettings.showAttributesOnlyValidRead && attribute.IsValidForRead.Value == false) { continue; }
                         }
                         result.Add(attribute);
                     }
