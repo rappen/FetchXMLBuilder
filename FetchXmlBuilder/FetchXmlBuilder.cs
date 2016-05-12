@@ -471,6 +471,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             if (tsmiLiveUpdate.Checked)
             {
+                LogUse("LiveXML");
                 UpdateLiveXML();
             }
             else if (xmlLiveUpdate != null)
