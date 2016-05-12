@@ -449,14 +449,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             moveUpToolStripMenuItem.Enabled = true;
         }
 
-        private void tsmiFriendly_CheckedChanged(object sender, EventArgs e)
-        {
-            currentSettings.useFriendlyNames = tsmiFriendly.Checked;
-            BuildAndValidateXml(false);
-            DisplayDefinition();
-            HandleNodeSelection(tvFetch.SelectedNode);
-        }
-
         private void toolStripMain_Click(object sender, EventArgs e)
         {
             tvFetch.Focus();
@@ -473,98 +465,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsmiSaveCWP_Click(object sender, EventArgs e)
         {
             SaveCWPFeed();
-        }
-
-        private void tsmiEntities_Click(object sender, EventArgs e)
-        {
-            if (sender != null && sender != tsmiEntitiesAll)
-            {
-                tsmiEntitiesAll.Checked =
-                    tsmiEntitiesManaged.Checked &&
-                    tsmiEntitiesUnmanaged.Checked &&
-                    tsmiEntitiesCustomizable.Checked &&
-                    tsmiEntitiesUncustomizable.Checked &&
-                    tsmiEntitiesCustom.Checked &&
-                    tsmiEntitiesStandard.Checked &&
-                    tsmiEntitiesIntersect.Checked &&
-                    !tsmiEntitiesOnlyValidAF.Checked;
-            }
-            if (!tsmiEntitiesManaged.Checked && !tsmiEntitiesUnmanaged.Checked)
-            {   // Neither managed nor unmanaged is not such a good idea...
-                tsmiEntitiesUnmanaged.Checked = true;
-            }
-            if (!tsmiEntitiesCustomizable.Checked && !tsmiEntitiesUncustomizable.Checked)
-            {   // Neither customizable nor uncustomizable is not such a good idea...
-                tsmiEntitiesCustomizable.Checked = true;
-            }
-            if (!tsmiEntitiesCustom.Checked && !tsmiEntitiesStandard.Checked)
-            {   // Neither custom nor standard is not such a good idea...
-                tsmiEntitiesCustom.Checked = true;
-            }
-            tsmiEntitiesManaged.Enabled = !tsmiEntitiesAll.Checked;
-            tsmiEntitiesUnmanaged.Enabled = !tsmiEntitiesAll.Checked;
-            tsmiEntitiesCustomizable.Enabled = !tsmiEntitiesAll.Checked;
-            tsmiEntitiesUncustomizable.Enabled = !tsmiEntitiesAll.Checked;
-            tsmiEntitiesCustom.Enabled = !tsmiEntitiesAll.Checked;
-            tsmiEntitiesStandard.Enabled = !tsmiEntitiesAll.Checked;
-            tsmiEntitiesIntersect.Enabled = !tsmiEntitiesAll.Checked;
-            tsmiEntitiesOnlyValidAF.Enabled = !tsmiEntitiesAll.Checked;
-            currentSettings.showEntitiesAll = tsmiEntitiesAll.Checked;
-            currentSettings.showEntitiesManaged = tsmiEntitiesManaged.Checked;
-            currentSettings.showEntitiesUnmanaged = tsmiEntitiesUnmanaged.Checked;
-            currentSettings.showEntitiesCustomizable = tsmiEntitiesCustomizable.Checked;
-            currentSettings.showEntitiesUncustomizable = tsmiEntitiesUncustomizable.Checked;
-            currentSettings.showEntitiesCustom = tsmiEntitiesCustom.Checked;
-            currentSettings.showEntitiesStandard = tsmiEntitiesStandard.Checked;
-            currentSettings.showEntitiesIntersect = tsmiEntitiesIntersect.Checked;
-            currentSettings.showEntitiesOnlyValidAF = tsmiEntitiesOnlyValidAF.Checked;
-            HandleNodeSelection(tvFetch.SelectedNode);
-        }
-
-        private void tsmiAttributes_Click(object sender, EventArgs e)
-        {
-            if (sender != null && sender != tsmiAttributesAll)
-            {
-                tsmiAttributesAll.Checked =
-                    tsmiAttributesManaged.Checked &&
-                    tsmiAttributesUnmanaged.Checked &&
-                    tsmiAttributesCustomizable.Checked &&
-                    tsmiAttributesUncustomizable.Checked &&
-                    tsmiAttributesCustom.Checked &&
-                    tsmiAttributesStandard.Checked &&
-                    !tsmiAttributesOnlyValidAF.Checked &&
-                    !tsmiAttributesOnlyValidRead.Checked;
-            }
-            if (!tsmiAttributesManaged.Checked && !tsmiAttributesUnmanaged.Checked)
-            {   // Neither managed nor unmanaged is not such a good idea...
-                tsmiAttributesUnmanaged.Checked = true;
-            }
-            if (!tsmiAttributesCustomizable.Checked && !tsmiAttributesUncustomizable.Checked)
-            {   // Neither customizable nor uncustomizable is not such a good idea...
-                tsmiAttributesCustomizable.Checked = true;
-            }
-            if (!tsmiAttributesCustom.Checked && !tsmiAttributesStandard.Checked)
-            {   // Neither custom nor standard is not such a good idea...
-                tsmiAttributesCustom.Checked = true;
-            }
-            tsmiAttributesManaged.Enabled = !tsmiAttributesAll.Checked;
-            tsmiAttributesUnmanaged.Enabled = !tsmiAttributesAll.Checked;
-            tsmiAttributesCustomizable.Enabled = !tsmiAttributesAll.Checked;
-            tsmiAttributesUncustomizable.Enabled = !tsmiAttributesAll.Checked;
-            tsmiAttributesCustom.Enabled = !tsmiAttributesAll.Checked;
-            tsmiAttributesStandard.Enabled = !tsmiAttributesAll.Checked;
-            tsmiAttributesOnlyValidAF.Enabled = !tsmiAttributesAll.Checked;
-            tsmiAttributesOnlyValidRead.Enabled = !tsmiAttributesAll.Checked;
-            currentSettings.showAttributesAll = tsmiAttributesAll.Checked;
-            currentSettings.showAttributesManaged = tsmiAttributesManaged.Checked;
-            currentSettings.showAttributesUnmanaged = tsmiAttributesUnmanaged.Checked;
-            currentSettings.showAttributesCustomizable = tsmiAttributesCustomizable.Checked;
-            currentSettings.showAttributesUncustomizable = tsmiAttributesUncustomizable.Checked;
-            currentSettings.showAttributesCustom = tsmiAttributesCustom.Checked;
-            currentSettings.showAttributesStandard = tsmiAttributesStandard.Checked;
-            currentSettings.showAttributesOnlyValidAF = tsmiAttributesOnlyValidAF.Checked;
-            currentSettings.showAttributesOnlyValidRead = tsmiAttributesOnlyValidRead.Checked;
-            HandleNodeSelection(tvFetch.SelectedNode);
         }
 
         private void tsmiLiveUpdate_CheckedChanged(object sender, EventArgs e)
@@ -676,16 +576,26 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
-        private void tsmiShowQuickActions_CheckedChanged(object sender, EventArgs e)
+        private void tsbOptions_Click(object sender, EventArgs e)
         {
-            currentSettings.showQuickActions = tsmiShowQuickActions.Checked;
-            ShowQuickActions();
-        }
-
-        private void tsmiUseSingleQuotes_CheckedChanged(object sender, EventArgs e)
-        {
-            currentSettings.useSingleQuotation = tsmiUseSingleQuotes.Checked;
-            UpdateLiveXML();
+            var allowStats = currentSettings.logUsage;
+            var settingDlg = new Settings(currentSettings);
+            if (settingDlg.ShowDialog(this) == DialogResult.OK)
+            {
+                currentSettings = settingDlg.GetSettings();
+                if (allowStats != currentSettings.logUsage)
+                {
+                    if (currentSettings.logUsage == true)
+                    {
+                        LogUse("Accept", true);
+                    }
+                    else if (!currentSettings.logUsage == true)
+                    {
+                        LogUse("Deny", true);
+                    }
+                }
+                ApplyCurrentSettings();
+            }
         }
 
         #endregion Event handlers
@@ -704,7 +614,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void SaveSetting()
         {
             var conn = ConnectionDetail != null ? ConnectionDetail.ConnectionName : "<none>";
-            currentSettings.resultOption = tsmiResultOption.SelectedIndex;
             if (currentSettings.fetchxml == null)
             {
                 currentSettings.fetchxml = new List<string>();
@@ -736,30 +645,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 LoadFetchFromSettings("");
             }
-            tsmiFriendly.Checked = currentSettings.useFriendlyNames;
-            tsmiEntitiesAll.Checked = currentSettings.showEntitiesAll;
-            tsmiEntitiesManaged.Checked = currentSettings.showEntitiesManaged;
-            tsmiEntitiesUnmanaged.Checked = currentSettings.showEntitiesUnmanaged;
-            tsmiEntitiesCustomizable.Checked = currentSettings.showEntitiesCustomizable;
-            tsmiEntitiesUncustomizable.Checked = currentSettings.showEntitiesUncustomizable;
-            tsmiEntitiesCustom.Checked = currentSettings.showEntitiesCustom;
-            tsmiEntitiesStandard.Checked = currentSettings.showEntitiesStandard;
-            tsmiEntitiesIntersect.Checked = currentSettings.showEntitiesIntersect;
-            tsmiEntitiesOnlyValidAF.Checked = currentSettings.showEntitiesOnlyValidAF;
-            tsmiAttributesAll.Checked = currentSettings.showAttributesAll;
-            tsmiAttributesManaged.Checked = currentSettings.showAttributesManaged;
-            tsmiAttributesUnmanaged.Checked = currentSettings.showAttributesUnmanaged;
-            tsmiAttributesCustomizable.Checked = currentSettings.showAttributesCustomizable;
-            tsmiAttributesUncustomizable.Checked = currentSettings.showAttributesUncustomizable;
-            tsmiAttributesCustom.Checked = currentSettings.showAttributesCustom;
-            tsmiAttributesStandard.Checked = currentSettings.showAttributesStandard;
-            tsmiAttributesOnlyValidAF.Checked = currentSettings.showAttributesOnlyValidAF;
-            tsmiAttributesOnlyValidRead.Checked = currentSettings.showAttributesOnlyValidRead;
-            tsmiResultOption.SelectedIndex = currentSettings.resultOption;
-            tsmiUseSingleQuotes.Checked = currentSettings.useSingleQuotation;
-            tsmiEntities_Click(null, null);
-            tsmiAttributes_Click(null, null);
-            tsmiShowQuickActions.Checked = currentSettings.showQuickActions;
             ShowQuickActions();
             var ass = Assembly.GetExecutingAssembly().GetName();
             var version = ass.Version.ToString();
@@ -767,20 +652,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 // Reset some settings when new version is deployed
                 currentSettings.logUsage = null;
-
                 currentSettings.currentVersion = version;
             }
             if (currentSettings.logUsage == null)
             {
                 currentSettings.logUsage = LogUsage.PromptToLog();
-                if (currentSettings.logUsage == true)
-                {
-                    LogUse("Accept", true);
-                }
-                else if (!currentSettings.logUsage == true)
-                {
-                    LogUse("Deny", true);
-                }
             }
         }
 
@@ -832,10 +708,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiSaveCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
                     tsmiSaveCWP.Enabled = enabled && Service != null && FetchChanged && !string.IsNullOrEmpty(CWPFeed);
                     tsmiToQureyExpression.Enabled = enabled && Service != null;
-                    tsbOptions.Enabled = enabled;
-                    tsmiFriendly.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
-                    tsmiShowEntities.Enabled = enabled && Service != null;
-                    tsmiShowAttributes.Enabled = enabled && Service != null;
+                    tsbView.Enabled = enabled;
                     tsbExecute.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
                     selectAttributesToolStripMenuItem.Enabled = enabled && Service != null;
                     gbFetchTree.Enabled = enabled;
@@ -1371,7 +1244,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 MessageBox.Show("Busy doing something...\n\nPlease wait until current transaction is done.");
                 return;
             }
-            var fetchType = tsmiResultOption.SelectedIndex;
+            var fetchType = currentSettings.resultOption;
             switch (fetchType)
             {
                 case 0:
@@ -1422,8 +1295,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void RetrieveMultiple(string fetch)
         {
             working = true;
-            var outputtype = tsmiResultOption.SelectedIndex;
-            var outputtypestring = tsmiResultOption.SelectedItem.ToString();
+            var outputtype = currentSettings.resultOption;
+            var outputtypestring = Settings.ResultOption2String(outputtype);
             WorkAsync(new WorkAsyncInfo("Executing FetchXML...",
                 (eventargs) =>
                 {
@@ -2437,5 +2310,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         }
 
         #endregion Static methods
+
+        private void ApplyCurrentSettings()
+        {
+            BuildAndValidateXml(false);
+            DisplayDefinition();
+            HandleNodeSelection(tvFetch.SelectedNode);
+            UpdateLiveXML();
+            ShowQuickActions();
+        }
     }
 }

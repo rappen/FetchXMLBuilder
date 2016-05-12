@@ -52,13 +52,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         internal static bool PromptToLog()
         {
-            var msg = "Allow FetchXML Builder to collect anonymous usage statistics?\n\n" +
-                "Statistics will be used to improve the functionality of FXB and is completely anonymous.\n\n" +
-                "Thanks!\n   /Jonas";
-            if (MessageBox.Show(msg, "Improve FetchXML Builder", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
-            {
-                return false;
-            }
+            var msg = "Anonymous statistics will be collected to improve the functionality of FetchXML Builder.\n\n" +
+                "If you do not wish to allow this, open the Options and uncheck the 'Allow statistics' checkbox.";
+            MessageBox.Show(msg, "Statistics", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return true;
         }
     }
