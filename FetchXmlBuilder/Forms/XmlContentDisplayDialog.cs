@@ -15,6 +15,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private string findtext = "";
         FetchXmlBuilder fxb;
 
+        public static XmlContentDisplayDialog Show(string xmlString, string header, bool allowEdit, bool allowFormat, bool allowExecute, FetchXmlBuilder caller)
+        {
+            if (xmlString.Length > 100000)
+            {
+                var dlgresult = MessageBox.Show("Huge result, this may take a while!\n" + xmlString.Length.ToString() + " characters in the XML document.\n\nContinue?", "Huge result",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (dlgresult == DialogResult.No)
+                {
+                    return null;
+                }
+            }
+            var xcdDialog = new XmlContentDisplayDialog(xmlString, header, allowEdit, allowFormat, allowExecute, caller);
+            xcdDialog.StartPosition = FormStartPosition.CenterParent;
+            xcdDialog.ShowDialog();
+            return xcdDialog;
+        }
+
         public XmlContentDisplayDialog(string xmlString, string header, bool allowEdit, bool allowFormat, bool allowExecute, FetchXmlBuilder caller)
         {
             InitializeComponent();
@@ -34,15 +51,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             }
             btnFormat.Visible = allowFormat;
             btnExecute.Visible = allowExecute;
-            if (xmlString.Length > 100000)
-            {
-                var dlgresult = MessageBox.Show("Huge result, this may take a while!\n" + xmlString.Length.ToString() + " characters in the XML document.\n\nContinue?", "Huge result",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                if (dlgresult == DialogResult.No)
-                {
-                    xmlString = "";
-                }
-            }
             UpdateXML(xmlString);
         }
 
@@ -113,6 +121,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             SetResult();
             execute = true;
+        }
+
+        private void XmlContentDisplayDialog_Load(object sender, EventArgs e)
+        {
+            if (DialogResult== DialogResult.Cancel)
+            {
+                Close();
+            }
         }
     }
 }
