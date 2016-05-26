@@ -29,7 +29,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://cinteros.se");
+            System.Diagnostics.Process.Start("http://www.innofactor.se");
         }
 
         private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

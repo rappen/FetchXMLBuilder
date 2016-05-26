@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("FetchXML Builder")]
 [assembly: AssemblyDescription("Build and test FetchXML with all capabilities supported by the CRM platform")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Jonas Rapp, Cinteros AB")]
+[assembly: AssemblyCompany("Jonas Rapp, Innofactor AB")]
 [assembly: AssemblyProduct("FetchXML Builder")]
-[assembly: AssemblyCopyright("Copyright © Cinteros AB 2014")]
+[assembly: AssemblyCopyright("Copyright © Innofactor AB 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label2 = new System.Windows.Forms.Label();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
@@ -40,37 +38,16 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.lblVersion = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.pictureBox1.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.FXB_100;
-            this.pictureBox1.Location = new System.Drawing.Point(209, 15);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(100, 100);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            // 
-            // label1
-            // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Copperplate Gothic Bold", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(57, 127);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(405, 41);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "FetchXML Builder";
-            // 
             // linkLabel1
             // 
-            this.linkLabel1.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.linkLabel1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel1.Location = new System.Drawing.Point(123, 325);
+            this.linkLabel1.Location = new System.Drawing.Point(123, 705);
             this.linkLabel1.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(270, 22);
@@ -81,8 +58,9 @@
             // 
             // label2
             // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(174, 218);
+            this.label2.Location = new System.Drawing.Point(174, 598);
             this.label2.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(59, 13);
@@ -91,8 +69,9 @@
             // 
             // linkLabel2
             // 
+            this.linkLabel2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Location = new System.Drawing.Point(271, 218);
+            this.linkLabel2.Location = new System.Drawing.Point(271, 598);
             this.linkLabel2.Name = "linkLabel2";
             this.linkLabel2.Size = new System.Drawing.Size(64, 13);
             this.linkLabel2.TabIndex = 4;
@@ -102,19 +81,21 @@
             // 
             // linkLabel3
             // 
+            this.linkLabel3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.linkLabel3.AutoSize = true;
-            this.linkLabel3.Location = new System.Drawing.Point(271, 266);
+            this.linkLabel3.Location = new System.Drawing.Point(271, 646);
             this.linkLabel3.Name = "linkLabel3";
-            this.linkLabel3.Size = new System.Drawing.Size(62, 13);
+            this.linkLabel3.Size = new System.Drawing.Size(72, 13);
             this.linkLabel3.TabIndex = 6;
             this.linkLabel3.TabStop = true;
-            this.linkLabel3.Text = "Cinteros AB";
+            this.linkLabel3.Text = "Innofactor AB";
             this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel3_LinkClicked);
             // 
             // label3
             // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(174, 266);
+            this.label3.Location = new System.Drawing.Point(174, 646);
             this.label3.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(54, 13);
@@ -133,8 +114,9 @@
             // 
             // linkLabel4
             // 
+            this.linkLabel4.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.linkLabel4.AutoSize = true;
-            this.linkLabel4.Location = new System.Drawing.Point(271, 242);
+            this.linkLabel4.Location = new System.Drawing.Point(271, 622);
             this.linkLabel4.Name = "linkLabel4";
             this.linkLabel4.Size = new System.Drawing.Size(51, 13);
             this.linkLabel4.TabIndex = 9;
@@ -144,8 +126,9 @@
             // 
             // label4
             // 
+            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(174, 242);
+            this.label4.Location = new System.Drawing.Point(174, 622);
             this.label4.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(42, 13);
@@ -154,8 +137,9 @@
             // 
             // label5
             // 
+            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(174, 194);
+            this.label5.Location = new System.Drawing.Point(174, 574);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(45, 13);
             this.label5.TabIndex = 10;
@@ -163,19 +147,31 @@
             // 
             // lblVersion
             // 
+            this.lblVersion.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.lblVersion.AutoSize = true;
-            this.lblVersion.Location = new System.Drawing.Point(271, 194);
+            this.lblVersion.Location = new System.Drawing.Point(271, 574);
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(22, 13);
             this.lblVersion.TabIndex = 11;
             this.lblVersion.Text = "1.0";
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.FXB_inno_logo_400;
+            this.pictureBox1.Location = new System.Drawing.Point(55, 27);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(407, 502);
+            this.pictureBox1.TabIndex = 12;
+            this.pictureBox1.TabStop = false;
+            // 
             // About
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.button1;
-            this.ClientSize = new System.Drawing.Size(517, 389);
+            this.ClientSize = new System.Drawing.Size(517, 769);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.linkLabel4);
@@ -186,8 +182,6 @@
             this.Controls.Add(this.linkLabel2);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.linkLabel1);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.pictureBox1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MinimumSize = new System.Drawing.Size(500, 400);
@@ -200,9 +194,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.LinkLabel linkLabel2;
@@ -213,5 +204,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         internal System.Windows.Forms.Label lblVersion;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

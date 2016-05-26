@@ -315,6 +315,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -325,6 +326,7 @@
   <ItemGroup>
     <Content Include="Cinteros.ico" />
     <Content Include="Resources\FXB-32.png" />
+    <None Include="Resources\FXB-inno-logo-400.png" />
     <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
