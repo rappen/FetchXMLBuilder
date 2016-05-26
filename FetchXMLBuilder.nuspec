@@ -4,15 +4,15 @@
     <id>Cinteros.Xrm.FetchXMLBuilder</id>
     <version>1.0.0</version>
     <title>FetchXML Builder for XrmToolBox</title>
-    <authors>Jonas Rapp, Innofactor AB</authors>
+    <authors>Jonas Rapp</authors>
     <owners>Cinteros</owners>
     <projectUrl>http://fxb.xrmtoolbox.com</projectUrl>
     <iconUrl>http://rappen.net/Cinteros/FXB-if.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Build and test FetchXML with all capabilities supported by the CRM platform</description>
     <summary>XrmToolBox plugin to create and run advanced FetchXML queries.</summary>
-    <releaseNotes>https://github.com/Cinteros/FetchXMLBuilder/releases/latest</releaseNotes>
-    <copyright>Copyright 2014-2016 Cinteros AB, 2016 Innofactor AB</copyright>
+    <releaseNotes>-not updated, see closed milestones at github-</releaseNotes>
+    <copyright>Copyright 2016 Innofactor AB, 2014-2016 Cinteros AB</copyright>
     <tags>XrmToolBox Plugins FetchXML Builder</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2016.3.30" />
