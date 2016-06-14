@@ -29,8 +29,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         #region Declarations
         const string settingfile = "Cinteros.Xrm.FetchXmlBuilder.Settings.xml";
         private XmlDocument fetchDoc;
-        private List<Tuple<string, string>> editHistory = new List<Tuple<string, string>>();
-        private int historyIndex = 0;
+        private HistoryManager historyMgr = new HistoryManager();
         internal static Dictionary<string, EntityMetadata> entities;
         internal static List<string> entityShitList = new List<string>(); // Oops, did I name that one??
         internal static Dictionary<string, List<Entity>> views;
@@ -527,18 +526,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsbUndo_Click(object sender, EventArgs e)
         {
-            if (editHistory.Count - 1 > historyIndex)
-            {
-                RestoreHistoryPosition(historyIndex + 1);
-            }
+            RestoreHistoryPosition(1);
         }
 
         private void tsbRedo_Click(object sender, EventArgs e)
         {
-            if (historyIndex > 0)
-            {
-                RestoreHistoryPosition(historyIndex - 1);
-            }
+            RestoreHistoryPosition(-1);
         }
 
         private void linkOData_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -2093,54 +2086,29 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             OnOutgoingMessage(this, message);
         }
 
-        private void RecordHistory(string origin)
+        private void RecordHistory(string action)
         {
-            if (historyIndex > 0)
-            {
-                // New history to be recorded, so if we had undone anything, all redo possibilities must be removed.
-                while (historyIndex > 0)
-                {
-                    historyIndex--;
-                    editHistory.RemoveAt(0);
-                }
-            }
             var fetch = GetFetchString(false);
-            editHistory.Insert(0, new Tuple<string, string>(fetch, origin));
+            historyMgr.RecordHistory(action, fetch);
             EnableDisableHistoryButtons();
         }
 
-        private void RestoreHistoryPosition(int position)
+        private void RestoreHistoryPosition(int delta)
         {
-            LogUse(position > historyIndex ? "Undo" : "Redo");
-            historyIndex = position;
-            var fetch = editHistory[historyIndex].Item1;
-            ParseXML(fetch, false);
-            RefreshSelectedNode();
+            LogUse(delta < 0 ? "Undo" : "Redo");
+            var fetch = historyMgr.RestoreHistoryPosition(delta) as string;
+            if (fetch != null)
+            {
+                ParseXML(fetch, false);
+                RefreshSelectedNode();
+            }
             EnableDisableHistoryButtons();
         }
 
         private void EnableDisableHistoryButtons()
         {
-            tsbUndo.Enabled = historyIndex < editHistory.Count - 1;
-            tsbRedo.Enabled = historyIndex > 0;
-            if (tsbUndo.Enabled)
-            {
-                var undoitem = editHistory[historyIndex];
-                tsbUndo.ToolTipText = "Undo (Ctrl+Z)\n\n" + undoitem.Item2;
-            }
-            else
-            {
-                tsbUndo.ToolTipText = "Nothing to undo (Ctrl+Z)";
-            }
-            if (tsbRedo.Enabled)
-            {
-                var redoitem = editHistory[historyIndex - 1];
-                tsbRedo.ToolTipText = "Redo (Ctrl+Y)\n\n" + redoitem.Item2;
-            }
-            else
-            {
-                tsbRedo.ToolTipText = "Nothing to redo (Ctrl+Y)";
-            }
+            historyMgr.SetupUndoButton(tsbUndo);
+            historyMgr.SetupRedoButton(tsbRedo);
         }
 
         private void ShowQuickActions()

@@ -244,6 +244,7 @@
       <DependentUpon>XmlContentDisplayDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="AppCode\FXBMessageBusArgument.cs" />
+    <Compile Include="HistoryManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FetchXmlBuilder.cs">
       <SubType>UserControl</SubType>
