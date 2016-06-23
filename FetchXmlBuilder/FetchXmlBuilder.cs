@@ -227,16 +227,27 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         public void OnIncomingMessage(MessageBusEventArgs message)
         {
-            if (message.TargetArgument != null && message.TargetArgument is FXBMessageBusArgument)
+            if (message.TargetArgument != null)
             {
                 callerArgs = message;
-                var fxbArg = (FXBMessageBusArgument)message.TargetArgument;
-                if (!string.IsNullOrWhiteSpace(fxbArg.FetchXML))
+                var fetchXml = string.Empty;
+                var requestedType = "FetchXML";
+                if (message.TargetArgument is FXBMessageBusArgument)
                 {
-                    ParseXML(fxbArg.FetchXML, false);
-                    RecordHistory("called from " + message.SourcePlugin);
+                    var fxbArg = (FXBMessageBusArgument)message.TargetArgument;
+                    fetchXml = fxbArg.FetchXML;
+                    requestedType = fxbArg.Request.ToString();
                 }
-                tsbReturnToCaller.ToolTipText = "Return " + fxbArg.Request.ToString() + " to " + callerArgs.SourcePlugin;
+                else if (message.TargetArgument is string)
+                {
+                    fetchXml = (string)message.TargetArgument;
+                }
+                if (!string.IsNullOrWhiteSpace(fetchXml))
+                {
+                    ParseXML(fetchXml, false);
+                }
+                tsbReturnToCaller.ToolTipText = "Return " + requestedType + " to " + callerArgs.SourcePlugin;
+                RecordHistory("called from " + message.SourcePlugin);
                 LogUse("CalledBy." + callerArgs.SourcePlugin);
             }
             EnableControls(true);
@@ -725,10 +736,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private bool CallerWantsResults()
         {
-            return
-                callerArgs != null &&
-                callerArgs.TargetArgument is FXBMessageBusArgument &&
-                ((FXBMessageBusArgument)callerArgs.TargetArgument).Request != FXBMessageBusRequest.None;
+            return callerArgs != null;
         }
 
         /// <summary>Repopulate the entire tree from the xml document containing the FetchXML</summary>
