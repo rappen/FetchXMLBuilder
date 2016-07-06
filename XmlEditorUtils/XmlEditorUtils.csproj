@@ -113,12 +113,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="XrmToolBox, Version=1.2016.5.27, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2016.5.27\lib\net452\XrmToolBox.exe</HintPath>
+    <Reference Include="XrmToolBox, Version=1.2016.6.29, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\XrmToolBoxPackage.1.2016.6.29\lib\net452\XrmToolBox.exe</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="XrmToolBox.Extensibility, Version=1.2016.5.27, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2016.5.27\lib\net452\XrmToolBox.Extensibility.dll</HintPath>
+    <Reference Include="XrmToolBox.Extensibility, Version=1.2016.6.29, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\XrmToolBoxPackage.1.2016.6.29\lib\net452\XrmToolBox.Extensibility.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
