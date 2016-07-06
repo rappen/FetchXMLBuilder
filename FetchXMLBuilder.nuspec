@@ -5,13 +5,35 @@
     <version>1.0.0</version>
     <title>FetchXML Builder for XrmToolBox</title>
     <authors>Jonas Rapp</authors>
-    <owners>Cinteros</owners>
+    <owners>Innofactor</owners>
     <projectUrl>http://fxb.xrmtoolbox.com</projectUrl>
     <iconUrl>http://rappen.net/Cinteros/FXB-if.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Build and test FetchXML with all capabilities supported by the CRM platform</description>
     <summary>XrmToolBox plugin to create and run advanced FetchXML queries.</summary>
-    <releaseNotes>-not updated, see closed milestones at github-</releaseNotes>
+    <releaseNotes>
+      The tool will assist in three major areas:
+
+      1. Constructing FetchXML in ways that Advanced Find cannot
+      - aggregates
+      - outer joins
+      - "has no"-queries
+      - attributes from multi-level linked entities
+
+      2. Querying CRM for information not (easily) found in the CRM UI
+      - system / internal entities
+      - attributes hidden in CRM UI
+      - join on other fields than relationships
+
+      3. Developer assistance
+      - Generate C# QueryExpression code from fetch xml
+      - Generate OData query string from fetch xml
+      - Easy to use UI to compose queries for reports in CRM
+
+      The tool reads metadata from CRM to assist with selecting entities, attributes, relations and to perform validation of condition values.
+
+      To make it more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.
+    </releaseNotes>
     <copyright>Copyright 2016 Innofactor AB, 2014-2016 Cinteros AB</copyright>
     <tags>XrmToolBox Plugins FetchXML Builder</tags>
     <dependencies>
