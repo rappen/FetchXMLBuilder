@@ -26,11 +26,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             chkAppSingle.Checked = settings.useSingleQuotation;
             switch (settings.resultOption)
             {
-                case 1: rbResXML.Checked = true; break;
-                case 2: rbResJSON.Checked = true; break;
+                case 1: rbResSerialized.Checked = true; break;
                 case 3: rbResRaw.Checked = true; break;
                 default: rbResGrid.Checked = true; break;
             }
+            cmbSeralizationStyle.SelectedIndex = settings.resultSerializeStyle;
             chkEntAll.Checked = settings.showEntitiesAll;
             if (!settings.showEntitiesAll)
             {
@@ -63,7 +63,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             settings.useFriendlyNames = chkAppFriendly.Checked;
             settings.showQuickActions = chkAppQuick.Checked;
             settings.useSingleQuotation = chkAppSingle.Checked;
-            settings.resultOption = rbResXML.Checked ? 1 : rbResJSON.Checked ? 2 : rbResRaw.Checked ? 3 : 0;
+            settings.resultOption = rbResSerialized.Checked ? 1 : rbResRaw.Checked ? 3 : 0;
+            settings.resultSerializeStyle = cmbSeralizationStyle.SelectedIndex;
             settings.showEntitiesAll = chkEntAll.Checked;
             settings.showEntitiesCustomizable = chkEntCustomizable.Checked;
             settings.showEntitiesUncustomizable = chkEntUncustomizable.Checked;
@@ -180,13 +181,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             }
         }
 
-        internal static object ResultOption2String(int outputtype)
+        internal static object ResultOption2String(int outputtype, int outputstyle)
         {
             switch (outputtype)
             {
                 case 0: return "Grid";
-                case 1: return "XML";
-                case 2: return "JSON";
+                case 1: return outputstyle == 1 ? "Basic" : outputstyle == 2 ? "JSON" : "Explicit";
                 case 3: return "FetchResult";
             }
             return "unknown";
@@ -198,6 +198,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             {
                 MessageBox.Show("Thank You!\n\nHappy fetching :)\n\n/Jonas", "Statistics", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void rbResSerialized_CheckedChanged(object sender, EventArgs e)
+        {
+            cmbSeralizationStyle.Enabled = rbResSerialized.Checked;
         }
     }
 }

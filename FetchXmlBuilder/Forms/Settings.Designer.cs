@@ -30,16 +30,17 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             this.gbEntities = new System.Windows.Forms.GroupBox();
-            this.chkEntAll = new System.Windows.Forms.CheckBox();
-            this.chkEntManaged = new System.Windows.Forms.CheckBox();
-            this.chkEntUnmanaged = new System.Windows.Forms.CheckBox();
-            this.chkEntCustomizable = new System.Windows.Forms.CheckBox();
-            this.chkEntUncustomizable = new System.Windows.Forms.CheckBox();
-            this.chkEntCustom = new System.Windows.Forms.CheckBox();
-            this.chkEntStandard = new System.Windows.Forms.CheckBox();
-            this.chkEntIntersect = new System.Windows.Forms.CheckBox();
             this.chkEntOnlyAF = new System.Windows.Forms.CheckBox();
+            this.chkEntIntersect = new System.Windows.Forms.CheckBox();
+            this.chkEntStandard = new System.Windows.Forms.CheckBox();
+            this.chkEntCustom = new System.Windows.Forms.CheckBox();
+            this.chkEntUncustomizable = new System.Windows.Forms.CheckBox();
+            this.chkEntCustomizable = new System.Windows.Forms.CheckBox();
+            this.chkEntUnmanaged = new System.Windows.Forms.CheckBox();
+            this.chkEntManaged = new System.Windows.Forms.CheckBox();
+            this.chkEntAll = new System.Windows.Forms.CheckBox();
             this.gbAttributes = new System.Windows.Forms.GroupBox();
+            this.chkAttOnlyRead = new System.Windows.Forms.CheckBox();
             this.chkAttOnlyAF = new System.Windows.Forms.CheckBox();
             this.chkAttStandard = new System.Windows.Forms.CheckBox();
             this.chkAttCustom = new System.Windows.Forms.CheckBox();
@@ -48,22 +49,21 @@
             this.chkAttUnmanaged = new System.Windows.Forms.CheckBox();
             this.chkAttManaged = new System.Windows.Forms.CheckBox();
             this.chkAttAll = new System.Windows.Forms.CheckBox();
-            this.chkAttOnlyRead = new System.Windows.Forms.CheckBox();
             this.gbResult = new System.Windows.Forms.GroupBox();
-            this.rbResGrid = new System.Windows.Forms.RadioButton();
-            this.rbResXML = new System.Windows.Forms.RadioButton();
-            this.rbResJSON = new System.Windows.Forms.RadioButton();
             this.rbResRaw = new System.Windows.Forms.RadioButton();
+            this.rbResSerialized = new System.Windows.Forms.RadioButton();
+            this.rbResGrid = new System.Windows.Forms.RadioButton();
             this.bgStats = new System.Windows.Forms.GroupBox();
-            this.chkStatAllow = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.chkStatAllow = new System.Windows.Forms.CheckBox();
             this.gbAppearance = new System.Windows.Forms.GroupBox();
-            this.chkAppFriendly = new System.Windows.Forms.CheckBox();
-            this.chkAppQuick = new System.Windows.Forms.CheckBox();
             this.chkAppSingle = new System.Windows.Forms.CheckBox();
+            this.chkAppQuick = new System.Windows.Forms.CheckBox();
+            this.chkAppFriendly = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.btnOK = new System.Windows.Forms.Button();
+            this.cmbSeralizationStyle = new System.Windows.Forms.ComboBox();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -83,95 +83,36 @@
             this.gbEntities.Controls.Add(this.chkEntUnmanaged);
             this.gbEntities.Controls.Add(this.chkEntManaged);
             this.gbEntities.Controls.Add(this.chkEntAll);
-            this.gbEntities.Location = new System.Drawing.Point(12, 165);
+            this.gbEntities.Location = new System.Drawing.Point(12, 138);
             this.gbEntities.Name = "gbEntities";
             this.gbEntities.Size = new System.Drawing.Size(247, 258);
             this.gbEntities.TabIndex = 2;
             this.gbEntities.TabStop = false;
             this.gbEntities.Text = "Show Entities";
             // 
-            // chkEntAll
+            // chkEntOnlyAF
             // 
-            this.chkEntAll.AutoSize = true;
-            this.chkEntAll.Checked = true;
-            this.chkEntAll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkEntAll.Location = new System.Drawing.Point(20, 30);
-            this.chkEntAll.Name = "chkEntAll";
-            this.chkEntAll.Size = new System.Drawing.Size(37, 17);
-            this.chkEntAll.TabIndex = 0;
-            this.chkEntAll.Text = "All";
-            this.chkEntAll.UseVisualStyleBackColor = true;
-            this.chkEntAll.CheckedChanged += new System.EventHandler(this.chkEntAll_CheckedChanged);
+            this.chkEntOnlyAF.AutoSize = true;
+            this.chkEntOnlyAF.Enabled = false;
+            this.chkEntOnlyAF.Location = new System.Drawing.Point(26, 214);
+            this.chkEntOnlyAF.Name = "chkEntOnlyAF";
+            this.chkEntOnlyAF.Size = new System.Drawing.Size(132, 17);
+            this.chkEntOnlyAF.TabIndex = 8;
+            this.chkEntOnlyAF.Text = "Only valid for Adv.Find";
+            this.chkEntOnlyAF.UseVisualStyleBackColor = true;
             // 
-            // chkEntManaged
+            // chkEntIntersect
             // 
-            this.chkEntManaged.AutoSize = true;
-            this.chkEntManaged.Checked = true;
-            this.chkEntManaged.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkEntManaged.Enabled = false;
-            this.chkEntManaged.Location = new System.Drawing.Point(26, 53);
-            this.chkEntManaged.Name = "chkEntManaged";
-            this.chkEntManaged.Size = new System.Drawing.Size(71, 17);
-            this.chkEntManaged.TabIndex = 1;
-            this.chkEntManaged.Text = "Managed";
-            this.chkEntManaged.UseVisualStyleBackColor = true;
-            this.chkEntManaged.CheckedChanged += new System.EventHandler(this.chkEntMgd_CheckedChanged);
-            // 
-            // chkEntUnmanaged
-            // 
-            this.chkEntUnmanaged.AutoSize = true;
-            this.chkEntUnmanaged.Checked = true;
-            this.chkEntUnmanaged.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkEntUnmanaged.Enabled = false;
-            this.chkEntUnmanaged.Location = new System.Drawing.Point(26, 76);
-            this.chkEntUnmanaged.Name = "chkEntUnmanaged";
-            this.chkEntUnmanaged.Size = new System.Drawing.Size(84, 17);
-            this.chkEntUnmanaged.TabIndex = 2;
-            this.chkEntUnmanaged.Text = "Unmanaged";
-            this.chkEntUnmanaged.UseVisualStyleBackColor = true;
-            this.chkEntUnmanaged.CheckedChanged += new System.EventHandler(this.chkEntMgd_CheckedChanged);
-            // 
-            // chkEntCustomizable
-            // 
-            this.chkEntCustomizable.AutoSize = true;
-            this.chkEntCustomizable.Checked = true;
-            this.chkEntCustomizable.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkEntCustomizable.Enabled = false;
-            this.chkEntCustomizable.Location = new System.Drawing.Point(26, 99);
-            this.chkEntCustomizable.Name = "chkEntCustomizable";
-            this.chkEntCustomizable.Size = new System.Drawing.Size(88, 17);
-            this.chkEntCustomizable.TabIndex = 3;
-            this.chkEntCustomizable.Text = "Customizable";
-            this.chkEntCustomizable.UseVisualStyleBackColor = true;
-            this.chkEntCustomizable.CheckedChanged += new System.EventHandler(this.chkEntCust_CheckedChanged);
-            // 
-            // chkEntUncustomizable
-            // 
-            this.chkEntUncustomizable.AutoSize = true;
-            this.chkEntUncustomizable.Checked = true;
-            this.chkEntUncustomizable.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkEntUncustomizable.Enabled = false;
-            this.chkEntUncustomizable.Location = new System.Drawing.Point(26, 122);
-            this.chkEntUncustomizable.Name = "chkEntUncustomizable";
-            this.chkEntUncustomizable.Size = new System.Drawing.Size(101, 17);
-            this.chkEntUncustomizable.TabIndex = 4;
-            this.chkEntUncustomizable.Text = "Uncustomizable";
-            this.chkEntUncustomizable.UseVisualStyleBackColor = true;
-            this.chkEntUncustomizable.CheckedChanged += new System.EventHandler(this.chkEntCust_CheckedChanged);
-            // 
-            // chkEntCustom
-            // 
-            this.chkEntCustom.AutoSize = true;
-            this.chkEntCustom.Checked = true;
-            this.chkEntCustom.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkEntCustom.Enabled = false;
-            this.chkEntCustom.Location = new System.Drawing.Point(26, 145);
-            this.chkEntCustom.Name = "chkEntCustom";
-            this.chkEntCustom.Size = new System.Drawing.Size(61, 17);
-            this.chkEntCustom.TabIndex = 5;
-            this.chkEntCustom.Text = "Custom";
-            this.chkEntCustom.UseVisualStyleBackColor = true;
-            this.chkEntCustom.CheckedChanged += new System.EventHandler(this.chkEntCustom_CheckedChanged);
+            this.chkEntIntersect.AutoSize = true;
+            this.chkEntIntersect.Checked = true;
+            this.chkEntIntersect.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkEntIntersect.Enabled = false;
+            this.chkEntIntersect.Location = new System.Drawing.Point(26, 191);
+            this.chkEntIntersect.Name = "chkEntIntersect";
+            this.chkEntIntersect.Size = new System.Drawing.Size(67, 17);
+            this.chkEntIntersect.TabIndex = 7;
+            this.chkEntIntersect.Text = "Intersect";
+            this.chkEntIntersect.UseVisualStyleBackColor = true;
             // 
             // chkEntStandard
             // 
@@ -187,29 +128,88 @@
             this.chkEntStandard.UseVisualStyleBackColor = true;
             this.chkEntStandard.CheckedChanged += new System.EventHandler(this.chkEntCustom_CheckedChanged);
             // 
-            // chkEntIntersect
+            // chkEntCustom
             // 
-            this.chkEntIntersect.AutoSize = true;
-            this.chkEntIntersect.Checked = true;
-            this.chkEntIntersect.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkEntIntersect.Enabled = false;
-            this.chkEntIntersect.Location = new System.Drawing.Point(26, 191);
-            this.chkEntIntersect.Name = "chkEntIntersect";
-            this.chkEntIntersect.Size = new System.Drawing.Size(67, 17);
-            this.chkEntIntersect.TabIndex = 7;
-            this.chkEntIntersect.Text = "Intersect";
-            this.chkEntIntersect.UseVisualStyleBackColor = true;
+            this.chkEntCustom.AutoSize = true;
+            this.chkEntCustom.Checked = true;
+            this.chkEntCustom.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkEntCustom.Enabled = false;
+            this.chkEntCustom.Location = new System.Drawing.Point(26, 145);
+            this.chkEntCustom.Name = "chkEntCustom";
+            this.chkEntCustom.Size = new System.Drawing.Size(61, 17);
+            this.chkEntCustom.TabIndex = 5;
+            this.chkEntCustom.Text = "Custom";
+            this.chkEntCustom.UseVisualStyleBackColor = true;
+            this.chkEntCustom.CheckedChanged += new System.EventHandler(this.chkEntCustom_CheckedChanged);
             // 
-            // chkEntOnlyAF
+            // chkEntUncustomizable
             // 
-            this.chkEntOnlyAF.AutoSize = true;
-            this.chkEntOnlyAF.Enabled = false;
-            this.chkEntOnlyAF.Location = new System.Drawing.Point(26, 214);
-            this.chkEntOnlyAF.Name = "chkEntOnlyAF";
-            this.chkEntOnlyAF.Size = new System.Drawing.Size(132, 17);
-            this.chkEntOnlyAF.TabIndex = 8;
-            this.chkEntOnlyAF.Text = "Only valid for Adv.Find";
-            this.chkEntOnlyAF.UseVisualStyleBackColor = true;
+            this.chkEntUncustomizable.AutoSize = true;
+            this.chkEntUncustomizable.Checked = true;
+            this.chkEntUncustomizable.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkEntUncustomizable.Enabled = false;
+            this.chkEntUncustomizable.Location = new System.Drawing.Point(26, 122);
+            this.chkEntUncustomizable.Name = "chkEntUncustomizable";
+            this.chkEntUncustomizable.Size = new System.Drawing.Size(101, 17);
+            this.chkEntUncustomizable.TabIndex = 4;
+            this.chkEntUncustomizable.Text = "Uncustomizable";
+            this.chkEntUncustomizable.UseVisualStyleBackColor = true;
+            this.chkEntUncustomizable.CheckedChanged += new System.EventHandler(this.chkEntCust_CheckedChanged);
+            // 
+            // chkEntCustomizable
+            // 
+            this.chkEntCustomizable.AutoSize = true;
+            this.chkEntCustomizable.Checked = true;
+            this.chkEntCustomizable.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkEntCustomizable.Enabled = false;
+            this.chkEntCustomizable.Location = new System.Drawing.Point(26, 99);
+            this.chkEntCustomizable.Name = "chkEntCustomizable";
+            this.chkEntCustomizable.Size = new System.Drawing.Size(88, 17);
+            this.chkEntCustomizable.TabIndex = 3;
+            this.chkEntCustomizable.Text = "Customizable";
+            this.chkEntCustomizable.UseVisualStyleBackColor = true;
+            this.chkEntCustomizable.CheckedChanged += new System.EventHandler(this.chkEntCust_CheckedChanged);
+            // 
+            // chkEntUnmanaged
+            // 
+            this.chkEntUnmanaged.AutoSize = true;
+            this.chkEntUnmanaged.Checked = true;
+            this.chkEntUnmanaged.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkEntUnmanaged.Enabled = false;
+            this.chkEntUnmanaged.Location = new System.Drawing.Point(26, 76);
+            this.chkEntUnmanaged.Name = "chkEntUnmanaged";
+            this.chkEntUnmanaged.Size = new System.Drawing.Size(84, 17);
+            this.chkEntUnmanaged.TabIndex = 2;
+            this.chkEntUnmanaged.Text = "Unmanaged";
+            this.chkEntUnmanaged.UseVisualStyleBackColor = true;
+            this.chkEntUnmanaged.CheckedChanged += new System.EventHandler(this.chkEntMgd_CheckedChanged);
+            // 
+            // chkEntManaged
+            // 
+            this.chkEntManaged.AutoSize = true;
+            this.chkEntManaged.Checked = true;
+            this.chkEntManaged.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkEntManaged.Enabled = false;
+            this.chkEntManaged.Location = new System.Drawing.Point(26, 53);
+            this.chkEntManaged.Name = "chkEntManaged";
+            this.chkEntManaged.Size = new System.Drawing.Size(71, 17);
+            this.chkEntManaged.TabIndex = 1;
+            this.chkEntManaged.Text = "Managed";
+            this.chkEntManaged.UseVisualStyleBackColor = true;
+            this.chkEntManaged.CheckedChanged += new System.EventHandler(this.chkEntMgd_CheckedChanged);
+            // 
+            // chkEntAll
+            // 
+            this.chkEntAll.AutoSize = true;
+            this.chkEntAll.Checked = true;
+            this.chkEntAll.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkEntAll.Location = new System.Drawing.Point(20, 30);
+            this.chkEntAll.Name = "chkEntAll";
+            this.chkEntAll.Size = new System.Drawing.Size(37, 17);
+            this.chkEntAll.TabIndex = 0;
+            this.chkEntAll.Text = "All";
+            this.chkEntAll.UseVisualStyleBackColor = true;
+            this.chkEntAll.CheckedChanged += new System.EventHandler(this.chkEntAll_CheckedChanged);
             // 
             // gbAttributes
             // 
@@ -222,12 +222,23 @@
             this.gbAttributes.Controls.Add(this.chkAttUnmanaged);
             this.gbAttributes.Controls.Add(this.chkAttManaged);
             this.gbAttributes.Controls.Add(this.chkAttAll);
-            this.gbAttributes.Location = new System.Drawing.Point(282, 165);
+            this.gbAttributes.Location = new System.Drawing.Point(284, 138);
             this.gbAttributes.Name = "gbAttributes";
             this.gbAttributes.Size = new System.Drawing.Size(247, 258);
             this.gbAttributes.TabIndex = 3;
             this.gbAttributes.TabStop = false;
             this.gbAttributes.Text = "Show Attributes";
+            // 
+            // chkAttOnlyRead
+            // 
+            this.chkAttOnlyRead.AutoSize = true;
+            this.chkAttOnlyRead.Enabled = false;
+            this.chkAttOnlyRead.Location = new System.Drawing.Point(26, 214);
+            this.chkAttOnlyRead.Name = "chkAttOnlyRead";
+            this.chkAttOnlyRead.Size = new System.Drawing.Size(116, 17);
+            this.chkAttOnlyRead.TabIndex = 9;
+            this.chkAttOnlyRead.Text = "Only valid for Read";
+            this.chkAttOnlyRead.UseVisualStyleBackColor = true;
             // 
             // chkAttOnlyAF
             // 
@@ -337,29 +348,39 @@
             this.chkAttAll.UseVisualStyleBackColor = true;
             this.chkAttAll.CheckedChanged += new System.EventHandler(this.chkAttAll_CheckedChanged);
             // 
-            // chkAttOnlyRead
-            // 
-            this.chkAttOnlyRead.AutoSize = true;
-            this.chkAttOnlyRead.Enabled = false;
-            this.chkAttOnlyRead.Location = new System.Drawing.Point(26, 214);
-            this.chkAttOnlyRead.Name = "chkAttOnlyRead";
-            this.chkAttOnlyRead.Size = new System.Drawing.Size(116, 17);
-            this.chkAttOnlyRead.TabIndex = 9;
-            this.chkAttOnlyRead.Text = "Only valid for Read";
-            this.chkAttOnlyRead.UseVisualStyleBackColor = true;
-            // 
             // gbResult
             // 
+            this.gbResult.Controls.Add(this.cmbSeralizationStyle);
             this.gbResult.Controls.Add(this.rbResRaw);
-            this.gbResult.Controls.Add(this.rbResJSON);
-            this.gbResult.Controls.Add(this.rbResXML);
+            this.gbResult.Controls.Add(this.rbResSerialized);
             this.gbResult.Controls.Add(this.rbResGrid);
             this.gbResult.Location = new System.Drawing.Point(282, 12);
             this.gbResult.Name = "gbResult";
-            this.gbResult.Size = new System.Drawing.Size(247, 133);
+            this.gbResult.Size = new System.Drawing.Size(247, 112);
             this.gbResult.TabIndex = 1;
             this.gbResult.TabStop = false;
             this.gbResult.Text = "Result view";
+            // 
+            // rbResRaw
+            // 
+            this.rbResRaw.AutoSize = true;
+            this.rbResRaw.Location = new System.Drawing.Point(20, 75);
+            this.rbResRaw.Name = "rbResRaw";
+            this.rbResRaw.Size = new System.Drawing.Size(102, 17);
+            this.rbResRaw.TabIndex = 3;
+            this.rbResRaw.Text = "Raw fetch result";
+            this.rbResRaw.UseVisualStyleBackColor = true;
+            // 
+            // rbResSerialized
+            // 
+            this.rbResSerialized.AutoSize = true;
+            this.rbResSerialized.Location = new System.Drawing.Point(20, 53);
+            this.rbResSerialized.Name = "rbResSerialized";
+            this.rbResSerialized.Size = new System.Drawing.Size(70, 17);
+            this.rbResSerialized.TabIndex = 1;
+            this.rbResSerialized.Text = "Serialized";
+            this.rbResSerialized.UseVisualStyleBackColor = true;
+            this.rbResSerialized.CheckedChanged += new System.EventHandler(this.rbResSerialized_CheckedChanged);
             // 
             // rbResGrid
             // 
@@ -373,46 +394,26 @@
             this.rbResGrid.Text = "Table grid";
             this.rbResGrid.UseVisualStyleBackColor = true;
             // 
-            // rbResXML
-            // 
-            this.rbResXML.AutoSize = true;
-            this.rbResXML.Location = new System.Drawing.Point(20, 53);
-            this.rbResXML.Name = "rbResXML";
-            this.rbResXML.Size = new System.Drawing.Size(95, 17);
-            this.rbResXML.TabIndex = 1;
-            this.rbResXML.Text = "Serialized XML";
-            this.rbResXML.UseVisualStyleBackColor = true;
-            // 
-            // rbResJSON
-            // 
-            this.rbResJSON.AutoSize = true;
-            this.rbResJSON.Location = new System.Drawing.Point(20, 76);
-            this.rbResJSON.Name = "rbResJSON";
-            this.rbResJSON.Size = new System.Drawing.Size(101, 17);
-            this.rbResJSON.TabIndex = 2;
-            this.rbResJSON.Text = "Serialized JSON";
-            this.rbResJSON.UseVisualStyleBackColor = true;
-            // 
-            // rbResRaw
-            // 
-            this.rbResRaw.AutoSize = true;
-            this.rbResRaw.Location = new System.Drawing.Point(20, 99);
-            this.rbResRaw.Name = "rbResRaw";
-            this.rbResRaw.Size = new System.Drawing.Size(102, 17);
-            this.rbResRaw.TabIndex = 3;
-            this.rbResRaw.Text = "Raw fetch result";
-            this.rbResRaw.UseVisualStyleBackColor = true;
-            // 
             // bgStats
             // 
             this.bgStats.Controls.Add(this.label1);
             this.bgStats.Controls.Add(this.chkStatAllow);
-            this.bgStats.Location = new System.Drawing.Point(12, 441);
+            this.bgStats.Location = new System.Drawing.Point(12, 415);
             this.bgStats.Name = "bgStats";
             this.bgStats.Size = new System.Drawing.Size(517, 130);
             this.bgStats.TabIndex = 4;
             this.bgStats.TabStop = false;
             this.bgStats.Text = "Statistics";
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.Location = new System.Drawing.Point(7, 20);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(504, 72);
+            this.label1.TabIndex = 6;
+            this.label1.Text = resources.GetString("label1.Text");
             // 
             // chkStatAllow
             // 
@@ -425,16 +426,6 @@
             this.chkStatAllow.UseVisualStyleBackColor = true;
             this.chkStatAllow.CheckedChanged += new System.EventHandler(this.chkStatAllow_CheckedChanged);
             // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.Location = new System.Drawing.Point(7, 20);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(504, 72);
-            this.label1.TabIndex = 6;
-            this.label1.Text = resources.GetString("label1.Text");
-            // 
             // gbAppearance
             // 
             this.gbAppearance.Controls.Add(this.chkAppSingle);
@@ -442,20 +433,20 @@
             this.gbAppearance.Controls.Add(this.chkAppFriendly);
             this.gbAppearance.Location = new System.Drawing.Point(12, 12);
             this.gbAppearance.Name = "gbAppearance";
-            this.gbAppearance.Size = new System.Drawing.Size(247, 133);
+            this.gbAppearance.Size = new System.Drawing.Size(247, 112);
             this.gbAppearance.TabIndex = 0;
             this.gbAppearance.TabStop = false;
             this.gbAppearance.Text = "Appearance";
             // 
-            // chkAppFriendly
+            // chkAppSingle
             // 
-            this.chkAppFriendly.AutoSize = true;
-            this.chkAppFriendly.Location = new System.Drawing.Point(20, 30);
-            this.chkAppFriendly.Name = "chkAppFriendly";
-            this.chkAppFriendly.Size = new System.Drawing.Size(96, 17);
-            this.chkAppFriendly.TabIndex = 1;
-            this.chkAppFriendly.Text = "Friendly names";
-            this.chkAppFriendly.UseVisualStyleBackColor = true;
+            this.chkAppSingle.AutoSize = true;
+            this.chkAppSingle.Location = new System.Drawing.Point(20, 76);
+            this.chkAppSingle.Name = "chkAppSingle";
+            this.chkAppSingle.Size = new System.Drawing.Size(203, 17);
+            this.chkAppSingle.TabIndex = 3;
+            this.chkAppSingle.Text = "Use single quotation in rendered XML";
+            this.chkAppSingle.UseVisualStyleBackColor = true;
             // 
             // chkAppQuick
             // 
@@ -469,34 +460,24 @@
             this.chkAppQuick.Text = "Show Quick Action buttons";
             this.chkAppQuick.UseVisualStyleBackColor = true;
             // 
-            // chkAppSingle
+            // chkAppFriendly
             // 
-            this.chkAppSingle.AutoSize = true;
-            this.chkAppSingle.Location = new System.Drawing.Point(20, 76);
-            this.chkAppSingle.Name = "chkAppSingle";
-            this.chkAppSingle.Size = new System.Drawing.Size(203, 17);
-            this.chkAppSingle.TabIndex = 3;
-            this.chkAppSingle.Text = "Use single quotation in rendered XML";
-            this.chkAppSingle.UseVisualStyleBackColor = true;
+            this.chkAppFriendly.AutoSize = true;
+            this.chkAppFriendly.Location = new System.Drawing.Point(20, 30);
+            this.chkAppFriendly.Name = "chkAppFriendly";
+            this.chkAppFriendly.Size = new System.Drawing.Size(96, 17);
+            this.chkAppFriendly.TabIndex = 1;
+            this.chkAppFriendly.Text = "Friendly names";
+            this.chkAppFriendly.UseVisualStyleBackColor = true;
             // 
             // panel1
             // 
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
-            this.panel1.Location = new System.Drawing.Point(12, 577);
+            this.panel1.Location = new System.Drawing.Point(12, 551);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(517, 53);
             this.panel1.TabIndex = 5;
-            // 
-            // btnOK
-            // 
-            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(353, 19);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 0;
-            this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
             // 
             // btnCancel
             // 
@@ -508,13 +489,37 @@
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
+            // btnOK
+            // 
+            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnOK.Location = new System.Drawing.Point(353, 19);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.TabIndex = 0;
+            this.btnOK.Text = "OK";
+            this.btnOK.UseVisualStyleBackColor = true;
+            // 
+            // cmbSeralizationStyle
+            // 
+            this.cmbSeralizationStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSeralizationStyle.Enabled = false;
+            this.cmbSeralizationStyle.FormattingEnabled = true;
+            this.cmbSeralizationStyle.Items.AddRange(new object[] {
+            "Explicit XML",
+            "Basic XML",
+            "JSON"});
+            this.cmbSeralizationStyle.Location = new System.Drawing.Point(96, 51);
+            this.cmbSeralizationStyle.Name = "cmbSeralizationStyle";
+            this.cmbSeralizationStyle.Size = new System.Drawing.Size(145, 21);
+            this.cmbSeralizationStyle.TabIndex = 2;
+            // 
             // Settings
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(543, 640);
+            this.ClientSize = new System.Drawing.Size(543, 613);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.gbAppearance);
             this.Controls.Add(this.bgStats);
@@ -575,7 +580,7 @@
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.RadioButton rbResGrid;
         private System.Windows.Forms.RadioButton rbResRaw;
-        private System.Windows.Forms.RadioButton rbResJSON;
-        private System.Windows.Forms.RadioButton rbResXML;
+        private System.Windows.Forms.RadioButton rbResSerialized;
+        private System.Windows.Forms.ComboBox cmbSeralizationStyle;
     }
 }

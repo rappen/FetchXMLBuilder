@@ -1250,7 +1250,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 case 0:
                 case 1:
-                case 2:
                     RetrieveMultiple(fetch);
                     break;
                 case 3:
@@ -1295,7 +1294,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             working = true;
             var outputtype = currentSettings.resultOption;
-            var outputtypestring = Settings.ResultOption2String(outputtype);
+            var outputstyle = currentSettings.resultSerializeStyle;
+            var outputtypestring = Settings.ResultOption2String(outputtype, outputstyle);
             WorkAsync(new WorkAsyncInfo("Executing FetchXML...",
                 (eventargs) =>
                 {
@@ -1310,7 +1310,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         query = new FetchExpression(fetch);
                     }
                     resultCollection = Service.RetrieveMultiple(query);
-                    if (outputtype == 2)
+                    if (outputtype == 1 && outputstyle == 2)
                     {
                         var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented);
                         eventargs.Result = json;
@@ -1331,18 +1331,29 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             ExecuteFetch(fetch);
                         }
                     }
-                    else if (outputtype == 0 && completedargs.Result is EntityCollection)
+                    else if (completedargs.Result is EntityCollection)
                     {
-                        var gridDialog = new ResultGrid((EntityCollection)completedargs.Result, this);
-                        gridDialog.StartPosition = FormStartPosition.CenterParent;
-                        gridDialog.ShowDialog();
+                        if (outputtype == 0)
+                        {
+                            var gridDialog = new ResultGrid((EntityCollection)completedargs.Result, this);
+                            gridDialog.StartPosition = FormStartPosition.CenterParent;
+                            gridDialog.ShowDialog();
+                        }
+                        else if (outputtype == 1)
+                        {
+                            if (outputstyle == 0)
+                            {
+                                var serialized = EntityCollectionSerializer.Serialize((EntityCollection)completedargs.Result, SerializationStyle.Explicit);
+                                XmlContentDisplayDialog.Show(serialized.OuterXml, "XML Serialized RetrieveMultiple result", false, false, false, this);
+                            }
+                            else if (outputstyle == 1)
+                            {
+                                var serialized = EntityCollectionSerializer.Serialize((EntityCollection)completedargs.Result, SerializationStyle.Basic);
+                                XmlContentDisplayDialog.Show(serialized.OuterXml, "XML Serialized RetrieveMultiple result", false, false, false, this);
+                            }
+                        }
                     }
-                    else if (outputtype == 1 && completedargs.Result is EntityCollection)
-                    {
-                        var serialized = EntityCollectionSerializer.Serialize((EntityCollection)completedargs.Result);
-                        XmlContentDisplayDialog.Show(serialized.OuterXml, "XML Serialized RetrieveMultiple result", false, false, false, this);
-                    }
-                    else if (outputtype == 2 && completedargs.Result is string)
+                    else if (outputtype == 1 && outputstyle == 2 && completedargs.Result is string)
                     {
                         var result = completedargs.Result.ToString();
                         XmlContentDisplayDialog.Show(result, "JSON Serialized RetrieveMultiple result", false, false, false, this);
