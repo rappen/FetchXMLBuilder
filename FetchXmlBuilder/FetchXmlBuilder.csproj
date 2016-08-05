@@ -347,6 +347,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Debug (
+  mkdir Plugins
   move /Y Cinteros.Xrm.*.dll Plugins
   move /Y Cinteros.Xrm.*.pdb Plugins
 )</PostBuildEvent>
