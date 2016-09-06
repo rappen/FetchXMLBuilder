@@ -47,6 +47,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     return "eq-userid";
                 case ConditionOperator.NotEqualUserId:
                     return "ne-userid";
+                case ConditionOperator.EqualUserOrUserHierarchy:
+                    return "eq-useroruserhierarchy";
+                case ConditionOperator.EqualUserOrUserHierarchyAndTeams:
+                    return "eq-useroruserhierarchyandteams";
                 case ConditionOperator.EqualBusinessId:
                     return "eq-businessid";
                 case ConditionOperator.NotEqualBusinessId:
@@ -105,6 +109,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 case ConditionOperator.EqualUserId:
                 case ConditionOperator.NotEqualUserId:
+                case ConditionOperator.EqualUserOrUserHierarchy:
+                case ConditionOperator.EqualUserOrUserHierarchyAndTeams:
                 case ConditionOperator.EqualBusinessId:
                 case ConditionOperator.NotEqualBusinessId:
                 case ConditionOperator.EqualUserLanguage:
@@ -196,6 +202,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 case ConditionOperator.EqualUserId:
                 case ConditionOperator.NotEqualUserId:
+                case ConditionOperator.EqualUserOrUserHierarchy:
+                case ConditionOperator.EqualUserOrUserHierarchyAndTeams:
                 case ConditionOperator.EqualUserTeams:
                 case ConditionOperator.EqualUserOrUserTeams:
                 case ConditionOperator.EqualBusinessId:
@@ -392,6 +400,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case AttributeTypeCode.Owner:
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualBusinessId));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserId));
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserOrUserHierarchy));
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserOrUserHierarchyAndTeams));
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserOrUserTeams));
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserTeams));
                     break;
             }
             return validConditionsList.ToArray();
