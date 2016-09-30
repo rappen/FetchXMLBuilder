@@ -15,7 +15,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private string findtext = "";
         FetchXmlBuilder fxb;
 
-        public static XmlContentDisplayDialog Show(string xmlString, string header, bool allowEdit, bool allowFormat, bool allowExecute, FetchXmlBuilder caller)
+        internal static XmlContentDisplayDialog Show(string xmlString, string header, bool allowEdit, bool allowFormat, bool allowExecute, SaveFormat saveFormat, FetchXmlBuilder caller)
         {
             if (xmlString.Length > 100000)
             {
@@ -26,13 +26,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                     return null;
                 }
             }
-            var xcdDialog = new XmlContentDisplayDialog(xmlString, header, allowEdit, allowFormat, allowExecute, caller);
+            var xcdDialog = new XmlContentDisplayDialog(xmlString, header, allowEdit, allowFormat, allowExecute, saveFormat, caller);
             xcdDialog.StartPosition = FormStartPosition.CenterParent;
             xcdDialog.ShowDialog();
             return xcdDialog;
         }
 
-        public XmlContentDisplayDialog(string xmlString, string header, bool allowEdit, bool allowFormat, bool allowExecute, FetchXmlBuilder caller)
+        internal XmlContentDisplayDialog(string xmlString, string header, bool allowEdit, bool allowFormat, bool allowExecute, SaveFormat saveFormat, FetchXmlBuilder caller)
         {
             InitializeComponent();
             fxb = caller;
@@ -125,10 +125,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void XmlContentDisplayDialog_Load(object sender, EventArgs e)
         {
-            if (DialogResult== DialogResult.Cancel)
+            if (DialogResult == DialogResult.Cancel)
             {
                 Close();
             }
         }
+    }
+
+    internal enum SaveFormat
+    {
+        None = 0,
+        XML = 1,
+        JSON = 2
     }
 }

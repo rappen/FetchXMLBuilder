@@ -342,7 +342,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsbEdit_Click(object sender, EventArgs e)
         {
             var xml = GetFetchString(false);
-            var xcdDialog = XmlContentDisplayDialog.Show(xml, "FetchXML", true, true, Service != null, this);
+            var xcdDialog = XmlContentDisplayDialog.Show(xml, "FetchXML", true, true, Service != null, SaveFormat.XML, this);
             if (xcdDialog.DialogResult == DialogResult.OK)
             {
                 XmlNode resultNode = xcdDialog.result;
@@ -1283,7 +1283,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         XmlDocument doc = new XmlDocument();
                         doc.LoadXml(completedargs.Result.ToString());
-                        XmlContentDisplayDialog.Show(doc.OuterXml, "FetchXML result", false, false, false, this);
+                        XmlContentDisplayDialog.Show(doc.OuterXml, "FetchXML result", false, false, false, SaveFormat.XML, this);
                     }
                 }
             });
@@ -1344,19 +1344,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             if (outputstyle == 0)
                             {
                                 var serialized = EntityCollectionSerializer.Serialize((EntityCollection)completedargs.Result, SerializationStyle.Explicit);
-                                XmlContentDisplayDialog.Show(serialized.OuterXml, "XML Serialized RetrieveMultiple result", false, false, false, this);
+                                XmlContentDisplayDialog.Show(serialized.OuterXml, "XML Serialized RetrieveMultiple result", false, false, false, SaveFormat.XML, this);
                             }
                             else if (outputstyle == 1)
                             {
                                 var serialized = EntityCollectionSerializer.Serialize((EntityCollection)completedargs.Result, SerializationStyle.Basic);
-                                XmlContentDisplayDialog.Show(serialized.OuterXml, "XML Serialized RetrieveMultiple result", false, false, false, this);
+                                XmlContentDisplayDialog.Show(serialized.OuterXml, "XML Serialized RetrieveMultiple result", false, false, false, SaveFormat.XML, this);
                             }
                         }
                     }
                     else if (outputtype == 1 && outputstyle == 2 && completedargs.Result is string)
                     {
                         var result = completedargs.Result.ToString();
-                        XmlContentDisplayDialog.Show(result, "JSON Serialized RetrieveMultiple result", false, false, false, this);
+                        XmlContentDisplayDialog.Show(result, "JSON Serialized RetrieveMultiple result", false, false, false, SaveFormat.JSON, this);
                     }
                 }
             });
@@ -1950,7 +1950,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 liveUpdateXml = GetFetchString(false);
                 if (xmlLiveUpdate == null)
                 {
-                    xmlLiveUpdate = new XmlContentDisplayDialog(liveUpdateXml, "FetchXML Live Update", false, true, false, this);
+                    xmlLiveUpdate = new XmlContentDisplayDialog(liveUpdateXml, "FetchXML Live Update", false, true, false, SaveFormat.None, this);
                     xmlLiveUpdate.Disposed += LiveXML_Disposed;
                     xmlLiveUpdate.txtXML.KeyUp += LiveXML_KeyUp;
                     xmlLiveUpdate.Visible = true;
@@ -1987,7 +1987,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 var QEx = GetQueryExpression();
                 var code = QueryExpressionCodeGenerator.GetCSharpQueryExpression(QEx);
                 LogUse("DisplayQExCode");
-                XmlContentDisplayDialog.Show(code, "QueryExpression Code", false, false, false, this);
+                XmlContentDisplayDialog.Show(code, "QueryExpression Code", false, false, false, SaveFormat.None, this);
             }
             catch (FetchIsAggregateException ex)
             {
