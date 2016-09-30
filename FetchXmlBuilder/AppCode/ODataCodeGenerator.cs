@@ -53,35 +53,36 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         private static string AppendQuery(string query, string paramname, string append)
         {
+            var result = new StringBuilder(query);
             if (!string.IsNullOrEmpty(append))
             {
                 if (!string.IsNullOrEmpty(query))
                 {
-                    query += "&";
+                    result.Append("&");
                 }
-                query += paramname + "=" + append;
+                result.Append(paramname + "=" + append);
             }
-            query = query.Trim(',');
-            return query;
+            return result.ToString().Trim(',');
         }
 
         private static string GetSelect(FetchEntityType entity, FetchXmlBuilder sender)
         {
-            var result = "";
+            var result = new List<string>();
             var attributeitems = entity.Items.Where(i => i is FetchAttributeType && ((FetchAttributeType)i).name != null).ToList();
             if (attributeitems.Count > 0)
             {
                 foreach (FetchAttributeType attributeitem in attributeitems)
                 {
-                    result += LogicalToSchemaName(entity.name, attributeitem.name, sender) + ",";
+                    result.Add(LogicalToSchemaName(entity.name, attributeitem.name, sender));
                 }
             }
-            return result;
+            return string.Join(",", result);
         }
 
         private static string GetExpand(FetchEntityType entity, FetchXmlBuilder sender, ref string select)
         {
-            var result = "";
+            var resultList = new List<string>();
+            var selectList = new List<string>();
             var linkitems = entity.Items.Where(i => i is FetchLinkEntityType).ToList();
             if (linkitems.Count > 0)
             {
@@ -107,11 +108,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         }
                     }
                     var relation = LinkItemToRelation(entity.name, linkitem, sender);
-                    result += relation.SchemaName + ",";
-                    select += GetExpandedSelect(linkitem, relation.SchemaName, sender);
+                    resultList.Add(relation.SchemaName);
+                    selectList.Add(GetExpandedSelect(linkitem, relation.SchemaName, sender));
                 }
             }
-            return result;
+            select += string.Join(",", selectList);
+            return string.Join(",", resultList);
         }
 
         private static string GetExpandedSelect(FetchLinkEntityType linkitem, string relation, FetchXmlBuilder sender)
@@ -120,7 +122,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 return "";
             }
-            var result = "";
+            var resultList = new List<string>();
             var linkentity = linkitem.name;
             var attributeitems = linkitem.Items.Where(i => i is FetchAttributeType && ((FetchAttributeType)i).name != null).ToList();
             if (linkitem.intersect)
@@ -141,28 +143,30 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 foreach (FetchAttributeType attributeitem in attributeitems)
                 {
-                    result += relation + "/" + LogicalToSchemaName(linkentity, attributeitem.name, sender) + ",";
+                    resultList.Add(relation + "/" + LogicalToSchemaName(linkentity, attributeitem.name, sender));
                 }
             }
-            return result;
+            return string.Join(",", resultList);
         }
 
         private static string GetFilter(FetchEntityType entity, FetchXmlBuilder sender)
         {
-            var result = "";
+            var resultList = new StringBuilder();
             var filteritems = entity.Items.Where(i => i is filter && ((filter)i).Items != null && ((filter)i).Items.Length > 0).ToList();
             if (filteritems.Count > 0)
             {
                 foreach (filter filteritem in filteritems)
                 {
-                    result += GetFilter(entity, filteritem, sender);
+                    resultList.Append(GetFilter(entity, filteritem, sender));
                 }
+                var result = resultList.ToString();
                 if (result.StartsWith("(") && result.EndsWith(")"))
                 {
                     result = result.Substring(1, result.Length - 2);
                 }
+                return result;
             }
-            return result;
+            return "";
         }
 
         private static string GetFilter(FetchEntityType entity, filter filteritem, FetchXmlBuilder sender)
