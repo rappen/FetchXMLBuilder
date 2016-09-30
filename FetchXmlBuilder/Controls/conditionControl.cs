@@ -288,7 +288,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
                 return;
             }
-            var entities = form.GetDisplayEntities();
             var attributes = form.GetDisplayAttributes(entityName);
             foreach (var attribute in attributes)
             {

@@ -188,7 +188,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             cmbFrom.Items.Clear();
             cmbTo.Items.Clear();
-            var entities = form.GetDisplayEntities();
             if (cmbEntity.SelectedItem != null)
             {
                 var linkentity = cmbEntity.SelectedItem.ToString();

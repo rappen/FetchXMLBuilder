@@ -27,7 +27,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
     public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessager
     {
         #region Declarations
-        const string settingfile = "Cinteros.Xrm.FetchXmlBuilder.Settings.xml";
         private XmlDocument fetchDoc;
         private HistoryManager historyMgr = new HistoryManager();
         internal static Dictionary<string, EntityMetadata> entities;
@@ -1299,7 +1298,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             WorkAsync(new WorkAsyncInfo("Executing FetchXML...",
                 (eventargs) =>
                 {
-                    EntityCollection resultCollection = null;
                     QueryBase query;
                     try
                     {
@@ -1309,7 +1307,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         query = new FetchExpression(fetch);
                     }
-                    resultCollection = Service.RetrieveMultiple(query);
+                    EntityCollection resultCollection = Service.RetrieveMultiple(query);
                     if (outputtype == 1 && outputstyle == 2)
                     {
                         var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented);

@@ -18,7 +18,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             if (size != null && size.Width > 0 && size.Height > 0)
             {
                 Width = size.Width;
-                Height = size.Height; ;
+                Height = size.Height;
             }
             menuFriendly.Checked = form.currentSettings.gridFriendly;
             menuIdColumn.Checked = form.currentSettings.gridId;

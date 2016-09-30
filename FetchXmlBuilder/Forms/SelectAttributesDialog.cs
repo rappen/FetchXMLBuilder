@@ -37,7 +37,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 item.Text = name;
                 item.Tag = attribute;
                 item.Checked = selectedAttributes.Contains(attribute.LogicalName);
-                var filter = txtFilter.Text.ToUpperInvariant();
                 allItems.Add(item);
             }
         }

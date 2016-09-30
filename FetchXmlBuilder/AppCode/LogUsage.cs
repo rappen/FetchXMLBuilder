@@ -34,17 +34,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     response.EnsureSuccessStatusCode();
                     if (response.IsSuccessStatusCode)
                     {
-                        var data = response.Content.ReadAsStringAsync();
+                        response.Content.ReadAsStringAsync();
                     }
-
-                    //client.BaseAddress = new Uri("http://gs.statcounter.com/");
-                    //var response = await client.GetAsync("detect").ConfigureAwait(continueOnCapturedContext: false);
-                    //response.EnsureSuccessStatusCode();
-                    //if (response.IsSuccessStatusCode)
-                    //{
-                    //    var data = response.Content.ReadAsStringAsync();
-                    //}
-
                 }
             }
             catch { }
