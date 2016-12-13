@@ -211,11 +211,25 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             entityShitList.Clear();
             View = null;
             views = null;
-            if (!working)
+            var orgver = new Version(e.ConnectionDetail.OrganizationVersion);
+            LogInfo("Connected CRM version: {0}", orgver);
+            // Verifying version where MetadataChanges request exists https://msdn.microsoft.com/en-us/library/jj863599(v=crm.5).aspx
+            // According to TechNet 2011 UR12 is 05.00.9690.3218 https://social.technet.microsoft.com/wiki/contents/articles/8062.crm-2011-build-and-version-numbers-for-update-rollups.aspx
+            var orgok = orgver >= new Version(05, 00, 9690, 3218);
+            if (orgok)
             {
-                LoadEntities();
+                if (!working)
+                {
+                    LoadEntities();
+                }
             }
-            EnableControls(buttonsEnabled);
+            else
+            {
+                LogError("CRM version too old for FXB");
+                MessageBox.Show($"RetrieveMetadataChangesRequest was introduced in\nMicrosoft Dynamics CRM 2011 UR12 (5.0.9690.3218)\nCurrent version is {orgver}\n\nPlease connect to a newer organization to use this cool tool.",
+                    "Organization too old", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            EnableControls(orgok && buttonsEnabled);
         }
 
         public void OnIncomingMessage(MessageBusEventArgs message)
