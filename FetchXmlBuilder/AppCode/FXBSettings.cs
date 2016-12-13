@@ -43,7 +43,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool gridFriendly { get; set; }
         public bool gridId { get; set; }
         public bool gridIndex { get; set; }
-        public DateTime lastUpdateCheck { get; set; }
         public string fetchxml { get; set; }
         public bool? logUsage { get; set; }
         public string currentVersion { get; set; }

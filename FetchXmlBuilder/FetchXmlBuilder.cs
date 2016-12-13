@@ -200,13 +200,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 ParentForm.LocationChanged += FetchXmlBuilder_FormChanged;
             }
             LoadSetting();
-            var tasks = new List<Task>
-            {
-                VersionCheck.LaunchVersionCheck(Assembly.GetExecutingAssembly().GetName().Version.ToString(), "Cinteros", "FetchXMLBuilder", "http://fxb.xrmtoolbox.com/?src=FXB.{0}", currentSettings.lastUpdateCheck.Date, this),
-                this.LogUsageTask("Load")
-            };
-            currentSettings.lastUpdateCheck = DateTime.Now;
-            tasks.ForEach(x => x.Start());
+            LogUse("Load");
             TreeNodeHelper.AddContextMenu(null, this);
             EnableControls(true);
         }
@@ -2092,14 +2086,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 result = serializer.Deserialize(reader);
             }
             return result as FetchType;
-        }
-
-        private Task LogUsageTask(string action)
-        {
-            return new Task(() =>
-            {
-                LogUse(action);
-            });
         }
 
         internal void LogUse(string action, bool forceLog = false)
