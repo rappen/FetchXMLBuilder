@@ -32,7 +32,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal static Dictionary<string, EntityMetadata> entities;
         internal static List<string> entityShitList = new List<string>(); // Oops, did I name that one??
         internal static Dictionary<string, List<Entity>> views;
-        private static string fetchTemplate = "<fetch count=\"50\"><entity name=\"\"/></fetch>";
+        private static string fetchTemplate = "<fetch top=\"50\"><entity name=\"\"/></fetch>";
         private string fileName;
         internal string FileName
         {
@@ -1274,6 +1274,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             var outputtype = currentSettings.resultOption;
             var outputstyle = currentSettings.resultSerializeStyle;
             var outputtypestring = Settings.ResultOption2String(outputtype, outputstyle);
+            SendMessageToStatusBar(this, new StatusBarMessageEventArgs("Retrieving..."));
             WorkAsync(new WorkAsyncInfo("Executing FetchXML...",
                 (eventargs) =>
                 {
@@ -1287,10 +1288,41 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         query = new FetchExpression(fetch);
                     }
                     var start = DateTime.Now;
-                    EntityCollection resultCollection = Service.RetrieveMultiple(query);
-                    var stop = DateTime.Now;
-                    var duration = stop - start;
-                    SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Execution time: {duration}"));
+                    EntityCollection resultCollection = null;
+                    EntityCollection tmpResult = null;
+                    var page = 0;
+                    do
+                    {
+                        tmpResult = Service.RetrieveMultiple(query);
+                        if (resultCollection == null)
+                        {
+                            resultCollection = tmpResult;
+                        }
+                        else
+                        {
+                            resultCollection.Entities.AddRange(tmpResult.Entities);
+                            resultCollection.MoreRecords = tmpResult.MoreRecords;
+                            resultCollection.PagingCookie = tmpResult.PagingCookie;
+                            resultCollection.TotalRecordCount = tmpResult.TotalRecordCount;
+                            resultCollection.TotalRecordCountLimitExceeded = tmpResult.TotalRecordCountLimitExceeded;
+                        }
+                        if (currentSettings.retrieveAllPages && query is QueryExpression && tmpResult.MoreRecords)
+                        {
+                            ((QueryExpression)query).PageInfo.PageNumber++;
+                            ((QueryExpression)query).PageInfo.PagingCookie = tmpResult.PagingCookie;
+                        }
+                        page++;
+                        var duration = DateTime.Now - start;
+                        if (page == 1)
+                        {
+                            SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Retrieved {resultCollection.Entities.Count} records on first page in {duration.TotalSeconds:F2} seconds"));
+                        }
+                        else
+                        {
+                            SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Retrieved {resultCollection.Entities.Count} records on {page} pages in {duration.TotalSeconds:F2} seconds"));
+                        }
+                    }
+                    while (currentSettings.retrieveAllPages && query is QueryExpression && tmpResult.MoreRecords);
                     if (outputtype == 1 && outputstyle == 2)
                     {
                         var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented);

@@ -31,6 +31,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 default: rbResGrid.Checked = true; break;
             }
             cmbSeralizationStyle.SelectedIndex = settings.resultSerializeStyle;
+            chkResAllPages.Checked = settings.retrieveAllPages;
             chkEntAll.Checked = settings.showEntitiesAll;
             if (!settings.showEntitiesAll)
             {
@@ -65,6 +66,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             settings.useSingleQuotation = chkAppSingle.Checked;
             settings.resultOption = rbResSerialized.Checked ? 1 : rbResRaw.Checked ? 3 : 0;
             settings.resultSerializeStyle = cmbSeralizationStyle.SelectedIndex;
+            settings.retrieveAllPages = chkResAllPages.Checked;
             settings.showEntitiesAll = chkEntAll.Checked;
             settings.showEntitiesCustomizable = chkEntCustomizable.Checked;
             settings.showEntitiesUncustomizable = chkEntUncustomizable.Checked;

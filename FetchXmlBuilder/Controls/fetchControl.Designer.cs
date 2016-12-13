@@ -105,9 +105,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(4, 73);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(35, 13);
+            this.label4.Size = new System.Drawing.Size(53, 13);
             this.label4.TabIndex = 23;
-            this.label4.Text = "Count";
+            this.label4.Text = "Page size";
             // 
             // textBox1
             // 

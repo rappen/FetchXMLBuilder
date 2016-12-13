@@ -50,6 +50,7 @@
             this.chkAttManaged = new System.Windows.Forms.CheckBox();
             this.chkAttAll = new System.Windows.Forms.CheckBox();
             this.gbResult = new System.Windows.Forms.GroupBox();
+            this.cmbSeralizationStyle = new System.Windows.Forms.ComboBox();
             this.rbResRaw = new System.Windows.Forms.RadioButton();
             this.rbResSerialized = new System.Windows.Forms.RadioButton();
             this.rbResGrid = new System.Windows.Forms.RadioButton();
@@ -63,7 +64,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.cmbSeralizationStyle = new System.Windows.Forms.ComboBox();
+            this.chkResAllPages = new System.Windows.Forms.CheckBox();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -83,7 +84,7 @@
             this.gbEntities.Controls.Add(this.chkEntUnmanaged);
             this.gbEntities.Controls.Add(this.chkEntManaged);
             this.gbEntities.Controls.Add(this.chkEntAll);
-            this.gbEntities.Location = new System.Drawing.Point(12, 138);
+            this.gbEntities.Location = new System.Drawing.Point(12, 166);
             this.gbEntities.Name = "gbEntities";
             this.gbEntities.Size = new System.Drawing.Size(247, 258);
             this.gbEntities.TabIndex = 2;
@@ -222,7 +223,7 @@
             this.gbAttributes.Controls.Add(this.chkAttUnmanaged);
             this.gbAttributes.Controls.Add(this.chkAttManaged);
             this.gbAttributes.Controls.Add(this.chkAttAll);
-            this.gbAttributes.Location = new System.Drawing.Point(284, 138);
+            this.gbAttributes.Location = new System.Drawing.Point(284, 166);
             this.gbAttributes.Name = "gbAttributes";
             this.gbAttributes.Size = new System.Drawing.Size(247, 258);
             this.gbAttributes.TabIndex = 3;
@@ -350,16 +351,31 @@
             // 
             // gbResult
             // 
+            this.gbResult.Controls.Add(this.chkResAllPages);
             this.gbResult.Controls.Add(this.cmbSeralizationStyle);
             this.gbResult.Controls.Add(this.rbResRaw);
             this.gbResult.Controls.Add(this.rbResSerialized);
             this.gbResult.Controls.Add(this.rbResGrid);
-            this.gbResult.Location = new System.Drawing.Point(282, 12);
+            this.gbResult.Location = new System.Drawing.Point(284, 12);
             this.gbResult.Name = "gbResult";
-            this.gbResult.Size = new System.Drawing.Size(247, 112);
+            this.gbResult.Size = new System.Drawing.Size(247, 137);
             this.gbResult.TabIndex = 1;
             this.gbResult.TabStop = false;
             this.gbResult.Text = "Result view";
+            // 
+            // cmbSeralizationStyle
+            // 
+            this.cmbSeralizationStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSeralizationStyle.Enabled = false;
+            this.cmbSeralizationStyle.FormattingEnabled = true;
+            this.cmbSeralizationStyle.Items.AddRange(new object[] {
+            "Explicit XML",
+            "Basic XML",
+            "JSON"});
+            this.cmbSeralizationStyle.Location = new System.Drawing.Point(96, 51);
+            this.cmbSeralizationStyle.Name = "cmbSeralizationStyle";
+            this.cmbSeralizationStyle.Size = new System.Drawing.Size(145, 21);
+            this.cmbSeralizationStyle.TabIndex = 2;
             // 
             // rbResRaw
             // 
@@ -398,7 +414,7 @@
             // 
             this.bgStats.Controls.Add(this.label1);
             this.bgStats.Controls.Add(this.chkStatAllow);
-            this.bgStats.Location = new System.Drawing.Point(12, 415);
+            this.bgStats.Location = new System.Drawing.Point(12, 443);
             this.bgStats.Name = "bgStats";
             this.bgStats.Size = new System.Drawing.Size(517, 130);
             this.bgStats.TabIndex = 4;
@@ -474,7 +490,7 @@
             // 
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
-            this.panel1.Location = new System.Drawing.Point(12, 551);
+            this.panel1.Location = new System.Drawing.Point(12, 579);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(517, 53);
             this.panel1.TabIndex = 5;
@@ -499,19 +515,15 @@
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             // 
-            // cmbSeralizationStyle
+            // chkResAllPages
             // 
-            this.cmbSeralizationStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSeralizationStyle.Enabled = false;
-            this.cmbSeralizationStyle.FormattingEnabled = true;
-            this.cmbSeralizationStyle.Items.AddRange(new object[] {
-            "Explicit XML",
-            "Basic XML",
-            "JSON"});
-            this.cmbSeralizationStyle.Location = new System.Drawing.Point(96, 51);
-            this.cmbSeralizationStyle.Name = "cmbSeralizationStyle";
-            this.cmbSeralizationStyle.Size = new System.Drawing.Size(145, 21);
-            this.cmbSeralizationStyle.TabIndex = 2;
+            this.chkResAllPages.AutoSize = true;
+            this.chkResAllPages.Location = new System.Drawing.Point(20, 106);
+            this.chkResAllPages.Name = "chkResAllPages";
+            this.chkResAllPages.Size = new System.Drawing.Size(111, 17);
+            this.chkResAllPages.TabIndex = 4;
+            this.chkResAllPages.Text = "Retrieve all pages";
+            this.chkResAllPages.UseVisualStyleBackColor = true;
             // 
             // Settings
             // 
@@ -519,7 +531,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(543, 613);
+            this.ClientSize = new System.Drawing.Size(543, 642);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.gbAppearance);
             this.Controls.Add(this.bgStats);
@@ -582,5 +594,6 @@
         private System.Windows.Forms.RadioButton rbResRaw;
         private System.Windows.Forms.RadioButton rbResSerialized;
         private System.Windows.Forms.ComboBox cmbSeralizationStyle;
+        private System.Windows.Forms.CheckBox chkResAllPages;
     }
 }
