@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlContentDisplayDialog));
-            CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings1 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
+            CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings2 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
             this.panBottom = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
             this.btnExecute = new System.Windows.Forms.Button();
             this.panOk = new System.Windows.Forms.Panel();
             this.btnOk = new System.Windows.Forms.Button();
@@ -47,7 +47,7 @@
             // panBottom
             // 
             this.panBottom.BackColor = System.Drawing.SystemColors.Control;
-            this.panBottom.Controls.Add(this.button1);
+            this.panBottom.Controls.Add(this.btnSave);
             this.panBottom.Controls.Add(this.btnExecute);
             this.panBottom.Controls.Add(this.panOk);
             this.panBottom.Controls.Add(this.panCancel);
@@ -58,15 +58,17 @@
             this.panBottom.Size = new System.Drawing.Size(809, 38);
             this.panBottom.TabIndex = 4;
             // 
-            // button1
+            // btnSave
             // 
-            this.button1.Location = new System.Drawing.Point(199, 8);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Save";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Visible = false;
+            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSave.Location = new System.Drawing.Point(549, 8);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.TabIndex = 6;
+            this.btnSave.Text = "Save...";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Visible = false;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnExecute
             // 
@@ -138,14 +140,14 @@
             this.txtXML.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtXML.Location = new System.Drawing.Point(0, 0);
             this.txtXML.Name = "txtXML";
-            xmlViewerSettings1.AttributeKey = System.Drawing.Color.Red;
-            xmlViewerSettings1.AttributeValue = System.Drawing.Color.Blue;
-            xmlViewerSettings1.Comment = System.Drawing.Color.Green;
-            xmlViewerSettings1.Element = System.Drawing.Color.DarkRed;
-            xmlViewerSettings1.QuoteCharacter = '\"';
-            xmlViewerSettings1.Tag = System.Drawing.Color.Blue;
-            xmlViewerSettings1.Value = System.Drawing.Color.Black;
-            this.txtXML.Settings = xmlViewerSettings1;
+            xmlViewerSettings2.AttributeKey = System.Drawing.Color.Red;
+            xmlViewerSettings2.AttributeValue = System.Drawing.Color.Blue;
+            xmlViewerSettings2.Comment = System.Drawing.Color.Green;
+            xmlViewerSettings2.Element = System.Drawing.Color.DarkRed;
+            xmlViewerSettings2.QuoteCharacter = '\"';
+            xmlViewerSettings2.Tag = System.Drawing.Color.Blue;
+            xmlViewerSettings2.Value = System.Drawing.Color.Black;
+            this.txtXML.Settings = xmlViewerSettings2;
             this.txtXML.Size = new System.Drawing.Size(809, 667);
             this.txtXML.TabIndex = 1;
             this.txtXML.Text = "";
@@ -181,6 +183,6 @@
         internal CSRichTextBoxSyntaxHighlighting.XMLViewer txtXML;
         internal System.Windows.Forms.Button btnFormat;
         internal System.Windows.Forms.Button btnExecute;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnSave;
     }
 }

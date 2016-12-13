@@ -14,6 +14,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         public bool execute;
         private string findtext = "";
         FetchXmlBuilder fxb;
+        SaveFormat format;
 
         internal static XmlContentDisplayDialog Show(string xmlString, string header, bool allowEdit, bool allowFormat, bool allowExecute, SaveFormat saveFormat, FetchXmlBuilder caller)
         {
@@ -35,6 +36,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         internal XmlContentDisplayDialog(string xmlString, string header, bool allowEdit, bool allowFormat, bool allowExecute, SaveFormat saveFormat, FetchXmlBuilder caller)
         {
             InitializeComponent();
+            format = saveFormat;
             fxb = caller;
             result = null;
             execute = false;
@@ -51,6 +53,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             }
             btnFormat.Visible = allowFormat;
             btnExecute.Visible = allowExecute;
+            btnSave.Visible = format != SaveFormat.None;
             UpdateXML(xmlString);
         }
 
@@ -128,6 +131,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             if (DialogResult == DialogResult.Cancel)
             {
                 Close();
+            }
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            var sfd = new SaveFileDialog
+            {
+                Title = $"Save {format}",
+                Filter = $"{format} file (*.{format.ToString().ToLowerInvariant()})|*.{format.ToString().ToLowerInvariant()}"
+            };
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                txtXML.SaveFile(sfd.FileName, RichTextBoxStreamType.PlainText);
+                MessageBox.Show($"{format} saved to {sfd.FileName}");
             }
         }
     }
