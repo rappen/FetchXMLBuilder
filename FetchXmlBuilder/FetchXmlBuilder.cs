@@ -1242,7 +1242,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 (eventargs) =>
                 {
                     //var fetchxml = GetFetchDocument().OuterXml;
+                    var start = DateTime.Now;
                     var resp = (ExecuteFetchResponse)Service.Execute(new ExecuteFetchRequest() { FetchXml = fetch });
+                    var stop = DateTime.Now;
+                    var duration = stop - start;
+                    SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Execution time: {duration}"));
                     eventargs.Result = resp.FetchXmlResult;
                 })
             {
@@ -1282,7 +1286,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         query = new FetchExpression(fetch);
                     }
+                    var start = DateTime.Now;
                     EntityCollection resultCollection = Service.RetrieveMultiple(query);
+                    var stop = DateTime.Now;
+                    var duration = stop - start;
+                    SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Execution time: {duration}"));
                     if (outputtype == 1 && outputstyle == 2)
                     {
                         var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented);
