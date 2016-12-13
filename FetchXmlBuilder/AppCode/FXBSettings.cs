@@ -43,7 +43,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool gridId { get; set; }
         public bool gridIndex { get; set; }
         public DateTime lastUpdateCheck { get; set; }
-        public List<string> fetchxml { get; set; }
+        public string fetchxml { get; set; }
         public bool? logUsage { get; set; }
         public string currentVersion { get; set; }
         public bool showQuickActions { get; set; }
@@ -54,26 +54,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             showEntitiesAll = true;
             showAttributesAll = true;
             showQuickActions = true;
-        }
-
-        public static FXBSettings Load()
-        {
-            if (File.Exists(filename))
-            {
-                var document = new XmlDocument();
-                try
-                {
-                    document.Load(filename);
-                    return (FXBSettings)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(FXBSettings));
-                }
-                catch { }
-            }
-            return new FXBSettings();
-        }
-
-        public void Save()
-        {
-            XmlSerializerHelper.SerializeToFile(this, filename);
         }
     }
 }

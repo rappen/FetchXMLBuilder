@@ -24,7 +24,7 @@ using Cinteros.Xrm.CRMWinForm;
 
 namespace Cinteros.Xrm.FetchXmlBuilder
 {
-    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessager
+    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger
     {
         #region Declarations
         private XmlDocument fetchDoc;
@@ -616,37 +616,29 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         /// <summary>Saves various configurations to file for next session</summary>
         private void SaveSetting()
         {
-            var conn = ConnectionDetail != null ? ConnectionDetail.ConnectionName : "<none>";
-            if (currentSettings.fetchxml == null)
-            {
-                currentSettings.fetchxml = new List<string>();
-            }
-            RemoveConnectionFetchFromSettings(conn);
-            currentSettings.fetchxml.Add(conn + "||" + GetFetchString(false));
-            currentSettings.Save();
-        }
-
-        private void RemoveConnectionFetchFromSettings(string conn)
-        {
-            var i = 0;
-            while (i < currentSettings.fetchxml.Count && !currentSettings.fetchxml[i].StartsWith(conn + "||"))
-            {
-                i++;
-            }
-            if (i < currentSettings.fetchxml.Count)
-            {
-                currentSettings.fetchxml.RemoveAt(i);
-            }
+            currentSettings.fetchxml = GetFetchString(false);
+            SettingsManager.Instance.Save(typeof(FetchXmlBuilder), currentSettings, ConnectionDetail?.ConnectionName);
         }
 
         /// <summary>Loads configurations from file</summary>
         private void LoadSetting()
         {
-            currentSettings = FXBSettings.Load();
-            var conn = ConnectionDetail != null ? ConnectionDetail.ConnectionName : "<none>";
-            if (!LoadFetchFromSettings(conn))
+            if (SettingsManager.Instance.TryLoad<FXBSettings>(typeof(FetchXmlBuilder), out currentSettings, ConnectionDetail?.ConnectionName) ||
+                SettingsManager.Instance.TryLoad<FXBSettings>(typeof(FetchXmlBuilder), out currentSettings))
             {
-                LoadFetchFromSettings("");
+                ApplySettings();
+            }
+        }
+
+        private void ApplySettings()
+        {
+            if (currentSettings != null && !string.IsNullOrWhiteSpace(currentSettings.fetchxml))
+            {
+                fetchDoc = new XmlDocument();
+                fetchDoc.LoadXml(currentSettings.fetchxml);
+                DisplayDefinition();
+                UpdateLiveXML();
+                RecordHistory("loaded from last session");
             }
             ShowQuickActions();
             var ass = Assembly.GetExecutingAssembly().GetName();
@@ -661,30 +653,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 currentSettings.logUsage = LogUsage.PromptToLog();
             }
-        }
-
-        private bool LoadFetchFromSettings(string conn)
-        {
-            if (currentSettings != null && currentSettings.fetchxml != null)
-            {
-                foreach (var fetch in currentSettings.fetchxml)
-                {
-                    if (fetch.StartsWith(conn + "||"))
-                    {
-                        fetchDoc = new XmlDocument();
-                        var fetchxml = fetch.Substring(fetch.IndexOf("||") + 2);
-                        if (!string.IsNullOrWhiteSpace(fetchxml.Trim()))
-                        {
-                            fetchDoc.LoadXml(fetchxml);
-                            DisplayDefinition();
-                            UpdateLiveXML();
-                            RecordHistory("loaded from last session");
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
         }
 
         /// <summary>Enables or disables all buttons on the form</summary>
