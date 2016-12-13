@@ -256,6 +256,7 @@
       <DependentUpon>XmlContentDisplayDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="AppCode\FXBMessageBusArgument.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HistoryManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FetchXmlBuilder.cs">
@@ -272,6 +273,7 @@
     <Compile Include="Resources\fetch.cs">
       <DependentUpon>fetch.xsd</DependentUpon>
     </Compile>
+    <Compile Include="AppCode\SQLQueryGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\commentControl.resx">

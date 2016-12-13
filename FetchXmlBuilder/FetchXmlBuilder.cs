@@ -529,6 +529,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             DisplayQExCode();
         }
 
+        private void tsmiToSQLQuery_Click(object sender, EventArgs e)
+        {
+            DisplaySQLQuery();
+        }
+
         private void tsbReturnToCaller_Click(object sender, EventArgs e)
         {
             ReturnToCaller();
@@ -623,11 +628,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         /// <summary>Loads configurations from file</summary>
         private void LoadSetting()
         {
-            if (SettingsManager.Instance.TryLoad<FXBSettings>(typeof(FetchXmlBuilder), out currentSettings, ConnectionDetail?.ConnectionName) ||
-                SettingsManager.Instance.TryLoad<FXBSettings>(typeof(FetchXmlBuilder), out currentSettings))
+            if (!SettingsManager.Instance.TryLoad<FXBSettings>(typeof(FetchXmlBuilder), out currentSettings, ConnectionDetail?.ConnectionName) &&
+                !SettingsManager.Instance.TryLoad<FXBSettings>(typeof(FetchXmlBuilder), out currentSettings))
             {
-                ApplySettings();
+                currentSettings = new FXBSettings();
             }
+            ApplySettings();
         }
 
         private void ApplySettings()
@@ -679,6 +685,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiSaveCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
                     tsmiSaveCWP.Enabled = enabled && Service != null && FetchChanged && !string.IsNullOrEmpty(CWPFeed);
                     tsmiToQureyExpression.Enabled = enabled && Service != null;
+                    tsmiToSQLQuery.Enabled = enabled && Service != null;
                     tsbView.Enabled = enabled;
                     tsbExecute.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
                     selectAttributesToolStripMenuItem.Enabled = enabled && Service != null;
@@ -2009,6 +2016,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             FetchType fetch = GetFetchType();
             var odata = ODataCodeGenerator.GetODataQuery(fetch, ConnectionDetail.OrganizationDataServiceUrl, this);
             return odata;
+        }
+
+        private void DisplaySQLQuery()
+        {
+            FetchType fetch = GetFetchType();
+            try
+            {
+                var sql = SQLQueryGenerator.GetSQLQuery(fetch);
+                LogUse("DisplaySQLQuery");
+                XmlContentDisplayDialog.Show(sql, "SQL Query", false, false, false, SaveFormat.None, this);
+            }
+            catch (Exception ex)
+            {
+                LogUse("DisplaySQLQuery failed");
+                MessageBox.Show("Failed to generate SQL Query.\n\n" + ex.Message, "SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private FetchType GetFetchType()

@@ -93,6 +93,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.panelButtonSpacer = new System.Windows.Forms.Panel();
             this.gbQuickActions = new System.Windows.Forms.GroupBox();
             this.menuControl = new System.Windows.Forms.MenuStrip();
+            this.tsmiToSQLQuery = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain.SuspendLayout();
             this.gbFetchTree.SuspendLayout();
             this.nodeMenu.SuspendLayout();
@@ -216,7 +217,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveView,
             this.tsmiSaveML,
             this.tsmiSaveCWP,
-            this.tsmiToQureyExpression});
+            this.tsmiToQureyExpression,
+            this.tsmiToSQLQuery});
             this.tsbSave.Image = ((System.Drawing.Image)(resources.GetObject("tsbSave.Image")));
             this.tsbSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSave.Name = "tsbSave";
@@ -709,6 +711,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.menuControl.Text = "menuStrip1";
             this.menuControl.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
+            // tsmiToSQLQuery
+            // 
+            this.tsmiToSQLQuery.Enabled = false;
+            this.tsmiToSQLQuery.Name = "tsmiToSQLQuery";
+            this.tsmiToSQLQuery.Size = new System.Drawing.Size(226, 22);
+            this.tsmiToSQLQuery.Text = "SQL query...";
+            this.tsmiToSQLQuery.Click += new System.EventHandler(this.tsmiToSQLQuery_Click);
+            // 
             // FetchXmlBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -810,5 +820,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.GroupBox gbQuickActions;
         internal System.Windows.Forms.MenuStrip menuControl;
         private System.Windows.Forms.ToolStripButton tsbOptions;
+        private System.Windows.Forms.ToolStripMenuItem tsmiToSQLQuery;
     }
 }
