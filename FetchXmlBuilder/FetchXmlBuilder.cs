@@ -628,12 +628,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         /// <summary>Loads configurations from file</summary>
         private void LoadSetting()
         {
+            var nosettings = false;
             if (!SettingsManager.Instance.TryLoad<FXBSettings>(typeof(FetchXmlBuilder), out currentSettings, ConnectionDetail?.ConnectionName) &&
                 !SettingsManager.Instance.TryLoad<FXBSettings>(typeof(FetchXmlBuilder), out currentSettings))
             {
+                // Initialize new settings instance, no settings file was found
                 currentSettings = new FXBSettings();
+                nosettings = true;
             }
             ApplySettings();
+            if (nosettings)
+            {
+                // Make sure initial default settings file is available
+                SettingsManager.Instance.Save(typeof(FetchXmlBuilder), currentSettings);
+            }
         }
 
         private void ApplySettings()
