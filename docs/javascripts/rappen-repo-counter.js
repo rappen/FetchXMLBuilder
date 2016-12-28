@@ -16,6 +16,7 @@ NugetGetDetails = function (packageName, successCallback, errorCallback) {
                 var result = data.data[0];
                 result.host = "NuGet";
                 var version = result.version;
+                var versions = [];
                 if (result.versions && result.versions.length > 0) {
                     $(result.versions).each(function (index) {
                         this.host = "NuGet";
@@ -35,10 +36,13 @@ NugetGetDetails = function (packageName, successCallback, errorCallback) {
 
                                 }
                             });
-                            this.published = date;
+                            this.published = new Date(date);
                         }
+                        versions.unshift(this);
                     });
                 }
+                // NuGet reports versions chronologically. Flip the order to get latest first in the array.
+                result.versions = versions;
             }
             successCallback(result);
         },
@@ -116,7 +120,7 @@ CombineDetails = function (info1, info2, mergeVersions) {
     var result = info1;
     result.totalDownloads += info2.totalDownloads;
     var versions = info1.versions.concat(info2.versions);
-    versions.sort(dynamicSortMultiple("-version", "-host"));
+    versions.sort(dynamicSortMultiple("-published", "-host"));
     var lastVersion = "";
     result.versions = [];
     $(versions).each(function (i) {
@@ -128,12 +132,12 @@ CombineDetails = function (info1, info2, mergeVersions) {
         }
         lastVersion = this.version;
     });
-    result.latestVersion = null;
-    $(result.versions).each(function (i) {
-        if (!result.latestVersion || this.version > result.latestVersion.version) {
-            result.latestVersion = this;
-        }
-    });
+    //result.latestVersion = null;
+    //$(result.versions).each(function (i) {
+    //    if (!result.latestVersion || this.published > result.latestVersion.published) {
+    //        result.latestVersion = this;
+    //    }
+    //});
     return result;
 }
 
