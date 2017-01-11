@@ -50,6 +50,7 @@
             this.chkAttManaged = new System.Windows.Forms.CheckBox();
             this.chkAttAll = new System.Windows.Forms.CheckBox();
             this.gbResult = new System.Windows.Forms.GroupBox();
+            this.chkResAllPages = new System.Windows.Forms.CheckBox();
             this.cmbSeralizationStyle = new System.Windows.Forms.ComboBox();
             this.rbResRaw = new System.Windows.Forms.RadioButton();
             this.rbResSerialized = new System.Windows.Forms.RadioButton();
@@ -64,7 +65,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.chkResAllPages = new System.Windows.Forms.CheckBox();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -363,6 +363,16 @@
             this.gbResult.TabStop = false;
             this.gbResult.Text = "Result view";
             // 
+            // chkResAllPages
+            // 
+            this.chkResAllPages.AutoSize = true;
+            this.chkResAllPages.Location = new System.Drawing.Point(20, 106);
+            this.chkResAllPages.Name = "chkResAllPages";
+            this.chkResAllPages.Size = new System.Drawing.Size(111, 17);
+            this.chkResAllPages.TabIndex = 4;
+            this.chkResAllPages.Text = "Retrieve all pages";
+            this.chkResAllPages.UseVisualStyleBackColor = true;
+            // 
             // cmbSeralizationStyle
             // 
             this.cmbSeralizationStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -371,7 +381,8 @@
             this.cmbSeralizationStyle.Items.AddRange(new object[] {
             "Explicit XML",
             "Basic XML",
-            "JSON"});
+            "JSON",
+            "EntityCollection"});
             this.cmbSeralizationStyle.Location = new System.Drawing.Point(96, 51);
             this.cmbSeralizationStyle.Name = "cmbSeralizationStyle";
             this.cmbSeralizationStyle.Size = new System.Drawing.Size(145, 21);
@@ -514,16 +525,6 @@
             this.btnOK.TabIndex = 0;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
-            // 
-            // chkResAllPages
-            // 
-            this.chkResAllPages.AutoSize = true;
-            this.chkResAllPages.Location = new System.Drawing.Point(20, 106);
-            this.chkResAllPages.Name = "chkResAllPages";
-            this.chkResAllPages.Size = new System.Drawing.Size(111, 17);
-            this.chkResAllPages.TabIndex = 4;
-            this.chkResAllPages.Text = "Retrieve all pages";
-            this.chkResAllPages.UseVisualStyleBackColor = true;
             // 
             // Settings
             // 

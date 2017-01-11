@@ -188,7 +188,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             switch (outputtype)
             {
                 case 0: return "Grid";
-                case 1: return outputstyle == 1 ? "Basic" : outputstyle == 2 ? "JSON" : "Explicit";
+                case 1: return outputstyle == 1 ? "Basic" : outputstyle == 2 ? "JSON" : outputstyle == 3 ? "EntityCollection" : "Explicit";
                 case 3: return "FetchResult";
             }
             return "unknown";

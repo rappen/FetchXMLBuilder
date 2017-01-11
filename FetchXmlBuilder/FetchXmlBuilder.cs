@@ -21,6 +21,7 @@ using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Extensibility.Args;
 using Cinteros.Xrm.CRMWinForm;
+using System.Runtime.Serialization;
 
 namespace Cinteros.Xrm.FetchXmlBuilder
 {
@@ -1379,6 +1380,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             {
                                 var serialized = EntityCollectionSerializer.Serialize((EntityCollection)completedargs.Result, SerializationStyle.Basic);
                                 XmlContentDisplayDialog.Show(serialized.OuterXml, "XML Serialized RetrieveMultiple result", false, false, false, SaveFormat.XML, this);
+                            }
+                            else if (outputstyle == 3)
+                            {
+                                var serializer = new DataContractSerializer(typeof(EntityCollection), null, int.MaxValue, false, false, null, new KnownTypesResolver());
+                                var sw = new StringWriter();
+                                var xw = new XmlTextWriter(sw);
+                                serializer.WriteObject(xw, (EntityCollection)completedargs.Result);
+                                xw.Close();
+                                sw.Close();
+                                var serialized = sw.ToString();
+                                XmlContentDisplayDialog.Show(serialized, "Serialized EntityCollection", false, false, false, SaveFormat.XML, this);
                             }
                         }
                     }
