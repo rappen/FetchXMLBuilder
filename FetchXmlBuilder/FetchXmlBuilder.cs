@@ -235,11 +235,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         public void OnIncomingMessage(MessageBusEventArgs message)
         {
+            callerArgs = message;
+            var fetchXml = string.Empty;
+            var requestedType = "FetchXML";
             if (message.TargetArgument != null)
             {
-                callerArgs = message;
-                var fetchXml = string.Empty;
-                var requestedType = "FetchXML";
                 if (message.TargetArgument is FXBMessageBusArgument)
                 {
                     var fxbArg = (FXBMessageBusArgument)message.TargetArgument;
@@ -250,14 +250,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     fetchXml = (string)message.TargetArgument;
                 }
-                if (!string.IsNullOrWhiteSpace(fetchXml))
-                {
-                    ParseXML(fetchXml, false);
-                }
-                tsbReturnToCaller.ToolTipText = "Return " + requestedType + " to " + callerArgs.SourcePlugin;
-                RecordHistory("called from " + message.SourcePlugin);
-                LogUse("CalledBy." + callerArgs.SourcePlugin);
             }
+            if (string.IsNullOrWhiteSpace(fetchXml))
+            {
+                fetchXml = fetchTemplate;
+            }
+            ParseXML(fetchXml, false);
+            tsbReturnToCaller.ToolTipText = "Return " + requestedType + " to " + callerArgs.SourcePlugin;
+            RecordHistory("called from " + message.SourcePlugin);
+            LogUse("CalledBy." + callerArgs.SourcePlugin);
             EnableControls(true);
         }
 
@@ -693,7 +694,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiOpenView.Enabled = enabled && Service != null;
                     tsmiOpenML.Enabled = enabled && Service != null;
                     tsmiOpenCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
-                    tsbReturnToCaller.Visible = tvFetch.Nodes.Count > 0 && CallerWantsResults();
+                    tsbReturnToCaller.Visible = CallerWantsResults();
                     tsbSave.Enabled = enabled;
                     tsmiSaveFile.Enabled = enabled && FetchChanged && !string.IsNullOrEmpty(FileName);
                     tsmiSaveFileAs.Enabled = enabled && tvFetch.Nodes.Count > 0;
@@ -2129,6 +2130,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 return;
             }
             LogUse("ReturnTo." + callerArgs.SourcePlugin);
+            if (!BuildAndValidateXml(true))
+            {
+                return;
+            }
             var message = new MessageBusEventArgs(callerArgs.SourcePlugin);
             if (callerArgs.TargetArgument is FXBMessageBusArgument)
             {
