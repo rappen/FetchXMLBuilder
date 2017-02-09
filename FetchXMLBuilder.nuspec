@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Build and test FetchXML with all capabilities supported by the CRM platform</description>
     <summary>XrmToolBox plugin to create and run advanced FetchXML queries.</summary>
-    <releaseNotes>
+    <description>
       The tool will assist in three major areas:
 
       1. Constructing FetchXML in ways that Advanced Find cannot
@@ -33,11 +33,11 @@
       The tool reads metadata from CRM to assist with selecting entities, attributes, relations and to perform validation of condition values.
 
       To make it more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.
-    </releaseNotes>
+    </description>
     <copyright>Copyright 2016 Innofactor AB, 2014-2016 Cinteros AB</copyright>
     <tags>XrmToolBox Plugins FetchXML Builder</tags>
     <dependencies>
-      <dependency id="XrmToolBox" version="1.2016.11.3" />
+      <dependency id="XrmToolBox" version="1.2017.1.11" />
     </dependencies>
   </metadata>
   <files>
