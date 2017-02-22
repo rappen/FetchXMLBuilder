@@ -4,7 +4,7 @@
     <id>Cinteros.Xrm.FetchXMLBuilder</id>
     <version>1.0.0</version>
     <title>FetchXML Builder for XrmToolBox</title>
-    <authors>Jonas Rapp</authors>
+    <authors>Jonas Rapp, Innofactor Sweden</authors>
     <owners>Innofactor</owners>
     <projectUrl>http://fxb.xrmtoolbox.com</projectUrl>
     <iconUrl>http://fxb.xrmtoolbox.com/images/FXB-150-transp.png</iconUrl>
