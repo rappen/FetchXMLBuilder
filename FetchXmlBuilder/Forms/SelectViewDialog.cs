@@ -110,5 +110,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             FetchXmlBuilder.views = null;
             Caller.LoadViews(PopulateForm);
         }
+
+        private void cmbEntity_KeyDown(object sender, KeyEventArgs e)
+        {
+            cmbEntity.DroppedDown = false;
+        }
     }
 }
