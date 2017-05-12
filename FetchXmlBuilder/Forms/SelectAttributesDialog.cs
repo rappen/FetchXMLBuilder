@@ -24,6 +24,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             InitializeComponent();
             GenerateAllItems(attributes, selectedAttributes);
             PopulateAttributes();
+            this.ActiveControl = txtFilter;
         }
 
         private void GenerateAllItems(List<AttributeMetadata> attributes, List<string> selectedAttributes)
