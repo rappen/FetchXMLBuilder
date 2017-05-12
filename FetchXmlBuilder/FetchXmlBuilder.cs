@@ -1357,6 +1357,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     working = false;
                     if (completedargs.Error != null)
                     {
+                        LogError("RetrieveMultiple error: {0}", completedargs.Error);
                         if (MessageBox.Show(completedargs.Error.Message + "\n\nTry with result as ExecuteFetch?", "Execute", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
                         {
                             ExecuteFetch(fetch);
