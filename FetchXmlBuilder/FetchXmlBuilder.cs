@@ -1665,6 +1665,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         LogUse("SaveView");
                     }
                     View["fetchxml"] = xml;
+                    treeChecksum = GetTreeChecksum(null);
+                    FetchChanged = false;
                 })
             {
                 PostWorkCallBack = (completedargs) =>
