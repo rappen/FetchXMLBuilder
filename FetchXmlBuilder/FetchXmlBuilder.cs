@@ -47,10 +47,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 fileName = value;
                 if (!string.IsNullOrWhiteSpace(value))
                 {
-                    tsmiSaveFile.Text = "Save File: " + System.IO.Path.GetFileName(value);
+                    var file = System.IO.Path.GetFileName(value);
+                    gbFetchTree.Text = $"FetchXML - File: {file}";
+                    tsmiSaveFile.Text = $"Save File: {file}";
                 }
                 else
                 {
+                    gbFetchTree.Text = "FetchXML";
                     tsmiSaveFile.Text = "Save File";
                 }
             }
@@ -68,10 +71,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 view = value;
                 if (view != null && view.Contains("name"))
                 {
-                    tsmiSaveView.Text = "Save View: " + view["name"];
+                    gbFetchTree.Text = $"FetchXML - View: {view["name"]}";
+                    tsmiSaveView.Text = $"Save View: {view["name"]}";
                 }
                 else
                 {
+                    gbFetchTree.Text = "FetchXML";
                     tsmiSaveView.Text = "Save View";
                 }
             }
