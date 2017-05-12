@@ -35,12 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="McTools.Xrm.Connection, Version=1.2017.5.14, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
-      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2017.5.14\lib\net452\McTools.Xrm.Connection.dll</HintPath>
-    </Reference>
-    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.2017.4.13, Culture=neutral, PublicKeyToken=f1559f79cf894e27, processorArchitecture=MSIL">
-      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2017.5.14\lib\net452\McTools.Xrm.Connection.WinForms.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.8.2.0.2\lib\net452\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
       <Private>True</Private>
@@ -101,15 +95,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="XrmToolBox, Version=1.2017.3.14, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2017.3.14\lib\net452\XrmToolBox.exe</HintPath>
-    </Reference>
-    <Reference Include="XrmToolBox.Extensibility, Version=1.2017.2.7, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2017.3.14\lib\net452\XrmToolBox.Extensibility.dll</HintPath>
-    </Reference>
-    <Reference Include="XrmToolBox.PluginsStore, Version=1.2017.1.4, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2017.3.14\lib\net452\XrmToolBox.PluginsStore.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControlUtils.cs" />
@@ -128,9 +113,6 @@
     <Compile Include="XMLViewer\XMLViewerSettings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
