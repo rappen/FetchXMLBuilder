@@ -104,6 +104,7 @@
             this.cmbEntity.Sorted = true;
             this.cmbEntity.TabIndex = 1;
             this.cmbEntity.SelectedIndexChanged += new System.EventHandler(this.cmbEntity_SelectedIndexChanged);
+            this.cmbEntity.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cmbEntity_KeyDown);
             // 
             // panel2
             // 
