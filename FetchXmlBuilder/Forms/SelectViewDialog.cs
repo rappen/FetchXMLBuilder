@@ -31,12 +31,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             var entities = Caller.GetDisplayEntities();
             if (entities != null)
             {
+                object selectedItem = null;
                 foreach (var entity in entities)
                 {
                     if (entity.Value.IsIntersect != true && FetchXmlBuilder.views.ContainsKey(entity.Value.LogicalName + "|S"))
                     {
-                        cmbEntity.Items.Add(new EntityItem(entity.Value));
+                        var ei = new EntityItem(entity.Value);
+                        cmbEntity.Items.Add(ei);
+                        if (entity.Value.LogicalName == Caller.currentSettings.lastOpenedViewEntity)
+                        {
+                            selectedItem = ei;
+                        }
                     }
+                }
+                if (selectedItem != null)
+                {
+                    cmbEntity.SelectedItem = selectedItem;
+                    UpdateViews();
                 }
             }
             Enabled = true;
@@ -54,13 +65,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             txtFetch.Text = "";
             btnOk.Enabled = false;
             var entity = ControlUtils.GetValueFromControl(cmbEntity);
+            object selectedItem = null;
             if (FetchXmlBuilder.views.ContainsKey(entity + "|S"))
             {
                 var views = FetchXmlBuilder.views[entity + "|S"];
                 cmbView.Items.Add("-- System Views --");
                 foreach (var view in views)
                 {
-                    cmbView.Items.Add(new ViewItem(view));
+                    var vi = new ViewItem(view);
+                    cmbView.Items.Add(vi);
+                    if (view.Id.Equals(Caller.currentSettings.lastOpenedViewId))
+                    {
+                        selectedItem = vi;
+                    }
                 }
             }
             if (FetchXmlBuilder.views.ContainsKey(entity + "|U"))
@@ -69,8 +86,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 cmbView.Items.Add("-- Personal Views --");
                 foreach (var view in views)
                 {
-                    cmbView.Items.Add(new ViewItem(view));
+                    var vi = new ViewItem(view);
+                    cmbView.Items.Add(vi);
+                    if (view.Id.Equals(Caller.currentSettings.lastOpenedViewId))
+                    {
+                        selectedItem = vi;
+                    }
                 }
+            }
+            if (selectedItem != null)
+            {
+                cmbView.SelectedItem = selectedItem;
+                UpdateFetch();
             }
         }
 
@@ -79,6 +106,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             if (cmbView.SelectedItem is ViewItem)
             {
                 View = ((ViewItem)cmbView.SelectedItem).GetView();
+                Caller.currentSettings.lastOpenedViewEntity = ControlUtils.GetValueFromControl(cmbEntity);
+                Caller.currentSettings.lastOpenedViewId = View.Id;
             }
             else
             {
@@ -87,6 +116,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         }
 
         private void cmbView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateFetch();
+        }
+
+        private void UpdateFetch()
         {
             if (cmbView.SelectedItem is ViewItem)
             {

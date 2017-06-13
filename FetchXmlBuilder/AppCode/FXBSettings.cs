@@ -48,6 +48,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public string currentVersion { get; set; }
         public bool showQuickActions { get; set; }
         public bool useSingleQuotation { get; set; }
+        public string lastOpenedViewEntity { get; set; }
+        public Guid lastOpenedViewId { get; set; }
 
         public FXBSettings()
         {
