@@ -341,7 +341,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                                 valueType = null;
                             }
                         }
-                        else if (attribute.Metadata is EnumAttributeMetadata)
+                        else if (attribute.Metadata is EnumAttributeMetadata && !(attribute.Metadata is EntityNameAttributeMetadata))
                         {
                             var options = ((EnumAttributeMetadata)attribute.Metadata).OptionSet;
                             if (options != null)
