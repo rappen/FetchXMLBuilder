@@ -95,7 +95,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                     }
                 }
                 url = string.Concat(url,
-                    "/main.aspx?etn=",
+                    url.EndsWith("/") ? "" : "/",
+                    "main.aspx?etn=",
                     entref.LogicalName,
                     "&pagetype=entityrecord&id=",
                     entref.Id.ToString());
