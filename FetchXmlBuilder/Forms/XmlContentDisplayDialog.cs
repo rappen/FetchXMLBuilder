@@ -1,8 +1,6 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
-using Cinteros.Xrm.XmlEditorUtils;
+﻿using Cinteros.Xrm.XmlEditorUtils;
 using System;
-using System.IO;
-using System.Text;
+using System.Web;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -52,6 +50,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 btnCancel.Text = "Close";
             }
             btnFormat.Visible = allowFormat;
+            btnDecode.Visible = allowFormat;
+            btnHtmlEncode.Visible = allowFormat;
+            btnEscape.Visible = allowFormat;
             btnExecute.Visible = allowExecute;
             btnSave.Visible = format != SaveFormat.None;
             UpdateXML(xmlString);
@@ -146,6 +147,66 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 txtXML.SaveFile(sfd.FileName, RichTextBoxStreamType.PlainText);
                 MessageBox.Show($"{format} saved to {sfd.FileName}");
             }
+        }
+
+        private void btnDecode_Click(object sender, EventArgs e)
+        {
+            if (FetchIsHtml())
+            {
+                txtXML.Text = HttpUtility.HtmlDecode(txtXML.Text.Trim());
+            }
+            else if (FetchIsEscaped())
+            {
+                txtXML.Text = Uri.UnescapeDataString(txtXML.Text.Trim());
+            }
+            else
+            {
+                if (MessageBox.Show("Unrecognized encoding, unsure what to do with it.\n" +
+                    "Currently FXB can handle htmlencoded and urlescaped strings.\n\n" +
+                    "Would you like to submit an issue to FetchXML Builder to be able to handle this?",
+                    "Decode FetchXML", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                {
+                    System.Diagnostics.Process.Start("https://github.com/Innofactor/FetchXMLBuilder/issues/new");
+                }
+                return;
+            }
+            FormatXML(false);
+        }
+
+        private void btnHtmlEncode_Click(object sender, EventArgs e)
+        {
+            txtXML.Text = HttpUtility.HtmlEncode(txtXML.Text.Trim());
+        }
+
+        private void btnEscape_Click(object sender, EventArgs e)
+        {
+            txtXML.Text = Uri.EscapeDataString(txtXML.Text.Trim());
+        }
+
+        private bool FetchIsPlain()
+        {
+            return txtXML.Text.Trim().ToLowerInvariant().StartsWith("<fetch");
+        }
+
+        private bool FetchIsHtml()
+        {
+            return txtXML.Text.Trim().ToLowerInvariant().StartsWith("&lt;fetch");
+        }
+
+        private bool FetchIsEscaped()
+        {
+            return txtXML.Text.Trim().ToLowerInvariant().StartsWith("%3cfetch");
+        }
+
+        private void txtXML_TextChanged(object sender, EventArgs e)
+        {
+            btnDecode.Enabled = FetchIsHtml() || FetchIsEscaped();
+            var plain = FetchIsPlain();
+            btnFormat.Enabled = plain;
+            btnHtmlEncode.Enabled = plain;
+            btnEscape.Enabled = plain;
+            btnExecute.Enabled = plain;
+            btnSave.Enabled = plain;
         }
     }
 

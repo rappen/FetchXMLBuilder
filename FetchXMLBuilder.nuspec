@@ -9,7 +9,6 @@
     <projectUrl>http://fxb.xrmtoolbox.com</projectUrl>
     <iconUrl>http://fxb.xrmtoolbox.com/images/FXB-150-transp.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Build and test FetchXML with all capabilities supported by the CRM platform</description>
     <summary>XrmToolBox plugin to create and run advanced FetchXML queries.</summary>
     <description>
       The tool will assist in three major areas:

@@ -31,6 +31,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlContentDisplayDialog));
             CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings2 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
             this.panBottom = new System.Windows.Forms.Panel();
+            this.btnEscape = new System.Windows.Forms.Button();
+            this.btnHtmlEncode = new System.Windows.Forms.Button();
+            this.btnDecode = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnExecute = new System.Windows.Forms.Button();
             this.panOk = new System.Windows.Forms.Panel();
@@ -47,6 +50,9 @@
             // panBottom
             // 
             this.panBottom.BackColor = System.Drawing.SystemColors.Control;
+            this.panBottom.Controls.Add(this.btnEscape);
+            this.panBottom.Controls.Add(this.btnHtmlEncode);
+            this.panBottom.Controls.Add(this.btnDecode);
             this.panBottom.Controls.Add(this.btnSave);
             this.panBottom.Controls.Add(this.btnExecute);
             this.panBottom.Controls.Add(this.panOk);
@@ -57,6 +63,37 @@
             this.panBottom.Name = "panBottom";
             this.panBottom.Size = new System.Drawing.Size(809, 38);
             this.panBottom.TabIndex = 4;
+            // 
+            // btnEscape
+            // 
+            this.btnEscape.Location = new System.Drawing.Point(255, 8);
+            this.btnEscape.Name = "btnEscape";
+            this.btnEscape.Size = new System.Drawing.Size(75, 23);
+            this.btnEscape.TabIndex = 22;
+            this.btnEscape.Text = "Escape";
+            this.btnEscape.UseVisualStyleBackColor = true;
+            this.btnEscape.Click += new System.EventHandler(this.btnEscape_Click);
+            // 
+            // btnHtmlEncode
+            // 
+            this.btnHtmlEncode.Location = new System.Drawing.Point(174, 8);
+            this.btnHtmlEncode.Name = "btnHtmlEncode";
+            this.btnHtmlEncode.Size = new System.Drawing.Size(75, 23);
+            this.btnHtmlEncode.TabIndex = 21;
+            this.btnHtmlEncode.Text = "Encode";
+            this.btnHtmlEncode.UseVisualStyleBackColor = true;
+            this.btnHtmlEncode.Click += new System.EventHandler(this.btnHtmlEncode_Click);
+            // 
+            // btnDecode
+            // 
+            this.btnDecode.Enabled = false;
+            this.btnDecode.Location = new System.Drawing.Point(93, 8);
+            this.btnDecode.Name = "btnDecode";
+            this.btnDecode.Size = new System.Drawing.Size(75, 23);
+            this.btnDecode.TabIndex = 3;
+            this.btnDecode.Text = "Decode";
+            this.btnDecode.UseVisualStyleBackColor = true;
+            this.btnDecode.Click += new System.EventHandler(this.btnDecode_Click);
             // 
             // btnSave
             // 
@@ -75,11 +112,11 @@
             this.btnExecute.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnExecute.Image = ((System.Drawing.Image)(resources.GetObject("btnExecute.Image")));
             this.btnExecute.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnExecute.Location = new System.Drawing.Point(93, 8);
+            this.btnExecute.Location = new System.Drawing.Point(336, 8);
             this.btnExecute.Name = "btnExecute";
             this.btnExecute.Size = new System.Drawing.Size(99, 23);
             this.btnExecute.TabIndex = 5;
-            this.btnExecute.Text = "Execute XML";
+            this.btnExecute.Text = "Execute";
             this.btnExecute.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnExecute.UseVisualStyleBackColor = true;
             this.btnExecute.Click += new System.EventHandler(this.btnExecute_Click);
@@ -91,7 +128,7 @@
             this.panOk.Location = new System.Drawing.Point(627, 0);
             this.panOk.Name = "panOk";
             this.panOk.Size = new System.Drawing.Size(91, 38);
-            this.panOk.TabIndex = 4;
+            this.panOk.TabIndex = 10;
             // 
             // btnOk
             // 
@@ -111,7 +148,7 @@
             this.panCancel.Location = new System.Drawing.Point(718, 0);
             this.panCancel.Name = "panCancel";
             this.panCancel.Size = new System.Drawing.Size(91, 38);
-            this.panCancel.TabIndex = 3;
+            this.panCancel.TabIndex = 20;
             // 
             // btnCancel
             // 
@@ -130,7 +167,7 @@
             this.btnFormat.Name = "btnFormat";
             this.btnFormat.Size = new System.Drawing.Size(75, 23);
             this.btnFormat.TabIndex = 2;
-            this.btnFormat.Text = "Format XML";
+            this.btnFormat.Text = "Format";
             this.btnFormat.UseVisualStyleBackColor = true;
             this.btnFormat.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -151,6 +188,7 @@
             this.txtXML.Size = new System.Drawing.Size(809, 667);
             this.txtXML.TabIndex = 1;
             this.txtXML.Text = "";
+            this.txtXML.TextChanged += new System.EventHandler(this.txtXML_TextChanged);
             // 
             // XmlContentDisplayDialog
             // 
@@ -184,5 +222,8 @@
         internal System.Windows.Forms.Button btnFormat;
         internal System.Windows.Forms.Button btnExecute;
         private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Button btnDecode;
+        private System.Windows.Forms.Button btnEscape;
+        private System.Windows.Forms.Button btnHtmlEncode;
     }
 }
