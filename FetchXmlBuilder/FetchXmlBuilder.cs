@@ -709,6 +709,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiSaveCWP.Enabled = enabled && Service != null && FetchChanged && !string.IsNullOrEmpty(CWPFeed);
                     tsmiToQureyExpression.Enabled = enabled && Service != null;
                     tsmiToSQLQuery.Enabled = enabled && Service != null;
+                    tsmiToJavascript.Enabled = enabled && Service != null;
+                    tsmiToCSharp.Enabled = enabled && Service != null;
                     tsbView.Enabled = enabled;
                     tsbExecute.Enabled = enabled && tvFetch.Nodes.Count > 0 && Service != null;
                     selectAttributesToolStripMenuItem.Enabled = enabled && Service != null;
@@ -2359,6 +2361,46 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             HandleNodeSelection(tvFetch.SelectedNode);
             UpdateLiveXML();
             ShowQuickActions();
+        }
+
+        private void tsmiToJavascript_Click(object sender, EventArgs e)
+        {
+            DisplayJavascriptCode();
+        }
+
+        private void DisplayJavascriptCode()
+        {
+            try
+            {
+                var js = JavascriptCodeGenerator.GetJavascriptCode(GetFetchString(true));
+                LogUse("DisplayJavascriptCode");
+                XmlContentDisplayDialog.Show(js, "Javascript Code", false, false, false, SaveFormat.None, this);
+            }
+            catch (Exception ex)
+            {
+                LogUse("DisplayJavascriptCode failed");
+                MessageBox.Show("Failed to generate Javascript code.\n\n" + ex.Message, "Javascript", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void tsmiToCSharp_Click(object sender, EventArgs e)
+        {
+            DisplayCSharpCode();
+        }
+
+        private void DisplayCSharpCode()
+        {
+            try
+            {
+                var cs = CSharpCodeGenerator.GetCSharpCode(GetFetchString(true));
+                LogUse("DisplayCSharpCode");
+                XmlContentDisplayDialog.Show(cs, "C# Code", false, false, false, SaveFormat.None, this);
+            }
+            catch (Exception ex)
+            {
+                LogUse("DisplayCSharpCode failed");
+                MessageBox.Show("Failed to generate C# code.\n\n" + ex.Message, "C#", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

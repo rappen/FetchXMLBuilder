@@ -127,8 +127,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppCode\AttributeItem.cs" />
+    <Compile Include="AppCode\CSharpCodeGenerator.cs" />
     <Compile Include="AppCode\FetchIsAggregateException.cs" />
     <Compile Include="AppCode\FXBSettings.cs" />
+    <Compile Include="AppCode\JavascriptCodeGenerator.cs" />
     <Compile Include="AppCode\LogUsage.cs" />
     <Compile Include="AppCode\ODataCodeGenerator.cs" />
     <Compile Include="AppCode\OptionsetItem.cs" />
