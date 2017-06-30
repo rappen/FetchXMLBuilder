@@ -2370,15 +2370,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void DisplayJavascriptCode()
         {
+            var fetch = GetFetchString(true);
             try
             {
-                var js = JavascriptCodeGenerator.GetJavascriptCode(GetFetchString(true));
+                var js = JavascriptCodeGenerator.GetJavascriptCode(fetch);
                 LogUse("DisplayJavascriptCode");
                 XmlContentDisplayDialog.Show(js, "Javascript Code", false, false, false, SaveFormat.None, this);
             }
             catch (Exception ex)
             {
-                LogUse("DisplayJavascriptCode failed");
+                LogError("DisplayJavascriptCode failed\n{0}", fetch);
                 MessageBox.Show("Failed to generate Javascript code.\n\n" + ex.Message, "Javascript", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -2390,15 +2391,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void DisplayCSharpCode()
         {
+            var fetch = GetFetchString(true);
             try
             {
-                var cs = CSharpCodeGenerator.GetCSharpCode(GetFetchString(true));
+                var cs = CSharpCodeGenerator.GetCSharpCode(fetch);
                 LogUse("DisplayCSharpCode");
                 XmlContentDisplayDialog.Show(cs, "C# Code", false, false, false, SaveFormat.None, this);
             }
             catch (Exception ex)
             {
-                LogUse("DisplayCSharpCode failed");
+                LogError("DisplayCSharpCode failed\n{0}", fetch);
                 MessageBox.Show("Failed to generate C# code.\n\n" + ex.Message, "C#", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
