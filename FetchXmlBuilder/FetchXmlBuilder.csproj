@@ -38,14 +38,15 @@
     <ApplicationIcon>Cinteros.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cinteros.Xrm.CRMWinForm, Version=2017.6.13.16, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Cinteros.Xrm.CRMWinForm.2017.6.13.16\lib\net452\Cinteros.Xrm.CRMWinForm.dll</HintPath>
+    <Reference Include="Cinteros.Xrm.CRMWinForm, Version=2017.2.22.14, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cinteros.Xrm.CRMWinForm.2017.2.22.14\lib\net452\Cinteros.Xrm.CRMWinForm.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="McTools.Xrm.Connection, Version=1.2017.5.14, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
-      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2017.5.14\lib\net452\McTools.Xrm.Connection.dll</HintPath>
+    <Reference Include="McTools.Xrm.Connection, Version=1.2017.1.10, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
+      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2017.1.10\lib\net452\McTools.Xrm.Connection.dll</HintPath>
     </Reference>
-    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.2017.4.13, Culture=neutral, PublicKeyToken=f1559f79cf894e27, processorArchitecture=MSIL">
-      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2017.5.14\lib\net452\McTools.Xrm.Connection.WinForms.dll</HintPath>
+    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.2017.1.10, Culture=neutral, PublicKeyToken=f1559f79cf894e27, processorArchitecture=MSIL">
+      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2017.1.10\lib\net452\McTools.Xrm.Connection.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.8.2.0.2\lib\net452\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
@@ -114,20 +115,22 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="XrmToolBox, Version=1.2017.6.16, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2017.6.16\lib\net452\XrmToolBox.exe</HintPath>
+    <Reference Include="XrmToolBox, Version=1.2017.1.11, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\XrmToolBoxPackage.1.2017.1.11\lib\net452\XrmToolBox.exe</HintPath>
     </Reference>
-    <Reference Include="XrmToolBox.Extensibility, Version=1.2017.5.8, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2017.6.16\lib\net452\XrmToolBox.Extensibility.dll</HintPath>
+    <Reference Include="XrmToolBox.Extensibility">
+      <HintPath>..\packages\XrmToolBoxPackage.1.2017.1.11\lib\net452\XrmToolBox.Extensibility.dll</HintPath>
     </Reference>
-    <Reference Include="XrmToolBox.PluginsStore, Version=1.2017.6.6, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2017.6.16\lib\net452\XrmToolBox.PluginsStore.dll</HintPath>
+    <Reference Include="XrmToolBox.PluginsStore">
+      <HintPath>..\packages\XrmToolBoxPackage.1.2017.1.11\lib\net452\XrmToolBox.PluginsStore.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppCode\AttributeItem.cs" />
+    <Compile Include="AppCode\CSharpCodeGenerator.cs" />
     <Compile Include="AppCode\FetchIsAggregateException.cs" />
     <Compile Include="AppCode\FXBSettings.cs" />
+    <Compile Include="AppCode\JavascriptCodeGenerator.cs" />
     <Compile Include="AppCode\LogUsage.cs" />
     <Compile Include="AppCode\ODataCodeGenerator.cs" />
     <Compile Include="AppCode\OptionsetItem.cs" />
@@ -350,7 +353,7 @@
   move /Y Cinteros.Xrm.*.pdb Plugins
 )</PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

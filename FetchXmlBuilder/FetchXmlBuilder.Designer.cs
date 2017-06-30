@@ -49,6 +49,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveCWP = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiToQureyExpression = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiToSQLQuery = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiToJavascript = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiToCSharp = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbEdit = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbUndo = new System.Windows.Forms.ToolStripButton();
@@ -61,6 +63,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiShowOData = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiLiveUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbOptions = new System.Windows.Forms.ToolStripButton();
+            this.tsddHidden = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsmiHiddenExecute = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiHiddenEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiHiddenUndo = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiHiddenRedo = new System.Windows.Forms.ToolStripMenuItem();
             this.gbFetchTree = new System.Windows.Forms.GroupBox();
             this.tvFetch = new System.Windows.Forms.TreeView();
             this.nodeMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -90,11 +97,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.panelButtonSpacer = new System.Windows.Forms.Panel();
             this.gbQuickActions = new System.Windows.Forms.GroupBox();
             this.menuControl = new System.Windows.Forms.MenuStrip();
-            this.tsddHidden = new System.Windows.Forms.ToolStripDropDownButton();
-            this.tsmiHiddenExecute = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiHiddenEdit = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiHiddenUndo = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiHiddenRedo = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain.SuspendLayout();
             this.gbFetchTree.SuspendLayout();
             this.nodeMenu.SuspendLayout();
@@ -220,7 +222,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveML,
             this.tsmiSaveCWP,
             this.tsmiToQureyExpression,
-            this.tsmiToSQLQuery});
+            this.tsmiToSQLQuery,
+            this.tsmiToJavascript,
+            this.tsmiToCSharp});
             this.tsbSave.Image = ((System.Drawing.Image)(resources.GetObject("tsbSave.Image")));
             this.tsbSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSave.Name = "tsbSave";
@@ -292,6 +296,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiToSQLQuery.Size = new System.Drawing.Size(226, 22);
             this.tsmiToSQLQuery.Text = "SQL query...";
             this.tsmiToSQLQuery.Click += new System.EventHandler(this.tsmiToSQLQuery_Click);
+            // 
+            // tsmiToJavascript
+            // 
+            this.tsmiToJavascript.Enabled = false;
+            this.tsmiToJavascript.Name = "tsmiToJavascript";
+            this.tsmiToJavascript.Size = new System.Drawing.Size(226, 22);
+            this.tsmiToJavascript.Text = "Javascript code...";
+            this.tsmiToJavascript.Click += new System.EventHandler(this.tsmiToJavascript_Click);
+            // 
+            // tsmiToCSharp
+            // 
+            this.tsmiToCSharp.Enabled = false;
+            this.tsmiToCSharp.Name = "tsmiToCSharp";
+            this.tsmiToCSharp.Size = new System.Drawing.Size(226, 22);
+            this.tsmiToCSharp.Text = "C# code...";
+            this.tsmiToCSharp.Click += new System.EventHandler(this.tsmiToCSharp_Click);
             // 
             // tsbEdit
             // 
@@ -404,6 +424,53 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbOptions.Size = new System.Drawing.Size(78, 22);
             this.tsbOptions.Text = "Options...";
             this.tsbOptions.Click += new System.EventHandler(this.tsbOptions_Click);
+            // 
+            // tsddHidden
+            // 
+            this.tsddHidden.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsddHidden.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiHiddenExecute,
+            this.tsmiHiddenEdit,
+            this.tsmiHiddenUndo,
+            this.tsmiHiddenRedo});
+            this.tsddHidden.Image = ((System.Drawing.Image)(resources.GetObject("tsddHidden.Image")));
+            this.tsddHidden.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsddHidden.Name = "tsddHidden";
+            this.tsddHidden.Size = new System.Drawing.Size(57, 22);
+            this.tsddHidden.Text = "hidden";
+            this.tsddHidden.Visible = false;
+            // 
+            // tsmiHiddenExecute
+            // 
+            this.tsmiHiddenExecute.Name = "tsmiHiddenExecute";
+            this.tsmiHiddenExecute.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.tsmiHiddenExecute.Size = new System.Drawing.Size(143, 22);
+            this.tsmiHiddenExecute.Text = "execute";
+            this.tsmiHiddenExecute.Click += new System.EventHandler(this.tsbExecute_Click);
+            // 
+            // tsmiHiddenEdit
+            // 
+            this.tsmiHiddenEdit.Name = "tsmiHiddenEdit";
+            this.tsmiHiddenEdit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+            this.tsmiHiddenEdit.Size = new System.Drawing.Size(143, 22);
+            this.tsmiHiddenEdit.Text = "edit";
+            this.tsmiHiddenEdit.Click += new System.EventHandler(this.tsbEdit_Click);
+            // 
+            // tsmiHiddenUndo
+            // 
+            this.tsmiHiddenUndo.Name = "tsmiHiddenUndo";
+            this.tsmiHiddenUndo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
+            this.tsmiHiddenUndo.Size = new System.Drawing.Size(143, 22);
+            this.tsmiHiddenUndo.Text = "undo";
+            this.tsmiHiddenUndo.Click += new System.EventHandler(this.tsbUndo_Click);
+            // 
+            // tsmiHiddenRedo
+            // 
+            this.tsmiHiddenRedo.Name = "tsmiHiddenRedo";
+            this.tsmiHiddenRedo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
+            this.tsmiHiddenRedo.Size = new System.Drawing.Size(143, 22);
+            this.tsmiHiddenRedo.Text = "redo";
+            this.tsmiHiddenRedo.Click += new System.EventHandler(this.tsbRedo_Click);
             // 
             // gbFetchTree
             // 
@@ -682,53 +749,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.menuControl.Text = "menuStrip1";
             this.menuControl.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
-            // tsddHidden
-            // 
-            this.tsddHidden.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsddHidden.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiHiddenExecute,
-            this.tsmiHiddenEdit,
-            this.tsmiHiddenUndo,
-            this.tsmiHiddenRedo});
-            this.tsddHidden.Image = ((System.Drawing.Image)(resources.GetObject("tsddHidden.Image")));
-            this.tsddHidden.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsddHidden.Name = "tsddHidden";
-            this.tsddHidden.Size = new System.Drawing.Size(57, 22);
-            this.tsddHidden.Text = "hidden";
-            this.tsddHidden.Visible = false;
-            // 
-            // tsmiHiddenExecute
-            // 
-            this.tsmiHiddenExecute.Name = "tsmiHiddenExecute";
-            this.tsmiHiddenExecute.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.tsmiHiddenExecute.Size = new System.Drawing.Size(152, 22);
-            this.tsmiHiddenExecute.Text = "execute";
-            this.tsmiHiddenExecute.Click += new System.EventHandler(this.tsbExecute_Click);
-            // 
-            // tsmiHiddenEdit
-            // 
-            this.tsmiHiddenEdit.Name = "tsmiHiddenEdit";
-            this.tsmiHiddenEdit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-            this.tsmiHiddenEdit.Size = new System.Drawing.Size(152, 22);
-            this.tsmiHiddenEdit.Text = "edit";
-            this.tsmiHiddenEdit.Click += new System.EventHandler(this.tsbEdit_Click);
-            // 
-            // tsmiHiddenUndo
-            // 
-            this.tsmiHiddenUndo.Name = "tsmiHiddenUndo";
-            this.tsmiHiddenUndo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.tsmiHiddenUndo.Size = new System.Drawing.Size(152, 22);
-            this.tsmiHiddenUndo.Text = "undo";
-            this.tsmiHiddenUndo.Click += new System.EventHandler(this.tsbUndo_Click);
-            // 
-            // tsmiHiddenRedo
-            // 
-            this.tsmiHiddenRedo.Name = "tsmiHiddenRedo";
-            this.tsmiHiddenRedo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.tsmiHiddenRedo.Size = new System.Drawing.Size(152, 22);
-            this.tsmiHiddenRedo.Text = "redo";
-            this.tsmiHiddenRedo.Click += new System.EventHandler(this.tsbRedo_Click);
-            // 
             // FetchXmlBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -832,5 +852,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiHiddenEdit;
         private System.Windows.Forms.ToolStripMenuItem tsmiHiddenUndo;
         private System.Windows.Forms.ToolStripMenuItem tsmiHiddenRedo;
+        private System.Windows.Forms.ToolStripMenuItem tsmiToJavascript;
+        private System.Windows.Forms.ToolStripMenuItem tsmiToCSharp;
     }
 }
