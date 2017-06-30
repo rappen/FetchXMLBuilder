@@ -47,10 +47,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveView = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveML = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveCWP = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiToQureyExpression = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiToSQLQuery = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSaveJs = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiToJavascript = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSaveCs = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiToQureyExpression = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiToCSharp = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSaveSql = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiToSQLQuery = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbEdit = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbUndo = new System.Windows.Forms.ToolStripButton();
@@ -97,6 +100,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.panelButtonSpacer = new System.Windows.Forms.Panel();
             this.gbQuickActions = new System.Windows.Forms.GroupBox();
             this.menuControl = new System.Windows.Forms.MenuStrip();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMain.SuspendLayout();
             this.gbFetchTree.SuspendLayout();
             this.nodeMenu.SuspendLayout();
@@ -221,10 +225,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveView,
             this.tsmiSaveML,
             this.tsmiSaveCWP,
-            this.tsmiToQureyExpression,
-            this.tsmiToSQLQuery,
-            this.tsmiToJavascript,
-            this.tsmiToCSharp});
+            this.toolStripMenuItem2,
+            this.tsmiSaveCs,
+            this.tsmiSaveJs,
+            this.tsmiSaveSql});
             this.tsbSave.Image = ((System.Drawing.Image)(resources.GetObject("tsbSave.Image")));
             this.tsbSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSave.Name = "tsbSave";
@@ -280,38 +284,63 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveCWP.Text = "Save as CWP Feed...";
             this.tsmiSaveCWP.Click += new System.EventHandler(this.tsmiSaveCWP_Click);
             // 
-            // tsmiToQureyExpression
+            // tsmiSaveJs
             // 
-            this.tsmiToQureyExpression.Enabled = false;
-            this.tsmiToQureyExpression.Image = ((System.Drawing.Image)(resources.GetObject("tsmiToQureyExpression.Image")));
-            this.tsmiToQureyExpression.Name = "tsmiToQureyExpression";
-            this.tsmiToQureyExpression.Size = new System.Drawing.Size(226, 22);
-            this.tsmiToQureyExpression.Text = "QueryExpression C# code...";
-            this.tsmiToQureyExpression.Click += new System.EventHandler(this.tsmiToQureyExpression_Click);
-            // 
-            // tsmiToSQLQuery
-            // 
-            this.tsmiToSQLQuery.Enabled = false;
-            this.tsmiToSQLQuery.Name = "tsmiToSQLQuery";
-            this.tsmiToSQLQuery.Size = new System.Drawing.Size(226, 22);
-            this.tsmiToSQLQuery.Text = "SQL query...";
-            this.tsmiToSQLQuery.Click += new System.EventHandler(this.tsmiToSQLQuery_Click);
+            this.tsmiSaveJs.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiToJavascript});
+            this.tsmiSaveJs.Name = "tsmiSaveJs";
+            this.tsmiSaveJs.Size = new System.Drawing.Size(226, 22);
+            this.tsmiSaveJs.Text = "JavaScript";
             // 
             // tsmiToJavascript
             // 
             this.tsmiToJavascript.Enabled = false;
             this.tsmiToJavascript.Name = "tsmiToJavascript";
-            this.tsmiToJavascript.Size = new System.Drawing.Size(226, 22);
-            this.tsmiToJavascript.Text = "Javascript code...";
+            this.tsmiToJavascript.Size = new System.Drawing.Size(152, 22);
+            this.tsmiToJavascript.Text = "FetchXML...";
             this.tsmiToJavascript.Click += new System.EventHandler(this.tsmiToJavascript_Click);
+            // 
+            // tsmiSaveCs
+            // 
+            this.tsmiSaveCs.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiToQureyExpression,
+            this.tsmiToCSharp});
+            this.tsmiSaveCs.Name = "tsmiSaveCs";
+            this.tsmiSaveCs.Size = new System.Drawing.Size(226, 22);
+            this.tsmiSaveCs.Text = "C#";
+            // 
+            // tsmiToQureyExpression
+            // 
+            this.tsmiToQureyExpression.Enabled = false;
+            this.tsmiToQureyExpression.Image = ((System.Drawing.Image)(resources.GetObject("tsmiToQureyExpression.Image")));
+            this.tsmiToQureyExpression.Name = "tsmiToQureyExpression";
+            this.tsmiToQureyExpression.Size = new System.Drawing.Size(170, 22);
+            this.tsmiToQureyExpression.Text = "QueryExpression...";
+            this.tsmiToQureyExpression.Click += new System.EventHandler(this.tsmiToQureyExpression_Click);
             // 
             // tsmiToCSharp
             // 
             this.tsmiToCSharp.Enabled = false;
             this.tsmiToCSharp.Name = "tsmiToCSharp";
-            this.tsmiToCSharp.Size = new System.Drawing.Size(226, 22);
-            this.tsmiToCSharp.Text = "C# code...";
+            this.tsmiToCSharp.Size = new System.Drawing.Size(170, 22);
+            this.tsmiToCSharp.Text = "FetchXML...";
             this.tsmiToCSharp.Click += new System.EventHandler(this.tsmiToCSharp_Click);
+            // 
+            // tsmiSaveSql
+            // 
+            this.tsmiSaveSql.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiToSQLQuery});
+            this.tsmiSaveSql.Name = "tsmiSaveSql";
+            this.tsmiSaveSql.Size = new System.Drawing.Size(226, 22);
+            this.tsmiSaveSql.Text = "SQL";
+            // 
+            // tsmiToSQLQuery
+            // 
+            this.tsmiToSQLQuery.Enabled = false;
+            this.tsmiToSQLQuery.Name = "tsmiToSQLQuery";
+            this.tsmiToSQLQuery.Size = new System.Drawing.Size(152, 22);
+            this.tsmiToSQLQuery.Text = "Query...";
+            this.tsmiToSQLQuery.Click += new System.EventHandler(this.tsmiToSQLQuery_Click);
             // 
             // tsbEdit
             // 
@@ -749,6 +778,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.menuControl.Text = "menuStrip1";
             this.menuControl.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(223, 6);
+            // 
             // FetchXmlBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -854,5 +888,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiHiddenRedo;
         private System.Windows.Forms.ToolStripMenuItem tsmiToJavascript;
         private System.Windows.Forms.ToolStripMenuItem tsmiToCSharp;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSaveJs;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSaveCs;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSaveSql;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
     }
 }
