@@ -25,7 +25,7 @@ using System.Runtime.Serialization;
 
 namespace Cinteros.Xrm.FetchXmlBuilder
 {
-    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger
+    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver
     {
         #region Declarations
         private XmlDocument fetchDoc;
@@ -1813,6 +1813,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 addMenu.Show(tvFetch.PointToScreen(tvFetch.Location));
             }
+            else if (e.Control && e.KeyCode == Keys.K && commentToolStripMenuItem.Enabled)
+            {
+                HandleNodeMenuClick(commentToolStripMenuItem);
+            }
+            else if (e.Control && e.KeyCode == Keys.U && uncommentToolStripMenuItem.Enabled)
+            {
+                HandleNodeMenuClick(uncommentToolStripMenuItem);
+            }
+            else if (e.Control && e.KeyCode == Keys.Up && moveUpToolStripMenuItem.Enabled)
+            {
+                toolStripButtonMoveUp_Click(null, null);
+            }
+            else if (e.Control && e.KeyCode == Keys.Down && moveDownToolStripMenuItem.Enabled)
+            {
+                toolStripButtonMoveDown_Click(null, null);
+            }
         }
 
         private Entity GetCWPFeed(string feedid)
@@ -2403,6 +2419,61 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 LogError("DisplayCSharpCode failed\n{0}", fetch);
                 MessageBox.Show("Failed to generate C# code.\n\n" + ex.Message, "C#", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        public void ReceiveKeyDownShortcut(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F5 && tsbExecute.Enabled)
+            {
+                tsbExecute_Click(null, null);
+            }
+            else if (e.Control && e.KeyCode == Keys.E && tsbEdit.Enabled)
+            {
+                tsbEdit_Click(null, null);
+            }
+            else if (e.Control && e.KeyCode == Keys.N && tsbNew.Enabled)
+            {
+                tsbNew_Click(null, null);
+            }
+            else if (e.Control && e.KeyCode==Keys.O && tsmiOpenFile.Enabled)
+            {
+                tsmiOpenFile_Click(null, null);
+            }
+            else if (e.Control && e.KeyCode == Keys.S && tsmiSaveFile.Enabled)
+            {
+                tsmiSaveFile_Click(null, null);
+            }
+            else if (e.KeyCode == Keys.F12 && tsmiSaveFileAs.Enabled)
+            {
+                tsmiSaveFileAs_Click(null, null);
+            }
+            else if (e.Control && e.KeyCode == Keys.Z && tsbUndo.Enabled)
+            {
+                tsbUndo_Click(null, null);
+            }
+            else if (e.Control && e.KeyCode == Keys.Y && tsbRedo.Enabled)
+            {
+                tsbRedo_Click(null, null);
+            }
+            else if (e.Control && e.KeyCode == Keys.L && tsmiLiveUpdate.Enabled)
+            {
+                tsmiLiveUpdate.Checked = !tsmiLiveUpdate.Checked;
+            }
+        }
+
+        public void ReceiveKeyPressShortcut(KeyPressEventArgs e)
+        {
+            // Nothing to do
+        }
+
+        public void ReceiveKeyUpShortcut(KeyEventArgs e)
+        {
+            // Nothing to do
+        }
+
+        public void ReceivePreviewKeyDownShortcut(PreviewKeyDownEventArgs e)
+        {
+            // Nothing to do
         }
     }
 }

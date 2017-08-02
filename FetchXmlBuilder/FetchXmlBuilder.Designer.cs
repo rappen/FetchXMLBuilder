@@ -66,11 +66,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiShowOData = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiLiveUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbOptions = new System.Windows.Forms.ToolStripButton();
-            this.tsddHidden = new System.Windows.Forms.ToolStripDropDownButton();
-            this.tsmiHiddenExecute = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiHiddenEdit = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiHiddenUndo = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiHiddenRedo = new System.Windows.Forms.ToolStripMenuItem();
             this.gbFetchTree = new System.Windows.Forms.GroupBox();
             this.tvFetch = new System.Windows.Forms.TreeView();
             this.nodeMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -132,8 +127,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripSeparator3,
             this.tsbAbout,
             this.tsbView,
-            this.tsbOptions,
-            this.tsddHidden});
+            this.tsbOptions});
             this.toolStripMain.Location = new System.Drawing.Point(0, 0);
             this.toolStripMain.Name = "toolStripMain";
             this.toolStripMain.Size = new System.Drawing.Size(884, 25);
@@ -164,7 +158,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbNew.Name = "tsbNew";
             this.tsbNew.Size = new System.Drawing.Size(51, 22);
             this.tsbNew.Text = "New";
-            this.tsbNew.ToolTipText = "New FetchXML";
+            this.tsbNew.ToolTipText = "New FetchXML (Ctrl+N)";
             this.tsbNew.Click += new System.EventHandler(this.tsbNew_Click);
             // 
             // tsbOpen
@@ -185,7 +179,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // tsmiOpenFile
             // 
             this.tsmiOpenFile.Name = "tsmiOpenFile";
-            this.tsmiOpenFile.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.tsmiOpenFile.ShortcutKeyDisplayString = "Ctrl+O";
             this.tsmiOpenFile.Size = new System.Drawing.Size(240, 22);
             this.tsmiOpenFile.Text = "Open File...";
             this.tsmiOpenFile.Click += new System.EventHandler(this.tsmiOpenFile_Click);
@@ -241,7 +235,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveFile.Enabled = false;
             this.tsmiSaveFile.Image = ((System.Drawing.Image)(resources.GetObject("tsmiSaveFile.Image")));
             this.tsmiSaveFile.Name = "tsmiSaveFile";
-            this.tsmiSaveFile.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.tsmiSaveFile.ShortcutKeyDisplayString = "Ctrl+S";
             this.tsmiSaveFile.Size = new System.Drawing.Size(226, 22);
             this.tsmiSaveFile.Text = "Save File";
             this.tsmiSaveFile.Click += new System.EventHandler(this.tsmiSaveFile_Click);
@@ -250,7 +244,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiSaveFileAs.Image = ((System.Drawing.Image)(resources.GetObject("tsmiSaveFileAs.Image")));
             this.tsmiSaveFileAs.Name = "tsmiSaveFileAs";
-            this.tsmiSaveFileAs.ShortcutKeys = System.Windows.Forms.Keys.F12;
+            this.tsmiSaveFileAs.ShortcutKeyDisplayString = "F12";
             this.tsmiSaveFileAs.Size = new System.Drawing.Size(226, 22);
             this.tsmiSaveFileAs.Text = "Save File as...";
             this.tsmiSaveFileAs.Click += new System.EventHandler(this.tsmiSaveFileAs_Click);
@@ -296,7 +290,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiToJavascript.Enabled = false;
             this.tsmiToJavascript.Name = "tsmiToJavascript";
-            this.tsmiToJavascript.Size = new System.Drawing.Size(152, 22);
+            this.tsmiToJavascript.Size = new System.Drawing.Size(136, 22);
             this.tsmiToJavascript.Text = "FetchXML...";
             this.tsmiToJavascript.Click += new System.EventHandler(this.tsmiToJavascript_Click);
             // 
@@ -338,7 +332,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiToSQLQuery.Enabled = false;
             this.tsmiToSQLQuery.Name = "tsmiToSQLQuery";
-            this.tsmiToSQLQuery.Size = new System.Drawing.Size(152, 22);
+            this.tsmiToSQLQuery.Size = new System.Drawing.Size(115, 22);
             this.tsmiToSQLQuery.Text = "Query...";
             this.tsmiToSQLQuery.Click += new System.EventHandler(this.tsmiToSQLQuery_Click);
             // 
@@ -349,7 +343,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbEdit.Name = "tsbEdit";
             this.tsbEdit.Size = new System.Drawing.Size(74, 22);
             this.tsbEdit.Text = "Edit XML";
-            this.tsbEdit.ToolTipText = "Edit XML <CTRL>+E";
+            this.tsbEdit.ToolTipText = "Edit XML (Ctrl+E)";
             this.tsbEdit.Click += new System.EventHandler(this.tsbEdit_Click);
             // 
             // toolStripSeparator2
@@ -387,8 +381,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbExecute.Image = ((System.Drawing.Image)(resources.GetObject("tsbExecute.Image")));
             this.tsbExecute.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbExecute.Name = "tsbExecute";
-            this.tsbExecute.Size = new System.Drawing.Size(67, 22);
-            this.tsbExecute.Text = "Execute";
+            this.tsbExecute.Size = new System.Drawing.Size(90, 22);
+            this.tsbExecute.Text = "Execute (F5)";
             this.tsbExecute.ToolTipText = "Execute FetchXML (F5)";
             this.tsbExecute.Click += new System.EventHandler(this.tsbExecute_Click);
             // 
@@ -440,7 +434,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiLiveUpdate.CheckOnClick = true;
             this.tsmiLiveUpdate.Name = "tsmiLiveUpdate";
-            this.tsmiLiveUpdate.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+            this.tsmiLiveUpdate.ShortcutKeyDisplayString = "Ctrl+L";
             this.tsmiLiveUpdate.Size = new System.Drawing.Size(203, 22);
             this.tsmiLiveUpdate.Text = "Live XML Update";
             this.tsmiLiveUpdate.CheckedChanged += new System.EventHandler(this.tsmiLiveUpdate_CheckedChanged);
@@ -453,53 +447,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbOptions.Size = new System.Drawing.Size(78, 22);
             this.tsbOptions.Text = "Options...";
             this.tsbOptions.Click += new System.EventHandler(this.tsbOptions_Click);
-            // 
-            // tsddHidden
-            // 
-            this.tsddHidden.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsddHidden.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiHiddenExecute,
-            this.tsmiHiddenEdit,
-            this.tsmiHiddenUndo,
-            this.tsmiHiddenRedo});
-            this.tsddHidden.Image = ((System.Drawing.Image)(resources.GetObject("tsddHidden.Image")));
-            this.tsddHidden.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsddHidden.Name = "tsddHidden";
-            this.tsddHidden.Size = new System.Drawing.Size(57, 22);
-            this.tsddHidden.Text = "hidden";
-            this.tsddHidden.Visible = false;
-            // 
-            // tsmiHiddenExecute
-            // 
-            this.tsmiHiddenExecute.Name = "tsmiHiddenExecute";
-            this.tsmiHiddenExecute.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.tsmiHiddenExecute.Size = new System.Drawing.Size(143, 22);
-            this.tsmiHiddenExecute.Text = "execute";
-            this.tsmiHiddenExecute.Click += new System.EventHandler(this.tsbExecute_Click);
-            // 
-            // tsmiHiddenEdit
-            // 
-            this.tsmiHiddenEdit.Name = "tsmiHiddenEdit";
-            this.tsmiHiddenEdit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-            this.tsmiHiddenEdit.Size = new System.Drawing.Size(143, 22);
-            this.tsmiHiddenEdit.Text = "edit";
-            this.tsmiHiddenEdit.Click += new System.EventHandler(this.tsbEdit_Click);
-            // 
-            // tsmiHiddenUndo
-            // 
-            this.tsmiHiddenUndo.Name = "tsmiHiddenUndo";
-            this.tsmiHiddenUndo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.tsmiHiddenUndo.Size = new System.Drawing.Size(143, 22);
-            this.tsmiHiddenUndo.Text = "undo";
-            this.tsmiHiddenUndo.Click += new System.EventHandler(this.tsbUndo_Click);
-            // 
-            // tsmiHiddenRedo
-            // 
-            this.tsmiHiddenRedo.Name = "tsmiHiddenRedo";
-            this.tsmiHiddenRedo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.tsmiHiddenRedo.Size = new System.Drawing.Size(143, 22);
-            this.tsmiHiddenRedo.Text = "redo";
-            this.tsmiHiddenRedo.Click += new System.EventHandler(this.tsbRedo_Click);
             // 
             // gbFetchTree
             // 
@@ -593,7 +540,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.commentToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("commentToolStripMenuItem.Image")));
             this.commentToolStripMenuItem.Name = "commentToolStripMenuItem";
-            this.commentToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.K)));
+            this.commentToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+K";
             this.commentToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.commentToolStripMenuItem.Tag = "Comment";
             this.commentToolStripMenuItem.Text = "Comment";
@@ -602,7 +549,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.uncommentToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("uncommentToolStripMenuItem.Image")));
             this.uncommentToolStripMenuItem.Name = "uncommentToolStripMenuItem";
-            this.uncommentToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
+            this.uncommentToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+U";
             this.uncommentToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.uncommentToolStripMenuItem.Tag = "Uncomment";
             this.uncommentToolStripMenuItem.Text = "Uncomment";
@@ -616,7 +563,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.moveUpToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("moveUpToolStripMenuItem.Image")));
             this.moveUpToolStripMenuItem.Name = "moveUpToolStripMenuItem";
-            this.moveUpToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Up)));
+            this.moveUpToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Up";
             this.moveUpToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.moveUpToolStripMenuItem.Text = "Move up";
             this.moveUpToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonMoveUp_Click);
@@ -625,7 +572,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.moveDownToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("moveDownToolStripMenuItem.Image")));
             this.moveDownToolStripMenuItem.Name = "moveDownToolStripMenuItem";
-            this.moveDownToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Down)));
+            this.moveDownToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Down";
             this.moveDownToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.moveDownToolStripMenuItem.Text = "Move down";
             this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonMoveDown_Click);
@@ -881,11 +828,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal System.Windows.Forms.MenuStrip menuControl;
         private System.Windows.Forms.ToolStripButton tsbOptions;
         private System.Windows.Forms.ToolStripMenuItem tsmiToSQLQuery;
-        private System.Windows.Forms.ToolStripDropDownButton tsddHidden;
-        private System.Windows.Forms.ToolStripMenuItem tsmiHiddenExecute;
-        private System.Windows.Forms.ToolStripMenuItem tsmiHiddenEdit;
-        private System.Windows.Forms.ToolStripMenuItem tsmiHiddenUndo;
-        private System.Windows.Forms.ToolStripMenuItem tsmiHiddenRedo;
         private System.Windows.Forms.ToolStripMenuItem tsmiToJavascript;
         private System.Windows.Forms.ToolStripMenuItem tsmiToCSharp;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveJs;
