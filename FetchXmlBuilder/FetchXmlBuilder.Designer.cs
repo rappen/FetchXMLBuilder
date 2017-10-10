@@ -47,11 +47,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveView = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveML = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveCWP = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiSaveJs = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiToJavascript = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiSaveCs = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiToQureyExpression = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiToCSharp = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSaveJs = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiToJavascript = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveSql = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiToSQLQuery = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbEdit = new System.Windows.Forms.ToolStripButton();
@@ -95,7 +96,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.panelButtonSpacer = new System.Windows.Forms.Panel();
             this.gbQuickActions = new System.Windows.Forms.GroupBox();
             this.menuControl = new System.Windows.Forms.MenuStrip();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMain.SuspendLayout();
             this.gbFetchTree.SuspendLayout();
             this.nodeMenu.SuspendLayout();
@@ -278,21 +278,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveCWP.Text = "Save as CWP Feed...";
             this.tsmiSaveCWP.Click += new System.EventHandler(this.tsmiSaveCWP_Click);
             // 
-            // tsmiSaveJs
+            // toolStripMenuItem2
             // 
-            this.tsmiSaveJs.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiToJavascript});
-            this.tsmiSaveJs.Name = "tsmiSaveJs";
-            this.tsmiSaveJs.Size = new System.Drawing.Size(226, 22);
-            this.tsmiSaveJs.Text = "JavaScript";
-            // 
-            // tsmiToJavascript
-            // 
-            this.tsmiToJavascript.Enabled = false;
-            this.tsmiToJavascript.Name = "tsmiToJavascript";
-            this.tsmiToJavascript.Size = new System.Drawing.Size(136, 22);
-            this.tsmiToJavascript.Text = "FetchXML...";
-            this.tsmiToJavascript.Click += new System.EventHandler(this.tsmiToJavascript_Click);
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(223, 6);
             // 
             // tsmiSaveCs
             // 
@@ -319,6 +308,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiToCSharp.Size = new System.Drawing.Size(170, 22);
             this.tsmiToCSharp.Text = "FetchXML...";
             this.tsmiToCSharp.Click += new System.EventHandler(this.tsmiToCSharp_Click);
+            // 
+            // tsmiSaveJs
+            // 
+            this.tsmiSaveJs.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiToJavascript});
+            this.tsmiSaveJs.Name = "tsmiSaveJs";
+            this.tsmiSaveJs.Size = new System.Drawing.Size(226, 22);
+            this.tsmiSaveJs.Text = "JavaScript";
+            // 
+            // tsmiToJavascript
+            // 
+            this.tsmiToJavascript.Enabled = false;
+            this.tsmiToJavascript.Name = "tsmiToJavascript";
+            this.tsmiToJavascript.Size = new System.Drawing.Size(136, 22);
+            this.tsmiToJavascript.Text = "FetchXML...";
+            this.tsmiToJavascript.Click += new System.EventHandler(this.tsmiToJavascript_Click);
             // 
             // tsmiSaveSql
             // 
@@ -725,11 +730,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.menuControl.Text = "menuStrip1";
             this.menuControl.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(223, 6);
-            // 
             // FetchXmlBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -743,6 +743,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "FetchXmlBuilder";
             this.Size = new System.Drawing.Size(884, 624);
+            this.TabIcon = ((System.Drawing.Image)(resources.GetObject("$this.TabIcon")));
             this.ConnectionUpdated += new XrmToolBox.Extensibility.PluginControlBase.ConnectionUpdatedHandler(this.FetchXmlBuilder_ConnectionUpdated);
             this.Load += new System.EventHandler(this.FetchXmlBuilder_Load);
             this.SizeChanged += new System.EventHandler(this.FetchXmlBuilder_FormChanged);
