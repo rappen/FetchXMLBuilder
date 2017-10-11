@@ -2459,6 +2459,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 tsmiLiveUpdate.Checked = !tsmiLiveUpdate.Checked;
             }
+            else if (e.Control && e.KeyCode== Keys.F)
+            {
+                currentSettings.useFriendlyNames = !currentSettings.useFriendlyNames;
+                ApplyCurrentSettings();
+            }
         }
 
         public void ReceiveKeyPressShortcut(KeyPressEventArgs e)

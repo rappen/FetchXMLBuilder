@@ -59,13 +59,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.chkStatAllow = new System.Windows.Forms.CheckBox();
             this.gbAppearance = new System.Windows.Forms.GroupBox();
+            this.chkAppNoSavePrompt = new System.Windows.Forms.CheckBox();
             this.chkAppSingle = new System.Windows.Forms.CheckBox();
             this.chkAppQuick = new System.Windows.Forms.CheckBox();
             this.chkAppFriendly = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.chkAppNoSavePrompt = new System.Windows.Forms.CheckBox();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -467,6 +467,16 @@
             this.gbAppearance.TabStop = false;
             this.gbAppearance.Text = "Appearance";
             // 
+            // chkAppNoSavePrompt
+            // 
+            this.chkAppNoSavePrompt.AutoSize = true;
+            this.chkAppNoSavePrompt.Location = new System.Drawing.Point(20, 99);
+            this.chkAppNoSavePrompt.Name = "chkAppNoSavePrompt";
+            this.chkAppNoSavePrompt.Size = new System.Drawing.Size(159, 17);
+            this.chkAppNoSavePrompt.TabIndex = 4;
+            this.chkAppNoSavePrompt.Text = "Do not prompt to save to file";
+            this.chkAppNoSavePrompt.UseVisualStyleBackColor = true;
+            // 
             // chkAppSingle
             // 
             this.chkAppSingle.AutoSize = true;
@@ -494,9 +504,9 @@
             this.chkAppFriendly.AutoSize = true;
             this.chkAppFriendly.Location = new System.Drawing.Point(20, 30);
             this.chkAppFriendly.Name = "chkAppFriendly";
-            this.chkAppFriendly.Size = new System.Drawing.Size(96, 17);
+            this.chkAppFriendly.Size = new System.Drawing.Size(151, 17);
             this.chkAppFriendly.TabIndex = 1;
-            this.chkAppFriendly.Text = "Friendly names";
+            this.chkAppFriendly.Text = "Friendly names (CTRL+F)";
             this.chkAppFriendly.UseVisualStyleBackColor = true;
             // 
             // panel1
@@ -527,16 +537,6 @@
             this.btnOK.TabIndex = 0;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
-            // 
-            // chkAppNoSavePrompt
-            // 
-            this.chkAppNoSavePrompt.AutoSize = true;
-            this.chkAppNoSavePrompt.Location = new System.Drawing.Point(20, 99);
-            this.chkAppNoSavePrompt.Name = "chkAppNoSavePrompt";
-            this.chkAppNoSavePrompt.Size = new System.Drawing.Size(159, 17);
-            this.chkAppNoSavePrompt.TabIndex = 4;
-            this.chkAppNoSavePrompt.Text = "Do not prompt to save to file";
-            this.chkAppNoSavePrompt.UseVisualStyleBackColor = true;
             // 
             // Settings
             // 
