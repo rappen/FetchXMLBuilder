@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
@@ -158,10 +152,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     {
                         if (attributeType != attribute.Metadata.AttributeType)
                         {
-                            if (attributeType != AttributeTypeCode.Lookup ||
-                                (attribute.Metadata.AttributeType != AttributeTypeCode.Owner &&
-                                 attribute.Metadata.AttributeType != AttributeTypeCode.Customer &&
-                                 attribute.Metadata.AttributeType != AttributeTypeCode.Uniqueidentifier))
+                            // Some attribute type combinations are ok
+                            if (attributeType == AttributeTypeCode.String && attribute.Metadata.AttributeType == AttributeTypeCode.Memo)
+                            {
+                                // This is ok
+                            }
+                            else if (attributeType == AttributeTypeCode.Lookup && attribute.Metadata.AttributeType == AttributeTypeCode.Owner)
+                            {
+                                // This is ok
+                            }
+                            else if (attributeType == AttributeTypeCode.Lookup && attribute.Metadata.AttributeType == AttributeTypeCode.Customer)
+                            {
+                                // This is ok
+                            }
+                            else if (attributeType == AttributeTypeCode.Lookup && attribute.Metadata.AttributeType == AttributeTypeCode.Uniqueidentifier)
+                            {
+                                // This is also ok
+                            }
+                            else
                             {
                                 error = "Operator " + oper.ToString() + " is not valid for attribute of type " + attribute.Metadata.AttributeType.ToString();
                             }
@@ -225,7 +233,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             break;
                         case AttributeTypeCode.PartyList:
                         case AttributeTypeCode.CalendarRules:
-                        //case AttributeTypeCode.ManagedProperty:   // ManagedProperty is a bit "undefined", so let's accept all values for now... ref issue #67
+                            //case AttributeTypeCode.ManagedProperty:   // ManagedProperty is a bit "undefined", so let's accept all values for now... ref issue #67
                             error = "Unsupported condition attribute type: " + valueType;
                             break;
                     }
