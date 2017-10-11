@@ -65,6 +65,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
+            this.chkAppNoSavePrompt = new System.Windows.Forms.CheckBox();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -455,12 +456,13 @@
             // 
             // gbAppearance
             // 
+            this.gbAppearance.Controls.Add(this.chkAppNoSavePrompt);
             this.gbAppearance.Controls.Add(this.chkAppSingle);
             this.gbAppearance.Controls.Add(this.chkAppQuick);
             this.gbAppearance.Controls.Add(this.chkAppFriendly);
             this.gbAppearance.Location = new System.Drawing.Point(12, 12);
             this.gbAppearance.Name = "gbAppearance";
-            this.gbAppearance.Size = new System.Drawing.Size(247, 112);
+            this.gbAppearance.Size = new System.Drawing.Size(247, 137);
             this.gbAppearance.TabIndex = 0;
             this.gbAppearance.TabStop = false;
             this.gbAppearance.Text = "Appearance";
@@ -525,6 +527,16 @@
             this.btnOK.TabIndex = 0;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
+            // 
+            // chkAppNoSavePrompt
+            // 
+            this.chkAppNoSavePrompt.AutoSize = true;
+            this.chkAppNoSavePrompt.Location = new System.Drawing.Point(20, 99);
+            this.chkAppNoSavePrompt.Name = "chkAppNoSavePrompt";
+            this.chkAppNoSavePrompt.Size = new System.Drawing.Size(159, 17);
+            this.chkAppNoSavePrompt.TabIndex = 4;
+            this.chkAppNoSavePrompt.Text = "Do not prompt to save to file";
+            this.chkAppNoSavePrompt.UseVisualStyleBackColor = true;
             // 
             // Settings
             // 
@@ -596,5 +608,6 @@
         private System.Windows.Forms.RadioButton rbResSerialized;
         private System.Windows.Forms.ComboBox cmbSeralizationStyle;
         private System.Windows.Forms.CheckBox chkResAllPages;
+        private System.Windows.Forms.CheckBox chkAppNoSavePrompt;
     }
 }

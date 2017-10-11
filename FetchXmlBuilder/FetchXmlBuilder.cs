@@ -864,7 +864,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private bool SaveIfChanged()
         {
             var ok = true;
-            if (FetchChanged)
+            if (!currentSettings.doNotPromptToSave && FetchChanged)
             {
                 var result = MessageBox.Show("FetchXML has changed.\nSave changes?", "Confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                 if (result == DialogResult.Cancel)

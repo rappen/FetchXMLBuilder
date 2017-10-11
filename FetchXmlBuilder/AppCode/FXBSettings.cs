@@ -50,6 +50,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool useSingleQuotation { get; set; }
         public string lastOpenedViewEntity { get; set; }
         public Guid lastOpenedViewId { get; set; }
+        public bool doNotPromptToSave { get; set; } = false;
 
         public FXBSettings()
         {
