@@ -23,9 +23,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             menuFriendly.Checked = form.currentSettings.gridFriendly;
             menuIdColumn.Checked = form.currentSettings.gridId;
             menuIndexColumn.Checked = form.currentSettings.gridIndex;
+            menuCopyHeaders.Checked = form.currentSettings.gridCopyHeaders;
             crmGridView1.ShowFriendlyNames = form.currentSettings.gridFriendly;
             crmGridView1.ShowIdColumn = form.currentSettings.gridId;
             crmGridView1.ShowIndexColumn = form.currentSettings.gridIndex;
+            crmGridView1.ClipboardCopyMode = form.currentSettings.gridCopyHeaders ?
+                DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             crmGridView1.OrganizationService = form.Service;
             crmGridView1.DataSource = entities;
         }
@@ -111,6 +114,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             form.currentSettings.gridFriendly = menuFriendly.Checked;
             form.currentSettings.gridId = menuIdColumn.Checked;
             form.currentSettings.gridIndex = menuIndexColumn.Checked;
+            form.currentSettings.gridCopyHeaders = menuCopyHeaders.Checked;
         }
 
         private void menuFriendly_CheckedChanged(object sender, EventArgs e)
@@ -139,6 +143,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                     Process.Start(url);
                 }
             }
+        }
+
+        private void menuCopyHeaders_CheckedChanged(object sender, EventArgs e)
+        {
+            crmGridView1.ClipboardCopyMode = menuCopyHeaders.Checked ?
+                DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
         }
     }
 }

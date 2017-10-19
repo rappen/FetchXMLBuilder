@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.crmGridView1 = new Cinteros.Xrm.CRMWinForm.CRMGridView();
@@ -40,6 +40,9 @@
             this.hintsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.doubleClickARowToOpenRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copySelectedCellsUsingCTRLCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuCopyHeaders = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).BeginInit();
@@ -71,9 +74,10 @@
             this.crmGridView1.AllowUserToDeleteRows = false;
             this.crmGridView1.AllowUserToOrderColumns = true;
             this.crmGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Azure;
-            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Azure;
+            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
             this.crmGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.crmGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
             this.crmGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.crmGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.crmGridView1.EnableHeadersVisualStyles = false;
@@ -102,11 +106,14 @@
             // 
             this.displayOptionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuFriendly,
+            this.toolStripMenuItem1,
             this.menuIdColumn,
-            this.menuIndexColumn});
+            this.menuIndexColumn,
+            this.toolStripMenuItem2,
+            this.menuCopyHeaders});
             this.displayOptionsToolStripMenuItem.Name = "displayOptionsToolStripMenuItem";
-            this.displayOptionsToolStripMenuItem.Size = new System.Drawing.Size(102, 20);
-            this.displayOptionsToolStripMenuItem.Text = "Display Options";
+            this.displayOptionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.displayOptionsToolStripMenuItem.Text = "Options";
             // 
             // menuFriendly
             // 
@@ -153,6 +160,24 @@
             this.copySelectedCellsUsingCTRLCToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
             this.copySelectedCellsUsingCTRLCToolStripMenuItem.Text = "Copy selected cells using <CTRL>+C";
             // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(212, 6);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(212, 6);
+            // 
+            // menuCopyHeaders
+            // 
+            this.menuCopyHeaders.CheckOnClick = true;
+            this.menuCopyHeaders.Name = "menuCopyHeaders";
+            this.menuCopyHeaders.Size = new System.Drawing.Size(215, 22);
+            this.menuCopyHeaders.Text = "Copy with Headers";
+            this.menuCopyHeaders.CheckedChanged += new System.EventHandler(this.menuCopyHeaders_CheckedChanged);
+            // 
             // ResultGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -187,5 +212,8 @@
         private System.Windows.Forms.ToolStripMenuItem hintsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem doubleClickARowToOpenRecordToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copySelectedCellsUsingCTRLCToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem menuCopyHeaders;
     }
 }
