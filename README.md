@@ -4,7 +4,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/sctdn4ig9m38wikj/branch/master?svg=true)](https://ci.appveyor.com/project/rappen/fetchxmlbuilder/branch/master)
 
 
-_**A tool to create and run advanced FetchXML queries in Microsoft Dynamics 365 CE / CRM **_
+## Microsoft Dynamics 365 CE / CRM tool to create and run advanced FetchXML queries
 
 *Written by Jonas Rapp at Innofactor AB, Stockholm, Sweden.*
 
