@@ -5,6 +5,7 @@
 
 
 ## Microsoft Dynamics 365 CE / CRM tool to create and run advanced FetchXML queries
+Works well with Microsoft Dynamics CRM 2011-2016 and Microsoft Dynamics 365, online and onprem.
 
 *Written by Jonas Rapp at Innofactor AB, Stockholm, Sweden.*
 
