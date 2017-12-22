@@ -175,12 +175,29 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void btnHtmlEncode_Click(object sender, EventArgs e)
         {
-            txtXML.Text = HttpUtility.HtmlEncode(txtXML.Text.Trim());
+            var xml = txtXML.Text;
+            switch (MessageBox.Show("Strip spaces from encoded XML?", "Encode XML", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+            {
+                case DialogResult.Yes:
+                    xml = GetCompactXml(xml);
+                    break;
+                case DialogResult.Cancel:
+                    return;
+            }
+            txtXML.Text = HttpUtility.HtmlEncode(xml);
         }
 
         private void btnEscape_Click(object sender, EventArgs e)
         {
-            txtXML.Text = Uri.EscapeDataString(txtXML.Text.Trim());
+            txtXML.Text = Uri.EscapeDataString(GetCompactXml(txtXML.Text));
+        }
+
+        private string GetCompactXml(string xml)
+        {
+            while (xml.Contains(" <")) xml = xml.Replace(" <", "<");
+            while (xml.Contains(" >")) xml = xml.Replace(" >", ">");
+            while (xml.Contains(" />")) xml = xml.Replace(" />", "/>");
+            return xml.Trim();
         }
 
         private bool FetchIsPlain()
