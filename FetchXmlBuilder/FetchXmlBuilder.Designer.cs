@@ -67,21 +67,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiShowOData = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiLiveUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbOptions = new System.Windows.Forms.ToolStripButton();
-            this.gbFetchTree = new System.Windows.Forms.GroupBox();
-            this.tvFetch = new System.Windows.Forms.TreeView();
-            this.nodeMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.selectAttributesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.addMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.nothingToAddToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparatorBeginOfEdition = new System.Windows.Forms.ToolStripSeparator();
-            this.commentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.uncommentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.splitter1 = new System.Windows.Forms.Splitter();
             this.panOData = new System.Windows.Forms.Panel();
             this.linkOData = new System.Windows.Forms.LinkLabel();
             this.menuOData = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -90,23 +75,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.panODataLabel = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.splitter2 = new System.Windows.Forms.Splitter();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.gbProperties = new System.Windows.Forms.GroupBox();
-            this.panelContainer = new System.Windows.Forms.Panel();
-            this.panelButtonSpacer = new System.Windows.Forms.Panel();
-            this.gbQuickActions = new System.Windows.Forms.GroupBox();
-            this.menuControl = new System.Windows.Forms.MenuStrip();
+            this.dockContainer = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.toolStripMain.SuspendLayout();
-            this.gbFetchTree.SuspendLayout();
-            this.nodeMenu.SuspendLayout();
-            this.addMenu.SuspendLayout();
             this.panOData.SuspendLayout();
             this.menuOData.SuspendLayout();
             this.panODataLabel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.panel1.SuspendLayout();
-            this.gbProperties.SuspendLayout();
-            this.gbQuickActions.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStripMain
@@ -453,143 +427,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbOptions.Text = "Options...";
             this.tsbOptions.Click += new System.EventHandler(this.tsbOptions_Click);
             // 
-            // gbFetchTree
-            // 
-            this.gbFetchTree.Controls.Add(this.tvFetch);
-            this.gbFetchTree.Dock = System.Windows.Forms.DockStyle.Left;
-            this.gbFetchTree.Location = new System.Drawing.Point(0, 25);
-            this.gbFetchTree.Name = "gbFetchTree";
-            this.gbFetchTree.Size = new System.Drawing.Size(394, 548);
-            this.gbFetchTree.TabIndex = 24;
-            this.gbFetchTree.TabStop = false;
-            this.gbFetchTree.Text = "FetchXML outline";
-            // 
-            // tvFetch
-            // 
-            this.tvFetch.ContextMenuStrip = this.nodeMenu;
-            this.tvFetch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tvFetch.HideSelection = false;
-            this.tvFetch.Location = new System.Drawing.Point(3, 16);
-            this.tvFetch.Name = "tvFetch";
-            this.tvFetch.ShowNodeToolTips = true;
-            this.tvFetch.Size = new System.Drawing.Size(388, 529);
-            this.tvFetch.TabIndex = 0;
-            this.tvFetch.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvFetch_AfterSelect);
-            this.tvFetch.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvFetch_NodeMouseClick);
-            this.tvFetch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tvFetch_KeyDown);
-            // 
-            // nodeMenu
-            // 
-            this.nodeMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.selectAttributesToolStripMenuItem,
-            this.addToolStripMenuItem,
-            this.deleteToolStripMenuItem,
-            this.toolStripSeparatorBeginOfEdition,
-            this.commentToolStripMenuItem,
-            this.uncommentToolStripMenuItem,
-            this.toolStripMenuItem1,
-            this.moveUpToolStripMenuItem,
-            this.moveDownToolStripMenuItem});
-            this.nodeMenu.Name = "nodeMenu";
-            this.nodeMenu.Size = new System.Drawing.Size(203, 170);
-            this.nodeMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
-            // 
-            // selectAttributesToolStripMenuItem
-            // 
-            this.selectAttributesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("selectAttributesToolStripMenuItem.Image")));
-            this.selectAttributesToolStripMenuItem.Name = "selectAttributesToolStripMenuItem";
-            this.selectAttributesToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.selectAttributesToolStripMenuItem.Tag = "SelectAttributes";
-            this.selectAttributesToolStripMenuItem.Text = "Select attributes...";
-            // 
-            // addToolStripMenuItem
-            // 
-            this.addToolStripMenuItem.DropDown = this.addMenu;
-            this.addToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("addToolStripMenuItem.Image")));
-            this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.ShortcutKeyDisplayString = "Ins";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.addToolStripMenuItem.Tag = "Add";
-            this.addToolStripMenuItem.Text = "Add";
-            // 
-            // addMenu
-            // 
-            this.addMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.nothingToAddToolStripMenuItem});
-            this.addMenu.Name = "addMenu";
-            this.addMenu.OwnerItem = this.addToolStripMenuItem;
-            this.addMenu.Size = new System.Drawing.Size(154, 26);
-            this.addMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
-            // 
-            // nothingToAddToolStripMenuItem
-            // 
-            this.nothingToAddToolStripMenuItem.Name = "nothingToAddToolStripMenuItem";
-            this.nothingToAddToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.nothingToAddToolStripMenuItem.Text = "nothing to add";
-            // 
-            // deleteToolStripMenuItem
-            // 
-            this.deleteToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("deleteToolStripMenuItem.Image")));
-            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.ShortcutKeyDisplayString = "Del";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.deleteToolStripMenuItem.Tag = "Delete";
-            this.deleteToolStripMenuItem.Text = "Delete";
-            // 
-            // toolStripSeparatorBeginOfEdition
-            // 
-            this.toolStripSeparatorBeginOfEdition.Name = "toolStripSeparatorBeginOfEdition";
-            this.toolStripSeparatorBeginOfEdition.Size = new System.Drawing.Size(199, 6);
-            // 
-            // commentToolStripMenuItem
-            // 
-            this.commentToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("commentToolStripMenuItem.Image")));
-            this.commentToolStripMenuItem.Name = "commentToolStripMenuItem";
-            this.commentToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+K";
-            this.commentToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.commentToolStripMenuItem.Tag = "Comment";
-            this.commentToolStripMenuItem.Text = "Comment";
-            // 
-            // uncommentToolStripMenuItem
-            // 
-            this.uncommentToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("uncommentToolStripMenuItem.Image")));
-            this.uncommentToolStripMenuItem.Name = "uncommentToolStripMenuItem";
-            this.uncommentToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+U";
-            this.uncommentToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.uncommentToolStripMenuItem.Tag = "Uncomment";
-            this.uncommentToolStripMenuItem.Text = "Uncomment";
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(199, 6);
-            // 
-            // moveUpToolStripMenuItem
-            // 
-            this.moveUpToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("moveUpToolStripMenuItem.Image")));
-            this.moveUpToolStripMenuItem.Name = "moveUpToolStripMenuItem";
-            this.moveUpToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Up";
-            this.moveUpToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.moveUpToolStripMenuItem.Text = "Move up";
-            this.moveUpToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonMoveUp_Click);
-            // 
-            // moveDownToolStripMenuItem
-            // 
-            this.moveDownToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("moveDownToolStripMenuItem.Image")));
-            this.moveDownToolStripMenuItem.Name = "moveDownToolStripMenuItem";
-            this.moveDownToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Down";
-            this.moveDownToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.moveDownToolStripMenuItem.Text = "Move down";
-            this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonMoveDown_Click);
-            // 
-            // splitter1
-            // 
-            this.splitter1.Location = new System.Drawing.Point(394, 25);
-            this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 548);
-            this.splitter1.TabIndex = 26;
-            this.splitter1.TabStop = false;
-            // 
             // panOData
             // 
             this.panOData.BackColor = System.Drawing.SystemColors.Window;
@@ -669,74 +506,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.splitter2.TabIndex = 4;
             this.splitter2.TabStop = false;
             // 
-            // panel1
+            // dockContainer
             // 
-            this.panel1.Controls.Add(this.gbProperties);
-            this.panel1.Controls.Add(this.panelButtonSpacer);
-            this.panel1.Controls.Add(this.gbQuickActions);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(397, 25);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(487, 548);
-            this.panel1.TabIndex = 30;
-            // 
-            // gbProperties
-            // 
-            this.gbProperties.Controls.Add(this.panelContainer);
-            this.gbProperties.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gbProperties.Location = new System.Drawing.Point(0, 71);
-            this.gbProperties.Name = "gbProperties";
-            this.gbProperties.Size = new System.Drawing.Size(487, 477);
-            this.gbProperties.TabIndex = 30;
-            this.gbProperties.TabStop = false;
-            this.gbProperties.Text = "FetchXML node attributes";
-            // 
-            // panelContainer
-            // 
-            this.panelContainer.BackColor = System.Drawing.SystemColors.Control;
-            this.panelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContainer.Location = new System.Drawing.Point(3, 16);
-            this.panelContainer.Name = "panelContainer";
-            this.panelContainer.Size = new System.Drawing.Size(481, 458);
-            this.panelContainer.TabIndex = 14;
-            // 
-            // panelButtonSpacer
-            // 
-            this.panelButtonSpacer.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelButtonSpacer.Location = new System.Drawing.Point(0, 50);
-            this.panelButtonSpacer.Name = "panelButtonSpacer";
-            this.panelButtonSpacer.Size = new System.Drawing.Size(487, 21);
-            this.panelButtonSpacer.TabIndex = 32;
-            // 
-            // gbQuickActions
-            // 
-            this.gbQuickActions.Controls.Add(this.menuControl);
-            this.gbQuickActions.Dock = System.Windows.Forms.DockStyle.Top;
-            this.gbQuickActions.Location = new System.Drawing.Point(0, 0);
-            this.gbQuickActions.Name = "gbQuickActions";
-            this.gbQuickActions.Size = new System.Drawing.Size(487, 50);
-            this.gbQuickActions.TabIndex = 31;
-            this.gbQuickActions.TabStop = false;
-            this.gbQuickActions.Text = "Quick Actions";
-            // 
-            // menuControl
-            // 
-            this.menuControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.menuControl.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.menuControl.Location = new System.Drawing.Point(3, 16);
-            this.menuControl.Name = "menuControl";
-            this.menuControl.Size = new System.Drawing.Size(481, 31);
-            this.menuControl.TabIndex = 16;
-            this.menuControl.Text = "menuStrip1";
-            this.menuControl.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
+            this.dockContainer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.dockContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dockContainer.DocumentStyle = WeifenLuo.WinFormsUI.Docking.DocumentStyle.DockingWindow;
+            this.dockContainer.Location = new System.Drawing.Point(0, 25);
+            this.dockContainer.Name = "dockContainer";
+            this.dockContainer.Size = new System.Drawing.Size(884, 548);
+            this.dockContainer.TabIndex = 33;
             // 
             // FetchXmlBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.splitter1);
-            this.Controls.Add(this.gbFetchTree);
+            this.Controls.Add(this.dockContainer);
             this.Controls.Add(this.toolStripMain);
             this.Controls.Add(this.splitter2);
             this.Controls.Add(this.panOData);
@@ -752,17 +536,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.Leave += new System.EventHandler(this.FetchXmlBuilder_Leave);
             this.toolStripMain.ResumeLayout(false);
             this.toolStripMain.PerformLayout();
-            this.gbFetchTree.ResumeLayout(false);
-            this.nodeMenu.ResumeLayout(false);
-            this.addMenu.ResumeLayout(false);
             this.panOData.ResumeLayout(false);
             this.menuOData.ResumeLayout(false);
             this.panODataLabel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.panel1.ResumeLayout(false);
-            this.gbProperties.ResumeLayout(false);
-            this.gbQuickActions.ResumeLayout(false);
-            this.gbQuickActions.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -771,20 +548,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         internal System.Windows.Forms.ToolStrip toolStripMain;
         private System.Windows.Forms.ToolStripButton tsbCloseThisTab;
-        internal System.Windows.Forms.GroupBox gbFetchTree;
-        internal System.Windows.Forms.TreeView tvFetch;
-        private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.ToolStripButton tsbNew;
-        internal System.Windows.Forms.ContextMenuStrip nodeMenu;
-        internal System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
-        internal System.Windows.Forms.ToolStripSeparator toolStripSeparatorBeginOfEdition;
-        internal System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton tsbEdit;
-        private System.Windows.Forms.ToolStripMenuItem moveUpToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem moveDownToolStripMenuItem;
         internal System.Windows.Forms.ToolStripDropDownButton tsbOpen;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenFile;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenView;
@@ -794,8 +562,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveView;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-        private System.Windows.Forms.ToolStripMenuItem nothingToAddToolStripMenuItem;
-        internal System.Windows.Forms.ContextMenuStrip addMenu;
         private System.Windows.Forms.ToolStripButton tsbAbout;
         private System.Windows.Forms.ToolStripDropDownButton tsbView;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveCWP;
@@ -804,12 +570,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiToQureyExpression;
         private System.Windows.Forms.ToolStripButton tsbExecute;
         private System.Windows.Forms.ToolStripButton tsbReturnToCaller;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
-        internal System.Windows.Forms.ToolStripMenuItem commentToolStripMenuItem;
-        internal System.Windows.Forms.ToolStripMenuItem uncommentToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton tsbUndo;
         private System.Windows.Forms.ToolStripButton tsbRedo;
-        internal System.Windows.Forms.ToolStripMenuItem selectAttributesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenML;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveML;
         private System.Windows.Forms.Panel panOData;
@@ -821,12 +583,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem menuODataExecute;
         private System.Windows.Forms.ToolStripMenuItem menuODataCopy;
         private System.Windows.Forms.Splitter splitter2;
-        private System.Windows.Forms.Panel panel1;
-        internal System.Windows.Forms.GroupBox gbProperties;
-        internal System.Windows.Forms.Panel panelContainer;
-        private System.Windows.Forms.Panel panelButtonSpacer;
-        private System.Windows.Forms.GroupBox gbQuickActions;
-        internal System.Windows.Forms.MenuStrip menuControl;
         private System.Windows.Forms.ToolStripButton tsbOptions;
         private System.Windows.Forms.ToolStripMenuItem tsmiToSQLQuery;
         private System.Windows.Forms.ToolStripMenuItem tsmiToJavascript;
@@ -835,5 +591,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveCs;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveSql;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private WeifenLuo.WinFormsUI.Docking.DockPanel dockContainer;
     }
 }

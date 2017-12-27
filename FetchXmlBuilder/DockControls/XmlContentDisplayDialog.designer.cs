@@ -1,4 +1,4 @@
-﻿namespace Cinteros.Xrm.FetchXmlBuilder.Forms
+﻿namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
     partial class XmlContentDisplayDialog
     {

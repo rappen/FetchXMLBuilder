@@ -4,7 +4,7 @@ using System.Web;
 using System.Windows.Forms;
 using System.Xml;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Forms
+namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
     public partial class XmlContentDisplayDialog : WeifenLuo.WinFormsUI.Docking.DockContent
     {

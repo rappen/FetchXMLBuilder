@@ -4,7 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Forms
+namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
     public partial class ResultGrid : WeifenLuo.WinFormsUI.Docking.DockContent
     {

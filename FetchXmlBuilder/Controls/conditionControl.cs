@@ -1,4 +1,5 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
@@ -14,6 +15,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private string controlsCheckSum = "";
         TreeNode node;
         FetchXmlBuilder form;
+        TreeBuilderControl tree;
 
         #region Delegates
 
@@ -33,10 +35,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             collec = new Dictionary<string, string>();
         }
 
-        public conditionControl(TreeNode Node, FetchXmlBuilder fetchXmlBuilder)
+        public conditionControl(TreeNode Node, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree)
             : this()
         {
             form = fetchXmlBuilder;
+            this.tree = tree;
             node = Node;
             collec = (Dictionary<string, string>)Node.Tag;
             if (collec == null)
@@ -47,7 +50,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             RefreshAttributes();
             ControlUtils.FillControls(collec, this.Controls);
             controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
-            Saved += fetchXmlBuilder.CtrlSaved;
+            Saved += tree.CtrlSaved;
         }
 
         private void PopulateControls()
@@ -57,7 +60,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (closestEntity != null && closestEntity.Name == "entity")
             {
                 cmbEntity.Items.Add("");
-                cmbEntity.Items.AddRange(GetEntities(form.tvFetch.Nodes[0]).ToArray());
+                cmbEntity.Items.AddRange(GetEntities(tree.tvFetch.Nodes[0]).ToArray());
             }
             cmbEntity.Enabled = cmbEntity.Items.Count > 0;
             cmbOperator.Items.Clear();
@@ -100,7 +103,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                                 var coll = new Dictionary<string, string>();
                                 coll.Add("#text", value);
                                 attrNode.Tag = coll;
-                                TreeNodeHelper.SetNodeText(attrNode, form.currentSettings.useFriendlyNames);
+                                TreeNodeHelper.SetNodeText(attrNode, FetchXmlBuilder.friendlyNames);
                             }
                             cmbValue.Text = "";
                         }
@@ -299,7 +302,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             var attributes = form.GetDisplayAttributes(entityName);
             foreach (var attribute in attributes)
             {
-                AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, true, form.currentSettings.useFriendlyNames);
+                AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, true, FetchXmlBuilder.friendlyNames);
             }
             // RefreshFill now that attributes are loaded
             ControlUtils.FillControl(collec, cmbAttribute);
