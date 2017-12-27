@@ -536,6 +536,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.dockContainer);
             this.Controls.Add(this.toolStripMain);
             this.Controls.Add(this.splitter2);

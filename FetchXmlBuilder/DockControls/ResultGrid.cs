@@ -14,10 +14,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             InitializeComponent();
             form = fetchXmlBuilder;
-            menuFriendly.Checked = form.currentSettings.gridFriendly;
-            menuIdColumn.Checked = form.currentSettings.gridId;
-            menuIndexColumn.Checked = form.currentSettings.gridIndex;
-            menuCopyHeaders.Checked = form.currentSettings.gridCopyHeaders;
+            chkFriendly.Checked = form.currentSettings.gridFriendly;
+            chkIdCol.Checked = form.currentSettings.gridId;
+            chkIndexCol.Checked = form.currentSettings.gridIndex;
+            chkCopyHeaders.Checked = form.currentSettings.gridCopyHeaders;
             crmGridView1.ShowFriendlyNames = form.currentSettings.gridFriendly;
             crmGridView1.ShowIdColumn = form.currentSettings.gridId;
             crmGridView1.ShowIndexColumn = form.currentSettings.gridIndex;
@@ -104,25 +104,25 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void ResultGrid_FormClosing(object sender, FormClosingEventArgs e)
         {
-            form.currentSettings.gridFriendly = menuFriendly.Checked;
-            form.currentSettings.gridId = menuIdColumn.Checked;
-            form.currentSettings.gridIndex = menuIndexColumn.Checked;
-            form.currentSettings.gridCopyHeaders = menuCopyHeaders.Checked;
+            form.currentSettings.gridFriendly = chkFriendly.Checked;
+            form.currentSettings.gridId = chkIdCol.Checked;
+            form.currentSettings.gridIndex = chkIndexCol.Checked;
+            form.currentSettings.gridCopyHeaders = chkCopyHeaders.Checked;
         }
 
-        private void menuFriendly_CheckedChanged(object sender, EventArgs e)
+        private void chkFriendly_CheckedChanged(object sender, EventArgs e)
         {
-            crmGridView1.ShowFriendlyNames = menuFriendly.Checked;
+            crmGridView1.ShowFriendlyNames = chkFriendly.Checked;
         }
 
-        private void menuIdColumn_CheckedChanged(object sender, EventArgs e)
+        private void chkIdCol_CheckedChanged(object sender, EventArgs e)
         {
-            crmGridView1.ShowIdColumn = menuIdColumn.Checked;
+            crmGridView1.ShowIdColumn = chkIdCol.Checked;
         }
 
-        private void menuIndexColumn_CheckedChanged(object sender, EventArgs e)
+        private void chkIndexCol_CheckedChanged(object sender, EventArgs e)
         {
-            crmGridView1.ShowIndexColumn = menuIndexColumn.Checked;
+            crmGridView1.ShowIndexColumn = chkIndexCol.Checked;
         }
 
         private void crmGridView1_RecordClick(object sender, CRMRecordEventArgs e)
@@ -138,9 +138,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
         }
 
-        private void menuCopyHeaders_CheckedChanged(object sender, EventArgs e)
+        private void chkCopyHeaders_CheckedChanged(object sender, EventArgs e)
         {
-            crmGridView1.ClipboardCopyMode = menuCopyHeaders.Checked ?
+            crmGridView1.ClipboardCopyMode = chkCopyHeaders.Checked ?
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
         }
 
