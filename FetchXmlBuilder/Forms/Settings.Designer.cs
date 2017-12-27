@@ -66,6 +66,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
+            this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -85,7 +86,7 @@
             this.gbEntities.Controls.Add(this.chkEntUnmanaged);
             this.gbEntities.Controls.Add(this.chkEntManaged);
             this.gbEntities.Controls.Add(this.chkEntAll);
-            this.gbEntities.Location = new System.Drawing.Point(12, 166);
+            this.gbEntities.Location = new System.Drawing.Point(12, 185);
             this.gbEntities.Name = "gbEntities";
             this.gbEntities.Size = new System.Drawing.Size(247, 258);
             this.gbEntities.TabIndex = 2;
@@ -224,7 +225,7 @@
             this.gbAttributes.Controls.Add(this.chkAttUnmanaged);
             this.gbAttributes.Controls.Add(this.chkAttManaged);
             this.gbAttributes.Controls.Add(this.chkAttAll);
-            this.gbAttributes.Location = new System.Drawing.Point(284, 166);
+            this.gbAttributes.Location = new System.Drawing.Point(284, 185);
             this.gbAttributes.Name = "gbAttributes";
             this.gbAttributes.Size = new System.Drawing.Size(247, 258);
             this.gbAttributes.TabIndex = 3;
@@ -359,7 +360,7 @@
             this.gbResult.Controls.Add(this.rbResGrid);
             this.gbResult.Location = new System.Drawing.Point(284, 12);
             this.gbResult.Name = "gbResult";
-            this.gbResult.Size = new System.Drawing.Size(247, 137);
+            this.gbResult.Size = new System.Drawing.Size(247, 156);
             this.gbResult.TabIndex = 1;
             this.gbResult.TabStop = false;
             this.gbResult.Text = "Result view";
@@ -424,9 +425,11 @@
             // 
             // bgStats
             // 
+            this.bgStats.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.bgStats.Controls.Add(this.label1);
             this.bgStats.Controls.Add(this.chkStatAllow);
-            this.bgStats.Location = new System.Drawing.Point(12, 443);
+            this.bgStats.Location = new System.Drawing.Point(12, 460);
             this.bgStats.Name = "bgStats";
             this.bgStats.Size = new System.Drawing.Size(517, 130);
             this.bgStats.TabIndex = 4;
@@ -456,13 +459,14 @@
             // 
             // gbAppearance
             // 
+            this.gbAppearance.Controls.Add(this.chkAppResultsNewWindow);
             this.gbAppearance.Controls.Add(this.chkAppNoSavePrompt);
             this.gbAppearance.Controls.Add(this.chkAppSingle);
             this.gbAppearance.Controls.Add(this.chkAppQuick);
             this.gbAppearance.Controls.Add(this.chkAppFriendly);
             this.gbAppearance.Location = new System.Drawing.Point(12, 12);
             this.gbAppearance.Name = "gbAppearance";
-            this.gbAppearance.Size = new System.Drawing.Size(247, 137);
+            this.gbAppearance.Size = new System.Drawing.Size(247, 156);
             this.gbAppearance.TabIndex = 0;
             this.gbAppearance.TabStop = false;
             this.gbAppearance.Text = "Appearance";
@@ -504,16 +508,18 @@
             this.chkAppFriendly.AutoSize = true;
             this.chkAppFriendly.Location = new System.Drawing.Point(20, 30);
             this.chkAppFriendly.Name = "chkAppFriendly";
-            this.chkAppFriendly.Size = new System.Drawing.Size(151, 17);
+            this.chkAppFriendly.Size = new System.Drawing.Size(145, 17);
             this.chkAppFriendly.TabIndex = 1;
             this.chkAppFriendly.Text = "Friendly names (CTRL+F)";
             this.chkAppFriendly.UseVisualStyleBackColor = true;
             // 
             // panel1
             // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
-            this.panel1.Location = new System.Drawing.Point(12, 579);
+            this.panel1.Location = new System.Drawing.Point(12, 596);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(517, 53);
             this.panel1.TabIndex = 5;
@@ -538,13 +544,23 @@
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             // 
+            // chkAppResultsNewWindow
+            // 
+            this.chkAppResultsNewWindow.AutoSize = true;
+            this.chkAppResultsNewWindow.Location = new System.Drawing.Point(20, 122);
+            this.chkAppResultsNewWindow.Name = "chkAppResultsNewWindow";
+            this.chkAppResultsNewWindow.Size = new System.Drawing.Size(192, 17);
+            this.chkAppResultsNewWindow.TabIndex = 5;
+            this.chkAppResultsNewWindow.Text = "Always open results in new window";
+            this.chkAppResultsNewWindow.UseVisualStyleBackColor = true;
+            // 
             // Settings
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(543, 642);
+            this.ClientSize = new System.Drawing.Size(543, 659);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.gbAppearance);
             this.Controls.Add(this.bgStats);
@@ -609,5 +625,6 @@
         private System.Windows.Forms.ComboBox cmbSeralizationStyle;
         private System.Windows.Forms.CheckBox chkResAllPages;
         private System.Windows.Forms.CheckBox chkAppNoSavePrompt;
+        private System.Windows.Forms.CheckBox chkAppResultsNewWindow;
     }
 }

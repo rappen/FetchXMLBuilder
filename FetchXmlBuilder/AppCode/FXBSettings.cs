@@ -39,7 +39,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public int resultSerializeStyle { get; set; }
         public bool retrieveAllPages { get; set; } = false;
         public Size xmlWinSize { get; set; }
-        public Size gridWinSize { get; set; }
         public bool gridFriendly { get; set; }
         public bool gridId { get; set; }
         public bool gridIndex { get; set; }
@@ -52,6 +51,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public string lastOpenedViewEntity { get; set; }
         public Guid lastOpenedViewId { get; set; }
         public bool doNotPromptToSave { get; set; } = false;
+        public bool resultsAlwaysNewWindow { get; set; } = false;
 
         public FXBSettings()
         {

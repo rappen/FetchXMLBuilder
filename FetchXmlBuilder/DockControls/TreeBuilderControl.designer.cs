@@ -258,6 +258,10 @@
             this.CloseButton = false;
             this.CloseButtonVisible = false;
             this.Controls.Add(this.splitContainer1);
+            this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight) 
+            | WeifenLuo.WinFormsUI.Docking.DockAreas.DockTop) 
+            | WeifenLuo.WinFormsUI.Docking.DockAreas.DockBottom) 
+            | WeifenLuo.WinFormsUI.Docking.DockAreas.Document)));
             this.Name = "TreeBuilderControl";
             this.TabText = "Query Builder";
             this.splitContainer1.Panel1.ResumeLayout(false);

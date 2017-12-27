@@ -25,6 +25,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             chkAppQuick.Checked = settings.showQuickActions;
             chkAppSingle.Checked = settings.useSingleQuotation;
             chkAppNoSavePrompt.Checked = settings.doNotPromptToSave;
+            chkAppResultsNewWindow.Checked = settings.resultsAlwaysNewWindow;
             switch (settings.resultOption)
             {
                 case 1: rbResSerialized.Checked = true; break;
@@ -66,6 +67,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             settings.showQuickActions = chkAppQuick.Checked;
             settings.useSingleQuotation = chkAppSingle.Checked;
             settings.doNotPromptToSave = chkAppNoSavePrompt.Checked;
+            settings.resultsAlwaysNewWindow = chkAppResultsNewWindow.Checked;
             settings.resultOption = rbResSerialized.Checked ? 1 : rbResRaw.Checked ? 3 : 0;
             settings.resultSerializeStyle = cmbSeralizationStyle.SelectedIndex;
             settings.retrieveAllPages = chkResAllPages.Checked;

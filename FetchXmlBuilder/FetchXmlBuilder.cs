@@ -27,8 +27,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
     {
         #region Declarations
         internal TreeBuilderControl treeControl;
+        internal ResultGrid resultGrid;
 
-        //private XmlDocument fetchDoc;
         internal static Dictionary<string, EntityMetadata> entities;
         internal static List<string> entityShitList = new List<string>(); // Oops, did I name that one??
         internal static Dictionary<string, List<Entity>> views;
@@ -37,13 +37,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private Entity dynml;
         private string cwpfeed;
         internal bool working = false;
-        internal FXBSettings currentSettings;
+        internal FXBSettings currentSettings = new FXBSettings();
         internal static bool friendlyNames = false;
         private string attributesChecksum = "";
         internal bool buttonsEnabled = true;
         private XmlContentDisplayDialog xmlLiveUpdate;
         private string liveUpdateXml = "";
         private MessageBusEventArgs callerArgs = null;
+        private int resultpanes = 0;
 
         internal string FileName
         {
@@ -149,14 +150,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 try
                 {
                     dockContainer.LoadFromXml(dockFile, dockDeSerialization);
-                    return;
                 }
-                catch (InvalidOperationException)
+                catch
                 {
                     // Restore from file failed
                 }
             }
-            ResetDockLayout();
+            if (treeControl?.DockState != DockState.Document)
+            {
+                ResetDockLayout();
+            }
         }
 
         private void ResetDockLayout()
@@ -174,6 +177,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (persistString == typeof(TreeBuilderControl).ToString())
             {
                 return treeControl;
+            }
+            else if (persistString == typeof(ResultGrid).ToString() && resultGrid == null)
+            {   // Only reopen default result grid
+                resultGrid = new ResultGrid(null, this);
+                return resultGrid;
             }
             return null;
         }
@@ -865,17 +873,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 return;
             }
+            if (working)
+            {
+                MessageBox.Show("Busy doing something...\n\nPlease wait until current transaction is done.");
+                return;
+            }
             if (string.IsNullOrEmpty(fetch))
             {
                 fetch = treeControl.GetFetchString(false, true);
             }
             if (string.IsNullOrEmpty(fetch))
             {
-                return;
-            }
-            if (working)
-            {
-                MessageBox.Show("Busy doing something...\n\nPlease wait until current transaction is done.");
                 return;
             }
             var fetchType = currentSettings.resultOption;
@@ -1004,24 +1012,38 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             ExecuteFetch(fetch);
                         }
                     }
-                    else if (completedargs.Result is EntityCollection)
+                    if (completedargs.Result is EntityCollection entities)
                     {
                         if (outputtype == 0)
                         {
-                            var gridDialog = new ResultGrid((EntityCollection)completedargs.Result, this);
-                            gridDialog.StartPosition = FormStartPosition.CenterParent;
-                            gridDialog.ShowDialog();
+                            if (resultGrid == null)
+                            {
+                                resultGrid = new ResultGrid(entities, this);
+                                resultGrid.Show(dockContainer, DockState.Document);
+                            }
+                            else if (currentSettings.resultsAlwaysNewWindow)
+                            {
+                                var newresults = new ResultGrid(entities, this);
+                                resultpanes++;
+                                newresults.Text = $"Results ({resultpanes})";
+                                newresults.Show(dockContainer, DockState.Document);
+                            }
+                            else
+                            {
+                                resultGrid.SetData(entities);
+                                resultGrid.Activate();
+                            }
                         }
                         else if (outputtype == 1)
                         {
                             if (outputstyle == 0)
                             {
-                                var serialized = EntityCollectionSerializer.Serialize((EntityCollection)completedargs.Result, SerializationStyle.Explicit);
+                                var serialized = EntityCollectionSerializer.Serialize(entities, SerializationStyle.Explicit);
                                 XmlContentDisplayDialog.Show(serialized.OuterXml, "XML Serialized RetrieveMultiple result", false, false, false, SaveFormat.XML, this);
                             }
                             else if (outputstyle == 1)
                             {
-                                var serialized = EntityCollectionSerializer.Serialize((EntityCollection)completedargs.Result, SerializationStyle.Basic);
+                                var serialized = EntityCollectionSerializer.Serialize(entities, SerializationStyle.Basic);
                                 XmlContentDisplayDialog.Show(serialized.OuterXml, "XML Serialized RetrieveMultiple result", false, false, false, SaveFormat.XML, this);
                             }
                             else if (outputstyle == 3)
@@ -1029,7 +1051,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                                 var serializer = new DataContractSerializer(typeof(EntityCollection), null, int.MaxValue, false, false, null, new KnownTypesResolver());
                                 var sw = new StringWriter();
                                 var xw = new XmlTextWriter(sw);
-                                serializer.WriteObject(xw, (EntityCollection)completedargs.Result);
+                                serializer.WriteObject(xw, entities);
                                 xw.Close();
                                 sw.Close();
                                 var serialized = sw.ToString();
@@ -1773,6 +1795,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         public void ReceivePreviewKeyDownShortcut(PreviewKeyDownEventArgs e)
         {
             // Nothing to do
+        }
+
+        private void resetWindowLayoutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ResetDockLayout();
         }
     }
 }

@@ -14,12 +14,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             InitializeComponent();
             form = fetchXmlBuilder;
-            var size = form.currentSettings.gridWinSize;
-            if (size != null && size.Width > 0 && size.Height > 0)
-            {
-                Width = size.Width;
-                Height = size.Height;
-            }
             menuFriendly.Checked = form.currentSettings.gridFriendly;
             menuIdColumn.Checked = form.currentSettings.gridId;
             menuIndexColumn.Checked = form.currentSettings.gridIndex;
@@ -30,7 +24,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             crmGridView1.ClipboardCopyMode = form.currentSettings.gridCopyHeaders ?
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             crmGridView1.OrganizationService = form.Service;
-            crmGridView1.DataSource = entities;
+            SetData(entities);
         }
 
         private void ResultGrid_Load(object sender, EventArgs e)
@@ -110,7 +104,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void ResultGrid_FormClosing(object sender, FormClosingEventArgs e)
         {
-            form.currentSettings.gridWinSize = new System.Drawing.Size(Width, Height);
             form.currentSettings.gridFriendly = menuFriendly.Checked;
             form.currentSettings.gridId = menuIdColumn.Checked;
             form.currentSettings.gridIndex = menuIndexColumn.Checked;
@@ -149,6 +142,28 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             crmGridView1.ClipboardCopyMode = menuCopyHeaders.Checked ?
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
+        }
+
+        internal void SetData(EntityCollection entities)
+        {
+            if (DockState == WeifenLuo.WinFormsUI.Docking.DockState.Hidden ||
+                DockState == WeifenLuo.WinFormsUI.Docking.DockState.Unknown)
+            {
+                Show(form.dockContainer, WeifenLuo.WinFormsUI.Docking.DockState.Document);
+            }
+            crmGridView1.DataSource = entities;
+            crmGridView1.Refresh();
+        }
+
+        private void ResultGrid_DockStateChanged(object sender, EventArgs e)
+        {
+            if (DockState == WeifenLuo.WinFormsUI.Docking.DockState.Unknown)
+            {
+                if (this == form.resultGrid)
+                {
+                    form.resultGrid = null;
+                }
+            }
         }
     }
 }

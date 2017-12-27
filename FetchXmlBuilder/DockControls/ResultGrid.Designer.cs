@@ -28,21 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.crmGridView1 = new Cinteros.Xrm.CRMWinForm.CRMGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.displayOptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuFriendly = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.menuIdColumn = new System.Windows.Forms.ToolStripMenuItem();
             this.menuIndexColumn = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuCopyHeaders = new System.Windows.Forms.ToolStripMenuItem();
             this.hintsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.doubleClickARowToOpenRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copySelectedCellsUsingCTRLCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.menuCopyHeaders = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).BeginInit();
@@ -74,8 +74,8 @@
             this.crmGridView1.AllowUserToDeleteRows = false;
             this.crmGridView1.AllowUserToOrderColumns = true;
             this.crmGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Azure;
-            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Azure;
+            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.crmGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.crmGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
             this.crmGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -123,6 +123,11 @@
             this.menuFriendly.Text = "Friendly Names and Values";
             this.menuFriendly.CheckedChanged += new System.EventHandler(this.menuFriendly_CheckedChanged);
             // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(212, 6);
+            // 
             // menuIdColumn
             // 
             this.menuIdColumn.CheckOnClick = true;
@@ -138,6 +143,19 @@
             this.menuIndexColumn.Size = new System.Drawing.Size(215, 22);
             this.menuIndexColumn.Text = "Index column";
             this.menuIndexColumn.CheckedChanged += new System.EventHandler(this.menuIndexColumn_CheckedChanged);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(212, 6);
+            // 
+            // menuCopyHeaders
+            // 
+            this.menuCopyHeaders.CheckOnClick = true;
+            this.menuCopyHeaders.Name = "menuCopyHeaders";
+            this.menuCopyHeaders.Size = new System.Drawing.Size(215, 22);
+            this.menuCopyHeaders.Text = "Copy with Headers";
+            this.menuCopyHeaders.CheckedChanged += new System.EventHandler(this.menuCopyHeaders_CheckedChanged);
             // 
             // hintsToolStripMenuItem
             // 
@@ -160,24 +178,6 @@
             this.copySelectedCellsUsingCTRLCToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
             this.copySelectedCellsUsingCTRLCToolStripMenuItem.Text = "Copy selected cells using <CTRL>+C";
             // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(212, 6);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(212, 6);
-            // 
-            // menuCopyHeaders
-            // 
-            this.menuCopyHeaders.CheckOnClick = true;
-            this.menuCopyHeaders.Name = "menuCopyHeaders";
-            this.menuCopyHeaders.Size = new System.Drawing.Size(215, 22);
-            this.menuCopyHeaders.Text = "Copy with Headers";
-            this.menuCopyHeaders.CheckedChanged += new System.EventHandler(this.menuCopyHeaders_CheckedChanged);
-            // 
             // ResultGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -186,7 +186,8 @@
             this.Controls.Add(this.panel2);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "ResultGrid";
-            this.Text = "FetchXML Builder - Result Grid";
+            this.Text = "Results";
+            this.DockStateChanged += new System.EventHandler(this.ResultGrid_DockStateChanged);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ResultGrid_FormClosing);
             this.Load += new System.EventHandler(this.ResultGrid_Load);
             this.panel2.ResumeLayout(false);

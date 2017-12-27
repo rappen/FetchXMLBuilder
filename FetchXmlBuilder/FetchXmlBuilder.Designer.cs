@@ -76,6 +76,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.dockContainer = new WeifenLuo.WinFormsUI.Docking.DockPanel();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.resetWindowLayoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain.SuspendLayout();
             this.panOData.SuspendLayout();
             this.menuOData.SuspendLayout();
@@ -394,7 +396,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsbView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiShowOData,
-            this.tsmiLiveUpdate});
+            this.tsmiLiveUpdate,
+            this.toolStripMenuItem1,
+            this.resetWindowLayoutToolStripMenuItem});
             this.tsbView.Image = ((System.Drawing.Image)(resources.GetObject("tsbView.Image")));
             this.tsbView.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbView.Name = "tsbView";
@@ -516,6 +520,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.dockContainer.Size = new System.Drawing.Size(884, 548);
             this.dockContainer.TabIndex = 33;
             // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(200, 6);
+            // 
+            // resetWindowLayoutToolStripMenuItem
+            // 
+            this.resetWindowLayoutToolStripMenuItem.Name = "resetWindowLayoutToolStripMenuItem";
+            this.resetWindowLayoutToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.resetWindowLayoutToolStripMenuItem.Text = "Reset window layout";
+            this.resetWindowLayoutToolStripMenuItem.Click += new System.EventHandler(this.resetWindowLayoutToolStripMenuItem_Click);
+            // 
             // FetchXmlBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -591,6 +607,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveCs;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveSql;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
-        private WeifenLuo.WinFormsUI.Docking.DockPanel dockContainer;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem resetWindowLayoutToolStripMenuItem;
+        internal WeifenLuo.WinFormsUI.Docking.DockPanel dockContainer;
     }
 }
