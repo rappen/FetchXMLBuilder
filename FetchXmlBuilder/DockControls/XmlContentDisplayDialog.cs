@@ -58,7 +58,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             UpdateXML(xmlString);
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void btnFormat_Click(object sender, EventArgs e)
         {
             FormatXML(false);
         }

@@ -28,6 +28,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         #region Declarations
         internal TreeBuilderControl treeControl;
         internal ResultGrid resultGrid;
+        internal XmlContentDisplayDialog xmlLiveUpdate;
 
         internal static Dictionary<string, EntityMetadata> entities;
         internal static List<string> entityShitList = new List<string>(); // Oops, did I name that one??
@@ -41,7 +42,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal static bool friendlyNames = false;
         private string attributesChecksum = "";
         internal bool buttonsEnabled = true;
-        private XmlContentDisplayDialog xmlLiveUpdate;
         private string liveUpdateXml = "";
         private MessageBusEventArgs callerArgs = null;
         private int resultpanes = 0;
@@ -160,6 +160,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 ResetDockLayout();
             }
+            if (resultGrid != null)
+            {
+                resultGrid.DockState = DockState.Hidden;
+            }
         }
 
         private void ResetDockLayout()
@@ -182,6 +186,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {   // Only reopen default result grid
                 resultGrid = new ResultGrid(null, this);
                 return resultGrid;
+            }
+            else if (persistString == typeof(XmlContentDisplayDialog).ToString() && xmlLiveUpdate == null)
+            {   // Only reopen default result grid
+                xmlLiveUpdate = new XmlContentDisplayDialog(string.Empty, "FetchXML", true, true, true, SaveFormat.XML, this);
+                return xmlLiveUpdate;
             }
             return null;
         }
@@ -230,11 +239,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             else
             {
-                if (xmlLiveUpdate != null)
-                {
-                    xmlLiveUpdate.Close();
-                    xmlLiveUpdate = null;
-                }
+                //if (xmlLiveUpdate != null)
+                //{
+                //    xmlLiveUpdate.Close();
+                //    xmlLiveUpdate = null;
+                //}
                 SaveSetting();
                 SaveDockPanels();
                 LogUse("Close");
@@ -308,26 +317,26 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void FetchXmlBuilder_FormChanged(object sender, EventArgs e)
         {
-            if (tsmiLiveUpdate.Checked && xmlLiveUpdate != null)
-            {
-                AlignLiveXML();
-            }
+            //if (tsmiLiveUpdate.Checked && xmlLiveUpdate != null)
+            //{
+            //    AlignLiveXML();
+            //}
         }
 
         private void FetchXmlBuilder_Leave(object sender, EventArgs e)
         {
-            if (tsmiLiveUpdate.Checked && xmlLiveUpdate != null)
-            {
-                xmlLiveUpdate.Visible = false;
-            }
+            //if (tsmiLiveUpdate.Checked && xmlLiveUpdate != null)
+            //{
+            //    xmlLiveUpdate.Visible = false;
+            //}
         }
 
         private void FetchXmlBuilder_Enter(object sender, EventArgs e)
         {
-            if (tsmiLiveUpdate.Checked && xmlLiveUpdate != null)
-            {
-                xmlLiveUpdate.Visible = true;
-            }
+            //if (tsmiLiveUpdate.Checked && xmlLiveUpdate != null)
+            //{
+            //    xmlLiveUpdate.Visible = true;
+            //}
         }
 
         private void tsbCloseThisTab_Click(object sender, EventArgs e)
@@ -432,11 +441,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 LogUse("LiveXML");
                 UpdateLiveXML();
             }
-            else if (xmlLiveUpdate != null)
-            {
-                xmlLiveUpdate.Close();
-                xmlLiveUpdate = null;
-            }
+            //else if (xmlLiveUpdate != null)
+            //{
+            //    xmlLiveUpdate.Close();
+            //    xmlLiveUpdate = null;
+            //}
         }
 
         void LiveXML_Disposed(object sender, EventArgs e)
@@ -1403,16 +1412,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         internal void UpdateLiveXML()
         {
-            if (tsmiLiveUpdate.Checked && xmlLiveUpdate?.Focused != true)
+            if (tsmiLiveUpdate.Checked || xmlLiveUpdate?.Visible == true)
             {
                 liveUpdateXml = treeControl.GetFetchString(false, false);
                 if (xmlLiveUpdate == null)
                 {
-                    xmlLiveUpdate = new XmlContentDisplayDialog(liveUpdateXml, "FetchXML Live Update", false, true, false, SaveFormat.None, this);
+                    xmlLiveUpdate = new XmlContentDisplayDialog(liveUpdateXml, "FetchXML", true, true, true, SaveFormat.XML, this);
                     xmlLiveUpdate.Disposed += LiveXML_Disposed;
                     xmlLiveUpdate.txtXML.KeyUp += LiveXML_KeyUp;
-                    xmlLiveUpdate.Visible = true;
-                    AlignLiveXML();
+                    xmlLiveUpdate.Show(dockContainer, DockState.DockRight);
+                    //xmlLiveUpdate.Visible = true;
+                    //AlignLiveXML();
                 }
                 else
                 {
@@ -1427,15 +1437,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void AlignLiveXML()
         {
-            if (xmlLiveUpdate != null && xmlLiveUpdate.Visible)
-            {
-                Control topparent = this;
-                while (topparent.Parent != null)
-                {
-                    topparent = topparent.Parent;
-                }
-                xmlLiveUpdate.Location = new Point(topparent.Location.X + topparent.Size.Width, topparent.Location.Y);
-            }
+            //if (xmlLiveUpdate != null && xmlLiveUpdate.Visible)
+            //{
+            //    Control topparent = this;
+            //    while (topparent.Parent != null)
+            //    {
+            //        topparent = topparent.Parent;
+            //    }
+            //    xmlLiveUpdate.Location = new Point(topparent.Location.X + topparent.Size.Width, topparent.Location.Y);
+            //}
         }
 
         private void DisplayQExCode()

@@ -66,6 +66,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbView = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiShowOData = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiLiveUpdate = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.resetWindowLayoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbOptions = new System.Windows.Forms.ToolStripButton();
             this.panOData = new System.Windows.Forms.Panel();
             this.linkOData = new System.Windows.Forms.LinkLabel();
@@ -76,8 +78,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.dockContainer = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.resetWindowLayoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain.SuspendLayout();
             this.panOData.SuspendLayout();
             this.menuOData.SuspendLayout();
@@ -422,6 +422,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiLiveUpdate.Text = "Live XML Update";
             this.tsmiLiveUpdate.CheckedChanged += new System.EventHandler(this.tsmiLiveUpdate_CheckedChanged);
             // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(200, 6);
+            // 
+            // resetWindowLayoutToolStripMenuItem
+            // 
+            this.resetWindowLayoutToolStripMenuItem.Name = "resetWindowLayoutToolStripMenuItem";
+            this.resetWindowLayoutToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.resetWindowLayoutToolStripMenuItem.Text = "Reset window layout";
+            this.resetWindowLayoutToolStripMenuItem.Click += new System.EventHandler(this.resetWindowLayoutToolStripMenuItem_Click);
+            // 
             // tsbOptions
             // 
             this.tsbOptions.Image = ((System.Drawing.Image)(resources.GetObject("tsbOptions.Image")));
@@ -519,18 +531,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.dockContainer.Name = "dockContainer";
             this.dockContainer.Size = new System.Drawing.Size(884, 548);
             this.dockContainer.TabIndex = 33;
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(200, 6);
-            // 
-            // resetWindowLayoutToolStripMenuItem
-            // 
-            this.resetWindowLayoutToolStripMenuItem.Name = "resetWindowLayoutToolStripMenuItem";
-            this.resetWindowLayoutToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
-            this.resetWindowLayoutToolStripMenuItem.Text = "Reset window layout";
-            this.resetWindowLayoutToolStripMenuItem.Click += new System.EventHandler(this.resetWindowLayoutToolStripMenuItem_Click);
             // 
             // FetchXmlBuilder
             // 
