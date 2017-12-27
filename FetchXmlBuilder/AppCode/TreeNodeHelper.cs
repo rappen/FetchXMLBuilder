@@ -265,7 +265,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public static void AddContextMenu(TreeNode node, TreeBuilderControl tree)
         {
             tree.addMenu.Items.Clear();
-            tree.menuControl.Items.Clear();
+            tree.gbQuickActions.Controls.Clear();
             if (node == null && tree.tvFetch.Nodes.Count > 0)
             {
                 node = tree.tvFetch.Nodes[0];
@@ -274,17 +274,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 var nodecapabilities = new FetchNodeCapabilities(node);
 
+                if (nodecapabilities.Attributes && tree.selectAttributesToolStripMenuItem.Enabled)
+                {
+                    AddLinkFromCapability(tree, "Select Attributes", "SelectAttributes");
+                }
                 foreach (var childcapability in nodecapabilities.ChildTypes)
                 {
                     if (childcapability.Name == "-")
                     {
                         tree.addMenu.Items.Add(new ToolStripSeparator());
-                        //form.menuControl.Items.Add(new ToolStripSeparator());
                     }
                     else if (childcapability.Multiple || !node.Nodes.ContainsKey(childcapability.Name))
                     {
                         AddMenuFromCapability(tree.addMenu, childcapability.Name);
-                        AddMenuFromCapability(tree.menuControl, childcapability.Name, childcapability.Name == "#comment", "Add ");
+                        AddLinkFromCapability(tree, childcapability.Name, null, childcapability.Name == "#comment");
                     }
                 }
                 if (tree.addMenu.Items.Count == 0)
@@ -298,14 +301,25 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 tree.commentToolStripMenuItem.Enabled = nodecapabilities.Comment;
                 tree.uncommentToolStripMenuItem.Enabled = nodecapabilities.Uncomment;
 
-                if (nodecapabilities.Attributes && tree.selectAttributesToolStripMenuItem.Enabled)
-                {
-                    var selattr = new ToolStripMenuItem("Select Attributes");
-                    selattr.Tag = "SelectAttributes";
-                    tree.menuControl.Items.Insert(0, selattr);
-                }
-
                 node.ContextMenuStrip = tree.nodeMenu;
+            }
+        }
+
+        private static void AddLinkFromCapability(TreeBuilderControl tree, string name, string tag = null, bool alignright = false)
+        {
+            var link = new LinkLabel();
+            link.AutoSize = true;
+            link.Dock = alignright ? DockStyle.Right : DockStyle.Left;
+            link.TabIndex = tree.gbQuickActions.Controls.Count;
+            link.TabStop = true;
+            link.Text = name;
+            link.Tag = tag ?? name;
+            link.LinkBehavior = LinkBehavior.HoverUnderline;
+            link.LinkClicked += tree.QuickActionLink_LinkClicked;
+            tree.gbQuickActions.Controls.Add(link);
+            if (!alignright)
+            {
+                link.BringToFront();
             }
         }
 

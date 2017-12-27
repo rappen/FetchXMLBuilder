@@ -30,13 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.gbFetchTree = new System.Windows.Forms.GroupBox();
             this.tvFetch = new System.Windows.Forms.TreeView();
             this.gbProperties = new System.Windows.Forms.GroupBox();
             this.panelContainer = new System.Windows.Forms.Panel();
-            this.panelButtonSpacer = new System.Windows.Forms.Panel();
-            this.gbQuickActions = new System.Windows.Forms.GroupBox();
-            this.menuControl = new System.Windows.Forms.MenuStrip();
             this.addMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.nothingToAddToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,55 +45,52 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panQuickActions = new System.Windows.Forms.Panel();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.gbQuickActions = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.gbFetchTree.SuspendLayout();
             this.gbProperties.SuspendLayout();
-            this.gbQuickActions.SuspendLayout();
             this.addMenu.SuspendLayout();
             this.nodeMenu.SuspendLayout();
+            this.panQuickActions.SuspendLayout();
+            this.gbQuickActions.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
             // 
+            this.splitContainer1.BackColor = System.Drawing.SystemColors.Window;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.gbFetchTree);
+            this.splitContainer1.Panel1.Controls.Add(this.tvFetch);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.gbProperties);
-            this.splitContainer1.Panel2.Controls.Add(this.panelButtonSpacer);
-            this.splitContainer1.Panel2.Controls.Add(this.gbQuickActions);
-            this.splitContainer1.Size = new System.Drawing.Size(943, 438);
-            this.splitContainer1.SplitterDistance = 414;
+            this.splitContainer1.Panel2.Controls.Add(this.panQuickActions);
+            this.splitContainer1.Size = new System.Drawing.Size(594, 438);
+            this.splitContainer1.SplitterDistance = 248;
+            this.splitContainer1.SplitterWidth = 6;
             this.splitContainer1.TabIndex = 0;
-            // 
-            // gbFetchTree
-            // 
-            this.gbFetchTree.Controls.Add(this.tvFetch);
-            this.gbFetchTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gbFetchTree.Location = new System.Drawing.Point(0, 0);
-            this.gbFetchTree.Name = "gbFetchTree";
-            this.gbFetchTree.Size = new System.Drawing.Size(414, 438);
-            this.gbFetchTree.TabIndex = 25;
-            this.gbFetchTree.TabStop = false;
-            this.gbFetchTree.Text = "FetchXML outline";
             // 
             // tvFetch
             // 
+            this.tvFetch.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tvFetch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tvFetch.HideSelection = false;
-            this.tvFetch.Location = new System.Drawing.Point(3, 16);
+            this.tvFetch.Location = new System.Drawing.Point(0, 0);
+            this.tvFetch.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tvFetch.Name = "tvFetch";
             this.tvFetch.ShowNodeToolTips = true;
-            this.tvFetch.Size = new System.Drawing.Size(408, 419);
+            this.tvFetch.Size = new System.Drawing.Size(594, 248);
             this.tvFetch.TabIndex = 0;
             this.tvFetch.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvFetch_AfterSelect);
             this.tvFetch.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvFetch_NodeMouseClick);
@@ -105,60 +98,35 @@
             // 
             // gbProperties
             // 
+            this.gbProperties.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gbProperties.Controls.Add(this.panelContainer);
-            this.gbProperties.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gbProperties.Location = new System.Drawing.Point(0, 71);
+            this.gbProperties.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gbProperties.Location = new System.Drawing.Point(-1, 55);
+            this.gbProperties.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.gbProperties.Name = "gbProperties";
-            this.gbProperties.Size = new System.Drawing.Size(525, 367);
+            this.gbProperties.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.gbProperties.Size = new System.Drawing.Size(596, 130);
             this.gbProperties.TabIndex = 34;
             this.gbProperties.TabStop = false;
-            this.gbProperties.Text = "FetchXML node attributes";
+            this.gbProperties.Text = "Node Properties";
             // 
             // panelContainer
             // 
-            this.panelContainer.BackColor = System.Drawing.SystemColors.Control;
+            this.panelContainer.BackColor = System.Drawing.SystemColors.Window;
             this.panelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContainer.Location = new System.Drawing.Point(3, 16);
+            this.panelContainer.Location = new System.Drawing.Point(2, 16);
+            this.panelContainer.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.panelContainer.Name = "panelContainer";
-            this.panelContainer.Size = new System.Drawing.Size(519, 348);
+            this.panelContainer.Size = new System.Drawing.Size(592, 111);
             this.panelContainer.TabIndex = 14;
-            // 
-            // panelButtonSpacer
-            // 
-            this.panelButtonSpacer.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelButtonSpacer.Location = new System.Drawing.Point(0, 50);
-            this.panelButtonSpacer.Name = "panelButtonSpacer";
-            this.panelButtonSpacer.Size = new System.Drawing.Size(525, 21);
-            this.panelButtonSpacer.TabIndex = 33;
-            // 
-            // gbQuickActions
-            // 
-            this.gbQuickActions.Controls.Add(this.menuControl);
-            this.gbQuickActions.Dock = System.Windows.Forms.DockStyle.Top;
-            this.gbQuickActions.Location = new System.Drawing.Point(0, 0);
-            this.gbQuickActions.Name = "gbQuickActions";
-            this.gbQuickActions.Size = new System.Drawing.Size(525, 50);
-            this.gbQuickActions.TabIndex = 32;
-            this.gbQuickActions.TabStop = false;
-            this.gbQuickActions.Text = "Quick Actions";
-            // 
-            // menuControl
-            // 
-            this.menuControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.menuControl.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.menuControl.Location = new System.Drawing.Point(3, 16);
-            this.menuControl.Name = "menuControl";
-            this.menuControl.Size = new System.Drawing.Size(519, 31);
-            this.menuControl.TabIndex = 16;
-            this.menuControl.Text = "menuStrip1";
-            this.menuControl.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
             // addMenu
             // 
             this.addMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.nothingToAddToolStripMenuItem});
             this.addMenu.Name = "addMenu";
-            this.addMenu.OwnerItem = this.addToolStripMenuItem;
             this.addMenu.Size = new System.Drawing.Size(154, 26);
             this.addMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
@@ -250,11 +218,48 @@
             this.moveDownToolStripMenuItem.Text = "Move down";
             this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonMoveDown_Click);
             // 
+            // panQuickActions
+            // 
+            this.panQuickActions.Controls.Add(this.gbQuickActions);
+            this.panQuickActions.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panQuickActions.Location = new System.Drawing.Point(0, 0);
+            this.panQuickActions.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.panQuickActions.Name = "panQuickActions";
+            this.panQuickActions.Padding = new System.Windows.Forms.Padding(0, 8, 0, 4);
+            this.panQuickActions.Size = new System.Drawing.Size(594, 55);
+            this.panQuickActions.TabIndex = 17;
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.linkLabel1.Location = new System.Drawing.Point(8, 19);
+            this.linkLabel1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(55, 13);
+            this.linkLabel1.TabIndex = 0;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "linkLabel1";
+            // 
+            // gbQuickActions
+            // 
+            this.gbQuickActions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbQuickActions.Controls.Add(this.linkLabel1);
+            this.gbQuickActions.Location = new System.Drawing.Point(-1, 8);
+            this.gbQuickActions.Name = "gbQuickActions";
+            this.gbQuickActions.Padding = new System.Windows.Forms.Padding(8, 6, 3, 3);
+            this.gbQuickActions.Size = new System.Drawing.Size(596, 49);
+            this.gbQuickActions.TabIndex = 19;
+            this.gbQuickActions.TabStop = false;
+            this.gbQuickActions.Text = "Quick Actions";
+            // 
             // TreeBuilderControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(943, 438);
+            this.ClientSize = new System.Drawing.Size(594, 438);
             this.CloseButton = false;
             this.CloseButtonVisible = false;
             this.Controls.Add(this.splitContainer1);
@@ -262,18 +267,20 @@
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockTop) 
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockBottom) 
             | WeifenLuo.WinFormsUI.Docking.DockAreas.Document)));
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "TreeBuilderControl";
             this.TabText = "Query Builder";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.gbFetchTree.ResumeLayout(false);
             this.gbProperties.ResumeLayout(false);
-            this.gbQuickActions.ResumeLayout(false);
-            this.gbQuickActions.PerformLayout();
             this.addMenu.ResumeLayout(false);
             this.nodeMenu.ResumeLayout(false);
+            this.panQuickActions.ResumeLayout(false);
+            this.gbQuickActions.ResumeLayout(false);
+            this.gbQuickActions.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -281,11 +288,7 @@
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        internal System.Windows.Forms.GroupBox gbFetchTree;
         internal System.Windows.Forms.TreeView tvFetch;
-        private System.Windows.Forms.GroupBox gbQuickActions;
-        internal System.Windows.Forms.MenuStrip menuControl;
-        private System.Windows.Forms.Panel panelButtonSpacer;
         internal System.Windows.Forms.GroupBox gbProperties;
         internal System.Windows.Forms.Panel panelContainer;
         internal System.Windows.Forms.ContextMenuStrip addMenu;
@@ -300,5 +303,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem moveUpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem moveDownToolStripMenuItem;
+        private System.Windows.Forms.Panel panQuickActions;
+        private System.Windows.Forms.LinkLabel linkLabel1;
+        internal System.Windows.Forms.GroupBox gbQuickActions;
     }
 }

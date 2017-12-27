@@ -52,6 +52,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public Guid lastOpenedViewId { get; set; }
         public bool doNotPromptToSave { get; set; } = false;
         public bool resultsAlwaysNewWindow { get; set; } = false;
+        public int treeHeight { get; set; } = -1;
 
         public FXBSettings()
         {

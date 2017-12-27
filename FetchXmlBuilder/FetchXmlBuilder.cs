@@ -59,12 +59,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     var file = System.IO.Path.GetFileName(value);
-                    treeControl.SetFetchName($"FetchXML - File: {file}");
+                    treeControl.SetFetchName($"File: {file}");
                     tsmiSaveFile.Text = $"Save File: {file}";
                 }
                 else
                 {
-                    treeControl.SetFetchName("FetchXML");
+                    treeControl.SetFetchName(string.Empty);
                     tsmiSaveFile.Text = "Save File";
                 }
             }
@@ -81,12 +81,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 view = value;
                 if (view != null && view.Contains("name"))
                 {
-                    treeControl.SetFetchName($"FetchXML - View: {view["name"]}");
+                    treeControl.SetFetchName($"View: {view["name"]}");
                     tsmiSaveView.Text = $"Save View: {view["name"]}";
                 }
                 else
                 {
-                    treeControl.SetFetchName("FetchXML");
+                    treeControl.SetFetchName(string.Empty);
                     tsmiSaveView.Text = "Save View";
                 }
             }
@@ -103,10 +103,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 dynml = value;
                 if (dynml != null && dynml.Contains("listname"))
                 {
+                    treeControl.SetFetchName($"ML: {dynml["listname"]}");
                     tsmiSaveML.Text = "Save Marketing List: " + dynml["listname"];
                 }
                 else
                 {
+                    treeControl.SetFetchName(string.Empty);
                     tsmiSaveML.Text = "Save Marketing List";
                 }
             }
@@ -144,7 +146,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void SetupDockControls()
         {
-            string dockFile = GetDockFileName();
+            var dockFile = GetDockFileName();
             if (File.Exists(dockFile))
             {
                 try
@@ -153,10 +155,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 }
                 catch
                 {
-                    // Restore from file failed
                 }
             }
-            if (treeControl?.DockState != DockState.Document)
+            if (treeControl.DockState == DockState.Hidden ||
+                treeControl.DockState == DockState.Unknown)
             {
                 ResetDockLayout();
             }
@@ -164,11 +166,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 resultGrid.DockState = DockState.Hidden;
             }
+
         }
 
         private void ResetDockLayout()
         {
-            treeControl.Show(dockContainer, DockState.Document);
+            treeControl.Show(dockContainer, DockState.DockLeft);
         }
 
         private static string GetDockFileName()
@@ -580,6 +583,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         /// <summary>Saves various configurations to file for next session</summary>
         private void SaveSetting()
         {
+            currentSettings.treeHeight = treeControl.SplitterPos;
             currentSettings.fetchxml = treeControl.GetFetchString(false, false);
             SettingsManager.Instance.Save(typeof(FetchXmlBuilder), currentSettings, ConnectionDetail?.ConnectionName);
         }
@@ -605,11 +609,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void ApplySettings()
         {
+            treeControl.SplitterPos = currentSettings.treeHeight;
             if (currentSettings != null && !string.IsNullOrWhiteSpace(currentSettings.fetchxml))
             {
                 treeControl.Init(currentSettings.fetchxml, "loaded from last session", false);
             }
-            treeControl.ShowQuickActions();
+            treeControl.ShowQuickActions(currentSettings.showQuickActions);
             var ass = Assembly.GetExecutingAssembly().GetName();
             var version = ass.Version.ToString();
             if (!version.Equals(currentSettings.currentVersion))

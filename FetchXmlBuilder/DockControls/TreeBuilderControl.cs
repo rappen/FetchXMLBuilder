@@ -51,6 +51,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
         }
 
+        internal int SplitterPos
+        {
+            get => splitContainer1.SplitterDistance;
+            set
+            {
+                if (value > -1)
+                {
+                    splitContainer1.SplitterDistance = value;
+                }
+            }
+        }
+
         #endregion Internal Properties
 
         #region Internal Methods
@@ -75,7 +87,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             DisplayDefinition(GetFetchDocument());
             HandleNodeSelection(tvFetch.SelectedNode);
             fxb.UpdateLiveXML();
-            ShowQuickActions();
+            ShowQuickActions(fxb.currentSettings.showQuickActions);
         }
 
         internal void ClearChanged()
@@ -108,7 +120,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         internal void EnableControls(bool enabled)
         {
             selectAttributesToolStripMenuItem.Enabled = enabled && fxb.Service != null;
-            gbFetchTree.Enabled = enabled;
+            tvFetch.Enabled = enabled;
             gbProperties.Enabled = enabled;
         }
 
@@ -261,13 +273,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         internal void SetFetchName(string name)
         {
-            gbFetchTree.Text = string.IsNullOrWhiteSpace(name) ? "FetchXML" : name;
+            TabText = "Query Builder" + (string.IsNullOrWhiteSpace(name) ? "" : " - ") + name;
         }
 
-        internal void ShowQuickActions()
+        internal void ShowQuickActions(bool show)
         {
-            gbQuickActions.Visible = fxb.currentSettings.showQuickActions;
-            panelButtonSpacer.Visible = fxb.currentSettings.showQuickActions;
+            panQuickActions.Visible = show;
         }
 
         internal void UpdateCurrentNode()
@@ -416,30 +427,30 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             return result;
         }
 
-        private void HandleNodeMenuClick(ToolStripItem ClickedItem)
+        private void HandleNodeMenuClick(string ClickedTag)
         {
-            if (ClickedItem == null || ClickedItem.Tag == null || ClickedItem.Tag.ToString() == "Add")
+            if (ClickedTag == null || ClickedTag == "Add")
                 return;
             TreeNode updateNode = null;
-            if (ClickedItem.Tag.ToString() == "Delete")
+            if (ClickedTag == "Delete")
             {
                 updateNode = DeleteNode();
             }
-            else if (ClickedItem.Tag.ToString() == "Comment")
+            else if (ClickedTag == "Comment")
             {
                 CommentNode();
             }
-            else if (ClickedItem.Tag.ToString() == "Uncomment")
+            else if (ClickedTag == "Uncomment")
             {
                 UncommentNode();
             }
-            else if (ClickedItem.Tag.ToString() == "SelectAttributes")
+            else if (ClickedTag == "SelectAttributes")
             {
                 SelectAttributes();
             }
             else
             {
-                string nodeText = ClickedItem.Tag.ToString();
+                string nodeText = ClickedTag;
                 updateNode = TreeNodeHelper.AddChildNode(tvFetch.SelectedNode, nodeText);
                 RecordHistory("add " + updateNode.Name);
                 HandleNodeSelection(updateNode);
@@ -584,7 +595,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 {
                     if (MessageBox.Show(deleteToolStripMenuItem.Text + " ?", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
                     {
-                        HandleNodeMenuClick(deleteToolStripMenuItem);
+                        HandleNodeMenuClick(deleteToolStripMenuItem.Tag?.ToString());
                     }
                 }
                 e.Handled = true;
@@ -596,11 +607,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
             else if (e.Control && e.KeyCode == Keys.K && commentToolStripMenuItem.Enabled)
             {
-                HandleNodeMenuClick(commentToolStripMenuItem);
+                HandleNodeMenuClick(commentToolStripMenuItem.Tag?.ToString());
             }
             else if (e.Control && e.KeyCode == Keys.U && uncommentToolStripMenuItem.Enabled)
             {
-                HandleNodeMenuClick(uncommentToolStripMenuItem);
+                HandleNodeMenuClick(uncommentToolStripMenuItem.Tag?.ToString());
             }
             else if (e.Control && e.KeyCode == Keys.Up && moveUpToolStripMenuItem.Enabled)
             {
@@ -735,11 +746,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         #endregion Private Methods
 
-        #region Private Control Event Handlers
+        #region Control Event Handlers
+
+        internal void QuickActionLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            HandleNodeMenuClick((sender as LinkLabel)?.Tag?.ToString());
+        }
 
         private void nodeMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            HandleNodeMenuClick(e.ClickedItem);
+            HandleNodeMenuClick(e.ClickedItem.Tag?.ToString());
         }
 
         private void toolStripButtonMoveDown_Click(object sender, EventArgs e)
@@ -812,6 +828,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
         }
 
-        #endregion Private Control Event Handlers
+        #endregion Control Event Handlers
     }
 }
