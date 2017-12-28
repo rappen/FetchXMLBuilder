@@ -240,17 +240,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 info.Cancel = true;
             }
-            else
-            {
-                //if (xmlLiveUpdate != null)
-                //{
-                //    xmlLiveUpdate.Close();
-                //    xmlLiveUpdate = null;
-                //}
-                SaveSetting();
-                SaveDockPanels();
-                LogUse("Close");
-            }
+            SaveSetting();
+            SaveDockPanels();
+            LogUse("Close");
         }
 
         private void FetchXmlBuilder_Load(object sender, EventArgs e)
@@ -444,11 +436,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 LogUse("LiveXML");
                 UpdateLiveXML();
             }
-            //else if (xmlLiveUpdate != null)
-            //{
-            //    xmlLiveUpdate.Close();
-            //    xmlLiveUpdate = null;
-            //}
         }
 
         void LiveXML_Disposed(object sender, EventArgs e)

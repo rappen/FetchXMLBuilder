@@ -2,6 +2,7 @@
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
@@ -18,18 +19,54 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             chkIdCol.Checked = form.currentSettings.gridId;
             chkIndexCol.Checked = form.currentSettings.gridIndex;
             chkCopyHeaders.Checked = form.currentSettings.gridCopyHeaders;
+            ApplySettingsToGrid();
+            SetData(entities);
+        }
+
+        internal void SetData(EntityCollection entities)
+        {
+            switch (DockState)
+            {
+                case WeifenLuo.WinFormsUI.Docking.DockState.Unknown:
+                case WeifenLuo.WinFormsUI.Docking.DockState.Hidden:
+                    Show(form.dockContainer, WeifenLuo.WinFormsUI.Docking.DockState.Document);
+                    break;
+                case WeifenLuo.WinFormsUI.Docking.DockState.DockBottomAutoHide:
+                    DockState = WeifenLuo.WinFormsUI.Docking.DockState.DockBottom;
+                    break;
+                case WeifenLuo.WinFormsUI.Docking.DockState.DockTopAutoHide:
+                    DockState = WeifenLuo.WinFormsUI.Docking.DockState.DockTop;
+                    break;
+                case WeifenLuo.WinFormsUI.Docking.DockState.DockLeftAutoHide:
+                    DockState = WeifenLuo.WinFormsUI.Docking.DockState.DockLeft;
+                    break;
+                case WeifenLuo.WinFormsUI.Docking.DockState.DockRightAutoHide:
+                    DockState = WeifenLuo.WinFormsUI.Docking.DockState.DockRight;
+                    break;
+            }
+            crmGridView1.DataSource = entities;
+            crmGridView1.Refresh();
+            crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
+        }
+
+        private void ApplySettingsToGrid()
+        {
             crmGridView1.ShowFriendlyNames = form.currentSettings.gridFriendly;
             crmGridView1.ShowIdColumn = form.currentSettings.gridId;
             crmGridView1.ShowIndexColumn = form.currentSettings.gridIndex;
             crmGridView1.ClipboardCopyMode = form.currentSettings.gridCopyHeaders ?
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             crmGridView1.OrganizationService = form.Service;
-            SetData(entities);
+            crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
         }
 
-        private void ResultGrid_Load(object sender, EventArgs e)
-        {   // Must be done after form has become visible
-            crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCellsExceptHeader);
+        private void UpddateSettingsFromGrid()
+        {
+            form.currentSettings.gridFriendly = chkFriendly.Checked;
+            form.currentSettings.gridIndex = chkIndexCol.Checked;
+            form.currentSettings.gridId = chkIdCol.Checked;
+            form.currentSettings.gridCopyHeaders = chkCopyHeaders.Checked;
+            ApplySettingsToGrid();
         }
 
         private void crmGridView1_RecordDoubleClick(object sender, CRMRecordEventArgs e)
@@ -102,24 +139,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             return string.Empty;
         }
 
-        private void chkFriendly_CheckedChanged(object sender, EventArgs e)
-        {
-            crmGridView1.ShowFriendlyNames = chkFriendly.Checked;
-            form.currentSettings.gridFriendly = chkFriendly.Checked;
-        }
-
-        private void chkIdCol_CheckedChanged(object sender, EventArgs e)
-        {
-            crmGridView1.ShowIdColumn = chkIdCol.Checked;
-            form.currentSettings.gridId = chkIdCol.Checked;
-        }
-
-        private void chkIndexCol_CheckedChanged(object sender, EventArgs e)
-        {
-            crmGridView1.ShowIndexColumn = chkIndexCol.Checked;
-            form.currentSettings.gridIndex = chkIndexCol.Checked;
-        }
-
         private void crmGridView1_RecordClick(object sender, CRMRecordEventArgs e)
         {
             if (e.Value is EntityReference)
@@ -133,22 +152,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
         }
 
-        private void chkCopyHeaders_CheckedChanged(object sender, EventArgs e)
+        private void chkGridOptions_CheckedChanged(object sender, EventArgs e)
         {
-            crmGridView1.ClipboardCopyMode = chkCopyHeaders.Checked ?
-                DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
-            form.currentSettings.gridCopyHeaders = chkCopyHeaders.Checked;
-        }
-
-        internal void SetData(EntityCollection entities)
-        {
-            if (DockState == WeifenLuo.WinFormsUI.Docking.DockState.Hidden ||
-                DockState == WeifenLuo.WinFormsUI.Docking.DockState.Unknown)
-            {
-                Show(form.dockContainer, WeifenLuo.WinFormsUI.Docking.DockState.Document);
-            }
-            crmGridView1.DataSource = entities;
-            crmGridView1.Refresh();
+            UpddateSettingsFromGrid();
         }
 
         private void ResultGrid_DockStateChanged(object sender, EventArgs e)
