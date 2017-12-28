@@ -131,7 +131,6 @@
             this.Name = "ResultGrid";
             this.Text = "Results";
             this.DockStateChanged += new System.EventHandler(this.ResultGrid_DockStateChanged);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ResultGrid_FormClosing);
             this.Load += new System.EventHandler(this.ResultGrid_Load);
             ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).EndInit();
             this.panel1.ResumeLayout(false);

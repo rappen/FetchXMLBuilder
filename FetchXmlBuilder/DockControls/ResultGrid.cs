@@ -102,27 +102,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             return string.Empty;
         }
 
-        private void ResultGrid_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            form.currentSettings.gridFriendly = chkFriendly.Checked;
-            form.currentSettings.gridId = chkIdCol.Checked;
-            form.currentSettings.gridIndex = chkIndexCol.Checked;
-            form.currentSettings.gridCopyHeaders = chkCopyHeaders.Checked;
-        }
-
         private void chkFriendly_CheckedChanged(object sender, EventArgs e)
         {
             crmGridView1.ShowFriendlyNames = chkFriendly.Checked;
+            form.currentSettings.gridFriendly = chkFriendly.Checked;
         }
 
         private void chkIdCol_CheckedChanged(object sender, EventArgs e)
         {
             crmGridView1.ShowIdColumn = chkIdCol.Checked;
+            form.currentSettings.gridId = chkIdCol.Checked;
         }
 
         private void chkIndexCol_CheckedChanged(object sender, EventArgs e)
         {
             crmGridView1.ShowIndexColumn = chkIndexCol.Checked;
+            form.currentSettings.gridIndex = chkIndexCol.Checked;
         }
 
         private void crmGridView1_RecordClick(object sender, CRMRecordEventArgs e)
@@ -142,6 +137,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             crmGridView1.ClipboardCopyMode = chkCopyHeaders.Checked ?
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
+            form.currentSettings.gridCopyHeaders = chkCopyHeaders.Checked;
         }
 
         internal void SetData(EntityCollection entities)
