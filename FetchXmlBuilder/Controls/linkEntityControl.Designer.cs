@@ -53,7 +53,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(4, 7);
+            this.label1.Location = new System.Drawing.Point(4, 6);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(46, 13);
             this.label1.TabIndex = 3;
@@ -72,7 +72,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(188, 6);
+            this.label3.Location = new System.Drawing.Point(116, 6);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(34, 13);
             this.label3.TabIndex = 21;
@@ -95,9 +95,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbEntity.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbEntity.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbEntity.FormattingEnabled = true;
-            this.cmbEntity.Location = new System.Drawing.Point(191, 70);
+            this.cmbEntity.Location = new System.Drawing.Point(119, 70);
             this.cmbEntity.Name = "cmbEntity";
-            this.cmbEntity.Size = new System.Drawing.Size(234, 21);
+            this.cmbEntity.Size = new System.Drawing.Size(306, 21);
             this.cmbEntity.Sorted = true;
             this.cmbEntity.TabIndex = 2;
             this.cmbEntity.Tag = "name|true";
@@ -110,9 +110,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbFrom.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbFrom.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbFrom.FormattingEnabled = true;
-            this.cmbFrom.Location = new System.Drawing.Point(191, 100);
+            this.cmbFrom.Location = new System.Drawing.Point(119, 100);
             this.cmbFrom.Name = "cmbFrom";
-            this.cmbFrom.Size = new System.Drawing.Size(234, 21);
+            this.cmbFrom.Size = new System.Drawing.Size(306, 21);
             this.cmbFrom.Sorted = true;
             this.cmbFrom.TabIndex = 3;
             this.cmbFrom.Tag = "from|true";
@@ -142,9 +142,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbTo.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbTo.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbTo.FormattingEnabled = true;
-            this.cmbTo.Location = new System.Drawing.Point(191, 130);
+            this.cmbTo.Location = new System.Drawing.Point(119, 130);
             this.cmbTo.Name = "cmbTo";
-            this.cmbTo.Size = new System.Drawing.Size(234, 21);
+            this.cmbTo.Size = new System.Drawing.Size(306, 21);
             this.cmbTo.Sorted = true;
             this.cmbTo.TabIndex = 4;
             this.cmbTo.Tag = "to|true";
@@ -161,9 +161,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             "",
             "inner",
             "outer"});
-            this.comboBox2.Location = new System.Drawing.Point(191, 160);
+            this.comboBox2.Location = new System.Drawing.Point(119, 160);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(234, 21);
+            this.comboBox2.Size = new System.Drawing.Size(306, 21);
             this.comboBox2.Sorted = true;
             this.comboBox2.TabIndex = 5;
             this.comboBox2.Tag = "link-type";
@@ -191,9 +191,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(191, 190);
+            this.textBox1.Location = new System.Drawing.Point(119, 190);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(234, 20);
+            this.textBox1.Size = new System.Drawing.Size(306, 20);
             this.textBox1.TabIndex = 6;
             this.textBox1.Tag = "alias";
             // 
@@ -209,7 +209,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // chkIntersect
             // 
             this.chkIntersect.AutoSize = true;
-            this.chkIntersect.Location = new System.Drawing.Point(191, 223);
+            this.chkIntersect.Location = new System.Drawing.Point(119, 223);
             this.chkIntersect.Name = "chkIntersect";
             this.chkIntersect.Size = new System.Drawing.Size(15, 14);
             this.chkIntersect.TabIndex = 7;
@@ -228,7 +228,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(191, 253);
+            this.checkBox2.Location = new System.Drawing.Point(119, 253);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(15, 14);
             this.checkBox2.TabIndex = 8;
@@ -250,9 +250,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbRelationship.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbRelationship.FormattingEnabled = true;
-            this.cmbRelationship.Location = new System.Drawing.Point(191, 40);
+            this.cmbRelationship.Location = new System.Drawing.Point(119, 40);
             this.cmbRelationship.Name = "cmbRelationship";
-            this.cmbRelationship.Size = new System.Drawing.Size(234, 21);
+            this.cmbRelationship.Size = new System.Drawing.Size(306, 21);
             this.cmbRelationship.TabIndex = 1;
             this.cmbRelationship.SelectedIndexChanged += new System.EventHandler(this.cmbRelationship_SelectedIndexChanged);
             // 

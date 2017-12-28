@@ -49,7 +49,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(4, 7);
+            this.label1.Location = new System.Drawing.Point(4, 6);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(46, 13);
             this.label1.TabIndex = 3;
@@ -68,7 +68,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(188, 6);
+            this.label3.Location = new System.Drawing.Point(116, 6);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(34, 13);
             this.label3.TabIndex = 21;
@@ -91,9 +91,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbAttribute.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbAttribute.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbAttribute.FormattingEnabled = true;
-            this.cmbAttribute.Location = new System.Drawing.Point(191, 40);
+            this.cmbAttribute.Location = new System.Drawing.Point(119, 40);
             this.cmbAttribute.Name = "cmbAttribute";
-            this.cmbAttribute.Size = new System.Drawing.Size(234, 21);
+            this.cmbAttribute.Size = new System.Drawing.Size(306, 21);
             this.cmbAttribute.Sorted = true;
             this.cmbAttribute.TabIndex = 27;
             this.cmbAttribute.Tag = "name|true";
@@ -102,9 +102,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.txtAlias.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAlias.Location = new System.Drawing.Point(191, 70);
+            this.txtAlias.Location = new System.Drawing.Point(119, 70);
             this.txtAlias.Name = "txtAlias";
-            this.txtAlias.Size = new System.Drawing.Size(234, 20);
+            this.txtAlias.Size = new System.Drawing.Size(306, 20);
             this.txtAlias.TabIndex = 28;
             this.txtAlias.Tag = "alias";
             // 
@@ -133,9 +133,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             "max",
             "min",
             "sum"});
-            this.cmbAggregate.Location = new System.Drawing.Point(191, 100);
+            this.cmbAggregate.Location = new System.Drawing.Point(119, 100);
             this.cmbAggregate.Name = "cmbAggregate";
-            this.cmbAggregate.Size = new System.Drawing.Size(234, 21);
+            this.cmbAggregate.Size = new System.Drawing.Size(306, 21);
             this.cmbAggregate.Sorted = true;
             this.cmbAggregate.TabIndex = 30;
             this.cmbAggregate.Tag = "aggregate";
@@ -161,7 +161,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // chkGroupBy
             // 
             this.chkGroupBy.AutoSize = true;
-            this.chkGroupBy.Location = new System.Drawing.Point(191, 133);
+            this.chkGroupBy.Location = new System.Drawing.Point(119, 133);
             this.chkGroupBy.Name = "chkGroupBy";
             this.chkGroupBy.Size = new System.Drawing.Size(15, 14);
             this.chkGroupBy.TabIndex = 33;
@@ -196,9 +196,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             "quarter",
             "week",
             "year"});
-            this.cmbDateGrouping.Location = new System.Drawing.Point(191, 160);
+            this.cmbDateGrouping.Location = new System.Drawing.Point(119, 160);
             this.cmbDateGrouping.Name = "cmbDateGrouping";
-            this.cmbDateGrouping.Size = new System.Drawing.Size(234, 21);
+            this.cmbDateGrouping.Size = new System.Drawing.Size(306, 21);
             this.cmbDateGrouping.Sorted = true;
             this.cmbDateGrouping.TabIndex = 34;
             this.cmbDateGrouping.Tag = "dategrouping";
@@ -207,7 +207,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.chkUserTZ.AutoSize = true;
             this.chkUserTZ.Enabled = false;
-            this.chkUserTZ.Location = new System.Drawing.Point(191, 195);
+            this.chkUserTZ.Location = new System.Drawing.Point(119, 193);
             this.chkUserTZ.Name = "chkUserTZ";
             this.chkUserTZ.Size = new System.Drawing.Size(15, 14);
             this.chkUserTZ.TabIndex = 37;

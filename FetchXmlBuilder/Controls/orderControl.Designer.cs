@@ -43,7 +43,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(4, 7);
+            this.label1.Location = new System.Drawing.Point(4, 6);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(46, 13);
             this.label1.TabIndex = 3;
@@ -62,7 +62,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(188, 6);
+            this.label3.Location = new System.Drawing.Point(116, 6);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(34, 13);
             this.label3.TabIndex = 21;
@@ -85,9 +85,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbAttribute.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbAttribute.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbAttribute.FormattingEnabled = true;
-            this.cmbAttribute.Location = new System.Drawing.Point(191, 40);
+            this.cmbAttribute.Location = new System.Drawing.Point(119, 40);
             this.cmbAttribute.Name = "cmbAttribute";
-            this.cmbAttribute.Size = new System.Drawing.Size(234, 21);
+            this.cmbAttribute.Size = new System.Drawing.Size(306, 21);
             this.cmbAttribute.Sorted = true;
             this.cmbAttribute.TabIndex = 1;
             this.cmbAttribute.Tag = "attribute";
@@ -113,7 +113,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // chkDescending
             // 
             this.chkDescending.AutoSize = true;
-            this.chkDescending.Location = new System.Drawing.Point(191, 103);
+            this.chkDescending.Location = new System.Drawing.Point(119, 103);
             this.chkDescending.Name = "chkDescending";
             this.chkDescending.Size = new System.Drawing.Size(15, 14);
             this.chkDescending.TabIndex = 3;
@@ -127,9 +127,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbAlias.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbAlias.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbAlias.FormattingEnabled = true;
-            this.cmbAlias.Location = new System.Drawing.Point(191, 70);
+            this.cmbAlias.Location = new System.Drawing.Point(119, 70);
             this.cmbAlias.Name = "cmbAlias";
-            this.cmbAlias.Size = new System.Drawing.Size(234, 21);
+            this.cmbAlias.Size = new System.Drawing.Size(306, 21);
             this.cmbAlias.Sorted = true;
             this.cmbAlias.TabIndex = 2;
             this.cmbAlias.Tag = "alias";

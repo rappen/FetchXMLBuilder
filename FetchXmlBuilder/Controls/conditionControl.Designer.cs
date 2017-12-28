@@ -47,7 +47,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(4, 7);
+            this.label1.Location = new System.Drawing.Point(4, 6);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(46, 13);
             this.label1.TabIndex = 3;
@@ -66,7 +66,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(188, 6);
+            this.label3.Location = new System.Drawing.Point(116, 6);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(34, 13);
             this.label3.TabIndex = 21;
@@ -89,9 +89,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbAttribute.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbAttribute.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbAttribute.FormattingEnabled = true;
-            this.cmbAttribute.Location = new System.Drawing.Point(191, 70);
+            this.cmbAttribute.Location = new System.Drawing.Point(119, 70);
             this.cmbAttribute.Name = "cmbAttribute";
-            this.cmbAttribute.Size = new System.Drawing.Size(234, 21);
+            this.cmbAttribute.Size = new System.Drawing.Size(306, 21);
             this.cmbAttribute.Sorted = true;
             this.cmbAttribute.TabIndex = 2;
             this.cmbAttribute.Tag = "attribute|true";
@@ -183,9 +183,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             "today",
             "tomorrow",
             "yesterday"});
-            this.cmbOperator.Location = new System.Drawing.Point(191, 100);
+            this.cmbOperator.Location = new System.Drawing.Point(119, 100);
             this.cmbOperator.Name = "cmbOperator";
-            this.cmbOperator.Size = new System.Drawing.Size(234, 21);
+            this.cmbOperator.Size = new System.Drawing.Size(306, 21);
             this.cmbOperator.TabIndex = 3;
             this.cmbOperator.Tag = "operator|true";
             this.cmbOperator.SelectedIndexChanged += new System.EventHandler(this.cmbOperator_SelectedIndexChanged);
@@ -216,16 +216,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbEntity.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbEntity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbEntity.FormattingEnabled = true;
-            this.cmbEntity.Location = new System.Drawing.Point(191, 40);
+            this.cmbEntity.Location = new System.Drawing.Point(119, 40);
             this.cmbEntity.Name = "cmbEntity";
-            this.cmbEntity.Size = new System.Drawing.Size(234, 21);
+            this.cmbEntity.Size = new System.Drawing.Size(306, 21);
             this.cmbEntity.TabIndex = 1;
             this.cmbEntity.Tag = "entityname";
             this.cmbEntity.SelectedIndexChanged += new System.EventHandler(this.cmbEtity_SelectedIndexChanged);
             // 
             // btnGetGuid
             // 
-            this.btnGetGuid.Location = new System.Drawing.Point(133, 130);
+            this.btnGetGuid.Location = new System.Drawing.Point(62, 130);
             this.btnGetGuid.Name = "btnGetGuid";
             this.btnGetGuid.Size = new System.Drawing.Size(52, 22);
             this.btnGetGuid.TabIndex = 40;
@@ -241,9 +241,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbValue.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbValue.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbValue.FormattingEnabled = true;
-            this.cmbValue.Location = new System.Drawing.Point(191, 130);
+            this.cmbValue.Location = new System.Drawing.Point(119, 130);
             this.cmbValue.Name = "cmbValue";
-            this.cmbValue.Size = new System.Drawing.Size(234, 21);
+            this.cmbValue.Size = new System.Drawing.Size(306, 21);
             this.cmbValue.Sorted = true;
             this.cmbValue.TabIndex = 4;
             this.cmbValue.Tag = "value";
@@ -252,7 +252,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.lblValueHint.AutoSize = true;
             this.lblValueHint.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblValueHint.Location = new System.Drawing.Point(191, 158);
+            this.lblValueHint.Location = new System.Drawing.Point(116, 158);
             this.lblValueHint.Name = "lblValueHint";
             this.lblValueHint.Size = new System.Drawing.Size(53, 13);
             this.lblValueHint.TabIndex = 41;

@@ -55,7 +55,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(4, 7);
+            this.label1.Location = new System.Drawing.Point(4, 6);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(46, 13);
             this.label1.TabIndex = 3;
@@ -74,9 +74,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.txtVersion.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtVersion.Location = new System.Drawing.Point(191, 40);
+            this.txtVersion.Location = new System.Drawing.Point(119, 40);
             this.txtVersion.Name = "txtVersion";
-            this.txtVersion.Size = new System.Drawing.Size(199, 20);
+            this.txtVersion.Size = new System.Drawing.Size(271, 20);
             this.txtVersion.TabIndex = 1;
             this.txtVersion.Tag = "version";
             // 
@@ -84,7 +84,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(188, 6);
+            this.label3.Location = new System.Drawing.Point(116, 6);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(34, 13);
             this.label3.TabIndex = 21;
@@ -113,9 +113,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(191, 70);
+            this.textBox1.Location = new System.Drawing.Point(119, 70);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(199, 20);
+            this.textBox1.Size = new System.Drawing.Size(271, 20);
             this.textBox1.TabIndex = 2;
             this.textBox1.Tag = "count";
             // 
@@ -131,7 +131,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(191, 163);
+            this.checkBox1.Location = new System.Drawing.Point(119, 163);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(15, 14);
             this.checkBox1.TabIndex = 6;
@@ -141,7 +141,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(191, 133);
+            this.checkBox2.Location = new System.Drawing.Point(119, 133);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(15, 14);
             this.checkBox2.TabIndex = 5;
@@ -161,9 +161,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox2.Location = new System.Drawing.Point(191, 100);
+            this.textBox2.Location = new System.Drawing.Point(119, 100);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(199, 20);
+            this.textBox2.Size = new System.Drawing.Size(271, 20);
             this.textBox2.TabIndex = 3;
             this.textBox2.Tag = "top";
             // 
@@ -179,7 +179,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(191, 193);
+            this.checkBox3.Location = new System.Drawing.Point(119, 193);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(15, 14);
             this.checkBox3.TabIndex = 7;
@@ -199,7 +199,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // checkBox4
             // 
             this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(191, 223);
+            this.checkBox4.Location = new System.Drawing.Point(119, 223);
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(15, 14);
             this.checkBox4.TabIndex = 8;
@@ -211,18 +211,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(3, 223);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(125, 13);
+            this.label9.Size = new System.Drawing.Size(94, 13);
             this.label9.TabIndex = 33;
             this.label9.Tag = "no-lock";
-            this.label9.Text = "Return total record count";
+            this.label9.Text = "Total record count";
             // 
             // textBox3
             // 
             this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox3.Location = new System.Drawing.Point(191, 250);
+            this.textBox3.Location = new System.Drawing.Point(119, 250);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(199, 20);
+            this.textBox3.Size = new System.Drawing.Size(271, 20);
             this.textBox3.TabIndex = 10;
             this.textBox3.Tag = "page";
             // 
@@ -239,10 +239,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.textBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox4.Location = new System.Drawing.Point(191, 280);
+            this.textBox4.Location = new System.Drawing.Point(119, 280);
             this.textBox4.Multiline = true;
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(199, 74);
+            this.textBox4.Size = new System.Drawing.Size(271, 74);
             this.textBox4.TabIndex = 11;
             this.textBox4.Tag = "paging-cookie";
             this.textBox4.Leave += new System.EventHandler(this.textBox4_Leave);
