@@ -254,7 +254,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbRelationship.Name = "cmbRelationship";
             this.cmbRelationship.Size = new System.Drawing.Size(306, 21);
             this.cmbRelationship.TabIndex = 1;
+            this.cmbRelationship.DropDown += new System.EventHandler(this.cmbRelationship_DropDown);
             this.cmbRelationship.SelectedIndexChanged += new System.EventHandler(this.cmbRelationship_SelectedIndexChanged);
+            this.cmbRelationship.DropDownClosed += new System.EventHandler(this.cmbRelationship_DropDownClosed);
             // 
             // linkEntityControl
             // 

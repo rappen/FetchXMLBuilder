@@ -14,6 +14,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private string controlsCheckSum = "";
         TreeNode node;
         FetchXmlBuilder form;
+        private int relatioshipWidth;
 
         #region Delegates
 
@@ -282,6 +283,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                         chkIntersect.Checked = true;
                     }
                 }
+            }
+        }
+
+        private void cmbRelationship_DropDown(object sender, EventArgs e)
+        {
+            relatioshipWidth = cmbRelationship.Width;
+            if (cmbRelationship.Width < 300)
+            {
+                cmbRelationship.Width = 350;
+            }
+        }
+
+        private void cmbRelationship_DropDownClosed(object sender, EventArgs e)
+        {
+            if (relatioshipWidth < 300)
+            {
+                cmbRelationship.Width = relatioshipWidth;
             }
         }
     }
