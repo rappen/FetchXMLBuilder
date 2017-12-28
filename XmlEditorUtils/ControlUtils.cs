@@ -49,11 +49,7 @@ namespace Cinteros.Xrm.XmlEditorUtils
                 }
                 else
                 {
-                    result = ((ComboBox)control).SelectedText;
-                    if (string.IsNullOrEmpty(result) && !string.IsNullOrEmpty(((ComboBox)control).Text))
-                    {
-                        result = ((ComboBox)control).Text;
-                    }
+                    result = ((ComboBox)control).Text;
                 }
             }
             return result;
