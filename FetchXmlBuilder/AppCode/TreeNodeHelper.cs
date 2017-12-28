@@ -93,25 +93,29 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             switch (node.Name)
             {
                 case "fetch":
+                    if (attributes.ContainsKey("top"))
+                    {
+                        text += " top:" + attributes["top"];
+                    }
                     if (attributes.ContainsKey("count"))
                     {
-                        text += " count: " + attributes["count"];
-                    }
-                    if (attributes.ContainsKey("page"))
-                    {
-                        text += " page: " + attributes["page"];
+                        text += " cnt:" + attributes["count"];
                     }
                     if (attributes.ContainsKey("returntotalrecordcount") && attributes["returntotalrecordcount"] == "true")
                     {
-                        text += " RTRC";
+                        text += " reccnt";
                     }
                     if (attributes.ContainsKey("aggregate") && attributes["aggregate"] == "true")
                     {
-                        text += " aggregate";
+                        text += " aggr";
                     }
                     if (attributes.ContainsKey("distinct") && attributes["distinct"] == "true")
                     {
-                        text += " distinct";
+                        text += " dist";
+                    }
+                    if (attributes.ContainsKey("page"))
+                    {
+                        text += " pg:" + attributes["page"];
                     }
                     break;
                 case "entity":
