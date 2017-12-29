@@ -188,6 +188,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Controls.Add(this.label2);
             this.Name = "attributeControl";
             this.Size = new System.Drawing.Size(293, 207);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.attributeControl_Paint);
             this.Leave += new System.EventHandler(this.Control_Leave);
             this.ResumeLayout(false);
             this.PerformLayout();

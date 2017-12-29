@@ -5,6 +5,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
@@ -402,6 +403,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
             }
             UpdateValueField();
+        }
+
+        private void conditionControl_Paint(object sender, PaintEventArgs e)
+        {
+            foreach (var cmb in Controls.Cast<Control>().Where(c => c is ComboBox).Select(c => (ComboBox)c).Where(c => c.DropDownStyle == ComboBoxStyle.DropDown))
+            {
+                cmb.SelectionLength = 0;
+            }
         }
     }
 

@@ -242,6 +242,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Controls.Add(this.label2);
             this.Name = "conditionControl";
             this.Size = new System.Drawing.Size(311, 194);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.conditionControl_Paint);
             this.Leave += new System.EventHandler(this.Control_Leave);
             this.ResumeLayout(false);
             this.PerformLayout();

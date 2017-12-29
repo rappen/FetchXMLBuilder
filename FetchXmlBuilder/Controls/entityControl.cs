@@ -3,6 +3,7 @@ using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Cinteros.Xrm.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
@@ -91,6 +92,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (controlsCheckSum != ControlUtils.ControlsChecksum(this.Controls))
             {
                 Save();
+            }
+        }
+
+        private void entityControl_Paint(object sender, PaintEventArgs e)
+        {
+            foreach (var cmb in Controls.Cast<Control>().Where(c => c is ComboBox).Select(c => (ComboBox)c).Where(c => c.DropDownStyle == ComboBoxStyle.DropDown))
+            {
+                cmb.SelectionLength = 0;
             }
         }
     }

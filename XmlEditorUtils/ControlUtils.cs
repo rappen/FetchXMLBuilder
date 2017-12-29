@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.XmlEditorUtils
@@ -98,17 +96,15 @@ namespace Cinteros.Xrm.XmlEditorUtils
                 var value = collection.ContainsKey(attribute) ? collection[attribute] : defaultvalue;
                 if (control is CheckBox)
                 {
-                    var chk = false;
-                    bool.TryParse(value, out chk);
+                    bool.TryParse(value, out bool chk);
                     ((CheckBox)control).Checked = chk;
                 }
                 else if (control is TextBox)
                 {
                     ((TextBox)control).Text = value;
                 }
-                else if (control is ComboBox)
+                else if (control is ComboBox cmb)
                 {
-                    var cmb = (ComboBox)control;
                     object selitem = null;
                     foreach (var item in cmb.Items)
                     {
