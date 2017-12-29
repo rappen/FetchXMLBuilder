@@ -420,7 +420,7 @@
             this.rbResGrid.Size = new System.Drawing.Size(72, 17);
             this.rbResGrid.TabIndex = 0;
             this.rbResGrid.TabStop = true;
-            this.rbResGrid.Text = "Table grid";
+            this.rbResGrid.Text = "View";
             this.rbResGrid.UseVisualStyleBackColor = true;
             // 
             // bgStats

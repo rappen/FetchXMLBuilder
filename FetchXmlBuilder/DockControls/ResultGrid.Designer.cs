@@ -124,7 +124,7 @@
             this.groupBox1.Size = new System.Drawing.Size(652, 42);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Grid Options";
+            this.groupBox1.Text = "View Options";
             // 
             // panel1
             // 
@@ -145,7 +145,7 @@
             this.Controls.Add(this.panel1);
             this.HideOnClose = true;
             this.Name = "ResultGrid";
-            this.Text = "Results";
+            this.Text = "Result View";
             this.DockStateChanged += new System.EventHandler(this.ResultGrid_DockStateChanged);
             ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);

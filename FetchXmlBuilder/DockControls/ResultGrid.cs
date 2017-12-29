@@ -2,7 +2,6 @@
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
