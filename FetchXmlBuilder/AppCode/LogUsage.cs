@@ -17,6 +17,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 var ass = Assembly.GetExecutingAssembly().GetName();
                 var version = ass.Version.ToString();
                 var name = ass.Name.Replace(" ", "");
+                action = "FXB-" + action;
 
                 var query = "t.php" +
                     "?sc_project=10396418" +
