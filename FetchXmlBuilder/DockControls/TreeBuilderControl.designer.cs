@@ -31,11 +31,12 @@
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tvFetch = new System.Windows.Forms.TreeView();
-            this.gbProperties = new System.Windows.Forms.GroupBox();
-            this.panelContainer = new System.Windows.Forms.Panel();
             this.panQuickActions = new System.Windows.Forms.Panel();
             this.gbQuickActions = new System.Windows.Forms.GroupBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.panTreeSplitter = new System.Windows.Forms.Panel();
+            this.gbProperties = new System.Windows.Forms.GroupBox();
+            this.panelContainer = new System.Windows.Forms.Panel();
             this.addMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.nothingToAddToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,16 +49,17 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.panProperties = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.gbProperties.SuspendLayout();
             this.panQuickActions.SuspendLayout();
             this.gbQuickActions.SuspendLayout();
+            this.gbProperties.SuspendLayout();
             this.addMenu.SuspendLayout();
             this.nodeMenu.SuspendLayout();
+            this.panProperties.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -75,9 +77,9 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.panProperties);
             this.splitContainer1.Panel2.Controls.Add(this.panQuickActions);
-            this.splitContainer1.Panel2.Controls.Add(this.panel1);
-            this.splitContainer1.Panel2.Controls.Add(this.gbProperties);
+            this.splitContainer1.Panel2.Controls.Add(this.panTreeSplitter);
             this.splitContainer1.Size = new System.Drawing.Size(594, 438);
             this.splitContainer1.SplitterDistance = 248;
             this.splitContainer1.SplitterWidth = 6;
@@ -97,32 +99,6 @@
             this.tvFetch.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvFetch_AfterSelect);
             this.tvFetch.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvFetch_NodeMouseClick);
             this.tvFetch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tvFetch_KeyDown);
-            // 
-            // gbProperties
-            // 
-            this.gbProperties.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbProperties.Controls.Add(this.panelContainer);
-            this.gbProperties.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbProperties.Location = new System.Drawing.Point(-1, 55);
-            this.gbProperties.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.gbProperties.Name = "gbProperties";
-            this.gbProperties.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.gbProperties.Size = new System.Drawing.Size(596, 128);
-            this.gbProperties.TabIndex = 34;
-            this.gbProperties.TabStop = false;
-            this.gbProperties.Text = "Node Properties";
-            // 
-            // panelContainer
-            // 
-            this.panelContainer.BackColor = System.Drawing.SystemColors.Window;
-            this.panelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContainer.Location = new System.Drawing.Point(2, 16);
-            this.panelContainer.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.panelContainer.Name = "panelContainer";
-            this.panelContainer.Size = new System.Drawing.Size(592, 109);
-            this.panelContainer.TabIndex = 14;
             // 
             // panQuickActions
             // 
@@ -160,6 +136,41 @@
             this.linkLabel1.TabIndex = 0;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "linkLabel1";
+            // 
+            // panTreeSplitter
+            // 
+            this.panTreeSplitter.BackColor = System.Drawing.SystemColors.ScrollBar;
+            this.panTreeSplitter.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panTreeSplitter.Location = new System.Drawing.Point(0, 0);
+            this.panTreeSplitter.Name = "panTreeSplitter";
+            this.panTreeSplitter.Size = new System.Drawing.Size(594, 1);
+            this.panTreeSplitter.TabIndex = 35;
+            // 
+            // gbProperties
+            // 
+            this.gbProperties.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbProperties.Controls.Add(this.panelContainer);
+            this.gbProperties.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gbProperties.Location = new System.Drawing.Point(-1, 8);
+            this.gbProperties.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.gbProperties.Name = "gbProperties";
+            this.gbProperties.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.gbProperties.Size = new System.Drawing.Size(596, 119);
+            this.gbProperties.TabIndex = 34;
+            this.gbProperties.TabStop = false;
+            this.gbProperties.Text = "Node Properties";
+            // 
+            // panelContainer
+            // 
+            this.panelContainer.BackColor = System.Drawing.SystemColors.Window;
+            this.panelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelContainer.Location = new System.Drawing.Point(2, 16);
+            this.panelContainer.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.panelContainer.Name = "panelContainer";
+            this.panelContainer.Size = new System.Drawing.Size(592, 100);
+            this.panelContainer.TabIndex = 14;
             // 
             // addMenu
             // 
@@ -258,14 +269,14 @@
             this.moveDownToolStripMenuItem.Text = "Move down";
             this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonMoveDown_Click);
             // 
-            // panel1
+            // panProperties
             // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(594, 1);
-            this.panel1.TabIndex = 35;
+            this.panProperties.Controls.Add(this.gbProperties);
+            this.panProperties.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panProperties.Location = new System.Drawing.Point(0, 56);
+            this.panProperties.Name = "panProperties";
+            this.panProperties.Size = new System.Drawing.Size(594, 128);
+            this.panProperties.TabIndex = 36;
             // 
             // TreeBuilderControl
             // 
@@ -288,12 +299,13 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.gbProperties.ResumeLayout(false);
             this.panQuickActions.ResumeLayout(false);
             this.gbQuickActions.ResumeLayout(false);
             this.gbQuickActions.PerformLayout();
+            this.gbProperties.ResumeLayout(false);
             this.addMenu.ResumeLayout(false);
             this.nodeMenu.ResumeLayout(false);
+            this.panProperties.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -319,6 +331,7 @@
         private System.Windows.Forms.Panel panQuickActions;
         private System.Windows.Forms.LinkLabel linkLabel1;
         internal System.Windows.Forms.GroupBox gbQuickActions;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panTreeSplitter;
+        private System.Windows.Forms.Panel panProperties;
     }
 }
