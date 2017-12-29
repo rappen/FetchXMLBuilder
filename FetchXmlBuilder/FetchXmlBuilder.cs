@@ -384,7 +384,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsbExecute_Click(object sender, EventArgs e)
         {
-            dockControlBuilder.Focus();
+            dockControlBuilder.tvFetch.Focus();
             FetchResults();
         }
 
@@ -410,7 +410,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void toolStripMain_Click(object sender, EventArgs e)
         {
-            dockControlBuilder.Focus();
+            dockControlBuilder.tvFetch.Focus();
         }
 
         private void tsbAbout_Click(object sender, EventArgs e)
