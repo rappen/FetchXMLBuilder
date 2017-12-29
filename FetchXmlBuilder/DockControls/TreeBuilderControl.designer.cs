@@ -33,6 +33,9 @@
             this.tvFetch = new System.Windows.Forms.TreeView();
             this.gbProperties = new System.Windows.Forms.GroupBox();
             this.panelContainer = new System.Windows.Forms.Panel();
+            this.panQuickActions = new System.Windows.Forms.Panel();
+            this.gbQuickActions = new System.Windows.Forms.GroupBox();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.addMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.nothingToAddToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,18 +48,16 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panQuickActions = new System.Windows.Forms.Panel();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.gbQuickActions = new System.Windows.Forms.GroupBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.gbProperties.SuspendLayout();
-            this.addMenu.SuspendLayout();
-            this.nodeMenu.SuspendLayout();
             this.panQuickActions.SuspendLayout();
             this.gbQuickActions.SuspendLayout();
+            this.addMenu.SuspendLayout();
+            this.nodeMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -74,8 +75,9 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.gbProperties);
             this.splitContainer1.Panel2.Controls.Add(this.panQuickActions);
+            this.splitContainer1.Panel2.Controls.Add(this.panel1);
+            this.splitContainer1.Panel2.Controls.Add(this.gbProperties);
             this.splitContainer1.Size = new System.Drawing.Size(594, 438);
             this.splitContainer1.SplitterDistance = 248;
             this.splitContainer1.SplitterWidth = 6;
@@ -107,7 +109,7 @@
             this.gbProperties.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.gbProperties.Name = "gbProperties";
             this.gbProperties.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.gbProperties.Size = new System.Drawing.Size(596, 130);
+            this.gbProperties.Size = new System.Drawing.Size(596, 128);
             this.gbProperties.TabIndex = 34;
             this.gbProperties.TabStop = false;
             this.gbProperties.Text = "Node Properties";
@@ -119,14 +121,52 @@
             this.panelContainer.Location = new System.Drawing.Point(2, 16);
             this.panelContainer.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.panelContainer.Name = "panelContainer";
-            this.panelContainer.Size = new System.Drawing.Size(592, 111);
+            this.panelContainer.Size = new System.Drawing.Size(592, 109);
             this.panelContainer.TabIndex = 14;
+            // 
+            // panQuickActions
+            // 
+            this.panQuickActions.Controls.Add(this.gbQuickActions);
+            this.panQuickActions.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panQuickActions.Location = new System.Drawing.Point(0, 1);
+            this.panQuickActions.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.panQuickActions.Name = "panQuickActions";
+            this.panQuickActions.Padding = new System.Windows.Forms.Padding(0, 8, 0, 4);
+            this.panQuickActions.Size = new System.Drawing.Size(594, 55);
+            this.panQuickActions.TabIndex = 17;
+            // 
+            // gbQuickActions
+            // 
+            this.gbQuickActions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbQuickActions.Controls.Add(this.linkLabel1);
+            this.gbQuickActions.Location = new System.Drawing.Point(-1, 8);
+            this.gbQuickActions.Name = "gbQuickActions";
+            this.gbQuickActions.Padding = new System.Windows.Forms.Padding(8, 6, 3, 3);
+            this.gbQuickActions.Size = new System.Drawing.Size(596, 49);
+            this.gbQuickActions.TabIndex = 19;
+            this.gbQuickActions.TabStop = false;
+            this.gbQuickActions.Text = "Quick Actions";
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.linkLabel1.Location = new System.Drawing.Point(8, 19);
+            this.linkLabel1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(55, 13);
+            this.linkLabel1.TabIndex = 0;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "linkLabel1";
             // 
             // addMenu
             // 
             this.addMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.nothingToAddToolStripMenuItem});
             this.addMenu.Name = "addMenu";
+            this.addMenu.OwnerItem = this.addToolStripMenuItem;
             this.addMenu.Size = new System.Drawing.Size(154, 26);
             this.addMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
@@ -218,42 +258,14 @@
             this.moveDownToolStripMenuItem.Text = "Move down";
             this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonMoveDown_Click);
             // 
-            // panQuickActions
+            // panel1
             // 
-            this.panQuickActions.Controls.Add(this.gbQuickActions);
-            this.panQuickActions.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panQuickActions.Location = new System.Drawing.Point(0, 0);
-            this.panQuickActions.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.panQuickActions.Name = "panQuickActions";
-            this.panQuickActions.Padding = new System.Windows.Forms.Padding(0, 8, 0, 4);
-            this.panQuickActions.Size = new System.Drawing.Size(594, 55);
-            this.panQuickActions.TabIndex = 17;
-            // 
-            // linkLabel1
-            // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.linkLabel1.Location = new System.Drawing.Point(8, 19);
-            this.linkLabel1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(55, 13);
-            this.linkLabel1.TabIndex = 0;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "linkLabel1";
-            // 
-            // gbQuickActions
-            // 
-            this.gbQuickActions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbQuickActions.Controls.Add(this.linkLabel1);
-            this.gbQuickActions.Location = new System.Drawing.Point(-1, 8);
-            this.gbQuickActions.Name = "gbQuickActions";
-            this.gbQuickActions.Padding = new System.Windows.Forms.Padding(8, 6, 3, 3);
-            this.gbQuickActions.Size = new System.Drawing.Size(596, 49);
-            this.gbQuickActions.TabIndex = 19;
-            this.gbQuickActions.TabStop = false;
-            this.gbQuickActions.Text = "Quick Actions";
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(594, 1);
+            this.panel1.TabIndex = 35;
             // 
             // TreeBuilderControl
             // 
@@ -277,11 +289,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.gbProperties.ResumeLayout(false);
-            this.addMenu.ResumeLayout(false);
-            this.nodeMenu.ResumeLayout(false);
             this.panQuickActions.ResumeLayout(false);
             this.gbQuickActions.ResumeLayout(false);
             this.gbQuickActions.PerformLayout();
+            this.addMenu.ResumeLayout(false);
+            this.nodeMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -307,5 +319,6 @@
         private System.Windows.Forms.Panel panQuickActions;
         private System.Windows.Forms.LinkLabel linkLabel1;
         internal System.Windows.Forms.GroupBox gbQuickActions;
+        private System.Windows.Forms.Panel panel1;
     }
 }

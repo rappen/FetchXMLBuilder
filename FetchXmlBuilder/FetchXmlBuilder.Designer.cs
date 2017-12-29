@@ -61,13 +61,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbUndo = new System.Windows.Forms.ToolStripButton();
             this.tsbRedo = new System.Windows.Forms.ToolStripButton();
             this.tsbExecute = new System.Windows.Forms.ToolStripButton();
-            this.tsbReturnToCaller = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbAbout = new System.Windows.Forms.ToolStripButton();
             this.tsbView = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiShowOData = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.resetWindowLayoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsbReturnToCaller = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbAbout = new System.Windows.Forms.ToolStripButton();
             this.tsbOptions = new System.Windows.Forms.ToolStripButton();
             this.panOData = new System.Windows.Forms.Panel();
             this.linkOData = new System.Windows.Forms.LinkLabel();
@@ -380,6 +380,38 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbExecute.ToolTipText = "Execute FetchXML (F5)";
             this.tsbExecute.Click += new System.EventHandler(this.tsbExecute_Click);
             // 
+            // tsbView
+            // 
+            this.tsbView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiShowOData,
+            this.toolStripMenuItem1,
+            this.resetWindowLayoutToolStripMenuItem});
+            this.tsbView.Image = ((System.Drawing.Image)(resources.GetObject("tsbView.Image")));
+            this.tsbView.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbView.Name = "tsbView";
+            this.tsbView.Size = new System.Drawing.Size(69, 28);
+            this.tsbView.Text = "View";
+            // 
+            // tsmiShowOData
+            // 
+            this.tsmiShowOData.CheckOnClick = true;
+            this.tsmiShowOData.Name = "tsmiShowOData";
+            this.tsmiShowOData.Size = new System.Drawing.Size(197, 22);
+            this.tsmiShowOData.Text = "Show OData Equivalent";
+            this.tsmiShowOData.CheckedChanged += new System.EventHandler(this.tsmiShowOData_CheckedChanged);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(194, 6);
+            // 
+            // resetWindowLayoutToolStripMenuItem
+            // 
+            this.resetWindowLayoutToolStripMenuItem.Name = "resetWindowLayoutToolStripMenuItem";
+            this.resetWindowLayoutToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.resetWindowLayoutToolStripMenuItem.Text = "Reset window layout";
+            this.resetWindowLayoutToolStripMenuItem.Click += new System.EventHandler(this.resetWindowLayoutToolStripMenuItem_Click);
+            // 
             // tsbReturnToCaller
             // 
             this.tsbReturnToCaller.Image = ((System.Drawing.Image)(resources.GetObject("tsbReturnToCaller.Image")));
@@ -404,38 +436,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbAbout.Size = new System.Drawing.Size(68, 28);
             this.tsbAbout.Text = "About";
             this.tsbAbout.Click += new System.EventHandler(this.tsbAbout_Click);
-            // 
-            // tsbView
-            // 
-            this.tsbView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiShowOData,
-            this.toolStripMenuItem1,
-            this.resetWindowLayoutToolStripMenuItem});
-            this.tsbView.Image = ((System.Drawing.Image)(resources.GetObject("tsbView.Image")));
-            this.tsbView.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbView.Name = "tsbView";
-            this.tsbView.Size = new System.Drawing.Size(69, 28);
-            this.tsbView.Text = "View";
-            // 
-            // tsmiShowOData
-            // 
-            this.tsmiShowOData.CheckOnClick = true;
-            this.tsmiShowOData.Name = "tsmiShowOData";
-            this.tsmiShowOData.Size = new System.Drawing.Size(203, 22);
-            this.tsmiShowOData.Text = "Show OData Equivalent";
-            this.tsmiShowOData.CheckedChanged += new System.EventHandler(this.tsmiShowOData_CheckedChanged);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(200, 6);
-            // 
-            // resetWindowLayoutToolStripMenuItem
-            // 
-            this.resetWindowLayoutToolStripMenuItem.Name = "resetWindowLayoutToolStripMenuItem";
-            this.resetWindowLayoutToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
-            this.resetWindowLayoutToolStripMenuItem.Text = "Reset window layout";
-            this.resetWindowLayoutToolStripMenuItem.Click += new System.EventHandler(this.resetWindowLayoutToolStripMenuItem_Click);
             // 
             // tsbOptions
             // 
@@ -528,6 +528,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // dockContainer
             // 
             this.dockContainer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.dockContainer.DefaultFloatWindowSize = new System.Drawing.Size(600, 400);
             this.dockContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dockContainer.DocumentStyle = WeifenLuo.WinFormsUI.Docking.DocumentStyle.DockingWindow;
             this.dockContainer.Location = new System.Drawing.Point(0, 31);
@@ -609,7 +610,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem resetWindowLayoutToolStripMenuItem;
-        internal WeifenLuo.WinFormsUI.Docking.DockPanel dockContainer;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        internal WeifenLuo.WinFormsUI.Docking.DockPanel dockContainer;
     }
 }
