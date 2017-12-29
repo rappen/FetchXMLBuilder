@@ -53,6 +53,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool doNotPromptToSave { get; set; } = false;
         public bool resultsAlwaysNewWindow { get; set; } = false;
         public int treeHeight { get; set; } = -1;
+        public WeifenLuo.WinFormsUI.Docking.DockState gridDockState { get; set; } = WeifenLuo.WinFormsUI.Docking.DockState.Document;
+        public WeifenLuo.WinFormsUI.Docking.DockState xmlDockState { get; set; } = WeifenLuo.WinFormsUI.Docking.DockState.DockRight;
 
         public FXBSettings()
         {

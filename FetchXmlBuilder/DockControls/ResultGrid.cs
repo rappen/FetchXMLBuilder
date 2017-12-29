@@ -11,7 +11,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
     {
         FetchXmlBuilder form;
 
-        public ResultGrid(EntityCollection entities, FetchXmlBuilder fetchXmlBuilder)
+        public ResultGrid(FetchXmlBuilder fetchXmlBuilder)
         {
             InitializeComponent();
             form = fetchXmlBuilder;
@@ -20,16 +20,26 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             chkIndexCol.Checked = form.currentSettings.gridIndex;
             chkCopyHeaders.Checked = form.currentSettings.gridCopyHeaders;
             ApplySettingsToGrid();
-            SetData(entities);
         }
 
         internal void SetData(EntityCollection entities)
+        {
+            if (entities != null)
+            {
+                EnsureVisible();
+            }
+            crmGridView1.DataSource = entities;
+            crmGridView1.Refresh();
+            crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
+        }
+
+        private void EnsureVisible()
         {
             switch (DockState)
             {
                 case WeifenLuo.WinFormsUI.Docking.DockState.Unknown:
                 case WeifenLuo.WinFormsUI.Docking.DockState.Hidden:
-                    Show(form.dockContainer, WeifenLuo.WinFormsUI.Docking.DockState.Document);
+                    Show(form.dockContainer, form.currentSettings.gridDockState);
                     break;
                 case WeifenLuo.WinFormsUI.Docking.DockState.DockBottomAutoHide:
                     DockState = WeifenLuo.WinFormsUI.Docking.DockState.DockBottom;
@@ -44,9 +54,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     DockState = WeifenLuo.WinFormsUI.Docking.DockState.DockRight;
                     break;
             }
-            crmGridView1.DataSource = entities;
-            crmGridView1.Refresh();
-            crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
         }
 
         private void ApplySettingsToGrid()
@@ -60,7 +67,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
         }
 
-        private void UpddateSettingsFromGrid()
+        private void UpdateSettingsFromGrid()
         {
             form.currentSettings.gridFriendly = chkFriendly.Checked;
             form.currentSettings.gridIndex = chkIndexCol.Checked;
@@ -152,9 +159,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
         }
 
-        private void chkGridOptions_CheckedChanged(object sender, EventArgs e)
+        private void chkGridOptions_Click(object sender, EventArgs e)
         {
-            UpddateSettingsFromGrid();
+            UpdateSettingsFromGrid();
         }
 
         private void ResultGrid_DockStateChanged(object sender, EventArgs e)
@@ -165,6 +172,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 {
                     form.resultGrid = null;
                 }
+            }
+            if (DockState != WeifenLuo.WinFormsUI.Docking.DockState.Unknown &&
+                DockState != WeifenLuo.WinFormsUI.Docking.DockState.Hidden)
+            {
+                form.currentSettings.gridDockState = DockState;
             }
         }
     }

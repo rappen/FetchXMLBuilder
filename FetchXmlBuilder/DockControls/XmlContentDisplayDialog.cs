@@ -225,6 +225,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             btnExecute.Enabled = plain;
             btnSave.Enabled = plain;
         }
+
+        private void XmlContentDisplayDialog_DockStateChanged(object sender, EventArgs e)
+        {
+            if (DockState == WeifenLuo.WinFormsUI.Docking.DockState.Unknown)
+            {
+                if (this == fxb.xmlLiveUpdate)
+                {
+                    fxb.xmlLiveUpdate = null;
+                }
+            }
+            if (DockState != WeifenLuo.WinFormsUI.Docking.DockState.Unknown &&
+                DockState != WeifenLuo.WinFormsUI.Docking.DockState.Hidden)
+            {
+                fxb.currentSettings.xmlDockState = DockState;
+            }
+        }
     }
 
     internal enum SaveFormat

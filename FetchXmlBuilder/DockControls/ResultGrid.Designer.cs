@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.crmGridView1 = new Cinteros.Xrm.CRMWinForm.CRMGridView();
             this.chkCopyHeaders = new System.Windows.Forms.CheckBox();
             this.chkIndexCol = new System.Windows.Forms.CheckBox();
@@ -47,8 +47,8 @@
             this.crmGridView1.AllowUserToDeleteRows = false;
             this.crmGridView1.AllowUserToOrderColumns = true;
             this.crmGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.crmGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
             this.crmGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.crmGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
@@ -76,7 +76,7 @@
             this.chkCopyHeaders.TabIndex = 3;
             this.chkCopyHeaders.Text = "Copy with Headers";
             this.chkCopyHeaders.UseVisualStyleBackColor = true;
-            this.chkCopyHeaders.CheckedChanged += new System.EventHandler(this.chkGridOptions_CheckedChanged);
+            this.chkCopyHeaders.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
             // chkIndexCol
             // 
@@ -87,7 +87,7 @@
             this.chkIndexCol.TabIndex = 2;
             this.chkIndexCol.Text = "Show Index Col";
             this.chkIndexCol.UseVisualStyleBackColor = true;
-            this.chkIndexCol.CheckedChanged += new System.EventHandler(this.chkGridOptions_CheckedChanged);
+            this.chkIndexCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
             // chkIdCol
             // 
@@ -98,7 +98,7 @@
             this.chkIdCol.TabIndex = 1;
             this.chkIdCol.Text = "Show Record Id";
             this.chkIdCol.UseVisualStyleBackColor = true;
-            this.chkIdCol.CheckedChanged += new System.EventHandler(this.chkGridOptions_CheckedChanged);
+            this.chkIdCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
             // chkFriendly
             // 
@@ -109,7 +109,7 @@
             this.chkFriendly.TabIndex = 0;
             this.chkFriendly.Text = "Friendly Names";
             this.chkFriendly.UseVisualStyleBackColor = true;
-            this.chkFriendly.CheckedChanged += new System.EventHandler(this.chkGridOptions_CheckedChanged);
+            this.chkFriendly.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
             // groupBox1
             // 

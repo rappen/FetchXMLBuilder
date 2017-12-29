@@ -561,10 +561,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.TabIcon = ((System.Drawing.Image)(resources.GetObject("$this.TabIcon")));
             this.ConnectionUpdated += new XrmToolBox.Extensibility.PluginControlBase.ConnectionUpdatedHandler(this.FetchXmlBuilder_ConnectionUpdated);
             this.Load += new System.EventHandler(this.FetchXmlBuilder_Load);
-            this.SizeChanged += new System.EventHandler(this.FetchXmlBuilder_FormChanged);
-            this.VisibleChanged += new System.EventHandler(this.FetchXmlBuilder_FormChanged);
-            this.Enter += new System.EventHandler(this.FetchXmlBuilder_Enter);
-            this.Leave += new System.EventHandler(this.FetchXmlBuilder_Leave);
             this.toolStripMain.ResumeLayout(false);
             this.toolStripMain.PerformLayout();
             this.panOData.ResumeLayout(false);
