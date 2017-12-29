@@ -38,7 +38,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public int resultOption { get; set; }
         public int resultSerializeStyle { get; set; }
         public bool retrieveAllPages { get; set; } = false;
-        public Size xmlWinSize { get; set; }
         public bool gridFriendly { get; set; }
         public bool gridId { get; set; }
         public bool gridIndex { get; set; }
@@ -54,7 +53,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool resultsAlwaysNewWindow { get; set; } = false;
         public int treeHeight { get; set; } = -1;
         public WeifenLuo.WinFormsUI.Docking.DockState gridDockState { get; set; } = WeifenLuo.WinFormsUI.Docking.DockState.Document;
-        public WeifenLuo.WinFormsUI.Docking.DockState xmlDockState { get; set; } = WeifenLuo.WinFormsUI.Docking.DockState.DockRight;
+        public WeifenLuo.WinFormsUI.Docking.DockState xmlDockState { get; set; } = WeifenLuo.WinFormsUI.Docking.DockState.Document;
 
         public FXBSettings()
         {

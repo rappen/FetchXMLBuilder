@@ -205,7 +205,6 @@
             this.Name = "XmlContentDisplayDialog";
             this.ShowIcon = false;
             this.DockStateChanged += new System.EventHandler(this.XmlContentDisplayDialog_DockStateChanged);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.XmlContentDisplayDialog_FormClosing);
             this.Load += new System.EventHandler(this.XmlContentDisplayDialog_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.XmlContentDisplayDialog_KeyDown);
             this.panBottom.ResumeLayout(false);

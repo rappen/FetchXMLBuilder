@@ -66,7 +66,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbAbout = new System.Windows.Forms.ToolStripButton();
             this.tsbView = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiShowOData = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiLiveUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.resetWindowLayoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbOptions = new System.Windows.Forms.ToolStripButton();
@@ -101,10 +100,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbUndo,
             this.tsbRedo,
             this.tsbExecute,
+            this.tsbView,
             this.tsbReturnToCaller,
             this.toolStripSeparator3,
             this.tsbAbout,
-            this.tsbView,
             this.tsbOptions});
             this.toolStripMain.Location = new System.Drawing.Point(0, 0);
             this.toolStripMain.Name = "toolStripMain";
@@ -410,7 +409,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsbView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiShowOData,
-            this.tsmiLiveUpdate,
             this.toolStripMenuItem1,
             this.resetWindowLayoutToolStripMenuItem});
             this.tsbView.Image = ((System.Drawing.Image)(resources.GetObject("tsbView.Image")));
@@ -426,15 +424,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiShowOData.Size = new System.Drawing.Size(203, 22);
             this.tsmiShowOData.Text = "Show OData Equivalent";
             this.tsmiShowOData.CheckedChanged += new System.EventHandler(this.tsmiShowOData_CheckedChanged);
-            // 
-            // tsmiLiveUpdate
-            // 
-            this.tsmiLiveUpdate.CheckOnClick = true;
-            this.tsmiLiveUpdate.Name = "tsmiLiveUpdate";
-            this.tsmiLiveUpdate.ShortcutKeyDisplayString = "Ctrl+L";
-            this.tsmiLiveUpdate.Size = new System.Drawing.Size(203, 22);
-            this.tsmiLiveUpdate.Text = "Live XML Update";
-            this.tsmiLiveUpdate.CheckedChanged += new System.EventHandler(this.tsmiLiveUpdate_CheckedChanged);
             // 
             // toolStripMenuItem1
             // 
@@ -593,7 +582,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripButton tsbAbout;
         private System.Windows.Forms.ToolStripDropDownButton tsbView;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveCWP;
-        private System.Windows.Forms.ToolStripMenuItem tsmiLiveUpdate;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenCWP;
         private System.Windows.Forms.ToolStripMenuItem tsmiToQureyExpression;
         private System.Windows.Forms.ToolStripButton tsbExecute;

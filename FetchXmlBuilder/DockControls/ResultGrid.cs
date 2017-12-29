@@ -168,9 +168,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             if (DockState == WeifenLuo.WinFormsUI.Docking.DockState.Unknown)
             {
-                if (this == form.resultGrid)
+                if (this == form.dockControlGrid)
                 {
-                    form.resultGrid = null;
+                    form.dockControlGrid = null;
                 }
             }
             if (DockState != WeifenLuo.WinFormsUI.Docking.DockState.Unknown &&

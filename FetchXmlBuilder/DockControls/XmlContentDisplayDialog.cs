@@ -25,25 +25,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     return null;
                 }
             }
-            var xcdDialog = new XmlContentDisplayDialog(xmlString, header, allowEdit, allowFormat, allowExecute, saveFormat, caller);
+            var xcdDialog = new XmlContentDisplayDialog(header, allowEdit, allowFormat, allowExecute, saveFormat, caller);
+            xcdDialog.UpdateXML(xmlString);
             xcdDialog.StartPosition = FormStartPosition.CenterParent;
             xcdDialog.ShowDialog();
             return xcdDialog;
         }
 
-        internal XmlContentDisplayDialog(string xmlString, string header, bool allowEdit, bool allowFormat, bool allowExecute, SaveFormat saveFormat, FetchXmlBuilder caller)
+        internal XmlContentDisplayDialog(FetchXmlBuilder caller) : this("FetchXML", true, true, true, SaveFormat.XML, caller) { }
+
+        internal XmlContentDisplayDialog(string header, bool allowEdit, bool allowFormat, bool allowExecute, SaveFormat saveFormat, FetchXmlBuilder caller)
         {
             InitializeComponent();
             format = saveFormat;
             fxb = caller;
             result = null;
             execute = false;
-            if (fxb.currentSettings.xmlWinSize != null && fxb.currentSettings.xmlWinSize.Width > 0 && fxb.currentSettings.xmlWinSize.Height > 0)
-            {
-                Width = fxb.currentSettings.xmlWinSize.Width;
-                Height = fxb.currentSettings.xmlWinSize.Height;
-            }
             Text = string.IsNullOrEmpty(header) ? "FetchXML Builder" : header;
+            TabText = Text;
             panOk.Visible = allowEdit;
             if (!allowEdit)
             {
@@ -55,7 +54,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             btnEscape.Visible = allowFormat;
             btnExecute.Visible = allowExecute;
             btnSave.Visible = format != SaveFormat.None;
-            UpdateXML(xmlString);
         }
 
         private void btnFormat_Click(object sender, EventArgs e)
@@ -102,11 +100,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             RichTextBox textBox = txtXML;
             findtext = FindTextHandler.HandleFindKeyPress(e, textBox, findtext);
-        }
-
-        private void XmlContentDisplayDialog_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            fxb.currentSettings.xmlWinSize = new System.Drawing.Size(Width, Height);
         }
 
         public void UpdateXML(string xmlString)
@@ -230,9 +223,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             if (DockState == WeifenLuo.WinFormsUI.Docking.DockState.Unknown)
             {
-                if (this == fxb.xmlLiveUpdate)
+                if (this == fxb.dockControlXml)
                 {
-                    fxb.xmlLiveUpdate = null;
+                    fxb.dockControlXml = null;
                 }
             }
             if (DockState != WeifenLuo.WinFormsUI.Docking.DockState.Unknown &&
