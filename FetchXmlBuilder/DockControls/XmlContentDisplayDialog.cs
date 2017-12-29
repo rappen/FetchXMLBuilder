@@ -14,7 +14,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         FetchXmlBuilder fxb;
         SaveFormat format;
 
-        internal static XmlContentDisplayDialog Show(string xmlString, string header, bool allowEdit, bool allowFormat, bool allowExecute, SaveFormat saveFormat, FetchXmlBuilder caller)
+        internal static XmlContentDisplayDialog ShowDialog(string xmlString, string header, SaveFormat saveFormat, FetchXmlBuilder caller)
         {
             if (xmlString.Length > 100000)
             {
@@ -25,16 +25,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     return null;
                 }
             }
-            var xcdDialog = new XmlContentDisplayDialog(header, allowEdit, allowFormat, allowExecute, saveFormat, caller);
+            var xcdDialog = new XmlContentDisplayDialog(header, false, saveFormat, caller);
             xcdDialog.UpdateXML(xmlString);
             xcdDialog.StartPosition = FormStartPosition.CenterParent;
             xcdDialog.ShowDialog();
             return xcdDialog;
         }
 
-        internal XmlContentDisplayDialog(FetchXmlBuilder caller) : this("FetchXML", true, true, true, SaveFormat.XML, caller) { }
+        internal XmlContentDisplayDialog(FetchXmlBuilder caller) : this("FetchXML", true, SaveFormat.XML, caller) { }
 
-        internal XmlContentDisplayDialog(string header, bool allowEdit, bool allowFormat, bool allowExecute, SaveFormat saveFormat, FetchXmlBuilder caller)
+        private XmlContentDisplayDialog(string header, bool allowEdit, SaveFormat saveFormat, FetchXmlBuilder caller)
         {
             InitializeComponent();
             format = saveFormat;
@@ -43,17 +43,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             execute = false;
             Text = string.IsNullOrEmpty(header) ? "FetchXML Builder" : header;
             TabText = Text;
+            txtXML.KeyUp += fxb.LiveXML_KeyUp;
+            panLiveUpdate.Visible = allowEdit;
+            panCancel.Visible = !allowEdit;
             panOk.Visible = allowEdit;
-            if (!allowEdit)
-            {
-                btnCancel.Text = "Close";
-            }
-            btnFormat.Visible = allowFormat;
-            btnDecode.Visible = allowFormat;
-            btnHtmlEncode.Visible = allowFormat;
-            btnEscape.Visible = allowFormat;
-            btnExecute.Visible = allowExecute;
-            btnSave.Visible = format != SaveFormat.None;
+            panFormatting.Visible = allowEdit;
+            panExecute.Visible = allowEdit;
+            panSave.Visible = format != SaveFormat.None;
+            chkLiveUpdate.Checked = allowEdit && fxb.currentSettings.xmlLiveUpdate;
+            UpdateButtons();
         }
 
         private void btnFormat_Click(object sender, EventArgs e)
@@ -63,22 +61,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            SetResult();
-        }
-
-        private void SetResult()
-        {
-            try
-            {
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(txtXML.Text.Replace("\n", "\r\n"));
-                result = doc.DocumentElement;
-            }
-            catch (Exception error)
-            {
-                DialogResult = DialogResult.None;
-                MessageBox.Show(this, "Error while parsing Xml: " + error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            fxb.dockControlBuilder.Init(txtXML.Text, "manual edit", true);
         }
 
         private void FormatXML(bool silent)
@@ -116,8 +99,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void btnExecute_Click(object sender, EventArgs e)
         {
-            SetResult();
-            execute = true;
+            fxb.FetchResults(txtXML.Text);
         }
 
         private void XmlContentDisplayDialog_Load(object sender, EventArgs e)
@@ -142,7 +124,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
         }
 
-        private void btnDecode_Click(object sender, EventArgs e)
+        private void FormatAsXML()
         {
             if (FetchIsHtml())
             {
@@ -166,27 +148,38 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             FormatXML(false);
         }
 
-        private void btnHtmlEncode_Click(object sender, EventArgs e)
+        private void FormatAsHtml()
         {
-            var xml = txtXML.Text;
-            switch (MessageBox.Show("Strip spaces from encoded XML?", "Encode XML", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+            var response = MessageBox.Show("Strip spaces from encoded XML?", "Encode XML", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            if (response == DialogResult.Cancel)
             {
-                case DialogResult.Yes:
-                    xml = GetCompactXml(xml);
-                    break;
-                case DialogResult.Cancel:
-                    return;
+                UpdateButtons();
+                return;
             }
+            if (!FetchIsPlain())
+            {
+                FormatAsXML();
+            }
+            var xml = response == DialogResult.Yes ? GetCompactXml() : txtXML.Text;
             txtXML.Text = HttpUtility.HtmlEncode(xml);
         }
 
-        private void btnEscape_Click(object sender, EventArgs e)
+        private void FormatAsEsc()
         {
-            txtXML.Text = Uri.EscapeDataString(GetCompactXml(txtXML.Text));
+            if (!FetchIsPlain())
+            {
+                FormatAsXML();
+            }
+            txtXML.Text = Uri.EscapeDataString(GetCompactXml());
         }
 
-        private string GetCompactXml(string xml)
+        private string GetCompactXml()
         {
+            if (!FetchIsPlain())
+            {
+                FormatAsXML();
+            }
+            var xml = txtXML.Text;
             while (xml.Contains(" <")) xml = xml.Replace(" <", "<");
             while (xml.Contains(" >")) xml = xml.Replace(" >", ">");
             while (xml.Contains(" />")) xml = xml.Replace(" />", "/>");
@@ -210,13 +203,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void txtXML_TextChanged(object sender, EventArgs e)
         {
-            btnDecode.Enabled = FetchIsHtml() || FetchIsEscaped();
+            UpdateButtons();
+        }
+
+        private void UpdateButtons()
+        {
             var plain = FetchIsPlain();
+            rbFormatEsc.Checked = FetchIsEscaped();
+            rbFormatHTML.Checked = FetchIsHtml();
+            rbFormatXML.Checked = plain;
             btnFormat.Enabled = plain;
-            btnHtmlEncode.Enabled = plain;
-            btnEscape.Enabled = plain;
-            btnExecute.Enabled = plain;
-            btnSave.Enabled = plain;
+            btnExecute.Enabled = plain && !fxb.currentSettings.xmlLiveUpdate;
+            btnOk.Enabled = !fxb.currentSettings.xmlLiveUpdate;
         }
 
         private void XmlContentDisplayDialog_DockStateChanged(object sender, EventArgs e)
@@ -233,6 +231,30 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 fxb.currentSettings.xmlDockState = DockState;
             }
+        }
+
+        private void rbFormatXML_Click(object sender, EventArgs e)
+        {
+            FormatAsXML();
+        }
+
+        private void rbFormatHTML_Click(object sender, EventArgs e)
+        {
+            FormatAsHtml();
+        }
+
+        private void rbFormatEsc_Click(object sender, EventArgs e)
+        {
+            FormatAsEsc();
+        }
+
+        private void chkLiveUpdate_CheckedChanged(object sender, EventArgs e)
+        {
+            if (panLiveUpdate.Visible)
+            {
+                fxb.currentSettings.xmlLiveUpdate = chkLiveUpdate.Checked;
+            }
+            UpdateButtons();
         }
     }
 

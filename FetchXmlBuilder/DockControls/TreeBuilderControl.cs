@@ -192,18 +192,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             return result as FetchType;
         }
 
-        internal QueryExpression GetQueryExpression()
+        internal QueryExpression GetQueryExpression(string fetch = null)
         {
-            if (IsFetchAggregate(tvFetch.Nodes.Count > 0 ? tvFetch.Nodes[0] : null))
-            {
-                throw new FetchIsAggregateException("QueryExpression does not support aggregate queries.");
-            }
-            var xml = GetFetchDocument();
             if (fxb.Service == null)
             {
                 throw new Exception("Must be connected to CRM to convert to QueryExpression.");
             }
-            var convert = (FetchXmlToQueryExpressionResponse)fxb.Service.Execute(new FetchXmlToQueryExpressionRequest() { FetchXml = xml.OuterXml });
+            if (string.IsNullOrWhiteSpace(fetch))
+            {
+                if (IsFetchAggregate(tvFetch.Nodes.Count > 0 ? tvFetch.Nodes[0] : null))
+                {
+                    throw new FetchIsAggregateException("QueryExpression does not support aggregate queries.");
+                }
+                fetch = GetFetchString(false, true);
+            }
+            var convert = (FetchXmlToQueryExpressionResponse)fxb.Service.Execute(new FetchXmlToQueryExpressionRequest() { FetchXml = fetch });
             return convert.Query;
         }
 

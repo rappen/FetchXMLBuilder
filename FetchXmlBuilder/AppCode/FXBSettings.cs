@@ -1,13 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using XrmToolBox;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
@@ -52,6 +44,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool doNotPromptToSave { get; set; } = false;
         public bool resultsAlwaysNewWindow { get; set; } = false;
         public int treeHeight { get; set; } = -1;
+        public bool xmlLiveUpdate { get; set; }
         public WeifenLuo.WinFormsUI.Docking.DockState gridDockState { get; set; } = WeifenLuo.WinFormsUI.Docking.DockState.Document;
         public WeifenLuo.WinFormsUI.Docking.DockState xmlDockState { get; set; } = WeifenLuo.WinFormsUI.Docking.DockState.Document;
 

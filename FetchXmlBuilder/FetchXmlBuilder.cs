@@ -372,8 +372,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             if (dockControlXml?.IsDisposed != false)
             {
-                dockControlXml = new XmlContentDisplayDialog("FetchXML", true, true, true, SaveFormat.XML, this);
-                dockControlXml.txtXML.KeyUp += LiveXML_KeyUp;
+                dockControlXml = new XmlContentDisplayDialog(this);
                 dockControlXml.Show(dockContainer, currentSettings.xmlDockState);
             }
             else
@@ -381,21 +380,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 dockControlXml.Activate();
             }
             UpdateLiveXML();
-
-
-            //var xml = treeControl.GetFetchString(false, false);
-            //var xcdDialog = XmlContentDisplayDialog.Show(xml, "FetchXML", true, true, Service != null, SaveFormat.XML, this);
-            //if (xcdDialog.DialogResult == DialogResult.OK)
-            //{
-            //    XmlNode resultNode = xcdDialog.result;
-            //    EnableControls(false);
-            //    treeControl.Init(resultNode.OuterXml, "manual edit", !xcdDialog.execute);
-            //    UpdateLiveXML();
-            //    if (xcdDialog.execute)
-            //    {
-            //        FetchResults(resultNode.OuterXml);
-            //    }
-            //}
         }
 
         private void tsbExecute_Click(object sender, EventArgs e)
@@ -442,9 +426,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             SaveCWPFeed();
         }
 
-        void LiveXML_KeyUp(object sender, KeyEventArgs e)
+        internal void LiveXML_KeyUp(object sender, KeyEventArgs e)
         {
-            if (dockControlXml != null && dockControlXml.txtXML != null && dockControlXml.Visible && !e.Handled)
+            if (dockControlXml != null && dockControlXml.chkLiveUpdate.Checked &&
+                dockControlXml.txtXML != null && dockControlXml.Visible && !e.Handled)
             {
                 try
                 {
@@ -452,7 +437,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     doc.LoadXml(dockControlXml.txtXML.Text);
                     if (doc.OuterXml != liveUpdateXml)
                     {
-                        dockControlBuilder.Init(dockControlXml.txtXML.Text, null, false);
+                        dockControlBuilder.ParseXML(dockControlXml.txtXML.Text, false);
                     }
                     liveUpdateXml = doc.OuterXml;
                 }
@@ -866,7 +851,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             working = false;
         }
 
-        private void FetchResults(string fetch = "")
+        internal void FetchResults(string fetch = "")
         {
             if (!tsbExecute.Enabled)
             {
@@ -927,7 +912,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         XmlDocument doc = new XmlDocument();
                         doc.LoadXml(completedargs.Result.ToString());
-                        XmlContentDisplayDialog.Show(doc.OuterXml, "FetchXML result", false, false, false, SaveFormat.XML, this);
+                        XmlContentDisplayDialog.ShowDialog(doc.OuterXml, "FetchXML result", SaveFormat.XML, this);
                     }
                 }
             });
@@ -947,7 +932,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     QueryBase query;
                     try
                     {
-                        query = dockControlBuilder.GetQueryExpression();
+                        query = dockControlBuilder.GetQueryExpression(fetch);
                     }
                     catch (FetchIsAggregateException)
                     {
@@ -1011,7 +996,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             ExecuteFetch(fetch);
                         }
                     }
-                    if (completedargs.Result is EntityCollection entities)
+                    else if (completedargs.Result is EntityCollection entities)
                     {
                         if (outputtype == 0)
                         {
@@ -1039,12 +1024,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             if (outputstyle == 0)
                             {
                                 var serialized = EntityCollectionSerializer.Serialize(entities, SerializationStyle.Explicit);
-                                XmlContentDisplayDialog.Show(serialized.OuterXml, "XML Serialized RetrieveMultiple result", false, false, false, SaveFormat.XML, this);
+                                XmlContentDisplayDialog.ShowDialog(serialized.OuterXml, "XML Serialized RetrieveMultiple result", SaveFormat.XML, this);
                             }
                             else if (outputstyle == 1)
                             {
                                 var serialized = EntityCollectionSerializer.Serialize(entities, SerializationStyle.Basic);
-                                XmlContentDisplayDialog.Show(serialized.OuterXml, "XML Serialized RetrieveMultiple result", false, false, false, SaveFormat.XML, this);
+                                XmlContentDisplayDialog.ShowDialog(serialized.OuterXml, "XML Serialized RetrieveMultiple result", SaveFormat.XML, this);
                             }
                             else if (outputstyle == 3)
                             {
@@ -1055,14 +1040,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                                 xw.Close();
                                 sw.Close();
                                 var serialized = sw.ToString();
-                                XmlContentDisplayDialog.Show(serialized, "Serialized EntityCollection", false, false, false, SaveFormat.XML, this);
+                                XmlContentDisplayDialog.ShowDialog(serialized, "Serialized EntityCollection", SaveFormat.XML, this);
                             }
                         }
                     }
                     else if (outputtype == 1 && outputstyle == 2 && completedargs.Result is string)
                     {
                         var result = completedargs.Result.ToString();
-                        XmlContentDisplayDialog.Show(result, "JSON Serialized RetrieveMultiple result", false, false, false, SaveFormat.JSON, this);
+                        XmlContentDisplayDialog.ShowDialog(result, "JSON Serialized RetrieveMultiple result", SaveFormat.JSON, this);
                     }
                 }
             });
@@ -1421,7 +1406,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 var QEx = dockControlBuilder.GetQueryExpression();
                 var code = QueryExpressionCodeGenerator.GetCSharpQueryExpression(QEx);
                 LogUse("DisplayQExCode");
-                XmlContentDisplayDialog.Show(code, "QueryExpression Code", false, false, false, SaveFormat.None, this);
+                XmlContentDisplayDialog.ShowDialog(code, "QueryExpression Code", SaveFormat.None, this);
             }
             catch (FetchIsAggregateException ex)
             {
@@ -1471,7 +1456,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 var sql = SQLQueryGenerator.GetSQLQuery(fetch);
                 LogUse("DisplaySQLQuery");
-                XmlContentDisplayDialog.Show(sql, "SQL Query", false, false, false, SaveFormat.None, this);
+                XmlContentDisplayDialog.ShowDialog(sql, "SQL Query", SaveFormat.None, this);
             }
             catch (Exception ex)
             {
@@ -1683,7 +1668,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 var js = JavascriptCodeGenerator.GetJavascriptCode(fetch);
                 LogUse("DisplayJavascriptCode");
-                XmlContentDisplayDialog.Show(js, "Javascript Code", false, false, false, SaveFormat.None, this);
+                XmlContentDisplayDialog.ShowDialog(js, "Javascript Code", SaveFormat.None, this);
             }
             catch (Exception ex)
             {
@@ -1704,7 +1689,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 var cs = CSharpCodeGenerator.GetCSharpCode(fetch);
                 LogUse("DisplayCSharpCode");
-                XmlContentDisplayDialog.Show(cs, "C# Code", false, false, false, SaveFormat.None, this);
+                XmlContentDisplayDialog.ShowDialog(cs, "C# Code", SaveFormat.None, this);
             }
             catch (Exception ex)
             {
