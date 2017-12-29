@@ -377,7 +377,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             else
             {
-                dockControlXml.Activate();
+                dockControlXml.EnsureVisible();
             }
             UpdateLiveXML();
         }

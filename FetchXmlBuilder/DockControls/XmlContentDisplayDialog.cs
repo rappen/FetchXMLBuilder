@@ -54,6 +54,31 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             UpdateButtons();
         }
 
+        internal void EnsureVisible()
+        {
+            switch (DockState)
+            {
+                case WeifenLuo.WinFormsUI.Docking.DockState.Unknown:
+                case WeifenLuo.WinFormsUI.Docking.DockState.Hidden:
+                    Show(fxb.dockContainer, fxb.currentSettings.xmlDockState);
+                    break;
+                case WeifenLuo.WinFormsUI.Docking.DockState.DockBottomAutoHide:
+                    DockState = WeifenLuo.WinFormsUI.Docking.DockState.DockBottom;
+                    break;
+                case WeifenLuo.WinFormsUI.Docking.DockState.DockTopAutoHide:
+                    DockState = WeifenLuo.WinFormsUI.Docking.DockState.DockTop;
+                    break;
+                case WeifenLuo.WinFormsUI.Docking.DockState.DockLeftAutoHide:
+                    DockState = WeifenLuo.WinFormsUI.Docking.DockState.DockLeft;
+                    break;
+                case WeifenLuo.WinFormsUI.Docking.DockState.DockRightAutoHide:
+                    DockState = WeifenLuo.WinFormsUI.Docking.DockState.DockRight;
+                    break;
+            }
+            Activate();
+        }
+
+
         private void btnFormat_Click(object sender, EventArgs e)
         {
             FormatXML(false);
