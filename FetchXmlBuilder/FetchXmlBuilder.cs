@@ -10,6 +10,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -154,6 +155,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             InitializeComponent();
             var theme = new VS2015LightTheme();
             dockContainer.Theme = theme;
+            dockContainer.Theme.Skin.DockPaneStripSkin.TextFont = Font;
+            dockContainer.DockBackColor = SystemColors.Window;
         }
 
         private void SetupDockControls()
