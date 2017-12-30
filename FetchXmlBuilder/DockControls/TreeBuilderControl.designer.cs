@@ -157,7 +157,7 @@
             this.gbProperties.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.gbProperties.Name = "gbProperties";
             this.gbProperties.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.gbProperties.Size = new System.Drawing.Size(596, 119);
+            this.gbProperties.Size = new System.Drawing.Size(596, 122);
             this.gbProperties.TabIndex = 34;
             this.gbProperties.TabStop = false;
             this.gbProperties.Text = "Node Properties";
