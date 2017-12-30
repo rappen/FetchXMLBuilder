@@ -431,6 +431,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (dockControlXml != null && dockControlXml.chkLiveUpdate.Checked &&
                 dockControlXml.txtXML != null && dockControlXml.Visible && !e.Handled)
             {
+                tmLiveUpdate.Stop();
+                tmLiveUpdate.Start();
+            }
+        }
+
+        private void tmLiveUpdate_Tick(object sender, EventArgs e)
+        {
+            tmLiveUpdate.Stop();
+            if (dockControlXml != null && dockControlXml.chkLiveUpdate.Checked &&
+                dockControlXml.txtXML != null && dockControlXml.Visible)
+            {
                 try
                 {
                     XmlDocument doc = new XmlDocument();

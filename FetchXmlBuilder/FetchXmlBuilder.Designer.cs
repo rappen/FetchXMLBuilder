@@ -78,6 +78,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.dockContainer = new WeifenLuo.WinFormsUI.Docking.DockPanel();
+            this.tmLiveUpdate = new System.Windows.Forms.Timer(this.components);
             this.toolStripMain.SuspendLayout();
             this.panOData.SuspendLayout();
             this.menuOData.SuspendLayout();
@@ -536,6 +537,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.dockContainer.Size = new System.Drawing.Size(1101, 542);
             this.dockContainer.TabIndex = 33;
             // 
+            // tmLiveUpdate
+            // 
+            this.tmLiveUpdate.Interval = 500;
+            this.tmLiveUpdate.Tick += new System.EventHandler(this.tmLiveUpdate_Tick);
+            // 
             // FetchXmlBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -612,5 +618,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem resetWindowLayoutToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         internal WeifenLuo.WinFormsUI.Docking.DockPanel dockContainer;
+        private System.Windows.Forms.Timer tmLiveUpdate;
     }
 }
