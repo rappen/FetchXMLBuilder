@@ -29,7 +29,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal TreeBuilderControl dockControlBuilder;
         internal ResultGrid dockControlGrid;
         internal XmlContentDisplayDialog dockControlXml;
-        internal ODataControl dockControlOData;
+        private ODataControl dockControlOData;
+        private XmlContentDisplayDialog dockControlQExp;
 
         internal static Dictionary<string, EntityMetadata> entities;
         internal static List<string> entityShitList = new List<string>(); // Oops, did I name that one??
@@ -482,9 +483,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             UpdateLiveXML();
         }
 
-        private void tsmiToQureyExpression_Click(object sender, EventArgs e)
+        private void tsmiShowQueryExpression_Click(object sender, EventArgs e)
         {
-            DisplayQExCode();
+            if (dockControlQExp?.IsDisposed != false)
+            {
+                dockControlQExp = new XmlContentDisplayDialog(ContentType.QueryExpression, false, SaveFormat.None, this);
+                dockControlQExp.Show(dockContainer, DockState.DockRight);
+            }
+            else
+            {
+                dockControlQExp.EnsureVisible(dockContainer, DockState.DockRight);
+            }
+            UpdateLiveXML();
         }
 
         private void tsmiToSQLQuery_Click(object sender, EventArgs e)
@@ -612,7 +622,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiSaveML.Enabled = enabled && Service != null && DynML != null;
                     tsmiSaveCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
                     tsmiSaveCWP.Enabled = enabled && Service != null && dockControlBuilder.FetchChanged && !string.IsNullOrEmpty(CWPFeed);
-                    tsmiToQureyExpression.Enabled = enabled && Service != null;
                     tsmiToSQLQuery.Enabled = enabled && Service != null;
                     tsmiToJavascript.Enabled = enabled && Service != null;
                     tsmiToCSharp.Enabled = enabled && Service != null;
@@ -1388,25 +1397,31 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 dockControlOData.DisplayOData();
             }
+            if (dockControlQExp?.Visible == true && entities != null)
+            {
+                var code = GetQueryExpressionCode();
+                dockControlQExp.UpdateXML(code);
+            }
         }
 
-        private void DisplayQExCode()
+        private string GetQueryExpressionCode()
         {
+            var code = string.Empty;
             try
             {
-                var QEx = dockControlBuilder.GetQueryExpression();
-                var code = QueryExpressionCodeGenerator.GetCSharpQueryExpression(QEx);
-                LogUse("DisplayQExCode");
-                XmlContentDisplayDialog.ShowDialog(code, ContentType.QueryExpression, SaveFormat.None, this);
+                var QEx = dockControlBuilder.GetQueryExpression(null, false);
+                code = QueryExpressionCodeGenerator.GetCSharpQueryExpression(QEx);
             }
             catch (FetchIsAggregateException ex)
             {
-                MessageBox.Show("This FetchXML is not possible to convert to QueryExpression in the current version of the SDK.\n\n" + ex.Message, "QueryExpression", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                code = "This FetchXML is not possible to convert to QueryExpression in the current version of the SDK.\n\n" + ex.Message;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Failed to generate C# QueryExpression code.\n\n" + ex.Message, "QueryExpression", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                code = "Failed to generate C# QueryExpression code.\n\n" + ex.Message;
             }
+
+            return code;
         }
 
         internal string GetOData()

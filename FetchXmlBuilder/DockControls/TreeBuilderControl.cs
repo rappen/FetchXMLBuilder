@@ -192,7 +192,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             return result as FetchType;
         }
 
-        internal QueryExpression GetQueryExpression(string fetch = null)
+        internal QueryExpression GetQueryExpression(string fetch = null, bool validate = true)
         {
             if (fxb.Service == null)
             {
@@ -204,7 +204,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 {
                     throw new FetchIsAggregateException("QueryExpression does not support aggregate queries.");
                 }
-                fetch = GetFetchString(false, true);
+                fetch = GetFetchString(false, validate);
             }
             var convert = (FetchXmlToQueryExpressionResponse)fxb.Service.Execute(new FetchXmlToQueryExpressionRequest() { FetchXml = fetch });
             return convert.Query;
@@ -326,7 +326,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(ex.Message, "FetchXML Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     result = ex.Message;
                 }
             }

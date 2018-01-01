@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlContentDisplayDialog));
-            CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings4 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
+            CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings1 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnExecute = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
@@ -38,6 +38,10 @@
             this.txtXML = new CSRichTextBoxSyntaxHighlighting.XMLViewer();
             this.panActions = new System.Windows.Forms.Panel();
             this.gbActions = new System.Windows.Forms.GroupBox();
+            this.panExecute = new System.Windows.Forms.Panel();
+            this.panSave = new System.Windows.Forms.Panel();
+            this.panOk = new System.Windows.Forms.Panel();
+            this.panLiveUpdate = new System.Windows.Forms.Panel();
             this.chkLiveUpdate = new System.Windows.Forms.CheckBox();
             this.panFormatting = new System.Windows.Forms.Panel();
             this.gbFormatting = new System.Windows.Forms.GroupBox();
@@ -45,19 +49,15 @@
             this.rbFormatHTML = new System.Windows.Forms.RadioButton();
             this.rbFormatXML = new System.Windows.Forms.RadioButton();
             this.btnFormat = new System.Windows.Forms.Button();
-            this.panOk = new System.Windows.Forms.Panel();
-            this.panSave = new System.Windows.Forms.Panel();
-            this.panExecute = new System.Windows.Forms.Panel();
-            this.panLiveUpdate = new System.Windows.Forms.Panel();
             this.panCancel.SuspendLayout();
             this.panActions.SuspendLayout();
             this.gbActions.SuspendLayout();
+            this.panExecute.SuspendLayout();
+            this.panSave.SuspendLayout();
+            this.panOk.SuspendLayout();
+            this.panLiveUpdate.SuspendLayout();
             this.panFormatting.SuspendLayout();
             this.gbFormatting.SuspendLayout();
-            this.panOk.SuspendLayout();
-            this.panSave.SuspendLayout();
-            this.panExecute.SuspendLayout();
-            this.panLiveUpdate.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSave
@@ -104,6 +104,7 @@
             this.panCancel.Name = "panCancel";
             this.panCancel.Size = new System.Drawing.Size(91, 28);
             this.panCancel.TabIndex = 4;
+            this.panCancel.Visible = false;
             // 
             // btnCancel
             // 
@@ -123,14 +124,14 @@
             this.txtXML.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtXML.Location = new System.Drawing.Point(0, 0);
             this.txtXML.Name = "txtXML";
-            xmlViewerSettings4.AttributeKey = System.Drawing.Color.Red;
-            xmlViewerSettings4.AttributeValue = System.Drawing.Color.Blue;
-            xmlViewerSettings4.Comment = System.Drawing.Color.Green;
-            xmlViewerSettings4.Element = System.Drawing.Color.DarkRed;
-            xmlViewerSettings4.QuoteCharacter = '\"';
-            xmlViewerSettings4.Tag = System.Drawing.Color.Blue;
-            xmlViewerSettings4.Value = System.Drawing.Color.Black;
-            this.txtXML.Settings = xmlViewerSettings4;
+            xmlViewerSettings1.AttributeKey = System.Drawing.Color.Red;
+            xmlViewerSettings1.AttributeValue = System.Drawing.Color.Blue;
+            xmlViewerSettings1.Comment = System.Drawing.Color.Green;
+            xmlViewerSettings1.Element = System.Drawing.Color.DarkRed;
+            xmlViewerSettings1.QuoteCharacter = '\"';
+            xmlViewerSettings1.Tag = System.Drawing.Color.Blue;
+            xmlViewerSettings1.Value = System.Drawing.Color.Black;
+            this.txtXML.Settings = xmlViewerSettings1;
             this.txtXML.Size = new System.Drawing.Size(578, 452);
             this.txtXML.TabIndex = 0;
             this.txtXML.Text = "";
@@ -160,6 +161,42 @@
             this.gbActions.TabIndex = 4;
             this.gbActions.TabStop = false;
             this.gbActions.Text = "Actions";
+            // 
+            // panExecute
+            // 
+            this.panExecute.Controls.Add(this.btnExecute);
+            this.panExecute.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panExecute.Location = new System.Drawing.Point(190, 16);
+            this.panExecute.Name = "panExecute";
+            this.panExecute.Size = new System.Drawing.Size(114, 28);
+            this.panExecute.TabIndex = 1;
+            // 
+            // panSave
+            // 
+            this.panSave.Controls.Add(this.btnSave);
+            this.panSave.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panSave.Location = new System.Drawing.Point(304, 16);
+            this.panSave.Name = "panSave";
+            this.panSave.Size = new System.Drawing.Size(91, 28);
+            this.panSave.TabIndex = 2;
+            // 
+            // panOk
+            // 
+            this.panOk.Controls.Add(this.btnOk);
+            this.panOk.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panOk.Location = new System.Drawing.Point(395, 16);
+            this.panOk.Name = "panOk";
+            this.panOk.Size = new System.Drawing.Size(91, 28);
+            this.panOk.TabIndex = 3;
+            // 
+            // panLiveUpdate
+            // 
+            this.panLiveUpdate.Controls.Add(this.chkLiveUpdate);
+            this.panLiveUpdate.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panLiveUpdate.Location = new System.Drawing.Point(3, 16);
+            this.panLiveUpdate.Name = "panLiveUpdate";
+            this.panLiveUpdate.Size = new System.Drawing.Size(131, 28);
+            this.panLiveUpdate.TabIndex = 5;
             // 
             // chkLiveUpdate
             // 
@@ -242,42 +279,6 @@
             this.btnFormat.UseVisualStyleBackColor = true;
             this.btnFormat.Click += new System.EventHandler(this.btnFormat_Click);
             // 
-            // panOk
-            // 
-            this.panOk.Controls.Add(this.btnOk);
-            this.panOk.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panOk.Location = new System.Drawing.Point(395, 16);
-            this.panOk.Name = "panOk";
-            this.panOk.Size = new System.Drawing.Size(91, 28);
-            this.panOk.TabIndex = 3;
-            // 
-            // panSave
-            // 
-            this.panSave.Controls.Add(this.btnSave);
-            this.panSave.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panSave.Location = new System.Drawing.Point(304, 16);
-            this.panSave.Name = "panSave";
-            this.panSave.Size = new System.Drawing.Size(91, 28);
-            this.panSave.TabIndex = 2;
-            // 
-            // panExecute
-            // 
-            this.panExecute.Controls.Add(this.btnExecute);
-            this.panExecute.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panExecute.Location = new System.Drawing.Point(190, 16);
-            this.panExecute.Name = "panExecute";
-            this.panExecute.Size = new System.Drawing.Size(114, 28);
-            this.panExecute.TabIndex = 1;
-            // 
-            // panLiveUpdate
-            // 
-            this.panLiveUpdate.Controls.Add(this.chkLiveUpdate);
-            this.panLiveUpdate.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panLiveUpdate.Location = new System.Drawing.Point(3, 16);
-            this.panLiveUpdate.Name = "panLiveUpdate";
-            this.panLiveUpdate.Size = new System.Drawing.Size(131, 28);
-            this.panLiveUpdate.TabIndex = 5;
-            // 
             // XmlContentDisplayDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -300,14 +301,14 @@
             this.panCancel.ResumeLayout(false);
             this.panActions.ResumeLayout(false);
             this.gbActions.ResumeLayout(false);
+            this.panExecute.ResumeLayout(false);
+            this.panSave.ResumeLayout(false);
+            this.panOk.ResumeLayout(false);
+            this.panLiveUpdate.ResumeLayout(false);
+            this.panLiveUpdate.PerformLayout();
             this.panFormatting.ResumeLayout(false);
             this.gbFormatting.ResumeLayout(false);
             this.gbFormatting.PerformLayout();
-            this.panOk.ResumeLayout(false);
-            this.panSave.ResumeLayout(false);
-            this.panExecute.ResumeLayout(false);
-            this.panLiveUpdate.ResumeLayout(false);
-            this.panLiveUpdate.PerformLayout();
             this.ResumeLayout(false);
 
         }

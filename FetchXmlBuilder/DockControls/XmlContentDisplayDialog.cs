@@ -1,5 +1,6 @@
 ﻿using Cinteros.Xrm.XmlEditorUtils;
 using System;
+using System.Linq;
 using System.Web;
 using System.Windows.Forms;
 using System.Xml;
@@ -25,6 +26,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 }
             }
             var xcdDialog = new XmlContentDisplayDialog(contentType, false, saveFormat, caller);
+            xcdDialog.panCancel.Visible = true;
             xcdDialog.UpdateXML(xmlString);
             xcdDialog.StartPosition = FormStartPosition.CenterParent;
             xcdDialog.ShowDialog();
@@ -33,7 +35,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         internal XmlContentDisplayDialog(FetchXmlBuilder caller) : this(ContentType.FetchXML, true, SaveFormat.XML, caller) { }
 
-        private XmlContentDisplayDialog(ContentType contentType, bool allowEdit, SaveFormat saveFormat, FetchXmlBuilder caller)
+        internal XmlContentDisplayDialog(ContentType contentType, bool allowEdit, SaveFormat saveFormat, FetchXmlBuilder caller)
         {
             InitializeComponent();
             contenttype = contentType;
@@ -43,7 +45,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             TabText = Text;
             txtXML.KeyUp += fxb.LiveXML_KeyUp;
             panLiveUpdate.Visible = allowEdit;
-            panCancel.Visible = !allowEdit;
             panOk.Visible = allowEdit;
             panFormatting.Visible = allowEdit;
             panExecute.Visible = allowEdit;
@@ -112,6 +113,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void XmlContentDisplayDialog_Load(object sender, EventArgs e)
         {
+            panActions.Visible = gbActions.Controls.Cast<Control>().Any(c => c.Visible);
             if (DialogResult == DialogResult.Cancel)
             {
                 Close();
