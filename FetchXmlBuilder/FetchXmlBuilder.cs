@@ -221,16 +221,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 dockControlGrid = new ResultGrid(this);
                 return dockControlGrid;
             }
-            else if (persistString == typeof(XmlContentDisplayDialog).ToString() && dockControlXml?.IsDisposed != false)
+            else if (persistString == XmlContentDisplayDialog.GetPersistString(ContentType.FetchXML) && dockControlXml?.IsDisposed != false)
             {
                 dockControlXml = new XmlContentDisplayDialog(this);
                 return dockControlXml;
             }
-            else if (persistString == typeof(ODataControl).ToString() && dockControlOData?.IsDisposed != false)
-            {
-                dockControlOData = new ODataControl(this);
-                return dockControlOData;
-            }
+            //else if (persistString == typeof(ODataControl).ToString() && dockControlOData?.IsDisposed != false)
+            //{
+            //    dockControlOData = new ODataControl(this);
+            //    return dockControlOData;
+            //}
             return null;
         }
 
@@ -903,7 +903,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         XmlDocument doc = new XmlDocument();
                         doc.LoadXml(completedargs.Result.ToString());
-                        XmlContentDisplayDialog.ShowDialog(doc.OuterXml, "FetchXML result", SaveFormat.XML, this);
+                        XmlContentDisplayDialog.ShowDialog(doc.OuterXml, ContentType.FetchXML_Result, SaveFormat.XML, this);
                     }
                 }
             });
@@ -1015,12 +1015,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             if (outputstyle == 0)
                             {
                                 var serialized = EntityCollectionSerializer.Serialize(entities, SerializationStyle.Explicit);
-                                XmlContentDisplayDialog.ShowDialog(serialized.OuterXml, "XML Serialized RetrieveMultiple result", SaveFormat.XML, this);
+                                XmlContentDisplayDialog.ShowDialog(serialized.OuterXml, ContentType.Serialized_Result_XML, SaveFormat.XML, this);
                             }
                             else if (outputstyle == 1)
                             {
                                 var serialized = EntityCollectionSerializer.Serialize(entities, SerializationStyle.Basic);
-                                XmlContentDisplayDialog.ShowDialog(serialized.OuterXml, "XML Serialized RetrieveMultiple result", SaveFormat.XML, this);
+                                XmlContentDisplayDialog.ShowDialog(serialized.OuterXml, ContentType.Serialized_Result_XML, SaveFormat.XML, this);
                             }
                             else if (outputstyle == 3)
                             {
@@ -1031,14 +1031,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                                 xw.Close();
                                 sw.Close();
                                 var serialized = sw.ToString();
-                                XmlContentDisplayDialog.ShowDialog(serialized, "Serialized EntityCollection", SaveFormat.XML, this);
+                                XmlContentDisplayDialog.ShowDialog(serialized, ContentType.Serialized_Result_XML, SaveFormat.XML, this);
                             }
                         }
                     }
                     else if (outputtype == 1 && outputstyle == 2 && completedargs.Result is string)
                     {
                         var result = completedargs.Result.ToString();
-                        XmlContentDisplayDialog.ShowDialog(result, "JSON Serialized RetrieveMultiple result", SaveFormat.JSON, this);
+                        XmlContentDisplayDialog.ShowDialog(result, ContentType.Serialized_Result_JSON, SaveFormat.JSON, this);
                     }
                 }
             });
@@ -1397,7 +1397,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 var QEx = dockControlBuilder.GetQueryExpression();
                 var code = QueryExpressionCodeGenerator.GetCSharpQueryExpression(QEx);
                 LogUse("DisplayQExCode");
-                XmlContentDisplayDialog.ShowDialog(code, "QueryExpression Code", SaveFormat.None, this);
+                XmlContentDisplayDialog.ShowDialog(code, ContentType.QueryExpression, SaveFormat.None, this);
             }
             catch (FetchIsAggregateException ex)
             {
@@ -1427,7 +1427,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 var sql = SQLQueryGenerator.GetSQLQuery(fetch);
                 LogUse("DisplaySQLQuery");
-                XmlContentDisplayDialog.ShowDialog(sql, "SQL Query", SaveFormat.None, this);
+                XmlContentDisplayDialog.ShowDialog(sql, ContentType.SQL_Query, SaveFormat.None, this);
             }
             catch (Exception ex)
             {
@@ -1639,7 +1639,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 var js = JavascriptCodeGenerator.GetJavascriptCode(fetch);
                 LogUse("DisplayJavascriptCode");
-                XmlContentDisplayDialog.ShowDialog(js, "Javascript Code", SaveFormat.None, this);
+                XmlContentDisplayDialog.ShowDialog(js, ContentType.JavaScript_Query, SaveFormat.None, this);
             }
             catch (Exception ex)
             {
@@ -1660,7 +1660,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 var cs = CSharpCodeGenerator.GetCSharpCode(fetch);
                 LogUse("DisplayCSharpCode");
-                XmlContentDisplayDialog.ShowDialog(cs, "C# Code", SaveFormat.None, this);
+                XmlContentDisplayDialog.ShowDialog(cs, ContentType.CSharp_Query, SaveFormat.None, this);
             }
             catch (Exception ex)
             {

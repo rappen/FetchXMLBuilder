@@ -8,13 +8,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
     public partial class XmlContentDisplayDialog : WeifenLuo.WinFormsUI.Docking.DockContent
     {
-        public XmlNode result;
-        public bool execute;
         private string findtext = "";
-        FetchXmlBuilder fxb;
-        SaveFormat format;
+        private FetchXmlBuilder fxb;
+        private ContentType contenttype;
+        private SaveFormat format;
 
-        internal static XmlContentDisplayDialog ShowDialog(string xmlString, string header, SaveFormat saveFormat, FetchXmlBuilder caller)
+        internal static XmlContentDisplayDialog ShowDialog(string xmlString, ContentType contentType, SaveFormat saveFormat, FetchXmlBuilder caller)
         {
             if (xmlString.Length > 100000)
             {
@@ -25,23 +24,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     return null;
                 }
             }
-            var xcdDialog = new XmlContentDisplayDialog(header, false, saveFormat, caller);
+            var xcdDialog = new XmlContentDisplayDialog(contentType, false, saveFormat, caller);
             xcdDialog.UpdateXML(xmlString);
             xcdDialog.StartPosition = FormStartPosition.CenterParent;
             xcdDialog.ShowDialog();
             return xcdDialog;
         }
 
-        internal XmlContentDisplayDialog(FetchXmlBuilder caller) : this("FetchXML", true, SaveFormat.XML, caller) { }
+        internal XmlContentDisplayDialog(FetchXmlBuilder caller) : this(ContentType.FetchXML, true, SaveFormat.XML, caller) { }
 
-        private XmlContentDisplayDialog(string header, bool allowEdit, SaveFormat saveFormat, FetchXmlBuilder caller)
+        private XmlContentDisplayDialog(ContentType contentType, bool allowEdit, SaveFormat saveFormat, FetchXmlBuilder caller)
         {
             InitializeComponent();
+            contenttype = contentType;
             format = saveFormat;
             fxb = caller;
-            result = null;
-            execute = false;
-            Text = string.IsNullOrEmpty(header) ? "FetchXML Builder" : header;
+            Text = contenttype.ToString().Replace("_", " ").Replace("CSharp", "C#");
             TabText = Text;
             txtXML.KeyUp += fxb.LiveXML_KeyUp;
             panLiveUpdate.Visible = allowEdit;
@@ -52,6 +50,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             panSave.Visible = format != SaveFormat.None;
             chkLiveUpdate.Checked = allowEdit && fxb.currentSettings.xmlLiveUpdate;
             UpdateButtons();
+        }
+
+        protected override string GetPersistString()
+        {
+            return GetPersistString(contenttype);
+        }
+
+        internal static string GetPersistString(ContentType type)
+        {
+            return typeof(XmlContentDisplayDialog).ToString() + "." + type.ToString();
         }
 
         private void btnFormat_Click(object sender, EventArgs e)
@@ -256,6 +264,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
             UpdateButtons();
         }
+    }
+
+    internal enum ContentType
+    {
+        FetchXML,
+        FetchXML_Result,
+        Serialized_Result_XML,
+        Serialized_Result_JSON,
+        QueryExpression,
+        SQL_Query,
+        JavaScript_Query,
+        CSharp_Query
     }
 
     internal enum SaveFormat
