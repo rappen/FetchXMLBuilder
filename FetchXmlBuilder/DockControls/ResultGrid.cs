@@ -3,6 +3,7 @@ using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
@@ -25,34 +26,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             if (entities != null)
             {
-                EnsureVisible();
+                this.EnsureVisible(form.dockContainer, form.currentSettings.gridDockState);
             }
             crmGridView1.DataSource = entities;
             crmGridView1.Refresh();
             crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
-        }
-
-        private void EnsureVisible()
-        {
-            switch (DockState)
-            {
-                case WeifenLuo.WinFormsUI.Docking.DockState.Unknown:
-                case WeifenLuo.WinFormsUI.Docking.DockState.Hidden:
-                    Show(form.dockContainer, form.currentSettings.gridDockState);
-                    break;
-                case WeifenLuo.WinFormsUI.Docking.DockState.DockBottomAutoHide:
-                    DockState = WeifenLuo.WinFormsUI.Docking.DockState.DockBottom;
-                    break;
-                case WeifenLuo.WinFormsUI.Docking.DockState.DockTopAutoHide:
-                    DockState = WeifenLuo.WinFormsUI.Docking.DockState.DockTop;
-                    break;
-                case WeifenLuo.WinFormsUI.Docking.DockState.DockLeftAutoHide:
-                    DockState = WeifenLuo.WinFormsUI.Docking.DockState.DockLeft;
-                    break;
-                case WeifenLuo.WinFormsUI.Docking.DockState.DockRightAutoHide:
-                    DockState = WeifenLuo.WinFormsUI.Docking.DockState.DockRight;
-                    break;
-            }
         }
 
         private void ApplySettingsToGrid()

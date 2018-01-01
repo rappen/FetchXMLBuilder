@@ -29,6 +29,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal TreeBuilderControl dockControlBuilder;
         internal ResultGrid dockControlGrid;
         internal XmlContentDisplayDialog dockControlXml;
+        internal ODataControl dockControlOData;
 
         internal static Dictionary<string, EntityMetadata> entities;
         internal static List<string> entityShitList = new List<string>(); // Oops, did I name that one??
@@ -225,6 +226,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 dockControlXml = new XmlContentDisplayDialog(this);
                 return dockControlXml;
             }
+            else if (persistString == typeof(ODataControl).ToString() && dockControlOData?.IsDisposed != false)
+            {
+                dockControlOData = new ODataControl(this);
+                return dockControlOData;
+            }
             return null;
         }
 
@@ -380,7 +386,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             else
             {
-                dockControlXml.EnsureVisible();
+                dockControlXml.EnsureVisible(dockContainer, currentSettings.xmlDockState);
             }
             UpdateLiveXML();
         }
@@ -461,12 +467,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
-        private void tsmiShowOData_CheckedChanged(object sender, EventArgs e)
+
+        private void tsmiShowOData_Click(object sender, EventArgs e)
         {
-            panOData.Visible = tsmiShowOData.Checked;
-            if (tsmiShowOData.Checked)
+            if (dockControlOData?.IsDisposed != false)
             {
-                LogUse("ShowOdata");
+                dockControlOData = new ODataControl(this);
+                dockControlOData.Show(dockContainer, DockState.DockBottom);
+            }
+            else
+            {
+                dockControlOData.EnsureVisible(dockContainer, DockState.DockBottom);
             }
             UpdateLiveXML();
         }
@@ -494,41 +505,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsbRedo_Click(object sender, EventArgs e)
         {
             dockControlBuilder.RestoreHistoryPosition(-1);
-        }
-
-        private void linkOData_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left && e.Link.Enabled)
-            {
-                System.Diagnostics.Process.Start(e.Link.LinkData as string);
-                LogUse("ExecuteOData");
-            }
-        }
-
-        private void menuODataExecute_Click(object sender, EventArgs e)
-        {
-            if (linkOData.Links.Count > 0 && linkOData.Links[0].Enabled)
-            {
-                System.Diagnostics.Process.Start(linkOData.Links[0].LinkData as string);
-                LogUse("ExecuteOData");
-            }
-            else
-            {
-                MessageBox.Show("No link to execute");
-            }
-        }
-
-        private void menuODataCopy_Click(object sender, EventArgs e)
-        {
-            if (linkOData.Links.Count > 0 && linkOData.Links[0].Enabled)
-            {
-                Clipboard.SetText(linkOData.Links[0].LinkData as string);
-                LogUse("CopyOData");
-            }
-            else
-            {
-                MessageBox.Show("No link to copy");
-            }
         }
 
         private void tsbOptions_Click(object sender, EventArgs e)
@@ -784,6 +760,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             }
                         }
                     }
+                    UpdateLiveXML();
                     working = false;
                     EnableControls(true);
                 }
@@ -1407,9 +1384,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 liveUpdateXml = dockControlBuilder.GetFetchString(false, false);
                 dockControlXml.UpdateXML(liveUpdateXml);
             }
-            if (tsmiShowOData.Checked)
+            if (dockControlOData?.Visible == true && entities != null)
             {
-                DisplayOData();
+                dockControlOData.DisplayOData();
             }
         }
 
@@ -1432,27 +1409,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
-        private void DisplayOData()
-        {
-            try
-            {
-                var prefix = "OData: ";
-                var url = GetOData();
-                linkOData.Text = prefix + url;
-                linkOData.LinkArea = new LinkArea(prefix.Length, url.Length);
-                if (linkOData.Links.Count > 0)
-                {
-                    linkOData.Links[0].LinkData = url;
-                }
-            }
-            catch (Exception ex)
-            {
-                linkOData.Text = ex.Message;
-                linkOData.Links.Clear();
-            }
-        }
-
-        private string GetOData()
+        internal string GetOData()
         {
             if (Service == null || ConnectionDetail == null || ConnectionDetail.OrganizationDataServiceUrl == null)
             {

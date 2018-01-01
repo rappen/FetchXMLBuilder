@@ -69,21 +69,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbAbout = new System.Windows.Forms.ToolStripButton();
             this.tsbOptions = new System.Windows.Forms.ToolStripButton();
-            this.panOData = new System.Windows.Forms.Panel();
-            this.linkOData = new System.Windows.Forms.LinkLabel();
-            this.menuOData = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.menuODataExecute = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuODataCopy = new System.Windows.Forms.ToolStripMenuItem();
-            this.panODataLabel = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.dockContainer = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.tmLiveUpdate = new System.Windows.Forms.Timer(this.components);
             this.toolStripMain.SuspendLayout();
-            this.panOData.SuspendLayout();
-            this.menuOData.SuspendLayout();
-            this.panODataLabel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStripMain
@@ -395,11 +384,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             // tsmiShowOData
             // 
-            this.tsmiShowOData.CheckOnClick = true;
+            this.tsmiShowOData.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowOData.Image")));
             this.tsmiShowOData.Name = "tsmiShowOData";
-            this.tsmiShowOData.Size = new System.Drawing.Size(197, 22);
+            this.tsmiShowOData.Size = new System.Drawing.Size(205, 30);
             this.tsmiShowOData.Text = "Show OData Equivalent";
-            this.tsmiShowOData.CheckedChanged += new System.EventHandler(this.tsmiShowOData_CheckedChanged);
+            this.tsmiShowOData.Click += new System.EventHandler(this.tsmiShowOData_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -408,8 +397,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             // resetWindowLayoutToolStripMenuItem
             // 
+            this.resetWindowLayoutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("resetWindowLayoutToolStripMenuItem.Image")));
             this.resetWindowLayoutToolStripMenuItem.Name = "resetWindowLayoutToolStripMenuItem";
-            this.resetWindowLayoutToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.resetWindowLayoutToolStripMenuItem.Size = new System.Drawing.Size(205, 30);
             this.resetWindowLayoutToolStripMenuItem.Text = "Reset window layout";
             this.resetWindowLayoutToolStripMenuItem.Click += new System.EventHandler(this.resetWindowLayoutToolStripMenuItem_Click);
             // 
@@ -447,80 +437,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbOptions.Text = "Options...";
             this.tsbOptions.Click += new System.EventHandler(this.tsbOptions_Click);
             // 
-            // panOData
-            // 
-            this.panOData.BackColor = System.Drawing.SystemColors.Window;
-            this.panOData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panOData.Controls.Add(this.linkOData);
-            this.panOData.Controls.Add(this.panODataLabel);
-            this.panOData.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panOData.Location = new System.Drawing.Point(0, 576);
-            this.panOData.Name = "panOData";
-            this.panOData.Padding = new System.Windows.Forms.Padding(4);
-            this.panOData.Size = new System.Drawing.Size(1101, 48);
-            this.panOData.TabIndex = 27;
-            this.panOData.Visible = false;
-            // 
-            // linkOData
-            // 
-            this.linkOData.ContextMenuStrip = this.menuOData;
-            this.linkOData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.linkOData.Location = new System.Drawing.Point(46, 4);
-            this.linkOData.Name = "linkOData";
-            this.linkOData.Padding = new System.Windows.Forms.Padding(2);
-            this.linkOData.Size = new System.Drawing.Size(1049, 38);
-            this.linkOData.TabIndex = 3;
-            this.linkOData.TabStop = true;
-            this.linkOData.Text = "linkLabel1";
-            this.linkOData.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkOData_LinkClicked);
-            // 
-            // menuOData
-            // 
-            this.menuOData.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuODataExecute,
-            this.menuODataCopy});
-            this.menuOData.Name = "menuOData";
-            this.menuOData.Size = new System.Drawing.Size(127, 48);
-            // 
-            // menuODataExecute
-            // 
-            this.menuODataExecute.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.menuODataExecute.Name = "menuODataExecute";
-            this.menuODataExecute.Size = new System.Drawing.Size(126, 22);
-            this.menuODataExecute.Text = "Execute";
-            this.menuODataExecute.Click += new System.EventHandler(this.menuODataExecute_Click);
-            // 
-            // menuODataCopy
-            // 
-            this.menuODataCopy.Name = "menuODataCopy";
-            this.menuODataCopy.Size = new System.Drawing.Size(126, 22);
-            this.menuODataCopy.Text = "Copy URL";
-            this.menuODataCopy.Click += new System.EventHandler(this.menuODataCopy_Click);
-            // 
-            // panODataLabel
-            // 
-            this.panODataLabel.Controls.Add(this.pictureBox1);
-            this.panODataLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panODataLabel.Location = new System.Drawing.Point(4, 4);
-            this.panODataLabel.Name = "panODataLabel";
-            this.panODataLabel.Size = new System.Drawing.Size(42, 38);
-            this.panODataLabel.TabIndex = 2;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(42, 38);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            // 
             // splitter2
             // 
             this.splitter2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.splitter2.Location = new System.Drawing.Point(0, 573);
+            this.splitter2.Location = new System.Drawing.Point(0, 621);
             this.splitter2.Name = "splitter2";
             this.splitter2.Size = new System.Drawing.Size(1101, 3);
             this.splitter2.TabIndex = 4;
@@ -534,7 +454,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.dockContainer.DocumentStyle = WeifenLuo.WinFormsUI.Docking.DocumentStyle.DockingWindow;
             this.dockContainer.Location = new System.Drawing.Point(0, 31);
             this.dockContainer.Name = "dockContainer";
-            this.dockContainer.Size = new System.Drawing.Size(1101, 542);
+            this.dockContainer.Size = new System.Drawing.Size(1101, 590);
             this.dockContainer.TabIndex = 33;
             // 
             // tmLiveUpdate
@@ -550,7 +470,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.Controls.Add(this.dockContainer);
             this.Controls.Add(this.toolStripMain);
             this.Controls.Add(this.splitter2);
-            this.Controls.Add(this.panOData);
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "FetchXmlBuilder";
             this.Size = new System.Drawing.Size(1101, 624);
@@ -559,10 +478,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.Load += new System.EventHandler(this.FetchXmlBuilder_Load);
             this.toolStripMain.ResumeLayout(false);
             this.toolStripMain.PerformLayout();
-            this.panOData.ResumeLayout(false);
-            this.menuOData.ResumeLayout(false);
-            this.panODataLabel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -597,14 +512,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripButton tsbRedo;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenML;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveML;
-        private System.Windows.Forms.Panel panOData;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowOData;
-        private System.Windows.Forms.Panel panODataLabel;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.LinkLabel linkOData;
-        private System.Windows.Forms.ContextMenuStrip menuOData;
-        private System.Windows.Forms.ToolStripMenuItem menuODataExecute;
-        private System.Windows.Forms.ToolStripMenuItem menuODataCopy;
         private System.Windows.Forms.Splitter splitter2;
         private System.Windows.Forms.ToolStripButton tsbOptions;
         private System.Windows.Forms.ToolStripMenuItem tsmiToSQLQuery;
