@@ -31,6 +31,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal XmlContentDisplayDialog dockControlXml;
         private ODataControl dockControlOData;
         private XmlContentDisplayDialog dockControlQExp;
+        private XmlContentDisplayDialog dockControlSQL;
 
         internal static Dictionary<string, EntityMetadata> entities;
         internal static List<string> entityShitList = new List<string>(); // Oops, did I name that one??
@@ -378,7 +379,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             OpenCWPFeed();
         }
 
-        private void tsbEdit_Click(object sender, EventArgs e)
+        private void tsmiShowFetchXML_Click(object sender, EventArgs e)
         {
             if (dockControlXml?.IsDisposed != false)
             {
@@ -497,9 +498,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             UpdateLiveXML();
         }
 
+        private void tsmiShowSQL_Click(object sender, EventArgs e)
+        {
+            if (dockControlSQL?.IsDisposed != false)
+            {
+                dockControlSQL = new XmlContentDisplayDialog(ContentType.SQL_Query, false, SaveFormat.SQL, this);
+                dockControlSQL.Show(dockContainer, DockState.DockRight);
+            }
+            else
+            {
+                dockControlSQL.EnsureVisible(dockContainer, DockState.DockRight);
+            }
+            UpdateLiveXML();
+        }
+
         private void tsmiToSQLQuery_Click(object sender, EventArgs e)
         {
-            DisplaySQLQuery();
         }
 
         private void tsbReturnToCaller_Click(object sender, EventArgs e)
@@ -608,7 +622,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 try
                 {
                     tsbNew.Enabled = enabled;
-                    tsbEdit.Enabled = enabled;
                     tsbOpen.Enabled = enabled;
                     tsmiOpenFile.Enabled = enabled;
                     tsmiOpenView.Enabled = enabled && Service != null;
@@ -622,7 +635,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiSaveML.Enabled = enabled && Service != null && DynML != null;
                     tsmiSaveCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
                     tsmiSaveCWP.Enabled = enabled && Service != null && dockControlBuilder.FetchChanged && !string.IsNullOrEmpty(CWPFeed);
-                    tsmiToSQLQuery.Enabled = enabled && Service != null;
                     tsmiToJavascript.Enabled = enabled && Service != null;
                     tsmiToCSharp.Enabled = enabled && Service != null;
                     tsbView.Enabled = enabled;
@@ -1402,6 +1414,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 var code = GetQueryExpressionCode();
                 dockControlQExp.UpdateXML(code);
             }
+            if (dockControlSQL?.Visible == true && entities != null)
+            {
+                var sql = GetSQLQuery();
+                dockControlSQL.UpdateXML(sql);
+            }
         }
 
         private string GetQueryExpressionCode()
@@ -1420,7 +1437,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 code = "Failed to generate C# QueryExpression code.\n\n" + ex.Message;
             }
-
             return code;
         }
 
@@ -1435,20 +1451,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return odata;
         }
 
-        private void DisplaySQLQuery()
+        private string GetSQLQuery()
         {
+            var sql = string.Empty;
             FetchType fetch = dockControlBuilder.GetFetchType();
             try
             {
-                var sql = SQLQueryGenerator.GetSQLQuery(fetch);
-                LogUse("DisplaySQLQuery");
-                XmlContentDisplayDialog.ShowDialog(sql, ContentType.SQL_Query, SaveFormat.None, this);
+                sql = SQLQueryGenerator.GetSQLQuery(fetch);
             }
             catch (Exception ex)
             {
-                LogUse("DisplaySQLQuery failed");
-                MessageBox.Show("Failed to generate SQL Query.\n\n" + ex.Message, "SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sql = "Failed to generate SQL Query.\n\n" + ex.Message;
             }
+            return sql;
         }
 
         internal void LogUse(string action, bool forceLog = false)
@@ -1690,7 +1705,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 tsbExecute_Click(null, null);
             }
-            else if (e.Control && e.KeyCode == Keys.E && tsbEdit.Enabled)
+            else if (e.Control && e.KeyCode == Keys.E && tsmiShowFetchXML.Enabled)
             {
                 tsbEdit_Click(null, null);
             }
@@ -1743,6 +1758,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void resetWindowLayoutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ResetDockLayout();
+        }
+
+        private void tsbEdit_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

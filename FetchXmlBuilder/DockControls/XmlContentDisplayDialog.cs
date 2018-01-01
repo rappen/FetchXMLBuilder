@@ -284,6 +284,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
     {
         None = 0,
         XML = 1,
-        JSON = 2
+        JSON = 2,
+        SQL = 3
     }
 }
