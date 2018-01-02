@@ -297,6 +297,7 @@
             this.ShowIcon = false;
             this.DockStateChanged += new System.EventHandler(this.XmlContentDisplayDialog_DockStateChanged);
             this.Load += new System.EventHandler(this.XmlContentDisplayDialog_Load);
+            this.VisibleChanged += new System.EventHandler(this.XmlContentDisplayDialog_VisibleChanged);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.XmlContentDisplayDialog_KeyDown);
             this.panCancel.ResumeLayout(false);
             this.panActions.ResumeLayout(false);

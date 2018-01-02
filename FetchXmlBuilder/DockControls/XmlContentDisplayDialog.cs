@@ -276,6 +276,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
             UpdateButtons();
         }
+
+        private void XmlContentDisplayDialog_VisibleChanged(object sender, EventArgs e)
+        {
+            fxb.UpdateLiveXML();
+        }
     }
 
     internal enum ContentType
