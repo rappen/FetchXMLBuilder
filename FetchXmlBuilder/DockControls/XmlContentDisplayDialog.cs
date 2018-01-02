@@ -231,15 +231,32 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             if (DockState == WeifenLuo.WinFormsUI.Docking.DockState.Unknown)
             {
-                if (this == fxb.dockControlXml)
+                if (this == fxb.dockControlFetchXml)
                 {
-                    fxb.dockControlXml = null;
+                    fxb.dockControlFetchXml = null;
                 }
             }
             if (DockState != WeifenLuo.WinFormsUI.Docking.DockState.Unknown &&
                 DockState != WeifenLuo.WinFormsUI.Docking.DockState.Hidden)
             {
-                fxb.currentSettings.xmlDockState = DockState;
+                switch (contenttype)
+                {
+                    case ContentType.FetchXML:
+                        fxb.currentSettings.dockStates.FetchXML = DockState;
+                        break;
+                    case ContentType.CSharp_Query:
+                        fxb.currentSettings.dockStates.FetchXMLCs = DockState;
+                        break;
+                    case ContentType.JavaScript_Query:
+                        fxb.currentSettings.dockStates.FetchXMLJs = DockState;
+                        break;
+                    case ContentType.QueryExpression:
+                        fxb.currentSettings.dockStates.QueryExpression = DockState;
+                        break;
+                    case ContentType.SQL_Query:
+                        fxb.currentSettings.dockStates.SQLQuery = DockState;
+                        break;
+                }
             }
         }
 

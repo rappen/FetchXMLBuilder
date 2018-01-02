@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
@@ -45,8 +46,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool resultsAlwaysNewWindow { get; set; } = false;
         public int treeHeight { get; set; } = -1;
         public bool xmlLiveUpdate { get; set; }
-        public WeifenLuo.WinFormsUI.Docking.DockState gridDockState { get; set; } = WeifenLuo.WinFormsUI.Docking.DockState.Document;
-        public WeifenLuo.WinFormsUI.Docking.DockState xmlDockState { get; set; } = WeifenLuo.WinFormsUI.Docking.DockState.Document;
+        public DockStates dockStates { get; set; } = new DockStates();
 
         public FXBSettings()
         {
@@ -54,5 +54,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             showAttributesAll = true;
             showQuickActions = true;
         }
+    }
+
+    public class DockStates
+    {
+        public DockState ResultView { get; set; } = DockState.Document;
+        public DockState FetchXML { get; set; } = DockState.Document;
+        public DockState FetchXMLCs { get; set; } = DockState.DockRight;
+        public DockState FetchXMLJs { get; set; } = DockState.DockRight;
+        public DockState QueryExpression { get; set; } = DockState.DockRight;
+        public DockState SQLQuery { get; set; } = DockState.DockRight;
     }
 }

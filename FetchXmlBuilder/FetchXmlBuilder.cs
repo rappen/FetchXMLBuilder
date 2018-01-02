@@ -28,10 +28,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         #region Declarations
         internal TreeBuilderControl dockControlBuilder;
         internal ResultGrid dockControlGrid;
-        internal XmlContentDisplayDialog dockControlXml;
-        private ODataControl dockControlOData;
+        internal XmlContentDisplayDialog dockControlFetchXml;
+        private XmlContentDisplayDialog dockControlFetchXmlCs;
+        private XmlContentDisplayDialog dockControlFetchXmlJs;
         private XmlContentDisplayDialog dockControlQExp;
         private XmlContentDisplayDialog dockControlSQL;
+        private ODataControl dockControlOData;
 
         internal static Dictionary<string, EntityMetadata> entities;
         internal static List<string> entityShitList = new List<string>(); // Oops, did I name that one??
@@ -159,7 +161,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             var theme = new VS2015LightTheme();
             dockContainer.Theme = theme;
             dockContainer.Theme.Skin.DockPaneStripSkin.TextFont = Font;
-            dockContainer.DockBackColor = SystemColors.Window;
+            //dockContainer.DockBackColor = SystemColors.Window;
         }
 
         private void SetupDockControls()
@@ -197,8 +199,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     dockContainer.Contents[i].DockHandler.Close();
                 }
             }
-            currentSettings.gridDockState = DockState.Document;
-            currentSettings.xmlDockState = DockState.Document;
+            currentSettings.dockStates = new DockStates();
             if (dockControlBuilder?.IsDisposed != false)
             {
                 dockControlBuilder = new TreeBuilderControl(this);
@@ -223,16 +224,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 dockControlGrid = new ResultGrid(this);
                 return dockControlGrid;
             }
-            else if (persistString == XmlContentDisplayDialog.GetPersistString(ContentType.FetchXML) && dockControlXml?.IsDisposed != false)
+            else if (persistString == XmlContentDisplayDialog.GetPersistString(ContentType.FetchXML) && dockControlFetchXml?.IsDisposed != false)
             {
-                dockControlXml = new XmlContentDisplayDialog(this);
-                return dockControlXml;
+                dockControlFetchXml = new XmlContentDisplayDialog(this);
+                return dockControlFetchXml;
             }
-            //else if (persistString == typeof(ODataControl).ToString() && dockControlOData?.IsDisposed != false)
-            //{
-            //    dockControlOData = new ODataControl(this);
-            //    return dockControlOData;
-            //}
             return null;
         }
 
@@ -379,20 +375,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             OpenCWPFeed();
         }
 
-        private void tsmiShowFetchXML_Click(object sender, EventArgs e)
-        {
-            if (dockControlXml?.IsDisposed != false)
-            {
-                dockControlXml = new XmlContentDisplayDialog(this);
-                dockControlXml.Show(dockContainer, currentSettings.xmlDockState);
-            }
-            else
-            {
-                dockControlXml.EnsureVisible(dockContainer, currentSettings.xmlDockState);
-            }
-            UpdateLiveXML();
-        }
-
         private void tsbExecute_Click(object sender, EventArgs e)
         {
             dockControlBuilder.tvFetch.Focus();
@@ -439,8 +421,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         internal void LiveXML_KeyUp(object sender, KeyEventArgs e)
         {
-            if (dockControlXml != null && dockControlXml.chkLiveUpdate.Checked &&
-                dockControlXml.txtXML != null && dockControlXml.Visible && !e.Handled)
+            if (dockControlFetchXml != null && dockControlFetchXml.chkLiveUpdate.Checked &&
+                dockControlFetchXml.txtXML != null && dockControlFetchXml.Visible && !e.Handled)
             {
                 tmLiveUpdate.Stop();
                 tmLiveUpdate.Start();
@@ -450,16 +432,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tmLiveUpdate_Tick(object sender, EventArgs e)
         {
             tmLiveUpdate.Stop();
-            if (dockControlXml != null && dockControlXml.chkLiveUpdate.Checked &&
-                dockControlXml.txtXML != null && dockControlXml.Visible)
+            if (dockControlFetchXml != null && dockControlFetchXml.chkLiveUpdate.Checked &&
+                dockControlFetchXml.txtXML != null && dockControlFetchXml.Visible)
             {
                 try
                 {
                     XmlDocument doc = new XmlDocument();
-                    doc.LoadXml(dockControlXml.txtXML.Text);
+                    doc.LoadXml(dockControlFetchXml.txtXML.Text);
                     if (doc.OuterXml != liveUpdateXml)
                     {
-                        dockControlBuilder.ParseXML(dockControlXml.txtXML.Text, false);
+                        dockControlBuilder.ParseXML(dockControlFetchXml.txtXML.Text, false);
+                        UpdateLiveXML(true);
                     }
                     liveUpdateXml = doc.OuterXml;
                 }
@@ -469,6 +452,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
+        private void tsmiShowFetchXML_Click(object sender, EventArgs e)
+        {
+            ShowContentControl(ref dockControlFetchXml, ContentType.FetchXML, SaveFormat.None, currentSettings.dockStates.FetchXML);
+        }
 
         private void tsmiShowOData_Click(object sender, EventArgs e)
         {
@@ -486,34 +473,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsmiShowQueryExpression_Click(object sender, EventArgs e)
         {
-            if (dockControlQExp?.IsDisposed != false)
-            {
-                dockControlQExp = new XmlContentDisplayDialog(ContentType.QueryExpression, false, SaveFormat.None, this);
-                dockControlQExp.Show(dockContainer, DockState.DockRight);
-            }
-            else
-            {
-                dockControlQExp.EnsureVisible(dockContainer, DockState.DockRight);
-            }
-            UpdateLiveXML();
+            ShowContentControl(ref dockControlQExp, ContentType.QueryExpression, SaveFormat.None, currentSettings.dockStates.QueryExpression);
         }
 
         private void tsmiShowSQL_Click(object sender, EventArgs e)
         {
-            if (dockControlSQL?.IsDisposed != false)
-            {
-                dockControlSQL = new XmlContentDisplayDialog(ContentType.SQL_Query, false, SaveFormat.SQL, this);
-                dockControlSQL.Show(dockContainer, DockState.DockRight);
-            }
-            else
-            {
-                dockControlSQL.EnsureVisible(dockContainer, DockState.DockRight);
-            }
-            UpdateLiveXML();
+            ShowContentControl(ref dockControlSQL, ContentType.SQL_Query, SaveFormat.SQL, currentSettings.dockStates.SQLQuery);
         }
 
-        private void tsmiToSQLQuery_Click(object sender, EventArgs e)
+        private void tsmiShowFetchXMLcs_Click(object sender, EventArgs e)
         {
+            ShowContentControl(ref dockControlFetchXmlCs, ContentType.CSharp_Query, SaveFormat.None, currentSettings.dockStates.FetchXMLCs);
+        }
+
+        private void tsmiShowFetchXMLjs_Click(object sender, EventArgs e)
+        {
+            ShowContentControl(ref dockControlFetchXmlJs, ContentType.JavaScript_Query, SaveFormat.None, currentSettings.dockStates.FetchXMLJs);
         }
 
         private void tsbReturnToCaller_Click(object sender, EventArgs e)
@@ -635,8 +610,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiSaveML.Enabled = enabled && Service != null && DynML != null;
                     tsmiSaveCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
                     tsmiSaveCWP.Enabled = enabled && Service != null && dockControlBuilder.FetchChanged && !string.IsNullOrEmpty(CWPFeed);
-                    tsmiToJavascript.Enabled = enabled && Service != null;
-                    tsmiToCSharp.Enabled = enabled && Service != null;
                     tsbView.Enabled = enabled;
                     tsbExecute.Enabled = enabled && Service != null;
                     dockControlBuilder.EnableControls(enabled);
@@ -859,6 +832,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 }
                 working = false;
                 dockControlBuilder.UpdateCurrentNode();
+                UpdateLiveXML();
             }
             working = false;
         }
@@ -1017,7 +991,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                                 var newresults = new ResultGrid(this);
                                 resultpanecount++;
                                 newresults.Text = $"Results ({resultpanecount})";
-                                newresults.Show(dockContainer, currentSettings.gridDockState);
+                                newresults.Show(dockContainer, currentSettings.dockStates.ResultView);
                                 newresults.SetData(entities);
                             }
                             else
@@ -1025,7 +999,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                                 if (dockControlGrid?.IsDisposed != false)
                                 {
                                     dockControlGrid = new ResultGrid(this);
-                                    dockControlGrid.Show(dockContainer, currentSettings.gridDockState);
+                                    dockControlGrid.Show(dockContainer, currentSettings.dockStates.ResultView);
                                 }
                                 dockControlGrid.SetData(entities);
                                 dockControlGrid.Activate();
@@ -1137,6 +1111,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                       }
                   }
             });
+        }
+
+        private void ShowContentControl(ref XmlContentDisplayDialog control, ContentType content, SaveFormat save, DockState state)
+        {
+            if (control?.IsDisposed != false)
+            {
+                control = new XmlContentDisplayDialog(content, content == ContentType.FetchXML, save, this);
+                control.Show(dockContainer, state);
+            }
+            else
+            {
+                control.EnsureVisible(dockContainer, state);
+            }
+            UpdateLiveXML();
         }
 
         private void OpenFile()
@@ -1398,12 +1386,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return feed;
         }
 
-        internal void UpdateLiveXML()
+        internal void UpdateLiveXML(bool preventxmlupdate = false)
         {
-            if (dockControlXml?.Visible == true)
+            if (!preventxmlupdate && dockControlFetchXml?.Visible == true)
             {
                 liveUpdateXml = dockControlBuilder.GetFetchString(false, false);
-                dockControlXml.UpdateXML(liveUpdateXml);
+                dockControlFetchXml.UpdateXML(liveUpdateXml);
             }
             if (dockControlOData?.Visible == true && entities != null)
             {
@@ -1418,6 +1406,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 var sql = GetSQLQuery();
                 dockControlSQL.UpdateXML(sql);
+            }
+            if (dockControlFetchXmlCs?.Visible == true)
+            {
+                var cs = CSharpCodeGenerator.GetCSharpCode(dockControlBuilder.GetFetchString(true, false));
+                dockControlFetchXmlCs.UpdateXML(cs);
+            }
+            if (dockControlFetchXmlJs?.Visible == true)
+            {
+                var js = JavascriptCodeGenerator.GetJavascriptCode(dockControlBuilder.GetFetchString(true, false));
+                dockControlFetchXmlJs.UpdateXML(js);
             }
         }
 
@@ -1657,48 +1655,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         #endregion Static methods
 
-        private void tsmiToJavascript_Click(object sender, EventArgs e)
-        {
-            DisplayJavascriptCode();
-        }
-
-        private void DisplayJavascriptCode()
-        {
-            var fetch = dockControlBuilder.GetFetchString(true, false);
-            try
-            {
-                var js = JavascriptCodeGenerator.GetJavascriptCode(fetch);
-                LogUse("DisplayJavascriptCode");
-                XmlContentDisplayDialog.ShowDialog(js, ContentType.JavaScript_Query, SaveFormat.None, this);
-            }
-            catch (Exception ex)
-            {
-                LogError("DisplayJavascriptCode failed\n{0}", fetch);
-                MessageBox.Show("Failed to generate Javascript code.\n\n" + ex.Message, "Javascript", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void tsmiToCSharp_Click(object sender, EventArgs e)
-        {
-            DisplayCSharpCode();
-        }
-
-        private void DisplayCSharpCode()
-        {
-            var fetch = dockControlBuilder.GetFetchString(true, false);
-            try
-            {
-                var cs = CSharpCodeGenerator.GetCSharpCode(fetch);
-                LogUse("DisplayCSharpCode");
-                XmlContentDisplayDialog.ShowDialog(cs, ContentType.CSharp_Query, SaveFormat.None, this);
-            }
-            catch (Exception ex)
-            {
-                LogError("DisplayCSharpCode failed\n{0}", fetch);
-                MessageBox.Show("Failed to generate C# code.\n\n" + ex.Message, "C#", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         public void ReceiveKeyDownShortcut(KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F5 && tsbExecute.Enabled)
@@ -1707,7 +1663,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             else if (e.Control && e.KeyCode == Keys.E && tsmiShowFetchXML.Enabled)
             {
-                tsbEdit_Click(null, null);
+                tsmiShowFetchXML_Click(null, null);
             }
             else if (e.Control && e.KeyCode == Keys.N && tsbNew.Enabled)
             {
@@ -1758,11 +1714,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void resetWindowLayoutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ResetDockLayout();
-        }
-
-        private void tsbEdit_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

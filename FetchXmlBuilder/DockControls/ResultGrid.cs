@@ -26,7 +26,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             if (entities != null)
             {
-                this.EnsureVisible(form.dockContainer, form.currentSettings.gridDockState);
+                this.EnsureVisible(form.dockContainer, form.currentSettings.dockStates.ResultView);
             }
             crmGridView1.DataSource = entities;
             crmGridView1.Refresh();
@@ -153,7 +153,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             if (DockState != WeifenLuo.WinFormsUI.Docking.DockState.Unknown &&
                 DockState != WeifenLuo.WinFormsUI.Docking.DockState.Hidden)
             {
-                form.currentSettings.gridDockState = DockState;
+                form.currentSettings.dockStates.ResultView = DockState;
             }
         }
     }
