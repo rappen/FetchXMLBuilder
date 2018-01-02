@@ -143,13 +143,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void ResultGrid_DockStateChanged(object sender, EventArgs e)
         {
-            if (DockState == WeifenLuo.WinFormsUI.Docking.DockState.Unknown)
-            {
-                if (this == form.dockControlGrid)
-                {
-                    form.dockControlGrid = null;
-                }
-            }
             if (DockState != WeifenLuo.WinFormsUI.Docking.DockState.Unknown &&
                 DockState != WeifenLuo.WinFormsUI.Docking.DockState.Hidden)
             {

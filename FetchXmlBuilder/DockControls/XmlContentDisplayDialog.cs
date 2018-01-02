@@ -229,13 +229,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void XmlContentDisplayDialog_DockStateChanged(object sender, EventArgs e)
         {
-            if (DockState == WeifenLuo.WinFormsUI.Docking.DockState.Unknown)
-            {
-                if (this == fxb.dockControlFetchXml)
-                {
-                    fxb.dockControlFetchXml = null;
-                }
-            }
             if (DockState != WeifenLuo.WinFormsUI.Docking.DockState.Unknown &&
                 DockState != WeifenLuo.WinFormsUI.Docking.DockState.Hidden)
             {

@@ -46,7 +46,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             set
             {
                 fetchChanged = value;
-                fxb.EnableControls(fxb.buttonsEnabled);
+                fxb.EnableControls();
                 //toolStripButtonSave.Enabled = value;
             }
         }
