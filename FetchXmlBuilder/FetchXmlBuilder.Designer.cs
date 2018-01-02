@@ -307,6 +307,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiShowFetchXML.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowFetchXML.Image")));
             this.tsmiShowFetchXML.Name = "tsmiShowFetchXML";
+            this.tsmiShowFetchXML.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
             this.tsmiShowFetchXML.Size = new System.Drawing.Size(219, 30);
             this.tsmiShowFetchXML.Text = "FetchXML";
             this.tsmiShowFetchXML.Click += new System.EventHandler(this.tsmiShowFetchXML_Click);
