@@ -87,7 +87,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             DisplayDefinition(GetFetchDocument());
             HandleNodeSelection(tvFetch.SelectedNode);
             fxb.UpdateLiveXML();
-            ShowQuickActions(fxb.currentSettings.showQuickActions);
+            ShowQuickActions(fxb.settings.QueryOptions.ShowQuickActions);
         }
 
         internal void ClearChanged()
@@ -165,7 +165,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 {
                     var doc = GetFetchDocument();
                     xml = doc.OuterXml;
-                    if (fxb.currentSettings.useSingleQuotation)
+                    if (fxb.settings.QueryOptions.UseSingleQuotation)
                     {
                         xml = xml.Replace("'", "&apos;");
                         xml = xml.Replace("\"", "'");
@@ -702,7 +702,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     var coll = new Dictionary<string, string>();
                     coll.Add("name", attribute.LogicalName);
                     attrNode.Tag = coll;
-                    TreeNodeHelper.SetNodeText(attrNode, fxb.currentSettings.useFriendlyNames);
+                    TreeNodeHelper.SetNodeText(attrNode, fxb.settings.UseFriendlyNames);
                 }
                 FetchChanged = treeChecksum != GetTreeChecksum(null);
                 fxb.UpdateLiveXML();

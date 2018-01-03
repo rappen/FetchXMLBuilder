@@ -38,7 +38,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                     {
                         var ei = new EntityItem(entity.Value);
                         cmbEntity.Items.Add(ei);
-                        if (entity.Value.LogicalName == Caller.currentSettings.lastOpenedViewEntity)
+                        if (entity.Value.LogicalName == Caller.settings.LastOpenedViewEntity)
                         {
                             selectedItem = ei;
                         }
@@ -74,7 +74,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 {
                     var vi = new ViewItem(view);
                     cmbView.Items.Add(vi);
-                    if (view.Id.Equals(Caller.currentSettings.lastOpenedViewId))
+                    if (view.Id.Equals(Caller.settings.LastOpenedViewId))
                     {
                         selectedItem = vi;
                     }
@@ -88,7 +88,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 {
                     var vi = new ViewItem(view);
                     cmbView.Items.Add(vi);
-                    if (view.Id.Equals(Caller.currentSettings.lastOpenedViewId))
+                    if (view.Id.Equals(Caller.settings.LastOpenedViewId))
                     {
                         selectedItem = vi;
                     }
@@ -106,8 +106,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             if (cmbView.SelectedItem is ViewItem)
             {
                 View = ((ViewItem)cmbView.SelectedItem).GetView();
-                Caller.currentSettings.lastOpenedViewEntity = ControlUtils.GetValueFromControl(cmbEntity);
-                Caller.currentSettings.lastOpenedViewId = View.Id;
+                Caller.settings.LastOpenedViewEntity = ControlUtils.GetValueFromControl(cmbEntity);
+                Caller.settings.LastOpenedViewId = View.Id;
             }
             else
             {

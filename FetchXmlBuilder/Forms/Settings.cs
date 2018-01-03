@@ -21,75 +21,75 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             {
                 settings = new FXBSettings();
             }
-            chkAppFriendly.Checked = settings.useFriendlyNames;
-            chkAppQuick.Checked = settings.showQuickActions;
-            chkAppSingle.Checked = settings.useSingleQuotation;
-            chkAppNoSavePrompt.Checked = settings.doNotPromptToSave;
-            chkAppResultsNewWindow.Checked = settings.resultsAlwaysNewWindow;
-            switch (settings.resultOption)
+            chkAppFriendly.Checked = settings.UseFriendlyNames;
+            chkAppQuick.Checked = settings.QueryOptions.ShowQuickActions;
+            chkAppSingle.Checked = settings.QueryOptions.UseSingleQuotation;
+            chkAppNoSavePrompt.Checked = settings.DoNotPromptToSave;
+            chkAppResultsNewWindow.Checked = settings.Results.AlwaysNewWindow;
+            switch (settings.Results.ResultOption)
             {
                 case 1: rbResSerialized.Checked = true; break;
                 case 3: rbResRaw.Checked = true; break;
                 default: rbResGrid.Checked = true; break;
             }
-            cmbSeralizationStyle.SelectedIndex = settings.resultSerializeStyle;
-            chkResAllPages.Checked = settings.retrieveAllPages;
-            chkEntAll.Checked = settings.showEntitiesAll;
-            if (!settings.showEntitiesAll)
+            cmbSeralizationStyle.SelectedIndex = settings.Results.SerializeStyle;
+            chkResAllPages.Checked = settings.Results.RetrieveAllPages;
+            chkEntAll.Checked = settings.Entity.All;
+            if (!settings.Entity.All)
             {
-                chkEntCustomizable.Checked = settings.showEntitiesCustomizable;
-                chkEntCustom.Checked = settings.showEntitiesCustom;
-                chkEntIntersect.Checked = settings.showEntitiesIntersect;
-                chkEntManaged.Checked = settings.showEntitiesManaged;
-                chkEntOnlyAF.Checked = settings.showEntitiesOnlyValidAF;
-                chkEntStandard.Checked = settings.showEntitiesStandard;
-                chkEntUncustomizable.Checked = settings.showEntitiesUncustomizable;
-                chkEntUnmanaged.Checked = settings.showEntitiesUnmanaged;
+                chkEntCustomizable.Checked = settings.Entity.Customizable;
+                chkEntCustom.Checked = settings.Entity.Custom;
+                chkEntIntersect.Checked = settings.Entity.Intersect;
+                chkEntManaged.Checked = settings.Entity.Managed;
+                chkEntOnlyAF.Checked = settings.Entity.OnlyValidAF;
+                chkEntStandard.Checked = settings.Entity.Standard;
+                chkEntUncustomizable.Checked = settings.Entity.Uncustomizable;
+                chkEntUnmanaged.Checked = settings.Entity.Unmanaged;
             }
-            chkAttAll.Checked = settings.showAttributesAll;
-            if (!settings.showAttributesAll)
+            chkAttAll.Checked = settings.Attribute.All;
+            if (!settings.Attribute.All)
             {
-                chkAttCustomizable.Checked = settings.showAttributesCustomizable;
-                chkAttCustom.Checked = settings.showAttributesCustom;
-                chkAttManaged.Checked = settings.showAttributesManaged;
-                chkAttOnlyAF.Checked = settings.showAttributesOnlyValidAF;
-                chkAttOnlyRead.Checked = settings.showAttributesOnlyValidRead;
-                chkAttStandard.Checked = settings.showAttributesStandard;
-                chkAttUncustomizable.Checked = settings.showAttributesUncustomizable;
-                chkAttUnmanaged.Checked = settings.showAttributesUnmanaged;
+                chkAttCustomizable.Checked = settings.Attribute.Customizable;
+                chkAttCustom.Checked = settings.Attribute.Custom;
+                chkAttManaged.Checked = settings.Attribute.Managed;
+                chkAttOnlyAF.Checked = settings.Attribute.OnlyValidAF;
+                chkAttOnlyRead.Checked = settings.Attribute.OnlyValidRead;
+                chkAttStandard.Checked = settings.Attribute.Standard;
+                chkAttUncustomizable.Checked = settings.Attribute.Uncustomizable;
+                chkAttUnmanaged.Checked = settings.Attribute.Unmanaged;
             }
-            chkStatAllow.Checked = settings.logUsage != false;
+            chkStatAllow.Checked = settings.LogUsage != false;
         }
 
         internal FXBSettings GetSettings()
         {
-            settings.useFriendlyNames = chkAppFriendly.Checked;
-            settings.showQuickActions = chkAppQuick.Checked;
-            settings.useSingleQuotation = chkAppSingle.Checked;
-            settings.doNotPromptToSave = chkAppNoSavePrompt.Checked;
-            settings.resultsAlwaysNewWindow = chkAppResultsNewWindow.Checked;
-            settings.resultOption = rbResSerialized.Checked ? 1 : rbResRaw.Checked ? 3 : 0;
-            settings.resultSerializeStyle = cmbSeralizationStyle.SelectedIndex;
-            settings.retrieveAllPages = chkResAllPages.Checked;
-            settings.showEntitiesAll = chkEntAll.Checked;
-            settings.showEntitiesCustomizable = chkEntCustomizable.Checked;
-            settings.showEntitiesUncustomizable = chkEntUncustomizable.Checked;
-            settings.showEntitiesManaged = chkEntManaged.Checked;
-            settings.showEntitiesUnmanaged = chkEntUnmanaged.Checked;
-            settings.showEntitiesCustom = chkEntCustom.Checked;
-            settings.showEntitiesStandard = chkEntStandard.Checked;
-            settings.showEntitiesIntersect = chkEntIntersect.Checked;
-            settings.showEntitiesOnlyValidAF = chkEntOnlyAF.Checked;
-            settings.showAttributesAll = chkAttAll.Checked;
-            settings.showAttributesManaged = chkAttManaged.Checked;
-            settings.showAttributesUnmanaged = chkAttUnmanaged.Checked;
-            settings.showAttributesCustomizable = chkAttCustomizable.Checked;
-            settings.showAttributesUncustomizable = chkAttUncustomizable.Checked;
-            settings.showAttributesCustom = chkAttCustom.Checked;
-            settings.showAttributesStandard = chkAttStandard.Checked;
-            settings.showAttributesOnlyValidAF = chkAttOnlyAF.Checked;
-            settings.showAttributesOnlyValidRead = chkAttOnlyRead.Checked;
-            settings.logUsage = chkStatAllow.Checked;
+            settings.UseFriendlyNames = chkAppFriendly.Checked;
+            settings.QueryOptions.ShowQuickActions = chkAppQuick.Checked;
+            settings.QueryOptions.UseSingleQuotation = chkAppSingle.Checked;
+            settings.DoNotPromptToSave = chkAppNoSavePrompt.Checked;
+            settings.Results.AlwaysNewWindow = chkAppResultsNewWindow.Checked;
+            settings.Results.ResultOption = rbResSerialized.Checked ? 1 : rbResRaw.Checked ? 3 : 0;
+            settings.Results.SerializeStyle = cmbSeralizationStyle.SelectedIndex;
+            settings.Results.RetrieveAllPages = chkResAllPages.Checked;
+            settings.Entity.All = chkEntAll.Checked;
+            settings.Entity.Customizable = chkEntCustomizable.Checked;
+            settings.Entity.Uncustomizable = chkEntUncustomizable.Checked;
+            settings.Entity.Managed = chkEntManaged.Checked;
+            settings.Entity.Unmanaged = chkEntUnmanaged.Checked;
+            settings.Entity.Custom = chkEntCustom.Checked;
+            settings.Entity.Standard = chkEntStandard.Checked;
+            settings.Entity.Intersect = chkEntIntersect.Checked;
+            settings.Entity.OnlyValidAF = chkEntOnlyAF.Checked;
+            settings.Attribute.All = chkAttAll.Checked;
+            settings.Attribute.Managed = chkAttManaged.Checked;
+            settings.Attribute.Unmanaged = chkAttUnmanaged.Checked;
+            settings.Attribute.Customizable = chkAttCustomizable.Checked;
+            settings.Attribute.Uncustomizable = chkAttUncustomizable.Checked;
+            settings.Attribute.Custom = chkAttCustom.Checked;
+            settings.Attribute.Standard = chkAttStandard.Checked;
+            settings.Attribute.OnlyValidAF = chkAttOnlyAF.Checked;
+            settings.Attribute.OnlyValidRead = chkAttOnlyRead.Checked;
+            settings.LogUsage = chkStatAllow.Checked;
             return settings;
         }
 

@@ -15,10 +15,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             InitializeComponent();
             form = fetchXmlBuilder;
-            chkFriendly.Checked = form.currentSettings.gridFriendly;
-            chkIdCol.Checked = form.currentSettings.gridId;
-            chkIndexCol.Checked = form.currentSettings.gridIndex;
-            chkCopyHeaders.Checked = form.currentSettings.gridCopyHeaders;
+            chkFriendly.Checked = form.settings.Results.Friendly;
+            chkIdCol.Checked = form.settings.Results.Id;
+            chkIndexCol.Checked = form.settings.Results.Index;
+            chkCopyHeaders.Checked = form.settings.Results.CopyHeaders;
             ApplySettingsToGrid();
         }
 
@@ -26,7 +26,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             if (entities != null)
             {
-                this.EnsureVisible(form.dockContainer, form.currentSettings.dockStates.ResultView);
+                this.EnsureVisible(form.dockContainer, form.settings.DockStates.ResultView);
             }
             crmGridView1.DataSource = entities;
             crmGridView1.Refresh();
@@ -35,10 +35,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void ApplySettingsToGrid()
         {
-            crmGridView1.ShowFriendlyNames = form.currentSettings.gridFriendly;
-            crmGridView1.ShowIdColumn = form.currentSettings.gridId;
-            crmGridView1.ShowIndexColumn = form.currentSettings.gridIndex;
-            crmGridView1.ClipboardCopyMode = form.currentSettings.gridCopyHeaders ?
+            crmGridView1.ShowFriendlyNames = form.settings.Results.Friendly;
+            crmGridView1.ShowIdColumn = form.settings.Results.Id;
+            crmGridView1.ShowIndexColumn = form.settings.Results.Index;
+            crmGridView1.ClipboardCopyMode = form.settings.Results.CopyHeaders ?
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             crmGridView1.OrganizationService = form.Service;
             crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
@@ -46,10 +46,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void UpdateSettingsFromGrid()
         {
-            form.currentSettings.gridFriendly = chkFriendly.Checked;
-            form.currentSettings.gridIndex = chkIndexCol.Checked;
-            form.currentSettings.gridId = chkIdCol.Checked;
-            form.currentSettings.gridCopyHeaders = chkCopyHeaders.Checked;
+            form.settings.Results.Friendly = chkFriendly.Checked;
+            form.settings.Results.Index = chkIndexCol.Checked;
+            form.settings.Results.Id = chkIdCol.Checked;
+            form.settings.Results.CopyHeaders = chkCopyHeaders.Checked;
             ApplySettingsToGrid();
         }
 
@@ -146,7 +146,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             if (DockState != WeifenLuo.WinFormsUI.Docking.DockState.Unknown &&
                 DockState != WeifenLuo.WinFormsUI.Docking.DockState.Hidden)
             {
-                form.currentSettings.dockStates.ResultView = DockState;
+                form.settings.DockStates.ResultView = DockState;
             }
         }
     }

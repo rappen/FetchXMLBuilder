@@ -29,7 +29,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal static Dictionary<string, EntityMetadata> entities;
         internal static bool friendlyNames = false;
         internal static Dictionary<string, List<Entity>> views;
-        internal FXBSettings currentSettings = new FXBSettings();
+        internal FXBSettings settings = new FXBSettings();
         internal TreeBuilderControl dockControlBuilder;
         internal bool working = false;
 
@@ -295,7 +295,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             else if (e.Control && e.KeyCode == Keys.F)
             {
-                currentSettings.useFriendlyNames = !currentSettings.useFriendlyNames;
+                settings.UseFriendlyNames = !settings.UseFriendlyNames;
                 dockControlBuilder.ApplyCurrentSettings();
             }
         }
@@ -470,7 +470,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 return;
             }
-            var fetchType = currentSettings.resultOption;
+            var fetchType = settings.Results.ResultOption;
             switch (fetchType)
             {
                 case 0:
@@ -499,18 +499,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     foreach (var attribute in attributes)
                     {
-                        if (!currentSettings.showAttributesAll)
+                        if (!settings.Attribute.All)
                         {
                             if (attribute.IsValidForRead == false) { continue; }
                             if (!string.IsNullOrEmpty(attribute.AttributeOf)) { continue; }
-                            if (!currentSettings.showAttributesManaged && attribute.IsManaged == true) { continue; }
-                            if (!currentSettings.showAttributesUnmanaged && attribute.IsManaged == false) { continue; }
-                            if (!currentSettings.showAttributesCustomizable && attribute.IsCustomizable.Value) { continue; }
-                            if (!currentSettings.showAttributesUncustomizable && !attribute.IsCustomizable.Value) { continue; }
-                            if (!currentSettings.showAttributesStandard && attribute.IsCustomAttribute == false) { continue; }
-                            if (!currentSettings.showAttributesCustom && attribute.IsCustomAttribute == true) { continue; }
-                            if (currentSettings.showAttributesOnlyValidAF && attribute.IsValidForAdvancedFind.Value == false) { continue; }
-                            if (currentSettings.showAttributesOnlyValidRead && attribute.IsValidForRead.Value == false) { continue; }
+                            if (!settings.Attribute.Managed && attribute.IsManaged == true) { continue; }
+                            if (!settings.Attribute.Unmanaged && attribute.IsManaged == false) { continue; }
+                            if (!settings.Attribute.Customizable && attribute.IsCustomizable.Value) { continue; }
+                            if (!settings.Attribute.Uncustomizable && !attribute.IsCustomizable.Value) { continue; }
+                            if (!settings.Attribute.Standard && attribute.IsCustomAttribute == false) { continue; }
+                            if (!settings.Attribute.Custom && attribute.IsCustomAttribute == true) { continue; }
+                            if (settings.Attribute.OnlyValidAF && attribute.IsValidForAdvancedFind.Value == false) { continue; }
+                            if (settings.Attribute.OnlyValidRead && attribute.IsValidForRead.Value == false) { continue; }
                         }
                         result.Add(attribute);
                     }
@@ -526,16 +526,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 foreach (var entity in entities)
                 {
-                    if (!currentSettings.showEntitiesAll)
+                    if (!settings.Entity.All)
                     {
-                        if (!currentSettings.showEntitiesManaged && entity.Value.IsManaged == true) { continue; }
-                        if (!currentSettings.showEntitiesUnmanaged && entity.Value.IsManaged == false) { continue; }
-                        if (!currentSettings.showEntitiesCustomizable && entity.Value.IsCustomizable.Value) { continue; }
-                        if (!currentSettings.showEntitiesUncustomizable && !entity.Value.IsCustomizable.Value) { continue; }
-                        if (!currentSettings.showEntitiesStandard && entity.Value.IsCustomEntity == false) { continue; }
-                        if (!currentSettings.showEntitiesCustom && entity.Value.IsCustomEntity == true) { continue; }
-                        if (!currentSettings.showEntitiesIntersect && entity.Value.IsIntersect == true) { continue; }
-                        if (currentSettings.showEntitiesOnlyValidAF && entity.Value.IsValidForAdvancedFind == false) { continue; }
+                        if (!settings.Entity.Managed && entity.Value.IsManaged == true) { continue; }
+                        if (!settings.Entity.Unmanaged && entity.Value.IsManaged == false) { continue; }
+                        if (!settings.Entity.Customizable && entity.Value.IsCustomizable.Value) { continue; }
+                        if (!settings.Entity.Uncustomizable && !entity.Value.IsCustomizable.Value) { continue; }
+                        if (!settings.Entity.Standard && entity.Value.IsCustomEntity == false) { continue; }
+                        if (!settings.Entity.Custom && entity.Value.IsCustomEntity == true) { continue; }
+                        if (!settings.Entity.Intersect && entity.Value.IsIntersect == true) { continue; }
+                        if (settings.Entity.OnlyValidAF && entity.Value.IsValidForAdvancedFind == false) { continue; }
                     }
                     result.Add(entity.Key, entity.Value);
                 }
@@ -679,7 +679,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         internal void LogUse(string action, bool forceLog = false)
         {
-            if (currentSettings.logUsage == true || forceLog)
+            if (settings.LogUsage == true || forceLog)
             {
                 LogUsage.DoLog(action);
             }
@@ -735,28 +735,29 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private static string GetDockFileName()
         {
-            return Path.Combine(Paths.SettingsPath, "Cinteros.Xrm.FetchXmlBuilder_DockPanels.xml");
+            return Path.Combine(Paths.SettingsPath, "Cinteros.Xrm.FetchXmlBuilder_[DockPanels].xml");
         }
 
         private void ApplySettings()
         {
-            dockControlBuilder.SplitterPos = currentSettings.treeHeight;
-            if (currentSettings != null && !string.IsNullOrWhiteSpace(currentSettings.fetchxml))
+            dockControlBuilder.SplitterPos = settings.QueryOptions.TreeHeight;
+            var connsett = GetConnectionSetting();
+            if (connsett != null && !string.IsNullOrWhiteSpace(connsett.FetchXML))
             {
-                dockControlBuilder.Init(currentSettings.fetchxml, "loaded from last session", false);
+                dockControlBuilder.Init(connsett.FetchXML, "loaded from last session", false);
             }
-            dockControlBuilder.ShowQuickActions(currentSettings.showQuickActions);
+            dockControlBuilder.ShowQuickActions(settings.QueryOptions.ShowQuickActions);
             var ass = Assembly.GetExecutingAssembly().GetName();
             var version = ass.Version.ToString();
-            if (!version.Equals(currentSettings.currentVersion))
+            if (!version.Equals(settings.CurrentVersion))
             {
                 // Reset some settings when new version is deployed
-                currentSettings.logUsage = null;
-                currentSettings.currentVersion = version;
+                settings.LogUsage = null;
+                settings.CurrentVersion = version;
             }
-            if (currentSettings.logUsage == null)
+            if (settings.LogUsage == null)
             {
-                currentSettings.logUsage = LogUsage.PromptToLog();
+                settings.LogUsage = LogUsage.PromptToLog();
             }
         }
 
@@ -975,19 +976,28 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         /// <summary>Loads configurations from file</summary>
         private void LoadSetting()
         {
-            var nosettings = false;
-            if (!SettingsManager.Instance.TryLoad<FXBSettings>(typeof(FetchXmlBuilder), out currentSettings, ConnectionDetail?.ConnectionName) &&
-                !SettingsManager.Instance.TryLoad<FXBSettings>(typeof(FetchXmlBuilder), out currentSettings))
+            try
             {
-                // Initialize new settings instance, no settings file was found
-                currentSettings = new FXBSettings();
-                nosettings = true;
+                if (SettingsManager.Instance.TryLoad<FXBSettings>(typeof(FetchXmlBuilder), out settings, "[Common]"))
+                {
+                    return;
+                }
             }
-            if (nosettings)
+            catch (InvalidOperationException) { }
+            settings = new FXBSettings();
+        }
+
+        private FXBConnectionSettings GetConnectionSetting()
+        {
+            try
             {
-                // Make sure initial default settings file is available
-                SettingsManager.Instance.Save(typeof(FetchXmlBuilder), currentSettings);
+                if (SettingsManager.Instance.TryLoad<FXBConnectionSettings>(typeof(FetchXmlBuilder), out FXBConnectionSettings connsett, ConnectionDetail?.ConnectionName))
+                {
+                    return connsett;
+                }
             }
+            catch (InvalidOperationException) { }
+            return new FXBConnectionSettings();
         }
 
         private void OpenCWPFeed()
@@ -1118,7 +1128,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     dockContainer.Contents[i].DockHandler.Close();
                 }
             }
-            currentSettings.dockStates = new DockStates();
+            settings.DockStates = new DockStates();
             if (dockControlBuilder?.IsDisposed != false)
             {
                 dockControlBuilder = new TreeBuilderControl(this);
@@ -1137,8 +1147,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void RetrieveMultiple(string fetch)
         {
             working = true;
-            var outputtype = currentSettings.resultOption;
-            var outputstyle = currentSettings.resultSerializeStyle;
+            var outputtype = settings.Results.ResultOption;
+            var outputstyle = settings.Results.SerializeStyle;
             var outputtypestring = Settings.ResultOption2String(outputtype, outputstyle);
             SendMessageToStatusBar(this, new StatusBarMessageEventArgs("Retrieving..."));
             WorkAsync(new WorkAsyncInfo("Executing FetchXML...",
@@ -1172,7 +1182,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             resultCollection.TotalRecordCount = tmpResult.TotalRecordCount;
                             resultCollection.TotalRecordCountLimitExceeded = tmpResult.TotalRecordCountLimitExceeded;
                         }
-                        if (currentSettings.retrieveAllPages && query is QueryExpression && tmpResult.MoreRecords)
+                        if (settings.Results.RetrieveAllPages && query is QueryExpression && tmpResult.MoreRecords)
                         {
                             ((QueryExpression)query).PageInfo.PageNumber++;
                             ((QueryExpression)query).PageInfo.PagingCookie = tmpResult.PagingCookie;
@@ -1188,7 +1198,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Retrieved {resultCollection.Entities.Count} records on {page} pages in {duration.TotalSeconds:F2} seconds"));
                         }
                     }
-                    while (currentSettings.retrieveAllPages && query is QueryExpression && tmpResult.MoreRecords);
+                    while (settings.Results.RetrieveAllPages && query is QueryExpression && tmpResult.MoreRecords);
                     if (outputtype == 1 && outputstyle == 2)
                     {
                         var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented);
@@ -1215,12 +1225,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         if (outputtype == 0)
                         {
-                            if (currentSettings.resultsAlwaysNewWindow)
+                            if (settings.Results.AlwaysNewWindow)
                             {
                                 var newresults = new ResultGrid(this);
                                 resultpanecount++;
                                 newresults.Text = $"Results ({resultpanecount})";
-                                newresults.Show(dockContainer, currentSettings.dockStates.ResultView);
+                                newresults.Show(dockContainer, settings.DockStates.ResultView);
                                 newresults.SetData(entities);
                             }
                             else
@@ -1228,7 +1238,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                                 if (dockControlGrid?.IsDisposed != false)
                                 {
                                     dockControlGrid = new ResultGrid(this);
-                                    dockControlGrid.Show(dockContainer, currentSettings.dockStates.ResultView);
+                                    dockControlGrid.Show(dockContainer, settings.DockStates.ResultView);
                                 }
                                 dockControlGrid.SetData(entities);
                                 dockControlGrid.Activate();
@@ -1391,7 +1401,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private bool SaveIfChanged()
         {
             var ok = true;
-            if (!currentSettings.doNotPromptToSave && dockControlBuilder?.FetchChanged == true)
+            if (!settings.DoNotPromptToSave && dockControlBuilder?.FetchChanged == true)
             {
                 var result = MessageBox.Show("FetchXML has changed.\nSave changes?", "Confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                 if (result == DialogResult.Cancel)
@@ -1440,9 +1450,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         /// <summary>Saves various configurations to file for next session</summary>
         private void SaveSetting()
         {
-            currentSettings.treeHeight = dockControlBuilder.SplitterPos;
-            currentSettings.fetchxml = dockControlBuilder.GetFetchString(false, false);
-            SettingsManager.Instance.Save(typeof(FetchXmlBuilder), currentSettings, ConnectionDetail?.ConnectionName);
+            settings.QueryOptions.TreeHeight = dockControlBuilder.SplitterPos;
+            SettingsManager.Instance.Save(typeof(FetchXmlBuilder), settings, "[Common]");
+            var connsett = new FXBConnectionSettings
+            {
+                FetchXML = dockControlBuilder.GetFetchString(false, false)
+            };
+            SettingsManager.Instance.Save(typeof(FetchXmlBuilder), connsett, ConnectionDetail?.ConnectionName);
         }
 
         private void SaveView()
@@ -1632,18 +1646,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsbOptions_Click(object sender, EventArgs e)
         {
-            var allowStats = currentSettings.logUsage;
-            var settingDlg = new Settings(currentSettings);
+            var allowStats = settings.LogUsage;
+            var settingDlg = new Settings(settings);
             if (settingDlg.ShowDialog(this) == DialogResult.OK)
             {
-                currentSettings = settingDlg.GetSettings();
-                if (allowStats != currentSettings.logUsage)
+                settings = settingDlg.GetSettings();
+                if (allowStats != settings.LogUsage)
                 {
-                    if (currentSettings.logUsage == true)
+                    if (settings.LogUsage == true)
                     {
                         LogUse("Accept", true);
                     }
-                    else if (!currentSettings.logUsage == true)
+                    else if (!settings.LogUsage == true)
                     {
                         LogUse("Deny", true);
                     }
@@ -1719,17 +1733,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsmiShowFetchXML_Click(object sender, EventArgs e)
         {
-            ShowContentControl(ref dockControlFetchXml, ContentType.FetchXML, SaveFormat.None, currentSettings.dockStates.FetchXML);
+            ShowContentControl(ref dockControlFetchXml, ContentType.FetchXML, SaveFormat.None, settings.DockStates.FetchXML);
         }
 
         private void tsmiShowFetchXMLcs_Click(object sender, EventArgs e)
         {
-            ShowContentControl(ref dockControlFetchXmlCs, ContentType.CSharp_Query, SaveFormat.None, currentSettings.dockStates.FetchXMLCs);
+            ShowContentControl(ref dockControlFetchXmlCs, ContentType.CSharp_Query, SaveFormat.None, settings.DockStates.FetchXMLCs);
         }
 
         private void tsmiShowFetchXMLjs_Click(object sender, EventArgs e)
         {
-            ShowContentControl(ref dockControlFetchXmlJs, ContentType.JavaScript_Query, SaveFormat.None, currentSettings.dockStates.FetchXMLJs);
+            ShowContentControl(ref dockControlFetchXmlJs, ContentType.JavaScript_Query, SaveFormat.None, settings.DockStates.FetchXMLJs);
         }
 
         private void tsmiShowOData_Click(object sender, EventArgs e)
@@ -1748,12 +1762,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsmiShowQueryExpression_Click(object sender, EventArgs e)
         {
-            ShowContentControl(ref dockControlQExp, ContentType.QueryExpression, SaveFormat.None, currentSettings.dockStates.QueryExpression);
+            ShowContentControl(ref dockControlQExp, ContentType.QueryExpression, SaveFormat.None, settings.DockStates.QueryExpression);
         }
 
         private void tsmiShowSQL_Click(object sender, EventArgs e)
         {
-            ShowContentControl(ref dockControlSQL, ContentType.SQL_Query, SaveFormat.SQL, currentSettings.dockStates.SQLQuery);
+            ShowContentControl(ref dockControlSQL, ContentType.SQL_Query, SaveFormat.SQL, settings.DockStates.SQLQuery);
         }
 
         #endregion Private Event Handlers

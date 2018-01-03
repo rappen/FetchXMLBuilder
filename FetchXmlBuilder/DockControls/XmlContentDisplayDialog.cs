@@ -54,7 +54,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             panFormatting.Visible = allowEdit;
             panExecute.Visible = allowEdit;
             panSave.Visible = format != SaveFormat.None;
-            var windowSettings = fxb.currentSettings.ContentWindows.GetContentWindow(contenttype);
+            var windowSettings = fxb.settings.ContentWindows.GetContentWindow(contenttype);
             chkLiveUpdate.Checked = allowEdit && windowSettings.LiveUpdate;
             GroupBoxSetState(lblFormatExpander, windowSettings.FormatExpanded);
             GroupBoxSetState(lblActionsExpander, windowSettings.ActionExpanded);
@@ -105,7 +105,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         public void UpdateXML(string xmlString)
         {
             txtXML.Text = xmlString;
-            txtXML.Settings.QuoteCharacter = fxb.currentSettings.useSingleQuotation ? '\'' : '"';
+            txtXML.Settings.QuoteCharacter = fxb.settings.QueryOptions.UseSingleQuotation ? '\'' : '"';
             FormatXML(true);
         }
 
@@ -243,19 +243,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 switch (contenttype)
                 {
                     case ContentType.FetchXML:
-                        fxb.currentSettings.dockStates.FetchXML = DockState;
+                        fxb.settings.DockStates.FetchXML = DockState;
                         break;
                     case ContentType.CSharp_Query:
-                        fxb.currentSettings.dockStates.FetchXMLCs = DockState;
+                        fxb.settings.DockStates.FetchXMLCs = DockState;
                         break;
                     case ContentType.JavaScript_Query:
-                        fxb.currentSettings.dockStates.FetchXMLJs = DockState;
+                        fxb.settings.DockStates.FetchXMLJs = DockState;
                         break;
                     case ContentType.QueryExpression:
-                        fxb.currentSettings.dockStates.QueryExpression = DockState;
+                        fxb.settings.DockStates.QueryExpression = DockState;
                         break;
                     case ContentType.SQL_Query:
-                        fxb.currentSettings.dockStates.SQLQuery = DockState;
+                        fxb.settings.DockStates.SQLQuery = DockState;
                         break;
                 }
             }
@@ -342,7 +342,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 FormatExpanded = gbFormatting.GetDockedContainer().Height > 20,
                 ActionExpanded = gbActions.GetDockedContainer().Height > 20
             };
-            fxb.currentSettings.ContentWindows.SetContentWindow(contenttype, windowSettings);
+            fxb.settings.ContentWindows.SetContentWindow(contenttype, windowSettings);
         }
     }
 

@@ -8,54 +8,53 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
     public class FXBSettings
     {
-        private static string filename = Assembly.GetExecutingAssembly().GetName().Name + ".Settings.xml";
         private bool _useFriendlyNames;
 
-        public bool useFriendlyNames { get { return _useFriendlyNames; } set { _useFriendlyNames = value; FetchXmlBuilder.friendlyNames = value; } }
-        public bool showEntitiesAll { get; set; }
-        public bool showEntitiesManaged { get; set; }
-        public bool showEntitiesUnmanaged { get; set; }
-        public bool showEntitiesCustomizable { get; set; }
-        public bool showEntitiesUncustomizable { get; set; }
-        public bool showEntitiesCustom { get; set; }
-        public bool showEntitiesStandard { get; set; }
-        public bool showEntitiesIntersect { get; set; }
-        public bool showEntitiesOnlyValidAF { get; set; }
-        public bool showAttributesAll { get; set; }
-        public bool showAttributesManaged { get; set; }
-        public bool showAttributesUnmanaged { get; set; }
-        public bool showAttributesCustomizable { get; set; }
-        public bool showAttributesUncustomizable { get; set; }
-        public bool showAttributesCustom { get; set; }
-        public bool showAttributesStandard { get; set; }
-        public bool showAttributesOnlyValidAF { get; set; }
-        public bool showAttributesOnlyValidRead { get; set; }
-        public int resultOption { get; set; }
-        public int resultSerializeStyle { get; set; }
-        public bool retrieveAllPages { get; set; } = false;
-        public bool gridFriendly { get; set; }
-        public bool gridId { get; set; }
-        public bool gridIndex { get; set; }
-        public bool gridCopyHeaders { get; set; } = true;
-        public string fetchxml { get; set; }
-        public bool? logUsage { get; set; }
-        public string currentVersion { get; set; }
-        public bool showQuickActions { get; set; }
-        public bool useSingleQuotation { get; set; }
-        public string lastOpenedViewEntity { get; set; }
-        public Guid lastOpenedViewId { get; set; }
-        public bool doNotPromptToSave { get; set; } = false;
-        public bool resultsAlwaysNewWindow { get; set; } = false;
-        public int treeHeight { get; set; } = -1;
-        public DockStates dockStates { get; set; } = new DockStates();
+        public bool UseFriendlyNames { get { return _useFriendlyNames; } set { _useFriendlyNames = value; FetchXmlBuilder.friendlyNames = value; } }
+        public QueryOptions QueryOptions { get; set; } = new QueryOptions();
+        public MetadataOptions Entity { get; set; } = new MetadataOptions();
+        public MetadataOptions Attribute { get; set; } = new MetadataOptions();
+        public ResultOptions Results { get; set; } = new ResultOptions();
+        public bool? LogUsage { get; set; }
+        public string CurrentVersion { get; set; }
+        public string LastOpenedViewEntity { get; set; }
+        public Guid LastOpenedViewId { get; set; }
+        public bool DoNotPromptToSave { get; set; } = false;
+        public DockStates DockStates { get; set; } = new DockStates();
         public ContentWindows ContentWindows { get; set; } = new ContentWindows();
+    }
 
-        public FXBSettings()
-        {
-            showEntitiesAll = true;
-            showAttributesAll = true;
-            showQuickActions = true;
-        }
+    public class QueryOptions
+    {
+        public bool ShowQuickActions { get; set; } = true;
+        public bool UseSingleQuotation { get; set; }
+        public int TreeHeight { get; set; } = -1;
+    }
+
+    public class MetadataOptions
+    {
+        public bool All { get; set; } = true;
+        public bool Managed { get; set; }
+        public bool Unmanaged { get; set; }
+        public bool Customizable { get; set; }
+        public bool Uncustomizable { get; set; }
+        public bool Custom { get; set; }
+        public bool Standard { get; set; }
+        public bool Intersect { get; set; }
+        public bool OnlyValidAF { get; set; }
+        public bool OnlyValidRead { get; set; }
+    }
+
+    public class ResultOptions
+    {
+        public bool Friendly { get; set; }
+        public bool Id { get; set; }
+        public bool Index { get; set; }
+        public bool CopyHeaders { get; set; } = true;
+        public int ResultOption { get; set; }
+        public int SerializeStyle { get; set; }
+        public bool RetrieveAllPages { get; set; } = false;
+        public bool AlwaysNewWindow { get; set; } = false;
     }
 
     public class DockStates
@@ -122,5 +121,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     break;
             }
         }
+    }
+
+    public class FXBConnectionSettings
+    {
+        public string FetchXML { get; set; } = string.Empty;
     }
 }
