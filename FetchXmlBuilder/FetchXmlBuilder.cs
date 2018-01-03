@@ -222,8 +222,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 info.Cancel = true;
             }
-            SaveSetting();
             SaveDockPanels();
+            dockControlFetchXml?.Close();
+            dockControlFetchXmlCs?.Close();
+            dockControlFetchXmlJs?.Close();
+            dockControlGrid?.Close();
+            dockControlOData?.Close();
+            dockControlQExp?.Close();
+            dockControlSQL?.Close();
+            SaveSetting();
             LogUse("Close");
         }
 
@@ -1384,7 +1391,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private bool SaveIfChanged()
         {
             var ok = true;
-            if (!currentSettings.doNotPromptToSave && dockControlBuilder.FetchChanged)
+            if (!currentSettings.doNotPromptToSave && dockControlBuilder?.FetchChanged == true)
             {
                 var result = MessageBox.Show("FetchXML has changed.\nSave changes?", "Confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                 if (result == DialogResult.Cancel)
@@ -1592,7 +1599,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void toolStripMain_Click(object sender, EventArgs e)
         {
-            dockControlBuilder.tvFetch.Focus();
+            dockControlBuilder?.tvFetch?.Focus();
         }
 
         private void tsbAbout_Click(object sender, EventArgs e)
@@ -1610,7 +1617,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsbExecute_Click(object sender, EventArgs e)
         {
-            dockControlBuilder.tvFetch.Focus();
+            dockControlBuilder?.tvFetch?.Focus();
             FetchResults();
         }
 

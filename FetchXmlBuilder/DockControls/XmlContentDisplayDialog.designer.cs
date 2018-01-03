@@ -38,6 +38,7 @@
             this.txtXML = new CSRichTextBoxSyntaxHighlighting.XMLViewer();
             this.panActions = new System.Windows.Forms.Panel();
             this.gbActions = new System.Windows.Forms.GroupBox();
+            this.lblActionsExpander = new System.Windows.Forms.Label();
             this.panExecute = new System.Windows.Forms.Panel();
             this.panSave = new System.Windows.Forms.Panel();
             this.panOk = new System.Windows.Forms.Panel();
@@ -45,6 +46,7 @@
             this.chkLiveUpdate = new System.Windows.Forms.CheckBox();
             this.panFormatting = new System.Windows.Forms.Panel();
             this.gbFormatting = new System.Windows.Forms.GroupBox();
+            this.lblFormatExpander = new System.Windows.Forms.Label();
             this.rbFormatEsc = new System.Windows.Forms.RadioButton();
             this.rbFormatHTML = new System.Windows.Forms.RadioButton();
             this.rbFormatXML = new System.Windows.Forms.RadioButton();
@@ -148,8 +150,9 @@
             // 
             // gbActions
             // 
-            this.gbActions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.gbActions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbActions.Controls.Add(this.lblActionsExpander);
             this.gbActions.Controls.Add(this.panExecute);
             this.gbActions.Controls.Add(this.panSave);
             this.gbActions.Controls.Add(this.panOk);
@@ -161,6 +164,20 @@
             this.gbActions.TabIndex = 4;
             this.gbActions.TabStop = false;
             this.gbActions.Text = "Actions";
+            // 
+            // lblActionsExpander
+            // 
+            this.lblActionsExpander.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblActionsExpander.AutoSize = true;
+            this.lblActionsExpander.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblActionsExpander.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblActionsExpander.Location = new System.Drawing.Point(558, 0);
+            this.lblActionsExpander.Name = "lblActionsExpander";
+            this.lblActionsExpander.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
+            this.lblActionsExpander.Size = new System.Drawing.Size(14, 13);
+            this.lblActionsExpander.TabIndex = 7;
+            this.lblActionsExpander.Text = "–";
+            this.lblActionsExpander.Click += new System.EventHandler(this.llGroupBoxExpander_Clicked);
             // 
             // panExecute
             // 
@@ -220,8 +237,9 @@
             // 
             // gbFormatting
             // 
-            this.gbFormatting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.gbFormatting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbFormatting.Controls.Add(this.lblFormatExpander);
             this.gbFormatting.Controls.Add(this.rbFormatEsc);
             this.gbFormatting.Controls.Add(this.rbFormatHTML);
             this.gbFormatting.Controls.Add(this.rbFormatXML);
@@ -232,6 +250,20 @@
             this.gbFormatting.TabIndex = 4;
             this.gbFormatting.TabStop = false;
             this.gbFormatting.Text = "Formatting";
+            // 
+            // lblFormatExpander
+            // 
+            this.lblFormatExpander.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblFormatExpander.AutoSize = true;
+            this.lblFormatExpander.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblFormatExpander.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFormatExpander.Location = new System.Drawing.Point(558, 0);
+            this.lblFormatExpander.Name = "lblFormatExpander";
+            this.lblFormatExpander.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
+            this.lblFormatExpander.Size = new System.Drawing.Size(14, 13);
+            this.lblFormatExpander.TabIndex = 6;
+            this.lblFormatExpander.Text = "–";
+            this.lblFormatExpander.Click += new System.EventHandler(this.llGroupBoxExpander_Clicked);
             // 
             // rbFormatEsc
             // 
@@ -296,12 +328,14 @@
             this.Name = "XmlContentDisplayDialog";
             this.ShowIcon = false;
             this.DockStateChanged += new System.EventHandler(this.XmlContentDisplayDialog_DockStateChanged);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.XmlContentDisplayDialog_FormClosing);
             this.Load += new System.EventHandler(this.XmlContentDisplayDialog_Load);
             this.VisibleChanged += new System.EventHandler(this.XmlContentDisplayDialog_VisibleChanged);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.XmlContentDisplayDialog_KeyDown);
             this.panCancel.ResumeLayout(false);
             this.panActions.ResumeLayout(false);
             this.gbActions.ResumeLayout(false);
+            this.gbActions.PerformLayout();
             this.panExecute.ResumeLayout(false);
             this.panSave.ResumeLayout(false);
             this.panOk.ResumeLayout(false);
@@ -334,5 +368,7 @@
         private System.Windows.Forms.Panel panOk;
         private System.Windows.Forms.Panel panLiveUpdate;
         internal System.Windows.Forms.CheckBox chkLiveUpdate;
+        private System.Windows.Forms.Label lblFormatExpander;
+        private System.Windows.Forms.Label lblActionsExpander;
     }
 }
