@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
@@ -37,7 +33,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             collec = new Dictionary<string, string>();
         }
 
-        public attributeControl(TreeNode Node, AttributeMetadata[] attributes, FetchXmlBuilder fetchXmlBuilder)
+        public attributeControl(TreeNode Node, AttributeMetadata[] attributes, TreeBuilderControl tree)
             : this()
         {
             collec = (Dictionary<string, string>)Node.Tag;
@@ -49,7 +45,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             PopulateControls(Node, attributes);
             ControlUtils.FillControls(collec, this.Controls);
             controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
-            Saved += fetchXmlBuilder.CtrlSaved;
+            Saved += tree.CtrlSaved;
         }
 
         private void PopulateControls(TreeNode node, AttributeMetadata[] attributes)
@@ -62,7 +58,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, false, FetchXmlBuilder.friendlyNames);
                 }
             }
-            var aggregate = FetchXmlBuilder.IsFetchAggregate(node);
+            var aggregate = TreeBuilderControl.IsFetchAggregate(node);
             cmbAggregate.Enabled = aggregate;
             chkGroupBy.Enabled = aggregate;
             if (!aggregate)
@@ -92,7 +88,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private bool ValidateForm()
         {
-            if (FetchXmlBuilder.IsFetchAggregate(node))
+            if (TreeBuilderControl.IsFetchAggregate(node))
             {
                 if (string.IsNullOrWhiteSpace(txtAlias.Text))
                 {

@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Cinteros.Xrm.XmlEditorUtils;
-using Microsoft.Xrm.Sdk.Metadata;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
@@ -37,7 +32,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             collec = new Dictionary<string, string>();
         }
 
-        public entityControl(Dictionary<string, string> collection, FetchXmlBuilder fetchXmlBuilder)
+        public entityControl(Dictionary<string, string> collection, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree)
             : this()
         {
             fxb = fetchXmlBuilder;
@@ -47,7 +42,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             PopulateControls();
             ControlUtils.FillControls(collec, this.Controls);
             controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
-            Saved += fetchXmlBuilder.CtrlSaved;
+            Saved += tree.CtrlSaved;
         }
 
         private void PopulateControls()

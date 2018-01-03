@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
@@ -19,6 +15,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private string controlsCheckSum = "";
         TreeNode node;
         FetchXmlBuilder form;
+        private int relatioshipWidth;
 
         #region Delegates
 
@@ -38,7 +35,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             collec = new Dictionary<string, string>();
         }
 
-        public linkEntityControl(TreeNode Node, FetchXmlBuilder fetchXmlBuilder)
+        public linkEntityControl(TreeNode Node, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree)
             : this()
         {
             form = fetchXmlBuilder;
@@ -51,7 +48,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             PopulateControls();
             ControlUtils.FillControls(collec, this.Controls);
             controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
-            Saved += fetchXmlBuilder.CtrlSaved;
+            Saved += tree.CtrlSaved;
         }
 
         private void PopulateControls()
@@ -287,6 +284,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                         chkIntersect.Checked = true;
                     }
                 }
+            }
+        }
+
+        private void cmbRelationship_DropDown(object sender, EventArgs e)
+        {
+            relatioshipWidth = cmbRelationship.Width;
+            if (cmbRelationship.Width < 300)
+            {
+                cmbRelationship.Width = 350;
+            }
+        }
+
+        private void cmbRelationship_DropDownClosed(object sender, EventArgs e)
+        {
+            if (relatioshipWidth < 300)
+            {
+                cmbRelationship.Width = relatioshipWidth;
             }
         }
     }

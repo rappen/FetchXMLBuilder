@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using XrmToolBox;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
@@ -38,8 +31,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public int resultOption { get; set; }
         public int resultSerializeStyle { get; set; }
         public bool retrieveAllPages { get; set; } = false;
-        public Size xmlWinSize { get; set; }
-        public Size gridWinSize { get; set; }
         public bool gridFriendly { get; set; }
         public bool gridId { get; set; }
         public bool gridIndex { get; set; }
@@ -52,6 +43,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public string lastOpenedViewEntity { get; set; }
         public Guid lastOpenedViewId { get; set; }
         public bool doNotPromptToSave { get; set; } = false;
+        public bool resultsAlwaysNewWindow { get; set; } = false;
+        public int treeHeight { get; set; } = -1;
+        public bool xmlLiveUpdate { get; set; }
+        public DockStates dockStates { get; set; } = new DockStates();
 
         public FXBSettings()
         {
@@ -59,5 +54,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             showAttributesAll = true;
             showQuickActions = true;
         }
+    }
+
+    public class DockStates
+    {
+        public DockState ResultView { get; set; } = DockState.Document;
+        public DockState FetchXML { get; set; } = DockState.Document;
+        public DockState FetchXMLCs { get; set; } = DockState.DockRight;
+        public DockState FetchXMLJs { get; set; } = DockState.DockRight;
+        public DockState QueryExpression { get; set; } = DockState.DockRight;
+        public DockState SQLQuery { get; set; } = DockState.DockRight;
     }
 }
