@@ -681,7 +681,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             if (settings.LogUsage == true || forceLog)
             {
+#if DEBUG
                 LogUsage.DoLog(action);
+#endif
             }
         }
 
@@ -752,12 +754,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (!version.Equals(settings.CurrentVersion))
             {
                 // Reset some settings when new version is deployed
-                settings.LogUsage = null;
+                settings.LogUsage = true;
                 settings.CurrentVersion = version;
-            }
-            if (settings.LogUsage == null)
-            {
-                settings.LogUsage = LogUsage.PromptToLog();
+                Welcome.ShowWelcome(this);
             }
         }
 

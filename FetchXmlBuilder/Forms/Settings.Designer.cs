@@ -59,6 +59,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.chkStatAllow = new System.Windows.Forms.CheckBox();
             this.gbAppearance = new System.Windows.Forms.GroupBox();
+            this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
             this.chkAppNoSavePrompt = new System.Windows.Forms.CheckBox();
             this.chkAppSingle = new System.Windows.Forms.CheckBox();
             this.chkAppQuick = new System.Windows.Forms.CheckBox();
@@ -66,7 +67,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
+            this.llShowWelcome = new System.Windows.Forms.LinkLabel();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -417,7 +418,7 @@
             this.rbResGrid.Checked = true;
             this.rbResGrid.Location = new System.Drawing.Point(20, 30);
             this.rbResGrid.Name = "rbResGrid";
-            this.rbResGrid.Size = new System.Drawing.Size(72, 17);
+            this.rbResGrid.Size = new System.Drawing.Size(48, 17);
             this.rbResGrid.TabIndex = 0;
             this.rbResGrid.TabStop = true;
             this.rbResGrid.Text = "View";
@@ -471,6 +472,16 @@
             this.gbAppearance.TabStop = false;
             this.gbAppearance.Text = "Appearance";
             // 
+            // chkAppResultsNewWindow
+            // 
+            this.chkAppResultsNewWindow.AutoSize = true;
+            this.chkAppResultsNewWindow.Location = new System.Drawing.Point(20, 122);
+            this.chkAppResultsNewWindow.Name = "chkAppResultsNewWindow";
+            this.chkAppResultsNewWindow.Size = new System.Drawing.Size(192, 17);
+            this.chkAppResultsNewWindow.TabIndex = 5;
+            this.chkAppResultsNewWindow.Text = "Always open results in new window";
+            this.chkAppResultsNewWindow.UseVisualStyleBackColor = true;
+            // 
             // chkAppNoSavePrompt
             // 
             this.chkAppNoSavePrompt.AutoSize = true;
@@ -517,6 +528,7 @@
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.llShowWelcome);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
             this.panel1.Location = new System.Drawing.Point(12, 596);
@@ -544,15 +556,16 @@
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             // 
-            // chkAppResultsNewWindow
+            // llShowWelcome
             // 
-            this.chkAppResultsNewWindow.AutoSize = true;
-            this.chkAppResultsNewWindow.Location = new System.Drawing.Point(20, 122);
-            this.chkAppResultsNewWindow.Name = "chkAppResultsNewWindow";
-            this.chkAppResultsNewWindow.Size = new System.Drawing.Size(192, 17);
-            this.chkAppResultsNewWindow.TabIndex = 5;
-            this.chkAppResultsNewWindow.Text = "Always open results in new window";
-            this.chkAppResultsNewWindow.UseVisualStyleBackColor = true;
+            this.llShowWelcome.AutoSize = true;
+            this.llShowWelcome.Location = new System.Drawing.Point(7, 24);
+            this.llShowWelcome.Name = "llShowWelcome";
+            this.llShowWelcome.Size = new System.Drawing.Size(114, 13);
+            this.llShowWelcome.TabIndex = 2;
+            this.llShowWelcome.TabStop = true;
+            this.llShowWelcome.Text = "Show welcome screen";
+            this.llShowWelcome.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llShowWelcome_LinkClicked);
             // 
             // Settings
             // 
@@ -583,6 +596,7 @@
             this.gbAppearance.ResumeLayout(false);
             this.gbAppearance.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -626,5 +640,6 @@
         private System.Windows.Forms.CheckBox chkResAllPages;
         private System.Windows.Forms.CheckBox chkAppNoSavePrompt;
         private System.Windows.Forms.CheckBox chkAppResultsNewWindow;
+        private System.Windows.Forms.LinkLabel llShowWelcome;
     }
 }

@@ -210,5 +210,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             cmbSeralizationStyle.Enabled = rbResSerialized.Checked;
         }
+
+        private void llShowWelcome_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Welcome.ShowWelcome(this);
+        }
     }
 }

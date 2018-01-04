@@ -41,13 +41,5 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
             catch { }
         }
-
-        internal static bool PromptToLog()
-        {
-            var msg = "Anonymous statistics will be collected to improve the functionality of FetchXML Builder.\n\n" +
-                "If you do not wish to allow this, open the Options and uncheck the 'Allow statistics' checkbox.";
-            MessageBox.Show(msg, "Statistics", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            return true;
-        }
     }
 }
