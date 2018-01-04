@@ -101,6 +101,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         /// <param name="e"></param>
         internal void CtrlSaved(object sender, SaveEventArgs e)
         {
+            if (tvFetch?.SelectedNode == null)
+            {
+                return;
+            }
             tvFetch.SelectedNode.Tag = e.AttributeCollection;
             TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, FetchXmlBuilder.friendlyNames);
             FetchChanged = treeChecksum != GetTreeChecksum(null);
