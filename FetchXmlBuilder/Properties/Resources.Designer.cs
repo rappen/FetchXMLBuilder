@@ -59,25 +59,5 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap FXB_100 {
-            get {
-                object obj = ResourceManager.GetObject("FXB_100", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap FXB_inno_logo_400 {
-            get {
-                object obj = ResourceManager.GetObject("FXB-inno-logo-400", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }
