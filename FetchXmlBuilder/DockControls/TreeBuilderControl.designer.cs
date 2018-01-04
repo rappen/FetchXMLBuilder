@@ -166,6 +166,7 @@
             // 
             this.lblQAExpander.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblQAExpander.AutoSize = true;
+            this.lblQAExpander.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblQAExpander.Location = new System.Drawing.Point(576, 0);
             this.lblQAExpander.Name = "lblQAExpander";
             this.lblQAExpander.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
@@ -309,6 +310,7 @@
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "TreeBuilderControl";
             this.TabText = "Query Builder";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TreeBuilderControl_FormClosing);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();

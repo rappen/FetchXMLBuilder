@@ -144,7 +144,6 @@
             this.lblOptionsExpander.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblOptionsExpander.AutoSize = true;
             this.lblOptionsExpander.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblOptionsExpander.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblOptionsExpander.Location = new System.Drawing.Point(631, 0);
             this.lblOptionsExpander.Name = "lblOptionsExpander";
             this.lblOptionsExpander.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);

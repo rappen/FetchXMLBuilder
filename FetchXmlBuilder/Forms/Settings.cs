@@ -22,7 +22,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 settings = new FXBSettings();
             }
             chkAppFriendly.Checked = settings.UseFriendlyNames;
-            chkAppQuick.Checked = settings.QueryOptions.ShowQuickActions;
             chkAppSingle.Checked = settings.QueryOptions.UseSingleQuotation;
             chkAppNoSavePrompt.Checked = settings.DoNotPromptToSave;
             chkAppResultsNewWindow.Checked = settings.Results.AlwaysNewWindow;
@@ -64,7 +63,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         internal FXBSettings GetSettings()
         {
             settings.UseFriendlyNames = chkAppFriendly.Checked;
-            settings.QueryOptions.ShowQuickActions = chkAppQuick.Checked;
             settings.QueryOptions.UseSingleQuotation = chkAppSingle.Checked;
             settings.DoNotPromptToSave = chkAppNoSavePrompt.Checked;
             settings.Results.AlwaysNewWindow = chkAppResultsNewWindow.Checked;

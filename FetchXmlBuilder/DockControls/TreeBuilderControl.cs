@@ -88,7 +88,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             DisplayDefinition(GetFetchDocument());
             HandleNodeSelection(tvFetch.SelectedNode);
             fxb.UpdateLiveXML();
-            ShowQuickActions(fxb.settings.QueryOptions.ShowQuickActions);
+            lblQAExpander.GroupBoxSetState(null, fxb.settings.QueryOptions.ShowQuickActions);
         }
 
         internal void ClearChanged()
@@ -282,11 +282,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         internal void SetFetchName(string name)
         {
             TabText = "Query Builder" + (string.IsNullOrWhiteSpace(name) ? "" : " - ") + name;
-        }
-
-        internal void ShowQuickActions(bool show)
-        {
-            panQuickActions.Visible = show;
         }
 
         internal void UpdateCurrentNode()
@@ -821,6 +816,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
             fxb.working = false;
             moveUpToolStripMenuItem.Enabled = true;
+        }
+
+        private void TreeBuilderControl_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            fxb.settings.QueryOptions.ShowQuickActions = gbQuickActions.IsExpanded();
         }
 
         private void tvFetch_AfterSelect(object sender, TreeViewEventArgs e)

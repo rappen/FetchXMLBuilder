@@ -223,6 +223,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 info.Cancel = true;
             }
             SaveDockPanels();
+            dockControlBuilder?.Close();
             dockControlFetchXml?.Close();
             dockControlFetchXmlCs?.Close();
             dockControlFetchXmlJs?.Close();
@@ -748,7 +749,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 dockControlBuilder.Init(connsett.FetchXML, "loaded from last session", false);
             }
-            dockControlBuilder.ShowQuickActions(settings.QueryOptions.ShowQuickActions);
+            dockControlBuilder.lblQAExpander.GroupBoxSetState(null, settings.QueryOptions.ShowQuickActions);
             var ass = Assembly.GetExecutingAssembly().GetName();
             var version = ass.Version.ToString();
             if (!version.Equals(settings.CurrentVersion))

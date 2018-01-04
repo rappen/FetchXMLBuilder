@@ -172,7 +172,6 @@
             this.lblActionsExpander.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblActionsExpander.AutoSize = true;
             this.lblActionsExpander.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblActionsExpander.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblActionsExpander.Location = new System.Drawing.Point(558, 0);
             this.lblActionsExpander.Name = "lblActionsExpander";
             this.lblActionsExpander.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
@@ -259,7 +258,6 @@
             this.lblFormatExpander.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblFormatExpander.AutoSize = true;
             this.lblFormatExpander.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblFormatExpander.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFormatExpander.Location = new System.Drawing.Point(558, 0);
             this.lblFormatExpander.Name = "lblFormatExpander";
             this.lblFormatExpander.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);

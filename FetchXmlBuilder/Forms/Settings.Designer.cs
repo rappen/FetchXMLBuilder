@@ -62,7 +62,6 @@
             this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
             this.chkAppNoSavePrompt = new System.Windows.Forms.CheckBox();
             this.chkAppSingle = new System.Windows.Forms.CheckBox();
-            this.chkAppQuick = new System.Windows.Forms.CheckBox();
             this.chkAppFriendly = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.llShowWelcome = new System.Windows.Forms.LinkLabel();
@@ -87,7 +86,7 @@
             this.gbEntities.Controls.Add(this.chkEntUnmanaged);
             this.gbEntities.Controls.Add(this.chkEntManaged);
             this.gbEntities.Controls.Add(this.chkEntAll);
-            this.gbEntities.Location = new System.Drawing.Point(12, 185);
+            this.gbEntities.Location = new System.Drawing.Point(12, 158);
             this.gbEntities.Name = "gbEntities";
             this.gbEntities.Size = new System.Drawing.Size(247, 258);
             this.gbEntities.TabIndex = 2;
@@ -226,7 +225,7 @@
             this.gbAttributes.Controls.Add(this.chkAttUnmanaged);
             this.gbAttributes.Controls.Add(this.chkAttManaged);
             this.gbAttributes.Controls.Add(this.chkAttAll);
-            this.gbAttributes.Location = new System.Drawing.Point(284, 185);
+            this.gbAttributes.Location = new System.Drawing.Point(284, 158);
             this.gbAttributes.Name = "gbAttributes";
             this.gbAttributes.Size = new System.Drawing.Size(247, 258);
             this.gbAttributes.TabIndex = 3;
@@ -361,7 +360,7 @@
             this.gbResult.Controls.Add(this.rbResGrid);
             this.gbResult.Location = new System.Drawing.Point(284, 12);
             this.gbResult.Name = "gbResult";
-            this.gbResult.Size = new System.Drawing.Size(247, 156);
+            this.gbResult.Size = new System.Drawing.Size(247, 131);
             this.gbResult.TabIndex = 1;
             this.gbResult.TabStop = false;
             this.gbResult.Text = "Result view";
@@ -369,7 +368,7 @@
             // chkResAllPages
             // 
             this.chkResAllPages.AutoSize = true;
-            this.chkResAllPages.Location = new System.Drawing.Point(20, 106);
+            this.chkResAllPages.Location = new System.Drawing.Point(20, 99);
             this.chkResAllPages.Name = "chkResAllPages";
             this.chkResAllPages.Size = new System.Drawing.Size(111, 17);
             this.chkResAllPages.TabIndex = 4;
@@ -430,7 +429,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.bgStats.Controls.Add(this.label1);
             this.bgStats.Controls.Add(this.chkStatAllow);
-            this.bgStats.Location = new System.Drawing.Point(12, 462);
+            this.bgStats.Location = new System.Drawing.Point(12, 432);
             this.bgStats.Name = "bgStats";
             this.bgStats.Size = new System.Drawing.Size(519, 80);
             this.bgStats.TabIndex = 4;
@@ -463,11 +462,10 @@
             this.gbAppearance.Controls.Add(this.chkAppResultsNewWindow);
             this.gbAppearance.Controls.Add(this.chkAppNoSavePrompt);
             this.gbAppearance.Controls.Add(this.chkAppSingle);
-            this.gbAppearance.Controls.Add(this.chkAppQuick);
             this.gbAppearance.Controls.Add(this.chkAppFriendly);
             this.gbAppearance.Location = new System.Drawing.Point(12, 12);
             this.gbAppearance.Name = "gbAppearance";
-            this.gbAppearance.Size = new System.Drawing.Size(247, 156);
+            this.gbAppearance.Size = new System.Drawing.Size(247, 131);
             this.gbAppearance.TabIndex = 0;
             this.gbAppearance.TabStop = false;
             this.gbAppearance.Text = "Appearance";
@@ -475,7 +473,7 @@
             // chkAppResultsNewWindow
             // 
             this.chkAppResultsNewWindow.AutoSize = true;
-            this.chkAppResultsNewWindow.Location = new System.Drawing.Point(20, 122);
+            this.chkAppResultsNewWindow.Location = new System.Drawing.Point(20, 99);
             this.chkAppResultsNewWindow.Name = "chkAppResultsNewWindow";
             this.chkAppResultsNewWindow.Size = new System.Drawing.Size(192, 17);
             this.chkAppResultsNewWindow.TabIndex = 5;
@@ -485,7 +483,7 @@
             // chkAppNoSavePrompt
             // 
             this.chkAppNoSavePrompt.AutoSize = true;
-            this.chkAppNoSavePrompt.Location = new System.Drawing.Point(20, 99);
+            this.chkAppNoSavePrompt.Location = new System.Drawing.Point(20, 76);
             this.chkAppNoSavePrompt.Name = "chkAppNoSavePrompt";
             this.chkAppNoSavePrompt.Size = new System.Drawing.Size(159, 17);
             this.chkAppNoSavePrompt.TabIndex = 4;
@@ -495,24 +493,12 @@
             // chkAppSingle
             // 
             this.chkAppSingle.AutoSize = true;
-            this.chkAppSingle.Location = new System.Drawing.Point(20, 76);
+            this.chkAppSingle.Location = new System.Drawing.Point(20, 53);
             this.chkAppSingle.Name = "chkAppSingle";
             this.chkAppSingle.Size = new System.Drawing.Size(203, 17);
             this.chkAppSingle.TabIndex = 3;
             this.chkAppSingle.Text = "Use single quotation in rendered XML";
             this.chkAppSingle.UseVisualStyleBackColor = true;
-            // 
-            // chkAppQuick
-            // 
-            this.chkAppQuick.AutoSize = true;
-            this.chkAppQuick.Checked = true;
-            this.chkAppQuick.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAppQuick.Location = new System.Drawing.Point(20, 53);
-            this.chkAppQuick.Name = "chkAppQuick";
-            this.chkAppQuick.Size = new System.Drawing.Size(155, 17);
-            this.chkAppQuick.TabIndex = 2;
-            this.chkAppQuick.Text = "Show Quick Action buttons";
-            this.chkAppQuick.UseVisualStyleBackColor = true;
             // 
             // chkAppFriendly
             // 
@@ -531,7 +517,7 @@
             this.panel1.Controls.Add(this.llShowWelcome);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
-            this.panel1.Location = new System.Drawing.Point(12, 548);
+            this.panel1.Location = new System.Drawing.Point(12, 518);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(517, 53);
             this.panel1.TabIndex = 5;
@@ -573,7 +559,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(543, 611);
+            this.ClientSize = new System.Drawing.Size(543, 581);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.gbAppearance);
             this.Controls.Add(this.bgStats);
@@ -628,7 +614,6 @@
         private System.Windows.Forms.CheckBox chkStatAllow;
         private System.Windows.Forms.GroupBox gbAppearance;
         private System.Windows.Forms.CheckBox chkAppSingle;
-        private System.Windows.Forms.CheckBox chkAppQuick;
         private System.Windows.Forms.CheckBox chkAppFriendly;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnCancel;
