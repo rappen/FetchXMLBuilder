@@ -325,7 +325,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiShowOData.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowOData.Image")));
             this.tsmiShowOData.Name = "tsmiShowOData";
             this.tsmiShowOData.Size = new System.Drawing.Size(219, 30);
-            this.tsmiShowOData.Text = "OData";
+            this.tsmiShowOData.Text = "OData 2.0";
             this.tsmiShowOData.Click += new System.EventHandler(this.tsmiShowOData_Click);
             // 
             // tsmiShowQueryExpression
