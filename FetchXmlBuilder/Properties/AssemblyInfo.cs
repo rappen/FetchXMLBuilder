@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("FetchXML Builder")]
-[assembly: AssemblyDescription("Build and test FetchXML with all capabilities supported by the CRM platform")]
+[assembly: AssemblyDescription("Build FetchXML queries. Investigate data. Update views. Get code. Empower Your querying skills.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Jonas Rapp, Innofactor Sweden")]
 [assembly: AssemblyProduct("FetchXML Builder")]
-[assembly: AssemblyCopyright("Copyright © Innofactor AB 2014")]
+[assembly: AssemblyCopyright("Copyright © Innofactor AB 2014-2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

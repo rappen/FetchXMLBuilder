@@ -9,7 +9,7 @@
     <projectUrl>http://fxb.xrmtoolbox.com</projectUrl>
     <iconUrl>http://fxb.xrmtoolbox.com/images/FXB-150-transp.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <summary>XrmToolBox plugin to create and run advanced FetchXML queries.</summary>
+    <summary>Build FetchXML queries. Investigate data. Update views. Get code. Empower Your querying skills.</summary>
     <description>
       The tool will assist in three major areas:
 
@@ -33,7 +33,12 @@
 
       To make it more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.
     </description>
-    <copyright>Copyright 2016 Innofactor AB, 2014-2016 Cinteros AB</copyright>
+    <releaseNotes>
+* Implemented #189 Extreme makeover with docking layout and lots of UI improvements
+* Implemented #190 Option to strip spaces from HTML-encoded FetchXML
+* Adding welcome screen with release notes
+    </releaseNotes>
+    <copyright>Copyright Jonas Rapp (2016-2018 Innofactor AB, 2014-2016 Cinteros AB)</copyright>
     <tags>XrmToolBox Plugins FetchXML Builder</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2017.10.19" />
@@ -41,5 +46,7 @@
   </metadata>
   <files>
     <file src="FetchXMLBuilder\bin\Release\Cinteros.Xrm.*.dll" target="lib\net452\Plugins" />
+    <file src="FetchXMLBuilder\bin\Release\Cinteros.Xrm.*.dll" target="lib\net452\Plugins" />
+    <file src="FetchXMLBuilder\bin\Release\WeifenLuo.WinFormsUI.*.dll" target="lib\net452\Plugins" />
   </files>
 </package>
