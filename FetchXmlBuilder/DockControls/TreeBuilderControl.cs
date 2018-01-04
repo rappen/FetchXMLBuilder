@@ -35,6 +35,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             fxb = owner;
             InitializeComponent();
             this.PrepareGroupBoxExpanders();
+            lblQAExpander.GroupBoxSetState(tt, fxb.settings.QueryOptions.ShowQuickActions);
         }
 
         #endregion Public Constructors
@@ -88,7 +89,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             DisplayDefinition(GetFetchDocument());
             HandleNodeSelection(tvFetch.SelectedNode);
             fxb.UpdateLiveXML();
-            lblQAExpander.GroupBoxSetState(null, fxb.settings.QueryOptions.ShowQuickActions);
         }
 
         internal void ClearChanged()
@@ -758,7 +758,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void lblQAExpander_Click(object sender, EventArgs e)
         {
-            (sender as Label)?.GroupBoxSetState();
+            (sender as Label)?.GroupBoxSetState(tt);
         }
 
         private void nodeMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)

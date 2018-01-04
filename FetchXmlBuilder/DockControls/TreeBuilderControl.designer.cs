@@ -51,6 +51,7 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tt = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -166,7 +167,6 @@
             // 
             this.lblQAExpander.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblQAExpander.AutoSize = true;
-            this.lblQAExpander.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblQAExpander.Location = new System.Drawing.Point(576, 0);
             this.lblQAExpander.Name = "lblQAExpander";
             this.lblQAExpander.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
@@ -350,5 +350,6 @@
         private System.Windows.Forms.Panel panTreeSplitter;
         private System.Windows.Forms.Panel panProperties;
         internal System.Windows.Forms.Label lblQAExpander;
+        private System.Windows.Forms.ToolTip tt;
     }
 }
