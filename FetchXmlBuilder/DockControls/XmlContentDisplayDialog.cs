@@ -14,8 +14,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         private FetchXmlBuilder fxb;
         private ContentType contenttype;
         private SaveFormat format;
-        private List<KeyValuePair<string, int>> groupBoxHeights;
-        private ToolTip tt;
 
         internal static XmlContentDisplayDialog ShowDialog(string xmlString, ContentType contentType, SaveFormat saveFormat, FetchXmlBuilder caller)
         {
@@ -41,8 +39,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         internal XmlContentDisplayDialog(ContentType contentType, bool allowEdit, SaveFormat saveFormat, FetchXmlBuilder caller)
         {
             InitializeComponent();
-            groupBoxHeights = this.GetAll(typeof(GroupBox)).Select(g => new KeyValuePair<string, int>(g.Name, g.GetDockedContainer().Height)).ToList();
-            tt = new ToolTip();
+            this.StoreMaxHeights(typeof(GroupBox));
             contenttype = contentType;
             format = saveFormat;
             fxb = caller;
@@ -56,8 +53,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             panSave.Visible = format != SaveFormat.None;
             var windowSettings = fxb.settings.ContentWindows.GetContentWindow(contenttype);
             chkLiveUpdate.Checked = allowEdit && windowSettings.LiveUpdate;
-            GroupBoxSetState(lblFormatExpander, windowSettings.FormatExpanded);
-            GroupBoxSetState(lblActionsExpander, windowSettings.ActionExpanded);
+            lblFormatExpander.GroupBoxSetState(tt, windowSettings.FormatExpanded);
+            lblActionsExpander.GroupBoxSetState(tt, windowSettings.ActionExpanded);
             UpdateButtons();
         }
 
@@ -286,52 +283,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             fxb.UpdateLiveXML();
         }
 
-        private void llGroupBoxExpander_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            GroupBoxToggle(sender as Label);
-        }
-
         private void llGroupBoxExpander_Clicked(object sender, EventArgs e)
         {
-            GroupBoxToggle(sender as Label);
-        }
-
-        private void GroupBoxToggle(Label link)
-        {
-            if (link.GetDockedContainer().Height > 20)
-            {
-                GroupBoxCollapse(link);
-            }
-            else
-            {
-                GroupBoxExpand(link);
-            }
-        }
-
-        private void GroupBoxSetState(Label link, bool expanded)
-        {
-            if (expanded)
-            {
-                GroupBoxExpand(link);
-            }
-            else
-            {
-                GroupBoxCollapse(link);
-            }
-        }
-        private void GroupBoxCollapse(Label link)
-        {
-            // ↑↓–+˄˅
-            link.GetDockedContainer().Height = 18;
-            link.Text = "+";
-            tt.SetToolTip(link, "Open");
-        }
-
-        private void GroupBoxExpand(Label link)
-        {
-            link.GetDockedContainer().Height = groupBoxHeights.FirstOrDefault(g => g.Key == link.Parent.Name).Value;
-            link.Text = "–";
-            tt.SetToolTip(link, "Close");
+            (sender as Label)?.GroupBoxSetState(tt);
         }
 
         private void XmlContentDisplayDialog_FormClosing(object sender, FormClosingEventArgs e)
@@ -339,8 +293,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             var windowSettings = new ContentWindow
             {
                 LiveUpdate = chkLiveUpdate.Checked,
-                FormatExpanded = gbFormatting.GetDockedContainer().Height > 20,
-                ActionExpanded = gbActions.GetDockedContainer().Height > 20
+                FormatExpanded = gbFormatting.IsExpanded(),
+                ActionExpanded = gbActions.IsExpanded()
             };
             fxb.settings.ContentWindows.SetContentWindow(contenttype, windowSettings);
         }

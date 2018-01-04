@@ -28,8 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlContentDisplayDialog));
-            CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings1 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
+            CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings4 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnExecute = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
@@ -51,6 +52,7 @@
             this.rbFormatHTML = new System.Windows.Forms.RadioButton();
             this.rbFormatXML = new System.Windows.Forms.RadioButton();
             this.btnFormat = new System.Windows.Forms.Button();
+            this.tt = new System.Windows.Forms.ToolTip(this.components);
             this.panCancel.SuspendLayout();
             this.panActions.SuspendLayout();
             this.gbActions.SuspendLayout();
@@ -126,14 +128,14 @@
             this.txtXML.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtXML.Location = new System.Drawing.Point(0, 0);
             this.txtXML.Name = "txtXML";
-            xmlViewerSettings1.AttributeKey = System.Drawing.Color.Red;
-            xmlViewerSettings1.AttributeValue = System.Drawing.Color.Blue;
-            xmlViewerSettings1.Comment = System.Drawing.Color.Green;
-            xmlViewerSettings1.Element = System.Drawing.Color.DarkRed;
-            xmlViewerSettings1.QuoteCharacter = '\"';
-            xmlViewerSettings1.Tag = System.Drawing.Color.Blue;
-            xmlViewerSettings1.Value = System.Drawing.Color.Black;
-            this.txtXML.Settings = xmlViewerSettings1;
+            xmlViewerSettings4.AttributeKey = System.Drawing.Color.Red;
+            xmlViewerSettings4.AttributeValue = System.Drawing.Color.Blue;
+            xmlViewerSettings4.Comment = System.Drawing.Color.Green;
+            xmlViewerSettings4.Element = System.Drawing.Color.DarkRed;
+            xmlViewerSettings4.QuoteCharacter = '\"';
+            xmlViewerSettings4.Tag = System.Drawing.Color.Blue;
+            xmlViewerSettings4.Value = System.Drawing.Color.Black;
+            this.txtXML.Settings = xmlViewerSettings4;
             this.txtXML.Size = new System.Drawing.Size(578, 452);
             this.txtXML.TabIndex = 0;
             this.txtXML.Text = "";
@@ -169,7 +171,6 @@
             // 
             this.lblActionsExpander.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblActionsExpander.AutoSize = true;
-            this.lblActionsExpander.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblActionsExpander.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblActionsExpander.Location = new System.Drawing.Point(558, 0);
             this.lblActionsExpander.Name = "lblActionsExpander";
@@ -231,6 +232,7 @@
             this.panFormatting.Controls.Add(this.gbFormatting);
             this.panFormatting.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panFormatting.Location = new System.Drawing.Point(0, 452);
+            this.panFormatting.MaximumSize = new System.Drawing.Size(10000, 44);
             this.panFormatting.Name = "panFormatting";
             this.panFormatting.Size = new System.Drawing.Size(578, 44);
             this.panFormatting.TabIndex = 7;
@@ -255,7 +257,6 @@
             // 
             this.lblFormatExpander.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblFormatExpander.AutoSize = true;
-            this.lblFormatExpander.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblFormatExpander.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFormatExpander.Location = new System.Drawing.Point(558, 0);
             this.lblFormatExpander.Name = "lblFormatExpander";
@@ -370,5 +371,6 @@
         internal System.Windows.Forms.CheckBox chkLiveUpdate;
         private System.Windows.Forms.Label lblFormatExpander;
         private System.Windows.Forms.Label lblActionsExpander;
+        private System.Windows.Forms.ToolTip tt;
     }
 }
