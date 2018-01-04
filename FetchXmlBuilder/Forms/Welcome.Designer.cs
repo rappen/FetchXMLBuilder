@@ -106,6 +106,7 @@
             this.txtNotes.Size = new System.Drawing.Size(428, 355);
             this.txtNotes.TabIndex = 28;
             this.txtNotes.Text = "";
+            this.txtNotes.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.txtNotes_LinkClicked);
             // 
             // txtWelcome
             // 
@@ -158,6 +159,7 @@
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(526, 528);
             this.label2.Name = "label2";
@@ -168,6 +170,7 @@
             // 
             // llStats
             // 
+            this.llStats.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.llStats.AutoSize = true;
             this.llStats.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.llStats.Location = new System.Drawing.Point(585, 528);

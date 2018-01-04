@@ -91,5 +91,19 @@ I am very grateful for anyone who allows statistics to be collected!
 Thank You,
 Jonas", "Anonymous statistics", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        private void txtNotes_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            var url = e.LinkText;
+            if (url.StartsWith("#"))
+            {
+                url = "https://github.com/Innofactor/FetchXMLBuilder/issues/" + url.Substring(1);
+            }
+            if (url.StartsWith("@"))
+            {
+                url = "https://twitter.com/" + url.Substring(1);
+            }
+            System.Diagnostics.Process.Start(url);
+        }
     }
 }
