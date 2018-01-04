@@ -372,7 +372,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ReleaseNotes\ReadMe.txt" />
+    <None Include="ReleaseNotes\ReadMe.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
