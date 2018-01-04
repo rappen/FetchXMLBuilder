@@ -65,9 +65,9 @@
             this.chkAppQuick = new System.Windows.Forms.CheckBox();
             this.chkAppFriendly = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.llShowWelcome = new System.Windows.Forms.LinkLabel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.llShowWelcome = new System.Windows.Forms.LinkLabel();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -430,9 +430,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.bgStats.Controls.Add(this.label1);
             this.bgStats.Controls.Add(this.chkStatAllow);
-            this.bgStats.Location = new System.Drawing.Point(12, 460);
+            this.bgStats.Location = new System.Drawing.Point(12, 462);
             this.bgStats.Name = "bgStats";
-            this.bgStats.Size = new System.Drawing.Size(517, 130);
+            this.bgStats.Size = new System.Drawing.Size(519, 80);
             this.bgStats.TabIndex = 4;
             this.bgStats.TabStop = false;
             this.bgStats.Text = "Statistics";
@@ -443,14 +443,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.Location = new System.Drawing.Point(7, 20);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(504, 72);
+            this.label1.Size = new System.Drawing.Size(506, 34);
             this.label1.TabIndex = 6;
             this.label1.Text = resources.GetString("label1.Text");
             // 
             // chkStatAllow
             // 
             this.chkStatAllow.AutoSize = true;
-            this.chkStatAllow.Location = new System.Drawing.Point(26, 95);
+            this.chkStatAllow.Location = new System.Drawing.Point(26, 53);
             this.chkStatAllow.Name = "chkStatAllow";
             this.chkStatAllow.Size = new System.Drawing.Size(94, 17);
             this.chkStatAllow.TabIndex = 5;
@@ -531,10 +531,21 @@
             this.panel1.Controls.Add(this.llShowWelcome);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
-            this.panel1.Location = new System.Drawing.Point(12, 596);
+            this.panel1.Location = new System.Drawing.Point(12, 548);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(517, 53);
             this.panel1.TabIndex = 5;
+            // 
+            // llShowWelcome
+            // 
+            this.llShowWelcome.AutoSize = true;
+            this.llShowWelcome.Location = new System.Drawing.Point(7, 24);
+            this.llShowWelcome.Name = "llShowWelcome";
+            this.llShowWelcome.Size = new System.Drawing.Size(114, 13);
+            this.llShowWelcome.TabIndex = 2;
+            this.llShowWelcome.TabStop = true;
+            this.llShowWelcome.Text = "Show welcome screen";
+            this.llShowWelcome.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llShowWelcome_LinkClicked);
             // 
             // btnCancel
             // 
@@ -556,24 +567,13 @@
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             // 
-            // llShowWelcome
-            // 
-            this.llShowWelcome.AutoSize = true;
-            this.llShowWelcome.Location = new System.Drawing.Point(7, 24);
-            this.llShowWelcome.Name = "llShowWelcome";
-            this.llShowWelcome.Size = new System.Drawing.Size(114, 13);
-            this.llShowWelcome.TabIndex = 2;
-            this.llShowWelcome.TabStop = true;
-            this.llShowWelcome.Text = "Show welcome screen";
-            this.llShowWelcome.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llShowWelcome_LinkClicked);
-            // 
             // Settings
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(543, 659);
+            this.ClientSize = new System.Drawing.Size(543, 611);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.gbAppearance);
             this.Controls.Add(this.bgStats);

@@ -118,11 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="label1.Text" xml:space="preserve">
-    <value>FetchXML Builder can collect anonymous statistics.
-This is mainly used to get an indication on which features are most popular.
-The statistics help improving the tool even more.
-No information regarding connected CRM or any kind of data is collected!
-Allowing the application to send statistict is greatly appreciated!</value>
+    <value>FetchXML Builder collects completely anonymous usage statistics. No information regarding connected CRM or any kind of data is collected! Allowing the application to send statistics is greatly appreciated!</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
