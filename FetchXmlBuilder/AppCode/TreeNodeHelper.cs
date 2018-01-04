@@ -269,7 +269,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public static void AddContextMenu(TreeNode node, TreeBuilderControl tree)
         {
             tree.addMenu.Items.Clear();
+            var tmplbl = tree.lblQAExpander;
             tree.gbQuickActions.Controls.Clear();
+            tree.gbQuickActions.Controls.Add(tmplbl);
             if (node == null && tree.tvFetch.Nodes.Count > 0)
             {
                 node = tree.tvFetch.Nodes[0];

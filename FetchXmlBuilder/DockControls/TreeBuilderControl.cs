@@ -34,6 +34,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             fxb = owner;
             InitializeComponent();
+            this.PrepareGroupBoxExpanders();
         }
 
         #endregion Public Constructors
@@ -758,6 +759,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         internal void QuickActionLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             HandleNodeMenuClick((sender as LinkLabel)?.Tag?.ToString());
+        }
+
+        private void lblQAExpander_Click(object sender, EventArgs e)
+        {
+            (sender as Label)?.GroupBoxSetState();
         }
 
         private void nodeMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
