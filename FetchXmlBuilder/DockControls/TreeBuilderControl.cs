@@ -34,7 +34,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             fxb = owner;
             InitializeComponent();
-            this.PrepareGroupBoxExpanders();
+            panQuickActions.PrepareGroupBoxExpanders();
             lblQAExpander.GroupBoxSetState(tt, fxb.settings.QueryOptions.ShowQuickActions);
         }
 
