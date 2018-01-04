@@ -35,7 +35,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Cinteros.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Cinteros.Xrm.CRMWinForm, Version=2017.11.15.2, Culture=neutral, processorArchitecture=MSIL">
@@ -341,9 +342,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Cinteros.ico" />
-    <Content Include="Resources\FXB-32.png" />
-    <None Include="Resources\FXB-inno-logo-400.png" />
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
@@ -351,7 +349,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\DataSources\Cinteros.Xrm.FetchXmlBuilder.Forms.ResultGrid.datasource" />
-    <None Include="Resources\FXB-100.png" />
     <None Include="Resources\XSD fetch.cs.cmd" />
     <None Include="XrmToolBox.exe.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
