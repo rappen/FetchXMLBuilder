@@ -68,7 +68,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://twitter.com/rappen");
+            System.Diagnostics.Process.Start("http://twitter.com/FetchXMLBuilder");
         }
     }
 }
