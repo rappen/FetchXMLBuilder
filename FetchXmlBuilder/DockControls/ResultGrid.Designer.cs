@@ -28,7 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.crmGridView1 = new Cinteros.Xrm.CRMWinForm.CRMGridView();
             this.chkCopyHeaders = new System.Windows.Forms.CheckBox();
             this.chkIndexCol = new System.Windows.Forms.CheckBox();
@@ -36,6 +37,8 @@
             this.chkFriendly = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblOptionsExpander = new System.Windows.Forms.Label();
+            this.tt = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -47,8 +50,8 @@
             this.crmGridView1.AllowUserToDeleteRows = false;
             this.crmGridView1.AllowUserToOrderColumns = true;
             this.crmGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
             this.crmGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
             this.crmGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.crmGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
@@ -113,8 +116,9 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.lblOptionsExpander);
             this.groupBox1.Controls.Add(this.chkCopyHeaders);
             this.groupBox1.Controls.Add(this.chkFriendly);
             this.groupBox1.Controls.Add(this.chkIndexCol);
@@ -134,6 +138,20 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(650, 43);
             this.panel1.TabIndex = 5;
+            // 
+            // lblOptionsExpander
+            // 
+            this.lblOptionsExpander.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblOptionsExpander.AutoSize = true;
+            this.lblOptionsExpander.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblOptionsExpander.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOptionsExpander.Location = new System.Drawing.Point(631, 0);
+            this.lblOptionsExpander.Name = "lblOptionsExpander";
+            this.lblOptionsExpander.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
+            this.lblOptionsExpander.Size = new System.Drawing.Size(14, 13);
+            this.lblOptionsExpander.TabIndex = 8;
+            this.lblOptionsExpander.Text = "–";
+            this.lblOptionsExpander.Click += new System.EventHandler(this.lblOptionsExpander_Click);
             // 
             // ResultGrid
             // 
@@ -163,5 +181,7 @@
         private System.Windows.Forms.CheckBox chkFriendly;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label lblOptionsExpander;
+        private System.Windows.Forms.ToolTip tt;
     }
 }

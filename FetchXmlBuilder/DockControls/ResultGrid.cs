@@ -14,6 +14,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         public ResultGrid(FetchXmlBuilder fetchXmlBuilder)
         {
             InitializeComponent();
+            this.PrepareGroupBoxExpanders();
             form = fetchXmlBuilder;
             chkFriendly.Checked = form.settings.Results.Friendly;
             chkIdCol.Checked = form.settings.Results.Id;
@@ -148,6 +149,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 form.settings.DockStates.ResultView = DockState;
             }
+        }
+
+        private void lblOptionsExpander_Click(object sender, EventArgs e)
+        {
+            (sender as System.Windows.Forms.Label)?.GroupBoxSetState(tt);
         }
     }
 }
