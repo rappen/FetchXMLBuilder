@@ -127,7 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppCode\AttributeItem.cs" />
-    <Compile Include="AppCode\ControlExtensions.cs" />
+    <Compile Include="AppCode\GroupBoxExpanderExtensions.cs" />
     <Compile Include="AppCode\CSharpCodeGenerator.cs" />
     <Compile Include="AppCode\DockExtensions.cs" />
     <Compile Include="AppCode\FetchIsAggregateException.cs" />

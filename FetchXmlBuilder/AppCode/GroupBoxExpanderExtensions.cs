@@ -6,8 +6,10 @@ using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
-    public static class ControlExtensions
+    public static class GroupBoxExpanderExtensions
     {
+        const int _collapsedHeight = 20;
+
         #region Public Methods
 
         public static void GroupBoxSetState(this Label link, ToolTip tt = null, bool? expanded = null)
@@ -28,12 +30,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         public static bool IsExpanded(this GroupBox gb)
         {
-            return gb.GetDockedContainer().Height > 20;
+            return gb.GetDockedContainer().Height > _collapsedHeight;
         }
 
-        public static void StoreMaxHeights(this Control control, Type controltype)
+        public static void PrepareGroupBoxExpanders(this Control control)
         {
-            foreach (GroupBox gb in control.GetAll(controltype))
+            foreach (GroupBox gb in control.GetAll(typeof(GroupBox)))
             {
                 gb.GetDockedContainer().SetMaxHeigh();
             }
@@ -66,7 +68,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         private static void GroupBoxCollapse(this Label link, ToolTip tt = null)
         {
             // ↑↓–+˄˅
-            link.GetDockedContainer().Height = 18;
+            link.GetDockedContainer().Height = _collapsedHeight;
             link.Text = "+";
             tt?.SetToolTip(link, "Open");
         }
@@ -81,7 +83,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         private static void GroupBoxToggle(this Label link, ToolTip tt = null)
         {
-            if (link.GetDockedContainer().Height > 20)
+            if (link.GetDockedContainer().Height > _collapsedHeight)
             {
                 link.GroupBoxCollapse(tt);
             }

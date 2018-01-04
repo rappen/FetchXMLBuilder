@@ -39,7 +39,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         internal XmlContentDisplayDialog(ContentType contentType, bool allowEdit, SaveFormat saveFormat, FetchXmlBuilder caller)
         {
             InitializeComponent();
-            this.StoreMaxHeights(typeof(GroupBox));
+            this.PrepareGroupBoxExpanders();
             contenttype = contentType;
             format = saveFormat;
             fxb = caller;

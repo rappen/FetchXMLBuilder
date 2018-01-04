@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlContentDisplayDialog));
-            CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings4 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
+            CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings6 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnExecute = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
@@ -128,14 +128,14 @@
             this.txtXML.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtXML.Location = new System.Drawing.Point(0, 0);
             this.txtXML.Name = "txtXML";
-            xmlViewerSettings4.AttributeKey = System.Drawing.Color.Red;
-            xmlViewerSettings4.AttributeValue = System.Drawing.Color.Blue;
-            xmlViewerSettings4.Comment = System.Drawing.Color.Green;
-            xmlViewerSettings4.Element = System.Drawing.Color.DarkRed;
-            xmlViewerSettings4.QuoteCharacter = '\"';
-            xmlViewerSettings4.Tag = System.Drawing.Color.Blue;
-            xmlViewerSettings4.Value = System.Drawing.Color.Black;
-            this.txtXML.Settings = xmlViewerSettings4;
+            xmlViewerSettings6.AttributeKey = System.Drawing.Color.Red;
+            xmlViewerSettings6.AttributeValue = System.Drawing.Color.Blue;
+            xmlViewerSettings6.Comment = System.Drawing.Color.Green;
+            xmlViewerSettings6.Element = System.Drawing.Color.DarkRed;
+            xmlViewerSettings6.QuoteCharacter = '\"';
+            xmlViewerSettings6.Tag = System.Drawing.Color.Blue;
+            xmlViewerSettings6.Value = System.Drawing.Color.Black;
+            this.txtXML.Settings = xmlViewerSettings6;
             this.txtXML.Size = new System.Drawing.Size(578, 452);
             this.txtXML.TabIndex = 0;
             this.txtXML.Text = "";
@@ -171,6 +171,7 @@
             // 
             this.lblActionsExpander.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblActionsExpander.AutoSize = true;
+            this.lblActionsExpander.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblActionsExpander.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblActionsExpander.Location = new System.Drawing.Point(558, 0);
             this.lblActionsExpander.Name = "lblActionsExpander";
@@ -257,6 +258,7 @@
             // 
             this.lblFormatExpander.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblFormatExpander.AutoSize = true;
+            this.lblFormatExpander.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblFormatExpander.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFormatExpander.Location = new System.Drawing.Point(558, 0);
             this.lblFormatExpander.Name = "lblFormatExpander";
