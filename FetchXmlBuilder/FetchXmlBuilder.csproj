@@ -358,6 +358,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\DataSources\Cinteros.Xrm.FetchXmlBuilder.Forms.ResultGrid.datasource" />
+    <EmbeddedResource Include="ReleaseNotes\1.2018.1.rtf" />
     <None Include="Resources\XSD fetch.cs.cmd" />
     <None Include="XrmToolBox.exe.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -370,6 +371,7 @@
       <Name>XmlEditorUtils</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Debug (
