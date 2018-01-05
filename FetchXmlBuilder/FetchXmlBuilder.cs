@@ -682,9 +682,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             if (settings.LogUsage == true || forceLog)
             {
-#if DEBUG
                 LogUsage.DoLog(action);
-#endif
             }
         }
 
