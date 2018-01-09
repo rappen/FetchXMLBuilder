@@ -83,6 +83,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             return aggregate;
         }
 
+        internal static bool IsFetchAggregate(string fetch)
+        {
+            var xml = new XmlDocument();
+            xml.LoadXml(fetch);
+            return IsFetchAggregate(xml);
+        }
+
+        private static bool IsFetchAggregate(XmlDocument xml)
+        {
+            var fetchnode = xml.SelectSingleNode("fetch");
+            return fetchnode.Attributes["aggregate"]?.Value == "true";
+        }
+
         internal void ApplyCurrentSettings()
         {
             BuildAndValidateXml(false);
@@ -205,11 +218,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
             if (string.IsNullOrWhiteSpace(fetch))
             {
-                if (IsFetchAggregate(tvFetch.Nodes.Count > 0 ? tvFetch.Nodes[0] : null))
-                {
-                    throw new FetchIsAggregateException("QueryExpression does not support aggregate queries.");
-                }
                 fetch = GetFetchString(false, validate);
+            }
+            if (IsFetchAggregate(fetch))
+            {
+                throw new FetchIsAggregateException("QueryExpression does not support aggregate queries.");
             }
             var convert = (FetchXmlToQueryExpressionResponse)fxb.Service.Execute(new FetchXmlToQueryExpressionRequest() { FetchXml = fetch });
             return convert.Query;
