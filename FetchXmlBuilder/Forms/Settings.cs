@@ -6,17 +6,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 {
     public partial class Settings : Form
     {
-        private FXBSettings settings = null;
+        private FetchXmlBuilder fxb;
 
-        public Settings(FXBSettings settings)
+        public Settings(FetchXmlBuilder fxb)
         {
             InitializeComponent();
-            PopulateSettings(settings);
+            this.fxb = fxb;
+            PopulateSettings(fxb.settings);
         }
 
-        private void PopulateSettings(FXBSettings Settings)
+        private void PopulateSettings(FXBSettings settings)
         {
-            settings = Settings;
             if (settings == null)
             {
                 settings = new FXBSettings();
@@ -62,6 +62,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         internal FXBSettings GetSettings()
         {
+            var settings = fxb.settings;
             settings.UseFriendlyNames = chkAppFriendly.Checked;
             settings.QueryOptions.UseSingleQuotation = chkAppSingle.Checked;
             settings.DoNotPromptToSave = chkAppNoSavePrompt.Checked;
@@ -211,6 +212,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void llShowWelcome_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            fxb.LogUse("ShowWelcome-Manual");
             Welcome.ShowWelcome(this);
         }
     }

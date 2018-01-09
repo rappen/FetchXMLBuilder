@@ -1,14 +1,12 @@
-﻿using McTools.Xrm.Connection;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
-    public class LogUsage
+    public static class LogUsage
     {
         public static async Task DoLog(string action)
         {

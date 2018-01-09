@@ -20,12 +20,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             InitializeComponent();
         }
 
-        internal void DisplayOData()
+        internal void DisplayOData(string url)
         {
             try
             {
                 var prefix = "OData: ";
-                var url = fxb.GetOData();
                 linkOData.Text = prefix + url;
                 linkOData.LinkArea = new LinkArea(prefix.Length, url.Length);
                 if (linkOData.Links.Count > 0)
@@ -46,7 +45,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             DockPanel.DockTopPortion = 80;
             if (!IsHidden)
             {
-                DisplayOData();
+                DisplayOData(fxb.GetOData());
             }
         }
 
