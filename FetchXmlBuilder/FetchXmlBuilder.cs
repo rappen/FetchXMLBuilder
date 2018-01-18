@@ -24,6 +24,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver
     {
+
+        private const string aiEndpoint = "https://dc.services.visualstudio.com/v2/track";
+        private const string aiKey = "cc7cb081-b489-421d-bb61-2ee53495c336";    // TestAI 
+
         #region Internal Fields
 
         internal static Dictionary<string, EntityMetadata> entities;
@@ -54,6 +58,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private string liveUpdateXml = "";
         private int resultpanecount = 0;
         private Entity view;
+        private AppInsights ai;
 
         #endregion Private Fields
 
@@ -62,6 +67,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         public FetchXmlBuilder()
         {
             InitializeComponent();
+            ai = new AppInsights(new AiConfig
+            {
+                AiEndpoint = aiEndpoint,
+                InstrumentationKey = aiKey,
+                OperationName = "FetchMXL Builder"
+            });
             var theme = new VS2015LightTheme();
             dockContainer.Theme = theme;
             dockContainer.Theme.Skin.DockPaneStripSkin.TextFont = Font;
@@ -678,11 +689,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             });
         }
 
-        internal void LogUse(string action, bool forceLog = false)
+        internal void LogUse(string action, bool forceLog = false, double? count = null, double? duration = null)
         {
+            ai.WriteEvent(action, count, duration, HandleAIResult);
             if (settings.LogUsage == true || forceLog)
             {
                 LogUsage.DoLog(action);
+            }
+        }
+
+        private void HandleAIResult(string result)
+        {
+            if (!string.IsNullOrEmpty(result))
+            {
+                LogError("Failed to write to Application Insights:\n{0}", result);
             }
         }
 
@@ -800,6 +820,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     var resp = (ExecuteFetchResponse)Service.Execute(new ExecuteFetchRequest() { FetchXml = fetch });
                     var stop = DateTime.Now;
                     var duration = stop - start;
+                    ai.WriteEvent("ExecuteFetch", null, duration.TotalMilliseconds, HandleAIResult);
                     SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Execution time: {duration}"));
                     eventargs.Result = resp.FetchXmlResult;
                 })
@@ -1202,6 +1223,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         }
                     }
                     while (settings.Results.RetrieveAllPages && query is QueryExpression && tmpResult.MoreRecords);
+                    ai.WriteEvent("RetrieveMultiple", resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds, HandleAIResult);
+
                     if (outputtype == 1 && outputstyle == 2)
                     {
                         var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented);
