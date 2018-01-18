@@ -28,7 +28,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     ChildTypes.Add(new ChildNodeCapabilities("-", true));
                     ChildTypes.Add(new ChildNodeCapabilities("all-attributes", false));
                     ChildTypes.Add(new ChildNodeCapabilities("attribute", true));
-                    ChildTypes.Add(new ChildNodeCapabilities("filter", false));
+                    ChildTypes.Add(new ChildNodeCapabilities("filter", true));
                     ChildTypes.Add(new ChildNodeCapabilities("order", true));
                     ChildTypes.Add(new ChildNodeCapabilities("link-entity", true));
                     ChildTypes.Add(new ChildNodeCapabilities("-", true));
