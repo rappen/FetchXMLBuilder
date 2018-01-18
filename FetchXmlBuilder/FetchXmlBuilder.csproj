@@ -379,6 +379,7 @@
     <None Include="Properties\DataSources\Cinteros.Xrm.FetchXmlBuilder.Forms.ResultGrid.datasource" />
     <EmbeddedResource Include="ReleaseNotes\1.2018.1.rtf" />
     <EmbeddedResource Include="ReleaseNotes\1.2018.0.1004.rtf" />
+    <EmbeddedResource Include="ReleaseNotes\1.2018.0.1005.rtf" />
     <None Include="Resources\XSD fetch.cs.cmd" />
     <None Include="XrmToolBox.exe.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
