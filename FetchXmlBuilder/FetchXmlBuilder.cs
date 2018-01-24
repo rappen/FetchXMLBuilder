@@ -71,7 +71,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 AiEndpoint = aiEndpoint,
                 InstrumentationKey = aiKey,
-                OperationName = "FetchMXL Builder"
+                OperationName = "FetchXML Builder"
             });
             var theme = new VS2015LightTheme();
             dockContainer.Theme = theme;
