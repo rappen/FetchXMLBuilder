@@ -8,35 +8,16 @@ using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
-    public partial class XmlContentDisplayDialog : WeifenLuo.WinFormsUI.Docking.DockContent
+    public partial class XmlContentControl : WeifenLuo.WinFormsUI.Docking.DockContent
     {
         private string findtext = "";
         private FetchXmlBuilder fxb;
         private ContentType contenttype;
-        private SaveFormat format;
+        internal SaveFormat format;
 
-        internal static XmlContentDisplayDialog ShowDialog(string xmlString, ContentType contentType, SaveFormat saveFormat, FetchXmlBuilder caller)
-        {
-            if (xmlString.Length > 100000)
-            {
-                var dlgresult = MessageBox.Show("Huge result, this may take a while!\n" + xmlString.Length.ToString() + " characters in the XML document.\n\nContinue?", "Huge result",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                if (dlgresult == DialogResult.No)
-                {
-                    return null;
-                }
-            }
-            var xcdDialog = new XmlContentDisplayDialog(contentType, false, saveFormat, caller);
-            xcdDialog.panCancel.Visible = true;
-            xcdDialog.UpdateXML(xmlString);
-            xcdDialog.StartPosition = FormStartPosition.CenterParent;
-            xcdDialog.ShowDialog();
-            return xcdDialog;
-        }
+        internal XmlContentControl(FetchXmlBuilder caller) : this(ContentType.FetchXML, true, SaveFormat.XML, caller) { }
 
-        internal XmlContentDisplayDialog(FetchXmlBuilder caller) : this(ContentType.FetchXML, true, SaveFormat.XML, caller) { }
-
-        internal XmlContentDisplayDialog(ContentType contentType, bool allowEdit, SaveFormat saveFormat, FetchXmlBuilder caller)
+        internal XmlContentControl(ContentType contentType, bool allowEdit, SaveFormat saveFormat, FetchXmlBuilder caller)
         {
             InitializeComponent();
             this.PrepareGroupBoxExpanders();
@@ -65,7 +46,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         internal static string GetPersistString(ContentType type)
         {
-            return typeof(XmlContentDisplayDialog).ToString() + "." + type.ToString();
+            return typeof(XmlContentControl).ToString() + "." + type.ToString();
         }
 
         private void btnFormat_Click(object sender, EventArgs e)

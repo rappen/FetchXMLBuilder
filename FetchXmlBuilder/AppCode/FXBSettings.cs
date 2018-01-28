@@ -60,6 +60,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     public class DockStates
     {
         public DockState ResultView { get; set; } = DockState.Document;
+        public DockState FetchResult { get; set; } = DockState.Document;
         public DockState FetchXML { get; set; } = DockState.Document;
         public DockState FetchXMLCs { get; set; } = DockState.DockRight;
         public DockState FetchXMLJs { get; set; } = DockState.DockRight;
@@ -76,6 +77,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
     public class ContentWindows
     {
+        public ContentWindow FetchResult { get; set; } = new ContentWindow();
         public ContentWindow FetchXmlWindow { get; set; } = new ContentWindow();
         public ContentWindow SQLWindow { get; set; } = new ContentWindow();
         public ContentWindow FetchXmlCsWindow { get; set; } = new ContentWindow();
@@ -86,6 +88,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         {
             switch (type)
             {
+                case ContentType.FetchXML_Result:
+                case ContentType.Serialized_Result_JSON:
+                case ContentType.Serialized_Result_XML:
+                    return FetchResult;
                 case ContentType.FetchXML:
                     return FetchXmlWindow;
                 case ContentType.SQL_Query:

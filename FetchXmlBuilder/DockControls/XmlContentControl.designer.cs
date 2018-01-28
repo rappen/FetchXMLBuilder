@@ -1,6 +1,6 @@
 ﻿namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
-    partial class XmlContentDisplayDialog
+    partial class XmlContentControl
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlContentDisplayDialog));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlContentControl));
             CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings6 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnExecute = new System.Windows.Forms.Button();

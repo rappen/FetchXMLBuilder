@@ -246,11 +246,11 @@
     <Compile Include="Forms\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="DockControls\XmlContentDisplayDialog.cs">
+    <Compile Include="DockControls\XmlContentControl.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DockControls\XmlContentDisplayDialog.designer.cs">
-      <DependentUpon>XmlContentDisplayDialog.cs</DependentUpon>
+    <Compile Include="DockControls\XmlContentControl.designer.cs">
+      <DependentUpon>XmlContentControl.cs</DependentUpon>
     </Compile>
     <Compile Include="AppCode\FXBMessageBusArgument.cs" />
     <Compile Include="Forms\Welcome.cs">
@@ -333,8 +333,8 @@
     <EmbeddedResource Include="Forms\Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DockControls\XmlContentDisplayDialog.resx">
-      <DependentUpon>XmlContentDisplayDialog.cs</DependentUpon>
+    <EmbeddedResource Include="DockControls\XmlContentControl.resx">
+      <DependentUpon>XmlContentControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Welcome.resx">
       <DependentUpon>Welcome.cs</DependentUpon>

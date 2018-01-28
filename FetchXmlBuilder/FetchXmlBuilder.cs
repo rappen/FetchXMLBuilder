@@ -42,13 +42,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private bool buttonsEnabled = true;
         private MessageBusEventArgs callerArgs = null;
         private string cwpfeed;
-        private XmlContentDisplayDialog dockControlFetchXml;
-        private XmlContentDisplayDialog dockControlFetchXmlCs;
-        private XmlContentDisplayDialog dockControlFetchXmlJs;
+        private XmlContentControl dockControlFetchResult;
+        private XmlContentControl dockControlFetchXml;
+        private XmlContentControl dockControlFetchXmlCs;
+        private XmlContentControl dockControlFetchXmlJs;
         private ResultGrid dockControlGrid;
         private ODataControl dockControlOData;
-        private XmlContentDisplayDialog dockControlQExp;
-        private XmlContentDisplayDialog dockControlSQL;
+        private XmlContentControl dockControlQExp;
+        private XmlContentControl dockControlSQL;
         private Entity dynml;
         private string fileName;
         private string liveUpdateXml = "";
@@ -227,6 +228,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             dockControlFetchXml?.Close();
             dockControlFetchXmlCs?.Close();
             dockControlFetchXmlJs?.Close();
+            dockControlFetchResult?.Close();
             dockControlGrid?.Close();
             dockControlOData?.Close();
             dockControlQExp?.Close();
@@ -781,9 +783,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 dockControlGrid = new ResultGrid(this);
                 return dockControlGrid;
             }
-            else if (persistString == XmlContentDisplayDialog.GetPersistString(ContentType.FetchXML) && dockControlFetchXml?.IsDisposed != false)
+            else if ((persistString == XmlContentControl.GetPersistString(ContentType.FetchXML_Result) ||
+                      persistString == XmlContentControl.GetPersistString(ContentType.Serialized_Result_JSON) ||
+                      persistString == XmlContentControl.GetPersistString(ContentType.Serialized_Result_XML)) &&
+                      dockControlFetchResult?.IsDisposed != false)
             {
-                dockControlFetchXml = new XmlContentDisplayDialog(this);
+                dockControlFetchResult = new XmlContentControl(this);
+                return dockControlFetchResult;
+            }
+            else if (persistString == XmlContentControl.GetPersistString(ContentType.FetchXML) && dockControlFetchXml?.IsDisposed != false)
+            {
+                dockControlFetchXml = new XmlContentControl(this);
                 return dockControlFetchXml;
             }
             return null;
@@ -792,6 +802,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void ExecuteFetch(string fetch)
         {
             working = true;
+            LogUse("ExecuteFetch");
             WorkAsync(new WorkAsyncInfo("Executing FetchXML...",
                 (eventargs) =>
                 {
@@ -815,11 +826,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         XmlDocument doc = new XmlDocument();
                         doc.LoadXml(completedargs.Result.ToString());
-                        XmlContentDisplayDialog.ShowDialog(doc.OuterXml, ContentType.FetchXML_Result, SaveFormat.XML, this);
+                        ShowResultControl(doc.OuterXml, ContentType.FetchXML_Result, SaveFormat.XML, settings.DockStates.FetchResult);
                     }
                 }
             });
-            LogUse("ExecuteFetch");
         }
 
         private Entity GetCWPFeed(string feedid)
@@ -1150,9 +1160,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void RetrieveMultiple(string fetch)
         {
             working = true;
-            var outputtype = settings.Results.ResultOption;
-            var outputstyle = settings.Results.SerializeStyle;
-            var outputtypestring = Settings.ResultOption2String(outputtype, outputstyle);
+            LogUse("RetrieveMultiple-" + Settings.ResultOption2String(settings.Results.ResultOption, settings.Results.SerializeStyle));
             SendMessageToStatusBar(this, new StatusBarMessageEventArgs("Retrieving..."));
             WorkAsync(new WorkAsyncInfo("Executing FetchXML...",
                 (eventargs) =>
@@ -1202,7 +1210,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         }
                     }
                     while (settings.Results.RetrieveAllPages && query is QueryExpression && tmpResult.MoreRecords);
-                    if (outputtype == 1 && outputstyle == 2)
+                    if (settings.Results.ResultOption == 1 && settings.Results.SerializeStyle == 2)
                     {
                         var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented);
                         eventargs.Result = json;
@@ -1226,7 +1234,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     else if (completedargs.Result is EntityCollection entities)
                     {
-                        if (outputtype == 0)
+                        if (settings.Results.ResultOption == 0)
                         {
                             if (settings.Results.AlwaysNewWindow)
                             {
@@ -1247,19 +1255,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                                 dockControlGrid.Activate();
                             }
                         }
-                        else if (outputtype == 1)
+                        else if (settings.Results.ResultOption == 1)
                         {
-                            if (outputstyle == 0)
+                            if (settings.Results.SerializeStyle == 0)
                             {
                                 var serialized = EntityCollectionSerializer.Serialize(entities, SerializationStyle.Explicit);
-                                XmlContentDisplayDialog.ShowDialog(serialized.OuterXml, ContentType.Serialized_Result_XML, SaveFormat.XML, this);
+                                ShowResultControl(serialized.OuterXml, ContentType.Serialized_Result_XML, SaveFormat.XML, settings.DockStates.FetchResult);
                             }
-                            else if (outputstyle == 1)
+                            else if (settings.Results.SerializeStyle == 1)
                             {
                                 var serialized = EntityCollectionSerializer.Serialize(entities, SerializationStyle.Basic);
-                                XmlContentDisplayDialog.ShowDialog(serialized.OuterXml, ContentType.Serialized_Result_XML, SaveFormat.XML, this);
+                                ShowResultControl(serialized.OuterXml, ContentType.Serialized_Result_XML, SaveFormat.XML, settings.DockStates.FetchResult);
                             }
-                            else if (outputstyle == 3)
+                            else if (settings.Results.SerializeStyle == 3)
                             {
                                 var serializer = new DataContractSerializer(typeof(EntityCollection), null, int.MaxValue, false, false, null, new KnownTypesResolver());
                                 var sw = new StringWriter();
@@ -1268,18 +1276,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                                 xw.Close();
                                 sw.Close();
                                 var serialized = sw.ToString();
-                                XmlContentDisplayDialog.ShowDialog(serialized, ContentType.Serialized_Result_XML, SaveFormat.XML, this);
+                                ShowResultControl(serialized, ContentType.Serialized_Result_XML, SaveFormat.XML, settings.DockStates.FetchResult);
                             }
                         }
                     }
-                    else if (outputtype == 1 && outputstyle == 2 && completedargs.Result is string)
+                    else if (settings.Results.ResultOption == 1 && settings.Results.SerializeStyle == 2 && completedargs.Result is string)
                     {
                         var result = completedargs.Result.ToString();
-                        XmlContentDisplayDialog.ShowDialog(result, ContentType.Serialized_Result_JSON, SaveFormat.JSON, this);
+                        ShowResultControl(result, ContentType.Serialized_Result_JSON, SaveFormat.JSON, settings.DockStates.FetchResult);
                     }
                 }
             });
-            LogUse("RetrieveMultiple-" + outputtypestring);
         }
 
         private void ReturnToCaller()
@@ -1536,12 +1543,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
-        private void ShowContentControl(ref XmlContentDisplayDialog control, ContentType content, SaveFormat save, DockState state)
+        private void ShowContentControl(ref XmlContentControl control, ContentType content, SaveFormat save, DockState state)
         {
             LogUse($"Show-{content}");
             if (control?.IsDisposed != false)
             {
-                control = new XmlContentDisplayDialog(content, content == ContentType.FetchXML, save, this);
+                control = new XmlContentControl(content, content == ContentType.FetchXML, save, this);
                 control.Show(dockContainer, state);
             }
             else
@@ -1564,6 +1571,28 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 dockControlOData.EnsureVisible(dockContainer, DockState.DockBottom);
             }
             UpdateLiveXML();
+        }
+
+        private void ShowResultControl(string content, ContentType contenttype, SaveFormat save, DockState defaultstate)
+        {
+            LogUse($"Show-{contenttype}");
+            if (dockControlFetchResult?.IsDisposed != false)
+            {
+                dockControlFetchResult = new XmlContentControl(contenttype, false, save, this);
+                dockControlFetchResult.Show(dockContainer, defaultstate);
+            }
+            else
+            {
+                dockControlFetchResult.EnsureVisible(dockContainer, defaultstate);
+            }
+            dockControlFetchResult.format = save;
+            var dlgresult = MessageBox.Show("Huge result, this may take a while!\n" + content.Length.ToString() + " characters.\n\nContinue?", "Huge result",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (dlgresult == DialogResult.No)
+            {
+                return;
+            }
+            dockControlFetchResult.UpdateXML(content);
         }
 
         #endregion Private Methods
