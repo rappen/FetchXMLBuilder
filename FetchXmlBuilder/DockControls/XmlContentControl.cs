@@ -231,6 +231,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 switch (contenttype)
                 {
+                    case ContentType.FetchXML_Result:
+                    case ContentType.Serialized_Result_JSON:
+                    case ContentType.Serialized_Result_XML:
+                        fxb.settings.DockStates.FetchResult = DockState;
+                        break;
                     case ContentType.FetchXML:
                         fxb.settings.DockStates.FetchXML = DockState;
                         break;

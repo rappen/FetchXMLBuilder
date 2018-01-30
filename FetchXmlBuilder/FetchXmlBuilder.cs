@@ -1575,25 +1575,34 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void ShowResultControl(string content, ContentType contenttype, SaveFormat save, DockState defaultstate)
         {
-            LogUse($"Show-{contenttype}");
-            if (dockControlFetchResult?.IsDisposed != false)
-            {
-                dockControlFetchResult = new XmlContentControl(contenttype, save, this);
-                dockControlFetchResult.Show(dockContainer, defaultstate);
-            }
-            else
-            {
-                dockControlFetchResult.EnsureVisible(dockContainer, defaultstate);
-            }
-            dockControlFetchResult.SetContentType(contenttype);
-            dockControlFetchResult.SetFormat(save);
-            if (content.Length > 100000 && 
+            if (content.Length > 100000 &&
                 MessageBox.Show("Huge result, this may take a while!\n" + content.Length.ToString() + " characters.\n\nContinue?", "Huge result",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
             {
                 return;
             }
-            dockControlFetchResult.UpdateXML(content);
+            LogUse($"Show-{contenttype}");
+            var resultControl = dockControlFetchResult;
+            if (settings.Results.AlwaysNewWindow)
+            {
+                resultControl = new XmlContentControl(contenttype, save, this);
+                resultpanecount++;
+            }
+            else if (resultControl?.IsDisposed != false)
+            {
+                resultControl = new XmlContentControl(contenttype, save, this);
+                resultControl.Show(dockContainer, defaultstate);
+                dockControlFetchResult = resultControl;
+            }
+            resultControl.SetContentType(contenttype);
+            resultControl.SetFormat(save);
+            if (settings.Results.AlwaysNewWindow)
+            {
+                resultControl.Text += $" ({resultpanecount})";
+                resultControl.TabText = resultControl.Text;
+            }
+            resultControl.EnsureVisible(dockContainer, defaultstate);
+            resultControl.UpdateXML(content);
         }
 
         #endregion Private Methods

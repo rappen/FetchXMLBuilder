@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlContentControl));
-            CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings6 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
+            CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings2 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnExecute = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
@@ -128,14 +128,14 @@
             this.txtXML.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtXML.Location = new System.Drawing.Point(0, 0);
             this.txtXML.Name = "txtXML";
-            xmlViewerSettings6.AttributeKey = System.Drawing.Color.Red;
-            xmlViewerSettings6.AttributeValue = System.Drawing.Color.Blue;
-            xmlViewerSettings6.Comment = System.Drawing.Color.Green;
-            xmlViewerSettings6.Element = System.Drawing.Color.DarkRed;
-            xmlViewerSettings6.QuoteCharacter = '\"';
-            xmlViewerSettings6.Tag = System.Drawing.Color.Blue;
-            xmlViewerSettings6.Value = System.Drawing.Color.Black;
-            this.txtXML.Settings = xmlViewerSettings6;
+            xmlViewerSettings2.AttributeKey = System.Drawing.Color.Red;
+            xmlViewerSettings2.AttributeValue = System.Drawing.Color.Blue;
+            xmlViewerSettings2.Comment = System.Drawing.Color.Green;
+            xmlViewerSettings2.Element = System.Drawing.Color.DarkRed;
+            xmlViewerSettings2.QuoteCharacter = '\"';
+            xmlViewerSettings2.Tag = System.Drawing.Color.Blue;
+            xmlViewerSettings2.Value = System.Drawing.Color.Black;
+            this.txtXML.Settings = xmlViewerSettings2;
             this.txtXML.Size = new System.Drawing.Size(578, 452);
             this.txtXML.TabIndex = 0;
             this.txtXML.Text = "";
@@ -312,7 +312,7 @@
             this.btnFormat.UseVisualStyleBackColor = true;
             this.btnFormat.Click += new System.EventHandler(this.btnFormat_Click);
             // 
-            // XmlContentDisplayDialog
+            // XmlContentControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -325,9 +325,9 @@
             this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)((((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight) 
             | WeifenLuo.WinFormsUI.Docking.DockAreas.Document)));
+            this.HideOnClose = true;
             this.KeyPreview = true;
-            this.Name = "XmlContentDisplayDialog";
-            this.ShowIcon = false;
+            this.Name = "XmlContentControl";
             this.DockStateChanged += new System.EventHandler(this.XmlContentDisplayDialog_DockStateChanged);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.XmlContentDisplayDialog_FormClosing);
             this.Load += new System.EventHandler(this.XmlContentDisplayDialog_Load);
