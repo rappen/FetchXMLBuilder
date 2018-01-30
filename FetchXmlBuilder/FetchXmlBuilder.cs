@@ -788,7 +788,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                       persistString == XmlContentControl.GetPersistString(ContentType.Serialized_Result_XML)) &&
                       dockControlFetchResult?.IsDisposed != false)
             {
-                dockControlFetchResult = new XmlContentControl(this);
+                dockControlFetchResult = new XmlContentControl(ContentType.FetchXML_Result, SaveFormat.XML, this);
                 return dockControlFetchResult;
             }
             else if (persistString == XmlContentControl.GetPersistString(ContentType.FetchXML) && dockControlFetchXml?.IsDisposed != false)
@@ -1543,12 +1543,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
-        private void ShowContentControl(ref XmlContentControl control, ContentType content, SaveFormat save, DockState state)
+        private void ShowContentControl(ref XmlContentControl control, ContentType contenttype, SaveFormat save, DockState state)
         {
-            LogUse($"Show-{content}");
+            LogUse($"Show-{contenttype}");
             if (control?.IsDisposed != false)
             {
-                control = new XmlContentControl(content, content == ContentType.FetchXML, save, this);
+                control = new XmlContentControl(contenttype, save, this);
                 control.Show(dockContainer, state);
             }
             else
@@ -1578,17 +1578,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             LogUse($"Show-{contenttype}");
             if (dockControlFetchResult?.IsDisposed != false)
             {
-                dockControlFetchResult = new XmlContentControl(contenttype, false, save, this);
+                dockControlFetchResult = new XmlContentControl(contenttype, save, this);
                 dockControlFetchResult.Show(dockContainer, defaultstate);
             }
             else
             {
                 dockControlFetchResult.EnsureVisible(dockContainer, defaultstate);
             }
-            dockControlFetchResult.format = save;
-            var dlgresult = MessageBox.Show("Huge result, this may take a while!\n" + content.Length.ToString() + " characters.\n\nContinue?", "Huge result",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (dlgresult == DialogResult.No)
+            dockControlFetchResult.SetContentType(contenttype);
+            dockControlFetchResult.SetFormat(save);
+            if (content.Length > 100000 && 
+                MessageBox.Show("Huge result, this may take a while!\n" + content.Length.ToString() + " characters.\n\nContinue?", "Huge result",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
             {
                 return;
             }

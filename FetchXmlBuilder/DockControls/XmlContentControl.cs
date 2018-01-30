@@ -13,29 +13,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         private string findtext = "";
         private FetchXmlBuilder fxb;
         private ContentType contenttype;
-        internal SaveFormat format;
+        private SaveFormat format;
 
-        internal XmlContentControl(FetchXmlBuilder caller) : this(ContentType.FetchXML, true, SaveFormat.XML, caller) { }
+        internal XmlContentControl(FetchXmlBuilder caller) : this(ContentType.FetchXML, SaveFormat.XML, caller) { }
 
-        internal XmlContentControl(ContentType contentType, bool allowEdit, SaveFormat saveFormat, FetchXmlBuilder caller)
+        internal XmlContentControl(ContentType contentType, SaveFormat saveFormat, FetchXmlBuilder caller)
         {
             InitializeComponent();
             this.PrepareGroupBoxExpanders();
-            contenttype = contentType;
-            format = saveFormat;
             fxb = caller;
-            Text = contenttype.ToString().Replace("_", " ").Replace("CSharp", "C#");
-            TabText = Text;
             txtXML.KeyUp += fxb.LiveXML_KeyUp;
-            panLiveUpdate.Visible = allowEdit;
-            panOk.Visible = allowEdit;
-            panFormatting.Visible = allowEdit;
-            panExecute.Visible = allowEdit;
-            panSave.Visible = format != SaveFormat.None;
-            var windowSettings = fxb.settings.ContentWindows.GetContentWindow(contenttype);
-            chkLiveUpdate.Checked = allowEdit && windowSettings.LiveUpdate;
-            lblFormatExpander.GroupBoxSetState(tt, windowSettings.FormatExpanded);
-            lblActionsExpander.GroupBoxSetState(tt, windowSettings.ActionExpanded);
+            SetContentType(contentType);
+            SetFormat(saveFormat);
             UpdateButtons();
         }
 
@@ -47,6 +36,28 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         internal static string GetPersistString(ContentType type)
         {
             return typeof(XmlContentControl).ToString() + "." + type.ToString();
+        }
+
+        internal void SetContentType(ContentType contentType)
+        {
+            contenttype = contentType;
+            Text = contenttype.ToString().Replace("_", " ").Replace("CSharp", "C#");
+            TabText = Text;
+            var windowSettings = fxb.settings.ContentWindows.GetContentWindow(contenttype);
+            var allowedit = contenttype == ContentType.FetchXML;
+            chkLiveUpdate.Checked = allowedit && windowSettings.LiveUpdate;
+            lblFormatExpander.GroupBoxSetState(tt, windowSettings.FormatExpanded);
+            lblActionsExpander.GroupBoxSetState(tt, windowSettings.ActionExpanded);
+            panLiveUpdate.Visible = allowedit;
+            panOk.Visible = allowedit;
+            panFormatting.Visible = allowedit;
+            panExecute.Visible = allowedit;
+        }
+
+        internal void SetFormat(SaveFormat saveFormat)
+        {
+            format = saveFormat;
+            panSave.Visible = format != SaveFormat.None;
         }
 
         private void btnFormat_Click(object sender, EventArgs e)
