@@ -429,12 +429,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.bgStats.Controls.Add(this.label1);
             this.bgStats.Controls.Add(this.chkStatAllow);
-            this.bgStats.Location = new System.Drawing.Point(12, 432);
+            this.bgStats.Location = new System.Drawing.Point(12, 347);
             this.bgStats.Name = "bgStats";
             this.bgStats.Size = new System.Drawing.Size(519, 80);
             this.bgStats.TabIndex = 4;
             this.bgStats.TabStop = false;
             this.bgStats.Text = "Statistics";
+            this.bgStats.Visible = false;
             // 
             // label1
             // 
@@ -517,7 +518,7 @@
             this.panel1.Controls.Add(this.llShowWelcome);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
-            this.panel1.Location = new System.Drawing.Point(12, 518);
+            this.panel1.Location = new System.Drawing.Point(12, 433);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(517, 53);
             this.panel1.TabIndex = 5;
@@ -559,13 +560,13 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(543, 581);
+            this.ClientSize = new System.Drawing.Size(543, 496);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.gbAppearance);
-            this.Controls.Add(this.bgStats);
             this.Controls.Add(this.gbResult);
             this.Controls.Add(this.gbAttributes);
             this.Controls.Add(this.gbEntities);
+            this.Controls.Add(this.bgStats);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Settings";

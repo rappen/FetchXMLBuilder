@@ -26,8 +26,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
     {
 
         private const string aiEndpoint = "https://dc.services.visualstudio.com/v2/track";
-        private const string aiKey = "cc7cb081-b489-421d-bb61-2ee53495c336";    // jonas@rappen.net tenant, TestAI 
-        //private const string aiKey = "eed73022-2444-45fd-928b-5eebd8fa46a6";    // jonas@rappen.net tenant, XrmToolBox
+        //private const string aiKey = "cc7cb081-b489-421d-bb61-2ee53495c336";    // jonas@rappen.net tenant, TestAI 
+        private const string aiKey = "eed73022-2444-45fd-928b-5eebd8fa46a6";    // jonas@rappen.net tenant, XrmToolBox
 
         #region Internal Fields
 
@@ -1231,7 +1231,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     while (settings.Results.RetrieveAllPages && query is QueryExpression && tmpResult.MoreRecords);
                     ai.WriteEvent("RetrieveMultiple", resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds, HandleAIResult);
-                    if (outputtype == 1 && outputstyle == 2)
+                    if (settings.Results.ResultOption == 1 && settings.Results.SerializeStyle == 2)
                     {
                         var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented);
                         eventargs.Result = json;
@@ -1418,6 +1418,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 EnableControls(false);
                 FileName = newfile;
                 dockControlBuilder.Save(FileName);
+                LogUse("SaveFile");
                 if (!silent)
                 {
                     MessageBox.Show(this, "FetchXML saved!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1461,6 +1462,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     newView.Id = DynML.Id;
                     newView.Attributes.Add("query", xml);
                     Service.Update(newView);
+                    LogUse("SaveML");
                     DynML["query"] = xml;
                 })
             {
@@ -1517,6 +1519,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     newView.Id = View.Id;
                     newView.Attributes.Add("fetchxml", xml);
                     Service.Update(newView);
+                    LogUse("SaveView");
                     if (View.LogicalName == "savedquery")
                     {
                         var pubRequest = new PublishXmlRequest();
@@ -1524,7 +1527,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             @"<importexportxml><entities><entity>{0}</entity></entities><nodes/><securityroles/><settings/><workflows/></importexportxml>",
                             View["returnedtypecode"].ToString());
                         Service.Execute(pubRequest);
-                        LogUse("SaveView");
                     }
                     View["fetchxml"] = xml;
                 })
@@ -1697,6 +1699,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsbAbout_Click(object sender, EventArgs e)
         {
+            LogUse("OpenAbout");
             var about = new About();
             about.StartPosition = FormStartPosition.CenterParent;
             about.lblVersion.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -1720,6 +1723,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 return;
             }
+            LogUse("New");
             dockControlBuilder.Init(null, "new", false);
         }
 
@@ -1727,8 +1731,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             var allowStats = settings.LogUsage;
             var settingDlg = new Settings(this);
+            LogUse("OpenOptions");
             if (settingDlg.ShowDialog(this) == DialogResult.OK)
             {
+                LogUse("SaveOptions");
                 settings = settingDlg.GetSettings();
                 if (allowStats != settings.LogUsage)
                 {

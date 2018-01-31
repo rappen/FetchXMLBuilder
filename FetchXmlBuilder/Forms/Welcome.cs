@@ -76,12 +76,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void llStats_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            MessageBox.Show(@"The evolution of FetchXML Builder is based on feedback issues and anonymous statistics collected from users.
+            MessageBox.Show(@"The evolution of FetchXML Builder is based on feedback issues and anonymous statistics collected about usage.
 The statistics are a valuable source of information for continuing the development to make the tool even easier to use and improve the most popular features.
-
-By default the usage statistics is turned on. If you do not want to participate in this, it can be turned off under Options from the main window.
-
-I am very grateful for anyone who allows statistics to be collected!
 
 Thank You,
 Jonas", "Anonymous statistics", MessageBoxButtons.OK, MessageBoxIcon.Information);
