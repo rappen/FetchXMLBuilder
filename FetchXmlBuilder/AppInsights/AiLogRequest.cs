@@ -12,11 +12,11 @@ public class AiLogRequest
         InstrumentationKey = aiConfig.InstrumentationKey;
         Tags = new AiTags
         {
+            OSVersion = aiConfig.XTBVersion,
+            DeviceType = aiConfig.PluginName,
+            ApplicationVersion = aiConfig.PluginVersion,
             SessionId = aiConfig.SessionId.ToString(),
-            OperationName = aiConfig.OperationName,
-            ApplicationVersion = aiConfig.ApplicationVersion.ToString(),
-            OSVersion = aiConfig.OSVersion.ToString(),
-            DeviceType = aiConfig.DeviceType
+            OperationName = aiConfig.OperationName
         };
         Data = new AiData
         {

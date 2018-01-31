@@ -22,8 +22,6 @@ public class AppInsights
     public AppInsights(AiConfig aiConfig)
     {
         _aiConfig = aiConfig;
-        _aiConfig.DeviceType = GetLastDotPart(_aiConfig.DeviceType);
-        _aiConfig.OperationName = GetLastDotPart(_aiConfig.OperationName);
     }
 
     public AppInsights(string endpoint, string ikey) : this(new AiConfig(endpoint, ikey)) { }
@@ -53,20 +51,6 @@ public class AppInsights
         }
         var json = Serialization.SerializeRequest<AiLogRequest>(logRequest);
         SendToAi(json, resultHandler);
-    }
-    
-    public void WritePage(string page, Action<string> resulthandler = null)
-    {
-        var logRequest = GetLogRequest("PageView");
-        logRequest.Data.BaseData.Name = page;
-        logRequest.Data.BaseData.Measurements = new AiMeasurements
-        {
-            Count = 3,
-            Duration = 25
-        };
-        logRequest.Data.BaseData.Url = "http://dn.se";
-        var json = Serialization.SerializeRequest<AiLogRequest>(logRequest);
-        SendToAi(json, resulthandler);
     }
 
     public void WriteException(Exception exception, AiExceptionSeverity severity, Action<string> resultHandler = null)
@@ -118,17 +102,6 @@ public class AppInsights
         }
 #endif
         handleresult?.Invoke(result);
-    }
-
-    private static string GetLastDotPart(string op)
-    {
-        if (op.Contains("."))
-        {
-            var parts = op.Split('.');
-            op = parts[parts.Length - 1];
-        }
-
-        return op;
     }
 
     private AiLogRequest GetLogRequest(string action)

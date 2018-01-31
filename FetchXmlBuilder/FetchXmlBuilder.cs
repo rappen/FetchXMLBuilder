@@ -26,7 +26,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
     {
 
         private const string aiEndpoint = "https://dc.services.visualstudio.com/v2/track";
-        private const string aiKey = "cc7cb081-b489-421d-bb61-2ee53495c336";    // TestAI 
+        private const string aiKey = "cc7cb081-b489-421d-bb61-2ee53495c336";    // jonas@rappen.net tenant, TestAI 
+        //private const string aiKey = "eed73022-2444-45fd-928b-5eebd8fa46a6";    // jonas@rappen.net tenant, XrmToolBox
 
         #region Internal Fields
 
@@ -67,11 +68,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         public FetchXmlBuilder()
         {
             InitializeComponent();
-            ai = new AppInsights(new AiConfig
+            ai = new AppInsights(new AiConfig(aiEndpoint, aiKey)
             {
-                AiEndpoint = aiEndpoint,
-                InstrumentationKey = aiKey,
-                OperationName = "FetchXML Builder"
+                PluginName = "FetchXML Builder"
             });
             var theme = new VS2015LightTheme();
             dockContainer.Theme = theme;
