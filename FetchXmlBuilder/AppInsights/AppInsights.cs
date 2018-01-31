@@ -54,6 +54,20 @@ public class AppInsights
         var json = Serialization.SerializeRequest<AiLogRequest>(logRequest);
         SendToAi(json, resultHandler);
     }
+    
+    public void WritePage(string page, Action<string> resulthandler = null)
+    {
+        var logRequest = GetLogRequest("PageView");
+        logRequest.Data.BaseData.Name = page;
+        logRequest.Data.BaseData.Measurements = new AiMeasurements
+        {
+            Count = 3,
+            Duration = 25
+        };
+        logRequest.Data.BaseData.Url = "http://dn.se";
+        var json = Serialization.SerializeRequest<AiLogRequest>(logRequest);
+        SendToAi(json, resulthandler);
+    }
 
     public void WriteException(Exception exception, AiExceptionSeverity severity, Action<string> resultHandler = null)
     {

@@ -152,7 +152,6 @@
     <Compile Include="AppInsights\AiMeasurements.cs" />
     <Compile Include="AppInsights\AiParsedStack.cs" />
     <Compile Include="AppInsights\AiProperties.cs" />
-    <Compile Include="AppInsights\AiSecureConfig.cs" />
     <Compile Include="AppInsights\AiTags.cs" />
     <Compile Include="AppInsights\AppInsights.cs" />
     <Compile Include="AppInsights\Enums\AiDataPointType.cs" />

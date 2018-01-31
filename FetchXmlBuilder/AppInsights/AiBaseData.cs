@@ -33,6 +33,7 @@ public class AiBaseData
 
     [DataMember(Name = "properties")]
     public AiProperties Properties { get; set; }
-    [DataMember(Name ="measurements")]
+
+    [DataMember(Name = "measurements")]
     public AiMeasurements Measurements { get; set; }
 }
