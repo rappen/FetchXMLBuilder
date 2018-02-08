@@ -2,16 +2,16 @@
 <xs:schema id="fetch"
            elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns:mstns="http://tempuri.org/fetch/unique">
+    xmlns:mstns="http://tempuri.org/fetch/unique">
   <xs:annotation>
     <xs:documentation>Schema name: fetch-schema</xs:documentation>
   </xs:annotation>
   <!--
-	
-		condition element - used for capturing entity and link-entity
-							"where" clause criteria
-		
-	-->
+
+        condition element - used for capturing entity and link-entity
+                            "where" clause criteria
+
+    -->
   <!-- [XDR-XSD] "value" element  -->
   <xs:element name="value"
               type="xs:string"></xs:element>
@@ -22,10 +22,10 @@
                  maxOccurs="unbounded">
         <!-- -->
         <!--
-		The attribute "value" is used for all operators that compare to a single value (for example, eq).
-		The element "value" is used for operators that compare to multiple values (for example, in).
-		Some operators require neither the attribute "value" or the element "value" (for example, null).
-	-->
+        The attribute "value" is used for all operators that compare to a single value (for example, eq).
+        The element "value" is used for operators that compare to multiple values (for example, in).
+        Some operators require neither the attribute "value" or the element "value" (for example, null).
+    -->
         <xs:element name="value"
                     minOccurs="0"
                     maxOccurs="unbounded">
@@ -52,10 +52,10 @@
                     use="required"
                     type="operator"></xs:attribute>
       <!--
-		The attribute "value" is used for all operators that compare to a single value (for example, eq).
-		The element "value" is used for operators that compare to multiple values (for example, in).
-		Some operators require neither the attribute "value" or the element "value" (for example, null).
-	-->
+        The attribute "value" is used for all operators that compare to a single value (for example, eq).
+        The element "value" is used for operators that compare to multiple values (for example, in).
+        Some operators require neither the attribute "value" or the element "value" (for example, null).
+    -->
       <xs:attribute name="value"
                     type="xs:string"></xs:attribute>
       <xs:attribute name="aggregate"
@@ -71,11 +71,11 @@
     </xs:complexType>
   </xs:element>
   <!--
-	
-		filter element - used for constructing complex conditionals
-						 legal on entity and link-entity
-		
-	-->
+
+        filter element - used for constructing complex conditionals
+                         legal on entity and link-entity
+
+    -->
   <!-- [XDR-XSD] "filter" element  -->
   <xs:element name="filter">
     <xs:complexType>
@@ -104,12 +104,12 @@
     </xs:complexType>
   </xs:element>
   <!--
-	
-		attribute elements - used for selecting attributes from the
-							 surrounding entity / link-entity, these
-							 values are returned as part of the fetch
-		
-	-->
+
+        attribute elements - used for selecting attributes from the
+                             surrounding entity / link-entity, these
+                             values are returned as part of the fetch
+
+    -->
   <!-- [XDR-XSD] "all-attributes" element  -->
   <xs:element name="all-attributes">
     <xs:complexType></xs:complexType>
@@ -133,12 +133,14 @@
                   type="DateGroupingType"></xs:attribute>
     <xs:attribute name="usertimezone"
                   type="FetchBoolType"></xs:attribute>
+    <xs:attribute name="distinct"
+                  type="FetchBoolType"></xs:attribute>
   </xs:complexType>
   <!--
-	
-	order element - used to specify a sort order
 
-	-->
+    order element - used to specify a sort order
+
+    -->
   <!-- [XDR-XSD] "order" element  -->
   <xs:complexType name="FetchOrderType">
     <xs:choice minOccurs="0"
@@ -155,10 +157,10 @@
                   type="xs:boolean"></xs:attribute>
   </xs:complexType>
   <!--
-	
-		link-entity element - used for joining one entity to its "parent"
-		
-	-->
+
+        link-entity element - used for joining one entity to its "parent"
+
+    -->
   <!-- [XDR-XSD] "link-entity" element  -->
   <xs:complexType name="FetchLinkEntityType">
     <xs:choice minOccurs="0"
@@ -172,7 +174,7 @@
                   maxOccurs="unbounded" />
       <xs:element name="order"
                   type="FetchOrderType"
-                  minOccurs="0"
+      minOccurs="0"
                   maxOccurs="1" />
       <xs:element ref="filter"
                   minOccurs="0" />
@@ -195,15 +197,19 @@
                   type="xs:boolean"></xs:attribute>
     <xs:attribute name="intersect"
                   type="xs:boolean"></xs:attribute>
+    <xs:attribute name="enableprefiltering"
+                  type="xs:boolean"></xs:attribute>
+    <xs:attribute name="prefilterparametername"
+                  type="xs:string"></xs:attribute>
   </xs:complexType>
   <!--
-	
-		entity element - used for specifying the root element for a fetch, only
-						 one root entity is allowed in a given fetch, all others
-						 are dependent on this entity and are marked as
-						 link-entity
-		
-	-->
+
+        entity element - used for specifying the root element for a fetch, only
+                         one root entity is allowed in a given fetch, all others
+                         are dependent on this entity and are marked as
+                         link-entity
+
+    -->
   <!-- [XDR-XSD] "entity" element  -->
   <xs:complexType name="FetchEntityType">
     <xs:choice minOccurs="0"
@@ -213,11 +219,11 @@
                   minOccurs="0" />
       <xs:element name="attribute"
                   type="FetchAttributeType"
-                  minOccurs="0"
+      minOccurs="0"
                   maxOccurs="unbounded" />
       <xs:element name="order"
                   type="FetchOrderType"
-                  minOccurs="0"
+      minOccurs="0"
                   maxOccurs="unbounded" />
       <xs:element name="link-entity"
                   type="FetchLinkEntityType" />
@@ -228,12 +234,16 @@
     <xs:attribute name="name"
                   use="required"
                   type="xs:string"></xs:attribute>
+    <xs:attribute name="enableprefiltering"
+                  type="xs:boolean"></xs:attribute>
+    <xs:attribute name="prefilterparametername"
+                  type="xs:string"></xs:attribute>
   </xs:complexType>
   <!--
-	
-		fetch element - root element for the query
-		
-	-->
+
+        fetch element - root element for the query
+
+    -->
   <!-- [XDR-XSD] "fetch" element  -->
   <xs:element name="fetch"
               type="FetchType"/>
@@ -275,8 +285,8 @@
     </xs:attribute>
     <xs:attribute name="min-active-row-version"
                   type="xs:boolean"
-                  use="optional"
-                  default="false"/>
+    use="optional"
+    default="false"/>
     <xs:attribute name="output-format">
       <xs:simpleType>
         <xs:restriction base="xs:NMTOKEN">
@@ -290,11 +300,11 @@
     </xs:attribute>
     <xs:attribute name="returntotalrecordcount"
                   type="xs:boolean"
-                  use="optional"
+    use="optional"
                   default="false" />
     <xs:attribute name="no-lock"
                   type="xs:boolean"
-                  use="optional"
+  use="optional"
                   default="false" />
   </xs:complexType>
   <!-- [XDR-XSD] XDR datatype derivations -->
@@ -303,7 +313,7 @@
       <xs:all>
         <xs:element name="name"
                     type="xs:string"
-                    minOccurs="1"
+        minOccurs="1"
                     maxOccurs="1" />
         <xs:element name="savedqueryid"
                     type="guid"
@@ -312,14 +322,14 @@
         <xs:element name="returnedtypecode"
                     type="SerializedInteger"
                     minOccurs="1"
-                    maxOccurs="1" />
+        maxOccurs="1" />
         <xs:element name="description"
                     type="xs:string"
                     minOccurs="0"
                     maxOccurs="1" />
         <xs:element name="querytype"
                     type="SerializedInteger"
-                    minOccurs="1"
+        minOccurs="1"
                     maxOccurs="1" />
         <xs:element name="IsCustomizable"
                     type="SerializedTrueFalse01Type"
@@ -327,16 +337,16 @@
                     maxOccurs="1" />
         <xs:element name="CanBeDeleted"
                     type="SerializedTrueFalse01Type"
-                    minOccurs="0"
-                    maxOccurs="1" />
+        minOccurs="0"
+        maxOccurs="1" />
         <xs:element name="IntroducedVersion"
                     type="VersionType"
-                    minOccurs="0"
+        minOccurs="0"
                     maxOccurs="1" />
         <xs:element name="isquickfindquery"
                     type="SerializedTrueFalse01Type"
                     minOccurs="0"
-                    maxOccurs="1" />
+        maxOccurs="1" />
         <xs:element name="isuserdefined"
                     type="SerializedTrueFalse01Type"
                     minOccurs="0"
@@ -365,20 +375,20 @@
           </xs:complexType>
         </xs:element>
         <xs:element name="columnsetxml"
-                    minOccurs="1"
+                    minOccurs="0"
                     maxOccurs="1">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="columnset"
                           minOccurs="0"
-                          maxOccurs="1">
+                maxOccurs="1">
                 <xs:complexType>
                   <xs:choice minOccurs="0"
                              maxOccurs="unbounded">
                     <!-- Because <column> contains text and one attribute we cannot specify its type. We have to define it as a complexType with a simple content. -->
                     <xs:element name="column"
                                 minOccurs="0"
-                                maxOccurs="1">
+                                  maxOccurs="1">
                       <xs:complexType>
                         <xs:simpleContent>
                           <xs:extension base="xs:string">
@@ -400,7 +410,7 @@
                     </xs:choice>
                     <xs:element name="filter"
                                 minOccurs="0"
-                                maxOccurs="1">
+                      maxOccurs="1">
                       <!-- Allow support for v1.5 format -->
                       <xs:complexType>
                         <xs:sequence>
@@ -423,7 +433,7 @@
 
                         <xs:attribute name="column"
                                       type="xs:string"
-                                      use="optional" />
+                        use="optional" />
                         <xs:attribute name="operator"
                                       type="operator"
                                       use="optional" />
@@ -447,7 +457,7 @@
         </xs:element>
         <xs:element name="layoutxml"
                     minOccurs="0"
-                    maxOccurs="1">
+                      maxOccurs="1">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="grid"
@@ -467,16 +477,16 @@
                               <xs:sequence></xs:sequence>
                               <xs:attribute name="name"
                                             type="xs:string"
-                                            use="required" />
+                              use="required" />
                               <xs:attribute name="width"
                                             type="xs:integer"
                                             use="optional" />
                               <xs:attribute name="LabelId"
                                             type="xs:string"
-                                            use="optional" />
+                              use="optional" />
                               <xs:attribute name="label"
                                             type="xs:string"
-                                            use="optional" />
+                              use="optional" />
                               <xs:attribute name="desc"
                                             type="xs:string"
                                             use="optional" />
@@ -490,6 +500,10 @@
                                             type="xs:integer"
                                             use="optional" />
                               <xs:attribute name="cellType"
+                                            type ="xs:string" />
+                              <xs:attribute name="imageproviderwebresource"
+                                            type ="xs:string" />
+                              <xs:attribute name="imageproviderfunctionname"
                                             type ="xs:string" />
                             </xs:complexType>
                           </xs:element>
@@ -509,7 +523,7 @@
                   </xs:sequence>
                   <xs:attribute name="name"
                                 type="xs:string"
-                                use="required" />
+                  use="required" />
                   <xs:attribute name="select"
                                 type="xs:boolean"
                                 use="required" />
@@ -521,10 +535,10 @@
                                 use="required" />
                   <xs:attribute name="jump"
                                 type="xs:string"
-                                use="optional" />
+                  use="optional" />
                   <xs:attribute name="object"
                                 type="xs:integer"
-                                use="required" />
+                  use="required" />
                   <xs:attribute name="disableInlineEditing"
                                 type="xs:integer"
                                 use="optional" />
@@ -541,7 +555,7 @@
       </xs:all>
       <xs:attribute name="donotuseinLCID"
                     type="xs:string"
-                    use="optional" />
+      use="optional" />
       <xs:attribute name="useinLCID"
                     type="xs:string"
                     use="optional" />
@@ -644,6 +658,8 @@
       <xs:enumeration value="not-under"/>
       <xs:enumeration value="above" />
       <xs:enumeration value="eq-or-above" />
+      <xs:enumeration value="contain-values" />
+      <xs:enumeration value="not-contain-values" />
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="VersionType">
@@ -731,15 +747,15 @@
     <xs:sequence>
       <xs:element name="LocalizedName"
                   type="FieldXmlFieldUIType"
-                  minOccurs="0"
-                  maxOccurs="unbounded" />
+    minOccurs="0"
+    maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="DescriptionsType">
     <xs:sequence>
       <xs:element name="Description"
                   type="FieldXmlFieldUIType"
-                  minOccurs="0"
+  minOccurs="0"
                   maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
@@ -748,7 +764,7 @@
       <xs:element name="Color"
                   type="FieldXmlFieldUIType"
                   minOccurs="0"
-                  maxOccurs="unbounded" />
+    maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="FieldXmlFieldUIType">
