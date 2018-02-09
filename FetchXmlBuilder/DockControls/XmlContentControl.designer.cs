@@ -53,6 +53,7 @@
             this.rbFormatXML = new System.Windows.Forms.RadioButton();
             this.btnFormat = new System.Windows.Forms.Button();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
+            this.rbFormatMini = new System.Windows.Forms.RadioButton();
             this.panCancel.SuspendLayout();
             this.panActions.SuspendLayout();
             this.gbActions.SuspendLayout();
@@ -242,6 +243,7 @@
             this.gbFormatting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbFormatting.Controls.Add(this.lblFormatExpander);
+            this.gbFormatting.Controls.Add(this.rbFormatMini);
             this.gbFormatting.Controls.Add(this.rbFormatEsc);
             this.gbFormatting.Controls.Add(this.rbFormatHTML);
             this.gbFormatting.Controls.Add(this.rbFormatXML);
@@ -304,13 +306,25 @@
             // 
             // btnFormat
             // 
-            this.btnFormat.Location = new System.Drawing.Point(199, 16);
+            this.btnFormat.Location = new System.Drawing.Point(267, 16);
             this.btnFormat.Name = "btnFormat";
             this.btnFormat.Size = new System.Drawing.Size(75, 23);
             this.btnFormat.TabIndex = 4;
             this.btnFormat.Text = "Format";
             this.btnFormat.UseVisualStyleBackColor = true;
             this.btnFormat.Click += new System.EventHandler(this.btnFormat_Click);
+            // 
+            // rbFormatMini
+            // 
+            this.rbFormatMini.AutoSize = true;
+            this.rbFormatMini.Location = new System.Drawing.Point(179, 19);
+            this.rbFormatMini.Name = "rbFormatMini";
+            this.rbFormatMini.Size = new System.Drawing.Size(44, 17);
+            this.rbFormatMini.TabIndex = 5;
+            this.rbFormatMini.TabStop = true;
+            this.rbFormatMini.Text = "Mini";
+            this.rbFormatMini.UseVisualStyleBackColor = true;
+            this.rbFormatMini.Click += new System.EventHandler(this.rbFormatMini_Click);
             // 
             // XmlContentControl
             // 
@@ -363,6 +377,7 @@
         private System.Windows.Forms.RadioButton rbFormatHTML;
         private System.Windows.Forms.RadioButton rbFormatXML;
         private System.Windows.Forms.RadioButton rbFormatEsc;
+        private System.Windows.Forms.RadioButton rbFormatMini;
         internal System.Windows.Forms.Button btnFormat;
         private System.Windows.Forms.Panel panExecute;
         private System.Windows.Forms.Panel panSave;

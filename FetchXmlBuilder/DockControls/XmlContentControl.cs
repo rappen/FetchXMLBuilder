@@ -1,10 +1,10 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 using Cinteros.Xrm.XmlEditorUtils;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
@@ -133,24 +133,31 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void FormatAsXML()
         {
-            if (FetchIsHtml())
+            if (string.IsNullOrEmpty(txtXML.Text.Trim()))
             {
-                txtXML.Text = HttpUtility.HtmlDecode(txtXML.Text.Trim());
-            }
-            else if (FetchIsEscaped())
-            {
-                txtXML.Text = Uri.UnescapeDataString(txtXML.Text.Trim());
-            }
-            else
-            {
-                if (MessageBox.Show("Unrecognized encoding, unsure what to do with it.\n" +
-                    "Currently FXB can handle htmlencoded and urlescaped strings.\n\n" +
-                    "Would you like to submit an issue to FetchXML Builder to be able to handle this?",
-                    "Decode FetchXML", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
-                {
-                    System.Diagnostics.Process.Start("https://github.com/Innofactor/FetchXMLBuilder/issues/new");
-                }
                 return;
+            }
+            if (!FetchIsPlain() && !FetchIsMini())
+            {
+                if (FetchIsHtml())
+                {
+                    txtXML.Text = HttpUtility.HtmlDecode(txtXML.Text.Trim());
+                }
+                else if (FetchIsEscaped())
+                {
+                    txtXML.Text = Uri.UnescapeDataString(txtXML.Text.Trim());
+                }
+                else
+                {
+                    if (MessageBox.Show("Unrecognized encoding, unsure what to do with it.\n" +
+                        "Currently FXB can handle htmlencoded and urlescaped strings.\n\n" +
+                        "Would you like to submit an issue to FetchXML Builder to be able to handle this?",
+                        "Decode FetchXML", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start("https://github.com/Innofactor/FetchXMLBuilder/issues/new");
+                    }
+                    return;
+                }
             }
             FormatXML(false);
         }
@@ -180,22 +187,88 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             txtXML.Text = Uri.EscapeDataString(GetCompactXml());
         }
 
+        private void FormatAsMini()
+        {
+            if (!FetchIsPlain() && !FetchIsMini())
+            {
+                FormatAsXML();
+            }
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(txtXML.Text);
+            var comments = doc.SelectNodes("//comment()");
+            if (comments.Count > 0 && MessageBox.Show("Remove comments?", "Minify XML", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                foreach (XmlNode node in comments)
+                {
+                    node.ParentNode.RemoveChild(node);
+                }
+            }
+            txtXML.Text = StripSpaces(doc.OuterXml);
+        }
+
         private string GetCompactXml()
         {
             if (!FetchIsPlain())
             {
                 FormatAsXML();
             }
-            var xml = txtXML.Text;
+            return StripSpaces(txtXML.Text);
+        }
+
+        private static string StripSpaces(string xml)
+        {
             while (xml.Contains(" <")) xml = xml.Replace(" <", "<");
             while (xml.Contains(" >")) xml = xml.Replace(" >", ">");
             while (xml.Contains(" />")) xml = xml.Replace(" />", "/>");
             return xml.Trim();
         }
 
+        private XmlStyle GetStyle()
+        {
+            if (FetchIsMini())
+            {
+                return XmlStyle.Mini;
+            }
+            if (FetchIsHtml())
+            {
+                return XmlStyle.Html;
+            }
+            if (FetchIsEscaped())
+            {
+                return XmlStyle.Esc;
+            }
+            return XmlStyle.Formatted;
+        }
+
+        private void SetStyle(XmlStyle style)
+        {
+            switch (style)
+            {
+                case XmlStyle.Formatted:
+                    FormatAsXML();
+                    break;
+                case XmlStyle.Html:
+                    FormatAsHtml();
+                    break;
+                case XmlStyle.Esc:
+                    FormatAsEsc();
+                    break;
+                case XmlStyle.Mini:
+                    FormatAsMini();
+                    break;
+            }
+        }
+
         private bool FetchIsPlain()
         {
-            return txtXML.Text.Trim().ToLowerInvariant().StartsWith("<fetch");
+            var lines = txtXML.Text.Trim().Split('\n').Select(l => l.Trim()).ToList();
+            return lines.Count > 1 && lines[0].StartsWith("<fetch");
+        }
+
+        private bool FetchIsMini()
+        {
+            var lines = txtXML.Text.Trim().Split('\n').Select(l => l.Trim()).ToList();
+            return lines.Count == 1 && lines[0].StartsWith("<fetch");
         }
 
         private bool FetchIsHtml()
@@ -218,6 +291,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             var plain = FetchIsPlain();
             rbFormatEsc.Checked = FetchIsEscaped();
             rbFormatHTML.Checked = FetchIsHtml();
+            rbFormatMini.Checked = FetchIsMini();
             rbFormatXML.Checked = plain;
             btnFormat.Enabled = plain;
             btnExecute.Enabled = plain && !chkLiveUpdate.Checked;
@@ -270,6 +344,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             FormatAsEsc();
         }
 
+        private void rbFormatMini_Click(object sender, EventArgs e)
+        {
+            FormatAsMini();
+        }
+
         private void chkLiveUpdate_CheckedChanged(object sender, EventArgs e)
         {
             UpdateButtons();
@@ -315,5 +394,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         XML = 1,
         JSON = 2,
         SQL = 3
+    }
+
+    internal enum XmlStyle
+    {
+        Formatted,
+        Html,
+        Esc,
+        Mini
     }
 }
