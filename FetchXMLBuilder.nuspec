@@ -5,7 +5,7 @@
     <version>1.0.0</version>
     <title>FetchXML Builder for XrmToolBox</title>
     <authors>Jonas Rapp, Innofactor Sweden</authors>
-    <owners>Innofactor</owners>
+    <owners>rappen</owners>
     <projectUrl>http://fxb.xrmtoolbox.com</projectUrl>
     <iconUrl>http://fxb.xrmtoolbox.com/images/FXB-150-transp.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -47,8 +47,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="FetchXMLBuilder\bin\Release\Cinteros.Xrm.*.dll" target="lib\net452\Plugins" />
-    <file src="FetchXMLBuilder\bin\Release\Cinteros.Xrm.*.dll" target="lib\net452\Plugins" />
-    <file src="FetchXMLBuilder\bin\Release\WeifenLuo.WinFormsUI.*.dll" target="lib\net452\Plugins" />
+    <file src="FetchXMLBuilder\bin\Release\Cinteros.Xrm.FetchXmlBuilder.dll" target="lib\net452\Plugins" />
   </files>
 </package>

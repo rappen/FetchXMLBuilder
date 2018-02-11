@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Cinteros.Xrm.FetchXmlBuilder</RootNamespace>
-    <AssemblyName>Cinteros.Xrm.FetchXmlBuilder</AssemblyName>
+    <AssemblyName>Cinteros.Xrm.FetchXmlBuilder.Unmerged</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -39,8 +39,11 @@
     </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cinteros.Xrm.CRMWinForm, Version=2017.11.15.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Cinteros.Xrm.CRMWinForm.2017.11.15.2\lib\net452\Cinteros.Xrm.CRMWinForm.dll</HintPath>
+    <Reference Include="Cinteros.Xrm.CRMWinForm, Version=2018.2.11.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cinteros.Xrm.CRMWinForm.2018.2.11.1\lib\net452\Cinteros.Xrm.CRMWinForm.dll</HintPath>
+    </Reference>
+    <Reference Include="ILMerge">
+      <HintPath>..\packages\ILMerge.2.14.1208\tools\ILMerge.exe</HintPath>
     </Reference>
     <Reference Include="McTools.Xrm.Connection, Version=1.2017.10.15, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
       <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2017.10.15\lib\net462\McTools.Xrm.Connection.dll</HintPath>
@@ -109,20 +112,20 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=3.0.3.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>..\packages\DockPanelSuite.3.0.3\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=3.0.4.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>..\packages\DockPanelSuite.3.0.4\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
     </Reference>
-    <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015, Version=3.0.3.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>..\packages\DockPanelSuite.ThemeVS2015.3.0.3\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
+    <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015, Version=3.0.4.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>..\packages\DockPanelSuite.ThemeVS2015.3.0.4\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
     </Reference>
-    <Reference Include="XrmToolBox, Version=1.2017.11.20, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2017.11.20\lib\net462\XrmToolBox.exe</HintPath>
+    <Reference Include="XrmToolBox, Version=1.2018.1.20, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\XrmToolBoxPackage.1.2018.1.20\lib\net462\XrmToolBox.exe</HintPath>
     </Reference>
     <Reference Include="XrmToolBox.Extensibility, Version=1.2017.7.10, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2017.11.20\lib\net462\XrmToolBox.Extensibility.dll</HintPath>
+      <HintPath>..\packages\XrmToolBoxPackage.1.2018.1.20\lib\net462\XrmToolBox.Extensibility.dll</HintPath>
     </Reference>
     <Reference Include="XrmToolBox.PluginsStore, Version=1.2017.10.7, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2017.11.20\lib\net462\XrmToolBox.PluginsStore.dll</HintPath>
+      <HintPath>..\packages\XrmToolBoxPackage.1.2018.1.20\lib\net462\XrmToolBox.PluginsStore.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -397,10 +400,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Debug (
+    <PostBuildEvent>ilmerge.exe /target:library /copyattrs /targetplatform:v4,"C:\Windows\Microsoft.NET\Framework\v4.0.30319" "/out:Cinteros.Xrm.FetchXmlBuilder.dll" "$(TargetFileName)" "Cinteros.Xrm.CRMWinForm.dll" "Cinteros.Xrm.XmlEditorUtils.dll" "WeifenLuo.WinFormsUI.Docking.dll" "WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll"
+
+if $(ConfigurationName) == Debug (
   IF NOT EXIST Plugins mkdir Plugins
-  move /Y Cinteros.Xrm.*.dll Plugins
-  move /Y Cinteros.Xrm.*.pdb Plugins
+  move /Y  "Cinteros.Xrm.FetchXmlBuilder.dll" Plugins
 )</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
