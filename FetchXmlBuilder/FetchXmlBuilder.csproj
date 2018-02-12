@@ -382,7 +382,8 @@
     <None Include="ReleaseNotes\1.2018.1.rtf" />
     <None Include="ReleaseNotes\1.2018.0.1004.rtf" />
     <None Include="ReleaseNotes\1.2018.0.1005.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2018.2.rtf" />
+    <None Include="ReleaseNotes\1.2018.2.rtf" />
+    <EmbeddedResource Include="ReleaseNotes\1.2018.2.2.rtf" />
     <None Include="Resources\XSD fetch.cs.cmd" />
     <None Include="XrmToolBox.exe.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

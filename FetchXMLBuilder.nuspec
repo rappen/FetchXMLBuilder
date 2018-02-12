@@ -9,14 +9,14 @@
     <projectUrl>http://fxb.xrmtoolbox.com</projectUrl>
     <iconUrl>http://fxb.xrmtoolbox.com/images/FXB-150-transp.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <summary>Build FetchXML queries. Investigate data. Update views. Get code. Empower Your querying skills.</summary>
+    <summary>Build FetchXML queries. Investigate data. Update views. Get code. Empower yourself to achieve more.</summary>
     <description>
       The tool will assist in three major areas:
 
       1. Constructing FetchXML in ways that Advanced Find cannot
       - aggregates
       - outer joins
-      - "has no"-queries
+      - complex "not-in"-queries
       - attributes from multi-level linked entities
       - update existing views with altered queries
 
@@ -28,19 +28,20 @@
       3. Developer assistance
       - Generate C# QueryExpression code from fetch xml
       - Generate OData query string from fetch xml
+      - Generate SQL, JavaScript and C# stubs for queries
       - Easy to use UI to compose queries for reports in CRM
 
       The tool reads metadata from CRM to assist with selecting entities, attributes, relations and to perform validation of condition values.
 
-      To make it more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.
+      To make it even more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.
     </description>
     <releaseNotes>
-* #189 Makeover continues with docking layout for XML and JSON result windows
-* #191 Fixed bug with aggregate queries
-* #194 Allow multiple parallel filter nodes
-* Azure Application Insights for anonymous usage statistics
+#196 Don't mess with existing attributes when selecting new using Select Attributes dialog
+#197 Option to display FetchMXL minimized, for compact one-line use in code
+#198 Display values from Multi Select Option Sets
+#5-CRMWinForm Display labels of Two Option Set values
     </releaseNotes>
-    <copyright>Copyright Jonas Rapp (2016-2018 Innofactor AB, 2014-2016 Cinteros AB)</copyright>
+    <copyright>Copyright Jonas Rapp 2014-2018</copyright>
     <tags>XrmToolBox Plugins FetchXML Builder</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2017.10.19" />
