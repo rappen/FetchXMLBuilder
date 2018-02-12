@@ -8,6 +8,7 @@ using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
@@ -679,27 +680,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 return;
             }
             var attributes = new List<AttributeMetadata>(fxb.GetDisplayAttributes(entityName));
-            var selected = new List<string>();
-            foreach (TreeNode subnode in entityNode.Nodes)
-            {
-                if (subnode.Name == "attribute")
-                {
-                    var attr = TreeNodeHelper.GetAttributeFromNode(subnode, "name");
-                    if (!string.IsNullOrEmpty(attr))
-                    {
-                        selected.Add(attr);
-                    }
-                }
-            }
+            var selected = entityNode.Nodes.Cast<TreeNode>().Where(n => n.Name == "attribute").Select(n => TreeNodeHelper.GetAttributeFromNode(n, "name")).Where(a => !string.IsNullOrEmpty(a)).ToList();
             var selectAttributesDlg = new SelectAttributesDialog(attributes, selected);
             selectAttributesDlg.StartPosition = FormStartPosition.CenterParent;
             if (selectAttributesDlg.ShowDialog() == DialogResult.OK)
             {
+                var selectedAttributes = selectAttributesDlg.GetSelectedAttributes().Select(a => a.LogicalName);
                 var i = 0;
                 while (i < entityNode.Nodes.Count)
-                {
+                {   // Remove unselected previously added attributes
                     TreeNode subnode = entityNode.Nodes[i];
-                    if (subnode.Name == "attribute")
+                    var attributename = TreeNodeHelper.GetAttributeFromNode(subnode, "name");
+                    if (subnode.Name == "attribute" && !selectedAttributes.Contains(attributename))
                     {
                         entityNode.Nodes.Remove(subnode);
                     }
@@ -708,12 +700,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                         i++;
                     }
                 }
-                var selectedAttributes = selectAttributesDlg.GetSelectedAttributes();
-                foreach (var attribute in selectedAttributes)
-                {
+                foreach (var attribute in selectedAttributes.Where(a => !selected.Contains(a)))
+                {   // Add new attributes
                     var attrNode = TreeNodeHelper.AddChildNode(entityNode, "attribute");
                     var coll = new Dictionary<string, string>();
-                    coll.Add("name", attribute.LogicalName);
+                    coll.Add("name", attribute);
                     attrNode.Tag = coll;
                     TreeNodeHelper.SetNodeText(attrNode, fxb.settings.UseFriendlyNames);
                 }
