@@ -413,11 +413,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.dockContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dockContainer.BackColor = System.Drawing.SystemColors.Window;
             this.dockContainer.DefaultFloatWindowSize = new System.Drawing.Size(600, 400);
             this.dockContainer.DocumentStyle = WeifenLuo.WinFormsUI.Docking.DocumentStyle.DockingWindow;
             this.dockContainer.Location = new System.Drawing.Point(-1, 31);
-            this.dockContainer.Margin = new System.Windows.Forms.Padding(0);
             this.dockContainer.Name = "dockContainer";
             this.dockContainer.Size = new System.Drawing.Size(1101, 593);
             this.dockContainer.TabIndex = 33;
@@ -435,7 +433,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.Controls.Add(this.dockContainer);
             this.Controls.Add(this.toolStripMain);
             this.Controls.Add(this.splitter2);
-            this.Margin = new System.Windows.Forms.Padding(0);
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "FetchXmlBuilder";
             this.Size = new System.Drawing.Size(1101, 624);
