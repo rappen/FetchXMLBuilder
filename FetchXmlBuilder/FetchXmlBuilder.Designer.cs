@@ -308,7 +308,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiShowFetchXML.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowFetchXML.Image")));
             this.tsmiShowFetchXML.Name = "tsmiShowFetchXML";
             this.tsmiShowFetchXML.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-            this.tsmiShowFetchXML.Size = new System.Drawing.Size(219, 30);
+            this.tsmiShowFetchXML.Size = new System.Drawing.Size(211, 22);
             this.tsmiShowFetchXML.Text = "FetchXML";
             this.tsmiShowFetchXML.Click += new System.EventHandler(this.tsmiShowFetchXML_Click);
             // 
@@ -316,7 +316,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiShowSQL.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowSQL.Image")));
             this.tsmiShowSQL.Name = "tsmiShowSQL";
-            this.tsmiShowSQL.Size = new System.Drawing.Size(219, 30);
+            this.tsmiShowSQL.Size = new System.Drawing.Size(211, 22);
             this.tsmiShowSQL.Text = "SQL Query";
             this.tsmiShowSQL.Click += new System.EventHandler(this.tsmiShowSQL_Click);
             // 
@@ -324,7 +324,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiShowOData.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowOData.Image")));
             this.tsmiShowOData.Name = "tsmiShowOData";
-            this.tsmiShowOData.Size = new System.Drawing.Size(219, 30);
+            this.tsmiShowOData.Size = new System.Drawing.Size(211, 22);
             this.tsmiShowOData.Text = "OData 2.0";
             this.tsmiShowOData.Click += new System.EventHandler(this.tsmiShowOData_Click);
             // 
@@ -332,7 +332,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiShowQueryExpression.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowQueryExpression.Image")));
             this.tsmiShowQueryExpression.Name = "tsmiShowQueryExpression";
-            this.tsmiShowQueryExpression.Size = new System.Drawing.Size(219, 30);
+            this.tsmiShowQueryExpression.Size = new System.Drawing.Size(211, 22);
             this.tsmiShowQueryExpression.Text = "QueryExpression";
             this.tsmiShowQueryExpression.Click += new System.EventHandler(this.tsmiShowQueryExpression_Click);
             // 
@@ -340,7 +340,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiShowFetchXMLcs.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowFetchXMLcs.Image")));
             this.tsmiShowFetchXMLcs.Name = "tsmiShowFetchXMLcs";
-            this.tsmiShowFetchXMLcs.Size = new System.Drawing.Size(219, 30);
+            this.tsmiShowFetchXMLcs.Size = new System.Drawing.Size(211, 22);
             this.tsmiShowFetchXMLcs.Text = "FetchXML C# code";
             this.tsmiShowFetchXMLcs.Click += new System.EventHandler(this.tsmiShowFetchXMLcs_Click);
             // 
@@ -348,20 +348,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiShowFetchXMLjs.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowFetchXMLjs.Image")));
             this.tsmiShowFetchXMLjs.Name = "tsmiShowFetchXMLjs";
-            this.tsmiShowFetchXMLjs.Size = new System.Drawing.Size(219, 30);
+            this.tsmiShowFetchXMLjs.Size = new System.Drawing.Size(211, 22);
             this.tsmiShowFetchXMLjs.Text = "FetchXML JavaScript code";
             this.tsmiShowFetchXMLjs.Click += new System.EventHandler(this.tsmiShowFetchXMLjs_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(216, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(208, 6);
             // 
             // tsmiResetWindowLayout
             // 
             this.tsmiResetWindowLayout.Image = ((System.Drawing.Image)(resources.GetObject("tsmiResetWindowLayout.Image")));
             this.tsmiResetWindowLayout.Name = "tsmiResetWindowLayout";
-            this.tsmiResetWindowLayout.Size = new System.Drawing.Size(219, 30);
+            this.tsmiResetWindowLayout.Size = new System.Drawing.Size(211, 22);
             this.tsmiResetWindowLayout.Text = "Reset window layout";
             this.tsmiResetWindowLayout.Click += new System.EventHandler(this.tsmiResetWindowLayout_Click);
             // 
@@ -410,13 +410,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             // dockContainer
             // 
-            this.dockContainer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.dockContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dockContainer.BackColor = System.Drawing.SystemColors.Window;
             this.dockContainer.DefaultFloatWindowSize = new System.Drawing.Size(600, 400);
-            this.dockContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dockContainer.DocumentStyle = WeifenLuo.WinFormsUI.Docking.DocumentStyle.DockingWindow;
-            this.dockContainer.Location = new System.Drawing.Point(0, 31);
+            this.dockContainer.Location = new System.Drawing.Point(-1, 31);
+            this.dockContainer.Margin = new System.Windows.Forms.Padding(0);
             this.dockContainer.Name = "dockContainer";
-            this.dockContainer.Size = new System.Drawing.Size(1101, 590);
+            this.dockContainer.Size = new System.Drawing.Size(1101, 593);
             this.dockContainer.TabIndex = 33;
             // 
             // tmLiveUpdate
@@ -432,6 +435,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.Controls.Add(this.dockContainer);
             this.Controls.Add(this.toolStripMain);
             this.Controls.Add(this.splitter2);
+            this.Margin = new System.Windows.Forms.Padding(0);
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "FetchXmlBuilder";
             this.Size = new System.Drawing.Size(1101, 624);
