@@ -219,6 +219,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 switch (condition.@operator)
                 {
                     case @operator.eq:
+                    case @operator.on:
                         result.Append(" = ");
                         break;
                     case @operator.ne:
@@ -229,12 +230,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         result.Append(" < ");
                         break;
                     case @operator.le:
+                    case @operator.onorbefore:
                         result.Append(" <= ");
                         break;
                     case @operator.gt:
                         result.Append(" > ");
                         break;
                     case @operator.ge:
+                    case @operator.onorafter:
                         result.Append(" >= ");
                         break;
                     case @operator.@null:
