@@ -63,6 +63,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             cmbView.Items.Clear();
             cmbView.Text = "";
             txtFetch.Text = "";
+            lblNotCusomizable.Visible = false;
             btnOk.Enabled = false;
             var entity = ControlUtils.GetValueFromControl(cmbEntity);
             object selectedItem = null;
@@ -122,15 +123,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void UpdateFetch()
         {
-            if (cmbView.SelectedItem is ViewItem)
+            if (cmbView.SelectedItem is ViewItem viewitem)
             {
-                txtFetch.Text = ((ViewItem)cmbView.SelectedItem).GetFetch();
+                txtFetch.Text = viewitem.GetFetch();
                 txtFetch.Process();
+                lblNotCusomizable.Visible = !viewitem.IsCustomizable;
                 btnOk.Enabled = true;
             }
             else
             {
                 txtFetch.Text = "";
+                lblNotCusomizable.Visible = false;
                 btnOk.Enabled = false;
             }
         }

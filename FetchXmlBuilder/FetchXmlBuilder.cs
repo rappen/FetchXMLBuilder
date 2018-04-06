@@ -434,7 +434,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsbSave.Enabled = enabled;
                     tsmiSaveFile.Enabled = enabled && dockControlBuilder.FetchChanged && !string.IsNullOrEmpty(FileName);
                     tsmiSaveFileAs.Enabled = enabled;
-                    tsmiSaveView.Enabled = enabled && Service != null && View != null;
+                    tsmiSaveView.Enabled = enabled && Service != null && View != null && View.IsCustomizable();
                     tsmiSaveML.Enabled = enabled && Service != null && DynML != null;
                     tsmiSaveCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
                     tsmiSaveCWP.Enabled = enabled && Service != null && dockControlBuilder.FetchChanged && !string.IsNullOrEmpty(CWPFeed);
@@ -630,9 +630,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         throw new Exception("Need a connection to load views.");
                     }
                     var qexs = new QueryExpression("savedquery");
-                    qexs.ColumnSet = new ColumnSet("name", "returnedtypecode", "fetchxml");
+                    qexs.ColumnSet = new ColumnSet("name", "returnedtypecode", "fetchxml", "iscustomizable");
                     qexs.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
-                    qexs.Criteria.AddCondition("iscustomizable", ConditionOperator.Equal, true);
+                    qexs.Criteria.AddCondition("fetchxml", ConditionOperator.NotNull);
+                    if (!settings.OpenUncustomizableViews)
+                    {
+                        qexs.Criteria.AddCondition("iscustomizable", ConditionOperator.Equal, true);
+                    }
                     qexs.AddOrder("name", OrderType.Ascending);
                     var sysviews = Service.RetrieveMultiple(qexs);
                     foreach (var view in sysviews.Entities)
@@ -1736,6 +1740,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 LogUse("SaveOptions");
                 settings = settingDlg.GetSettings();
+                views = null;
                 if (allowStats != settings.LogUsage)
                 {
                     if (settings.LogUsage == true)

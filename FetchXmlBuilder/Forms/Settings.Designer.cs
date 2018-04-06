@@ -67,6 +67,7 @@
             this.llShowWelcome = new System.Windows.Forms.LinkLabel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
+            this.chkAppAllowUncustViews = new System.Windows.Forms.CheckBox();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -86,7 +87,7 @@
             this.gbEntities.Controls.Add(this.chkEntUnmanaged);
             this.gbEntities.Controls.Add(this.chkEntManaged);
             this.gbEntities.Controls.Add(this.chkEntAll);
-            this.gbEntities.Location = new System.Drawing.Point(12, 158);
+            this.gbEntities.Location = new System.Drawing.Point(12, 181);
             this.gbEntities.Name = "gbEntities";
             this.gbEntities.Size = new System.Drawing.Size(247, 258);
             this.gbEntities.TabIndex = 2;
@@ -225,7 +226,7 @@
             this.gbAttributes.Controls.Add(this.chkAttUnmanaged);
             this.gbAttributes.Controls.Add(this.chkAttManaged);
             this.gbAttributes.Controls.Add(this.chkAttAll);
-            this.gbAttributes.Location = new System.Drawing.Point(284, 158);
+            this.gbAttributes.Location = new System.Drawing.Point(284, 181);
             this.gbAttributes.Name = "gbAttributes";
             this.gbAttributes.Size = new System.Drawing.Size(247, 258);
             this.gbAttributes.TabIndex = 3;
@@ -360,7 +361,7 @@
             this.gbResult.Controls.Add(this.rbResGrid);
             this.gbResult.Location = new System.Drawing.Point(284, 12);
             this.gbResult.Name = "gbResult";
-            this.gbResult.Size = new System.Drawing.Size(247, 131);
+            this.gbResult.Size = new System.Drawing.Size(247, 154);
             this.gbResult.TabIndex = 1;
             this.gbResult.TabStop = false;
             this.gbResult.Text = "Result view";
@@ -429,7 +430,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.bgStats.Controls.Add(this.label1);
             this.bgStats.Controls.Add(this.chkStatAllow);
-            this.bgStats.Location = new System.Drawing.Point(12, 347);
+            this.bgStats.Location = new System.Drawing.Point(12, 360);
             this.bgStats.Name = "bgStats";
             this.bgStats.Size = new System.Drawing.Size(519, 80);
             this.bgStats.TabIndex = 4;
@@ -460,13 +461,14 @@
             // 
             // gbAppearance
             // 
+            this.gbAppearance.Controls.Add(this.chkAppAllowUncustViews);
             this.gbAppearance.Controls.Add(this.chkAppResultsNewWindow);
             this.gbAppearance.Controls.Add(this.chkAppNoSavePrompt);
             this.gbAppearance.Controls.Add(this.chkAppSingle);
             this.gbAppearance.Controls.Add(this.chkAppFriendly);
             this.gbAppearance.Location = new System.Drawing.Point(12, 12);
             this.gbAppearance.Name = "gbAppearance";
-            this.gbAppearance.Size = new System.Drawing.Size(247, 131);
+            this.gbAppearance.Size = new System.Drawing.Size(247, 154);
             this.gbAppearance.TabIndex = 0;
             this.gbAppearance.TabStop = false;
             this.gbAppearance.Text = "Appearance";
@@ -518,7 +520,7 @@
             this.panel1.Controls.Add(this.llShowWelcome);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
-            this.panel1.Location = new System.Drawing.Point(12, 433);
+            this.panel1.Location = new System.Drawing.Point(12, 446);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(517, 53);
             this.panel1.TabIndex = 5;
@@ -554,13 +556,23 @@
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             // 
+            // chkAppAllowUncustViews
+            // 
+            this.chkAppAllowUncustViews.AutoSize = true;
+            this.chkAppAllowUncustViews.Location = new System.Drawing.Point(20, 122);
+            this.chkAppAllowUncustViews.Name = "chkAppAllowUncustViews";
+            this.chkAppAllowUncustViews.Size = new System.Drawing.Size(198, 17);
+            this.chkAppAllowUncustViews.TabIndex = 6;
+            this.chkAppAllowUncustViews.Text = "Allow opening uncustomizable views";
+            this.chkAppAllowUncustViews.UseVisualStyleBackColor = true;
+            // 
             // Settings
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(543, 496);
+            this.ClientSize = new System.Drawing.Size(543, 509);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.gbAppearance);
             this.Controls.Add(this.gbResult);
@@ -627,5 +639,6 @@
         private System.Windows.Forms.CheckBox chkAppNoSavePrompt;
         private System.Windows.Forms.CheckBox chkAppResultsNewWindow;
         private System.Windows.Forms.LinkLabel llShowWelcome;
+        private System.Windows.Forms.CheckBox chkAppAllowUncustViews;
     }
 }

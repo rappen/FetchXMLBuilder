@@ -27,6 +27,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return view;
         }
 
+        public bool IsCustomizable => view.IsCustomizable();
+
         public string GetValue()
         {
             return view.Id.ToString();
@@ -43,6 +45,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 return view["query"].ToString();
             }
             return "";
+        }
+    }
+
+    public static class EntityExtensions
+    {
+        public static bool IsCustomizable(this Entity entity)
+        {
+            return entity != null && entity.Contains("iscustomizable") && entity["iscustomizable"] is BooleanManagedProperty iscust && iscust.Value;
         }
     }
 }

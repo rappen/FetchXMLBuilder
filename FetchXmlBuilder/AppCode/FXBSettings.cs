@@ -22,6 +22,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool DoNotPromptToSave { get; set; } = false;
         public DockStates DockStates { get; set; } = new DockStates();
         public ContentWindows ContentWindows { get; set; } = new ContentWindows();
+        public bool OpenUncustomizableViews { get; set; } = false;
     }
 
     public class QueryOptions
