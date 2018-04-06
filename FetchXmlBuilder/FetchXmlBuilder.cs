@@ -558,13 +558,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         internal string GetOData()
         {
-            if (Service == null || ConnectionDetail == null || ConnectionDetail.OrganizationDataServiceUrl == null)
+            try
             {
-                throw new Exception("Must have an active connection to CRM to compose OData query.");
+                if (Service == null || ConnectionDetail == null || ConnectionDetail.OrganizationDataServiceUrl == null)
+                {
+                    throw new Exception("Must have an active connection to CRM to compose OData query.");
+                }
+                FetchType fetch = dockControlBuilder.GetFetchType();
+                var odata = ODataCodeGenerator.GetODataQuery(fetch, ConnectionDetail.OrganizationDataServiceUrl, this);
+                return odata;
             }
-            FetchType fetch = dockControlBuilder.GetFetchType();
-            var odata = ODataCodeGenerator.GetODataQuery(fetch, ConnectionDetail.OrganizationDataServiceUrl, this);
-            return odata;
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
 
         internal void LiveXML_KeyUp(object sender, KeyEventArgs e)

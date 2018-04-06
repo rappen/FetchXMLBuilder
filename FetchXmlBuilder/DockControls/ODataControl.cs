@@ -22,7 +22,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         internal void DisplayOData(string url)
         {
-            try
+            if (Uri.TryCreate(url, UriKind.Absolute, out Uri uri))
             {
                 var prefix = "OData: ";
                 linkOData.Text = prefix + url;
@@ -32,9 +32,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     linkOData.Links[0].LinkData = url;
                 }
             }
-            catch (Exception ex)
+            else
             {
-                linkOData.Text = ex.Message;
+                linkOData.Text = url;
                 linkOData.Links.Clear();
             }
         }
