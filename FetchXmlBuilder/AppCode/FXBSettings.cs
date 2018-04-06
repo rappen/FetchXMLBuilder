@@ -29,7 +29,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     {
         public bool ShowQuickActions { get; set; } = true;
         public bool UseSingleQuotation { get; set; }
-        public int TreeHeight { get; set; } = -1;
     }
 
     public class MetadataOptions

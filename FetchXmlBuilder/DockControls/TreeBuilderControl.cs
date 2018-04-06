@@ -822,6 +822,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             moveUpToolStripMenuItem.Enabled = true;
         }
 
+        private void TreeBuilderControl_Load(object sender, EventArgs e)
+        {
+            splitContainer1.SplitterDistance = splitContainer1.Height * 3 / 4;
+        }
+
         private void TreeBuilderControl_FormClosing(object sender, FormClosingEventArgs e)
         {
             fxb.settings.QueryOptions.ShowQuickActions = gbQuickActions.IsExpanded();

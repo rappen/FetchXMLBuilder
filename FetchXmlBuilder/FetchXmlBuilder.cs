@@ -770,7 +770,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void ApplySettings()
         {
-            dockControlBuilder.SplitterPos = settings.QueryOptions.TreeHeight;
             var connsett = GetConnectionSetting();
             if (connsett != null && !string.IsNullOrWhiteSpace(connsett.FetchXML))
             {
@@ -1487,7 +1486,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         /// <summary>Saves various configurations to file for next session</summary>
         private void SaveSetting()
         {
-            settings.QueryOptions.TreeHeight = dockControlBuilder.SplitterPos;
             SettingsManager.Instance.Save(typeof(FetchXmlBuilder), settings, "[Common]");
             var connsett = new FXBConnectionSettings
             {
