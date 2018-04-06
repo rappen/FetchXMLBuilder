@@ -36,15 +36,18 @@
       To make it even more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.
     </description>
     <releaseNotes>
-#196 Don't mess with existing attributes when selecting new using Select Attributes dialog
-#197 Option to display FetchMXL minimized, for compact one-line use in code
-#198 Display values from Multi Select Option Sets
-#5-CRMWinForm Display labels of Two Option Set values
+#186 Result Grid will now show columns in the order they were defined in the query
+#199 Introduced option to allow opening uncustomizable views
+#200 Fixed problem with query builder properties window being minimized
+#202 Fixed SQL error with operators on, onorafter, onorbefore
+#204 Fixed ugly error when composing queries unsupported for OData 2.0
+* Minor UI fixes after XrmToolBox introduced docking layout
+* OData error when including attributes from both main and linked entities
     </releaseNotes>
     <copyright>Copyright Jonas Rapp 2014-2018</copyright>
     <tags>XrmToolBox Plugins FetchXML Builder</tags>
     <dependencies>
-      <dependency id="XrmToolBox" version="1.2017.10.19" />
+      <dependency id="XrmToolBox" version="1.2018.3.21" />
     </dependencies>
   </metadata>
   <files>
