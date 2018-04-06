@@ -4,12 +4,14 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using System.Linq;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
     public partial class ResultGrid : WeifenLuo.WinFormsUI.Docking.DockContent
     {
         FetchXmlBuilder form;
+        QueryInfo queryinfo;
 
         public ResultGrid(FetchXmlBuilder fetchXmlBuilder)
         {
@@ -23,14 +25,34 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             ApplySettingsToGrid();
         }
 
-        internal void SetData(EntityCollection entities)
+        internal void SetData(QueryInfo queryinfo)
         {
+            this.queryinfo = queryinfo;
+            var entities = queryinfo.Results;
             if (entities != null)
             {
                 this.EnsureVisible(form.dockContainer, form.settings.DockStates.ResultView);
             }
             crmGridView1.DataSource = entities;
             crmGridView1.Refresh();
+            ArrangeColumns();
+        }
+
+        private void ArrangeColumns()
+        {
+            if (queryinfo == null)
+            {
+                return;
+            }
+            var pos = 2;
+            foreach (var attribute in queryinfo.AttributesSignature?.Split('\n').Select(a => a.Trim()).Where(a => !string.IsNullOrWhiteSpace(a)))
+            {
+                if (crmGridView1.Columns.Contains(attribute))
+                {
+                    crmGridView1.Columns[attribute].DisplayIndex = pos;
+                    pos++;
+                }
+            }
             crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
         }
 
@@ -42,7 +64,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             crmGridView1.ClipboardCopyMode = form.settings.Results.CopyHeaders ?
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             crmGridView1.OrganizationService = form.Service;
-            crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
+            ArrangeColumns();
         }
 
         private void UpdateSettingsFromGrid()

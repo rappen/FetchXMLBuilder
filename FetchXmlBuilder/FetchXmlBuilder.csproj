@@ -139,6 +139,7 @@
     <Compile Include="AppCode\LogUsage.cs" />
     <Compile Include="AppCode\ODataCodeGenerator.cs" />
     <Compile Include="AppCode\OptionsetItem.cs" />
+    <Compile Include="AppCode\QueryInfo.cs" />
     <Compile Include="AppCode\QueryExpressionCodeGenerator.cs" />
     <Compile Include="AppCode\ViewItem.cs" />
     <Compile Include="AppCode\EntityItem.cs" />

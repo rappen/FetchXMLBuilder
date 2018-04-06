@@ -1204,6 +1204,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         query = new FetchExpression(fetch);
                     }
+                    var attributessignature = dockControlBuilder.GetAttributesSignature(null);
                     var start = DateTime.Now;
                     EntityCollection resultCollection = null;
                     EntityCollection tmpResult = null;
@@ -1248,7 +1249,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     else
                     {
-                        eventargs.Result = resultCollection;
+                        eventargs.Result = new QueryInfo
+                        {
+                            Query = query,
+                            AttributesSignature = attributessignature,
+                            Results = resultCollection
+                        };
                     }
                 })
             {
@@ -1263,7 +1269,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             ExecuteFetch(fetch);
                         }
                     }
-                    else if (completedargs.Result is EntityCollection entities)
+                    else if (completedargs.Result is QueryInfo queryinfo)
                     {
                         if (settings.Results.ResultOption == 0)
                         {
@@ -1273,7 +1279,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                                 resultpanecount++;
                                 newresults.Text = $"Results ({resultpanecount})";
                                 newresults.Show(dockContainer, settings.DockStates.ResultView);
-                                newresults.SetData(entities);
+                                newresults.SetData(queryinfo);
                             }
                             else
                             {
@@ -1282,7 +1288,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                                     dockControlGrid = new ResultGrid(this);
                                     dockControlGrid.Show(dockContainer, settings.DockStates.ResultView);
                                 }
-                                dockControlGrid.SetData(entities);
+                                dockControlGrid.SetData(queryinfo);
                                 dockControlGrid.Activate();
                             }
                         }
@@ -1290,12 +1296,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         {
                             if (settings.Results.SerializeStyle == 0)
                             {
-                                var serialized = EntityCollectionSerializer.Serialize(entities, SerializationStyle.Explicit);
+                                var serialized = EntityCollectionSerializer.Serialize(queryinfo.Results, SerializationStyle.Explicit);
                                 ShowResultControl(serialized.OuterXml, ContentType.Serialized_Result_XML, SaveFormat.XML, settings.DockStates.FetchResult);
                             }
                             else if (settings.Results.SerializeStyle == 1)
                             {
-                                var serialized = EntityCollectionSerializer.Serialize(entities, SerializationStyle.Basic);
+                                var serialized = EntityCollectionSerializer.Serialize(queryinfo.Results, SerializationStyle.Basic);
                                 ShowResultControl(serialized.OuterXml, ContentType.Serialized_Result_XML, SaveFormat.XML, settings.DockStates.FetchResult);
                             }
                             else if (settings.Results.SerializeStyle == 3)
