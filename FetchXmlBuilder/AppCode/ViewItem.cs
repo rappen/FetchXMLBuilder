@@ -52,7 +52,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     {
         public static bool IsCustomizable(this Entity entity)
         {
-            return entity != null && entity.Contains("iscustomizable") && entity["iscustomizable"] is BooleanManagedProperty iscust && iscust.Value;
+            return entity != null
+                && (entity.LogicalName == "userquery"
+                || (entity.Contains("iscustomizable")
+                    && entity["iscustomizable"] is BooleanManagedProperty iscust 
+                    && iscust.Value));
         }
     }
 }
