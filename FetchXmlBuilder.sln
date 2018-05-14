@@ -9,7 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlEditorUtils", "XmlEditor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{13AB47EF-2E67-4179-876C-88816794849B}"
 	ProjectSection(SolutionItems) = preProject
-		appveyor.yml = appveyor.yml
 		FetchXMLBuilder.nuspec = FetchXMLBuilder.nuspec
 	EndProjectSection
 EndProject
@@ -30,5 +29,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BB94D8EC-E778-4D0A-BE34-CBE2342DB0F3}
 	EndGlobalSection
 EndGlobal
