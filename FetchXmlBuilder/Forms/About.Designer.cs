@@ -32,8 +32,6 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label2 = new System.Windows.Forms.Label();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
-            this.linkLabel3 = new System.Windows.Forms.LinkLabel();
-            this.label3 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.linkLabel4 = new System.Windows.Forms.LinkLabel();
             this.label4 = new System.Windows.Forms.Label();
@@ -52,7 +50,7 @@
             // 
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel1.Location = new System.Drawing.Point(513, 157);
+            this.linkLabel1.Location = new System.Drawing.Point(513, 190);
             this.linkLabel1.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(270, 22);
@@ -64,7 +62,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(514, 53);
+            this.label2.Location = new System.Drawing.Point(514, 86);
             this.label2.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(59, 13);
@@ -74,34 +72,13 @@
             // linkLabel2
             // 
             this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Location = new System.Drawing.Point(611, 53);
+            this.linkLabel2.Location = new System.Drawing.Point(611, 86);
             this.linkLabel2.Name = "linkLabel2";
             this.linkLabel2.Size = new System.Drawing.Size(64, 13);
             this.linkLabel2.TabIndex = 4;
             this.linkLabel2.TabStop = true;
             this.linkLabel2.Text = "Jonas Rapp";
             this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
-            // 
-            // linkLabel3
-            // 
-            this.linkLabel3.AutoSize = true;
-            this.linkLabel3.Location = new System.Drawing.Point(611, 101);
-            this.linkLabel3.Name = "linkLabel3";
-            this.linkLabel3.Size = new System.Drawing.Size(72, 13);
-            this.linkLabel3.TabIndex = 6;
-            this.linkLabel3.TabStop = true;
-            this.linkLabel3.Text = "Innofactor AB";
-            this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel3_LinkClicked);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(514, 101);
-            this.label3.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(54, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Company:";
             // 
             // button1
             // 
@@ -116,7 +93,7 @@
             // linkLabel4
             // 
             this.linkLabel4.AutoSize = true;
-            this.linkLabel4.Location = new System.Drawing.Point(611, 77);
+            this.linkLabel4.Location = new System.Drawing.Point(611, 110);
             this.linkLabel4.Name = "linkLabel4";
             this.linkLabel4.Size = new System.Drawing.Size(99, 13);
             this.linkLabel4.TabIndex = 9;
@@ -127,7 +104,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(514, 77);
+            this.label4.Location = new System.Drawing.Point(514, 110);
             this.label4.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(42, 13);
@@ -137,7 +114,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(514, 29);
+            this.label5.Location = new System.Drawing.Point(514, 62);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(45, 13);
             this.label5.TabIndex = 10;
@@ -146,7 +123,7 @@
             // lblVersion
             // 
             this.lblVersion.AutoSize = true;
-            this.lblVersion.Location = new System.Drawing.Point(611, 29);
+            this.lblVersion.Location = new System.Drawing.Point(611, 62);
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(22, 13);
             this.lblVersion.TabIndex = 11;
@@ -155,9 +132,9 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.listAssemblies);
-            this.groupBox1.Location = new System.Drawing.Point(444, 314);
+            this.groupBox1.Location = new System.Drawing.Point(444, 274);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(392, 195);
+            this.groupBox1.Size = new System.Drawing.Size(392, 235);
             this.groupBox1.TabIndex = 16;
             this.groupBox1.TabStop = false;
             // 
@@ -173,7 +150,7 @@
             this.listAssemblies.Location = new System.Drawing.Point(3, 16);
             this.listAssemblies.Name = "listAssemblies";
             this.listAssemblies.ShowGroups = false;
-            this.listAssemblies.Size = new System.Drawing.Size(386, 176);
+            this.listAssemblies.Size = new System.Drawing.Size(386, 216);
             this.listAssemblies.TabIndex = 0;
             this.listAssemblies.UseCompatibleStateImageBehavior = false;
             this.listAssemblies.View = System.Windows.Forms.View.Details;
@@ -211,8 +188,6 @@
             this.Controls.Add(this.linkLabel4);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.linkLabel3);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.linkLabel2);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.linkLabel1);
@@ -232,8 +207,6 @@
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.LinkLabel linkLabel2;
-        private System.Windows.Forms.LinkLabel linkLabel3;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.LinkLabel linkLabel4;
         private System.Windows.Forms.Label label4;
