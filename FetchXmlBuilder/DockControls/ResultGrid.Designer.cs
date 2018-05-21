@@ -29,16 +29,17 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.crmGridView1 = new Cinteros.Xrm.CRMWinForm.CRMGridView();
             this.chkCopyHeaders = new System.Windows.Forms.CheckBox();
             this.chkIndexCol = new System.Windows.Forms.CheckBox();
             this.chkIdCol = new System.Windows.Forms.CheckBox();
             this.chkFriendly = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.lblOptionsExpander = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
+            this.chkLocalTime = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -50,8 +51,8 @@
             this.crmGridView1.AllowUserToDeleteRows = false;
             this.crmGridView1.AllowUserToOrderColumns = true;
             this.crmGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             this.crmGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
             this.crmGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.crmGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
@@ -73,10 +74,10 @@
             // chkCopyHeaders
             // 
             this.chkCopyHeaders.AutoSize = true;
-            this.chkCopyHeaders.Location = new System.Drawing.Point(335, 19);
+            this.chkCopyHeaders.Location = new System.Drawing.Point(449, 19);
             this.chkCopyHeaders.Name = "chkCopyHeaders";
             this.chkCopyHeaders.Size = new System.Drawing.Size(115, 17);
-            this.chkCopyHeaders.TabIndex = 3;
+            this.chkCopyHeaders.TabIndex = 50;
             this.chkCopyHeaders.Text = "Copy with Headers";
             this.chkCopyHeaders.UseVisualStyleBackColor = true;
             this.chkCopyHeaders.Click += new System.EventHandler(this.chkGridOptions_Click);
@@ -87,7 +88,7 @@
             this.chkIndexCol.Location = new System.Drawing.Point(120, 19);
             this.chkIndexCol.Name = "chkIndexCol";
             this.chkIndexCol.Size = new System.Drawing.Size(100, 17);
-            this.chkIndexCol.TabIndex = 2;
+            this.chkIndexCol.TabIndex = 20;
             this.chkIndexCol.Text = "Show Index Col";
             this.chkIndexCol.UseVisualStyleBackColor = true;
             this.chkIndexCol.Click += new System.EventHandler(this.chkGridOptions_Click);
@@ -98,7 +99,7 @@
             this.chkIdCol.Location = new System.Drawing.Point(226, 19);
             this.chkIdCol.Name = "chkIdCol";
             this.chkIdCol.Size = new System.Drawing.Size(103, 17);
-            this.chkIdCol.TabIndex = 1;
+            this.chkIdCol.TabIndex = 30;
             this.chkIdCol.Text = "Show Record Id";
             this.chkIdCol.UseVisualStyleBackColor = true;
             this.chkIdCol.Click += new System.EventHandler(this.chkGridOptions_Click);
@@ -109,7 +110,7 @@
             this.chkFriendly.Location = new System.Drawing.Point(16, 19);
             this.chkFriendly.Name = "chkFriendly";
             this.chkFriendly.Size = new System.Drawing.Size(98, 17);
-            this.chkFriendly.TabIndex = 0;
+            this.chkFriendly.TabIndex = 10;
             this.chkFriendly.Text = "Friendly Names";
             this.chkFriendly.UseVisualStyleBackColor = true;
             this.chkFriendly.Click += new System.EventHandler(this.chkGridOptions_Click);
@@ -118,6 +119,7 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.chkLocalTime);
             this.groupBox1.Controls.Add(this.lblOptionsExpander);
             this.groupBox1.Controls.Add(this.chkCopyHeaders);
             this.groupBox1.Controls.Add(this.chkFriendly);
@@ -130,15 +132,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "View Options";
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.groupBox1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 230);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(650, 43);
-            this.panel1.TabIndex = 5;
-            // 
             // lblOptionsExpander
             // 
             this.lblOptionsExpander.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -148,9 +141,29 @@
             this.lblOptionsExpander.Name = "lblOptionsExpander";
             this.lblOptionsExpander.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.lblOptionsExpander.Size = new System.Drawing.Size(14, 13);
-            this.lblOptionsExpander.TabIndex = 8;
+            this.lblOptionsExpander.TabIndex = 60;
             this.lblOptionsExpander.Text = "–";
             this.lblOptionsExpander.Click += new System.EventHandler(this.lblOptionsExpander_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.groupBox1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 230);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(650, 43);
+            this.panel1.TabIndex = 5;
+            // 
+            // chkLocalTime
+            // 
+            this.chkLocalTime.AutoSize = true;
+            this.chkLocalTime.Location = new System.Drawing.Point(335, 19);
+            this.chkLocalTime.Name = "chkLocalTime";
+            this.chkLocalTime.Size = new System.Drawing.Size(108, 17);
+            this.chkLocalTime.TabIndex = 40;
+            this.chkLocalTime.Text = "Show Local Time";
+            this.chkLocalTime.UseVisualStyleBackColor = true;
+            this.chkLocalTime.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
             // ResultGrid
             // 
@@ -182,5 +195,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lblOptionsExpander;
         private System.Windows.Forms.ToolTip tt;
+        private System.Windows.Forms.CheckBox chkLocalTime;
     }
 }

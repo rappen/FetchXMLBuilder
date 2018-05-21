@@ -50,6 +50,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool Friendly { get; set; }
         public bool Id { get; set; }
         public bool Index { get; set; }
+        public bool LocalTime { get; set; }
         public bool CopyHeaders { get; set; } = true;
         public int ResultOption { get; set; }
         public int SerializeStyle { get; set; }
