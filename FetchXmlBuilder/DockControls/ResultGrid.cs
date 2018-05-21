@@ -21,6 +21,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             chkFriendly.Checked = form.settings.Results.Friendly;
             chkIdCol.Checked = form.settings.Results.Id;
             chkIndexCol.Checked = form.settings.Results.Index;
+            chkLocalTime.Checked = form.settings.Results.LocalTime;
             chkCopyHeaders.Checked = form.settings.Results.CopyHeaders;
             ApplySettingsToGrid();
         }
@@ -61,6 +62,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             crmGridView1.ShowFriendlyNames = form.settings.Results.Friendly;
             crmGridView1.ShowIdColumn = form.settings.Results.Id;
             crmGridView1.ShowIndexColumn = form.settings.Results.Index;
+            crmGridView1.ShowLocalTimes = form.settings.Results.LocalTime;
             crmGridView1.ClipboardCopyMode = form.settings.Results.CopyHeaders ?
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             crmGridView1.OrganizationService = form.Service;
@@ -72,6 +74,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             form.settings.Results.Friendly = chkFriendly.Checked;
             form.settings.Results.Index = chkIndexCol.Checked;
             form.settings.Results.Id = chkIdCol.Checked;
+            form.settings.Results.LocalTime = chkLocalTime.Checked;
             form.settings.Results.CopyHeaders = chkCopyHeaders.Checked;
             ApplySettingsToGrid();
         }
