@@ -20,22 +20,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
     public partial class TreeBuilderControl : WeifenLuo.WinFormsUI.Docking.DockContent
     {
-        #region Public Properties
-
-        public static XmlSchemaSet Schemas
-        {
-            get
-            {
-                if (schemas == null)
-                {
-                    LoadDefinitionSchemas();
-                }
-                return schemas;
-            }
-        }
-
-        #endregion Public Properties
-
         #region Private Fields
 
         private static string fetchTemplate = "<fetch top=\"50\"><entity name=\"\"/></fetch>";
@@ -349,8 +333,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 try
                 {
+                    if (schemas == null)
+                    {
+                        LoadDefinitionSchemas();
+                    }
                     var fetchDoc = GetFetchDocument();
-                    fetchDoc.Schemas = Schemas;
+                    fetchDoc.Schemas = schemas;
                     fetchDoc.Validate(null);
                 }
                 catch (Exception ex)
