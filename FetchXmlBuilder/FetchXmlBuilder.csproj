@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Cinteros.Xrm.FetchXmlBuilder</RootNamespace>
-    <AssemblyName>Cinteros.Xrm.FetchXmlBuilder.Unmerged</AssemblyName>
+    <AssemblyName>Rappen.XTB.FXB.Unmerged</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -285,11 +285,11 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HistoryManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FetchXmlBuilder.cs">
+    <Compile Include="FetchXMLBuilder.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FetchXmlBuilder.Designer.cs">
-      <DependentUpon>FetchXmlBuilder.cs</DependentUpon>
+    <Compile Include="FetchXMLBuilder.Designer.cs">
+      <DependentUpon>FetchXMLBuilder.cs</DependentUpon>
     </Compile>
     <Compile Include="Resources\fetch.cs">
       <DependentUpon>fetch.xsd</DependentUpon>
@@ -330,8 +330,8 @@
     <EmbeddedResource Include="DockControls\TreeBuilderControl.resx">
       <DependentUpon>TreeBuilderControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FetchXmlBuilder.resx">
-      <DependentUpon>FetchXmlBuilder.cs</DependentUpon>
+    <EmbeddedResource Include="FetchXMLBuilder.resx">
+      <DependentUpon>FetchXMLBuilder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\About.resx">
       <DependentUpon>About.cs</DependentUpon>
@@ -392,12 +392,18 @@
   <ItemGroup>
     <None Include="ReleaseNotes\ReadMe.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Cinteros.Xrm.FetchXmlBuilder.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>ilmerge.exe /target:library /targetplatform:v4,"C:\Windows\Microsoft.NET\Framework\v4.0.30319" "/out:Cinteros.Xrm.FetchXmlBuilder.dll" "$(TargetFileName)" "Cinteros.Xrm.XmlEditorUtils.dll" "Cinteros.Xrm.CRMWinForm.dll"
+    <PostBuildEvent>ilmerge.exe /target:library /targetplatform:v4,"C:\Windows\Microsoft.NET\Framework\v4.0.30319" "/out:Rappen.XTB.FXB.dll" "$(TargetFileName)" "Rappen.XmlEditorUtils.dll" "Cinteros.Xrm.CRMWinForm.dll"
 
 if $(ConfigurationName) == Debug (
   IF NOT EXIST Plugins mkdir Plugins
+  move /Y  "Rappen.XTB.FXB.dll" Plugins
   move /Y  "Cinteros.Xrm.FetchXmlBuilder.dll" Plugins
 )</PostBuildEvent>
   </PropertyGroup>

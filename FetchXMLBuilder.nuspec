@@ -47,10 +47,11 @@
     <copyright>Copyright Jonas Rapp 2014-2018</copyright>
     <tags>XrmToolBox Plugins FetchXML Builder</tags>
     <dependencies>
-      <dependency id="XrmToolBox" version="1.2018.3.21" />
+      <dependency id="XrmToolBox" version="1.2018.6.24" />
     </dependencies>
   </metadata>
   <files>
+    <file src="FetchXMLBuilder\bin\Release\Rappen.XTB.FXB.dll" target="lib\net452\Plugins" />
     <file src="FetchXMLBuilder\bin\Release\Cinteros.Xrm.FetchXmlBuilder.dll" target="lib\net452\Plugins" />
   </files>
 </package>

@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Cinteros.Xrm.XmlEditorUtils</RootNamespace>
-    <AssemblyName>Cinteros.Xrm.XmlEditorUtils</AssemblyName>
+    <AssemblyName>Rappen.XmlEditorUtils</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
