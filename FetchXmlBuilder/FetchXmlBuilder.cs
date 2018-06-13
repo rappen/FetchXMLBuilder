@@ -22,7 +22,7 @@ using XrmToolBox.Extensibility.Interfaces;
 
 namespace Cinteros.Xrm.FetchXmlBuilder
 {
-    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver
+    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin
     {
 
         private const string aiEndpoint = "https://dc.services.visualstudio.com/v2/track";
@@ -327,6 +327,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         public void ReceivePreviewKeyDownShortcut(PreviewKeyDownEventArgs e)
         {
             // Nothing to do
+        }
+
+        public void ShowAboutDialog()
+        {
+            tslAbout_Click(null, null);
         }
 
         #endregion Public Methods
@@ -1713,7 +1718,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             dockControlBuilder?.tvFetch?.Focus();
         }
 
-        private void tsbAbout_Click(object sender, EventArgs e)
+        private void tslAbout_Click(object sender, EventArgs e)
         {
             LogUse("OpenAbout");
             var about = new About();

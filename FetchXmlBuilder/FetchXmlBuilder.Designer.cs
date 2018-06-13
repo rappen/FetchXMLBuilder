@@ -63,8 +63,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiResetWindowLayout = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbReturnToCaller = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbAbout = new System.Windows.Forms.ToolStripButton();
             this.tsbOptions = new System.Windows.Forms.ToolStripButton();
+            this.tslAbout = new System.Windows.Forms.ToolStripLabel();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.dockContainer = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.tmLiveUpdate = new System.Windows.Forms.Timer(this.components);
@@ -88,8 +88,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbView,
             this.tsbReturnToCaller,
             this.toolStripSeparator3,
-            this.tsbAbout,
-            this.tsbOptions});
+            this.tsbOptions,
+            this.tslAbout});
             this.toolStripMain.Location = new System.Drawing.Point(0, 0);
             this.toolStripMain.Name = "toolStripMain";
             this.toolStripMain.Size = new System.Drawing.Size(1101, 31);
@@ -380,16 +380,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 31);
             // 
-            // tsbAbout
-            // 
-            this.tsbAbout.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tsbAbout.Image = ((System.Drawing.Image)(resources.GetObject("tsbAbout.Image")));
-            this.tsbAbout.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbAbout.Name = "tsbAbout";
-            this.tsbAbout.Size = new System.Drawing.Size(68, 28);
-            this.tsbAbout.Text = "About";
-            this.tsbAbout.Click += new System.EventHandler(this.tsbAbout_Click);
-            // 
             // tsbOptions
             // 
             this.tsbOptions.Image = ((System.Drawing.Image)(resources.GetObject("tsbOptions.Image")));
@@ -398,6 +388,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbOptions.Size = new System.Drawing.Size(86, 28);
             this.tsbOptions.Text = "Options...";
             this.tsbOptions.Click += new System.EventHandler(this.tsbOptions_Click);
+            // 
+            // tslAbout
+            // 
+            this.tslAbout.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.tslAbout.Image = ((System.Drawing.Image)(resources.GetObject("tslAbout.Image")));
+            this.tslAbout.IsLink = true;
+            this.tslAbout.Name = "tslAbout";
+            this.tslAbout.Size = new System.Drawing.Size(106, 28);
+            this.tslAbout.Text = "by Jonas Rapp";
+            this.tslAbout.Click += new System.EventHandler(this.tslAbout_Click);
             // 
             // splitter2
             // 
@@ -464,7 +464,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveView;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-        private System.Windows.Forms.ToolStripButton tsbAbout;
         private System.Windows.Forms.ToolStripDropDownButton tsbView;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveCWP;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenCWP;
@@ -487,5 +486,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiShowFetchXML;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowFetchXMLcs;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowFetchXMLjs;
+        private System.Windows.Forms.ToolStripLabel tslAbout;
     }
 }
