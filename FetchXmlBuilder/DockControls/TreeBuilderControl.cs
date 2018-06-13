@@ -13,15 +13,33 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
     public partial class TreeBuilderControl : WeifenLuo.WinFormsUI.Docking.DockContent
     {
+        #region Public Properties
+
+        public static XmlSchemaSet Schemas
+        {
+            get
+            {
+                if (schemas == null)
+                {
+                    LoadDefinitionSchemas();
+                }
+                return schemas;
+            }
+        }
+
+        #endregion Public Properties
+
         #region Private Fields
 
         private static string fetchTemplate = "<fetch top=\"50\"><entity name=\"\"/></fetch>";
+        private static XmlSchemaSet schemas = null;
         private bool fetchChanged = false;
         private FetchXmlBuilder fxb;
         private HistoryManager historyMgr = new HistoryManager();
@@ -89,12 +107,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             var xml = new XmlDocument();
             xml.LoadXml(fetch);
             return IsFetchAggregate(xml);
-        }
-
-        private static bool IsFetchAggregate(XmlDocument xml)
-        {
-            var fetchnode = xml.SelectSingleNode("fetch");
-            return fetchnode.Attributes["aggregate"]?.Value == "true";
         }
 
         internal void ApplyCurrentSettings()
@@ -303,9 +315,28 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, FetchXmlBuilder.friendlyNames);
         }
 
+        private static bool IsFetchAggregate(XmlDocument xml)
+        {
+            var fetchnode = xml.SelectSingleNode("fetch");
+            return fetchnode.Attributes["aggregate"]?.Value == "true";
+        }
+
         #endregion Internal Methods
 
         #region Private Methods
+
+        private static void LoadDefinitionSchemas()
+        {
+            schemas = new XmlSchemaSet();
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            var shufdefresource = assembly.GetManifestResourceNames().Where(n => n.ToLowerInvariant().EndsWith("fetch.xsd")).FirstOrDefault();
+
+            Stream stream = assembly.GetManifestResourceStream(shufdefresource);
+            if (stream != null)
+            {
+                schemas.Add(null, XmlReader.Create(stream));
+            }
+        }
 
         private bool BuildAndValidateXml(bool validate = true)
         {
@@ -318,25 +349,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 try
                 {
-                    Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-                    string assemblyname = assembly.ManifestModule.ToString();
-                    if (assemblyname.ToLower().EndsWith(".dll"))
-                    {
-                        assemblyname = assemblyname.Substring(0, assemblyname.Length - 4);
-                    }
-                    assemblyname = assemblyname.Replace("Merged", "");
-                    assemblyname = assemblyname.Replace("..", ".");
-                    Stream stream = assembly.GetManifestResourceStream(assemblyname + ".Resources.fetch.xsd");
-                    if (stream == null)
-                    {
-                        result = "Cannot find resource " + assemblyname + ".Resources.fetch.xsd";
-                    }
-                    else
-                    {
-                        var fetchDoc = GetFetchDocument();
-                        fetchDoc.Schemas.Add(null, XmlReader.Create(stream));
-                        fetchDoc.Validate(null);
-                    }
+                    var fetchDoc = GetFetchDocument();
+                    fetchDoc.Schemas = Schemas;
+                    fetchDoc.Validate(null);
                 }
                 catch (Exception ex)
                 {
@@ -822,14 +837,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             moveUpToolStripMenuItem.Enabled = true;
         }
 
-        private void TreeBuilderControl_Load(object sender, EventArgs e)
-        {
-            splitContainer1.SplitterDistance = splitContainer1.Height * 3 / 4;
-        }
-
         private void TreeBuilderControl_FormClosing(object sender, FormClosingEventArgs e)
         {
             fxb.settings.QueryOptions.ShowQuickActions = gbQuickActions.IsExpanded();
+        }
+
+        private void TreeBuilderControl_Load(object sender, EventArgs e)
+        {
+            splitContainer1.SplitterDistance = splitContainer1.Height * 3 / 4;
         }
 
         private void tvFetch_AfterSelect(object sender, TreeViewEventArgs e)
