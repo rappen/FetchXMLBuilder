@@ -68,6 +68,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.dockContainer = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.tmLiveUpdate = new System.Windows.Forms.Timer(this.components);
+            this.tsmiSaveViewAs = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -182,6 +183,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveFileAs,
             this.toolStripSeparator5,
             this.tsmiSaveView,
+            this.tsmiSaveViewAs,
             this.tsmiSaveML,
             this.tsmiSaveCWP});
             this.tsbSave.Image = ((System.Drawing.Image)(resources.GetObject("tsbSave.Image")));
@@ -197,7 +199,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveFile.Image = ((System.Drawing.Image)(resources.GetObject("tsmiSaveFile.Image")));
             this.tsmiSaveFile.Name = "tsmiSaveFile";
             this.tsmiSaveFile.ShortcutKeyDisplayString = "Ctrl+S";
-            this.tsmiSaveFile.Size = new System.Drawing.Size(226, 22);
+            this.tsmiSaveFile.Size = new System.Drawing.Size(234, 30);
             this.tsmiSaveFile.Text = "Save File";
             this.tsmiSaveFile.Click += new System.EventHandler(this.tsmiSaveFile_Click);
             // 
@@ -206,21 +208,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveFileAs.Image = ((System.Drawing.Image)(resources.GetObject("tsmiSaveFileAs.Image")));
             this.tsmiSaveFileAs.Name = "tsmiSaveFileAs";
             this.tsmiSaveFileAs.ShortcutKeyDisplayString = "F12";
-            this.tsmiSaveFileAs.Size = new System.Drawing.Size(226, 22);
+            this.tsmiSaveFileAs.Size = new System.Drawing.Size(234, 30);
             this.tsmiSaveFileAs.Text = "Save File as...";
             this.tsmiSaveFileAs.Click += new System.EventHandler(this.tsmiSaveFileAs_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(223, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(231, 6);
             // 
             // tsmiSaveView
             // 
             this.tsmiSaveView.Enabled = false;
             this.tsmiSaveView.Image = ((System.Drawing.Image)(resources.GetObject("tsmiSaveView.Image")));
             this.tsmiSaveView.Name = "tsmiSaveView";
-            this.tsmiSaveView.Size = new System.Drawing.Size(226, 22);
+            this.tsmiSaveView.Size = new System.Drawing.Size(234, 30);
             this.tsmiSaveView.Text = "Save View";
             this.tsmiSaveView.Click += new System.EventHandler(this.tsmiSaveView_Click);
             // 
@@ -229,7 +231,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveML.Enabled = false;
             this.tsmiSaveML.Image = ((System.Drawing.Image)(resources.GetObject("tsmiSaveML.Image")));
             this.tsmiSaveML.Name = "tsmiSaveML";
-            this.tsmiSaveML.Size = new System.Drawing.Size(226, 22);
+            this.tsmiSaveML.Size = new System.Drawing.Size(234, 30);
             this.tsmiSaveML.Text = "Save Dynamic Marketing List";
             this.tsmiSaveML.Click += new System.EventHandler(this.tsmiSaveML_Click);
             // 
@@ -237,7 +239,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiSaveCWP.Enabled = false;
             this.tsmiSaveCWP.Name = "tsmiSaveCWP";
-            this.tsmiSaveCWP.Size = new System.Drawing.Size(226, 22);
+            this.tsmiSaveCWP.Size = new System.Drawing.Size(234, 30);
             this.tsmiSaveCWP.Text = "Save as CWP Feed...";
             this.tsmiSaveCWP.Click += new System.EventHandler(this.tsmiSaveCWP_Click);
             // 
@@ -425,6 +427,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tmLiveUpdate.Interval = 500;
             this.tmLiveUpdate.Tick += new System.EventHandler(this.tmLiveUpdate_Tick);
             // 
+            // tsmiSaveViewAs
+            // 
+            this.tsmiSaveViewAs.Enabled = false;
+            this.tsmiSaveViewAs.Image = ((System.Drawing.Image)(resources.GetObject("tsmiSaveViewAs.Image")));
+            this.tsmiSaveViewAs.Name = "tsmiSaveViewAs";
+            this.tsmiSaveViewAs.Size = new System.Drawing.Size(234, 30);
+            this.tsmiSaveViewAs.Text = "Save View as...";
+            this.tsmiSaveViewAs.Click += new System.EventHandler(this.tsmiSaveView_Click);
+            // 
             // FetchXmlBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -487,5 +498,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiShowFetchXMLcs;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowFetchXMLjs;
         private System.Windows.Forms.ToolStripLabel tslAbout;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSaveViewAs;
     }
 }

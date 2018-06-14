@@ -441,6 +441,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiSaveFile.Enabled = enabled && dockControlBuilder.FetchChanged && !string.IsNullOrEmpty(FileName);
                     tsmiSaveFileAs.Enabled = enabled;
                     tsmiSaveView.Enabled = enabled && Service != null && View != null && View.IsCustomizable();
+                    tsmiSaveViewAs.Enabled = tsmiSaveView.Enabled;
                     tsmiSaveML.Enabled = enabled && Service != null && DynML != null;
                     tsmiSaveCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
                     tsmiSaveCWP.Enabled = enabled && Service != null && dockControlBuilder.FetchChanged && !string.IsNullOrEmpty(CWPFeed);
@@ -643,7 +644,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         throw new Exception("Need a connection to load views.");
                     }
                     var qexs = new QueryExpression("savedquery");
-                    qexs.ColumnSet = new ColumnSet("name", "returnedtypecode", "fetchxml", "iscustomizable");
+                    qexs.ColumnSet = new ColumnSet("name", "returnedtypecode", "fetchxml", "layoutxml", "iscustomizable");
                     qexs.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
                     qexs.Criteria.AddCondition("fetchxml", ConditionOperator.NotNull);
                     if (!settings.OpenUncustomizableViews)
@@ -669,7 +670,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         }
                     }
                     var qexu = new QueryExpression("userquery");
-                    qexu.ColumnSet = new ColumnSet("name", "returnedtypecode", "fetchxml");
+                    qexu.ColumnSet = new ColumnSet("name", "returnedtypecode", "fetchxml", "layoutxml");
                     qexu.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
                     qexu.AddOrder("name", OrderType.Ascending);
                     var userviews = Service.RetrieveMultiple(qexu);
@@ -1513,7 +1514,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             SettingsManager.Instance.Save(typeof(FetchXmlBuilder), connsett, ConnectionDetail?.ConnectionName);
         }
 
-        private void SaveView()
+        private void SaveView(bool saveas)
         {
             var currentAttributes = dockControlBuilder.GetAttributesSignature(null);
             if (currentAttributes != attributesChecksum)
@@ -1523,7 +1524,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     "Cannot save view", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (View.LogicalName == "savedquery")
+            var viewname = View["name"].ToString();
+            if (saveas)
+            {
+                var newviewname = Prompt.ShowDialog("Enter name for the new personal view", "Save View As", viewname);
+                if (string.IsNullOrEmpty(newviewname))
+                {
+                    MessageBox.Show("No name for new view.", "Save View As", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (newviewname.ToLowerInvariant() == viewname.ToLowerInvariant())
+                {
+                    MessageBox.Show("Enter a new name for this view.", "Save View As", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                viewname = newviewname;
+            }
+            else if (View.LogicalName == "savedquery")
             {
                 if (MessageBox.Show("This will update and publish the saved query in CRM.\n\nConfirm!", "Confirm",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.Cancel)
@@ -1531,17 +1548,37 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     return;
                 }
             }
-            var msg = View.LogicalName == "savedquery" ? "Saving and publishing {0}..." : "Saving {0}...";
-            WorkAsync(new WorkAsyncInfo(string.Format(msg, View["name"]),
-                (eventargs) =>
+            var xml = dockControlBuilder.GetFetchString(false, false);
+            var entityname = View["returnedtypecode"].ToString();
+            var newView = new Entity(saveas ? "userquery" : View.LogicalName);
+            newView["fetchxml"] = xml;
+            if (saveas)
+            {
+                newView["name"] = viewname;
+                newView["layoutxml"] = View["layoutxml"];
+                newView["returnedtypecode"] = View["returnedtypecode"];
+                newView["querytype"] = 0;
+            }
+            else
+            {
+                newView.Id = View.Id;
+            }
+
+            var msg = newView.LogicalName == "savedquery" ? "Saving and publishing {0}..." : "Saving {0}...";
+            WorkAsync(new WorkAsyncInfo(string.Format(msg, viewname),
+                (worker, eventargs) =>
                 {
-                    var xml = dockControlBuilder.GetFetchString(false, false);
-                    Entity newView = new Entity(View.LogicalName);
-                    newView.Id = View.Id;
-                    newView.Attributes.Add("fetchxml", xml);
-                    Service.Update(newView);
+                    if (newView.Id.Equals(Guid.Empty))
+                    {
+                        newView.Id = Service.Create(newView);
+                        eventargs.Result = newView;
+                    }
+                    else
+                    {
+                        Service.Update(newView);
+                    }
                     LogUse("SaveView");
-                    if (View.LogicalName == "savedquery")
+                    if (newView.LogicalName == "savedquery")
                     {
                         var pubRequest = new PublishXmlRequest();
                         pubRequest.ParameterXml = string.Format(
@@ -1549,7 +1586,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             View["returnedtypecode"].ToString());
                         Service.Execute(pubRequest);
                     }
-                    View["fetchxml"] = xml;
                 })
             {
                 PostWorkCallBack = (completedargs) =>
@@ -1560,6 +1596,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     else
                     {
+                        if (completedargs.Result is Entity newview)
+                        {
+                            entityname = newview["returnedtypecode"].ToString();
+                            if (!views.ContainsKey(entityname + "|U"))
+                            {
+                                views.Add(entityname + "|U", new List<Entity>());
+                            }
+                            views[entityname + "|U"].Add(newView);
+                            View = newview;
+                        }
                         dockControlBuilder.ClearChanged();
                     }
                 }
@@ -1836,7 +1882,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsmiSaveView_Click(object sender, EventArgs e)
         {
-            SaveView();
+            SaveView(sender == tsmiSaveViewAs);
         }
 
         private void tsmiShowFetchXML_Click(object sender, EventArgs e)
