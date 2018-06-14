@@ -14,6 +14,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private readonly Dictionary<string, string> collec;
         private string controlsCheckSum = "";
         TreeNode node;
+        private bool aggregate;
 
         #region Delegates
 
@@ -58,7 +59,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, false, FetchXmlBuilder.friendlyNames);
                 }
             }
-            var aggregate = TreeBuilderControl.IsFetchAggregate(node);
+            aggregate = TreeBuilderControl.IsFetchAggregate(node);
             cmbAggregate.Enabled = aggregate;
             chkGroupBy.Enabled = aggregate;
             if (!aggregate)
@@ -125,7 +126,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void chkGroupBy_CheckedChanged(object sender, EventArgs e)
         {
+            EnableAggregateControls();
+        }
+
+        private void cmbAggregate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            EnableAggregateControls();
+        }
+
+        private void EnableAggregateControls()
+        {
             cmbDateGrouping.Enabled = chkGroupBy.Checked;
+            chkDistinct.Enabled = aggregate && !chkGroupBy.Checked;// && cmbAggregate.Text == "countcolumn";
+            if (!chkDistinct.Enabled)
+            {
+                chkDistinct.Checked = false;
+            }
             chkUserTZ.Enabled = chkGroupBy.Checked;
             if (!chkGroupBy.Checked)
             {

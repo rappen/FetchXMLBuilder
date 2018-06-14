@@ -38,6 +38,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.label7 = new System.Windows.Forms.Label();
             this.cmbDateGrouping = new System.Windows.Forms.ComboBox();
             this.chkUserTZ = new System.Windows.Forms.CheckBox();
+            this.chkDistinct = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label2
@@ -104,6 +105,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbAggregate.Sorted = true;
             this.cmbAggregate.TabIndex = 30;
             this.cmbAggregate.Tag = "aggregate";
+            this.cmbAggregate.SelectedIndexChanged += new System.EventHandler(this.cmbAggregate_SelectedIndexChanged);
             // 
             // label5
             // 
@@ -157,14 +159,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbDateGrouping.Name = "cmbDateGrouping";
             this.cmbDateGrouping.Size = new System.Drawing.Size(283, 21);
             this.cmbDateGrouping.Sorted = true;
-            this.cmbDateGrouping.TabIndex = 34;
+            this.cmbDateGrouping.TabIndex = 40;
             this.cmbDateGrouping.Tag = "dategrouping";
             // 
             // chkUserTZ
             // 
             this.chkUserTZ.AutoSize = true;
             this.chkUserTZ.Enabled = false;
-            this.chkUserTZ.Location = new System.Drawing.Point(109, 124);
+            this.chkUserTZ.Location = new System.Drawing.Point(149, 124);
             this.chkUserTZ.Name = "chkUserTZ";
             this.chkUserTZ.Size = new System.Drawing.Size(96, 17);
             this.chkUserTZ.TabIndex = 37;
@@ -172,10 +174,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.chkUserTZ.Text = "User time zone";
             this.chkUserTZ.UseVisualStyleBackColor = true;
             // 
+            // chkDistinct
+            // 
+            this.chkDistinct.AutoSize = true;
+            this.chkDistinct.Enabled = false;
+            this.chkDistinct.Location = new System.Drawing.Point(82, 124);
+            this.chkDistinct.Name = "chkDistinct";
+            this.chkDistinct.Size = new System.Drawing.Size(61, 17);
+            this.chkDistinct.TabIndex = 34;
+            this.chkDistinct.Tag = "distinct";
+            this.chkDistinct.Text = "Distinct";
+            this.chkDistinct.UseVisualStyleBackColor = true;
+            // 
             // attributeControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.chkDistinct);
             this.Controls.Add(this.chkUserTZ);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.cmbDateGrouping);
@@ -205,5 +220,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox cmbDateGrouping;
         private System.Windows.Forms.CheckBox chkUserTZ;
+        private System.Windows.Forms.CheckBox chkDistinct;
     }
 }
