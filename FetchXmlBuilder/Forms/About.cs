@@ -46,8 +46,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 assemblyName.Contains("XrmToolBox") ? "AAAAAAAAAAAB" :
                 assemblyName.Equals(Assembly.GetExecutingAssembly().GetName().Name) ? "AAAAAAAAAAAC" :
                 assemblyName.Contains("Jonas") ? "AAAAAAAAAAAD" :
-                assemblyName.Contains("Innofactor") ? "AAAAAAAAAAAE" :
-                assemblyName.Contains("Cinteros") ? "AAAAAAAAAAAF" :
+                assemblyName.Contains("Rappen") ? "AAAAAAAAAAAE" :
+                assemblyName.Contains("Innofactor") ? "AAAAAAAAAAAF" :
+                assemblyName.Contains("Cinteros") ? "AAAAAAAAAAAG" :
                 assemblyName;
         }
 

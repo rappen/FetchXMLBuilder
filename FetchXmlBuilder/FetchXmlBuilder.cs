@@ -104,7 +104,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         public string HelpUrl
         {
-            get { return "http://jonasrapp.cinteros.se/p/fxb.html?src=FXBhelp"; }
+            get { return "http://jonasrapp.net/fxb"; }
         }
 
         public string RepositoryName
@@ -114,7 +114,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         public string UserName
         {
-            get { return "Innofactor"; }
+            get { return "rappen"; }
         }
 
         #endregion Public Properties
