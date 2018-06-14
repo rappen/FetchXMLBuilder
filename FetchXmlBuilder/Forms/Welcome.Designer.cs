@@ -40,6 +40,8 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label2 = new System.Windows.Forms.Label();
             this.llStats = new System.Windows.Forms.LinkLabel();
+            this.cmbVersions = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -100,10 +102,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtNotes.BackColor = System.Drawing.SystemColors.Window;
             this.txtNotes.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtNotes.Location = new System.Drawing.Point(491, 125);
+            this.txtNotes.Location = new System.Drawing.Point(491, 156);
             this.txtNotes.Name = "txtNotes";
             this.txtNotes.ReadOnly = true;
-            this.txtNotes.Size = new System.Drawing.Size(428, 355);
+            this.txtNotes.Size = new System.Drawing.Size(428, 328);
             this.txtNotes.TabIndex = 28;
             this.txtNotes.Text = "";
             this.txtNotes.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.txtNotes_LinkClicked);
@@ -181,6 +183,25 @@
             this.llStats.Text = "Information";
             this.llStats.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llStats_LinkClicked);
             // 
+            // cmbVersions
+            // 
+            this.cmbVersions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbVersions.FormattingEnabled = true;
+            this.cmbVersions.Location = new System.Drawing.Point(569, 131);
+            this.cmbVersions.Name = "cmbVersions";
+            this.cmbVersions.Size = new System.Drawing.Size(93, 21);
+            this.cmbVersions.TabIndex = 34;
+            this.cmbVersions.SelectedIndexChanged += new System.EventHandler(this.cmbVersions_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(488, 134);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(75, 13);
+            this.label3.TabIndex = 35;
+            this.label3.Text = "Release notes";
+            // 
             // Welcome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -188,6 +209,8 @@
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.button1;
             this.ClientSize = new System.Drawing.Size(944, 558);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.cmbVersions);
             this.Controls.Add(this.llStats);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.lblContinue);
@@ -207,6 +230,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Welcome to FetchXML Builder";
             this.TopMost = true;
+            this.Load += new System.EventHandler(this.Welcome_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -225,5 +249,7 @@
         private System.Windows.Forms.Label lblContinue;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.LinkLabel llStats;
+        private System.Windows.Forms.ComboBox cmbVersions;
+        private System.Windows.Forms.Label label3;
     }
 }

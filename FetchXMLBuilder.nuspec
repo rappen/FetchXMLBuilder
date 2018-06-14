@@ -4,10 +4,10 @@
     <id>Cinteros.Xrm.FetchXMLBuilder</id>
     <version>1.0.0</version>
     <title>FetchXML Builder for XrmToolBox</title>
-    <authors>Jonas Rapp, Innofactor Sweden</authors>
+    <authors>Jonas Rapp</authors>
     <owners>rappen</owners>
     <projectUrl>http://fxb.xrmtoolbox.com</projectUrl>
-    <iconUrl>http://fxb.xrmtoolbox.com/images/FXB-150-transp.png</iconUrl>
+    <iconUrl>http://fxb.xrmtoolbox.com/images/FXB-150-tsp.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>Build FetchXML queries. Investigate data. Update views. Get code. Empower yourself to achieve more.</summary>
     <description>
@@ -36,13 +36,21 @@
       To make it even more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.
     </description>
     <releaseNotes>
-#186 Result Grid will now show columns in the order they were defined in the query
-#199 Introduced option to allow opening uncustomizable views
-#200 Fixed problem with query builder properties window being minimized
-#202 Fixed SQL error with operators on, onorafter, onorbefore
-#204 Fixed ugly error when composing queries unsupported for OData 2.0
-* Minor UI fixes after XrmToolBox introduced docking layout
-* OData error when including attributes from both main and linked entities
+-- New features--
+#170 Save View As... Create a new personal view from existing
+#210 Adding option to show dates with local time in result grid
+Possible to review previous release notes in Welcome dialog
+
+-- Bug fixes --
+#129 Handle values for Fiscal conditions correctly
+#205 Don't treat personal views as uncustomizable
+#206 Distinct on countcolumn aggregate
+
+-- Internal --
+Rebranded with Jonas personal brand
+Restructuring with assembly name Rappen.XTB.FXB.dll
+Improved fetch schema load for XML validation
+Implemented IAboutPlugin for generic access to About dialog
     </releaseNotes>
     <copyright>Copyright Jonas Rapp 2014-2018</copyright>
     <tags>XrmToolBox Plugins FetchXML Builder</tags>

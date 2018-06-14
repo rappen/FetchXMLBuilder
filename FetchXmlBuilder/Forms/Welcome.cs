@@ -11,52 +11,32 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
     {
         public static void ShowWelcome(Control owner)
         {
-            var notes = string.Empty;
             var assembly = Assembly.GetExecutingAssembly();
             var version = assembly.GetName().Version;
 
-            var releaseresource = assembly.GetManifestResourceNames()
-                .Where(n => n.ToLowerInvariant().Contains(".releasenotes.") && ExtractReleaseVersions(n) <= version)
-                .OrderByDescending(n => ExtractReleaseVersions(n))
-                .FirstOrDefault();
-
-            if (releaseresource != null)
-            {
-                using (Stream stream = assembly.GetManifestResourceStream(releaseresource))
-                {
-                    if (stream != null)
-                    {
-                        using (StreamReader reader = new StreamReader(stream))
-                        {
-                            notes = reader.ReadToEnd();
-                        }
-                    }
-                }
-            }
+            var releaseresources = assembly.GetManifestResourceNames()
+                .Where(n => n.ToLowerInvariant().Contains(".releasenotes."))
+                .Select(n => new ReleaseDoc(n))
+                .Where(n => n.Version <= version)
+                .OrderByDescending(n => n.Version);
+            
             var welcome = new Welcome();
+            welcome.cmbVersions.Items.AddRange(releaseresources.ToArray());
             welcome.txtWelcome.Text = welcome.txtWelcome.Text.Replace("{version}", version.ToString());
-            welcome.txtNotes.Rtf = notes.ToString();
             welcome.ShowDialog(owner);
-        }
-
-        private static Version ExtractReleaseVersions(string filename)
-        {
-            filename = filename.ToLowerInvariant();
-            if (filename.Contains(".releasenotes.") && !filename.EndsWith(".releasenotes."))
-            {
-                filename = filename.Substring(filename.IndexOf(".releasenotes.") + 14);
-            }
-            if (filename.EndsWith(".rtf"))
-            {
-                filename = filename.Substring(0, filename.IndexOf(".rtf"));
-            }
-            var version = new Version(filename);
-            return version;
         }
 
         private Welcome()
         {
             InitializeComponent();
+        }
+
+        private void Welcome_Load(object sender, EventArgs e)
+        {
+            if (cmbVersions.Items.Count > 0)
+            {
+                cmbVersions.SelectedIndex = 0;
+            }
         }
 
         private void llTwitter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -88,13 +68,51 @@ Jonas", "Anonymous statistics", MessageBoxButtons.OK, MessageBoxIcon.Information
             var url = e.LinkText;
             if (url.StartsWith("#"))
             {
-                url = "https://github.com/Innofactor/FetchXMLBuilder/issues/" + url.Substring(1);
+                url = "https://github.com/rappen/FetchXMLBuilder/issues/" + url.Substring(1);
             }
             if (url.StartsWith("@"))
             {
                 url = "https://twitter.com/" + url.Substring(1);
             }
             System.Diagnostics.Process.Start(url);
+        }
+
+        private void cmbVersions_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var notes = string.Empty;
+            if (cmbVersions.SelectedItem is ReleaseDoc releaseresource)
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                using (Stream stream = assembly.GetManifestResourceStream(releaseresource.ResourceName))
+                {
+                    if (stream != null)
+                    {
+                        using (StreamReader reader = new StreamReader(stream))
+                        {
+                            notes = reader.ReadToEnd();
+                        }
+                    }
+                }
+            }
+            txtNotes.Rtf = notes.ToString();
+        }
+    }
+
+    public class ReleaseDoc
+    {
+        public string ResourceName;
+        public Version Version;
+
+        public ReleaseDoc(string resourcename)
+        {
+            ResourceName = resourcename;
+            var docver = resourcename.ToLowerInvariant().Split(new string[] { ".releasenotes." }, StringSplitOptions.None)[1].Replace(".rtf", "");
+            Version = new Version(docver);
+        }
+
+        public override string ToString()
+        {
+            return Version.ToString();
         }
     }
 }
