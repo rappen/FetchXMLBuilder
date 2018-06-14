@@ -172,6 +172,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case ConditionOperator.LastXFiscalPeriods:
                 case ConditionOperator.NextXFiscalYears:
                 case ConditionOperator.NextXFiscalPeriods:
+                case ConditionOperator.InFiscalPeriod:
+                case ConditionOperator.InFiscalPeriodAndYear:
+                case ConditionOperator.InFiscalYear:
+                case ConditionOperator.InOrAfterFiscalPeriodAndYear:
+                case ConditionOperator.InOrBeforeFiscalPeriodAndYear:
                     result = AttributeTypeCode.Integer;
                     break;
             }
@@ -187,6 +192,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case ConditionOperator.NotIn:
                 case ConditionOperator.Between:
                 case ConditionOperator.NotBetween:
+                case ConditionOperator.InFiscalPeriodAndYear:
+                case ConditionOperator.InOrAfterFiscalPeriodAndYear:
+                case ConditionOperator.InOrBeforeFiscalPeriodAndYear:
                     result = true;
                     break;
             }
