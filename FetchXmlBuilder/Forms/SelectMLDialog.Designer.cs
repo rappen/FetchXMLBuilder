@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings1 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectMLDialog));
             this.panel1 = new System.Windows.Forms.Panel();
             this.cmbML = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -158,6 +159,7 @@
             xmlViewerSettings1.AttributeValue = System.Drawing.Color.Blue;
             xmlViewerSettings1.Comment = System.Drawing.Color.Empty;
             xmlViewerSettings1.Element = System.Drawing.Color.DarkRed;
+            xmlViewerSettings1.QuoteCharacter = '\"';
             xmlViewerSettings1.Tag = System.Drawing.Color.Blue;
             xmlViewerSettings1.Value = System.Drawing.Color.Black;
             this.txtFetch.Settings = xmlViewerSettings1;
@@ -175,6 +177,7 @@
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SelectMLDialog";
             this.Text = "Select View";
             this.panel1.ResumeLayout(false);

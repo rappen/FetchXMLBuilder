@@ -59,6 +59,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.chkStatAllow = new System.Windows.Forms.CheckBox();
             this.gbAppearance = new System.Windows.Forms.GroupBox();
+            this.chkAppAllowUncustViews = new System.Windows.Forms.CheckBox();
             this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
             this.chkAppNoSavePrompt = new System.Windows.Forms.CheckBox();
             this.chkAppSingle = new System.Windows.Forms.CheckBox();
@@ -67,7 +68,6 @@
             this.llShowWelcome = new System.Windows.Forms.LinkLabel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.chkAppAllowUncustViews = new System.Windows.Forms.CheckBox();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -473,6 +473,16 @@
             this.gbAppearance.TabStop = false;
             this.gbAppearance.Text = "Appearance";
             // 
+            // chkAppAllowUncustViews
+            // 
+            this.chkAppAllowUncustViews.AutoSize = true;
+            this.chkAppAllowUncustViews.Location = new System.Drawing.Point(20, 122);
+            this.chkAppAllowUncustViews.Name = "chkAppAllowUncustViews";
+            this.chkAppAllowUncustViews.Size = new System.Drawing.Size(198, 17);
+            this.chkAppAllowUncustViews.TabIndex = 6;
+            this.chkAppAllowUncustViews.Text = "Allow opening uncustomizable views";
+            this.chkAppAllowUncustViews.UseVisualStyleBackColor = true;
+            // 
             // chkAppResultsNewWindow
             // 
             this.chkAppResultsNewWindow.AutoSize = true;
@@ -555,16 +565,6 @@
             this.btnOK.TabIndex = 0;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
-            // 
-            // chkAppAllowUncustViews
-            // 
-            this.chkAppAllowUncustViews.AutoSize = true;
-            this.chkAppAllowUncustViews.Location = new System.Drawing.Point(20, 122);
-            this.chkAppAllowUncustViews.Name = "chkAppAllowUncustViews";
-            this.chkAppAllowUncustViews.Size = new System.Drawing.Size(198, 17);
-            this.chkAppAllowUncustViews.TabIndex = 6;
-            this.chkAppAllowUncustViews.Text = "Allow opening uncustomizable views";
-            this.chkAppAllowUncustViews.UseVisualStyleBackColor = true;
             // 
             // Settings
             // 

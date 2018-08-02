@@ -29,12 +29,14 @@
         private void InitializeComponent()
         {
             CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings1 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectViewDialog));
             this.panel1 = new System.Windows.Forms.Panel();
             this.cmbView = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cmbEntity = new System.Windows.Forms.ComboBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.lblNotCusomizable = new System.Windows.Forms.Label();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.panOk = new System.Windows.Forms.Panel();
             this.btnOk = new System.Windows.Forms.Button();
@@ -42,7 +44,6 @@
             this.button2 = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.txtFetch = new CSRichTextBoxSyntaxHighlighting.XMLViewer();
-            this.lblNotCusomizable = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panOk.SuspendLayout();
@@ -118,6 +119,18 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(566, 38);
             this.panel2.TabIndex = 6;
+            // 
+            // lblNotCusomizable
+            // 
+            this.lblNotCusomizable.AutoSize = true;
+            this.lblNotCusomizable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNotCusomizable.ForeColor = System.Drawing.Color.Red;
+            this.lblNotCusomizable.Location = new System.Drawing.Point(144, 13);
+            this.lblNotCusomizable.Name = "lblNotCusomizable";
+            this.lblNotCusomizable.Size = new System.Drawing.Size(108, 13);
+            this.lblNotCusomizable.TabIndex = 8;
+            this.lblNotCusomizable.Text = "Not customizable!";
+            this.lblNotCusomizable.Visible = false;
             // 
             // btnRefresh
             // 
@@ -196,18 +209,6 @@
             this.txtFetch.TabIndex = 3;
             this.txtFetch.Text = "";
             // 
-            // lblNotCusomizable
-            // 
-            this.lblNotCusomizable.AutoSize = true;
-            this.lblNotCusomizable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNotCusomizable.ForeColor = System.Drawing.Color.Red;
-            this.lblNotCusomizable.Location = new System.Drawing.Point(144, 13);
-            this.lblNotCusomizable.Name = "lblNotCusomizable";
-            this.lblNotCusomizable.Size = new System.Drawing.Size(108, 13);
-            this.lblNotCusomizable.TabIndex = 8;
-            this.lblNotCusomizable.Text = "Not customizable!";
-            this.lblNotCusomizable.Visible = false;
-            // 
             // SelectViewDialog
             // 
             this.AcceptButton = this.btnOk;
@@ -218,6 +219,7 @@
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SelectViewDialog";
             this.Text = "Select View";
             this.panel1.ResumeLayout(false);
