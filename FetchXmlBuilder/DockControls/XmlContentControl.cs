@@ -195,7 +195,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 FormatAsXML();
             }
             XmlDocument doc = new XmlDocument();
-			doc.LoadXml(txtXML.Text);
+            doc.LoadXml(txtXML.Text);
             var comments = doc.SelectNodes("//comment()");
             if (comments.Count > 0 && MessageBox.Show("Remove comments?", "Minify XML", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
@@ -205,17 +205,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 }
             }
 
-	        string xml;
-			using (var stringWriter = new StringWriter())
-			{
-				using (var xmlWriter = new XmlFragmentWriter(stringWriter))
-				{
-					xmlWriter.QuoteChar = fxb.settings.QueryOptions.UseSingleQuotation ? '\'' : '"';
-					doc.Save(xmlWriter);
-					xml = stringWriter.ToString();
-				}
-			}
-			txtXML.Text = StripSpaces(xml);
+            string xml;
+            using (var stringWriter = new StringWriter())
+            {
+                using (var xmlWriter = new XmlFragmentWriter(stringWriter))
+                {
+                    xmlWriter.QuoteChar = fxb.settings.QueryOptions.UseSingleQuotation ? '\'' : '"';
+                    doc.Save(xmlWriter);
+                    xml = stringWriter.ToString();
+                }
+            }
+            txtXML.Text = StripSpaces(xml);
         }
 
         private string GetCompactXml()
