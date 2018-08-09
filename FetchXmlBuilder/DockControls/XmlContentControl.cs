@@ -1,6 +1,7 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 using Cinteros.Xrm.XmlEditorUtils;
 using System;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Windows.Forms;
@@ -8,7 +9,7 @@ using System.Xml;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
-    public partial class XmlContentControl : WeifenLuo.WinFormsUI.Docking.DockContent
+	public partial class XmlContentControl : WeifenLuo.WinFormsUI.Docking.DockContent
     {
         private string findtext = "";
         private FetchXmlBuilder fxb;
@@ -194,7 +195,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 FormatAsXML();
             }
             XmlDocument doc = new XmlDocument();
-            doc.LoadXml(txtXML.Text);
+			doc.LoadXml(txtXML.Text);
             var comments = doc.SelectNodes("//comment()");
             if (comments.Count > 0 && MessageBox.Show("Remove comments?", "Minify XML", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
@@ -203,7 +204,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     node.ParentNode.RemoveChild(node);
                 }
             }
-            txtXML.Text = StripSpaces(doc.OuterXml);
+
+	        string xml;
+			using (var stringWriter = new StringWriter())
+			{
+				using (var xmlWriter = new XmlFragmentWriter(stringWriter))
+				{
+					xmlWriter.QuoteChar = fxb.settings.QueryOptions.UseSingleQuotation ? '\'' : '"';
+					doc.Save(xmlWriter);
+					xml = stringWriter.ToString();
+				}
+			}
+			txtXML.Text = StripSpaces(xml);
         }
 
         private string GetCompactXml()
