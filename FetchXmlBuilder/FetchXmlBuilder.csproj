@@ -232,6 +232,7 @@
     <Compile Include="DockControls\TreeBuilderControl.designer.cs">
       <DependentUpon>TreeBuilderControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppCode\XmlFragmentWriter.cs" />
     <Compile Include="FetchXMLBuilderPlugin.cs" />
     <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>
