@@ -320,11 +320,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 valueType == AttributeTypeCode.BigInt ||
                 valueType == AttributeTypeCode.Decimal ||
                 valueType == AttributeTypeCode.Double ||
-                valueType == AttributeTypeCode.Money ||
-                valueType == AttributeTypeCode.Lookup ||
-                valueType == AttributeTypeCode.Customer ||
-                valueType == AttributeTypeCode.Owner ||
-                valueType == AttributeTypeCode.Uniqueidentifier)
+                valueType == AttributeTypeCode.Money)
             {
                 validConditionsList.Add(new OperatorItem(ConditionOperator.Between));
                 validConditionsList.Add(new OperatorItem(ConditionOperator.NotBetween));
@@ -403,11 +399,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualBusinessId));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserId));
                     break;
-                case AttributeTypeCode.Lookup:
-                case AttributeTypeCode.Customer:
                 case AttributeTypeCode.Owner:
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualBusinessId));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserId));
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.NotEqualUserId));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserOrUserHierarchy));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserOrUserHierarchyAndTeams));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserOrUserTeams));
