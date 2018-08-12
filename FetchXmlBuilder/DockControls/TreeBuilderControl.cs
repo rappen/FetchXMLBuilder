@@ -277,6 +277,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 ParseXML(fetch, false);
                 RefreshSelectedNode();
+                fxb.UpdateLiveXML();
             }
             fxb.EnableDisableHistoryButtons(historyMgr);
         }
