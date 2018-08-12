@@ -12,6 +12,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             public string Name { get; set; }
             public string Value { get; set; }
         }
+
         public static string GetCSharpCode(string fetchXml)
         {
             var data = new List<NameValue>();

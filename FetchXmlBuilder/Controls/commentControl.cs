@@ -15,13 +15,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         public delegate void SaveEventHandler(object sender, SaveEventArgs e);
 
-        #endregion
+        #endregion Delegates
 
         #region Event Handlers
 
         public event SaveEventHandler Saved;
 
-        #endregion
+        #endregion Event Handlers
 
         public commentControl()
         {
@@ -55,7 +55,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         }
 
         /// <summary>
-        /// Sends a connection success message 
+        /// Sends a connection success message
         /// </summary>
         /// <param name="service">IOrganizationService generated</param>
         /// <param name="parameters">Lsit of parameter</param>

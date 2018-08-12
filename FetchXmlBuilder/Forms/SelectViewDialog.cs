@@ -2,20 +2,13 @@
 using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 {
     public partial class SelectViewDialog : Form
     {
-        FetchXmlBuilder Caller;
+        private FetchXmlBuilder Caller;
         public Entity View;
 
         public SelectViewDialog(FetchXmlBuilder caller)

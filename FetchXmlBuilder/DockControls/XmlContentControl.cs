@@ -9,14 +9,16 @@ using System.Xml;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
-	public partial class XmlContentControl : WeifenLuo.WinFormsUI.Docking.DockContent
+    public partial class XmlContentControl : WeifenLuo.WinFormsUI.Docking.DockContent
     {
         private string findtext = "";
         private FetchXmlBuilder fxb;
         private ContentType contenttype;
         private SaveFormat format;
 
-        internal XmlContentControl(FetchXmlBuilder caller) : this(ContentType.FetchXML, SaveFormat.XML, caller) { }
+        internal XmlContentControl(FetchXmlBuilder caller) : this(ContentType.FetchXML, SaveFormat.XML, caller)
+        {
+        }
 
         internal XmlContentControl(ContentType contentType, SaveFormat saveFormat, FetchXmlBuilder caller)
         {

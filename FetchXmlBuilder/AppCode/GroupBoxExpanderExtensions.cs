@@ -8,7 +8,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
     public static class GroupBoxExpanderExtensions
     {
-        const int _collapsedHeight = 20;
+        private const int _collapsedHeight = 20;
 
         #region Public Methods
 

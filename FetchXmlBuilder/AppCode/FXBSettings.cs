@@ -1,7 +1,5 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using System;
-using System.Collections.Generic;
-using System.Reflection;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode

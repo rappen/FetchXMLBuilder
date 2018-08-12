@@ -1,27 +1,27 @@
 ﻿/****************************** Module Header ******************************\
 * Module Name:  XMLViewer.cs
-* Project:	    CSRichTextBoxSyntaxHighlighting 
+* Project:	    CSRichTextBoxSyntaxHighlighting
 * Copyright (c) Microsoft Corporation.
-* 
-* This XMLViewer class inherits System.Windows.Forms.RichTextBox and it is used 
-* to display an Xml in a specified format. 
-* 
-* RichTextBox uses the Rtf format to show the test. The XMLViewer will 
+*
+* This XMLViewer class inherits System.Windows.Forms.RichTextBox and it is used
+* to display an Xml in a specified format.
+*
+* RichTextBox uses the Rtf format to show the test. The XMLViewer will
 * convert the Xml to Rtf with some formats specified in the XMLViewerSettings,
 * and then set the Rtf property to the value.
-* 
+*
 * This source is subject to the Microsoft Public License.
 * See http://www.microsoft.com/opensource/licenses.mspx#Ms-PL.
 * All other rights reserved.
-* 
-* THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, 
-* EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED 
+*
+* THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
+* EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED
 * WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
 \***************************************************************************/
 
 using System;
-using System.Text;
 using System.Drawing;
+using System.Text;
 using System.Xml;
 
 namespace CSRichTextBoxSyntaxHighlighting
@@ -29,6 +29,7 @@ namespace CSRichTextBoxSyntaxHighlighting
     public class XMLViewer : System.Windows.Forms.RichTextBox
     {
         private XMLViewerSettings settings;
+
         /// <summary>
         /// The format settings.
         /// </summary>
@@ -76,7 +77,7 @@ namespace CSRichTextBoxSyntaxHighlighting
                 string rtfFormat = @"{{\rtf1\ansi\ansicpg1252\deff0\deflang1033\deflangfe2052
 {{\fonttbl{{\f0\fnil Courier New;}}}}
 {{\colortbl ;{0}}}
-\viewkind4\uc1\pard\lang1033\f0\fs18 
+\viewkind4\uc1\pard\lang1033\f0\fs18
 {1}}}";
 
                 // Get the XDocument from the Text property.
@@ -93,7 +94,6 @@ namespace CSRichTextBoxSyntaxHighlighting
                 // Construct the completed Rtf, and set the Rtf property to this value.
                 this.Rtf = string.Format(rtfFormat, Settings.ToRtfFormatString(),
                     xmlRtfContent.ToString());
-
             }
             catch (System.Xml.XmlException xmlException)
             {
@@ -117,7 +117,7 @@ namespace CSRichTextBoxSyntaxHighlighting
             // Construct the indent.
             string indent = new string(' ', 2 * level);
 
-            // If the element has child elements or value, then add the element to the 
+            // If the element has child elements or value, then add the element to the
             // Rtf. {{0}} will be replaced with the attributes and {{1}} will be replaced
             // with the child elements or value.
             if (element.ChildNodes.Count > 0 && !(element.ChildNodes.Count == 1 && element.ChildNodes[0] is XmlText))
@@ -139,7 +139,6 @@ namespace CSRichTextBoxSyntaxHighlighting
                     childElementsRtfContent.Append(childElementRtfContent);
                 }
             }
-
             else if (element is XmlComment)
             {
                 elementRtfFormat = string.Format(@"
@@ -155,7 +154,7 @@ namespace CSRichTextBoxSyntaxHighlighting
                     element.Value.Replace("\r\n", "\n").Replace("\n", "\\line "));
             }
 
-            // If !string.IsNullOrWhiteSpace(element.Value), then construct the Rtf 
+            // If !string.IsNullOrWhiteSpace(element.Value), then construct the Rtf
             // of the value.
             else if (element.ChildNodes.Count == 1 && element.ChildNodes[0] is XmlText)
             {
@@ -174,7 +173,7 @@ namespace CSRichTextBoxSyntaxHighlighting
                     CharacterEncoder.Encode(((XmlText)element.ChildNodes[0]).Value.Trim()));
             }
 
-            // If !string.IsNullOrWhiteSpace(element.Value), then construct the Rtf 
+            // If !string.IsNullOrWhiteSpace(element.Value), then construct the Rtf
             // of the value.
             else if (!string.IsNullOrWhiteSpace(element.Value))
             {

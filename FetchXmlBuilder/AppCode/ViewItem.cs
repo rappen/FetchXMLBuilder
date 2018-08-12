@@ -1,10 +1,5 @@
 ﻿using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
@@ -55,7 +50,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return entity != null
                 && (entity.LogicalName == "userquery"
                 || (entity.Contains("iscustomizable")
-                    && entity["iscustomizable"] is BooleanManagedProperty iscust 
+                    && entity["iscustomizable"] is BooleanManagedProperty iscust
                     && iscust.Value));
         }
     }

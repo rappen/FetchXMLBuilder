@@ -1,17 +1,17 @@
 ﻿using Cinteros.Xrm.CRMWinForm;
+using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics;
-using System.Windows.Forms;
-using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
     public partial class ResultGrid : WeifenLuo.WinFormsUI.Docking.DockContent
     {
-        FetchXmlBuilder form;
-        QueryInfo queryinfo;
+        private FetchXmlBuilder form;
+        private QueryInfo queryinfo;
 
         public ResultGrid(FetchXmlBuilder fetchXmlBuilder)
         {

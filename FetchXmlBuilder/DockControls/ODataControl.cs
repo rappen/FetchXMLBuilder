@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
@@ -38,7 +31,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 linkOData.Links.Clear();
             }
         }
-        
+
         private void ODataControl_DockStateChanged(object sender, EventArgs e)
         {
             DockPanel.DockBottomPortion = 80;
@@ -83,6 +76,5 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 fxb.LogUse("ExecuteOData");
             }
         }
-
     }
 }

@@ -19,7 +19,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 .Select(n => new ReleaseDoc(n))
                 .Where(n => n.Version <= version)
                 .OrderByDescending(n => n.Version);
-            
+
             var welcome = new Welcome();
             welcome.cmbVersions.Items.AddRange(releaseresources.ToArray());
             welcome.txtWelcome.Text = welcome.txtWelcome.Text.Replace("{version}", version.ToString());

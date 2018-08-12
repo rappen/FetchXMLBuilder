@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
 
 public class AppInsights
 {
@@ -24,7 +22,9 @@ public class AppInsights
         _aiConfig = aiConfig;
     }
 
-    public AppInsights(string endpoint, string ikey) : this(new AiConfig(endpoint, ikey)) { }
+    public AppInsights(string endpoint, string ikey) : this(new AiConfig(endpoint, ikey))
+    {
+    }
 
     public void WriteMessage(string message, AiTraceSeverity severity, Action<string> resultHandler = null)
     {

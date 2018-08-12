@@ -5,10 +5,10 @@
 		<xs:documentation>Schema name: fetch-schema</xs:documentation>
 	</xs:annotation>
 	<!--
-	
+
 		condition element - used for capturing entity and link-entity
 							"where" clause criteria
-		
+
 	-->
 	<!-- [XDR-XSD] "value" element  -->
 	<xs:element name="value" type="xs:string"></xs:element>
@@ -53,10 +53,10 @@
 		</xs:complexType>
 	</xs:element>
 	<!--
-	
+
 		filter element - used for constructing complex conditionals
 						 legal on entity and link-entity
-		
+
 	-->
 	<!-- [XDR-XSD] "filter" element  -->
 	<xs:element name="filter">
@@ -79,11 +79,11 @@
 		</xs:complexType>
 	</xs:element>
 	<!--
-	
+
 		attribute elements - used for selecting attributes from the
 							 surrounding entity / link-entity, these
 							 values are returned as part of the fetch
-		
+
 	-->
 	<!-- [XDR-XSD] "all-attributes" element  -->
 	<xs:element name="all-attributes">
@@ -99,10 +99,10 @@
 		<xs:attribute name="groupby" type="FetchBoolType"></xs:attribute>
 		<xs:attribute name="dategrouping" type="DateGroupingType"></xs:attribute>
 		<xs:attribute name="usertimezone" type="FetchBoolType"></xs:attribute>
-		<xs:attribute name="distinct" type="FetchBoolType"></xs:attribute>		
+		<xs:attribute name="distinct" type="FetchBoolType"></xs:attribute>
 	</xs:complexType>
 	<!--
-	
+
 	order element - used to specify a sort order
 
 	-->
@@ -117,9 +117,9 @@
 		<xs:attribute name="descending" default="false" type="xs:boolean"></xs:attribute>
 	</xs:complexType>
 	<!--
-	
+
 		link-entity element - used for joining one entity to its "parent"
-		
+
 	-->
 	<!-- [XDR-XSD] "link-entity" element  -->
 	<xs:complexType name="FetchLinkEntityType">
@@ -143,12 +143,12 @@
 		<xs:attribute name="prefilterparametername" type="xs:string"></xs:attribute>
 	</xs:complexType>
 	<!--
-	
+
 		entity element - used for specifying the root element for a fetch, only
 						 one root entity is allowed in a given fetch, all others
 						 are dependent on this entity and are marked as
 						 link-entity
-		
+
 	-->
 	<!-- [XDR-XSD] "entity" element  -->
 	<xs:complexType name="FetchEntityType">
@@ -166,12 +166,12 @@
 		<xs:attribute name="prefilterparametername" type="xs:string"></xs:attribute>
 	</xs:complexType>
 	<!--
-	
+
 		fetch element - root element for the query
-		
+
 	-->
 	<!-- [XDR-XSD] "fetch" element  -->
-	<xs:element name="fetch" type="FetchType"/>
+	<xs:element name="fetch" type="FetchType" />
 	<xs:complexType name="FetchType">
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<!-- -->
@@ -180,14 +180,14 @@
 			<xs:element name="order" type="FetchOrderType" minOccurs="1" maxOccurs="1" />
 		</xs:choice>
 		<!-- -->
-		<xs:attribute name="version"/>
-		<xs:attribute name="count" type="xs:integer"/>
-		<xs:attribute name="page" type="xs:integer"/>
-		<xs:attribute name="paging-cookie" type="xs:string"/>
-		<xs:attribute name="utc-offset" type="IntOrEmpty"/>
-		<xs:attribute name="aggregate" type="xs:boolean"/>
-		<xs:attribute name="distinct" type="xs:boolean"/>
-		<xs:attribute name="top" type="xs:integer"/>
+		<xs:attribute name="version" />
+		<xs:attribute name="count" type="xs:integer" />
+		<xs:attribute name="page" type="xs:integer" />
+		<xs:attribute name="paging-cookie" type="xs:string" />
+		<xs:attribute name="utc-offset" type="IntOrEmpty" />
+		<xs:attribute name="aggregate" type="xs:boolean" />
+		<xs:attribute name="distinct" type="xs:boolean" />
+		<xs:attribute name="top" type="xs:integer" />
 		<xs:attribute name="mapping">
 			<xs:simpleType>
 				<xs:restriction base="xs:NMTOKEN">
@@ -196,7 +196,7 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="min-active-row-version" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="min-active-row-version" type="xs:boolean" use="optional" default="false" />
 		<xs:attribute name="output-format">
 			<xs:simpleType>
 				<xs:restriction base="xs:NMTOKEN">
@@ -264,21 +264,20 @@
 														<xs:complexType>
 															<xs:attribute name="column" type="xs:string" use="required" />
 															<xs:attribute name="operator" type="operator" use="optional" />
-															<xs:attribute name="value" type="xs:string" use="optional"/>
+															<xs:attribute name="value" type="xs:string" use="optional" />
 														</xs:complexType>
 													</xs:element>
 												</xs:sequence>
 
 												<xs:attribute name="column" type="xs:string" use="optional" />
 												<xs:attribute name="operator" type="operator" use="optional" />
-												<xs:attribute name="value" type="xs:string" use="optional"/>
-												<xs:attribute name="type" type="xs:string" use="optional"/>
-
+												<xs:attribute name="value" type="xs:string" use="optional" />
+												<xs:attribute name="type" type="xs:string" use="optional" />
 											</xs:complexType>
 										</xs:element>
 									</xs:choice>
 									<xs:attribute name="version"></xs:attribute>
-									<xs:attribute name="distinct" type="xs:boolean"/>
+									<xs:attribute name="distinct" type="xs:boolean" />
 								</xs:complexType>
 							</xs:element>
 						</xs:sequence>
@@ -427,9 +426,9 @@
 			<xs:enumeration value="not-begin-with" />
 			<xs:enumeration value="ends-with" />
 			<xs:enumeration value="not-end-with" />
-			<xs:enumeration value="under"/>
+			<xs:enumeration value="under" />
 			<xs:enumeration value="eq-or-under" />
-			<xs:enumeration value="not-under"/>
+			<xs:enumeration value="not-under" />
 			<xs:enumeration value="above" />
 			<xs:enumeration value="eq-or-above" />
 			<xs:enumeration value="contain-values" />

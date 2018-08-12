@@ -1,17 +1,13 @@
 ﻿using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
     public class OperatorItem : IComboBoxItem
     {
-        ConditionOperator oper = ConditionOperator.Equal;
+        private ConditionOperator oper = ConditionOperator.Equal;
 
         /// <summary>Property that indicates what type the value must have for the condition to be valid</summary>
         public AttributeTypeCode? ValueType { get { return GetValueType(); } }
@@ -422,6 +418,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     //    Date,
     //}
 }
+
 /*
 
 case ConditionOperator.Equal:

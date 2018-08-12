@@ -20,7 +20,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             var name = string.Empty;
             fetchXml = fetchXml.Replace("\"", "'");
             var lines = fetchXml.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-            foreach(var line in lines)
+            foreach (var line in lines)
             {
                 var space = line.Substring(0, line.IndexOf("<"));
                 if (line.Trim().StartsWith("<condition"))
@@ -62,7 +62,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             if (data.Count > 0)
             {
                 js += "\tvar fetchData = {\r\n";
-                foreach(var nv in data)
+                foreach (var nv in data)
                     js += "\t\t" + nv.Name + ": " + "\"" + nv.Value + "\",\r\n";
                 js = js.Substring(0, js.Length - ",\r\n".Length);
                 js += "\n\t};\r\n";

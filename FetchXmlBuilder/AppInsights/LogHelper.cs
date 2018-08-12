@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 
-public class LogHelper {
+public class LogHelper
+{
     public static string GetFullMethodName(MethodBase methodBase)
     {
         string operationName = "";

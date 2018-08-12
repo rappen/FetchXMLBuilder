@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.Xrm.Sdk.Query;
-using System.Text;
-using System.Linq;
+﻿using Microsoft.Xrm.Sdk.Metadata;
+using System;
 using System.Collections.Generic;
-using Microsoft.Xrm.Sdk.Metadata;
+using System.Linq;
+using System.Text;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {

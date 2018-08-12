@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
-    class TreeNodeHelper
+    internal class TreeNodeHelper
     {
         /// <summary>
         /// Adds a new TreeNode to the parent object from the XmlNode information
