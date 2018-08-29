@@ -22,7 +22,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
     {
         #region Private Fields
 
-        private static string fetchTemplate = "<fetch top=\"50\"><entity name=\"\"/></fetch>";
         private static XmlSchemaSet schemas = null;
         private bool fetchChanged = false;
         private FetchXmlBuilder fxb;
@@ -241,16 +240,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             if (string.IsNullOrWhiteSpace(xml))
             {
-                xml = fetchTemplate;
+                xml = fxb.settings.QueryOptions.NewQueryTemplate;
             }
             var fetchDoc = new XmlDocument();
-            fetchDoc.LoadXml(xml);
+            try
+            {
+                fetchDoc.LoadXml(xml);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Invalid XML: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             treeChecksum = "";
             if (fetchDoc.DocumentElement.Name != "fetch" ||
                 fetchDoc.DocumentElement.ChildNodes.Count > 0 &&
                 fetchDoc.DocumentElement.ChildNodes[0].Name == "fetch")
             {
-                MessageBox.Show(this, "Invalid Xml: Definition XML root must be fetch!", "Error",
+                MessageBox.Show(this, "Invalid XML: Definition XML root must be fetch!", "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else

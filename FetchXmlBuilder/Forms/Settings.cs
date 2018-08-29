@@ -34,6 +34,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             }
             cmbSeralizationStyle.SelectedIndex = settings.Results.SerializeStyle;
             chkResAllPages.Checked = settings.Results.RetrieveAllPages;
+            txtFetch.Text = settings.QueryOptions.NewQueryTemplate;
+            txtFetch.Process();
             chkEntAll.Checked = settings.Entity.All;
             if (!settings.Entity.All)
             {
@@ -58,7 +60,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 chkAttUncustomizable.Checked = settings.Attribute.Uncustomizable;
                 chkAttUnmanaged.Checked = settings.Attribute.Unmanaged;
             }
-            chkStatAllow.Checked = settings.LogUsage != false;
         }
 
         internal FXBSettings GetSettings()
@@ -66,6 +67,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             var settings = fxb.settings;
             settings.UseFriendlyNames = chkAppFriendly.Checked;
             settings.QueryOptions.UseSingleQuotation = chkAppSingle.Checked;
+            settings.QueryOptions.NewQueryTemplate = txtFetch.Text;
             settings.DoNotPromptToSave = chkAppNoSavePrompt.Checked;
             settings.Results.AlwaysNewWindow = chkAppResultsNewWindow.Checked;
             settings.Results.ResultOption = rbResSerialized.Checked ? 1 : rbResRaw.Checked ? 3 : 0;
@@ -90,7 +92,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             settings.Attribute.Standard = chkAttStandard.Checked;
             settings.Attribute.OnlyValidAF = chkAttOnlyAF.Checked;
             settings.Attribute.OnlyValidRead = chkAttOnlyRead.Checked;
-            settings.LogUsage = chkStatAllow.Checked;
             return settings;
         }
 
@@ -199,14 +200,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             return "unknown";
         }
 
-        private void chkStatAllow_CheckedChanged(object sender, EventArgs e)
-        {
-            if (Visible && chkStatAllow.Checked)
-            {
-                MessageBox.Show("Thank You!\n\nHappy fetching :)\n\n/Jonas", "Statistics", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
         private void rbResSerialized_CheckedChanged(object sender, EventArgs e)
         {
             cmbSeralizationStyle.Enabled = rbResSerialized.Checked;
@@ -216,6 +209,40 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             fxb.LogUse("ShowWelcome-Manual");
             Welcome.ShowWelcome(this);
+        }
+
+        private void btnFormatQuery_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                txtFetch.Process();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "XML Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void txtFetch_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtFetch.Text))
+            {
+                txtFetch.Text = QueryOptions.DefaultNewQuery;
+                txtFetch.Process();
+            }
+        }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                txtFetch.Process();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "XML Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DialogResult = DialogResult.None;
+            }
         }
     }
 }

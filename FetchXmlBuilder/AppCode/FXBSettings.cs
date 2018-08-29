@@ -25,8 +25,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
     public class QueryOptions
     {
+        internal static string DefaultNewQuery = "<fetch top=\"50\"><entity name=\"\"/></fetch>";
         public bool ShowQuickActions { get; set; } = true;
         public bool UseSingleQuotation { get; set; }
+        public string NewQueryTemplate { get; set; } = DefaultNewQuery;
     }
 
     public class MetadataOptions
