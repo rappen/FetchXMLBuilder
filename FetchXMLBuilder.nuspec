@@ -37,20 +37,12 @@
     </description>
     <releaseNotes>
 -- New features--
-#170 Save View As... Create a new personal view from existing
-#210 Adding option to show dates with local time in result grid
-Possible to review previous release notes in Welcome dialog
+#157 Improved condition operators for Owner attributes
+#217 Default query for "New" now configurable
 
 -- Bug fixes --
-#129 Handle values for Fiscal conditions correctly
-#205 Don't treat personal views as uncustomizable
-#206 Distinct on countcolumn aggregate
-
--- Internal --
-Rebranded with Jonas personal brand
-Restructuring with assembly name Rappen.XTB.FXB.dll
-Improved fetch schema load for XML validation
-Implemented IAboutPlugin for generic access to About dialog
+#213 Minified XML does not respect quote character option (fixed by @rajrao)
+#212 FetchXML window was not updated after Undo/Redo
     </releaseNotes>
     <copyright>Copyright Jonas Rapp 2014-2018</copyright>
     <tags>XrmToolBox Plugins FetchXML Builder</tags>
