@@ -70,6 +70,7 @@
             this.txtFetch = new CSRichTextBoxSyntaxHighlighting.XMLViewer();
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnFormatQuery = new System.Windows.Forms.Button();
+            this.btnDefaultQuery = new System.Windows.Forms.Button();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -568,6 +569,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.btnDefaultQuery);
             this.panel2.Controls.Add(this.btnFormatQuery);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel2.Location = new System.Drawing.Point(486, 16);
@@ -584,6 +586,16 @@
             this.btnFormatQuery.Text = "Format";
             this.btnFormatQuery.UseVisualStyleBackColor = true;
             this.btnFormatQuery.Click += new System.EventHandler(this.btnFormatQuery_Click);
+            // 
+            // btnDefaultQuery
+            // 
+            this.btnDefaultQuery.Location = new System.Drawing.Point(3, 3);
+            this.btnDefaultQuery.Name = "btnDefaultQuery";
+            this.btnDefaultQuery.Size = new System.Drawing.Size(75, 23);
+            this.btnDefaultQuery.TabIndex = 1;
+            this.btnDefaultQuery.Text = "Default";
+            this.btnDefaultQuery.UseVisualStyleBackColor = true;
+            this.btnDefaultQuery.Click += new System.EventHandler(this.btnDefaultQuery_Click);
             // 
             // Settings
             // 
@@ -660,5 +672,6 @@
         internal CSRichTextBoxSyntaxHighlighting.XMLViewer txtFetch;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btnFormatQuery;
+        private System.Windows.Forms.Button btnDefaultQuery;
     }
 }

@@ -244,5 +244,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 DialogResult = DialogResult.None;
             }
         }
+
+        private void btnDefaultQuery_Click(object sender, EventArgs e)
+        {
+            txtFetch.Text = QueryOptions.DefaultNewQuery;
+            txtFetch.Process();
+        }
     }
 }
