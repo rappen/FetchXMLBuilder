@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
-    public class JavascriptCodeGenerator
+    public class JavascriptCodeGenerator : CodeGeneratorBase
     {
-        private class NameValue
-        {
-            public string Name { get; set; }
-            public string Value { get; set; }
-        }
-
         public static string GetJavascriptCode(string fetchXml)
         {
             var data = new List<NameValue>();
@@ -71,13 +64,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             js += fetch.Substring(0, fetch.Length - 1);
             js += "\r\n\t].join(\"\");";
             return js;
-        }
-
-        private static NameValue GetFetchData(List<NameValue> data, string name, string value)
-        {
-            var index = data.Where(r => r.Name == name).Count();
-            if (index == 0) return new NameValue { Name = name, Value = value };
-            return new NameValue { Name = name + (index + 1).ToString(), Value = value };
         }
     }
 }

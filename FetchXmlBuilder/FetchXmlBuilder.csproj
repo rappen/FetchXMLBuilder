@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppCode\AttributeItem.cs" />
+    <Compile Include="AppCode\CodeGeneratorBase.cs" />
     <Compile Include="AppCode\GroupBoxExpanderExtensions.cs" />
     <Compile Include="AppCode\CSharpCodeGenerator.cs" />
     <Compile Include="AppCode\DockExtensions.cs" />
@@ -406,7 +407,6 @@
 if $(ConfigurationName) == Debug (
   IF NOT EXIST Plugins mkdir Plugins
   move /Y  "Rappen.XTB.FXB.dll" Plugins
-  move /Y  "Cinteros.Xrm.FetchXmlBuilder.dll" Plugins
 )</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

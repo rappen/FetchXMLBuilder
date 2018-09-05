@@ -766,11 +766,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             if (dockControlFetchXmlCs?.Visible == true)
             {
-                dockControlFetchXmlCs.UpdateXML(CSharpCodeGenerator.GetCSharpCode(GetFetch()));
+                dockControlFetchXmlCs.UpdateXML(GetCSharpCode());
             }
             if (dockControlFetchXmlJs?.Visible == true)
             {
-                dockControlFetchXmlJs.UpdateXML(JavascriptCodeGenerator.GetJavascriptCode(GetFetch()));
+                dockControlFetchXmlJs.UpdateXML(GetJavaScriptCode());
             }
         }
 
@@ -940,7 +940,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private string GetSQLQuery()
         {
             var sql = string.Empty;
-            FetchType fetch = dockControlBuilder.GetFetchType();
+            var fetch = dockControlBuilder.GetFetchType();
             try
             {
                 sql = SQLQueryGenerator.GetSQLQuery(fetch);
@@ -950,6 +950,36 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 sql = "Failed to generate SQL Query.\n\n" + ex.Message;
             }
             return sql;
+        }
+
+        private string GetCSharpCode()
+        {
+            var cs = string.Empty;
+            var fetch = dockControlBuilder.GetFetchString(true, false);
+            try
+            {
+                cs = CSharpCodeGenerator.GetCSharpCode(fetch);
+            }
+            catch (Exception ex)
+            {
+                cs = "Failed to generate C# code.\n\n" + ex.Message;
+            }
+            return cs;
+        }
+
+        private string GetJavaScriptCode()
+        {
+            var js = string.Empty;
+            var fetch = dockControlBuilder.GetFetchString(true, false);
+            try
+            {
+                js = JavascriptCodeGenerator.GetJavascriptCode(fetch);
+            }
+            catch (Exception ex)
+            {
+                js = "Failed to generate JavaScript code.\n\n" + ex.Message;
+            }
+            return js;
         }
 
         private void LoadEntities()

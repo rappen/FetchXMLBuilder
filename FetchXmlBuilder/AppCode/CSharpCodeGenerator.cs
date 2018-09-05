@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
-    public class CSharpCodeGenerator
+    public class CSharpCodeGenerator : CodeGeneratorBase
     {
-        private class NameValue
-        {
-            public string Name { get; set; }
-            public string Value { get; set; }
-        }
-
-        public static string GetCSharpCode(string fetchXml)
+         public static string GetCSharpCode(string fetchXml)
         {
             var data = new List<NameValue>();
             var fetch = string.Empty;
@@ -71,13 +64,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             cs += fetch.Substring(0, fetch.Length - 1);
             cs += "\";\r\n";
             return cs;
-        }
-
-        private static NameValue GetFetchData(List<NameValue> data, string name, string value)
-        {
-            var index = data.Where(r => r.Name == name).Count();
-            if (index == 0) return new NameValue { Name = name, Value = value };
-            return new NameValue { Name = name + (index + 1).ToString(), Value = value };
         }
     }
 }
