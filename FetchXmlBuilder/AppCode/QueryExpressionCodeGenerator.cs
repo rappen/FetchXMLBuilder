@@ -34,13 +34,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 code.AppendLine(qename + ".AddOrder(\"" + order.AttributeName + "\", OrderType." + order.OrderType.ToString() + ");");
             }
-            code.Append(GetFilter(QEx.Criteria, qename + ".Criteria"));
+            code.Append(GetFilter(QEx.Criteria, qename, "Criteria"));
             foreach (var link in QEx.LinkEntities)
             {
                 code.Append(GetLinkEntity(link, qename));
             }
-
-            return code.ToString();
+            var codestr = ReplaceValueTokens(code.ToString());
+            return codestr;
         }
 
         private static string GetVarName(string requestedname)
@@ -91,7 +91,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 code.AppendLine(linkname + ".EntityAlias = \"" + link.EntityAlias + "\";");
             }
             code.Append(GetColumns(link.Columns, linkname + ".Columns"));
-            code.Append(GetFilter(link.LinkCriteria, linkname + ".LinkCriteria"));
+            code.Append(GetFilter(link.LinkCriteria, linkname, "LinkCriteria"));
             foreach (var sublink in link.LinkEntities)
             {
                 code.Append(GetLinkEntity(sublink, linkname));
@@ -99,8 +99,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return code.ToString();
         }
 
-        private static string GetFilter(FilterExpression filterExpression, string LineStart)
+        private static string GetFilter(FilterExpression filterExpression, string parentName, string property)
         {
+            var LineStart = parentName + (!string.IsNullOrEmpty(property) ? "." + property : "");
             var code = new StringBuilder();
             if (filterExpression.FilterOperator == LogicalOperator.Or || filterExpression.Conditions.Count > 0 || filterExpression.Filters.Count > 0)
             {
@@ -114,13 +115,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 {
                     var entity = "";
                     var values = "";
+                    var token = LineStart.Replace(".", "_").Replace("_Criteria", "").Replace("_LinkCriteria", "");
                     if (!string.IsNullOrWhiteSpace(cond.EntityName))
                     {
                         entity = "\"" + cond.EntityName + "\", ";
+                        token += "_" + cond.EntityName;
                     }
+                    token += "_" + cond.AttributeName;
                     if (cond.Values.Count > 0)
                     {
-                        values = ", " + GetConditionValues(cond.Values);
+                        values = ", " + GetConditionValues(cond.Values, token);
                     }
                     code.AppendLine($"{LineStart}.AddCondition({entity}\"{cond.AttributeName}\", ConditionOperator.{cond.Operator.ToString()}{values});");
                 }
@@ -130,32 +134,68 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     var filtername = GetVarName(LineStart.Replace(".", "_") + "_" + i.ToString());
                     code.AppendLine($"var {filtername} = new FilterExpression();");
                     code.AppendLine($"{LineStart}.AddFilter({filtername});");
-                    code.Append(GetFilter(subfilter, filtername));
+                    code.Append(GetFilter(subfilter, filtername, null));
                     i++;
                 }
             }
             return code.ToString();
         }
 
-        private static string GetConditionValues(DataCollection<object> values)
+        private static string GetConditionValues(DataCollection<object> values, string token)
         {
             var strings = new List<string>();
+            var i = 1;
             foreach (var value in values)
             {
+                var valuestr = string.Empty;
                 if (value is string || value is Guid)
                 {
-                    strings.Add("\"" + value.ToString() + "\"");
+                    valuestr = "\"" + value.ToString() + "\"";
                 }
                 else if (value is bool)
                 {
-                    strings.Add((bool)value ? "true" : "false");
+                    valuestr = (bool)value ? "true" : "false";
                 }
                 else
                 {
-                    strings.Add(value.ToString());
+                    valuestr = value.ToString();
+                }
+                if (values.Count == 1)
+                {
+                    strings.Add($"<<<{token}|{valuestr}>>>");
+                }
+                else
+                {
+                    strings.Add($"<<<{token}_{i++}|{valuestr}>>>");
                 }
             }
             return string.Join(", ", strings);
+        }
+
+        private static string ReplaceValueTokens(string code)
+        {
+            if (!code.Contains("<<<"))
+            {
+                return code;
+            }
+            var variables = new StringBuilder();
+            variables.AppendLine("// Define Condition Values");
+            while (code.Contains("<<<"))
+            {
+                var tokenvalue = code.Substring(code.IndexOf("<<<") + 3);
+                if (!tokenvalue.Contains("|") || !tokenvalue.Contains(">>>") || tokenvalue.IndexOf("|") > tokenvalue.IndexOf(">>>"))
+                {
+                    throw new Exception($"Unexpected value token: {tokenvalue}");
+                }
+                tokenvalue = tokenvalue.Substring(0, tokenvalue.IndexOf(">>>"));
+                var token = tokenvalue.Split('|')[0];
+                var value = tokenvalue.Split('|')[1];
+                variables.AppendLine($"var {token} = {value};");
+                code = code.Replace("<<<" + tokenvalue + ">>>", token);
+            }
+            variables.AppendLine();
+            code = variables.ToString() + code;
+            return code;
         }
     }
 }
