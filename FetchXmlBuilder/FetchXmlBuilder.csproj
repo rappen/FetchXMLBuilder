@@ -139,6 +139,7 @@
     <Compile Include="AppCode\FXBSettings.cs" />
     <Compile Include="AppCode\JavascriptCodeGenerator.cs" />
     <Compile Include="AppCode\LogUsage.cs" />
+    <Compile Include="AppCode\OData4CodeGenerator.cs" />
     <Compile Include="AppCode\ODataCodeGenerator.cs" />
     <Compile Include="AppCode\OptionsetItem.cs" />
     <Compile Include="AppCode\QueryInfo.cs" />

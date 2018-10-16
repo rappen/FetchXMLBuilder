@@ -45,6 +45,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveFileAs = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiSaveView = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSaveViewAs = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveML = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveCWP = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -68,7 +69,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.dockContainer = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.tmLiveUpdate = new System.Windows.Forms.Timer(this.components);
-            this.tsmiSaveViewAs = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowOData4 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -199,7 +200,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveFile.Image = ((System.Drawing.Image)(resources.GetObject("tsmiSaveFile.Image")));
             this.tsmiSaveFile.Name = "tsmiSaveFile";
             this.tsmiSaveFile.ShortcutKeyDisplayString = "Ctrl+S";
-            this.tsmiSaveFile.Size = new System.Drawing.Size(234, 30);
+            this.tsmiSaveFile.Size = new System.Drawing.Size(226, 22);
             this.tsmiSaveFile.Text = "Save File";
             this.tsmiSaveFile.Click += new System.EventHandler(this.tsmiSaveFile_Click);
             // 
@@ -208,30 +209,39 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveFileAs.Image = ((System.Drawing.Image)(resources.GetObject("tsmiSaveFileAs.Image")));
             this.tsmiSaveFileAs.Name = "tsmiSaveFileAs";
             this.tsmiSaveFileAs.ShortcutKeyDisplayString = "F12";
-            this.tsmiSaveFileAs.Size = new System.Drawing.Size(234, 30);
+            this.tsmiSaveFileAs.Size = new System.Drawing.Size(226, 22);
             this.tsmiSaveFileAs.Text = "Save File as...";
             this.tsmiSaveFileAs.Click += new System.EventHandler(this.tsmiSaveFileAs_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(231, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(223, 6);
             // 
             // tsmiSaveView
             // 
             this.tsmiSaveView.Enabled = false;
             this.tsmiSaveView.Image = ((System.Drawing.Image)(resources.GetObject("tsmiSaveView.Image")));
             this.tsmiSaveView.Name = "tsmiSaveView";
-            this.tsmiSaveView.Size = new System.Drawing.Size(234, 30);
+            this.tsmiSaveView.Size = new System.Drawing.Size(226, 22);
             this.tsmiSaveView.Text = "Save View";
             this.tsmiSaveView.Click += new System.EventHandler(this.tsmiSaveView_Click);
+            // 
+            // tsmiSaveViewAs
+            // 
+            this.tsmiSaveViewAs.Enabled = false;
+            this.tsmiSaveViewAs.Image = ((System.Drawing.Image)(resources.GetObject("tsmiSaveViewAs.Image")));
+            this.tsmiSaveViewAs.Name = "tsmiSaveViewAs";
+            this.tsmiSaveViewAs.Size = new System.Drawing.Size(226, 22);
+            this.tsmiSaveViewAs.Text = "Save View as...";
+            this.tsmiSaveViewAs.Click += new System.EventHandler(this.tsmiSaveView_Click);
             // 
             // tsmiSaveML
             // 
             this.tsmiSaveML.Enabled = false;
             this.tsmiSaveML.Image = ((System.Drawing.Image)(resources.GetObject("tsmiSaveML.Image")));
             this.tsmiSaveML.Name = "tsmiSaveML";
-            this.tsmiSaveML.Size = new System.Drawing.Size(234, 30);
+            this.tsmiSaveML.Size = new System.Drawing.Size(226, 22);
             this.tsmiSaveML.Text = "Save Dynamic Marketing List";
             this.tsmiSaveML.Click += new System.EventHandler(this.tsmiSaveML_Click);
             // 
@@ -239,7 +249,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiSaveCWP.Enabled = false;
             this.tsmiSaveCWP.Name = "tsmiSaveCWP";
-            this.tsmiSaveCWP.Size = new System.Drawing.Size(234, 30);
+            this.tsmiSaveCWP.Size = new System.Drawing.Size(226, 22);
             this.tsmiSaveCWP.Text = "Save as CWP Feed...";
             this.tsmiSaveCWP.Click += new System.EventHandler(this.tsmiSaveCWP_Click);
             // 
@@ -293,6 +303,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiShowFetchXML,
             this.tsmiShowSQL,
+            this.tsmiShowOData4,
             this.tsmiShowOData,
             this.tsmiShowQueryExpression,
             this.tsmiShowFetchXMLcs,
@@ -310,7 +321,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiShowFetchXML.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowFetchXML.Image")));
             this.tsmiShowFetchXML.Name = "tsmiShowFetchXML";
             this.tsmiShowFetchXML.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-            this.tsmiShowFetchXML.Size = new System.Drawing.Size(211, 22);
+            this.tsmiShowFetchXML.Size = new System.Drawing.Size(219, 30);
             this.tsmiShowFetchXML.Text = "FetchXML";
             this.tsmiShowFetchXML.Click += new System.EventHandler(this.tsmiShowFetchXML_Click);
             // 
@@ -318,7 +329,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiShowSQL.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowSQL.Image")));
             this.tsmiShowSQL.Name = "tsmiShowSQL";
-            this.tsmiShowSQL.Size = new System.Drawing.Size(211, 22);
+            this.tsmiShowSQL.Size = new System.Drawing.Size(219, 30);
             this.tsmiShowSQL.Text = "SQL Query";
             this.tsmiShowSQL.Click += new System.EventHandler(this.tsmiShowSQL_Click);
             // 
@@ -326,7 +337,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiShowOData.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowOData.Image")));
             this.tsmiShowOData.Name = "tsmiShowOData";
-            this.tsmiShowOData.Size = new System.Drawing.Size(211, 22);
+            this.tsmiShowOData.Size = new System.Drawing.Size(219, 30);
             this.tsmiShowOData.Text = "OData 2.0";
             this.tsmiShowOData.Click += new System.EventHandler(this.tsmiShowOData_Click);
             // 
@@ -334,7 +345,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiShowQueryExpression.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowQueryExpression.Image")));
             this.tsmiShowQueryExpression.Name = "tsmiShowQueryExpression";
-            this.tsmiShowQueryExpression.Size = new System.Drawing.Size(211, 22);
+            this.tsmiShowQueryExpression.Size = new System.Drawing.Size(219, 30);
             this.tsmiShowQueryExpression.Text = "QueryExpression";
             this.tsmiShowQueryExpression.Click += new System.EventHandler(this.tsmiShowQueryExpression_Click);
             // 
@@ -342,7 +353,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiShowFetchXMLcs.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowFetchXMLcs.Image")));
             this.tsmiShowFetchXMLcs.Name = "tsmiShowFetchXMLcs";
-            this.tsmiShowFetchXMLcs.Size = new System.Drawing.Size(211, 22);
+            this.tsmiShowFetchXMLcs.Size = new System.Drawing.Size(219, 30);
             this.tsmiShowFetchXMLcs.Text = "FetchXML C# code";
             this.tsmiShowFetchXMLcs.Click += new System.EventHandler(this.tsmiShowFetchXMLcs_Click);
             // 
@@ -350,20 +361,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiShowFetchXMLjs.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowFetchXMLjs.Image")));
             this.tsmiShowFetchXMLjs.Name = "tsmiShowFetchXMLjs";
-            this.tsmiShowFetchXMLjs.Size = new System.Drawing.Size(211, 22);
+            this.tsmiShowFetchXMLjs.Size = new System.Drawing.Size(219, 30);
             this.tsmiShowFetchXMLjs.Text = "FetchXML JavaScript code";
             this.tsmiShowFetchXMLjs.Click += new System.EventHandler(this.tsmiShowFetchXMLjs_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(208, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(216, 6);
             // 
             // tsmiResetWindowLayout
             // 
             this.tsmiResetWindowLayout.Image = ((System.Drawing.Image)(resources.GetObject("tsmiResetWindowLayout.Image")));
             this.tsmiResetWindowLayout.Name = "tsmiResetWindowLayout";
-            this.tsmiResetWindowLayout.Size = new System.Drawing.Size(211, 22);
+            this.tsmiResetWindowLayout.Size = new System.Drawing.Size(219, 30);
             this.tsmiResetWindowLayout.Text = "Reset window layout";
             this.tsmiResetWindowLayout.Click += new System.EventHandler(this.tsmiResetWindowLayout_Click);
             // 
@@ -427,14 +438,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tmLiveUpdate.Interval = 500;
             this.tmLiveUpdate.Tick += new System.EventHandler(this.tmLiveUpdate_Tick);
             // 
-            // tsmiSaveViewAs
+            // tsmiShowOData4
             // 
-            this.tsmiSaveViewAs.Enabled = false;
-            this.tsmiSaveViewAs.Image = ((System.Drawing.Image)(resources.GetObject("tsmiSaveViewAs.Image")));
-            this.tsmiSaveViewAs.Name = "tsmiSaveViewAs";
-            this.tsmiSaveViewAs.Size = new System.Drawing.Size(234, 30);
-            this.tsmiSaveViewAs.Text = "Save View as...";
-            this.tsmiSaveViewAs.Click += new System.EventHandler(this.tsmiSaveView_Click);
+            this.tsmiShowOData4.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowOData4.Image")));
+            this.tsmiShowOData4.Name = "tsmiShowOData4";
+            this.tsmiShowOData4.Size = new System.Drawing.Size(219, 30);
+            this.tsmiShowOData4.Text = "OData 4.0 (WebAPI)";
+            this.tsmiShowOData4.Click += new System.EventHandler(this.tsmiShowOData4_Click);
             // 
             // FetchXmlBuilder
             // 
@@ -499,5 +509,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiShowFetchXMLjs;
         private System.Windows.Forms.ToolStripLabel tslAbout;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveViewAs;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowOData4;
     }
 }
