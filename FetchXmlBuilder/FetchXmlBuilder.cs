@@ -1453,7 +1453,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private bool SaveFetchXML(bool prompt, bool silent)
         {
             bool result = false;
-            var newfile = "";
+            var newfile = prompt ? "" : FileName;
             if (prompt || string.IsNullOrEmpty(FileName))
             {
                 var sfd = new SaveFileDialog

@@ -37,12 +37,9 @@
     </description>
     <releaseNotes>
 -- New features--
-#157 Improved condition operators for Owner attributes
-#217 Default query for "New" now configurable
 
 -- Bug fixes --
-#213 Minified XML does not respect quote character option (fixed by @rajrao)
-#212 FetchXML window was not updated after Undo/Redo
+#221 Save File does actually save the file
     </releaseNotes>
     <copyright>Copyright Jonas Rapp 2014-2018</copyright>
     <tags>XrmToolBox Plugins FetchXML Builder</tags>
