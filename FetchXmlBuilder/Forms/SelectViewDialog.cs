@@ -2,20 +2,13 @@
 using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 {
     public partial class SelectViewDialog : Form
     {
-        FetchXmlBuilder Caller;
+        private FetchXmlBuilder Caller;
         public Entity View;
 
         public SelectViewDialog(FetchXmlBuilder caller)
@@ -38,7 +31,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                     {
                         var ei = new EntityItem(entity.Value);
                         cmbEntity.Items.Add(ei);
-                        if (entity.Value.LogicalName == Caller.currentSettings.lastOpenedViewEntity)
+                        if (entity.Value.LogicalName == Caller.settings.LastOpenedViewEntity)
                         {
                             selectedItem = ei;
                         }
@@ -63,6 +56,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             cmbView.Items.Clear();
             cmbView.Text = "";
             txtFetch.Text = "";
+            lblNotCusomizable.Visible = false;
             btnOk.Enabled = false;
             var entity = ControlUtils.GetValueFromControl(cmbEntity);
             object selectedItem = null;
@@ -74,7 +68,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 {
                     var vi = new ViewItem(view);
                     cmbView.Items.Add(vi);
-                    if (view.Id.Equals(Caller.currentSettings.lastOpenedViewId))
+                    if (view.Id.Equals(Caller.settings.LastOpenedViewId))
                     {
                         selectedItem = vi;
                     }
@@ -88,7 +82,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 {
                     var vi = new ViewItem(view);
                     cmbView.Items.Add(vi);
-                    if (view.Id.Equals(Caller.currentSettings.lastOpenedViewId))
+                    if (view.Id.Equals(Caller.settings.LastOpenedViewId))
                     {
                         selectedItem = vi;
                     }
@@ -106,8 +100,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             if (cmbView.SelectedItem is ViewItem)
             {
                 View = ((ViewItem)cmbView.SelectedItem).GetView();
-                Caller.currentSettings.lastOpenedViewEntity = ControlUtils.GetValueFromControl(cmbEntity);
-                Caller.currentSettings.lastOpenedViewId = View.Id;
+                Caller.settings.LastOpenedViewEntity = ControlUtils.GetValueFromControl(cmbEntity);
+                Caller.settings.LastOpenedViewId = View.Id;
             }
             else
             {
@@ -122,15 +116,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void UpdateFetch()
         {
-            if (cmbView.SelectedItem is ViewItem)
+            if (cmbView.SelectedItem is ViewItem viewitem)
             {
-                txtFetch.Text = ((ViewItem)cmbView.SelectedItem).GetFetch();
+                txtFetch.Text = viewitem.GetFetch();
                 txtFetch.Process();
+                lblNotCusomizable.Visible = !viewitem.IsCustomizable;
                 btnOk.Enabled = true;
             }
             else
             {
                 txtFetch.Text = "";
+                lblNotCusomizable.Visible = false;
                 btnOk.Enabled = false;
             }
         }

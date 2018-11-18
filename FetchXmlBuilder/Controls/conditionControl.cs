@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
@@ -18,20 +13,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
     {
         private readonly Dictionary<string, string> collec;
         private string controlsCheckSum = "";
-        TreeNode node;
-        FetchXmlBuilder form;
+        private TreeNode node;
+        private FetchXmlBuilder form;
+        private TreeBuilderControl tree;
 
         #region Delegates
 
         public delegate void SaveEventHandler(object sender, SaveEventArgs e);
 
-        #endregion
+        #endregion Delegates
 
         #region Event Handlers
 
         public event SaveEventHandler Saved;
 
-        #endregion
+        #endregion Event Handlers
 
         public conditionControl()
         {
@@ -39,10 +35,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             collec = new Dictionary<string, string>();
         }
 
-        public conditionControl(TreeNode Node, FetchXmlBuilder fetchXmlBuilder)
+        public conditionControl(TreeNode Node, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree)
             : this()
         {
             form = fetchXmlBuilder;
+            this.tree = tree;
             node = Node;
             collec = (Dictionary<string, string>)Node.Tag;
             if (collec == null)
@@ -53,7 +50,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             RefreshAttributes();
             ControlUtils.FillControls(collec, this.Controls);
             controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
-            Saved += fetchXmlBuilder.CtrlSaved;
+            Saved += tree.CtrlSaved;
         }
 
         private void PopulateControls()
@@ -63,7 +60,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (closestEntity != null && closestEntity.Name == "entity")
             {
                 cmbEntity.Items.Add("");
-                cmbEntity.Items.AddRange(GetEntities(form.tvFetch.Nodes[0]).ToArray());
+                cmbEntity.Items.AddRange(GetEntities(tree.tvFetch.Nodes[0]).ToArray());
             }
             cmbEntity.Enabled = cmbEntity.Items.Count > 0;
             cmbOperator.Items.Clear();
@@ -106,7 +103,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                                 var coll = new Dictionary<string, string>();
                                 coll.Add("#text", value);
                                 attrNode.Tag = coll;
-                                TreeNodeHelper.SetNodeText(attrNode, form.currentSettings.useFriendlyNames);
+                                TreeNodeHelper.SetNodeText(attrNode, FetchXmlBuilder.friendlyNames);
                             }
                             cmbValue.Text = "";
                         }
@@ -158,10 +155,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     {
                         if (attributeType != attribute.Metadata.AttributeType)
                         {
-                            if (attributeType != AttributeTypeCode.Lookup ||
-                                (attribute.Metadata.AttributeType != AttributeTypeCode.Owner &&
-                                 attribute.Metadata.AttributeType != AttributeTypeCode.Customer &&
-                                 attribute.Metadata.AttributeType != AttributeTypeCode.Uniqueidentifier))
+                            // Some attribute type combinations are ok
+                            if (attributeType == AttributeTypeCode.String && attribute.Metadata.AttributeType == AttributeTypeCode.Memo)
+                            {
+                                // This is ok
+                            }
+                            else if (attributeType == AttributeTypeCode.Lookup && attribute.Metadata.AttributeType == AttributeTypeCode.Owner)
+                            {
+                                // This is ok
+                            }
+                            else if (attributeType == AttributeTypeCode.Lookup && attribute.Metadata.AttributeType == AttributeTypeCode.Customer)
+                            {
+                                // This is ok
+                            }
+                            else if (attributeType == AttributeTypeCode.Lookup && attribute.Metadata.AttributeType == AttributeTypeCode.Uniqueidentifier)
+                            {
+                                // This is also ok
+                            }
+                            else
                             {
                                 error = "Operator " + oper.ToString() + " is not valid for attribute of type " + attribute.Metadata.AttributeType.ToString();
                             }
@@ -225,7 +236,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             break;
                         case AttributeTypeCode.PartyList:
                         case AttributeTypeCode.CalendarRules:
-                        //case AttributeTypeCode.ManagedProperty:   // ManagedProperty is a bit "undefined", so let's accept all values for now... ref issue #67
+                            //case AttributeTypeCode.ManagedProperty:   // ManagedProperty is a bit "undefined", so let's accept all values for now... ref issue #67
                             error = "Unsupported condition attribute type: " + valueType;
                             break;
                     }
@@ -240,7 +251,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         }
 
         /// <summary>
-        /// Sends a connection success message 
+        /// Sends a connection success message
         /// </summary>
         /// <param name="service">IOrganizationService generated</param>
         /// <param name="parameters">Lsit of parameter</param>
@@ -291,7 +302,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             var attributes = form.GetDisplayAttributes(entityName);
             foreach (var attribute in attributes)
             {
-                AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, true, form.currentSettings.useFriendlyNames);
+                AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, true, FetchXmlBuilder.friendlyNames);
             }
             // RefreshFill now that attributes are loaded
             ControlUtils.FillControl(collec, cmbAttribute);

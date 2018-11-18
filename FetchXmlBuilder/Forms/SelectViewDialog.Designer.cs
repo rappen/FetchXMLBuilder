@@ -29,12 +29,14 @@
         private void InitializeComponent()
         {
             CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings1 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectViewDialog));
             this.panel1 = new System.Windows.Forms.Panel();
             this.cmbView = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cmbEntity = new System.Windows.Forms.ComboBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.lblNotCusomizable = new System.Windows.Forms.Label();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.panOk = new System.Windows.Forms.Panel();
             this.btnOk = new System.Windows.Forms.Button();
@@ -108,6 +110,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.lblNotCusomizable);
             this.panel2.Controls.Add(this.btnRefresh);
             this.panel2.Controls.Add(this.panOk);
             this.panel2.Controls.Add(this.panCancel);
@@ -116,6 +119,18 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(566, 38);
             this.panel2.TabIndex = 6;
+            // 
+            // lblNotCusomizable
+            // 
+            this.lblNotCusomizable.AutoSize = true;
+            this.lblNotCusomizable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNotCusomizable.ForeColor = System.Drawing.Color.Red;
+            this.lblNotCusomizable.Location = new System.Drawing.Point(144, 13);
+            this.lblNotCusomizable.Name = "lblNotCusomizable";
+            this.lblNotCusomizable.Size = new System.Drawing.Size(108, 13);
+            this.lblNotCusomizable.TabIndex = 8;
+            this.lblNotCusomizable.Text = "Not customizable!";
+            this.lblNotCusomizable.Visible = false;
             // 
             // btnRefresh
             // 
@@ -186,6 +201,7 @@
             xmlViewerSettings1.AttributeValue = System.Drawing.Color.Blue;
             xmlViewerSettings1.Comment = System.Drawing.Color.Empty;
             xmlViewerSettings1.Element = System.Drawing.Color.DarkRed;
+            xmlViewerSettings1.QuoteCharacter = '\"';
             xmlViewerSettings1.Tag = System.Drawing.Color.Blue;
             xmlViewerSettings1.Value = System.Drawing.Color.Black;
             this.txtFetch.Settings = xmlViewerSettings1;
@@ -203,11 +219,13 @@
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SelectViewDialog";
             this.Text = "Select View";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.panOk.ResumeLayout(false);
             this.panCancel.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
@@ -230,6 +248,6 @@
         private System.Windows.Forms.Button button2;
         internal CSRichTextBoxSyntaxHighlighting.XMLViewer txtFetch;
         private System.Windows.Forms.Button btnRefresh;
-
+        private System.Windows.Forms.Label lblNotCusomizable;
     }
 }

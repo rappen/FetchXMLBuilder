@@ -1,17 +1,13 @@
 ﻿using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
     public class OperatorItem : IComboBoxItem
     {
-        ConditionOperator oper = ConditionOperator.Equal;
+        private ConditionOperator oper = ConditionOperator.Equal;
 
         /// <summary>Property that indicates what type the value must have for the condition to be valid</summary>
         public AttributeTypeCode? ValueType { get { return GetValueType(); } }
@@ -172,6 +168,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case ConditionOperator.LastXFiscalPeriods:
                 case ConditionOperator.NextXFiscalYears:
                 case ConditionOperator.NextXFiscalPeriods:
+                case ConditionOperator.InFiscalPeriod:
+                case ConditionOperator.InFiscalPeriodAndYear:
+                case ConditionOperator.InFiscalYear:
+                case ConditionOperator.InOrAfterFiscalPeriodAndYear:
+                case ConditionOperator.InOrBeforeFiscalPeriodAndYear:
                     result = AttributeTypeCode.Integer;
                     break;
             }
@@ -187,6 +188,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case ConditionOperator.NotIn:
                 case ConditionOperator.Between:
                 case ConditionOperator.NotBetween:
+                case ConditionOperator.InFiscalPeriodAndYear:
+                case ConditionOperator.InOrAfterFiscalPeriodAndYear:
+                case ConditionOperator.InOrBeforeFiscalPeriodAndYear:
                     result = true;
                     break;
             }
@@ -312,11 +316,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 valueType == AttributeTypeCode.BigInt ||
                 valueType == AttributeTypeCode.Decimal ||
                 valueType == AttributeTypeCode.Double ||
-                valueType == AttributeTypeCode.Money ||
-                valueType == AttributeTypeCode.Lookup ||
-                valueType == AttributeTypeCode.Customer ||
-                valueType == AttributeTypeCode.Owner ||
-                valueType == AttributeTypeCode.Uniqueidentifier)
+                valueType == AttributeTypeCode.Money)
             {
                 validConditionsList.Add(new OperatorItem(ConditionOperator.Between));
                 validConditionsList.Add(new OperatorItem(ConditionOperator.NotBetween));
@@ -395,11 +395,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualBusinessId));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserId));
                     break;
-                case AttributeTypeCode.Lookup:
-                case AttributeTypeCode.Customer:
                 case AttributeTypeCode.Owner:
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualBusinessId));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserId));
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.NotEqualUserId));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserOrUserHierarchy));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserOrUserHierarchyAndTeams));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserOrUserTeams));
@@ -419,6 +418,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     //    Date,
     //}
 }
+
 /*
 
 case ConditionOperator.Equal:

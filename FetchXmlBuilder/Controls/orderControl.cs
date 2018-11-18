@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
@@ -18,19 +13,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private readonly Dictionary<string, string> collec;
         private string controlsCheckSum = "";
         private bool friendly;
-        FetchXmlBuilder form;
+        private TreeBuilderControl tree;
 
         #region Delegates
 
         public delegate void SaveEventHandler(object sender, SaveEventArgs e);
 
-        #endregion
+        #endregion Delegates
 
         #region Event Handlers
 
         public event SaveEventHandler Saved;
 
-        #endregion
+        #endregion Event Handlers
 
         public orderControl()
         {
@@ -38,11 +33,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             collec = new Dictionary<string, string>();
         }
 
-        public orderControl(TreeNode Node, AttributeMetadata[] attributes, FetchXmlBuilder fetchXmlBuilder)
+        public orderControl(TreeNode Node, AttributeMetadata[] attributes, TreeBuilderControl tree)
             : this()
         {
-            form = fetchXmlBuilder;
-            friendly = fetchXmlBuilder.currentSettings.useFriendlyNames;
+            this.tree = tree;
+            friendly = FetchXmlBuilder.friendlyNames;
             collec = (Dictionary<string, string>)Node.Tag;
             if (collec == null)
             {
@@ -52,12 +47,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             PopulateControls(Node, attributes);
             ControlUtils.FillControls(collec, this.Controls);
             controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
-            Saved += fetchXmlBuilder.CtrlSaved;
+            Saved += tree.CtrlSaved;
         }
 
         private void PopulateControls(TreeNode node, AttributeMetadata[] attributes)
         {
-            var aggregate = FetchXmlBuilder.IsFetchAggregate(node);
+            var aggregate = TreeBuilderControl.IsFetchAggregate(node);
             if (!aggregate)
             {
                 cmbAttribute.Items.Clear();
@@ -73,7 +68,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 cmbAlias.Items.Clear();
                 cmbAlias.Items.Add("");
-                cmbAlias.Items.AddRange(GetAliases(form.tvFetch.Nodes[0]).ToArray());
+                cmbAlias.Items.AddRange(GetAliases(tree.tvFetch.Nodes[0]).ToArray());
             }
             cmbAttribute.Enabled = !aggregate;
             cmbAlias.Enabled = aggregate;
@@ -118,7 +113,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         }
 
         /// <summary>
-        /// Sends a connection success message 
+        /// Sends a connection success message
         /// </summary>
         /// <param name="service">IOrganizationService generated</param>
         /// <param name="parameters">Lsit of parameter</param>

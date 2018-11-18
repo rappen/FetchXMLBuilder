@@ -1,14 +1,12 @@
-﻿using McTools.Xrm.Connection;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
-    public class LogUsage
+    public static class LogUsage
     {
         public static async Task DoLog(string action)
         {
@@ -17,6 +15,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 var ass = Assembly.GetExecutingAssembly().GetName();
                 var version = ass.Version.ToString();
                 var name = ass.Name.Replace(" ", "");
+                action = "FXB-" + action;
 
                 var query = "t.php" +
                     "?sc_project=10396418" +
@@ -39,14 +38,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 }
             }
             catch { }
-        }
-
-        internal static bool PromptToLog()
-        {
-            var msg = "Anonymous statistics will be collected to improve the functionality of FetchXML Builder.\n\n" +
-                "If you do not wish to allow this, open the Options and uncheck the 'Allow statistics' checkbox.";
-            MessageBox.Show(msg, "Statistics", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            return true;
         }
     }
 }

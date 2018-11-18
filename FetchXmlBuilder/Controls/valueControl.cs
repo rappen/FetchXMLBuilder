@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Cinteros.Xrm.XmlEditorUtils;
-using Microsoft.Xrm.Sdk.Metadata;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
@@ -22,13 +15,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         public delegate void SaveEventHandler(object sender, SaveEventArgs e);
 
-        #endregion
+        #endregion Delegates
 
         #region Event Handlers
 
         public event SaveEventHandler Saved;
 
-        #endregion
+        #endregion Event Handlers
 
         public valueControl()
         {
@@ -36,7 +29,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             collec = new Dictionary<string, string>();
         }
 
-        public valueControl(Dictionary<string, string> collection, FetchXmlBuilder fetchXmlBuilder)
+        public valueControl(Dictionary<string, string> collection, TreeBuilderControl tree)
             : this()
         {
             if (collection != null)
@@ -44,7 +37,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
             ControlUtils.FillControls(collec, this.Controls);
             controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
-            Saved += fetchXmlBuilder.CtrlSaved;
+            Saved += tree.CtrlSaved;
         }
 
         public void Save()
@@ -62,7 +55,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         }
 
         /// <summary>
-        /// Sends a connection success message 
+        /// Sends a connection success message
         /// </summary>
         /// <param name="service">IOrganizationService generated</param>
         /// <param name="parameters">Lsit of parameter</param>

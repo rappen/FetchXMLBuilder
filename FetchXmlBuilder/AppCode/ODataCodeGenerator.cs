@@ -1,12 +1,8 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
@@ -82,13 +78,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         private static string GetExpand(FetchEntityType entity, FetchXmlBuilder sender, ref string select)
         {
             var resultList = new List<string>();
-            var selectList = new List<string>();
+            var selectList = new List<string> { select };
             var linkitems = entity.Items.Where(i => i is FetchLinkEntityType).ToList();
             if (linkitems.Count > 0)
             {
                 foreach (FetchLinkEntityType linkitem in linkitems)
                 {
-                    if (linkitem.linktype== "outer")
+                    if (linkitem.linktype == "outer")
                     {
                         throw new Exception("OData queries do not support outer joins");
                     }
@@ -112,7 +108,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     selectList.Add(GetExpandedSelect(linkitem, relation.SchemaName, sender));
                 }
             }
-            select += string.Join(",", selectList);
+            select = string.Join(",", selectList);
             return string.Join(",", resultList);
         }
 

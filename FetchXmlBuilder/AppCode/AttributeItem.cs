@@ -1,15 +1,10 @@
 ﻿using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
-    class AttributeItem : IComboBoxItem
+    internal class AttributeItem : IComboBoxItem
     {
         private AttributeMetadata meta = null;
 

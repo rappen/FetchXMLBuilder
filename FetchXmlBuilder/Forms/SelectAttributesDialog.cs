@@ -1,15 +1,7 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
-using Cinteros.Xrm.XmlEditorUtils;
-using Microsoft.Xrm.Sdk;
+﻿using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Forms
@@ -17,7 +9,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
     public partial class SelectAttributesDialog : Form
     {
         private int sortcolumn = 0;
-        List<ListViewItem> allItems;
+        private List<ListViewItem> allItems;
 
         public SelectAttributesDialog(List<AttributeMetadata> attributes, List<string> selectedAttributes)
         {

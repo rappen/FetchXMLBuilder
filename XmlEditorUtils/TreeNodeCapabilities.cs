@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.XmlEditorUtils
@@ -16,7 +12,9 @@ namespace Cinteros.Xrm.XmlEditorUtils
         public bool Uncomment = false;
         public List<ChildNodeCapabilities> ChildTypes = new List<ChildNodeCapabilities>();
 
-        public TreeNodeCapabilities() { }
+        public TreeNodeCapabilities()
+        {
+        }
 
         protected TreeNodeCapabilities(TreeNode node)
         {

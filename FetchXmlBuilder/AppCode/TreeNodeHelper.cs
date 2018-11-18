@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cinteros.Xrm.FetchXmlBuilder.DockControls;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Xml;
@@ -6,16 +7,16 @@ using System.Xml.Linq;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
-    class TreeNodeHelper
+    internal class TreeNodeHelper
     {
         /// <summary>
         /// Adds a new TreeNode to the parent object from the XmlNode information
         /// </summary>
         /// <param name="parentObject">Object (TreeNode or TreeView) where to add a new TreeNode</param>
         /// <param name="xmlNode">Xml node from the sitemap</param>
-        /// <param name="form">Current application form</param>
+        /// <param name="tree">Current application form</param>
         /// <param name="isDisabled"> </param>
-        public static TreeNode AddTreeViewNode(object parentObject, XmlNode xmlNode, FetchXmlBuilder form, int index = -1)
+        public static TreeNode AddTreeViewNode(object parentObject, XmlNode xmlNode, TreeBuilderControl tree, int index = -1)
         {
             TreeNode node = null;
             if (xmlNode is XmlElement || xmlNode is XmlComment)
@@ -56,10 +57,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     throw new Exception("AddTreeViewNode: Unsupported control type");
                 }
                 node.Tag = attributes;
-                AddContextMenu(node, form);
+                AddContextMenu(node, tree);
                 foreach (XmlNode childNode in xmlNode.ChildNodes)
                 {
-                    AddTreeViewNode(node, childNode, form);
+                    AddTreeViewNode(node, childNode, tree);
                 }
                 SetNodeText(node, FetchXmlBuilder.friendlyNames);
             }
@@ -92,25 +93,29 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             switch (node.Name)
             {
                 case "fetch":
+                    if (attributes.ContainsKey("top"))
+                    {
+                        text += " top:" + attributes["top"];
+                    }
                     if (attributes.ContainsKey("count"))
                     {
-                        text += " count: " + attributes["count"];
-                    }
-                    if (attributes.ContainsKey("page"))
-                    {
-                        text += " page: " + attributes["page"];
+                        text += " cnt:" + attributes["count"];
                     }
                     if (attributes.ContainsKey("returntotalrecordcount") && attributes["returntotalrecordcount"] == "true")
                     {
-                        text += " RTRC";
+                        text += " reccnt";
                     }
                     if (attributes.ContainsKey("aggregate") && attributes["aggregate"] == "true")
                     {
-                        text += " aggregate";
+                        text += " aggr";
                     }
                     if (attributes.ContainsKey("distinct") && attributes["distinct"] == "true")
                     {
-                        text += " distinct";
+                        text += " dist";
+                    }
+                    if (attributes.ContainsKey("page"))
+                    {
+                        text += " pg:" + attributes["page"];
                     }
                     break;
                 case "entity":
@@ -260,51 +265,67 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         /// <summary>Adds a context menu to a TreeNode control</summary>
         /// <param name="node">TreeNode where to add the context menu</param>
-        /// <param name="form">Current application form</param>
-        public static void AddContextMenu(TreeNode node, FetchXmlBuilder form)
+        /// <param name="tree">Current application form</param>
+        public static void AddContextMenu(TreeNode node, TreeBuilderControl tree)
         {
-            form.addMenu.Items.Clear();
-            form.menuControl.Items.Clear();
-            if (node == null && form.tvFetch.Nodes.Count > 0)
+            tree.addMenu.Items.Clear();
+            var tmplbl = tree.lblQAExpander;
+            tree.gbQuickActions.Controls.Clear();
+            tree.gbQuickActions.Controls.Add(tmplbl);
+            if (node == null && tree.tvFetch.Nodes.Count > 0)
             {
-                node = form.tvFetch.Nodes[0];
+                node = tree.tvFetch.Nodes[0];
             }
             if (node != null)
             {
                 var nodecapabilities = new FetchNodeCapabilities(node);
 
+                if (nodecapabilities.Attributes && tree.selectAttributesToolStripMenuItem.Enabled)
+                {
+                    AddLinkFromCapability(tree, "Select Attributes", "SelectAttributes");
+                }
                 foreach (var childcapability in nodecapabilities.ChildTypes)
                 {
                     if (childcapability.Name == "-")
                     {
-                        form.addMenu.Items.Add(new ToolStripSeparator());
-                        //form.menuControl.Items.Add(new ToolStripSeparator());
+                        tree.addMenu.Items.Add(new ToolStripSeparator());
                     }
                     else if (childcapability.Multiple || !node.Nodes.ContainsKey(childcapability.Name))
                     {
-                        AddMenuFromCapability(form.addMenu, childcapability.Name);
-                        AddMenuFromCapability(form.menuControl, childcapability.Name, childcapability.Name == "#comment", "Add ");
+                        AddMenuFromCapability(tree.addMenu, childcapability.Name);
+                        AddLinkFromCapability(tree, childcapability.Name, null, childcapability.Name == "#comment");
                     }
                 }
-                if (form.addMenu.Items.Count == 0)
+                if (tree.addMenu.Items.Count == 0)
                 {
-                    var dummy = form.addMenu.Items.Add("nothing to add");
+                    var dummy = tree.addMenu.Items.Add("nothing to add");
                     dummy.Enabled = false;
                 }
 
-                form.selectAttributesToolStripMenuItem.Visible = nodecapabilities.Attributes;
-                form.deleteToolStripMenuItem.Enabled = nodecapabilities.Delete;
-                form.commentToolStripMenuItem.Enabled = nodecapabilities.Comment;
-                form.uncommentToolStripMenuItem.Enabled = nodecapabilities.Uncomment;
+                tree.selectAttributesToolStripMenuItem.Visible = nodecapabilities.Attributes;
+                tree.deleteToolStripMenuItem.Enabled = nodecapabilities.Delete;
+                tree.commentToolStripMenuItem.Enabled = nodecapabilities.Comment;
+                tree.uncommentToolStripMenuItem.Enabled = nodecapabilities.Uncomment;
 
-                if (nodecapabilities.Attributes && form.selectAttributesToolStripMenuItem.Enabled)
-                {
-                    var selattr = new ToolStripMenuItem("Select Attributes");
-                    selattr.Tag = "SelectAttributes";
-                    form.menuControl.Items.Insert(0, selattr);
-                }
+                node.ContextMenuStrip = tree.nodeMenu;
+            }
+        }
 
-                node.ContextMenuStrip = form.nodeMenu;
+        private static void AddLinkFromCapability(TreeBuilderControl tree, string name, string tag = null, bool alignright = false)
+        {
+            var link = new LinkLabel();
+            link.AutoSize = true;
+            link.Dock = alignright ? DockStyle.Right : DockStyle.Left;
+            link.TabIndex = tree.gbQuickActions.Controls.Count;
+            link.TabStop = true;
+            link.Text = name;
+            link.Tag = tag ?? name;
+            link.LinkBehavior = LinkBehavior.HoverUnderline;
+            link.LinkClicked += tree.QuickActionLink_LinkClicked;
+            tree.gbQuickActions.Controls.Add(link);
+            if (!alignright)
+            {
+                link.BringToFront();
             }
         }
 

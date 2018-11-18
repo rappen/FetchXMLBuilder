@@ -21,7 +21,7 @@
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <script>
-        var GH_USER = "Innofactor";
+        var GH_USER = "rappen";
         var GH_REPO = "FetchXMLBuilder";
         var NUGET_PACKAGE = "Cinteros.Xrm.FetchXMLBuilder";
         var nugetInfo = null;
@@ -109,7 +109,7 @@
         }
 
         PrintHistoryInfo = function (info, callback) {
-            var counttext = "<u>Version&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Count&nbsp;&nbsp;Released</u><br />";
+            var counttext = "<u>Version&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Count&nbsp;&nbsp;Released&nbsp;&nbsp;</u><br />";
             $(info.versions).each(function (index) {
                 var link = "";
                 if (this.url) {
@@ -190,7 +190,7 @@
         <div class="row">
             <div class="col-xs-12 col-sm-4 col-lg-3">
                 <h1 onclick="window.location = 'http://fxb.xrmtoolbox.com';" style="cursor:pointer;">
-                    <img src="images/FXB-inno-logo-400.png" /><br />
+                    <img src="images/FXB-Logo-400.png" /><br />
                 </h1>
                 <p>
                     <br /><br /><br />
@@ -200,7 +200,7 @@
                     </strong>
                 </p>
                 <p align="right">
-                    <i>- Jonas Rapp, Innofactor AB</i>
+                    <i>- Jonas Rapp, Sweden</i>
                 </p>
                 <hr />
             </div>
@@ -212,19 +212,13 @@
                     <em>
                         The primary goal of the tool is to give developers, customizers and administrators of Microsoft Dynamics CRM an easy to use tool to create queries for views, reports and code.
                         This includes the possibility to execute the queries to verify the results in various formats.
-                        <br /><br />
-                        <strong>
-                            Confused by new design? Cinteros recently merged with Innofactor. <a href="http://www.innofactor.com/for_media/0/0/innofactor_and_swedish_cinteros_ab_to_merge_innofactor_continues_its_expansion_in_the_nordics" target="_blank">Read more</a>
-                            <br />
-                            But don't worry - FetchXML Builder will continue to improve as before!
-                        </strong>
                     </em>
                 </p>
                 <h3>
                     <a id="info" class="anchor" href="#info" aria-hidden="true"><span class="octicon octicon-link"></span></a>Information sources
                 </h3>
                 <p>
-                    <a href="http://jonasrapp.cinteros.se/p/fxb.html" target="_blank">Learn</a> from the Introduction to FXB</a> on my blog <em>Jonas Rapp's CRM trenches</em>.<br />
+                    <a href="http://jonasrapp.net/fxb/" target="_blank">Learn</a> from the Introduction to FXB</a> on my blog <em>Jonas Rapp's CRM trenches</em>.<br />
                     <a href="watch">Watch</a> FXB on GitHub to recieve notifications on new releases and updates.<br />
                     <!--<strong><u><a href="wiki">Read</a></u></strong> information and screen shots in the wiki.<br />-->
                     <a href="#disqus">Discuss</a> if you have feedback, questions or just want to talk FXB.<br />
@@ -274,18 +268,56 @@
                 <div id="gitter_sidecar">
                     <script>
                         ((window.gitter = {}).chat = {}).options = {
-                            room: 'Innofactor/FetchXMLBuilder'
+                            room: 'jonasrapp/FetchXMLBuilder'
                         };
                     </script>
                     <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
                 </div>
                 <h3>
-                    <a id="cinteros" class="anchor" href="#cinteros" aria-hidden="true"><span class="octicon octicon-link"></span></a>Other plugins from Innofactor
+                    <a id="cinteros" class="anchor" href="#cinteros" aria-hidden="true"><span class="octicon octicon-link"></span></a>Other XrmToolBox plugins from Jonas Rapp
                 </h3>
-                <p>
-                    Me and some other colleagues at <strong>Innofactor</strong> have developed a few other cool plugins for XrmToolBox.<br />
-                    Have a look at these here: <a href="http://cinteros.xrmtoolbox.com">http://cinteros.xrmtoolbox.com</a>.
-                </p>
+                <table border="0">
+                    <tr>
+                        <td>
+                            Plugin Trace Viewer:
+                        </td>
+                        <td>
+                            <a href="http://ptv.xrmtoolbox.com" target="_blank">ptv.xrmtoolbox.com</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Auto Number Manager:
+                        </td>
+                        <td>
+                            <a href="http://anm.xrmtoolbox.com" target="_blank">anm.xrmtoolbox.com</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Bulk Data Updater:
+                        </td>
+                        <td>
+                            <a href="http://github.com/rappen/BulkDataUpdater" target="_blank">github.com/rappen/BulkDataUpdater</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Latebound Constants Generator:
+                        </td>
+                        <td>
+                            <a href="http://github.com/rappen/LateboundConstantsGenerator" target="_blank">github.com/rappen/LateboundConstantsGenerator</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Related Records Analyzer:
+                        </td>
+                        <td>
+                            <a href="http://github.com/rappen/RelatedRecordsAnalyzer" target="_blank">github.com/rappen/RelatedRecordsAnalyzer</a>
+                        </td>
+                    </tr>
+                </table>
                 <hr />
                 <!-- The following link was http://info.flagcounter.com/b2js but changed by me -->
                 <a href="http://statcounter.com/p10300908/visitor_map/?&perpage=200" target="_blank"><img src="http://s09.flagcounter.com/count/b2js/bg_FFFFFF/txt_000000/border_D4D4D4/columns_5/maxflags_250/viewers_FXB+fan+base/labels_1/pageviews_0/flags_0/" alt="Flag Counter" border="0"></a>
@@ -330,7 +362,7 @@
                         <th colspan="2" style="padding-top:10px;">
                             Latest release
                             &nbsp;&nbsp;
-                            <a href="https://github.com/Innofactor/FetchXMLBuilder/releases" target="_blank"><img src="images/open.png" /></a>
+                            <a href="https://github.com/rappen/FetchXMLBuilder/releases" target="_blank"><img src="images/open.png" /></a>
                         </th>
                     </tr>
                     <tr>
@@ -369,7 +401,7 @@
                         <th colspan="2" style="padding-top:10px;">
                             Issues
                             &nbsp;&nbsp;
-                            <a href="https://github.com/Innofactor/FetchXMLBuilder/issues" target="_blank"><img src="images/open.png" /></a>
+                            <a href="https://github.com/rappen/FetchXMLBuilder/issues" target="_blank"><img src="images/open.png" /></a>
                         </th>
                     </tr>
                     <tr>
@@ -393,25 +425,24 @@
         </div>
         <footer>
             <p>
-                <iframe src="https://ghbtns.com/github-btn.html?user=Innofactor&repo=FetchXMLBuilder&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+                <iframe src="https://ghbtns.com/github-btn.html?user=rappen&repo=FetchXMLBuilder&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
                 <span id="gazers"></span>
-                <iframe src="https://ghbtns.com/github-btn.html?user=Innofactor&repo=FetchXMLBuilder&type=watch&count=true&v=2" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+                <iframe src="https://ghbtns.com/github-btn.html?user=rappen&repo=FetchXMLBuilder&type=watch&count=true&v=2" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
                 <span id="watchers"></span>
-                <!--<iframe src="https://ghbtns.com/github-btn.html?user=Innofactor&repo=FetchXMLBuilder&type=fork&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>-->
+                <!--<iframe src="https://ghbtns.com/github-btn.html?user=rappen&repo=FetchXMLBuilder&type=fork&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>-->
             </p>
             <p>
                 <ul>
-                    <li><a href="https://github.com/Innofactor/FetchXMLBuilder">View on <strong>GitHub</strong></a></li>
-                    <li><a href="https://github.com/Innofactor/FetchXMLBuilder/issues">Go to <strong>Issues</strong></a></li>
-                    <li><a href="http://jonasrapp.cinteros.se/p/fxb.html">View the <strong>Tutorial</strong></a></li>
+                    <li><a href="https://github.com/rappen/FetchXMLBuilder">View on <strong>GitHub</strong></a></li>
+                    <li><a href="https://github.com/rappen/FetchXMLBuilder/issues">Go to <strong>Issues</strong></a></li>
+                    <li><a href="http://jonasrapp.net/fxb">View the <strong>Tutorial</strong></a></li>
                 </ul>
             </p>
             <p>
-                <a href="http://www.innofactor.se" target="_blank" title="Innofactor AB"><img src="images/Innofactor-square-032.png" width="30" height="30" /></a>&nbsp;
-                <a href="http://jonasrapp.cinteros.se" target="_blank" title="Jonas Rapp blog"><img src="images/blogger.png" width="30" height="30" /></a>&nbsp;
+                <a href="http://jonasrapp.net" target="_blank" title="Jonas Rapp blog"><img src="images/blogger.png" width="30" height="30" /></a>&nbsp;
                 <a href="http://twitter.com/rappen" target="_blank" title="Jonas Rapp on Twitter"><img src="images/twitter.png" width="30" height="30" /></a>&nbsp;
             </p>
-            <p>This project is developed by Jonas Rapp and maintained by Innofactor AB</p>
+            <p>This project is developed and maintained by by Jonas Rapp</p>
             <!--<p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>-->
         </footer>
     </div>

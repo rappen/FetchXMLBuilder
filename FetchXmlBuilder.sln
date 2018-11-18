@@ -3,13 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FetchXmlBuilder", "FetchXmlBuilder\FetchXmlBuilder.csproj", "{D746CBE7-7787-47FC-B773-F089A44DF8C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FetchXMLBuilder", "FetchXMLBuilder\FetchXMLBuilder.csproj", "{D746CBE7-7787-47FC-B773-F089A44DF8C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlEditorUtils", "XmlEditorUtils\XmlEditorUtils.csproj", "{9FC7BDF7-321C-4B96-9B70-D75A16BD7685}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{13AB47EF-2E67-4179-876C-88816794849B}"
 	ProjectSection(SolutionItems) = preProject
-		appveyor.yml = appveyor.yml
 		FetchXMLBuilder.nuspec = FetchXMLBuilder.nuspec
 	EndProjectSection
 EndProject
@@ -30,5 +29,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BB94D8EC-E778-4D0A-BE34-CBE2342DB0F3}
 	EndGlobalSection
 EndGlobal

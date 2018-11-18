@@ -1,18 +1,18 @@
 ﻿/****************************** Module Header ******************************\
 * Module Name:  CharacterEncoder.cs
-* Project:	    CSRichTextBoxSyntaxHighlighting 
+* Project:	    CSRichTextBoxSyntaxHighlighting
 * Copyright (c) Microsoft Corporation.
-* 
-* This CharacterEncoder class supplies a static(Shared) method to encode some 
+*
+* This CharacterEncoder class supplies a static(Shared) method to encode some
 * special characters in Xml and Rtf, such as '<', '>', '"', '&', ''', '\',
 * '{' and '}' .
-* 
+*
 * This source is subject to the Microsoft Public License.
 * See http://www.microsoft.com/opensource/licenses.mspx#Ms-PL.
 * All other rights reserved.
-* 
-* THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, 
-* EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED 
+*
+* THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
+* EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED
 * WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
 \***************************************************************************/
 
@@ -50,17 +50,17 @@ namespace CSRichTextBoxSyntaxHighlighting
                         encodedText.Append(@"&gt;");
                         break;
 
-                    // The character '\' should be converted to @"\\" or "\\\\" 
+                    // The character '\' should be converted to @"\\" or "\\\\"
                     case '\\':
                         encodedText.Append(@"\\");
                         break;
 
-                    // The character '{' should be converted to @"\{" or "\\{" 
+                    // The character '{' should be converted to @"\{" or "\\{"
                     case '{':
                         encodedText.Append(@"\{");
                         break;
 
-                    // The character '}' should be converted to @"\}" or "\\}" 
+                    // The character '}' should be converted to @"\}" or "\\}"
                     case '}':
                         encodedText.Append(@"\}");
                         break;
@@ -68,7 +68,6 @@ namespace CSRichTextBoxSyntaxHighlighting
                         encodedText.Append(originalText[i]);
                         break;
                 }
-
             }
             return encodedText.ToString();
         }

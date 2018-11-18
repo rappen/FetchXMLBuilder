@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
@@ -17,19 +12,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
     {
         private readonly Dictionary<string, string> collec;
         private string controlsCheckSum = "";
-        TreeNode node;
+        private TreeNode node;
+        private bool aggregate;
 
         #region Delegates
 
         public delegate void SaveEventHandler(object sender, SaveEventArgs e);
 
-        #endregion
+        #endregion Delegates
 
         #region Event Handlers
 
         public event SaveEventHandler Saved;
 
-        #endregion
+        #endregion Event Handlers
 
         public attributeControl()
         {
@@ -37,7 +33,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             collec = new Dictionary<string, string>();
         }
 
-        public attributeControl(TreeNode Node, AttributeMetadata[] attributes, FetchXmlBuilder fetchXmlBuilder)
+        public attributeControl(TreeNode Node, AttributeMetadata[] attributes, TreeBuilderControl tree)
             : this()
         {
             collec = (Dictionary<string, string>)Node.Tag;
@@ -49,7 +45,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             PopulateControls(Node, attributes);
             ControlUtils.FillControls(collec, this.Controls);
             controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
-            Saved += fetchXmlBuilder.CtrlSaved;
+            Saved += tree.CtrlSaved;
         }
 
         private void PopulateControls(TreeNode node, AttributeMetadata[] attributes)
@@ -62,7 +58,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, false, FetchXmlBuilder.friendlyNames);
                 }
             }
-            var aggregate = FetchXmlBuilder.IsFetchAggregate(node);
+            aggregate = TreeBuilderControl.IsFetchAggregate(node);
             cmbAggregate.Enabled = aggregate;
             chkGroupBy.Enabled = aggregate;
             if (!aggregate)
@@ -92,7 +88,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private bool ValidateForm()
         {
-            if (FetchXmlBuilder.IsFetchAggregate(node))
+            if (TreeBuilderControl.IsFetchAggregate(node))
             {
                 if (string.IsNullOrWhiteSpace(txtAlias.Text))
                 {
@@ -105,7 +101,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         }
 
         /// <summary>
-        /// Sends a connection success message 
+        /// Sends a connection success message
         /// </summary>
         /// <param name="service">IOrganizationService generated</param>
         /// <param name="parameters">Lsit of parameter</param>
@@ -129,7 +125,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void chkGroupBy_CheckedChanged(object sender, EventArgs e)
         {
+            EnableAggregateControls();
+        }
+
+        private void cmbAggregate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            EnableAggregateControls();
+        }
+
+        private void EnableAggregateControls()
+        {
             cmbDateGrouping.Enabled = chkGroupBy.Checked;
+            chkDistinct.Enabled = aggregate && !chkGroupBy.Checked;// && cmbAggregate.Text == "countcolumn";
+            if (!chkDistinct.Enabled)
+            {
+                chkDistinct.Checked = false;
+            }
             chkUserTZ.Enabled = chkGroupBy.Checked;
             if (!chkGroupBy.Checked)
             {

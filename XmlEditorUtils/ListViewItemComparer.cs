@@ -26,7 +26,7 @@ namespace Cinteros.Xrm.XmlEditorUtils
         /// </summary>
         private readonly SortOrder innerOrder;
 
-        #endregion
+        #endregion Variables
 
         #region Constructors
 
@@ -50,7 +50,7 @@ namespace Cinteros.Xrm.XmlEditorUtils
             innerOrder = order;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
@@ -94,6 +94,6 @@ namespace Cinteros.Xrm.XmlEditorUtils
             return String.CompareOrdinal(x, y);
         }
 
-        #endregion
+        #endregion Methods
     }
 }
