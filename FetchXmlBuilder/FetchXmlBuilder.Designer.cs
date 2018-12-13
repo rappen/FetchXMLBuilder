@@ -34,6 +34,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbCloseThisTab = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbNew = new System.Windows.Forms.ToolStripButton();
+            this.tsbRepo = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsmiRepoSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiRepoDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiRepoSaveAs = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbOpen = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiOpenFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -79,6 +84,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbCloseThisTab,
             this.toolStripSeparator4,
             this.tsbNew,
+            this.tsbRepo,
             this.tsbOpen,
             this.tsbSave,
             this.toolStripSeparator6,
@@ -123,6 +129,51 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbNew.Text = "New";
             this.tsbNew.ToolTipText = "New FetchXML (Ctrl+N)";
             this.tsbNew.Click += new System.EventHandler(this.tsbNew_Click);
+            // 
+            // tsbRepo
+            // 
+            this.tsbRepo.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiRepoSave,
+            this.tsmiRepoDelete,
+            this.tsmiRepoSaveAs,
+            this.toolStripMenuItem2});
+            this.tsbRepo.Image = ((System.Drawing.Image)(resources.GetObject("tsbRepo.Image")));
+            this.tsbRepo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbRepo.Name = "tsbRepo";
+            this.tsbRepo.Size = new System.Drawing.Size(100, 28);
+            this.tsbRepo.Text = "Repository";
+            this.tsbRepo.DropDownOpening += new System.EventHandler(this.tsbRepo_DropDownOpening);
+            // 
+            // tsmiRepoSave
+            // 
+            this.tsmiRepoSave.Enabled = false;
+            this.tsmiRepoSave.Image = ((System.Drawing.Image)(resources.GetObject("tsmiRepoSave.Image")));
+            this.tsmiRepoSave.Name = "tsmiRepoSave";
+            this.tsmiRepoSave.Size = new System.Drawing.Size(188, 30);
+            this.tsmiRepoSave.Text = "Save";
+            this.tsmiRepoSave.Click += new System.EventHandler(this.tsmiRepoSave_Click);
+            // 
+            // tsmiRepoDelete
+            // 
+            this.tsmiRepoDelete.Enabled = false;
+            this.tsmiRepoDelete.Image = ((System.Drawing.Image)(resources.GetObject("tsmiRepoDelete.Image")));
+            this.tsmiRepoDelete.Name = "tsmiRepoDelete";
+            this.tsmiRepoDelete.Size = new System.Drawing.Size(188, 30);
+            this.tsmiRepoDelete.Text = "Delete";
+            this.tsmiRepoDelete.Click += new System.EventHandler(this.tsmiRepoDelete_Click);
+            // 
+            // tsmiRepoSaveAs
+            // 
+            this.tsmiRepoSaveAs.Image = ((System.Drawing.Image)(resources.GetObject("tsmiRepoSaveAs.Image")));
+            this.tsmiRepoSaveAs.Name = "tsmiRepoSaveAs";
+            this.tsmiRepoSaveAs.Size = new System.Drawing.Size(188, 30);
+            this.tsmiRepoSaveAs.Text = "Save Query As...";
+            this.tsmiRepoSaveAs.Click += new System.EventHandler(this.tsmiRepoSaveAs_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(185, 6);
             // 
             // tsbOpen
             // 
@@ -499,5 +550,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiShowFetchXMLjs;
         private System.Windows.Forms.ToolStripLabel tslAbout;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveViewAs;
+        private System.Windows.Forms.ToolStripDropDownButton tsbRepo;
+        private System.Windows.Forms.ToolStripMenuItem tsmiRepoSave;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem tsmiRepoSaveAs;
+        private System.Windows.Forms.ToolStripMenuItem tsmiRepoDelete;
     }
 }

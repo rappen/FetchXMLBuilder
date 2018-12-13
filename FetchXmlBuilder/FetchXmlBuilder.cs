@@ -11,6 +11,7 @@ using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
@@ -38,6 +39,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal static Dictionary<string, List<Entity>> views;
         internal FXBSettings settings = new FXBSettings();
         internal TreeBuilderControl dockControlBuilder;
+        internal QueryRepository repository = new QueryRepository();
         internal bool working = false;
 
         #endregion Internal Fields
@@ -808,6 +810,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return callerArgs != null;
         }
 
+        private ToolStripMenuItem CreateRepoMenuItem(QueryDefinition q)
+        {
+            var menu = new ToolStripMenuItem(q.Name) { Tag = q };
+            menu.Click += tsmiRepoOpen_Click;
+            return menu;
+        }
+
         private IDockContent dockDeSerialization(string persistString)
         {
             if (persistString == typeof(TreeBuilderControl).ToString() && dockControlBuilder?.IsDisposed != false)
@@ -1057,22 +1066,33 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         /// <summary>Loads configurations from file</summary>
         private void LoadSetting()
         {
+            settings = null;
             try
             {
-                if (SettingsManager.Instance.TryLoad<FXBSettings>(typeof(FetchXmlBuilder), out settings, "[Common]"))
-                {
-                    return;
-                }
+                SettingsManager.Instance.TryLoad(typeof(FetchXmlBuilder), out settings, "[Common]");
             }
             catch (InvalidOperationException) { }
-            settings = new FXBSettings();
+            if (settings == null)
+            {
+                settings = new FXBSettings();
+            }
+            repository = null;
+            try
+            {
+                SettingsManager.Instance.TryLoad(typeof(FetchXmlBuilder), out repository, "[QueryRepository]");
+            }
+            catch (InvalidOperationException) { }
+            if (repository == null)
+            {
+                repository = new QueryRepository();
+            }
         }
 
         private FXBConnectionSettings GetConnectionSetting()
         {
             try
             {
-                if (SettingsManager.Instance.TryLoad<FXBConnectionSettings>(typeof(FetchXmlBuilder), out FXBConnectionSettings connsett, ConnectionDetail?.ConnectionName))
+                if (SettingsManager.Instance.TryLoad(typeof(FetchXmlBuilder), out FXBConnectionSettings connsett, ConnectionDetail?.ConnectionName))
                 {
                     return connsett;
                 }
@@ -1193,6 +1213,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 }
             }
             EnableControls(true);
+        }
+
+        private void RebuildRepositoryMenu(QueryDefinition selectedquery)
+        {
+            tsbRepo.Tag = selectedquery;
+            dockControlBuilder.SetFetchName(selectedquery != null ? $"Repo: {selectedquery.Name}" : null);
+            var oldqueries = tsbRepo.DropDownItems.Cast<ToolStripItem>().Where(m => m.Tag is QueryDefinition).ToList();
+            foreach (var oldmenu in oldqueries)
+            {
+                tsbRepo.DropDownItems.Remove(oldmenu);
+            }
+            tsbRepo.DropDownItems.AddRange(repository.Queries.Select(q => CreateRepoMenuItem(q)).ToArray());
         }
 
         private void ResetDockLayout()
@@ -1534,6 +1566,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             });
         }
 
+        private void SaveRepository()
+        {
+            SettingsManager.Instance.Save(typeof(FetchXmlBuilder), repository, "[QueryRepository]");
+        }
+
         /// <summary>Saves various configurations to file for next session</summary>
         private void SaveSetting()
         {
@@ -1763,6 +1800,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             LogUse("Load");
             SetupDockControls();
             ApplySettings();
+            RebuildRepositoryMenu(null);
             TreeNodeHelper.AddContextMenu(null, dockControlBuilder);
             EnableControls(true);
         }
@@ -1944,6 +1982,79 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsmiShowSQL_Click(object sender, EventArgs e)
         {
             ShowContentControl(ref dockControlSQL, ContentType.SQL_Query, SaveFormat.SQL, settings.DockStates.SQLQuery);
+        }
+
+        private void tsbRepo_DropDownOpening(object sender, EventArgs e)
+        {
+            var query = tsbRepo.Tag as QueryDefinition;
+            tsmiRepoSave.Text = $"Save {query?.Name}";
+            tsmiRepoDelete.Text = $"Delete {query?.Name}";
+            tsmiRepoSave.Enabled = query != null;
+            tsmiRepoDelete.Enabled = query != null;
+        }
+
+        private void tsmiRepoDelete_Click(object sender, EventArgs e)
+        {
+            if (!(tsbRepo.Tag is QueryDefinition query))
+            {
+                return;
+            }
+            if (MessageBox.Show($"Confirm delete query {query.Name} from repository", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK)
+            {
+                return;
+            }
+            repository.Queries.Remove(query);
+            SaveRepository();
+            RebuildRepositoryMenu(null);
+        }
+
+        private void tsmiRepoOpen_Click(object sender, EventArgs e)
+        {
+            if (sender is ToolStripMenuItem menu && menu.Tag is QueryDefinition query)
+            {
+                dockControlBuilder.Init(query.Fetch, $"open repo {query.Name}", false);
+                tsbRepo.Tag = query;
+                dockControlBuilder.SetFetchName($"Repo: {query.Name}");
+            }
+        }
+
+        private void tsmiRepoSave_Click(object sender, EventArgs e)
+        {
+            if (!(tsbRepo.Tag is QueryDefinition query))
+            {
+                return;
+            }
+            query.Fetch = dockControlBuilder.GetFetchString(true, false);
+            SaveRepository();
+            MessageBox.Show($"Query {query.Name} updated in repository", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void tsmiRepoSaveAs_Click(object sender, EventArgs e)
+        {
+            if (!(Prompt.ShowDialog("Enter name for the query", "Save Query")?.Trim() is string queryname))
+            {
+                return;
+            }
+            if (string.IsNullOrEmpty(queryname))
+            {
+                MessageBox.Show("No name for query.", "Save Query", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (repository.Queries.Any(q => q.Name == queryname))
+            {
+                if (MessageBox.Show($"Query {queryname} already exists.\nOverwrite?", "Save Query", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) != DialogResult.Yes)
+                {
+                    return;
+                }
+                repository.Queries.Remove(repository.Queries.FirstOrDefault(q => q.Name == queryname));
+            }
+            var fetch = dockControlBuilder.GetFetchString(true, false);
+            var query = new QueryDefinition { Name = queryname, Fetch = fetch };
+            repository.Queries.Add(query);
+            repository.SortQueries();
+            SaveRepository();
+            RebuildRepositoryMenu(query);
+            MessageBox.Show($"Query {query.Name} saved in repository", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         #endregion Private Event Handlers
