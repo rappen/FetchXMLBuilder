@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
@@ -11,12 +10,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             public string Value { get; set; }
         }
 
+        private static bool foundFetchData(List<NameValue> data, string name)
+        {
+            for (var i = 0; i < data.Count; i++)
+                if (data[i].Name == name) return true;
+            return false;
+        }
 
         internal static NameValue GetFetchData(List<NameValue> data, string name, string value)
         {
-            var index = data.Where(r => r.Name == name || (r.Name.StartsWith(name) && int.TryParse(r.Name.Substring(name.Length), out int i))).Count();
-            if (index == 0) return new NameValue { Name = name, Value = value };
-            return new NameValue { Name = name + (index + 1).ToString(), Value = value };
+            var nv = new NameValue { Name = name, Value = value };
+            var index = 1;
+            var checkName = name;
+            while (foundFetchData(data, checkName)) {
+                index = index + 1;
+                checkName = name + index;
+            }
+            nv.Name = checkName;
+            return nv;
         }
     }
 }
