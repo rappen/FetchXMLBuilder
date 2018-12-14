@@ -37,9 +37,15 @@
     </description>
     <releaseNotes>
 -- New features--
+#229 Repository for easy access to favorite queries
+#215 Variables for conditions in QueryExpression code
+More modern colors / font in XML window
 
 -- Bug fixes --
+#219 Crash in CRMGridView in some null value scenario
+#220 Code generator error for multiple condition values
 #221 Save File does actually save the file
+#223 Filters not generated correct in C# code
     </releaseNotes>
     <copyright>Copyright Jonas Rapp 2014-2018</copyright>
     <tags>XrmToolBox Plugins FetchXML Builder</tags>
