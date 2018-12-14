@@ -151,5 +151,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     {
         public string Name { get; set; }
         public string Fetch { get; set; }
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

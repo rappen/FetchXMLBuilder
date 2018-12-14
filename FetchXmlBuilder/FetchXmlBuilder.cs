@@ -39,7 +39,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal static Dictionary<string, List<Entity>> views;
         internal FXBSettings settings = new FXBSettings();
         internal TreeBuilderControl dockControlBuilder;
-        internal QueryRepository repository = new QueryRepository();
         internal bool working = false;
 
         #endregion Internal Fields
@@ -65,6 +64,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private int resultpanecount = 0;
         private Entity view;
         private AppInsights ai;
+        private QueryRepository repository = new QueryRepository();
 
         #endregion Private Fields
 
@@ -810,11 +810,30 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return callerArgs != null;
         }
 
-        private ToolStripMenuItem CreateRepoMenuItem(QueryDefinition q)
+        private void CreateRepoMenuItem(QueryDefinition query)
         {
-            var menu = new ToolStripMenuItem(q.Name) { Tag = q };
+            ToolStripDropDownItem folder = tsbRepo;
+            var nameparts = query.Name.Split('\\');
+            for (var i = 0; i < nameparts.Length - 1; i++)
+            {
+                var foldername = nameparts[i];
+                folder = GetMenuFolder(folder, foldername);
+            }
+            var name = nameparts[nameparts.Length - 1];
+            var menu = new ToolStripMenuItem(name) { Tag = query };
             menu.Click += tsmiRepoOpen_Click;
-            return menu;
+            folder.DropDownItems.Add(menu);
+        }
+
+        private ToolStripMenuItem GetMenuFolder(ToolStripDropDownItem parent, string label)
+        {
+            var result = parent.DropDownItems.Cast<ToolStripItem>().FirstOrDefault(m => m.Text == label && m.Tag as string == "folder") as ToolStripMenuItem;
+            if (result == null)
+            {
+                result = new ToolStripMenuItem(label) { Tag = "folder" };
+                parent.DropDownItems.Add(result);
+            }
+            return result;
         }
 
         private IDockContent dockDeSerialization(string persistString)
@@ -1086,6 +1105,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 repository = new QueryRepository();
             }
+            repository.SortQueries();
         }
 
         private FXBConnectionSettings GetConnectionSetting()
@@ -1219,12 +1239,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             tsbRepo.Tag = selectedquery;
             dockControlBuilder.SetFetchName(selectedquery != null ? $"Repo: {selectedquery.Name}" : null);
-            var oldqueries = tsbRepo.DropDownItems.Cast<ToolStripItem>().Where(m => m.Tag is QueryDefinition).ToList();
+            var oldqueries = tsbRepo.DropDownItems.Cast<ToolStripItem>().Where(m => m.Tag is QueryDefinition || m.Tag == "folder").ToList();
             foreach (var oldmenu in oldqueries)
             {
                 tsbRepo.DropDownItems.Remove(oldmenu);
             }
-            tsbRepo.DropDownItems.AddRange(repository.Queries.Select(q => CreateRepoMenuItem(q)).ToArray());
+            foreach (var query in repository.Queries)
+            {
+                CreateRepoMenuItem(query);
+            }
         }
 
         private void ResetDockLayout()
@@ -1987,7 +2010,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsbRepo_DropDownOpening(object sender, EventArgs e)
         {
             var query = tsbRepo.Tag as QueryDefinition;
-            tsmiRepoSave.Text = $"Save {query?.Name}";
+            tsmiRepoSave.Text = $"Update {query?.Name}";
             tsmiRepoDelete.Text = $"Delete {query?.Name}";
             tsmiRepoSave.Enabled = query != null;
             tsmiRepoDelete.Enabled = query != null;
@@ -2031,7 +2054,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsmiRepoSaveAs_Click(object sender, EventArgs e)
         {
-            if (!(Prompt.ShowDialog("Enter name for the query", "Save Query")?.Trim() is string queryname))
+            if (!(Prompt.ShowDialog("Enter name for the query. Use backslashes \\ to create folder structure.", "Save Query")?.Trim() is string queryname))
             {
                 return;
             }
