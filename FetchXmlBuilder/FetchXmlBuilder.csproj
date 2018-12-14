@@ -149,24 +149,6 @@
     <Compile Include="AppCode\EntityRelationship.cs" />
     <Compile Include="AppCode\OperatorItem.cs" />
     <Compile Include="AppCode\TreeNodeHelper.cs" />
-    <Compile Include="AppInsights\AiBaseData.cs" />
-    <Compile Include="AppInsights\AiConfig.cs" />
-    <Compile Include="AppInsights\AiData.cs" />
-    <Compile Include="AppInsights\AiDataPoint.cs" />
-    <Compile Include="AppInsights\AiException.cs" />
-    <Compile Include="AppInsights\AiLogRequest.cs" />
-    <Compile Include="AppInsights\AiMeasurements.cs" />
-    <Compile Include="AppInsights\AiParsedStack.cs" />
-    <Compile Include="AppInsights\AiProperties.cs" />
-    <Compile Include="AppInsights\AiTags.cs" />
-    <Compile Include="AppInsights\AppInsights.cs" />
-    <Compile Include="AppInsights\Enums\AiDataPointType.cs" />
-    <Compile Include="AppInsights\Enums\AiExceptionSeverity.cs" />
-    <Compile Include="AppInsights\Enums\AiTraceSeverity.cs" />
-    <Compile Include="AppInsights\ExceptionHelper.cs" />
-    <Compile Include="AppInsights\HttpHelper.cs" />
-    <Compile Include="AppInsights\LogHelper.cs" />
-    <Compile Include="AppInsights\Serialization.cs" />
     <Compile Include="Controls\commentControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -380,7 +362,8 @@
     <EmbeddedResource Include="ReleaseNotes\1.2018.4.2.rtf" />
     <EmbeddedResource Include="ReleaseNotes\1.2018.6.1.rtf" />
     <EmbeddedResource Include="ReleaseNotes\1.2018.8.2.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2018.12.1.rtf" />
+    <None Include="ReleaseNotes\1.2018.12.1.rtf" />
+    <EmbeddedResource Include="ReleaseNotes\1.2018.12.2.rtf" />
     <None Include="Resources\XSD fetch.cs.cmd" />
     <None Include="XrmToolBox.exe.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -391,6 +374,10 @@
     <ProjectReference Include="..\XmlEditorUtils\XmlEditorUtils.csproj">
       <Project>{9fc7bdf7-321c-4b96-9b70-d75a16bd7685}</Project>
       <Name>XmlEditorUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XTB.AppInsights\XTB.AppInsights.csproj">
+      <Project>{beee0a66-96ed-45b2-a82e-da678f8d6eab}</Project>
+      <Name>XTB.AppInsights</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -403,7 +390,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>ilmerge.exe /target:library /targetplatform:v4,"C:\Windows\Microsoft.NET\Framework\v4.0.30319" "/out:Rappen.XTB.FXB.dll" "$(TargetFileName)" "Rappen.XmlEditorUtils.dll" "Cinteros.Xrm.CRMWinForm.dll"
+    <PostBuildEvent>ilmerge.exe /target:library /targetplatform:v4,"C:\Windows\Microsoft.NET\Framework\v4.0.30319" "/out:Rappen.XTB.FXB.dll" "$(TargetFileName)" "Rappen.XmlEditorUtils.dll" "Rappen.XTB.AppInsights.dll" "Cinteros.Xrm.CRMWinForm.dll"
 
 if $(ConfigurationName) == Debug (
   IF NOT EXIST Plugins mkdir Plugins

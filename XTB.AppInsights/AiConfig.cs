@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Reflection;
+using XTB.AppInsights;
 
 public class AiConfig
 {
     public string PluginName { get; set; } = GetLastDotPart(Assembly.GetExecutingAssembly().GetName().Name);
-    public string PluginVersion { get; set; } = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-    public string XTBVersion { get; set; } = GetLastDotPart(Assembly.GetEntryAssembly().GetName().Name) + " " + Assembly.GetEntryAssembly().GetName().Version;
+    public string PluginVersion { get; set; } = Assembly.GetExecutingAssembly().GetName().Version.PaddedVersion(1, 4, 2, 2);
+    public string XTBVersion { get; set; } = GetLastDotPart(Assembly.GetEntryAssembly().GetName().Name) + " " + Assembly.GetEntryAssembly().GetName().Version.PaddedVersion(1, 4, 2, 2);
     public string OperationName { get; set; }
     public Guid SessionId { get; } = Guid.NewGuid();
     public string InstrumentationKey { get; }
