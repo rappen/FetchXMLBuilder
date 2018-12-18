@@ -42,6 +42,7 @@
 More modern colors / font in XML window
 
 -- Bug fixes --
+#122 Uncommenting fails sometimes when using single quotes
 #219 Crash in CRMGridView in some null value scenario
 #220 Code generator error for multiple condition values
 #221 Save File does actually save the file

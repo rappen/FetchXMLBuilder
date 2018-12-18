@@ -363,8 +363,7 @@
     <EmbeddedResource Include="ReleaseNotes\1.2018.4.2.rtf" />
     <EmbeddedResource Include="ReleaseNotes\1.2018.6.1.rtf" />
     <EmbeddedResource Include="ReleaseNotes\1.2018.8.2.rtf" />
-    <None Include="ReleaseNotes\1.2018.12.1.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2018.12.2.rtf" />
+    <EmbeddedResource Include="ReleaseNotes\1.2018.12.3.rtf" />
     <None Include="Resources\XSD fetch.cs.cmd" />
     <None Include="XrmToolBox.exe.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
