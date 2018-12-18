@@ -103,7 +103,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                                 var coll = new Dictionary<string, string>();
                                 coll.Add("#text", value);
                                 attrNode.Tag = coll;
-                                TreeNodeHelper.SetNodeText(attrNode, FetchXmlBuilder.friendlyNames);
+                                TreeNodeHelper.SetNodeText(attrNode, form);
                             }
                             cmbValue.Text = "";
                         }

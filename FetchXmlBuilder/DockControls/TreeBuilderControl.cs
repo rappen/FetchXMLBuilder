@@ -116,7 +116,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 return;
             }
             tvFetch.SelectedNode.Tag = e.AttributeCollection;
-            TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, FetchXmlBuilder.friendlyNames);
+            TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, fxb);
             FetchChanged = treeChecksum != GetTreeChecksum(null);
             var origin = "";
             if (sender is IDefinitionSavable)
@@ -304,7 +304,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         internal void UpdateCurrentNode()
         {
-            TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, FetchXmlBuilder.friendlyNames);
+            TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, fxb);
         }
 
         private static bool IsFetchAggregate(XmlDocument xml)
@@ -385,7 +385,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 var parent = node.Parent;
                 var index = node.Index;
                 node.Parent.Nodes.Remove(node);
-                tvFetch.SelectedNode = TreeNodeHelper.AddTreeViewNode(parent, commentNode, this, index);
+                tvFetch.SelectedNode = TreeNodeHelper.AddTreeViewNode(parent, commentNode, this, fxb, index);
                 RecordHistory("comment");
             }
         }
@@ -407,7 +407,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
             XmlNode definitionXmlNode = fetchDoc.DocumentElement;
             tvFetch.Nodes.Clear();
-            TreeNodeHelper.AddTreeViewNode(tvFetch, definitionXmlNode, this);
+            TreeNodeHelper.AddTreeViewNode(tvFetch, definitionXmlNode, this, fxb);
             tvFetch.ExpandAll();
             ManageMenuDisplay();
         }
@@ -717,7 +717,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     var coll = new Dictionary<string, string>();
                     coll.Add("name", attribute);
                     attrNode.Tag = coll;
-                    TreeNodeHelper.SetNodeText(attrNode, fxb.settings.UseFriendlyNames);
+                    TreeNodeHelper.SetNodeText(attrNode, fxb);
                 }
                 FetchChanged = treeChecksum != GetTreeChecksum(null);
                 fxb.UpdateLiveXML();
@@ -753,7 +753,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                         var parent = node.Parent;
                         var index = node.Index;
                         node.Parent.Nodes.Remove(node);
-                        tvFetch.SelectedNode = TreeNodeHelper.AddTreeViewNode(parent, doc.DocumentElement, this, index);
+                        tvFetch.SelectedNode = TreeNodeHelper.AddTreeViewNode(parent, doc.DocumentElement, this, fxb, index);
                         tvFetch.SelectedNode.Expand();
                         RecordHistory("uncomment");
                     }

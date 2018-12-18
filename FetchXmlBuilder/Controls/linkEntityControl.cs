@@ -149,7 +149,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     list.Clear();
                     foreach (var rel in mo)
                     {
-                        list.Add(new EntityRelationship(rel, parententityname));
+                        list.Add(new EntityRelationship(rel, parententityname, form));
                     }
                     list.Sort();
                     cmbRelationship.Items.AddRange(list.ToArray());
@@ -160,7 +160,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     list.Clear();
                     foreach (var rel in om)
                     {
-                        list.Add(new EntityRelationship(rel, parententityname));
+                        list.Add(new EntityRelationship(rel, parententityname, form));
                     }
                     list.Sort();
                     cmbRelationship.Items.AddRange(list.ToArray());
@@ -172,7 +172,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     list.Clear();
                     foreach (var rel in mm)
                     {
-                        list.Add(new EntityRelationship(rel, parententityname, greatparententityname));
+                        list.Add(new EntityRelationship(rel, parententityname, form, greatparententityname));
                     }
                     list.Sort();
                     cmbRelationship.Items.AddRange(list.ToArray());

@@ -34,9 +34,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         #region Internal Fields
 
-        internal static Dictionary<string, EntityMetadata> entities;
+        internal Dictionary<string, EntityMetadata> entities;
         internal static bool friendlyNames = false;
-        internal static Dictionary<string, List<Entity>> views;
+        internal Dictionary<string, List<Entity>> views;
         internal FXBSettings settings = new FXBSettings();
         internal TreeBuilderControl dockControlBuilder;
         internal bool working = false;
@@ -341,7 +341,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         #region Internal Methods
 
-        internal static AttributeMetadata GetAttribute(string entityName, string attributeName)
+        internal AttributeMetadata GetAttribute(string entityName, string attributeName)
         {
             if (entities != null && entities.ContainsKey(entityName))
             {
@@ -359,7 +359,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return null;
         }
 
-        internal static string GetAttributeDisplayName(string entityName, string attributeName)
+        internal string GetAttributeDisplayName(string entityName, string attributeName)
         {
             if (!friendlyNames)
             {
@@ -390,7 +390,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return attributeName;
         }
 
-        internal static string GetEntityDisplayName(string entityName)
+        internal string GetEntityDisplayName(string entityName)
         {
             if (!friendlyNames)
             {
@@ -971,7 +971,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             var fetch = dockControlBuilder.GetFetchType();
             try
             {
-                sql = SQLQueryGenerator.GetSQLQuery(fetch);
+                sql = SQLQueryGenerator.GetSQLQuery(fetch, this);
             }
             catch (Exception ex)
             {

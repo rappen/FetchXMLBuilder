@@ -16,7 +16,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         /// <param name="xmlNode">Xml node from the sitemap</param>
         /// <param name="tree">Current application form</param>
         /// <param name="isDisabled"> </param>
-        public static TreeNode AddTreeViewNode(object parentObject, XmlNode xmlNode, TreeBuilderControl tree, int index = -1)
+        public static TreeNode AddTreeViewNode(object parentObject, XmlNode xmlNode, TreeBuilderControl tree, FetchXmlBuilder fxb, int index = -1)
         {
             TreeNode node = null;
             if (xmlNode is XmlElement || xmlNode is XmlComment)
@@ -60,9 +60,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 AddContextMenu(node, tree);
                 foreach (XmlNode childNode in xmlNode.ChildNodes)
                 {
-                    AddTreeViewNode(node, childNode, tree);
+                    AddTreeViewNode(node, childNode, tree, fxb);
                 }
-                SetNodeText(node, FetchXmlBuilder.friendlyNames);
+                SetNodeText(node, fxb);
             }
             else if (xmlNode is XmlText && parentObject is TreeNode)
             {
@@ -76,7 +76,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return node;
         }
 
-        public static void SetNodeText(TreeNode node, bool friendly)
+        public static void SetNodeText(TreeNode node, FetchXmlBuilder fxb)
         {
             if (node == null)
             {
@@ -120,7 +120,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     break;
                 case "entity":
                 case "link-entity":
-                    text += " " + FetchXmlBuilder.GetEntityDisplayName(name);
+                    text += " " + fxb.GetEntityDisplayName(name);
                     if (!string.IsNullOrEmpty(alias))
                     {
                         text += " (" + alias + ")";
@@ -137,7 +137,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         if (node.Parent != null)
                         {
                             var parent = GetAttributeFromNode(node.Parent, "name");
-                            name = FetchXmlBuilder.GetAttributeDisplayName(parent, name);
+                            name = fxb.GetAttributeDisplayName(parent, name);
                         }
                         if (!string.IsNullOrEmpty(agg) && !string.IsNullOrEmpty(name))
                         {
@@ -178,7 +178,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         if (node.Parent != null && node.Parent.Parent != null)
                         {
                             var parent = GetAttributeFromNode(node.Parent.Parent, "name");
-                            attr = FetchXmlBuilder.GetAttributeDisplayName(parent, attr);
+                            attr = fxb.GetAttributeDisplayName(parent, attr);
                         }
                         if (!string.IsNullOrEmpty(ent))
                         {
@@ -209,7 +209,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                             if (!string.IsNullOrEmpty(attr) && node.Parent != null)
                             {
                                 var parent = GetAttributeFromNode(node.Parent, "name");
-                                attr = FetchXmlBuilder.GetAttributeDisplayName(parent, attr);
+                                attr = fxb.GetAttributeDisplayName(parent, attr);
                             }
                             {
                                 text += " " + attr;
@@ -232,7 +232,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
                     break;
             }
-            if (friendly && !string.IsNullOrEmpty(text))
+            if (FetchXmlBuilder.friendlyNames && !string.IsNullOrEmpty(text))
             {
                 text = text.Substring(0, 1).ToUpper() + text.Substring(1);
             }

@@ -8,14 +8,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public RelationshipMetadataBase Relationship;
         public string Name = "";
 
-        public EntityRelationship(RelationshipMetadataBase relation, string originatingEntity, string originatingParent = "")
+        public EntityRelationship(RelationshipMetadataBase relation, string originatingEntity, FetchXmlBuilder fxb, string originatingParent = "")
         {
             Relationship = relation;
             if (relation is OneToManyRelationshipMetadata)
             {
                 var om = (OneToManyRelationshipMetadata)relation;
-                Name = FetchXmlBuilder.GetEntityDisplayName(om.ReferencingEntity) + "." + om.ReferencingAttribute + " -> " +
-                    FetchXmlBuilder.GetEntityDisplayName(om.ReferencedEntity) + "." + om.ReferencedAttribute;
+                Name = fxb.GetEntityDisplayName(om.ReferencingEntity) + "." + om.ReferencingAttribute + " -> " +
+                    fxb.GetEntityDisplayName(om.ReferencedEntity) + "." + om.ReferencedAttribute;
             }
             else if (relation is ManyToManyRelationshipMetadata)
             {
