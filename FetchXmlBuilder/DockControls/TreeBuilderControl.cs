@@ -180,7 +180,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     var doc = GetFetchDocument();
                     xml = doc.OuterXml;
                     if (fxb.settings.QueryOptions.UseSingleQuotation)
-                    {
+                    {   // #122 Not sure why this is done... and it messes up commented xml using single quotation
                         xml = xml.Replace("'", "&apos;");
                         xml = xml.Replace("\"", "'");
                     }
@@ -741,6 +741,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     if (comment.EndsWith("~"))
                     {
                         comment = comment.Substring(0, comment.Length - 1) + "-";
+                    }
+                    if (comment.Contains("&apos;"))
+                    {
+                        comment = comment.Replace("&apos;", "'");
                     }
                     var doc = new XmlDocument();
                     try

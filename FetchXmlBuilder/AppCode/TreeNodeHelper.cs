@@ -222,7 +222,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
                     break;
                 case "#comment":
-                    text = GetAttributeFromNode(node, "#comment").Trim().Replace("\r\n", "  ");
+                    text = GetAttributeFromNode(node, "#comment")
+                        .Trim()
+                        .Replace("\r\n", "  ")
+                        .Replace("&apos;", "'");
                     if (string.IsNullOrWhiteSpace(text))
                     {
                         text = " - comment - ";
