@@ -47,6 +47,7 @@ More modern colors / font in XML window
 #220 Code generator error for multiple condition values
 #221 Save File does actually save the file
 #223 Filters not generated correct in C# code
+#230 Cache bleed between FXB instances
     </releaseNotes>
     <copyright>Copyright Jonas Rapp 2014-2018</copyright>
     <tags>XrmToolBox Plugins FetchXML Builder</tags>
