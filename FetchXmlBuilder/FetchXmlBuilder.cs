@@ -1884,6 +1884,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             LogUse("New");
             dockControlBuilder.Init(null, "new", false);
+            liveUpdateXml = string.Empty;
         }
 
         private void tsbOptions_Click(object sender, EventArgs e)
