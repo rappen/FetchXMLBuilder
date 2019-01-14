@@ -33,6 +33,7 @@
             CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings2 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnExecute = new System.Windows.Forms.Button();
+            this.btnParseQE = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.panCancel = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -41,6 +42,7 @@
             this.gbActions = new System.Windows.Forms.GroupBox();
             this.lblActionsExpander = new System.Windows.Forms.Label();
             this.panExecute = new System.Windows.Forms.Panel();
+            this.panParseQE = new System.Windows.Forms.Panel();
             this.panSave = new System.Windows.Forms.Panel();
             this.panOk = new System.Windows.Forms.Panel();
             this.panLiveUpdate = new System.Windows.Forms.Panel();
@@ -89,6 +91,17 @@
             this.btnExecute.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnExecute.UseVisualStyleBackColor = true;
             this.btnExecute.Click += new System.EventHandler(this.btnExecute_Click);
+            // 
+            // btnOk
+            // 
+            this.btnParseQE.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnParseQE.Location = new System.Drawing.Point(6, 0);
+            this.btnParseQE.Name = "btnParseQE";
+            this.btnParseQE.Size = new System.Drawing.Size(75, 23);
+            this.btnParseQE.TabIndex = 3;
+            this.btnParseQE.Text = "Parse";
+            this.btnParseQE.UseVisualStyleBackColor = true;
+            this.btnParseQE.Click += new System.EventHandler(this.btnParseQE_Click);
             // 
             // btnOk
             // 
@@ -146,10 +159,11 @@
             // 
             // gbActions
             // 
-            this.gbActions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.gbActions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbActions.Controls.Add(this.lblActionsExpander);
             this.gbActions.Controls.Add(this.panExecute);
+            this.gbActions.Controls.Add(this.panParseQE);
             this.gbActions.Controls.Add(this.panSave);
             this.gbActions.Controls.Add(this.panOk);
             this.gbActions.Controls.Add(this.panCancel);
@@ -182,6 +196,15 @@
             this.panExecute.Name = "panExecute";
             this.panExecute.Size = new System.Drawing.Size(114, 28);
             this.panExecute.TabIndex = 1;
+            // 
+            // panParseQE
+            // 
+            this.panParseQE.Controls.Add(this.btnParseQE);
+            this.panParseQE.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panParseQE.Location = new System.Drawing.Point(190, 16);
+            this.panParseQE.Name = "panParseQE";
+            this.panParseQE.Size = new System.Drawing.Size(114, 28);
+            this.panParseQE.TabIndex = 1;
             // 
             // panSave
             // 
@@ -233,7 +256,7 @@
             // 
             // gbFormatting
             // 
-            this.gbFormatting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.gbFormatting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbFormatting.Controls.Add(this.lblFormatExpander);
             this.gbFormatting.Controls.Add(this.rbFormatMini);
@@ -329,8 +352,8 @@
             this.Controls.Add(this.txtXML);
             this.Controls.Add(this.panFormatting);
             this.Controls.Add(this.panActions);
-            this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)((((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
-            | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight) 
+            this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)((((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft)
+            | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight)
             | WeifenLuo.WinFormsUI.Docking.DockAreas.Document)));
             this.HideOnClose = true;
             this.KeyPreview = true;
@@ -342,6 +365,7 @@
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.XmlContentDisplayDialog_KeyDown);
             this.panCancel.ResumeLayout(false);
             this.panActions.ResumeLayout(false);
+            this.panParseQE.ResumeLayout(false);
             this.gbActions.ResumeLayout(false);
             this.gbActions.PerformLayout();
             this.panExecute.ResumeLayout(false);
@@ -362,6 +386,7 @@
         private System.Windows.Forms.Button btnCancel;
         internal CSRichTextBoxSyntaxHighlighting.XMLViewer txtXML;
         internal System.Windows.Forms.Button btnExecute;
+        internal System.Windows.Forms.Button btnParseQE;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Panel panActions;
         private System.Windows.Forms.GroupBox gbActions;
@@ -373,6 +398,7 @@
         private System.Windows.Forms.RadioButton rbFormatMini;
         internal System.Windows.Forms.Button btnFormat;
         private System.Windows.Forms.Panel panExecute;
+        private System.Windows.Forms.Panel panParseQE;
         private System.Windows.Forms.Panel panSave;
         private System.Windows.Forms.Panel panOk;
         private System.Windows.Forms.Panel panLiveUpdate;

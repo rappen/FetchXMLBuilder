@@ -697,17 +697,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             })
             {
                 PostWorkCallBack = (completedargs) =>
-                  {
-                      EnableControls(true);
-                      if (completedargs.Error != null)
-                      {
-                          MessageBox.Show(completedargs.Error.Message);
-                      }
-                      else
-                      {
-                          viewsLoaded();
-                      }
-                  }
+                {
+                    EnableControls(true);
+                    if (completedargs.Error != null)
+                    {
+                        MessageBox.Show(completedargs.Error.Message);
+                    }
+                    else
+                    {
+                        viewsLoaded();
+                    }
+                }
             });
         }
 
@@ -774,6 +774,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 dockControlFetchXmlJs.UpdateXML(GetJavaScriptCode());
             }
+        }
+
+        internal void QueryExpressionToFetchXml(string query)
+        {
+            string fetchXml;
+            try
+            {
+                fetchXml = QueryExpressionCodeGenerator.GetFetchXmlFromCSharpQueryExpression(query, Service);
+            }
+            catch (Exception ex)
+            {
+                fetchXml = $"<error>{ex}</error>";
+            }
+            dockControlFetchXml.UpdateXML(fetchXml);
         }
 
         #endregion Internal Methods
