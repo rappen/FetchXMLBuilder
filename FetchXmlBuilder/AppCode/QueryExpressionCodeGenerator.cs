@@ -3,6 +3,10 @@ using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.CSharp;
+using System.CodeDom.Compiler;
+using System.Text.RegularExpressions;
+using Microsoft.Crm.Sdk.Messages;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
@@ -196,6 +200,73 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             variables.AppendLine();
             code = variables.ToString() + code;
             return code;
+        }
+
+        public static string GetFetchXmlFromCSharpQueryExpression(string query, IOrganizationService organizationService)
+        {
+            CSharpCodeProvider provider = new CSharpCodeProvider();
+            CompilerParameters parameters = new CompilerParameters();
+
+            parameters.ReferencedAssemblies.Add("Microsoft.Xrm.Sdk.dll");
+            parameters.ReferencedAssemblies.Add("System.Runtime.Serialization.dll");
+            parameters.GenerateInMemory = true;
+            parameters.GenerateExecutable = false;
+
+            CompilerResults compilerResults = provider.CompileAssemblyFromSource(parameters, GetQueryExpressionFromScript(query));
+
+            if (compilerResults.Errors.HasErrors)
+            {
+                StringBuilder sbuilder = new StringBuilder();
+                foreach (CompilerError compilerError in compilerResults.Errors)
+                {
+                    sbuilder.AppendLine($"Error ({compilerError.ErrorNumber}): {compilerError.ErrorText}");
+                }
+                throw new InvalidOperationException(sbuilder.ToString());
+            }
+
+            QueryExpression queryExpression =
+                ((queryExpressionCompiler)Delegate.CreateDelegate(typeof(queryExpressionCompiler),
+                    compilerResults.CompiledAssembly.GetType("DynamicContentGenerator.Generator"), "Generate"))();
+
+            QueryExpressionToFetchXmlRequest request = new QueryExpressionToFetchXmlRequest()
+            {
+                Query = queryExpression
+            };
+
+            QueryExpressionToFetchXmlResponse response = (QueryExpressionToFetchXmlResponse)organizationService.Execute(request);
+            return response.FetchXml;
+        }
+
+        private delegate QueryExpression queryExpressionCompiler();
+
+        private static string GetQueryExpressionFromScript(string query)
+        {
+            Regex varMatcher = new Regex(@"(var|QueryExpression)\W+([^\W]+)\W*=\W*new QueryExpression\W*\(");
+            Match match = varMatcher.Match(query);
+
+            if (match.Success)
+            {
+                return $@"
+                    using System;
+                    using Microsoft.Xrm.Sdk;
+                    using Microsoft.Xrm.Sdk.Query;
+                    
+                    namespace DynamicContentGenerator
+                    {{
+                        public class Generator
+                        {{
+                            public static QueryExpression Generate()
+                            {{
+                                {query}
+                                return {match.Groups[2].Value};
+                            }}
+                        }}
+                    }}";
+            }
+            else
+            {
+                throw new Exception("Could not determine QueryExpression variable.");
+            }
         }
     }
 }
