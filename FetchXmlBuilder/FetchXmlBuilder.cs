@@ -778,16 +778,35 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         internal void QueryExpressionToFetchXml(string query)
         {
-            string fetchXml;
-            try
+            working = true;
+            LogUse("QueryExpressionToFetchXml");
+            WorkAsync(new WorkAsyncInfo("Translating QueryExpression to FetchXML...",
+                (eventargs) =>
+                {
+                    var start = DateTime.Now;
+                    string fetchXml = QueryExpressionCodeGenerator.GetFetchXmlFromCSharpQueryExpression(query, Service);
+                    var stop = DateTime.Now;
+                    var duration = stop - start;
+                    ai.WriteEvent("QueryExpressionToFetchXml", null, duration.TotalMilliseconds, HandleAIResult);
+                    SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Execution time: {duration}"));
+                    eventargs.Result = fetchXml;
+                })
             {
-                fetchXml = QueryExpressionCodeGenerator.GetFetchXmlFromCSharpQueryExpression(query, Service);
-            }
-            catch (Exception ex)
-            {
-                fetchXml = $"<error>{ex}</error>";
-            }
-            dockControlBuilder.Init(fetchXml, "parse QueryExpression", true);
+                PostWorkCallBack = (completedargs) =>
+                {
+                    if (completedargs.Error != null)
+                    {
+                        MessageBox.Show(completedargs.Error.Message);
+                    }
+                    else if (completedargs.Result is string)
+                    {
+                        XmlDocument doc = new XmlDocument();
+                        doc.LoadXml(completedargs.Result.ToString());
+                        dockControlBuilder.Init(doc.OuterXml, "parse QueryExpression", true);
+                    }
+                    working = false;
+                }
+            });
         }
 
         #endregion Internal Methods
