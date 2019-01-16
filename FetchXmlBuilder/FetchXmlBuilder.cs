@@ -787,7 +787,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 fetchXml = $"<error>{ex}</error>";
             }
-            dockControlFetchXml.UpdateXML(fetchXml);
+            dockControlBuilder.Init(fetchXml, "parse QueryExpression", true);
         }
 
         #endregion Internal Methods

@@ -25,7 +25,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             InitializeComponent();
             this.PrepareGroupBoxExpanders();
             fxb = caller;
-            txtXML.KeyUp += fxb.LiveXML_KeyUp;
+            if (contentType == ContentType.FetchXML)
+            {
+                txtXML.KeyUp += fxb.LiveXML_KeyUp;
+            }
             SetContentType(contentType);
             SetFormat(saveFormat);
             UpdateButtons();

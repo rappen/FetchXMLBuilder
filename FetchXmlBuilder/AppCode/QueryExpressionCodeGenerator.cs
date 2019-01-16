@@ -7,6 +7,7 @@ using Microsoft.CSharp;
 using System.CodeDom.Compiler;
 using System.Text.RegularExpressions;
 using Microsoft.Crm.Sdk.Messages;
+using Rappen.Xrm.Extensions;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
@@ -228,13 +229,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 ((queryExpressionCompiler)Delegate.CreateDelegate(typeof(queryExpressionCompiler),
                     compilerResults.CompiledAssembly.GetType("DynamicContentGenerator.Generator"), "Generate"))();
 
-            QueryExpressionToFetchXmlRequest request = new QueryExpressionToFetchXmlRequest()
-            {
-                Query = queryExpression
-            };
-
-            QueryExpressionToFetchXmlResponse response = (QueryExpressionToFetchXmlResponse)organizationService.Execute(request);
-            return response.FetchXml;
+            return organizationService.QueryExpressionToFetchXml(queryExpression);
         }
 
         private delegate QueryExpression queryExpressionCompiler();
