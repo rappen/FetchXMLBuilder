@@ -22,7 +22,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
     {
         #region Private Fields
 
-        private static XmlSchemaSet schemas = null;
         private bool fetchChanged = false;
         private FetchXmlBuilder fxb;
         private HistoryManager historyMgr = new HistoryManager();
@@ -317,19 +316,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         #region Private Methods
 
-        private static void LoadDefinitionSchemas()
-        {
-            schemas = new XmlSchemaSet();
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            var shufdefresource = assembly.GetManifestResourceNames().Where(n => n.ToLowerInvariant().EndsWith("fetch.xsd")).FirstOrDefault();
-
-            Stream stream = assembly.GetManifestResourceStream(shufdefresource);
-            if (stream != null)
-            {
-                schemas.Add(null, XmlReader.Create(stream));
-            }
-        }
-
         private bool BuildAndValidateXml(bool validate = true)
         {
             if (tvFetch.Nodes.Count == 0)
@@ -341,13 +327,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 try
                 {
-                    if (schemas == null)
-                    {
-                        LoadDefinitionSchemas();
-                    }
                     var fetchDoc = GetFetchDocument();
-                    fetchDoc.Schemas = schemas;
-                    fetchDoc.Validate(null);
                 }
                 catch (Exception ex)
                 {
