@@ -207,7 +207,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             if (!string.IsNullOrEmpty(condition.attribute))
             {
                 GetEntityMetadata(entity.name, sender);
-                var attrMeta = FetchXmlBuilder.GetAttribute(entity.name, condition.attribute);
+                var attrMeta = sender.GetAttribute(entity.name, condition.attribute);
                 if (attrMeta == null)
                 {
                     throw new Exception($"No metadata for attribute: {entity.name}.{condition.attribute}");
@@ -321,14 +321,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         private static string LogicalToSchemaName(string entity, FetchXmlBuilder sender)
         {
             GetEntityMetadata(entity, sender);
-            var entityMeta = FetchXmlBuilder.entities[entity];
+            var entityMeta = sender.entities[entity];
             return entityMeta.SchemaName;
         }
 
         private static string LogicalToSchemaName(string entity, string attribute, FetchXmlBuilder sender)
         {
             GetEntityMetadata(entity, sender);
-            var attrMeta = FetchXmlBuilder.GetAttribute(entity, attribute);
+            var attrMeta = sender.GetAttribute(entity, attribute);
             if (attrMeta == null)
             {
                 throw new Exception($"No metadata for attribute: {entity}.{attribute}");
@@ -342,7 +342,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 sender.LoadEntityDetails(entity, null, false);
             }
-            if (!FetchXmlBuilder.entities.ContainsKey(entity))
+            if (!sender.entities.ContainsKey(entity))
             {
                 throw new Exception($"No metadata for entity: {entity}");
             }
@@ -351,7 +351,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         private static RelationshipMetadataBase LinkItemToRelation(string entityname, FetchLinkEntityType linkitem, FetchXmlBuilder sender)
         {
             GetEntityMetadata(entityname, sender);
-            var entity = FetchXmlBuilder.entities[entityname];
+            var entity = sender.entities[entityname];
             foreach (var relation in entity.OneToManyRelationships)
             {
                 if (relation.ReferencedEntity == entityname &&
