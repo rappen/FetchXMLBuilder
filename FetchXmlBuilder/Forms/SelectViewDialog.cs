@@ -27,7 +27,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 object selectedItem = null;
                 foreach (var entity in entities)
                 {
-                    if (entity.Value.IsIntersect != true && FetchXmlBuilder.views.ContainsKey(entity.Value.LogicalName + "|S"))
+                    if (entity.Value.IsIntersect != true && Caller.views.ContainsKey(entity.Value.LogicalName + "|S"))
                     {
                         var ei = new EntityItem(entity.Value);
                         cmbEntity.Items.Add(ei);
@@ -60,9 +60,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             btnOk.Enabled = false;
             var entity = ControlUtils.GetValueFromControl(cmbEntity);
             object selectedItem = null;
-            if (FetchXmlBuilder.views.ContainsKey(entity + "|S"))
+            if (Caller.views.ContainsKey(entity + "|S"))
             {
-                var views = FetchXmlBuilder.views[entity + "|S"];
+                var views = Caller.views[entity + "|S"];
                 cmbView.Items.Add("-- System Views --");
                 foreach (var view in views)
                 {
@@ -74,9 +74,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                     }
                 }
             }
-            if (FetchXmlBuilder.views.ContainsKey(entity + "|U"))
+            if (Caller.views.ContainsKey(entity + "|U"))
             {
-                var views = FetchXmlBuilder.views[entity + "|U"];
+                var views = Caller.views[entity + "|U"];
                 cmbView.Items.Add("-- Personal Views --");
                 foreach (var view in views)
                 {
@@ -137,7 +137,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             cmbView.SelectedIndex = -1;
             cmbEntity.SelectedIndex = -1;
             txtFetch.Text = "";
-            FetchXmlBuilder.views = null;
+            Caller.views = null;
             Caller.LoadViews(PopulateForm);
         }
 

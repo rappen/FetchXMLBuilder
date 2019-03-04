@@ -32,42 +32,41 @@ namespace CSRichTextBoxSyntaxHighlighting
         /// <summary>
         /// The color of an Xml element name.
         /// </summary>
-        public Color Element { get; set; }
+        public Color Element { get; set; } = Color.DarkGreen;
 
         /// <summary>
         /// The color of an Xml element value.
         /// </summary>
-        public Color Value { get; set; }
+        public Color Value { get; set; } = Color.Black;
 
         /// <summary>
         /// The color of an Attribute Key in Xml element.
         /// </summary>
-        public Color AttributeKey { get; set; }
+        public Color AttributeKey { get; set; } = Color.Blue;
 
         /// <summary>
         /// The color of an Attribute Value in Xml element.
         /// </summary>
-        public Color AttributeValue { get; set; }
+        public Color AttributeValue { get; set; } = Color.DarkRed;
 
         /// <summary>
         /// The color of comment content
         /// </summary>
-        public Color Comment { get; set; }
+        public Color Comment { get; set; } = Color.Gray;
 
         /// <summary>
         /// The color of the tags and operators like "<,/> and =".
         /// </summary>
-        public Color Tag { get; set; }
+        public Color Tag { get; set; } = Color.ForestGreen;
 
         /// <summary>
         /// Defines quote character in xml. Default double quotes "
         /// </summary>
-        public char QuoteCharacter { get; set; }
+        public char QuoteCharacter { get; set; } = '"';
 
-        public XMLViewerSettings()
-        {
-            QuoteCharacter = '"';
-        }
+        public string FontName { get; set; } = "Consolas";
+
+        public float FontSize { get; set; } = 9;
 
         /// <summary>
         /// Convert the settings to Rtf color definitions.

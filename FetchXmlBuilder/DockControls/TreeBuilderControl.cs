@@ -22,7 +22,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
     {
         #region Private Fields
 
-        private static XmlSchemaSet schemas = null;
         private bool fetchChanged = false;
         private FetchXmlBuilder fxb;
         private HistoryManager historyMgr = new HistoryManager();
@@ -116,7 +115,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 return;
             }
             tvFetch.SelectedNode.Tag = e.AttributeCollection;
-            TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, FetchXmlBuilder.friendlyNames);
+            TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, fxb);
             FetchChanged = treeChecksum != GetTreeChecksum(null);
             var origin = "";
             if (sender is IDefinitionSavable)
@@ -180,7 +179,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     var doc = GetFetchDocument();
                     xml = doc.OuterXml;
                     if (fxb.settings.QueryOptions.UseSingleQuotation)
-                    {
+                    {   // #122 Not sure why this is done... and it messes up commented xml using single quotation
                         xml = xml.Replace("'", "&apos;");
                         xml = xml.Replace("\"", "'");
                     }
@@ -304,7 +303,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         internal void UpdateCurrentNode()
         {
-            TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, FetchXmlBuilder.friendlyNames);
+            TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, fxb);
         }
 
         private static bool IsFetchAggregate(XmlDocument xml)
@@ -317,19 +316,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         #region Private Methods
 
-        private static void LoadDefinitionSchemas()
-        {
-            schemas = new XmlSchemaSet();
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            var shufdefresource = assembly.GetManifestResourceNames().Where(n => n.ToLowerInvariant().EndsWith("fetch.xsd")).FirstOrDefault();
-
-            Stream stream = assembly.GetManifestResourceStream(shufdefresource);
-            if (stream != null)
-            {
-                schemas.Add(null, XmlReader.Create(stream));
-            }
-        }
-
         private bool BuildAndValidateXml(bool validate = true)
         {
             if (tvFetch.Nodes.Count == 0)
@@ -341,13 +327,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 try
                 {
-                    if (schemas == null)
-                    {
-                        LoadDefinitionSchemas();
-                    }
                     var fetchDoc = GetFetchDocument();
-                    fetchDoc.Schemas = schemas;
-                    fetchDoc.Validate(null);
                 }
                 catch (Exception ex)
                 {
@@ -385,7 +365,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 var parent = node.Parent;
                 var index = node.Index;
                 node.Parent.Nodes.Remove(node);
-                tvFetch.SelectedNode = TreeNodeHelper.AddTreeViewNode(parent, commentNode, this, index);
+                tvFetch.SelectedNode = TreeNodeHelper.AddTreeViewNode(parent, commentNode, this, fxb, index);
                 RecordHistory("comment");
             }
         }
@@ -407,7 +387,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
             XmlNode definitionXmlNode = fetchDoc.DocumentElement;
             tvFetch.Nodes.Clear();
-            TreeNodeHelper.AddTreeViewNode(tvFetch, definitionXmlNode, this);
+            TreeNodeHelper.AddTreeViewNode(tvFetch, definitionXmlNode, this, fxb);
             tvFetch.ExpandAll();
             ManageMenuDisplay();
         }
@@ -717,7 +697,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     var coll = new Dictionary<string, string>();
                     coll.Add("name", attribute);
                     attrNode.Tag = coll;
-                    TreeNodeHelper.SetNodeText(attrNode, fxb.settings.UseFriendlyNames);
+                    TreeNodeHelper.SetNodeText(attrNode, fxb);
                 }
                 FetchChanged = treeChecksum != GetTreeChecksum(null);
                 fxb.UpdateLiveXML();
@@ -742,6 +722,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     {
                         comment = comment.Substring(0, comment.Length - 1) + "-";
                     }
+                    if (comment.Contains("&apos;"))
+                    {
+                        comment = comment.Replace("&apos;", "'");
+                    }
                     var doc = new XmlDocument();
                     try
                     {
@@ -749,7 +733,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                         var parent = node.Parent;
                         var index = node.Index;
                         node.Parent.Nodes.Remove(node);
-                        tvFetch.SelectedNode = TreeNodeHelper.AddTreeViewNode(parent, doc.DocumentElement, this, index);
+                        tvFetch.SelectedNode = TreeNodeHelper.AddTreeViewNode(parent, doc.DocumentElement, this, fxb, index);
                         tvFetch.SelectedNode.Expand();
                         RecordHistory("uncomment");
                     }

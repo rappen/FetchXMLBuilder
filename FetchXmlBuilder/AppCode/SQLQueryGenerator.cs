@@ -12,7 +12,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         private static List<string> selectcols;
         private static List<string> ordercols;
 
-        internal static string GetSQLQuery(FetchType fetch)
+        internal static string GetSQLQuery(FetchType fetch, FetchXmlBuilder fxb)
         {
             aliasmap = new Dictionary<string, string>();
             var sql = new StringBuilder();
@@ -34,8 +34,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 selectcols = GetSelect(entity);
                 ordercols = GetOrder(entity.Items.Where(i => i is FetchOrderType).ToList(), string.Empty);
-                var join = GetJoin(entity.Items.Where(i => i is FetchLinkEntityType).ToList(), entity.name);
-                var where = GetWhere(entity.name, string.Empty, entity.Items.Where(i => i is filter && ((filter)i).Items != null && ((filter)i).Items.Length > 0).ToList());
+                var join = GetJoin(entity.Items.Where(i => i is FetchLinkEntityType).ToList(), entity.name, fxb);
+                var where = GetWhere(entity.name, string.Empty, entity.Items.Where(i => i is filter && ((filter)i).Items != null && ((filter)i).Items.Length > 0).ToList(), fxb);
                 sql.AppendLine(string.Join(", ", selectcols));
                 sql.AppendLine($"FROM {entity.name}");
                 if (join != null && join.Count > 0)
@@ -74,7 +74,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return result;
         }
 
-        private static List<string> GetJoin(List<object> linkentities, string entityalias)
+        private static List<string> GetJoin(List<object> linkentities, string entityalias, FetchXmlBuilder fxb)
         {
             var joinList = new List<String>();
             foreach (FetchLinkEntityType linkitem in linkentities)
@@ -92,7 +92,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 join.Append($"JOIN {linkitem.name} {linkalias} ON {linkalias}.{linkitem.from} = {entityalias}.{linkitem.to}");
                 if (linkitem.Items != null)
                 {
-                    var linkwhere = GetWhere(linkitem.name, linkalias, linkitem.Items.Where(i => i is filter && ((filter)i).Items != null && ((filter)i).Items.Length > 0).ToList());
+                    var linkwhere = GetWhere(linkitem.name, linkalias, linkitem.Items.Where(i => i is filter && ((filter)i).Items != null && ((filter)i).Items.Length > 0).ToList(), fxb);
                     if (!string.IsNullOrEmpty(linkwhere))
                     {
                         join.Append($" AND {linkwhere} ");
@@ -103,7 +103,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 {
                     selectcols.AddRange(GetExpandedSelect(linkitem, linkalias));
                     ordercols.AddRange(GetOrder(linkitem.Items.Where(i => i is FetchOrderType).ToList(), linkalias));
-                    joinList.AddRange(GetJoin(linkitem.Items.Where(i => i is FetchLinkEntityType).ToList(), linkalias));
+                    joinList.AddRange(GetJoin(linkitem.Items.Where(i => i is FetchLinkEntityType).ToList(), linkalias, fxb));
                 }
             }
             return joinList;
@@ -139,20 +139,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return resultList;
         }
 
-        private static string GetWhere(string entityname, string entityalias, List<object> filteritems)
+        private static string GetWhere(string entityname, string entityalias, List<object> filteritems, FetchXmlBuilder fxb)
         {
             var resultList = new StringBuilder();
             if (filteritems.Count > 0)
             {
                 foreach (filter filteritem in filteritems)
                 {
-                    resultList.Append(GetFilter(entityname, entityalias, filteritem));
+                    resultList.Append(GetFilter(entityname, entityalias, filteritem, fxb));
                 }
             }
             return resultList.ToString();
         }
 
-        private static string GetFilter(string entityname, string entityalias, filter filteritem)
+        private static string GetFilter(string entityname, string entityalias, filter filteritem, FetchXmlBuilder fxb)
         {
             var result = "";
             if (filteritem.Items == null || filteritem.Items.Length == 0)
@@ -168,11 +168,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 if (item is condition)
                 {
-                    result += GetCondition(entityname, entityalias, item as condition);
+                    result += GetCondition(entityname, entityalias, item as condition, fxb);
                 }
                 else if (item is filter)
                 {
-                    result += GetFilter(entityname, entityalias, item as filter);
+                    result += GetFilter(entityname, entityalias, item as filter, fxb);
                 }
                 result += logical;
             }
@@ -187,7 +187,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return result;
         }
 
-        private static string GetCondition(string entityname, string entityalias, condition condition)
+        private static string GetCondition(string entityname, string entityalias, condition condition, FetchXmlBuilder fxb)
         {
             var result = new StringBuilder();
             if (!string.IsNullOrEmpty(entityalias))
@@ -210,7 +210,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
                 }
                 result.Append(condition.attribute);
-                var attrMeta = FetchXmlBuilder.GetAttribute(entityname, condition.attribute);
+                var attrMeta = fxb.GetAttribute(entityname, condition.attribute);
                 if (attrMeta == null)
                 {
                     throw new Exception($"No metadata for attribute: {entityname}.{condition.attribute}");

@@ -37,12 +37,17 @@
     </description>
     <releaseNotes>
 -- New features--
-#157 Improved condition operators for Owner attributes
-#217 Default query for "New" now configurable
+#229 Repository for easy access to favorite queries
+#215 Variables for conditions in QueryExpression code
+More modern colors / font in XML window
 
 -- Bug fixes --
-#213 Minified XML does not respect quote character option (fixed by @rajrao)
-#212 FetchXML window was not updated after Undo/Redo
+#122 Uncommenting fails sometimes when using single quotes
+#219 Crash in CRMGridView in some null value scenario
+#220 Code generator error for multiple condition values
+#221 Save File does actually save the file
+#223 Filters not generated correct in C# code
+#230 Cache bleed between FXB instances
     </releaseNotes>
     <copyright>Copyright Jonas Rapp 2014-2018</copyright>
     <tags>XrmToolBox Plugins FetchXML Builder</tags>

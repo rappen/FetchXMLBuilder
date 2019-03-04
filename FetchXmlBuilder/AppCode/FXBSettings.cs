@@ -1,5 +1,7 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
@@ -133,5 +135,25 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     public class FXBConnectionSettings
     {
         public string FetchXML { get; set; } = string.Empty;
+    }
+
+    public class QueryRepository
+    {
+        public List<QueryDefinition> Queries { get; set; } = new List<QueryDefinition>();
+
+        public void SortQueries()
+        {
+            Queries = Queries.OrderBy(q => q.Name).ToList();
+        }
+    }
+
+    public class QueryDefinition
+    {
+        public string Name { get; set; }
+        public string Fetch { get; set; }
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

@@ -39,15 +39,7 @@ namespace CSRichTextBoxSyntaxHighlighting
             {
                 if (settings == null)
                 {
-                    settings = new XMLViewerSettings
-                    {
-                        AttributeKey = Color.Red,
-                        AttributeValue = Color.Blue,
-                        Comment = Color.Green,
-                        Tag = Color.Blue,
-                        Element = Color.DarkRed,
-                        Value = Color.Black,
-                    };
+                    settings = new XMLViewerSettings();
                 }
                 return settings;
             }
@@ -75,10 +67,11 @@ namespace CSRichTextBoxSyntaxHighlighting
                 // The Rtf contains 2 parts, header and content. The colortbl is a part of
                 // the header, and the {1} will be replaced with the content.
                 string rtfFormat = @"{{\rtf1\ansi\ansicpg1252\deff0\deflang1033\deflangfe2052
-{{\fonttbl{{\f0\fnil Courier New;}}}}
+{{\fonttbl{{\f0\fnil " + Settings.FontName + @";}}}}
 {{\colortbl ;{0}}}
-\viewkind4\uc1\pard\lang1033\f0\fs18
+\viewkind4\uc1\pard\lang1033\f0\fs" + Math.Round(Settings.FontSize * 2) + @"
 {1}}}";
+
 
                 // Get the XDocument from the Text property.
                 var xmlDoc = new XmlDocument();
