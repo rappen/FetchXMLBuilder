@@ -584,8 +584,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         odata = ODataCodeGenerator.GetODataQuery(fetch, ConnectionDetail.OrganizationDataServiceUrl, this);
                         break;
                     case 4:
-                        // TODO: Find correct WebAPI base url
-                        odata = OData4CodeGenerator.GetOData4Query(fetch, ConnectionDetail.OrganizationDataServiceUrl, this);
+                        // Find correct WebAPI base url
+                        var url = new Uri(new Uri(ConnectionDetail.WebApplicationUrl), $"api/data/v{ConnectionDetail.OrganizationMajorVersion}.{ConnectionDetail.OrganizationMinorVersion}");
+                        odata = OData4CodeGenerator.GetOData4Query(fetch, url.ToString(), this);
                         break;
                 }
                 return odata;
