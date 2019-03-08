@@ -254,17 +254,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     throw new Exception($"No metadata for attribute: {entity.name}.{condition.attribute}");
                 }
                 result = attrMeta.LogicalName;
-                switch (attrMeta.AttributeType)
+                if (attrMeta is LookupAttributeMetadata lookupAttrMeta)
                 {
-                    case AttributeTypeCode.Picklist:
-                    case AttributeTypeCode.Money:
-                    case AttributeTypeCode.State:
-                    case AttributeTypeCode.Status:
-                        result += "/Value";
-                        break;
-                    case AttributeTypeCode.Lookup:
-                        result += "/Id";
-                        break;
+                    if (lookupAttrMeta.Targets.Length > 1)
+                        throw new Exception($"Multiple targets for lookup attribute: {entity.name}.{condition.attribute}. Use a link entity and filter on the primary key attribute instead");
+
+                    GetEntityMetadata(lookupAttrMeta.Targets[0], sender);
+                    result += "/" + sender.entities[lookupAttrMeta.Targets[0]].PrimaryIdAttribute;
                 }
                 switch (condition.@operator)
                 {
