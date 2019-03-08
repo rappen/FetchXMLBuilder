@@ -20,8 +20,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 throw new Exception("Fetch must contain entity definition");
             }
-            // TODO: Find entitysetname from metadata instead
-            url += "/" + LogicalToSchemaName(entity.name, sender) + "s";
+            url += "/" + LogicalToCollectionName(entity.name, sender);
 
             var query = "";
             if (!string.IsNullOrEmpty(fetch.top))
@@ -32,8 +31,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 var select = GetSelect(entity, sender);
                 var order = GetOrder(entity, sender);
-                var expand = GetExpand(entity, sender, ref select);
-                var filter = GetFilter(entity, sender);
+                var expandFilter = "";
+                var expand = GetExpand(entity, sender, ref expandFilter);
+                var filter = GetFilter(entity, sender, expandFilter);
                 query = AppendQuery(query, "$select", select);
                 query = AppendQuery(query, "$orderby", order);
                 query = AppendQuery(query, "$expand", expand);
@@ -70,21 +70,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 foreach (FetchAttributeType attributeitem in attributeitems)
                 {
-                    result.Add(LogicalToSchemaName(entity.name, attributeitem.name, sender));
+                    result.Add(attributeitem.name);
                 }
             }
             return string.Join(",", result);
         }
 
-        private static string GetExpand(FetchEntityType entity, FetchXmlBuilder sender, ref string select)
+        private static string GetExpand(FetchEntityType entity, FetchXmlBuilder sender, ref string filterString)
         {
             var resultList = new List<string>();
-            var selectList = new List<string> { select };
             var linkitems = entity.Items.Where(i => i is FetchLinkEntityType).ToList();
             if (linkitems.Count > 0)
             {
                 foreach (FetchLinkEntityType linkitem in linkitems)
                 {
+                    var navigationProperty = LinkItemToNavigationProperty(entity.name, linkitem, sender);
+
                     if (linkitem.linktype == "outer")
                     {
                         throw new Exception("OData queries do not support outer joins");
@@ -97,23 +98,45 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         }
                         if (linkitem.Items.Where(i => i is filter).ToList().Count > 0)
                         {
-                            throw new Exception("OData queries do not support filter on link entities");
+                            foreach (var filter in linkitem.Items.OfType<filter>())
+                            {
+                                foreach (var condition in filter.Items.OfType<condition>())
+                                {
+                                    var targetLogicalName = linkitem.name;
+                                    GetEntityMetadata(targetLogicalName, sender);
+                                    if (condition.attribute == sender.entities[targetLogicalName].PrimaryIdAttribute &&
+                                        condition.@operator == @operator.eq)
+                                    {
+                                        if (!String.IsNullOrEmpty(filterString))
+                                            filterString += " and ";
+
+                                        filterString += $"{navigationProperty}/{condition.attribute} eq {condition.value}";
+                                    }
+                                    else
+                                    {
+                                        throw new Exception("OData queries to not support filter on link entities except by primary key");
+                                    }
+                                }
+                            }
                         }
                         if (linkitem.Items.Where(i => i is FetchOrderType).ToList().Count > 0)
                         {
                             throw new Exception("OData queries do not support sorting on link entities");
                         }
                     }
-                    var relation = LinkItemToRelation(entity.name, linkitem, sender);
-                    resultList.Add(relation.SchemaName);
-                    selectList.Add(GetExpandedSelect(linkitem, relation.SchemaName, sender));
+
+                    var expandedSelect = GetExpandedSelect(linkitem, sender);
+
+                    if (String.IsNullOrEmpty(expandedSelect))
+                        resultList.Add(navigationProperty);
+                    else
+                        resultList.Add(navigationProperty + "($select=" + GetExpandedSelect(linkitem, sender) + ")");
                 }
             }
-            select = string.Join(",", selectList);
             return string.Join(",", resultList);
         }
 
-        private static string GetExpandedSelect(FetchLinkEntityType linkitem, string relation, FetchXmlBuilder sender)
+        private static string GetExpandedSelect(FetchLinkEntityType linkitem, FetchXmlBuilder sender)
         {
             if (linkitem.Items == null)
             {
@@ -121,6 +144,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
             var resultList = new List<string>();
             var linkentity = linkitem.name;
+
+            if (linkentity == null)
+                return null;
+
             var attributeitems = linkitem.Items.Where(i => i is FetchAttributeType && ((FetchAttributeType)i).name != null).ToList();
             if (linkitem.intersect)
             {
@@ -133,6 +160,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 {
                     var nextlink = (FetchLinkEntityType)linkitems[0];
                     linkentity = nextlink.name;
+
+                    if (nextlink.Items == null)
+                        return null;
+
                     attributeitems = nextlink.Items.Where(i => i is FetchAttributeType && ((FetchAttributeType)i).name != null).ToList();
                 }
             }
@@ -140,26 +171,36 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 foreach (FetchAttributeType attributeitem in attributeitems)
                 {
-                    resultList.Add(relation + "/" + LogicalToSchemaName(linkentity, attributeitem.name, sender));
+                    resultList.Add(attributeitem.name);
                 }
             }
             return string.Join(",", resultList);
         }
 
-        private static string GetFilter(FetchEntityType entity, FetchXmlBuilder sender)
+        private static string GetFilter(FetchEntityType entity, FetchXmlBuilder sender, string expandFilter)
         {
             var resultList = new StringBuilder();
             var filteritems = entity.Items.Where(i => i is filter && ((filter)i).Items != null && ((filter)i).Items.Length > 0).ToList();
             if (filteritems.Count > 0)
             {
+                var and = true;
                 foreach (filter filteritem in filteritems)
                 {
                     resultList.Append(GetFilter(entity, filteritem, sender));
+                    if (filteritem.type == filterType.or)
+                        and = false;
                 }
                 var result = resultList.ToString();
                 if (result.StartsWith("(") && result.EndsWith(")"))
                 {
                     result = result.Substring(1, result.Length - 2);
+                }
+                if (!String.IsNullOrEmpty(expandFilter))
+                {
+                    if (!and)
+                        result = "(" + result + ")";
+
+                    result += " and " + expandFilter;
                 }
                 return result;
             }
@@ -212,7 +253,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 {
                     throw new Exception($"No metadata for attribute: {entity.name}.{condition.attribute}");
                 }
-                result = attrMeta.SchemaName;
+                result = attrMeta.LogicalName;
                 switch (attrMeta.AttributeType)
                 {
                     case AttributeTypeCode.Picklist:
@@ -245,10 +286,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         result += " ne null";
                         break;
                     case @operator.like:
-                        result = $"substringof('{condition.value}', {attrMeta.SchemaName})";
+                        result = $"contains({attrMeta.LogicalName}, '{condition.value}')";
                         break;
                     case @operator.notlike:
-                        result = $"not substringof('{condition.value}', {attrMeta.SchemaName})";
+                        result = $"not contains({attrMeta.LogicalName}, '{condition.value}')";
+                        break;
+                    case @operator.beginswith:
+                        result = $"startswith({attrMeta.LogicalName}, '{condition.value}')";
+                        break;
+                    case @operator.endswith:
+                        result = $"endswith({attrMeta.LogicalName}, '{condition.value}')";
                         break;
                     case @operator.@in:
                     case @operator.notin:
@@ -256,7 +303,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     default:
                         throw new Exception($"Unsupported OData condition operator '{condition.@operator}'");
                 }
-                if (!string.IsNullOrEmpty(condition.value) && condition.@operator != @operator.like && condition.@operator != @operator.notlike)
+                if (!string.IsNullOrEmpty(condition.value) && condition.@operator != @operator.like && condition.@operator != @operator.notlike &&
+                    condition.@operator != @operator.beginswith && condition.@operator != @operator.endswith)
                 {
                     switch (attrMeta.AttributeType)
                     {
@@ -269,16 +317,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         case AttributeTypeCode.State:
                         case AttributeTypeCode.Status:
                         case AttributeTypeCode.Picklist:
-                            result += condition.value;
-                            break;
                         case AttributeTypeCode.Uniqueidentifier:
                         case AttributeTypeCode.Lookup:
                         case AttributeTypeCode.Customer:
                         case AttributeTypeCode.Owner:
-                            result += $"(guid'{condition.value}')";
+                            result += condition.value;
                             break;
                         case AttributeTypeCode.DateTime:
-                            var date = DateTime.Parse(condition.value);
+                            var date = DateTimeOffset.Parse(condition.value);
                             var datestr = string.Empty;
                             if (date.Equals(date.Date))
                             {
@@ -286,9 +332,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                             }
                             else
                             {
-                                datestr = date.ToString("o");
+                                datestr = date.ToString("u").Replace(' ', 'T');
                             }
-                            result += $"datetime'{datestr}'";
+                            result += datestr;
                             break;
                         default:
                             result += $"'{condition.value}'";
@@ -307,7 +353,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 foreach (FetchOrderType orderitem in orderitems)
                 {
-                    result += LogicalToSchemaName(entity.name, orderitem.attribute, sender);
+                    result += orderitem.attribute;
                     if (orderitem.descending)
                     {
                         result += " desc";
@@ -318,22 +364,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return result;
         }
 
-        private static string LogicalToSchemaName(string entity, FetchXmlBuilder sender)
+        private static string LogicalToCollectionName(string entity, FetchXmlBuilder sender)
         {
             GetEntityMetadata(entity, sender);
             var entityMeta = sender.entities[entity];
-            return entityMeta.SchemaName;
-        }
-
-        private static string LogicalToSchemaName(string entity, string attribute, FetchXmlBuilder sender)
-        {
-            GetEntityMetadata(entity, sender);
-            var attrMeta = sender.GetAttribute(entity, attribute);
-            if (attrMeta == null)
-            {
-                throw new Exception($"No metadata for attribute: {entity}.{attribute}");
-            }
-            return attrMeta.SchemaName;
+            return entityMeta.LogicalCollectionName;
         }
 
         private static void GetEntityMetadata(string entity, FetchXmlBuilder sender)
@@ -348,7 +383,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
         }
 
-        private static RelationshipMetadataBase LinkItemToRelation(string entityname, FetchLinkEntityType linkitem, FetchXmlBuilder sender)
+        private static string LinkItemToNavigationProperty(string entityname, FetchLinkEntityType linkitem, FetchXmlBuilder sender)
         {
             GetEntityMetadata(entityname, sender);
             var entity = sender.entities[entityname];
@@ -359,7 +394,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     relation.ReferencingEntity == linkitem.name &&
                     relation.ReferencingAttribute == linkitem.from)
                 {
-                    return relation;
+                    return relation.ReferencedEntityNavigationPropertyName;
                 }
             }
             foreach (var relation in entity.ManyToOneRelationships)
@@ -369,7 +404,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     relation.ReferencedEntity == linkitem.name &&
                     relation.ReferencedAttribute == linkitem.from)
                 {
-                    return relation;
+                    return relation.ReferencingEntityNavigationPropertyName;
                 }
             }
             foreach (var relation in entity.ManyToManyRelationships)
@@ -392,7 +427,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         if (relation.Entity2LogicalName == nextlink.name &&
                             relation.Entity2IntersectAttribute == nextlink.to)
                         {
-                            return relation;
+                            return relation.Entity1NavigationPropertyName;
                         }
                     }
                 }
@@ -412,9 +447,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                             throw new Exception("OData queries do not support outer joins");
                         }
                         if (relation.Entity1LogicalName == nextlink.name &&
-                            relation.Entity1IntersectAttribute == nextlink.to)
+                            relation.Entity1IntersectAttribute == nextlink.from)
                         {
-                            return relation;
+                            return relation.Entity2NavigationPropertyName;
                         }
                     }
                 }
