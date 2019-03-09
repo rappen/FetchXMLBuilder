@@ -713,17 +713,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             })
             {
                 PostWorkCallBack = (completedargs) =>
-                  {
-                      EnableControls(true);
-                      if (completedargs.Error != null)
-                      {
-                          MessageBox.Show(completedargs.Error.Message);
-                      }
-                      else
-                      {
-                          viewsLoaded();
-                      }
-                  }
+                {
+                    EnableControls(true);
+                    if (completedargs.Error != null)
+                    {
+                        MessageBox.Show(completedargs.Error.Message);
+                    }
+                    else
+                    {
+                        viewsLoaded();
+                    }
+                }
             });
         }
 
@@ -797,6 +797,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (dockControlFetchXmlJs?.Visible == true)
             {
                 dockControlFetchXmlJs.UpdateXML(GetJavaScriptCode());
+            }
+        }
+
+        internal void QueryExpressionToFetchXml(string query)
+        {
+            string fetchXml;
+            try
+            {
+                fetchXml = QueryExpressionCodeGenerator.GetFetchXmlFromCSharpQueryExpression(query, Service);
+                dockControlBuilder.Init(fetchXml, "parse QueryExpression", true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Parse QueryExpression", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

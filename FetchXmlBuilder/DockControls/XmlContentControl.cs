@@ -25,7 +25,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             InitializeComponent();
             this.PrepareGroupBoxExpanders();
             fxb = caller;
-            txtXML.KeyUp += fxb.LiveXML_KeyUp;
+            if (contentType == ContentType.FetchXML)
+            {
+                txtXML.KeyUp += fxb.LiveXML_KeyUp;
+            }
             SetContentType(contentType);
             SetFormat(saveFormat);
             UpdateButtons();
@@ -48,6 +51,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             TabText = Text;
             var windowSettings = fxb.settings.ContentWindows.GetContentWindow(contenttype);
             var allowedit = contenttype == ContentType.FetchXML;
+            var allowparse = contenttype == ContentType.QueryExpression;
             chkLiveUpdate.Checked = allowedit && windowSettings.LiveUpdate;
             lblFormatExpander.GroupBoxSetState(tt, windowSettings.FormatExpanded);
             lblActionsExpander.GroupBoxSetState(tt, windowSettings.ActionExpanded);
@@ -55,6 +59,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             panOk.Visible = allowedit;
             panFormatting.Visible = allowedit;
             panExecute.Visible = allowedit;
+            panParseQE.Visible = allowparse;
         }
 
         internal void SetFormat(SaveFormat saveFormat)
@@ -110,6 +115,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             fxb.FetchResults(txtXML.Text);
         }
+
+        private void btnParseQE_Click(object sender, EventArgs e)
+        {
+            fxb.QueryExpressionToFetchXml(txtXML.Text);
+        }
+
 
         private void XmlContentDisplayDialog_Load(object sender, EventArgs e)
         {
