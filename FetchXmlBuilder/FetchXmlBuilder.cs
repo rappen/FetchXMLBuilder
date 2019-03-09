@@ -782,12 +782,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             try
             {
                 fetchXml = QueryExpressionCodeGenerator.GetFetchXmlFromCSharpQueryExpression(query, Service);
+                dockControlBuilder.Init(fetchXml, "parse QueryExpression", true);
             }
             catch (Exception ex)
             {
-                fetchXml = $"<error>{ex}</error>";
+                MessageBox.Show(ex.Message, "Parse QueryExpression", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            dockControlBuilder.Init(fetchXml, "parse QueryExpression", true);
         }
 
         #endregion Internal Methods
