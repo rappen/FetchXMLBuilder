@@ -238,6 +238,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (!SaveIfChanged())
             {
                 info.Cancel = true;
+                return;
             }
             SaveDockPanels();
             dockControlBuilder?.Close();
