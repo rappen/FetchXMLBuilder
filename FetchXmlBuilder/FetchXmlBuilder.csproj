@@ -39,8 +39,8 @@
     </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cinteros.Xrm.CRMWinForm, Version=2018.9.6.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Cinteros.Xrm.CRMWinForm.2018.9.6.1\lib\net452\Cinteros.Xrm.CRMWinForm.dll</HintPath>
+    <Reference Include="Cinteros.Xrm.CRMWinForm, Version=2019.3.8.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cinteros.Xrm.CRMWinForm.2019.3.8.3\lib\net452\Cinteros.Xrm.CRMWinForm.dll</HintPath>
     </Reference>
     <Reference Include="ILMerge">
       <HintPath>..\packages\ILMerge.2.14.1208\tools\ILMerge.exe</HintPath>
@@ -205,6 +205,12 @@
     <Compile Include="Controls\fetchControl.Designer.cs">
       <DependentUpon>fetchControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="DockControls\FlowListControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DockControls\FlowListControl.Designer.cs">
+      <DependentUpon>FlowListControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="DockControls\ODataControl.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -309,6 +315,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\fetchControl.resx">
       <DependentUpon>fetchControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DockControls\FlowListControl.resx">
+      <DependentUpon>FlowListControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DockControls\ODataControl.resx">
       <DependentUpon>ODataControl.cs</DependentUpon>

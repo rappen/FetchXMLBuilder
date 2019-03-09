@@ -57,6 +57,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private ResultGrid dockControlGrid;
         private ODataControl dockControlOData2;
         private ODataControl dockControlOData4;
+        private FlowListControl dockControlFlowList;
         private XmlContentControl dockControlQExp;
         private XmlContentControl dockControlSQL;
         private Entity dynml;
@@ -247,6 +248,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             dockControlGrid?.Close();
             dockControlOData2?.Close();
             dockControlOData4?.Close();
+            dockControlFlowList?.Close();
             dockControlQExp?.Close();
             dockControlSQL?.Close();
             SaveSetting();
@@ -774,6 +776,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (dockControlOData4?.Visible == true && entities != null)
             {
                 dockControlOData4.DisplayOData(GetOData(4));
+            }
+            if (dockControlFlowList?.Visible == true && entities != null)
+            {
+                dockControlFlowList.DisplayFlowList(GetOData(4));
             }
             if (dockControlQExp?.Visible == true && entities != null)
             {
@@ -1771,6 +1777,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             UpdateLiveXML();
         }
 
+        private void ShowFlowListControl(ref FlowListControl control, DockState defaultstate)
+        {
+            LogUse($"Show-FlowList.0");
+            if (control?.IsDisposed != false)
+            {
+                control = new FlowListControl(this);
+                control.Show(dockContainer, defaultstate);
+            }
+            else
+            {
+                control.EnsureVisible(dockContainer, defaultstate);
+            }
+            UpdateLiveXML();
+        }
+
         private void ShowResultControl(string content, ContentType contenttype, SaveFormat save, DockState defaultstate)
         {
             if (content.Length > 100000 &&
@@ -2018,6 +2039,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsmiShowOData4_Click(object sender, EventArgs e)
         {
             ShowODataControl(ref dockControlOData4, 4);
+        }
+
+        private void tsmiShowFlow_Click(object sender, EventArgs e)
+        {
+            ShowFlowListControl(ref dockControlFlowList, settings.DockStates.FlowList);
         }
 
         private void tsmiShowQueryExpression_Click(object sender, EventArgs e)

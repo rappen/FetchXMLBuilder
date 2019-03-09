@@ -69,6 +69,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public DockState FetchXMLJs { get; set; } = DockState.DockRight;
         public DockState QueryExpression { get; set; } = DockState.DockRight;
         public DockState SQLQuery { get; set; } = DockState.DockRight;
+        public DockState FlowList { get; set; } = DockState.Float;
     }
 
     public class ContentWindow
