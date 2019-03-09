@@ -6,18 +6,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
     public partial class ODataControl : WeifenLuo.WinFormsUI.Docking.DockContent
     {
         private FetchXmlBuilder fxb;
+        private int version;
 
-        public ODataControl(FetchXmlBuilder fetchXmlBuilder)
+        public ODataControl(FetchXmlBuilder fetchXmlBuilder, int version)
         {
             fxb = fetchXmlBuilder;
+            this.version = version;
             InitializeComponent();
+            Text = $"OData v{version}.0";
+            TabText = Text;
         }
 
         internal void DisplayOData(string url)
         {
             if (Uri.TryCreate(url, UriKind.Absolute, out Uri uri))
             {
-                var prefix = "OData: ";
+                var prefix = version == 4 ? "WebAPI: " : "OData: ";
                 linkOData.Text = prefix + url;
                 linkOData.LinkArea = new LinkArea(prefix.Length, url.Length);
                 if (linkOData.Links.Count > 0)
@@ -38,7 +42,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             DockPanel.DockTopPortion = 80;
             if (!IsHidden)
             {
-                DisplayOData(fxb.GetOData());
+                DisplayOData(fxb.GetOData(version));
             }
         }
 
@@ -47,7 +51,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             if (linkOData.Links.Count > 0 && linkOData.Links[0].Enabled)
             {
                 System.Diagnostics.Process.Start(linkOData.Links[0].LinkData as string);
-                fxb.LogUse("ExecuteOData");
+                fxb.LogUse("ExecuteOData" + version);
             }
             else
             {
@@ -60,7 +64,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             if (linkOData.Links.Count > 0 && linkOData.Links[0].Enabled)
             {
                 Clipboard.SetText(linkOData.Links[0].LinkData as string);
-                fxb.LogUse("CopyOData");
+                fxb.LogUse("CopyOData" + version);
             }
             else
             {
@@ -73,7 +77,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             if (e.Button == MouseButtons.Left && e.Link.Enabled)
             {
                 System.Diagnostics.Process.Start(e.Link.LinkData as string);
-                fxb.LogUse("ExecuteOData");
+                fxb.LogUse("ExecuteOData" + version);
             }
         }
     }

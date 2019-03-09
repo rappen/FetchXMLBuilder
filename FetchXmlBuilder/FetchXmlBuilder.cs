@@ -55,7 +55,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private XmlContentControl dockControlFetchXmlCs;
         private XmlContentControl dockControlFetchXmlJs;
         private ResultGrid dockControlGrid;
-        private ODataControl dockControlOData;
+        private ODataControl dockControlOData2;
+        private ODataControl dockControlOData4;
+        private FlowListControl dockControlFlowList;
         private XmlContentControl dockControlQExp;
         private XmlContentControl dockControlSQL;
         private Entity dynml;
@@ -244,7 +246,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             dockControlFetchXmlJs?.Close();
             dockControlFetchResult?.Close();
             dockControlGrid?.Close();
-            dockControlOData?.Close();
+            dockControlOData2?.Close();
+            dockControlOData4?.Close();
+            dockControlFlowList?.Close();
             dockControlQExp?.Close();
             dockControlSQL?.Close();
             SaveSetting();
@@ -406,7 +410,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal static string GetEntityDisplayName(EntityMetadata entity)
         {
             var result = entity.LogicalName;
-            if (FetchXmlBuilder.friendlyNames)
+            if (friendlyNames)
             {
                 if (entity.DisplayName.UserLocalizedLabel != null)
                 {
@@ -566,7 +570,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return result;
         }
 
-        internal string GetOData()
+        internal string GetOData(int version)
         {
             try
             {
@@ -575,7 +579,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     throw new Exception("Must have an active connection to CRM to compose OData query.");
                 }
                 FetchType fetch = dockControlBuilder.GetFetchType();
-                var odata = ODataCodeGenerator.GetODataQuery(fetch, ConnectionDetail.OrganizationDataServiceUrl, this);
+                var odata = string.Empty;
+                switch (version)
+                {
+                    case 2:
+                        odata = ODataCodeGenerator.GetODataQuery(fetch, ConnectionDetail.OrganizationDataServiceUrl, this);
+                        break;
+                    case 4:
+                        // Find correct WebAPI base url
+                        var url = new Uri(new Uri(ConnectionDetail.WebApplicationUrl), $"api/data/v{ConnectionDetail.OrganizationMajorVersion}.{ConnectionDetail.OrganizationMinorVersion}");
+                        odata = OData4CodeGenerator.GetOData4Query(fetch, url.ToString(), this);
+                        break;
+                }
                 return odata;
             }
             catch (Exception ex)
@@ -754,9 +769,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 dockControlFetchXml.UpdateXML(GetFetch());
             }
-            if (dockControlOData?.Visible == true && entities != null)
+            if (dockControlOData2?.Visible == true && entities != null)
             {
-                dockControlOData.DisplayOData(GetOData());
+                dockControlOData2.DisplayOData(GetOData(2));
+            }
+            if (dockControlOData4?.Visible == true && entities != null)
+            {
+                dockControlOData4.DisplayOData(GetOData(4));
+            }
+            if (dockControlFlowList?.Visible == true && entities != null)
+            {
+                dockControlFlowList.DisplayFlowList(GetOData(4));
             }
             if (dockControlQExp?.Visible == true && entities != null)
             {
@@ -1446,7 +1469,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         break;
 
                     case FXBMessageBusRequest.OData:
-                        fxbArgs.OData = GetOData();
+                        fxbArgs.OData = GetOData(2);
                         break;
                 }
                 message.TargetArgument = fxbArgs;
@@ -1739,17 +1762,32 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             UpdateLiveXML();
         }
 
-        private void ShowOData20Control()
+        private void ShowODataControl(ref ODataControl control, int version)
         {
-            LogUse("Show-OData2.0");
-            if (dockControlOData?.IsDisposed != false)
+            LogUse($"Show-OData{version}.0");
+            if (control?.IsDisposed != false)
             {
-                dockControlOData = new ODataControl(this);
-                dockControlOData.Show(dockContainer, DockState.DockBottom);
+                control = new ODataControl(this, version);
+                control.Show(dockContainer, DockState.DockBottom);
             }
             else
             {
-                dockControlOData.EnsureVisible(dockContainer, DockState.DockBottom);
+                control.EnsureVisible(dockContainer, DockState.DockBottom);
+            }
+            UpdateLiveXML();
+        }
+
+        private void ShowFlowListControl(ref FlowListControl control, DockState defaultstate)
+        {
+            LogUse($"Show-FlowList.0");
+            if (control?.IsDisposed != false)
+            {
+                control = new FlowListControl(this);
+                control.Show(dockContainer, defaultstate);
+            }
+            else
+            {
+                control.EnsureVisible(dockContainer, defaultstate);
             }
             UpdateLiveXML();
         }
@@ -1995,7 +2033,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsmiShowOData_Click(object sender, EventArgs e)
         {
-            ShowOData20Control();
+            ShowODataControl(ref dockControlOData2, 2);
+        }
+
+        private void tsmiShowOData4_Click(object sender, EventArgs e)
+        {
+            ShowODataControl(ref dockControlOData4, 4);
+        }
+
+        private void tsmiShowFlow_Click(object sender, EventArgs e)
+        {
+            ShowFlowListControl(ref dockControlFlowList, settings.DockStates.FlowList);
         }
 
         private void tsmiShowQueryExpression_Click(object sender, EventArgs e)
