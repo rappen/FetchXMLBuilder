@@ -54,7 +54,10 @@
 
 -- Bug fixes --
 #237 Cancelling Close wipes the window.
-#231 New - Paste XML does not update query builder      
+#231 New - Paste XML does not update query builder
+
+-- Other --
+Removed XML validation against fetch.xsd as this is no longer up to date with the platform
     </releaseNotes>
     <copyright>Copyright Jonas Rapp 2014-2018</copyright>
     <tags>XrmToolBox Plugins FetchXML Builder</tags>
