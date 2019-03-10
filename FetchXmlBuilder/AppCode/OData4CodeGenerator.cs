@@ -93,10 +93,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 if (attrMeta == null)
                     throw new ApplicationException($"Unknown attribute {entityName}.{attributeitem.name}");
 
-                if (attrMeta is LookupAttributeMetadata lookupAttrMeta && lookupAttrMeta.Targets.Length > 1 && attrMeta.AttributeType != AttributeTypeCode.Owner)
+                if (attrMeta is LookupAttributeMetadata lookupAttrMeta)
                 {
-                    foreach (var targetType in lookupAttrMeta.Targets)
-                        yield return $"{attrMeta.LogicalName}_{targetType}";
+                    yield return $"_{attrMeta.LogicalName}_value";
                 }
                 else
                 {
