@@ -84,6 +84,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         private static IEnumerable<string> GetAttributeNames(string entityName, IEnumerable<FetchAttributeType> attributeitems, FetchXmlBuilder sender)
         {
+            GetEntityMetadata(entityName, sender);
             var entityMeta = sender.entities[entityName];
 
             foreach (FetchAttributeType attributeitem in attributeitems)
@@ -120,6 +121,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         {
                             throw new Exception("OData queries only support one level of link entities");
                         }
+
                         if (linkitem.Items.Where(i => i is filter).ToList().Count > 0)
                         {
                             foreach (var filter in linkitem.Items.OfType<filter>())
@@ -133,7 +135,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                                         if (!String.IsNullOrEmpty(filterString))
                                             filterString += $" {filter.type} ";
 
-                                        filterString += navigationProperty + GetCondition(linkitem.name, condition, sender);
+                                        filterString += navigationProperty + "/" + GetCondition(linkitem.name, condition, sender);
                                     }
                                     else
                                     {
@@ -226,7 +228,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 }
                 return result;
             }
-            return "";
+            return expandFilter;
         }
 
         private static string GetFilter(FetchEntityType entity, filter filteritem, FetchXmlBuilder sender)
@@ -460,6 +462,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     relation.ReferencingEntity == linkitem.name &&
                     relation.ReferencingAttribute == linkitem.from)
                 {
+                    if (linkitem.linktype != "outer")
+                        throw new ApplicationException("OData queries do not support inner joins on 1:N relationships. Try changing to an outer join");
+
                     return relation.ReferencedEntityNavigationPropertyName;
                 }
             }
@@ -470,6 +475,36 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     relation.ReferencedEntity == linkitem.name &&
                     relation.ReferencedAttribute == linkitem.from)
                 {
+                    // OData $expand is equivalent to an outer join. Replicate inner join behaviour by adding a not-null filter on primary key
+                    // of related record type
+                    if (linkitem.linktype != "outer")
+                    {
+                        var filter = linkitem.Items.OfType<filter>().FirstOrDefault(f => f.type == filterType.and);
+                        if (filter == null)
+                        {
+                            filter = new filter { type = filterType.and, Items = new object[0] };
+                            var items = new List<object>(linkitem.Items);
+                            items.Add(filter);
+                            linkitem.Items = items.ToArray();
+                        }
+                        GetEntityMetadata(linkitem.name, sender);
+                        var linkedEntity = sender.entities[linkitem.name];
+                        var condition = filter.Items.OfType<condition>()
+                            .FirstOrDefault(c => c.attribute == linkedEntity.PrimaryIdAttribute && c.@operator == @operator.notnull);
+
+                        if (condition == null)
+                        {
+                            condition = new condition
+                            {
+                                attribute = linkedEntity.PrimaryIdAttribute,
+                                @operator = @operator.notnull
+                            };
+                            var items = new List<object>(filter.Items);
+                            items.Add(condition);
+                            filter.Items = items.ToArray();
+                        }
+                    }
+
                     return relation.ReferencingEntityNavigationPropertyName;
                 }
             }
@@ -486,9 +521,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     if (linkitems.Count == 1)
                     {
                         var nextlink = (FetchLinkEntityType)linkitems[0];
-                        if (nextlink.linktype == "outer")
+                        if (nextlink.linktype != "outer")
                         {
-                            throw new Exception("OData queries do not support outer joins");
+                            throw new Exception("OData queries do not support inner joins on N:N relationships. Try changing to an outer join");
                         }
                         if (relation.Entity2LogicalName == nextlink.name &&
                             relation.Entity2IntersectAttribute == nextlink.to)
@@ -508,9 +543,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     if (linkitems.Count == 1)
                     {
                         var nextlink = (FetchLinkEntityType)linkitems[0];
-                        if (nextlink.linktype == "outer")
+                        if (nextlink.linktype != "outer")
                         {
-                            throw new Exception("OData queries do not support outer joins");
+                            throw new Exception("OData queries do not support inner joins on N:N relationships. Try changing to an outer join");
                         }
                         if (relation.Entity1LogicalName == nextlink.name &&
                             relation.Entity1IntersectAttribute == nextlink.from)
