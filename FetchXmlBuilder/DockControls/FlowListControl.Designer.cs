@@ -44,9 +44,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.linkAggr = new System.Windows.Forms.LinkLabel();
             this.panODataLabel = new System.Windows.Forms.Panel();
+            this.linkHelp = new System.Windows.Forms.LinkLabel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.tm = new System.Windows.Forms.Timer(this.components);
             this.lblError = new System.Windows.Forms.Label();
+            this.tm = new System.Windows.Forms.Timer(this.components);
             this.panOData.SuspendLayout();
             this.panODataLabel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -224,12 +225,24 @@
             // 
             // panODataLabel
             // 
+            this.panODataLabel.Controls.Add(this.linkHelp);
             this.panODataLabel.Controls.Add(this.pictureBox1);
             this.panODataLabel.Dock = System.Windows.Forms.DockStyle.Left;
             this.panODataLabel.Location = new System.Drawing.Point(4, 4);
             this.panODataLabel.Name = "panODataLabel";
             this.panODataLabel.Size = new System.Drawing.Size(42, 136);
             this.panODataLabel.TabIndex = 2;
+            // 
+            // linkHelp
+            // 
+            this.linkHelp.AutoSize = true;
+            this.linkHelp.Location = new System.Drawing.Point(3, 44);
+            this.linkHelp.Name = "linkHelp";
+            this.linkHelp.Size = new System.Drawing.Size(32, 13);
+            this.linkHelp.TabIndex = 1;
+            this.linkHelp.TabStop = true;
+            this.linkHelp.Text = "Help!";
+            this.linkHelp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkHelp_LinkClicked);
             // 
             // pictureBox1
             // 
@@ -240,11 +253,6 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            // 
-            // tm
-            // 
-            this.tm.Interval = 2000;
-            this.tm.Tick += new System.EventHandler(this.Tm_Tick);
             // 
             // lblError
             // 
@@ -259,6 +267,11 @@
             this.lblError.TabIndex = 0;
             this.lblError.Text = "Error";
             this.lblError.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tm
+            // 
+            this.tm.Interval = 2000;
+            this.tm.Tick += new System.EventHandler(this.Tm_Tick);
             // 
             // FlowListControl
             // 
@@ -278,6 +291,7 @@
             this.panOData.ResumeLayout(false);
             this.panOData.PerformLayout();
             this.panODataLabel.ResumeLayout(false);
+            this.panODataLabel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
@@ -302,5 +316,6 @@
         private System.Windows.Forms.Label lblCopied;
         private System.Windows.Forms.Timer tm;
         private System.Windows.Forms.Label lblError;
+        private System.Windows.Forms.LinkLabel linkHelp;
     }
 }

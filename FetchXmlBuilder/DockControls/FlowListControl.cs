@@ -69,5 +69,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             lblCopied.Visible = false;
         }
+
+        private void LinkHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://docs.microsoft.com/en-us/connectors/commondataservice/#list-records");
+        }
     }
 }
