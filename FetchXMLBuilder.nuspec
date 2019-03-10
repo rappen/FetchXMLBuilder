@@ -48,9 +48,9 @@
     </description>
     <releaseNotes>
 -- New features--
-#123 Generate WebAPI queries!
-#241 Generate parameters for Flow List Records!
-#195 Convert from QueryExpression C# code to query!
+#123 Generate WebAPI queries by @MarkMpn
+#241 Generate parameters for Flow List Records
+#195 Convert from QueryExpression C# code to query by @BetimBeja
 
 -- Bug fixes --
 #237 Cancelling Close wipes the window.
