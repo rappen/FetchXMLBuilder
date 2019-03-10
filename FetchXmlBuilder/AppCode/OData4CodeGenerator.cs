@@ -89,6 +89,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
             foreach (FetchAttributeType attributeitem in attributeitems)
             {
+                if (!String.IsNullOrEmpty(attributeitem.alias))
+                    throw new ApplicationException($"OData queries do not support aliasing columns except for aggregate queries");
+
                 var attrMeta = entityMeta.Attributes.SingleOrDefault(a => a.LogicalName == attributeitem.name);
 
                 if (attrMeta == null)
@@ -271,6 +274,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             var result = "";
             if (!string.IsNullOrEmpty(condition.attribute))
             {
+                if (!String.IsNullOrEmpty(condition.entityname))
+                    throw new ApplicationException($"OData queries do not support filtering on link entities. If filtering on the primary key of an N:1 related entity, please add the filter to the link entity itself");
+
                 GetEntityMetadata(entityName, sender);
                 var attrMeta = sender.GetAttribute(entityName, condition.attribute);
                 if (attrMeta == null)
