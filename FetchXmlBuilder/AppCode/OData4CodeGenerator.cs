@@ -139,7 +139,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                                     }
                                     else
                                     {
-                                        throw new Exception("OData queries do not support filter on link entities except by primary key");
+                                        throw new Exception($"OData queries do not support filter on link entities except by primary key. Filter on {linkitem.name}.{condition.attribute} is not allowed");
                                     }
                                 }
                             }
@@ -463,7 +463,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     relation.ReferencingAttribute == linkitem.from)
                 {
                     if (linkitem.linktype != "outer")
-                        throw new ApplicationException("OData queries do not support inner joins on 1:N relationships. Try changing to an outer join");
+                        throw new ApplicationException($"OData queries do not support inner joins on 1:N relationships. Try changing link to {linkitem.name} to an outer join");
 
                     return relation.ReferencedEntityNavigationPropertyName;
                 }
@@ -523,7 +523,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         var nextlink = (FetchLinkEntityType)linkitems[0];
                         if (nextlink.linktype != "outer")
                         {
-                            throw new Exception("OData queries do not support inner joins on N:N relationships. Try changing to an outer join");
+                            throw new Exception($"OData queries do not support inner joins on N:N relationships. Try changing link to {nextlink.name} to an outer join");
                         }
                         if (relation.Entity2LogicalName == nextlink.name &&
                             relation.Entity2IntersectAttribute == nextlink.to)
@@ -545,7 +545,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         var nextlink = (FetchLinkEntityType)linkitems[0];
                         if (nextlink.linktype != "outer")
                         {
-                            throw new Exception("OData queries do not support inner joins on N:N relationships. Try changing to an outer join");
+                            throw new Exception($"OData queries do not support inner joins on N:N relationships. Try changing link to {nextlink.name} to an outer join");
                         }
                         if (relation.Entity1LogicalName == nextlink.name &&
                             relation.Entity1IntersectAttribute == nextlink.from)
