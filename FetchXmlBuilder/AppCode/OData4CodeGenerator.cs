@@ -74,31 +74,35 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         private static string GetSelect(FetchEntityType entity, FetchXmlBuilder sender)
         {
-            var entityMeta = sender.entities[entity.name];
+            var attributeitems = entity.Items
+                .OfType<FetchAttributeType>()
+                .Where(i => i.name != null);
 
-            var result = new List<string>();
-            var attributeitems = entity.Items.Where(i => i is FetchAttributeType && ((FetchAttributeType)i).name != null).ToList();
-            if (attributeitems.Count > 0)
+            var result = GetAttributeNames(entity.name, attributeitems, sender);
+            return string.Join(",", result);
+        }
+
+        private static IEnumerable<string> GetAttributeNames(string entityName, IEnumerable<FetchAttributeType> attributeitems, FetchXmlBuilder sender)
+        {
+            var entityMeta = sender.entities[entityName];
+
+            foreach (FetchAttributeType attributeitem in attributeitems)
             {
-                foreach (FetchAttributeType attributeitem in attributeitems)
+                var attrMeta = entityMeta.Attributes.SingleOrDefault(a => a.LogicalName == attributeitem.name);
+
+                if (attrMeta == null)
+                    throw new ApplicationException($"Unknown attribute {entityName}.{attributeitem.name}");
+
+                if (attrMeta is LookupAttributeMetadata lookupAttrMeta && lookupAttrMeta.Targets.Length > 1 && attrMeta.AttributeType != AttributeTypeCode.Owner)
                 {
-                    var attrMeta = entityMeta.Attributes.SingleOrDefault(a => a.LogicalName == attributeitem.name);
-
-                    if (attrMeta == null)
-                        throw new ApplicationException($"Unknown attribute {entity.name}.{attributeitem.name}");
-
-                    if (attrMeta is LookupAttributeMetadata lookupAttrMeta && lookupAttrMeta.Targets.Length > 1 && attrMeta.AttributeType != AttributeTypeCode.Owner)
-                    {
-                        foreach (var targetType in lookupAttrMeta.Targets)
-                            result.Add(attrMeta.LogicalName + "_" + targetType);
-                    }
-                    else
-                    {
-                        result.Add(attributeitem.name);
-                    }
+                    foreach (var targetType in lookupAttrMeta.Targets)
+                        yield return $"{attrMeta.LogicalName}_{targetType}";
+                }
+                else
+                {
+                    yield return attrMeta.LogicalName;
                 }
             }
-            return string.Join(",", result);
         }
 
         private static string GetExpand(FetchEntityType entity, FetchXmlBuilder sender, ref string filterString)
@@ -167,13 +171,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 return "";
             }
-            var resultList = new List<string>();
-            var linkentity = linkitem.name;
 
+            var linkentity = linkitem.name;
             if (linkentity == null)
                 return null;
 
-            var attributeitems = linkitem.Items.Where(i => i is FetchAttributeType && ((FetchAttributeType)i).name != null).ToList();
+            var attributeitems = linkitem.Items
+                .OfType<FetchAttributeType>()
+                .Where(i => i.name != null);
+
             if (linkitem.intersect)
             {
                 var linkitems = linkitem.Items.Where(i => i is FetchLinkEntityType).ToList();
@@ -189,16 +195,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     if (nextlink.Items == null)
                         return null;
 
-                    attributeitems = nextlink.Items.Where(i => i is FetchAttributeType && ((FetchAttributeType)i).name != null).ToList();
+                    attributeitems = nextlink.Items
+                        .OfType<FetchAttributeType>()
+                        .Where(i => i.name != null);
                 }
             }
-            if (attributeitems.Count > 0)
-            {
-                foreach (FetchAttributeType attributeitem in attributeitems)
-                {
-                    resultList.Add(attributeitem.name);
-                }
-            }
+
+            var resultList = GetAttributeNames(linkentity, attributeitems, sender);
             return string.Join(",", resultList);
         }
 
