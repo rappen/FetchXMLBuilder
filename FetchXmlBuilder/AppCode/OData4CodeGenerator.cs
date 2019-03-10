@@ -113,11 +113,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 foreach (FetchLinkEntityType linkitem in linkitems)
                 {
                     var navigationProperty = LinkItemToNavigationProperty(entity.name, linkitem, sender);
-
-                    if (linkitem.linktype == "outer")
-                    {
-                        throw new Exception("OData queries do not support outer joins");
-                    }
+                    
                     if (linkitem.Items != null)
                     {
                         if (!linkitem.intersect && linkitem.Items.Where(i => i is FetchLinkEntityType).ToList().Count > 0)
