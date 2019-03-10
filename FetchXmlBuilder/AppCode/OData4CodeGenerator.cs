@@ -29,15 +29,25 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
             if (entity.Items != null)
             {
-                var select = GetSelect(entity, sender);
-                var order = GetOrder(entity, sender);
-                var expandFilter = "";
-                var expand = GetExpand(entity, sender, ref expandFilter);
-                var filter = GetFilter(entity, sender, expandFilter);
-                query = AppendQuery(query, "$select", select);
-                query = AppendQuery(query, "$orderby", order);
-                query = AppendQuery(query, "$expand", expand);
-                query = AppendQuery(query, "$filter", filter);
+                if (fetch.aggregate)
+                {
+                    var apply = GetApply(entity, sender);
+                    
+                    query = AppendQuery(query, "$apply", apply);
+                }
+                else
+                {
+                    var select = GetSelect(entity, sender);
+                    var order = GetOrder(entity, sender);
+                    var expandFilter = "";
+                    var expand = GetExpand(entity, sender, ref expandFilter);
+                    var filter = GetFilter(entity, sender, expandFilter);
+
+                    query = AppendQuery(query, "$select", select);
+                    query = AppendQuery(query, "$orderby", order);
+                    query = AppendQuery(query, "$expand", expand);
+                    query = AppendQuery(query, "$filter", filter);
+                }
             }
 
             if (!string.IsNullOrEmpty(query))
@@ -64,16 +74,35 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         private static string GetSelect(FetchEntityType entity, FetchXmlBuilder sender)
         {
-            var result = new List<string>();
-            var attributeitems = entity.Items.Where(i => i is FetchAttributeType && ((FetchAttributeType)i).name != null).ToList();
-            if (attributeitems.Count > 0)
+            var attributeitems = entity.Items
+                .OfType<FetchAttributeType>()
+                .Where(i => i.name != null);
+
+            var result = GetAttributeNames(entity.name, attributeitems, sender);
+            return string.Join(",", result);
+        }
+
+        private static IEnumerable<string> GetAttributeNames(string entityName, IEnumerable<FetchAttributeType> attributeitems, FetchXmlBuilder sender)
+        {
+            GetEntityMetadata(entityName, sender);
+            var entityMeta = sender.entities[entityName];
+
+            foreach (FetchAttributeType attributeitem in attributeitems)
             {
-                foreach (FetchAttributeType attributeitem in attributeitems)
+                var attrMeta = entityMeta.Attributes.SingleOrDefault(a => a.LogicalName == attributeitem.name);
+
+                if (attrMeta == null)
+                    throw new ApplicationException($"Unknown attribute {entityName}.{attributeitem.name}");
+
+                if (attrMeta is LookupAttributeMetadata lookupAttrMeta)
                 {
-                    result.Add(attributeitem.name);
+                    yield return $"_{attrMeta.LogicalName}_value";
+                }
+                else
+                {
+                    yield return attrMeta.LogicalName;
                 }
             }
-            return string.Join(",", result);
         }
 
         private static string GetExpand(FetchEntityType entity, FetchXmlBuilder sender, ref string filterString)
@@ -85,17 +114,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 foreach (FetchLinkEntityType linkitem in linkitems)
                 {
                     var navigationProperty = LinkItemToNavigationProperty(entity.name, linkitem, sender);
-
-                    if (linkitem.linktype == "outer")
-                    {
-                        throw new Exception("OData queries do not support outer joins");
-                    }
+                    
                     if (linkitem.Items != null)
                     {
                         if (!linkitem.intersect && linkitem.Items.Where(i => i is FetchLinkEntityType).ToList().Count > 0)
                         {
                             throw new Exception("OData queries only support one level of link entities");
                         }
+
                         if (linkitem.Items.Where(i => i is filter).ToList().Count > 0)
                         {
                             foreach (var filter in linkitem.Items.OfType<filter>())
@@ -104,17 +130,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                                 {
                                     var targetLogicalName = linkitem.name;
                                     GetEntityMetadata(targetLogicalName, sender);
-                                    if (condition.attribute == sender.entities[targetLogicalName].PrimaryIdAttribute &&
-                                        condition.@operator == @operator.eq)
+                                    if (condition.attribute == sender.entities[targetLogicalName].PrimaryIdAttribute)
                                     {
                                         if (!String.IsNullOrEmpty(filterString))
-                                            filterString += " and ";
+                                            filterString += $" {filter.type} ";
 
-                                        filterString += $"{navigationProperty}/{condition.attribute} eq {condition.value}";
+                                        filterString += navigationProperty + "/" + GetCondition(linkitem.name, condition, sender);
                                     }
                                     else
                                     {
-                                        throw new Exception("OData queries to not support filter on link entities except by primary key");
+                                        throw new Exception($"OData queries do not support filter on link entities except by primary key. Filter on {linkitem.name}.{condition.attribute} is not allowed");
                                     }
                                 }
                             }
@@ -142,13 +167,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 return "";
             }
-            var resultList = new List<string>();
-            var linkentity = linkitem.name;
 
+            var linkentity = linkitem.name;
             if (linkentity == null)
                 return null;
 
-            var attributeitems = linkitem.Items.Where(i => i is FetchAttributeType && ((FetchAttributeType)i).name != null).ToList();
+            var attributeitems = linkitem.Items
+                .OfType<FetchAttributeType>()
+                .Where(i => i.name != null);
+
             if (linkitem.intersect)
             {
                 var linkitems = linkitem.Items.Where(i => i is FetchLinkEntityType).ToList();
@@ -164,16 +191,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     if (nextlink.Items == null)
                         return null;
 
-                    attributeitems = nextlink.Items.Where(i => i is FetchAttributeType && ((FetchAttributeType)i).name != null).ToList();
+                    attributeitems = nextlink.Items
+                        .OfType<FetchAttributeType>()
+                        .Where(i => i.name != null);
                 }
             }
-            if (attributeitems.Count > 0)
-            {
-                foreach (FetchAttributeType attributeitem in attributeitems)
-                {
-                    resultList.Add(attributeitem.name);
-                }
-            }
+
+            var resultList = GetAttributeNames(linkentity, attributeitems, sender);
             return string.Join(",", resultList);
         }
 
@@ -204,7 +228,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 }
                 return result;
             }
-            return "";
+            return expandFilter;
         }
 
         private static string GetFilter(FetchEntityType entity, filter filteritem, FetchXmlBuilder sender)
@@ -223,7 +247,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 if (item is condition)
                 {
-                    result += GetCondition(entity, item as condition, sender);
+                    result += GetCondition(entity.name, item as condition, sender);
                 }
                 else if (item is filter)
                 {
@@ -242,22 +266,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return result;
         }
 
-        private static string GetCondition(FetchEntityType entity, condition condition, FetchXmlBuilder sender)
+        private static string GetCondition(string entityName, condition condition, FetchXmlBuilder sender)
         {
             var result = "";
             if (!string.IsNullOrEmpty(condition.attribute))
             {
-                GetEntityMetadata(entity.name, sender);
-                var attrMeta = sender.GetAttribute(entity.name, condition.attribute);
+                GetEntityMetadata(entityName, sender);
+                var attrMeta = sender.GetAttribute(entityName, condition.attribute);
                 if (attrMeta == null)
                 {
-                    throw new Exception($"No metadata for attribute: {entity.name}.{condition.attribute}");
+                    throw new Exception($"No metadata for attribute: {entityName}.{condition.attribute}");
                 }
                 result = attrMeta.LogicalName;
                 if (attrMeta is LookupAttributeMetadata lookupAttrMeta)
                 {
                     if (lookupAttrMeta.Targets.Length > 1)
-                        throw new Exception($"Multiple targets for lookup attribute: {entity.name}.{condition.attribute}. Use a link entity and filter on the primary key attribute instead");
+                        throw new Exception($"Multiple targets for lookup attribute: {entityName}.{condition.attribute}. Use a link entity and filter on the primary key attribute instead");
 
                     GetEntityMetadata(lookupAttrMeta.Targets[0], sender);
                     result += "/" + sender.entities[lookupAttrMeta.Targets[0]].PrimaryIdAttribute;
@@ -360,6 +384,54 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return result;
         }
 
+        private static string GetApply(FetchEntityType entity, FetchXmlBuilder sender)
+        {
+            var groups = entity.Items.OfType<FetchAttributeType>()
+                .Where(a => a.groupbySpecified)
+                .Select(a => a.name)
+                .ToList();
+            
+            var aggregates = entity.Items.OfType<FetchAttributeType>()
+                .Where(a => a.aggregateSpecified)
+                .Select(a => $"aggregate({a.name} with {GetAggregateType(a.aggregate)} as {a.alias})")
+                .ToList();
+
+            if (groups.Count > 0)
+            {
+                var result = "groupby((" + String.Join(",", groups) + ")";
+
+                if (aggregates.Count > 0)
+                    result += "," + String.Join(",", aggregates);
+
+                result += ")";
+                return result;
+            }
+
+            return String.Join(",", aggregates);
+        }
+
+        private static string GetAggregateType(AggregateType aggregate)
+        {
+            switch (aggregate)
+            {
+                case AggregateType.avg:
+                    return "average";
+
+                case AggregateType.count:
+                    throw new ApplicationException("\"count\" aggregate is not supported by OData4. Please use \"countcolumn\" instead");
+
+                case AggregateType.countcolumn:
+                    return "countdistinct";
+
+                case AggregateType.max:
+                case AggregateType.min:
+                case AggregateType.sum:
+                    return aggregate.ToString();
+            }
+
+            throw new ApplicationException("Unknown aggregate type " + aggregate);
+        }
+
         private static string LogicalToCollectionName(string entity, FetchXmlBuilder sender)
         {
             GetEntityMetadata(entity, sender);
@@ -390,6 +462,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     relation.ReferencingEntity == linkitem.name &&
                     relation.ReferencingAttribute == linkitem.from)
                 {
+                    if (linkitem.linktype != "outer")
+                        throw new ApplicationException($"OData queries do not support inner joins on 1:N relationships. Try changing link to {linkitem.name} to an outer join");
+
                     return relation.ReferencedEntityNavigationPropertyName;
                 }
             }
@@ -400,6 +475,36 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     relation.ReferencedEntity == linkitem.name &&
                     relation.ReferencedAttribute == linkitem.from)
                 {
+                    // OData $expand is equivalent to an outer join. Replicate inner join behaviour by adding a not-null filter on primary key
+                    // of related record type
+                    if (linkitem.linktype != "outer")
+                    {
+                        var filter = linkitem.Items.OfType<filter>().FirstOrDefault(f => f.type == filterType.and);
+                        if (filter == null)
+                        {
+                            filter = new filter { type = filterType.and, Items = new object[0] };
+                            var items = new List<object>(linkitem.Items);
+                            items.Add(filter);
+                            linkitem.Items = items.ToArray();
+                        }
+                        GetEntityMetadata(linkitem.name, sender);
+                        var linkedEntity = sender.entities[linkitem.name];
+                        var condition = filter.Items.OfType<condition>()
+                            .FirstOrDefault(c => c.attribute == linkedEntity.PrimaryIdAttribute && c.@operator == @operator.notnull);
+
+                        if (condition == null)
+                        {
+                            condition = new condition
+                            {
+                                attribute = linkedEntity.PrimaryIdAttribute,
+                                @operator = @operator.notnull
+                            };
+                            var items = new List<object>(filter.Items);
+                            items.Add(condition);
+                            filter.Items = items.ToArray();
+                        }
+                    }
+
                     return relation.ReferencingEntityNavigationPropertyName;
                 }
             }
@@ -416,9 +521,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     if (linkitems.Count == 1)
                     {
                         var nextlink = (FetchLinkEntityType)linkitems[0];
-                        if (nextlink.linktype == "outer")
+                        if (nextlink.linktype != "outer")
                         {
-                            throw new Exception("OData queries do not support outer joins");
+                            throw new Exception($"OData queries do not support inner joins on N:N relationships. Try changing link to {nextlink.name} to an outer join");
                         }
                         if (relation.Entity2LogicalName == nextlink.name &&
                             relation.Entity2IntersectAttribute == nextlink.to)
@@ -438,9 +543,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     if (linkitems.Count == 1)
                     {
                         var nextlink = (FetchLinkEntityType)linkitems[0];
-                        if (nextlink.linktype == "outer")
+                        if (nextlink.linktype != "outer")
                         {
-                            throw new Exception("OData queries do not support outer joins");
+                            throw new Exception($"OData queries do not support inner joins on N:N relationships. Try changing link to {nextlink.name} to an outer join");
                         }
                         if (relation.Entity1LogicalName == nextlink.name &&
                             relation.Entity1IntersectAttribute == nextlink.from)
