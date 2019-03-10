@@ -379,6 +379,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 foreach (FetchOrderType orderitem in orderitems)
                 {
+                    if (!String.IsNullOrEmpty(orderitem.alias))
+                        throw new ApplicationException($"OData queries do not support ordering on link entities. Please remove the sort on {orderitem.alias}.{orderitem.attribute}");
+
                     result += orderitem.attribute;
                     if (orderitem.descending)
                     {
