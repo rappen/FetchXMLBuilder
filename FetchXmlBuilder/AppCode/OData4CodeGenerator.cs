@@ -128,13 +128,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                                 {
                                     var targetLogicalName = linkitem.name;
                                     GetEntityMetadata(targetLogicalName, sender);
-                                    if (condition.attribute == sender.entities[targetLogicalName].PrimaryIdAttribute &&
-                                        condition.@operator == @operator.eq)
+                                    if (condition.attribute == sender.entities[targetLogicalName].PrimaryIdAttribute)
                                     {
                                         if (!String.IsNullOrEmpty(filterString))
-                                            filterString += " and ";
+                                            filterString += $" {filter.type} ";
 
-                                        filterString += $"{navigationProperty}/{condition.attribute} eq {condition.value}";
+                                        filterString += navigationProperty + GetCondition(linkitem.name, condition, sender);
                                     }
                                     else
                                     {
@@ -246,7 +245,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 if (item is condition)
                 {
-                    result += GetCondition(entity, item as condition, sender);
+                    result += GetCondition(entity.name, item as condition, sender);
                 }
                 else if (item is filter)
                 {
@@ -265,22 +264,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return result;
         }
 
-        private static string GetCondition(FetchEntityType entity, condition condition, FetchXmlBuilder sender)
+        private static string GetCondition(string entityName, condition condition, FetchXmlBuilder sender)
         {
             var result = "";
             if (!string.IsNullOrEmpty(condition.attribute))
             {
-                GetEntityMetadata(entity.name, sender);
-                var attrMeta = sender.GetAttribute(entity.name, condition.attribute);
+                GetEntityMetadata(entityName, sender);
+                var attrMeta = sender.GetAttribute(entityName, condition.attribute);
                 if (attrMeta == null)
                 {
-                    throw new Exception($"No metadata for attribute: {entity.name}.{condition.attribute}");
+                    throw new Exception($"No metadata for attribute: {entityName}.{condition.attribute}");
                 }
                 result = attrMeta.LogicalName;
                 if (attrMeta is LookupAttributeMetadata lookupAttrMeta)
                 {
                     if (lookupAttrMeta.Targets.Length > 1)
-                        throw new Exception($"Multiple targets for lookup attribute: {entity.name}.{condition.attribute}. Use a link entity and filter on the primary key attribute instead");
+                        throw new Exception($"Multiple targets for lookup attribute: {entityName}.{condition.attribute}. Use a link entity and filter on the primary key attribute instead");
 
                     GetEntityMetadata(lookupAttrMeta.Targets[0], sender);
                     result += "/" + sender.entities[lookupAttrMeta.Targets[0]].PrimaryIdAttribute;
