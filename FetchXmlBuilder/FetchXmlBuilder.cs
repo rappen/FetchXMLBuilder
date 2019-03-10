@@ -1813,11 +1813,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void ShowFlowListControl(ref FlowListControl control, DockState defaultstate)
         {
-            LogUse($"Show-FlowList.0");
+            LogUse($"Show-FlowList");
             if (control?.IsDisposed != false)
             {
                 control = new FlowListControl(this);
+                var defaultfloatsize = dockContainer.DefaultFloatWindowSize;
+                dockContainer.DefaultFloatWindowSize = dockControlFlowList.Size;
                 control.Show(dockContainer, defaultstate);
+                dockContainer.DefaultFloatWindowSize = defaultfloatsize;
             }
             else
             {
