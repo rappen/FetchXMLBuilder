@@ -69,8 +69,8 @@
             this.gbDefaultQuery = new System.Windows.Forms.GroupBox();
             this.txtFetch = new CSRichTextBoxSyntaxHighlighting.XMLViewer();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.btnFormatQuery = new System.Windows.Forms.Button();
             this.btnDefaultQuery = new System.Windows.Forms.Button();
+            this.btnFormatQuery = new System.Windows.Forms.Button();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -577,16 +577,6 @@
             this.panel2.Size = new System.Drawing.Size(81, 126);
             this.panel2.TabIndex = 5;
             // 
-            // btnFormatQuery
-            // 
-            this.btnFormatQuery.Location = new System.Drawing.Point(3, 100);
-            this.btnFormatQuery.Name = "btnFormatQuery";
-            this.btnFormatQuery.Size = new System.Drawing.Size(75, 23);
-            this.btnFormatQuery.TabIndex = 0;
-            this.btnFormatQuery.Text = "Format";
-            this.btnFormatQuery.UseVisualStyleBackColor = true;
-            this.btnFormatQuery.Click += new System.EventHandler(this.btnFormatQuery_Click);
-            // 
             // btnDefaultQuery
             // 
             this.btnDefaultQuery.Location = new System.Drawing.Point(3, 3);
@@ -596,6 +586,16 @@
             this.btnDefaultQuery.Text = "Default";
             this.btnDefaultQuery.UseVisualStyleBackColor = true;
             this.btnDefaultQuery.Click += new System.EventHandler(this.btnDefaultQuery_Click);
+            // 
+            // btnFormatQuery
+            // 
+            this.btnFormatQuery.Location = new System.Drawing.Point(3, 100);
+            this.btnFormatQuery.Name = "btnFormatQuery";
+            this.btnFormatQuery.Size = new System.Drawing.Size(75, 23);
+            this.btnFormatQuery.TabIndex = 0;
+            this.btnFormatQuery.Text = "Format";
+            this.btnFormatQuery.UseVisualStyleBackColor = true;
+            this.btnFormatQuery.Click += new System.EventHandler(this.btnFormatQuery_Click);
             // 
             // Settings
             // 

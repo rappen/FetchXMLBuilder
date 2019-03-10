@@ -116,7 +116,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtWelcome.BackColor = System.Drawing.SystemColors.Window;
             this.txtWelcome.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtWelcome.Font = new System.Drawing.Font("Norwegian", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtWelcome.Font = new System.Drawing.Font("Berlin Sans FB", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtWelcome.Location = new System.Drawing.Point(491, 27);
             this.txtWelcome.Multiline = true;
             this.txtWelcome.Name = "txtWelcome";
@@ -223,6 +223,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.llWeb);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(880, 580);
