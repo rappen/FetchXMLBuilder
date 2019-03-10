@@ -124,7 +124,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                                     }
                                     else
                                     {
-                                        throw new Exception("OData queries to not support filter on link entities except by primary key");
+                                        throw new Exception("OData queries do not support filter on link entities except by primary key");
                                     }
                                 }
                             }
