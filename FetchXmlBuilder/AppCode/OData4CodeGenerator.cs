@@ -29,15 +29,25 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
             if (entity.Items != null)
             {
-                var select = GetSelect(entity, sender);
-                var order = GetOrder(entity, sender);
-                var expandFilter = "";
-                var expand = GetExpand(entity, sender, ref expandFilter);
-                var filter = GetFilter(entity, sender, expandFilter);
-                query = AppendQuery(query, "$select", select);
-                query = AppendQuery(query, "$orderby", order);
-                query = AppendQuery(query, "$expand", expand);
-                query = AppendQuery(query, "$filter", filter);
+                if (fetch.aggregate)
+                {
+                    var apply = GetApply(entity, sender);
+                    
+                    query = AppendQuery(query, "$apply", apply);
+                }
+                else
+                {
+                    var select = GetSelect(entity, sender);
+                    var order = GetOrder(entity, sender);
+                    var expandFilter = "";
+                    var expand = GetExpand(entity, sender, ref expandFilter);
+                    var filter = GetFilter(entity, sender, expandFilter);
+
+                    query = AppendQuery(query, "$select", select);
+                    query = AppendQuery(query, "$orderby", order);
+                    query = AppendQuery(query, "$expand", expand);
+                    query = AppendQuery(query, "$filter", filter);
+                }
             }
 
             if (!string.IsNullOrEmpty(query))
@@ -358,6 +368,54 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 }
             }
             return result;
+        }
+
+        private static string GetApply(FetchEntityType entity, FetchXmlBuilder sender)
+        {
+            var groups = entity.Items.OfType<FetchAttributeType>()
+                .Where(a => a.groupbySpecified)
+                .Select(a => a.name)
+                .ToList();
+            
+            var aggregates = entity.Items.OfType<FetchAttributeType>()
+                .Where(a => a.aggregateSpecified)
+                .Select(a => $"aggregate({a.name} with {GetAggregateType(a.aggregate)} as {a.alias})")
+                .ToList();
+
+            if (groups.Count > 0)
+            {
+                var result = "groupby((" + String.Join(",", groups) + ")";
+
+                if (aggregates.Count > 0)
+                    result += "," + String.Join(",", aggregates);
+
+                result += ")";
+                return result;
+            }
+
+            return String.Join(",", aggregates);
+        }
+
+        private static string GetAggregateType(AggregateType aggregate)
+        {
+            switch (aggregate)
+            {
+                case AggregateType.avg:
+                    return "average";
+
+                case AggregateType.count:
+                    throw new ApplicationException("\"count\" aggregate is not supported by OData4. Please use \"countcolumn\" instead");
+
+                case AggregateType.countcolumn:
+                    return "countdistinct";
+
+                case AggregateType.max:
+                case AggregateType.min:
+                case AggregateType.sum:
+                    return aggregate.ToString();
+            }
+
+            throw new ApplicationException("Unknown aggregate type " + aggregate);
         }
 
         private static string LogicalToCollectionName(string entity, FetchXmlBuilder sender)
