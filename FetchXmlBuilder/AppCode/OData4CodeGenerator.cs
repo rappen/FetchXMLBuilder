@@ -74,13 +74,28 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         private static string GetSelect(FetchEntityType entity, FetchXmlBuilder sender)
         {
+            var entityMeta = sender.entities[entity.name];
+
             var result = new List<string>();
             var attributeitems = entity.Items.Where(i => i is FetchAttributeType && ((FetchAttributeType)i).name != null).ToList();
             if (attributeitems.Count > 0)
             {
                 foreach (FetchAttributeType attributeitem in attributeitems)
                 {
-                    result.Add(attributeitem.name);
+                    var attrMeta = entityMeta.Attributes.SingleOrDefault(a => a.LogicalName == attributeitem.name);
+
+                    if (attrMeta == null)
+                        throw new ApplicationException($"Unknown attribute {entity.name}.{attributeitem.name}");
+
+                    if (attrMeta is LookupAttributeMetadata lookupAttrMeta && lookupAttrMeta.Targets.Length > 1 && attrMeta.AttributeType != AttributeTypeCode.Owner)
+                    {
+                        foreach (var targetType in lookupAttrMeta.Targets)
+                            result.Add(attrMeta.LogicalName + "_" + targetType);
+                    }
+                    else
+                    {
+                        result.Add(attributeitem.name);
+                    }
                 }
             }
             return string.Join(",", result);
