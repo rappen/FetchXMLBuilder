@@ -308,11 +308,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 result = attrMeta.LogicalName;
                 if (attrMeta is LookupAttributeMetadata lookupAttrMeta)
                 {
-                    if (lookupAttrMeta.Targets.Length > 1)
-                        throw new Exception($"Multiple targets for lookup attribute: {entityName}.{condition.attribute}. Use a link entity and filter on the primary key attribute instead");
-
-                    GetEntityMetadata(lookupAttrMeta.Targets[0], sender);
-                    result += "/" + sender.entities[lookupAttrMeta.Targets[0]].PrimaryIdAttribute;
+                    result = $"_{attrMeta.LogicalName}_value";
                 }
                 switch (condition.@operator)
                 {
