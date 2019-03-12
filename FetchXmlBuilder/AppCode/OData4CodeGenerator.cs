@@ -97,14 +97,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 if (attrMeta == null)
                     throw new ApplicationException($"Unknown attribute {entityName}.{attributeitem.name}");
 
-                if (attrMeta is LookupAttributeMetadata lookupAttrMeta)
-                {
-                    yield return $"_{attrMeta.LogicalName}_value";
-                }
-                else
-                {
-                    yield return attrMeta.LogicalName;
-                }
+                yield return GetPropertyName(attrMeta);
             }
         }
 
@@ -160,7 +153,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     var childFilter = child ? linkitem.Items?.OfType<filter>().FirstOrDefault() : null;
                     var expandedFilter = childFilter == null ? null : GetFilter(linkitem.name, childFilter, sender);
                     var childOrders = child ? linkitem.Items?.OfType<FetchOrderType>().ToList() : null;
-                    var expandedOrder = childOrders == null ? null : GetOrder(childOrders);
+                    var expandedOrder = childOrders == null ? null : GetOrder(linkitem.name, sender, childOrders);
 
                     if (String.IsNullOrEmpty(expandedSelect) && String.IsNullOrEmpty(expandedFilter) && String.IsNullOrEmpty(expandedOrder))
                     {
@@ -305,11 +298,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 {
                     throw new Exception($"No metadata for attribute: {entityName}.{condition.attribute}");
                 }
-                result = attrMeta.LogicalName;
-                if (attrMeta is LookupAttributeMetadata lookupAttrMeta)
-                {
-                    result = $"_{attrMeta.LogicalName}_value";
-                }
+                result = GetPropertyName(attrMeta);
                 switch (condition.@operator)
                 {
                     case @operator.eq:
@@ -389,15 +378,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return result;
         }
 
+        private static string GetPropertyName(AttributeMetadata attr)
+        {
+            if (attr is LookupAttributeMetadata)
+                return $"_{attr.LogicalName}_value";
+
+            return attr.LogicalName;
+        }
+
         private static string GetOrder(FetchEntityType entity, FetchXmlBuilder sender)
         {
             var orderitems = entity.Items
                 .OfType<FetchOrderType>()
                 .Where(i => i.attribute != null);
-            return GetOrder(orderitems);
+            return GetOrder(entity.name, sender, orderitems);
         }
 
-        private static string GetOrder(IEnumerable<FetchOrderType> orderitems)
+        private static string GetOrder(string entityName, FetchXmlBuilder sender, IEnumerable<FetchOrderType> orderitems)
         {
             var results = new List<string>();
 
@@ -406,7 +403,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 if (!String.IsNullOrEmpty(orderitem.alias))
                     throw new ApplicationException($"OData queries do not support ordering on link entities. Please remove the sort on {orderitem.alias}.{orderitem.attribute}");
 
-                var result = orderitem.attribute;
+                var attrMetadata = sender.entities[entityName].Attributes.SingleOrDefault(a => a.LogicalName == orderitem.attribute);
+                if (attrMetadata == null)
+                    throw new ApplicationException($"No metadata for attribute {entityName}.{orderitem.attribute}");
+
+                var result = GetPropertyName(attrMetadata);
                 if (orderitem.descending)
                 {
                     result += " desc";
