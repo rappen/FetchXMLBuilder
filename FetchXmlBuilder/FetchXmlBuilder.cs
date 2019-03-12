@@ -1872,7 +1872,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             View = null;
             views = null;
             var orgver = new Version(e.ConnectionDetail.OrganizationVersion);
-            LogInfo("Connected CRM version: {0}", orgver);
+            LogInfo("Connected CRM version: {0} (Major: {1} Minor: {2})",
+                orgver, e.ConnectionDetail.OrganizationMajorVersion, e.ConnectionDetail.OrganizationMinorVersion);
             // Verifying version where MetadataChanges request exists https://msdn.microsoft.com/en-us/library/jj863599(v=crm.5).aspx
             // According to TechNet 2011 UR12 is 05.00.9690.3218 https://social.technet.microsoft.com/wiki/contents/articles/8062.crm-2011-build-and-version-numbers-for-update-rollups.aspx
             var orgok = orgver >= new Version(05, 00, 9690, 3218);
