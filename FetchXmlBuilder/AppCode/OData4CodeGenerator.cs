@@ -32,8 +32,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 if (fetch.aggregate)
                 {
                     var apply = GetApply(entity, sender);
-                    
+                    var filter = GetFilter(entity, sender, null);
+
                     query = AppendQuery(query, "$apply", apply);
+                    query = AppendQuery(query, "$filter", filter);
                 }
                 else
                 {
