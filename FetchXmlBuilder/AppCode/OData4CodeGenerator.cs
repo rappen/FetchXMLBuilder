@@ -608,13 +608,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 if (!String.IsNullOrEmpty(function))
                 {
                     if (functionParameters == Int32.MaxValue)
-                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{GetPropertyName(attrMeta)}',PropertyValues=[{String.Join(",",condition.Items.Select(i => FormatValue(functionParameterType, i.Value)))}]')";
+                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}',PropertyValues=[{String.Join(",",condition.Items.Select(i => FormatValue(functionParameterType, i.Value)))}])";
                     else if (functionParameters == 0)
-                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{GetPropertyName(attrMeta)}')";
+                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}')";
                     else if (functionParameters == 1)
-                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{GetPropertyName(attrMeta)}',PropertyValue={FormatValue(functionParameterType, condition.value)})";
+                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}',PropertyValue={FormatValue(functionParameterType, condition.value)})";
                     else
-                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{GetPropertyName(attrMeta)}',{String.Join(",", condition.Items.Select((i,idx) => $"Property{idx+1}={FormatValue(functionParameterType, i.Value)}"))})";
+                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}',{String.Join(",", condition.Items.Select((i,idx) => $"Property{idx+1}={FormatValue(functionParameterType, i.Value)}"))})";
                 }
 
                 if (!string.IsNullOrEmpty(condition.value) && !result.Contains("("))
