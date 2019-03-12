@@ -623,7 +623,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 WorkAsync(new WorkAsyncInfo($"Loading {name}...",
                     (eventargs) =>
                     {
-                        eventargs.Result = MetadataHelper.LoadEntityDetails(Service, entityName);
+                        eventargs.Result = MetadataHelper.LoadEntityDetails(Service, entityName, ConnectionDetail.OrganizationMajorVersion, ConnectionDetail.OrganizationMinorVersion);
                     })
                 {
                     PostWorkCallBack = (completedargs) =>
@@ -640,7 +640,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 try
                 {
-                    var resp = MetadataHelper.LoadEntityDetails(Service, entityName);
+                    var resp = MetadataHelper.LoadEntityDetails(Service, entityName, ConnectionDetail.OrganizationMajorVersion, ConnectionDetail.OrganizationMinorVersion);
                     LoadEntityDetailsCompleted(entityName, resp, null);
                 }
                 catch (Exception e)
