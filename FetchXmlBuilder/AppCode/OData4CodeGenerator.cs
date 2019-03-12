@@ -32,8 +32,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 if (fetch.aggregate)
                 {
                     var apply = GetApply(entity, sender);
-                    
+                    var filter = GetFilter(entity, sender, null);
+
                     query = AppendQuery(query, "$apply", apply);
+                    query = AppendQuery(query, "$filter", filter);
                 }
                 else
                 {
@@ -97,14 +99,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 if (attrMeta == null)
                     throw new ApplicationException($"Unknown attribute {entityName}.{attributeitem.name}");
 
-                if (attrMeta is LookupAttributeMetadata lookupAttrMeta)
-                {
-                    yield return $"_{attrMeta.LogicalName}_value";
-                }
-                else
-                {
-                    yield return attrMeta.LogicalName;
-                }
+                yield return GetPropertyName(attrMeta);
             }
         }
 
@@ -160,7 +155,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     var childFilter = child ? linkitem.Items?.OfType<filter>().FirstOrDefault() : null;
                     var expandedFilter = childFilter == null ? null : GetFilter(linkitem.name, childFilter, sender);
                     var childOrders = child ? linkitem.Items?.OfType<FetchOrderType>().ToList() : null;
-                    var expandedOrder = childOrders == null ? null : GetOrder(childOrders);
+                    var expandedOrder = childOrders == null ? null : GetOrder(linkitem.name, sender, childOrders);
 
                     if (String.IsNullOrEmpty(expandedSelect) && String.IsNullOrEmpty(expandedFilter) && String.IsNullOrEmpty(expandedOrder))
                     {
@@ -305,11 +300,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 {
                     throw new Exception($"No metadata for attribute: {entityName}.{condition.attribute}");
                 }
-                result = attrMeta.LogicalName;
-                if (attrMeta is LookupAttributeMetadata lookupAttrMeta)
-                {
-                    result = $"_{attrMeta.LogicalName}_value";
-                }
+                result = GetPropertyName(attrMeta);
+                string function = null;
+                var functionParameters = 1;
+                var functionParameterType = typeof(string);
+
                 switch (condition.@operator)
                 {
                     case @operator.eq:
@@ -341,52 +336,364 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     case @operator.endswith:
                         result = $"endswith({attrMeta.LogicalName}, '{condition.value}')";
                         break;
+                    case @operator.above:
+                        function = "Above";
+                        break;
+                    case @operator.eqorabove:
+                        function = "AboveOrEqual";
+                        break;
+                    case @operator.between:
+                        function = "Between";
+                        functionParameters = Int32.MaxValue;
+                        break;
+                    case @operator.containvalues:
+                        function = "ContainsValues";
+                        functionParameters = Int32.MaxValue;
+                        break;
+                    case @operator.notcontainvalues:
+                        function = "DoesNotContainValues";
+                        functionParameters = Int32.MaxValue;
+                        break;
+                    case @operator.eqbusinessid:
+                        function = "EqualBusinessId";
+                        functionParameters = 0;
+                        break;
+                    case @operator.equserid:
+                        function = "EqualUserId";
+                        functionParameters = 0;
+                        break;
+                    case @operator.equserlanguage:
+                        function = "EqualUserLanguage";
+                        functionParameters = 0;
+                        break;
+                    case @operator.equseroruserhierarchy:
+                        function = "EqualUserOrUserHierarchy";
+                        functionParameters = 0;
+                        break;
+                    case @operator.equseroruserhierarchyandteams:
+                        function = "EqualUserOrUserHierarchyAndTeams";
+                        functionParameters = 0;
+                        break;
+                    case @operator.equseroruserteams:
+                        function = "EqualUserOrUserTeams";
+                        functionParameters = 0;
+                        break;
+                    case @operator.equserteams:
+                        function = "EqualUserTeams";
+                        functionParameters = 0;
+                        break;
                     case @operator.@in:
+                        function = "In";
+                        functionParameters = Int32.MaxValue;
+                        break;
+                    case @operator.infiscalperiod:
+                        function = "InFiscalPeriod";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.infiscalperiodandyear:
+                        function = "InFiscalPeriodAndYear";
+                        functionParameters = 2;
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.infiscalyear:
+                        function = "InFiscalYear";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.inorafterfiscalperiodandyear:
+                        function = "InOrAfterFiscalPeriodAndYear";
+                        functionParameters = 2;
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.inorbeforefiscalperiodandyear:
+                        function = "InOrBeforeFiscalPeriodAndYear";
+                        functionParameters = 2;
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.lastsevendays:
+                        function = "Last7Days";
+                        functionParameters = 0;
+                        break;
+                    case @operator.lastfiscalperiod:
+                        function = "LastFiscalPeriod";
+                        functionParameters = 0;
+                        break;
+                    case @operator.lastfiscalyear:
+                        function = "LastFiscalYear";
+                        functionParameters = 0;
+                        break;
+                    case @operator.lastmonth:
+                        function = "LastMonth";
+                        functionParameters = 0;
+                        break;
+                    case @operator.lastweek:
+                        function = "LastWeek";
+                        functionParameters = 0;
+                        break;
+                    case @operator.lastxdays:
+                        function = "LastXDays";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.lastxfiscalperiods:
+                        function = "LastXFiscalPeriods";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.lastxfiscalyears:
+                        function = "LastXFiscalYears";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.lastxhours:
+                        function = "LastXHours";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.lastxmonths:
+                        function = "LastXMonths";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.lastxweeks:
+                        function = "LastXWeeks";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.lastxyears:
+                        function = "LastXYears";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.lastyear:
+                        function = "LastYear";
+                        functionParameters = 0;
+                        break;
+                    case @operator.nextsevendays:
+                        function = "Next7Days";
+                        functionParameters = 0;
+                        break;
+                    case @operator.nextfiscalperiod:
+                        function = "NextFiscalPeriod";
+                        functionParameters = 0;
+                        break;
+                    case @operator.nextfiscalyear:
+                        function = "NextFiscalYear";
+                        functionParameters = 0;
+                        break;
+                    case @operator.nextmonth:
+                        function = "NextMonth";
+                        functionParameters = 0;
+                        break;
+                    case @operator.nextweek:
+                        function = "NextWeek";
+                        functionParameters = 0;
+                        break;
+                    case @operator.nextxdays:
+                        function = "NextXDays";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.nextxfiscalperiods:
+                        function = "NextXFiscalPeriods";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.nextxfiscalyears:
+                        function = "NextXFiscalYears";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.nextxhours:
+                        function = "NextXHours";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.nextxmonths:
+                        function = "NextXMonths";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.nextxweeks:
+                        function = "NextXWeeks";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.nextxyears:
+                        function = "NextXYears";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.nextyear:
+                        function = "NextYear";
+                        functionParameters = 0;
+                        break;
+                    case @operator.notbetween:
+                        function = "NotBetween";
+                        functionParameters = Int32.MaxValue;
+                        break;
+                    case @operator.nebusinessid:
+                        function = "NotEqualBusinessId";
+                        functionParameters = 0;
+                        break;
+                    case @operator.neuserid:
+                        function = "NotEqualUserId";
+                        functionParameters = 0;
+                        break;
                     case @operator.notin:
-                        throw new Exception($"Condition operator '{condition.@operator}' is not yet supported by the OData generator");
+                        function = "NotIn";
+                        functionParameters = Int32.MaxValue;
+                        break;
+                    case @operator.notunder:
+                        function = "NotUnder";
+                        break;
+                    case @operator.olderthanxdays:
+                        function = "OlderThanXDays";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.olderthanxhours:
+                        function = "OlderThanXHours";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.olderthanxminutes:
+                        function = "OlderThanXMinutes";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.olderthanxmonths:
+                        function = "OlderThanXMonths";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.olderthanxweeks:
+                        function = "OlderThanXWeeks";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.olderthanxyears:
+                        function = "OlderThanXYears";
+                        functionParameterType = typeof(long);
+                        break;
+                    case @operator.on:
+                        function = "On";
+                        break;
+                    case @operator.onorafter:
+                        function = "OnOrAfter";
+                        break;
+                    case @operator.onorbefore:
+                        function = "OnOrBefore";
+                        break;
+                    case @operator.thisfiscalperiod:
+                        function = "ThisFiscalPeriod";
+                        functionParameters = 0;
+                        break;
+                    case @operator.thisfiscalyear:
+                        function = "ThisFiscalYear";
+                        functionParameters = 0;
+                        break;
+                    case @operator.thismonth:
+                        function = "ThisMonth";
+                        functionParameters = 0;
+                        break;
+                    case @operator.thisweek:
+                        function = "ThisWeek";
+                        functionParameters = 0;
+                        break;
+                    case @operator.thisyear:
+                        function = "ThisYear";
+                        functionParameters = 0;
+                        break;
+                    case @operator.today:
+                        function = "Today";
+                        functionParameters = 0;
+                        break;
+                    case @operator.tomorrow:
+                        function = "Tomorrow";
+                        functionParameters = 0;
+                        break;
+                    case @operator.under:
+                        function = "Under";
+                        break;
+                    case @operator.eqorunder:
+                        function = "UnderOrEqual";
+                        break;
+                    case @operator.yesterday:
+                        function = "Yesterday";
+                        functionParameters = 0;
+                        break;
                     default:
                         throw new Exception($"Unsupported OData condition operator '{condition.@operator}'");
                 }
-                if (!string.IsNullOrEmpty(condition.value) && condition.@operator != @operator.like && condition.@operator != @operator.notlike &&
-                    condition.@operator != @operator.beginswith && condition.@operator != @operator.endswith)
+
+                if (!String.IsNullOrEmpty(function))
                 {
+                    if (functionParameters == Int32.MaxValue)
+                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}',PropertyValues=[{String.Join(",",condition.Items.Select(i => FormatValue(functionParameterType, i.Value)))}])";
+                    else if (functionParameters == 0)
+                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}')";
+                    else if (functionParameters == 1)
+                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}',PropertyValue={FormatValue(functionParameterType, condition.value)})";
+                    else
+                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}',{String.Join(",", condition.Items.Select((i,idx) => $"Property{idx+1}={FormatValue(functionParameterType, i.Value)}"))})";
+                }
+
+                if (!string.IsNullOrEmpty(condition.value) && !result.Contains("("))
+                {
+                    var valueType = typeof(string);
+
                     switch (attrMeta.AttributeType)
                     {
                         case AttributeTypeCode.Money:
-                        case AttributeTypeCode.BigInt:
-                        case AttributeTypeCode.Boolean:
                         case AttributeTypeCode.Decimal:
+                            valueType = typeof(decimal);
+                            break;
+
+                        case AttributeTypeCode.BigInt:
+                            valueType = typeof(long);
+                            break;
+
+                        case AttributeTypeCode.Boolean:
+                            valueType = typeof(bool);
+                            break;
+
                         case AttributeTypeCode.Double:
+                            valueType = typeof(double);
+                            break;
+
                         case AttributeTypeCode.Integer:
                         case AttributeTypeCode.State:
                         case AttributeTypeCode.Status:
                         case AttributeTypeCode.Picklist:
+                            valueType = typeof(int);
+                            break;
+
                         case AttributeTypeCode.Uniqueidentifier:
                         case AttributeTypeCode.Lookup:
                         case AttributeTypeCode.Customer:
                         case AttributeTypeCode.Owner:
-                            result += condition.value;
+                            valueType = typeof(Guid);
                             break;
+
                         case AttributeTypeCode.DateTime:
-                            var date = DateTimeOffset.Parse(condition.value);
-                            var datestr = string.Empty;
-                            if (date.Equals(date.Date))
-                            {
-                                datestr = date.ToString("yyyy-MM-dd");
-                            }
-                            else
-                            {
-                                datestr = date.ToString("u").Replace(' ', 'T');
-                            }
-                            result += datestr;
-                            break;
-                        default:
-                            result += $"'{condition.value}'";
+                            valueType = typeof(DateTime);
                             break;
                     }
+
+                    result += FormatValue(valueType, condition.value);
                 }
             }
             return result;
+        }
+
+        private static string GetPropertyName(AttributeMetadata attr)
+        {
+            if (attr is LookupAttributeMetadata)
+                return $"_{attr.LogicalName}_value";
+
+            return attr.LogicalName;
+        }
+
+        private static string FormatValue(Type type, string s)
+        {
+            if (type == typeof(string))
+                return "'" + s.Replace("'", "''") + "'";
+
+            if (type == typeof(DateTime))
+            {
+                var date = DateTimeOffset.Parse(s);
+                var datestr = string.Empty;
+                if (date.Equals(date.Date))
+                    return date.ToString("yyyy-MM-dd");
+                else
+                    return date.ToString("u").Replace(' ', 'T');
+            }
+
+            if (type == typeof(Guid))
+                return Guid.Parse(s).ToString();
+
+            return Convert.ChangeType(s, type).ToString();
         }
 
         private static string GetOrder(FetchEntityType entity, FetchXmlBuilder sender)
@@ -394,10 +701,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             var orderitems = entity.Items
                 .OfType<FetchOrderType>()
                 .Where(i => i.attribute != null);
-            return GetOrder(orderitems);
+            return GetOrder(entity.name, sender, orderitems);
         }
 
-        private static string GetOrder(IEnumerable<FetchOrderType> orderitems)
+        private static string GetOrder(string entityName, FetchXmlBuilder sender, IEnumerable<FetchOrderType> orderitems)
         {
             var results = new List<string>();
 
@@ -406,7 +713,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 if (!String.IsNullOrEmpty(orderitem.alias))
                     throw new ApplicationException($"OData queries do not support ordering on link entities. Please remove the sort on {orderitem.alias}.{orderitem.attribute}");
 
-                var result = orderitem.attribute;
+                var attrMetadata = sender.entities[entityName].Attributes.SingleOrDefault(a => a.LogicalName == orderitem.attribute);
+                if (attrMetadata == null)
+                    throw new ApplicationException($"No metadata for attribute {entityName}.{orderitem.attribute}");
+
+                var result = GetPropertyName(attrMetadata);
                 if (orderitem.descending)
                 {
                     result += " desc";
