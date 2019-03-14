@@ -3,6 +3,7 @@ using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Cinteros.Xrm.FetchXmlBuilder.Forms;
 using Cinteros.Xrm.XmlEditorUtils;
+using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
@@ -588,8 +589,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         break;
                     case 4:
                         // Find correct WebAPI base url
-                        var url = new Uri(new Uri(ConnectionDetail.WebApplicationUrl), $"api/data/v{ConnectionDetail.OrganizationMajorVersion}.{ConnectionDetail.OrganizationMinorVersion}");
-                        odata = OData4CodeGenerator.GetOData4Query(fetch, url.ToString(), this);
+                        odata = OData4CodeGenerator.GetOData4Query(fetch, ConnectionDetail.GetWebApiServiceUrl(), this);
                         break;
                 }
                 return odata;

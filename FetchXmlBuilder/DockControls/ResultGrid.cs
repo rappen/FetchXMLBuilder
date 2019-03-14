@@ -129,15 +129,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             if (!string.IsNullOrEmpty(entref.LogicalName) && !entref.Id.Equals(Guid.Empty))
             {
-                var url = form.ConnectionDetail.WebApplicationUrl;
-                if (string.IsNullOrEmpty(url))
-                {
-                    url = string.Concat(form.ConnectionDetail.ServerName, "/", form.ConnectionDetail.Organization);
-                    if (!url.ToLower().StartsWith("http"))
-                    {
-                        url = string.Concat("http://", url);
-                    }
-                }
+                var url = form.ConnectionDetail.GetFullWebApplicationUrl();
                 url = string.Concat(url,
                     url.EndsWith("/") ? "" : "/",
                     "main.aspx?etn=",
