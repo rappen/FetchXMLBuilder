@@ -47,6 +47,7 @@ The tool reads metadata from CDS to assist with selecting entities, attributes, 
 To make it even more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.
     </description>
     <releaseNotes>
+1.2019.3.7 - Fixed #250. Multiple condition operators and aggregate filters added to WebAPI support by @MarkMpn
 1.2019.3.6 - Fixed #246,#247,#248 Crash when connected to CRM 2015 or earlier version
 1.2019.3.4 - @MarkMpn continues to add improvements to WebAPI / Flow generator, bugfixes and support for aggregate queries
 
