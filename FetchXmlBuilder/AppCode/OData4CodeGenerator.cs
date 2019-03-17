@@ -745,13 +745,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 var result = "groupby((" + String.Join(",", groups) + ")";
 
                 if (aggregates.Count > 0)
-                    result += "," + String.Join(",", aggregates);
+                    result += "," + String.Join("/", aggregates);
 
                 result += ")";
                 return result;
             }
 
-            return String.Join(",", aggregates);
+            return String.Join("/", aggregates);
         }
 
         private static string GetAggregateType(AggregateType aggregate)
