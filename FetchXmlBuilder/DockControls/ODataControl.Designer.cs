@@ -68,6 +68,7 @@
             this.linkOData.TabIndex = 3;
             this.linkOData.Text = "OData query";
             this.linkOData.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkOData_LinkClicked);
+            this.linkOData.UseMnemonic = false;
             // 
             // panODataLabel
             // 
