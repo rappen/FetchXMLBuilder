@@ -588,7 +588,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         break;
                     case 4:
                         // Find correct WebAPI base url
-                        var url = new Uri(new Uri(ConnectionDetail.WebApplicationUrl), $"api/data/v{ConnectionDetail.OrganizationMajorVersion}.{ConnectionDetail.OrganizationMinorVersion}");
+                        var baseUrl = ConnectionDetail.WebApplicationUrl;
+                        if (!baseUrl.EndsWith("/"))
+                            baseUrl += "/";
+                        var url = new Uri(new Uri(baseUrl), $"api/data/v{ConnectionDetail.OrganizationMajorVersion}.{ConnectionDetail.OrganizationMinorVersion}");
                         odata = OData4CodeGenerator.GetOData4Query(fetch, url.ToString(), this);
                         break;
                 }
