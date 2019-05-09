@@ -690,6 +690,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     return date.ToString("u").Replace(' ', 'T');
             }
 
+            if (type == typeof(bool))
+                return s == "1" ? "true" : "false";
+
             if (type == typeof(Guid))
                 return Guid.Parse(s).ToString();
 
