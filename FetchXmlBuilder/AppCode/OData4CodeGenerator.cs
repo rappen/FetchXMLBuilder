@@ -31,11 +31,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 if (fetch.aggregate)
                 {
-                    var apply = GetApply(entity, sender);
+                    var aggregate = GetAggregate(entity, sender);
                     var filter = GetFilter(entity, sender, null);
 
+                    var apply = aggregate;
+                    if (!String.IsNullOrEmpty(filter))
+                        apply = $"filter({filter})/{aggregate}";
+
                     query = AppendQuery(query, "$apply", apply);
-                    query = AppendQuery(query, "$filter", filter);
                 }
                 else
                 {
@@ -731,7 +734,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return String.Join(",", results);
         }
 
-        private static string GetApply(FetchEntityType entity, FetchXmlBuilder sender)
+        private static string GetAggregate(FetchEntityType entity, FetchXmlBuilder sender)
         {
             var groups = entity.Items.OfType<FetchAttributeType>()
                 .Where(a => a.groupbySpecified)
@@ -739,22 +742,28 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 .ToList();
             
             var aggregates = entity.Items.OfType<FetchAttributeType>()
-                .Where(a => a.aggregateSpecified)
-                .Select(a => $"aggregate({a.name} with {GetAggregateType(a.aggregate)} as {a.alias})")
+                .Where(a => a.aggregateSpecified && a.aggregate != AggregateType.count)
+                .Select(a => $"{a.name} with {GetAggregateType(a.aggregate)} as {a.alias}")
                 .ToList();
+
+            aggregates.AddRange(entity.Items.OfType<FetchAttributeType>()
+                .Where(a => a.aggregateSpecified && a.aggregate == AggregateType.count)
+                .Select(a => $"$count as {a.alias}"));
+
+            var aggregateText = "aggregate(" + String.Join(",", aggregates) + ")";
 
             if (groups.Count > 0)
             {
                 var result = "groupby((" + String.Join(",", groups) + ")";
 
                 if (aggregates.Count > 0)
-                    result += "," + String.Join(",", aggregates);
+                    result += "," + aggregateText;
 
                 result += ")";
                 return result;
             }
 
-            return String.Join(",", aggregates);
+            return aggregateText;
         }
 
         private static string GetAggregateType(AggregateType aggregate)
@@ -763,10 +772,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 case AggregateType.avg:
                     return "average";
-
-                case AggregateType.count:
-                    throw new ApplicationException("\"count\" aggregate is not supported by OData4. Please use \"countcolumn\" instead");
-
+                    
                 case AggregateType.countcolumn:
                     return "countdistinct";
 

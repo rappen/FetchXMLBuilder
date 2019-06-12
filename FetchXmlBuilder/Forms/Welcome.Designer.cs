@@ -102,10 +102,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtNotes.BackColor = System.Drawing.SystemColors.Window;
             this.txtNotes.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtNotes.Location = new System.Drawing.Point(491, 156);
+            this.txtNotes.Location = new System.Drawing.Point(491, 168);
             this.txtNotes.Name = "txtNotes";
             this.txtNotes.ReadOnly = true;
-            this.txtNotes.Size = new System.Drawing.Size(428, 328);
+            this.txtNotes.Size = new System.Drawing.Size(428, 316);
             this.txtNotes.TabIndex = 28;
             this.txtNotes.Text = "";
             this.txtNotes.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.txtNotes_LinkClicked);
