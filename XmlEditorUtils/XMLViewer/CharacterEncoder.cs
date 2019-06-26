@@ -24,11 +24,6 @@ namespace CSRichTextBoxSyntaxHighlighting
     {
         public static string Encode(string originalText)
         {
-            if (string.IsNullOrWhiteSpace(originalText))
-            {
-                return string.Empty;
-            }
-
             StringBuilder encodedText = new StringBuilder();
             for (int i = 0; i < originalText.Length; i++)
             {
