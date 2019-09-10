@@ -47,23 +47,13 @@ The tool reads metadata from CDS to assist with selecting entities, attributes, 
 To make it even more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.
     </description>
     <releaseNotes>
--- Updates --
-1.2019.4.1 - Fixed #251 Wrong separator used for ODATA with multiple aggregates. Thanks to @filcole and @MarkMpn for the fix!
-1.2019.3.7 - Fixed #250 Multiple condition operators and aggregate filters added to WebAPI support by @MarkMpn
-1.2019.3.6 - Fixed #246,#247,#248 Crash when connected to CRM 2015 or earlier version
-1.2019.3.4 - @MarkMpn continues to add improvements to WebAPI / Flow generator, bugfixes and support for aggregate queries
-
--- New features--
-#123 Generate WebAPI queries by @MarkMpn
-#241 Generate parameters for Flow List Records
-#195 Convert from QueryExpression C# code to query by @BetimBeja
 
 -- Bug fixes --
-#237 Cancelling Close wipes the window.
-#231 New - Paste XML does not update query builder
+#256 OData v4.0 links missing ampersand character – thanks to @MarkMpn for the fix!
+#255 OData v4.0 bool filters not rendered correctly – thanks to @MarkMpn for the fix!
+#258 XML values with only whitespace are trimmed away
+  OData v4.0 url for onprem was incorrectly formed
 
--- Other --
-Removed XML validation against fetch.xsd as this is no longer up to date with the platform
     </releaseNotes>
     <copyright>Copyright Jonas Rapp 2014-2018</copyright>
     <tags>XrmToolBox Plugins FetchXML Builder</tags>
