@@ -115,7 +115,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 foreach (FetchLinkEntityType linkitem in linkitems)
                 {
                     var navigationProperty = LinkItemToNavigationProperty(entity.name, linkitem, sender, out var child);
-                    
+
                     if (linkitem.Items != null)
                     {
                         if (!linkitem.intersect && linkitem.Items.Where(i => i is FetchLinkEntityType).ToList().Count > 0)
@@ -613,13 +613,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 if (!String.IsNullOrEmpty(function))
                 {
                     if (functionParameters == Int32.MaxValue)
-                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}',PropertyValues=[{String.Join(",",condition.Items.Select(i => FormatValue(functionParameterType, i.Value)))}])";
+                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}',PropertyValues=[{String.Join(",", condition.Items.Select(i => FormatValue(functionParameterType, i.Value)))}])";
                     else if (functionParameters == 0)
                         return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}')";
                     else if (functionParameters == 1)
                         return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}',PropertyValue={FormatValue(functionParameterType, condition.value)})";
                     else
-                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}',{String.Join(",", condition.Items.Select((i,idx) => $"Property{idx+1}={FormatValue(functionParameterType, i.Value)}"))})";
+                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}',{String.Join(",", condition.Items.Select((i, idx) => $"Property{idx + 1}={FormatValue(functionParameterType, i.Value)}"))})";
                 }
 
                 if (!string.IsNullOrEmpty(condition.value) && !result.Contains("("))
@@ -730,7 +730,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 }
                 results.Add(result);
             }
-            
+
             return String.Join(",", results);
         }
 
@@ -740,7 +740,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 .Where(a => a.groupbySpecified)
                 .Select(a => a.name)
                 .ToList();
-            
+
             var aggregates = entity.Items.OfType<FetchAttributeType>()
                 .Where(a => a.aggregateSpecified && a.aggregate != AggregateType.count)
                 .Select(a => $"{a.name} with {GetAggregateType(a.aggregate)} as {a.alias}")
@@ -772,7 +772,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 case AggregateType.avg:
                     return "average";
-                    
+
                 case AggregateType.countcolumn:
                     return "countdistinct";
 
@@ -808,110 +808,114 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         {
             GetEntityMetadata(entityname, sender);
             var entity = sender.entities[entityname];
-            foreach (var relation in entity.OneToManyRelationships)
+            foreach (var relation in entity.OneToManyRelationships
+                .Where(r =>
+                    r.ReferencedEntity == entityname &&
+                    r.ReferencedAttribute == linkitem.to &&
+                    r.ReferencingEntity == linkitem.name &&
+                    r.ReferencingAttribute == linkitem.from))
             {
-                if (relation.ReferencedEntity == entityname &&
-                    relation.ReferencedAttribute == linkitem.to &&
-                    relation.ReferencingEntity == linkitem.name &&
-                    relation.ReferencingAttribute == linkitem.from)
-                {
-                    if (linkitem.linktype != "outer")
-                        throw new ApplicationException($"OData queries do not support inner joins on 1:N relationships. Try changing link to {linkitem.name} to an outer join");
+                if (linkitem.linktype != "outer")
+                    throw new ApplicationException($"OData queries do not support inner joins on 1:N relationships. Try changing link to {linkitem.name} to an outer join");
 
-                    child = true;
-                    return relation.ReferencedEntityNavigationPropertyName;
+                child = true;
+                return relation.ReferencedEntityNavigationPropertyName;
+            }
+            foreach (var relation in entity.ManyToOneRelationships
+                .Where(r =>
+                    r.ReferencingEntity == entityname &&
+                    r.ReferencingAttribute == linkitem.to &&
+                    r.ReferencedEntity == linkitem.name &&
+                    r.ReferencedAttribute == linkitem.from))
+            {
+                // OData $expand is equivalent to an outer join. Replicate inner join behaviour by adding a not-null filter on primary key
+                // of related record type
+                if (linkitem.linktype != "outer")
+                {
+                    if (linkitem.Items == null)
+                    {
+                        linkitem.Items = new object[0];
+                    }
+                    var filter = linkitem.Items.OfType<filter>().FirstOrDefault(f => f.type == filterType.and);
+                    if (filter == null)
+                    {
+                        filter = new filter
+                        {
+                            type = filterType.and,
+                            Items = new object[0]
+                        };
+                        var items = new List<object>(linkitem.Items);
+                        items.Add(filter);
+                        linkitem.Items = items.ToArray();
+                    }
+                    GetEntityMetadata(linkitem.name, sender);
+                    var linkedEntity = sender.entities[linkitem.name];
+                    var condition = filter.Items.OfType<condition>()
+                        .FirstOrDefault(c => c.attribute == linkedEntity.PrimaryIdAttribute && c.@operator == @operator.notnull);
+
+                    if (condition == null)
+                    {
+                        condition = new condition
+                        {
+                            attribute = linkedEntity.PrimaryIdAttribute,
+                            @operator = @operator.notnull
+                        };
+                        var items = new List<object>(filter.Items);
+                        items.Add(condition);
+                        filter.Items = items.ToArray();
+                    }
+                }
+
+                child = false;
+                return relation.ReferencingEntityNavigationPropertyName;
+            }
+            foreach (var relation in entity.ManyToManyRelationships
+                .Where(r =>
+                    r.Entity1LogicalName == entityname &&
+                    r.Entity1IntersectAttribute == linkitem.from))
+            {
+                var linkitems = linkitem.Items.Where(i => i is FetchLinkEntityType).ToList();
+                if (linkitems.Count > 1)
+                {
+                    throw new Exception("Invalid M:M-relation definition for OData");
+                }
+                if (linkitems.Count == 1)
+                {
+                    var nextlink = (FetchLinkEntityType)linkitems[0];
+                    if (nextlink.linktype != "outer")
+                    {
+                        throw new Exception($"OData queries do not support inner joins on N:N relationships. Try changing link to {nextlink.name} to an outer join");
+                    }
+                    if (relation.Entity2LogicalName == nextlink.name &&
+                        relation.Entity2IntersectAttribute == nextlink.to)
+                    {
+                        child = true;
+                        return relation.Entity1NavigationPropertyName;
+                    }
                 }
             }
-            foreach (var relation in entity.ManyToOneRelationships)
+            foreach (var relation in entity.ManyToManyRelationships
+                .Where(r =>
+                    r.Entity2LogicalName == entityname &&
+                    r.Entity2IntersectAttribute == linkitem.from))
             {
-                if (relation.ReferencingEntity == entityname &&
-                    relation.ReferencingAttribute == linkitem.to &&
-                    relation.ReferencedEntity == linkitem.name &&
-                    relation.ReferencedAttribute == linkitem.from)
+                var linkitems = linkitem.Items.Where(i => i is FetchLinkEntityType).ToList();
+                if (linkitems.Count > 1)
                 {
-                    // OData $expand is equivalent to an outer join. Replicate inner join behaviour by adding a not-null filter on primary key
-                    // of related record type
-                    if (linkitem.linktype != "outer")
-                    {
-                        if (linkitem.Items == null)
-                            linkitem.Items = new object[0];
-
-                        var filter = linkitem.Items.OfType<filter>().FirstOrDefault(f => f.type == filterType.and);
-                        if (filter == null)
-                        {
-                            filter = new filter { type = filterType.and, Items = new object[0] };
-                            var items = new List<object>(linkitem.Items);
-                            items.Add(filter);
-                            linkitem.Items = items.ToArray();
-                        }
-                        GetEntityMetadata(linkitem.name, sender);
-                        var linkedEntity = sender.entities[linkitem.name];
-                        var condition = filter.Items.OfType<condition>()
-                            .FirstOrDefault(c => c.attribute == linkedEntity.PrimaryIdAttribute && c.@operator == @operator.notnull);
-
-                        if (condition == null)
-                        {
-                            condition = new condition
-                            {
-                                attribute = linkedEntity.PrimaryIdAttribute,
-                                @operator = @operator.notnull
-                            };
-                            var items = new List<object>(filter.Items);
-                            items.Add(condition);
-                            filter.Items = items.ToArray();
-                        }
-                    }
-
-                    child = false;
-                    return relation.ReferencingEntityNavigationPropertyName;
+                    throw new Exception("Invalid M:M-relation definition for OData");
                 }
-            }
-            foreach (var relation in entity.ManyToManyRelationships)
-            {
-                if (relation.Entity1LogicalName == entityname &&
-                    relation.Entity1IntersectAttribute == linkitem.from)
+                if (linkitems.Count == 1)
                 {
-                    var linkitems = linkitem.Items.Where(i => i is FetchLinkEntityType).ToList();
-                    if (linkitems.Count > 1)
+                    var nextlink = (FetchLinkEntityType)linkitems[0];
+                    if (nextlink.linktype != "outer")
                     {
-                        throw new Exception("Invalid M:M-relation definition for OData");
+                        throw new Exception($"OData queries do not support inner joins on N:N relationships. Try changing link to {nextlink.name} to an outer join");
                     }
-                    if (linkitems.Count == 1)
+                    if (relation.Entity1LogicalName == nextlink.name &&
+                        relation.Entity1IntersectAttribute == nextlink.from)
                     {
-                        var nextlink = (FetchLinkEntityType)linkitems[0];
-                        if (nextlink.linktype != "outer")
-                        {
-                            throw new Exception($"OData queries do not support inner joins on N:N relationships. Try changing link to {nextlink.name} to an outer join");
-                        }
-                        if (relation.Entity2LogicalName == nextlink.name &&
-                            relation.Entity2IntersectAttribute == nextlink.to)
-                        {
-                            child = true;
-                            return relation.Entity1NavigationPropertyName;
-                        }
-                    }
-                }
-                if (relation.Entity2LogicalName == entityname &&
-                    relation.Entity2IntersectAttribute == linkitem.from)
-                {
-                    var linkitems = linkitem.Items.Where(i => i is FetchLinkEntityType).ToList();
-                    if (linkitems.Count > 1)
-                    {
-                        throw new Exception("Invalid M:M-relation definition for OData");
-                    }
-                    if (linkitems.Count == 1)
-                    {
-                        var nextlink = (FetchLinkEntityType)linkitems[0];
-                        if (nextlink.linktype != "outer")
-                        {
-                            throw new Exception($"OData queries do not support inner joins on N:N relationships. Try changing link to {nextlink.name} to an outer join");
-                        }
-                        if (relation.Entity1LogicalName == nextlink.name &&
-                            relation.Entity1IntersectAttribute == nextlink.from)
-                        {
-                            child = true;
-                            return relation.Entity2NavigationPropertyName;
-                        }
+                        child = true;
+                        return relation.Entity2NavigationPropertyName;
                     }
                 }
             }
