@@ -48,7 +48,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
             PopulateControls();
             RefreshAttributes();
-            ControlUtils.FillControls(collec, this.Controls);
+            ControlUtils.FillControls(collec, this.Controls, this);
             controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
             Saved += tree.CtrlSaved;
         }
@@ -84,13 +84,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             return result;
         }
 
-        public void Save()
+        public void Save(bool silent)
         {
             try
             {
                 if (ValidateForm())
                 {
-                    if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem)
+                    if (!silent && cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem)
                     {
                         var oper = (OperatorItem)cmbOperator.SelectedItem;
                         if (oper.IsMultipleValuesType && !string.IsNullOrWhiteSpace(cmbValue.Text))
@@ -115,7 +115,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
             catch (ArgumentNullException ex)
             {
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                if (!silent)
+                    MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
         }
 
@@ -269,7 +270,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             if (controlsCheckSum != ControlUtils.ControlsChecksum(this.Controls))
             {
-                Save();
+                Save(false);
             }
         }
 
@@ -305,8 +306,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, true, FetchXmlBuilder.friendlyNames);
             }
             // RefreshFill now that attributes are loaded
-            ControlUtils.FillControl(collec, cmbAttribute);
-            ControlUtils.FillControl(collec, cmbValue);
+            ControlUtils.FillControl(collec, cmbAttribute, this);
+            ControlUtils.FillControl(collec, cmbValue, this);
         }
 
         private static TreeNode GetClosestEntityNode(TreeNode node)
@@ -398,7 +399,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     cmbOperator.SelectedItem = null;
                     cmbOperator.Items.Clear();
                     cmbOperator.Items.AddRange(OperatorItem.GetConditionsByAttributeType(attributeType.Value));
-                    ControlUtils.FillControl(tmpColl, cmbOperator);
+                    ControlUtils.FillControl(tmpColl, cmbOperator, this);
                 }
             }
             UpdateValueField();
