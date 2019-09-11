@@ -832,6 +832,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 // of related record type
                 if (linkitem.linktype != "outer")
                 {
+                    if (linkitem.Items == null)
+                    {
+                        linkitem.Items = new object[0];
+                    }
                     var filter = linkitem.Items.OfType<filter>().FirstOrDefault(f => f.type == filterType.and);
                     if (filter == null)
                     {
