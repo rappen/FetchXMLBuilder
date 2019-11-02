@@ -1055,6 +1055,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return sql;
         }
 
+        public void EditInSQL4CDS()
+        {
+            OnOutgoingMessage(this, new MessageBusEventArgs("SQL 4 CDS") { TargetArgument = dockControlBuilder.GetFetchString(false, false) });
+        }
+
         private string GetCSharpCode()
         {
             var cs = string.Empty;
