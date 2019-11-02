@@ -259,6 +259,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         public void OnIncomingMessage(MessageBusEventArgs message)
         {
+            if (message.TargetArgument == null)
+                return;
+
             callerArgs = message;
             var fetchXml = string.Empty;
             var requestedType = "FetchXML";
@@ -1028,6 +1031,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private string GetSQLQuery()
         {
+            var param = new Dictionary<string,object>
+            {
+                ["FetchXml"] = dockControlBuilder.GetFetchString(false, false),
+                ["ConvertOnly"] = true
+            };
+
+            OnOutgoingMessage(this, new MessageBusEventArgs("SQL 4 CDS") { TargetArgument = param });
+
+            if (param.TryGetValue("Sql", out var s))
+                return (string) s;
+
             var sql = string.Empty;
             var fetch = dockControlBuilder.GetFetchType();
             try
