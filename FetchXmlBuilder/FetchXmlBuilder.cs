@@ -795,7 +795,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             if (dockControlSQL?.Visible == true && entities != null)
             {
-                dockControlSQL.UpdateXML(GetSQLQuery());
+                var sql = GetSQLQuery(out var sql4cds);
+                dockControlSQL.UpdateSQL(sql, sql4cds);
             }
             if (dockControlFetchXmlCs?.Visible == true)
             {
@@ -1029,18 +1030,26 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return code;
         }
 
-        private string GetSQLQuery()
+        private string GetSQLQuery(out bool sql4cds)
         {
-            var param = new Dictionary<string,object>
+            sql4cds = false;
+
+            if (settings.UseSQL4CDS)
             {
-                ["FetchXml"] = dockControlBuilder.GetFetchString(false, false),
-                ["ConvertOnly"] = true
-            };
+                var param = new Dictionary<string, object>
+                {
+                    ["FetchXml"] = dockControlBuilder.GetFetchString(false, false),
+                    ["ConvertOnly"] = true
+                };
 
-            OnOutgoingMessage(this, new MessageBusEventArgs("SQL 4 CDS") { TargetArgument = param });
+                OnOutgoingMessage(this, new MessageBusEventArgs("SQL 4 CDS") { TargetArgument = param });
 
-            if (param.TryGetValue("Sql", out var s))
-                return (string) s;
+                if (param.TryGetValue("Sql", out var s))
+                {
+                    sql4cds = true;
+                    return (string)s;
+                }
+            }
 
             var sql = string.Empty;
             var fetch = dockControlBuilder.GetFetchType();

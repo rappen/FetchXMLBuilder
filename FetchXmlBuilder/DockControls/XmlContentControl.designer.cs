@@ -40,6 +40,8 @@
             this.txtXML = new CSRichTextBoxSyntaxHighlighting.XMLViewer();
             this.panActions = new System.Windows.Forms.Panel();
             this.gbActions = new System.Windows.Forms.GroupBox();
+            this.panSQL4CDS = new System.Windows.Forms.Panel();
+            this.btnSQL4CDS = new System.Windows.Forms.Button();
             this.lblActionsExpander = new System.Windows.Forms.Label();
             this.panExecute = new System.Windows.Forms.Panel();
             this.panParseQE = new System.Windows.Forms.Panel();
@@ -56,11 +58,12 @@
             this.rbFormatXML = new System.Windows.Forms.RadioButton();
             this.btnFormat = new System.Windows.Forms.Button();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
-            this.panSQL4CDS = new System.Windows.Forms.Panel();
-            this.btnSQL4CDS = new System.Windows.Forms.Button();
+            this.panSQL4CDSInfo = new System.Windows.Forms.Panel();
+            this.lblSQL4CDSInfo = new System.Windows.Forms.Label();
             this.panCancel.SuspendLayout();
             this.panActions.SuspendLayout();
             this.gbActions.SuspendLayout();
+            this.panSQL4CDS.SuspendLayout();
             this.panExecute.SuspendLayout();
             this.panParseQE.SuspendLayout();
             this.panSave.SuspendLayout();
@@ -68,7 +71,7 @@
             this.panLiveUpdate.SuspendLayout();
             this.panFormatting.SuspendLayout();
             this.gbFormatting.SuspendLayout();
-            this.panSQL4CDS.SuspendLayout();
+            this.panSQL4CDSInfo.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSave
@@ -188,6 +191,27 @@
             this.gbActions.TabIndex = 4;
             this.gbActions.TabStop = false;
             this.gbActions.Text = "Actions";
+            // 
+            // panSQL4CDS
+            // 
+            this.panSQL4CDS.Controls.Add(this.btnSQL4CDS);
+            this.panSQL4CDS.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panSQL4CDS.Location = new System.Drawing.Point(85, 16);
+            this.panSQL4CDS.Name = "panSQL4CDS";
+            this.panSQL4CDS.Size = new System.Drawing.Size(118, 28);
+            this.panSQL4CDS.TabIndex = 8;
+            this.panSQL4CDS.Visible = false;
+            // 
+            // btnSQL4CDS
+            // 
+            this.btnSQL4CDS.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnSQL4CDS.Location = new System.Drawing.Point(6, 0);
+            this.btnSQL4CDS.Name = "btnSQL4CDS";
+            this.btnSQL4CDS.Size = new System.Drawing.Size(106, 23);
+            this.btnSQL4CDS.TabIndex = 4;
+            this.btnSQL4CDS.Text = "Edit in SQL 4 CDS";
+            this.btnSQL4CDS.UseVisualStyleBackColor = true;
+            this.btnSQL4CDS.Click += new System.EventHandler(this.btnSQL4CDS_Click);
             // 
             // lblActionsExpander
             // 
@@ -356,26 +380,28 @@
             this.btnFormat.UseVisualStyleBackColor = true;
             this.btnFormat.Click += new System.EventHandler(this.btnFormat_Click);
             // 
-            // panSQL4CDS
+            // panSQL4CDSInfo
             // 
-            this.panSQL4CDS.Controls.Add(this.btnSQL4CDS);
-            this.panSQL4CDS.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panSQL4CDS.Location = new System.Drawing.Point(85, 16);
-            this.panSQL4CDS.Name = "panSQL4CDS";
-            this.panSQL4CDS.Size = new System.Drawing.Size(118, 28);
-            this.panSQL4CDS.TabIndex = 8;
-            this.panSQL4CDS.Visible = false;
+            this.panSQL4CDSInfo.BackColor = System.Drawing.SystemColors.Info;
+            this.panSQL4CDSInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panSQL4CDSInfo.Controls.Add(this.lblSQL4CDSInfo);
+            this.panSQL4CDSInfo.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panSQL4CDSInfo.Location = new System.Drawing.Point(0, 223);
+            this.panSQL4CDSInfo.Name = "panSQL4CDSInfo";
+            this.panSQL4CDSInfo.Padding = new System.Windows.Forms.Padding(4);
+            this.panSQL4CDSInfo.Size = new System.Drawing.Size(682, 42);
+            this.panSQL4CDSInfo.TabIndex = 11;
             // 
-            // btnSQL4CDS
+            // lblSQL4CDSInfo
             // 
-            this.btnSQL4CDS.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnSQL4CDS.Location = new System.Drawing.Point(6, 0);
-            this.btnSQL4CDS.Name = "btnSQL4CDS";
-            this.btnSQL4CDS.Size = new System.Drawing.Size(106, 23);
-            this.btnSQL4CDS.TabIndex = 4;
-            this.btnSQL4CDS.Text = "Edit in SQL 4 CDS";
-            this.btnSQL4CDS.UseVisualStyleBackColor = true;
-            this.btnSQL4CDS.Click += new System.EventHandler(this.btnSQL4CDS_Click);
+            this.lblSQL4CDSInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblSQL4CDSInfo.Location = new System.Drawing.Point(4, 4);
+            this.lblSQL4CDSInfo.Name = "lblSQL4CDSInfo";
+            this.lblSQL4CDSInfo.Size = new System.Drawing.Size(672, 32);
+            this.lblSQL4CDSInfo.TabIndex = 0;
+            this.lblSQL4CDSInfo.Text = "FetchXML to SQL conversion works better when the SQL 4 CDS tool is also installed" +
+    ". Get it from the toolbox and enable SQL 4 CDS in the FetchXML Builder settings " +
+    "to get the improved experience.";
             // 
             // XmlContentControl
             // 
@@ -385,6 +411,7 @@
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(682, 359);
             this.Controls.Add(this.txtXML);
+            this.Controls.Add(this.panSQL4CDSInfo);
             this.Controls.Add(this.panFormatting);
             this.Controls.Add(this.panActions);
             this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)((((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
@@ -402,6 +429,7 @@
             this.panActions.ResumeLayout(false);
             this.gbActions.ResumeLayout(false);
             this.gbActions.PerformLayout();
+            this.panSQL4CDS.ResumeLayout(false);
             this.panExecute.ResumeLayout(false);
             this.panParseQE.ResumeLayout(false);
             this.panSave.ResumeLayout(false);
@@ -411,7 +439,7 @@
             this.panFormatting.ResumeLayout(false);
             this.gbFormatting.ResumeLayout(false);
             this.gbFormatting.PerformLayout();
-            this.panSQL4CDS.ResumeLayout(false);
+            this.panSQL4CDSInfo.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -444,5 +472,7 @@
         private System.Windows.Forms.ToolTip tt;
         private System.Windows.Forms.Panel panSQL4CDS;
         private System.Windows.Forms.Button btnSQL4CDS;
+        private System.Windows.Forms.Panel panSQL4CDSInfo;
+        private System.Windows.Forms.Label lblSQL4CDSInfo;
     }
 }

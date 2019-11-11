@@ -23,6 +23,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public DockStates DockStates { get; set; } = new DockStates();
         public ContentWindows ContentWindows { get; set; } = new ContentWindows();
         public bool OpenUncustomizableViews { get; set; } = false;
+        public bool UseSQL4CDS { get; set; }
     }
 
     public class QueryOptions

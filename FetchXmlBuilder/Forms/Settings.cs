@@ -26,6 +26,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             chkAppNoSavePrompt.Checked = settings.DoNotPromptToSave;
             chkAppResultsNewWindow.Checked = settings.Results.AlwaysNewWindow;
             chkAppAllowUncustViews.Checked = settings.OpenUncustomizableViews;
+            chkUseSQL4CDS.Checked = settings.UseSQL4CDS;
             switch (settings.Results.ResultOption)
             {
                 case 1: rbResSerialized.Checked = true; break;
@@ -74,6 +75,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             settings.Results.SerializeStyle = cmbSeralizationStyle.SelectedIndex;
             settings.Results.RetrieveAllPages = chkResAllPages.Checked;
             settings.OpenUncustomizableViews = chkAppAllowUncustViews.Checked;
+            settings.UseSQL4CDS = chkUseSQL4CDS.Checked;
             settings.Entity.All = chkEntAll.Checked;
             settings.Entity.Customizable = chkEntCustomizable.Checked;
             settings.Entity.Uncustomizable = chkEntUncustomizable.Checked;

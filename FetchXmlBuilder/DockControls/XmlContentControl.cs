@@ -62,6 +62,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             panExecute.Visible = allowedit;
             panParseQE.Visible = allowparse;
             panSQL4CDS.Visible = allowsql;
+            panSQL4CDSInfo.Visible = allowsql;
         }
 
         internal void SetFormat(SaveFormat saveFormat)
@@ -106,6 +107,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             txtXML.Text = xmlString;
             txtXML.Settings.QuoteCharacter = fxb.settings.QueryOptions.UseSingleQuotation ? '\'' : '"';
             FormatXML(true);
+        }
+
+        public void UpdateSQL(string sql, bool sql4cds)
+        {
+            txtXML.Text = sql;
+            panSQL4CDSInfo.Visible = !sql4cds;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
