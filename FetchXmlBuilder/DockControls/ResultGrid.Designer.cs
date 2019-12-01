@@ -1,4 +1,6 @@
-﻿namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
+﻿using xrmtb.XrmToolBox.Controls;
+
+namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
     partial class ResultGrid
     {
@@ -30,7 +32,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.crmGridView1 = new Cinteros.Xrm.CRMWinForm.CRMGridView();
+            this.crmGridView1 = new xrmtb.XrmToolBox.Controls.CRMGridView();
             this.chkCopyHeaders = new System.Windows.Forms.CheckBox();
             this.chkIndexCol = new System.Windows.Forms.CheckBox();
             this.chkIdCol = new System.Windows.Forms.CheckBox();
@@ -68,8 +70,8 @@
             this.crmGridView1.ShowEditingIcon = false;
             this.crmGridView1.Size = new System.Drawing.Size(650, 230);
             this.crmGridView1.TabIndex = 1;
-            this.crmGridView1.RecordClick += new Cinteros.Xrm.CRMWinForm.CRMRecordEventHandler(this.crmGridView1_RecordClick);
-            this.crmGridView1.RecordDoubleClick += new Cinteros.Xrm.CRMWinForm.CRMRecordEventHandler(this.crmGridView1_RecordDoubleClick);
+            this.crmGridView1.RecordClick += new xrmtb.XrmToolBox.Controls.CRMRecordEventHandler(this.crmGridView1_RecordClick);
+            this.crmGridView1.RecordDoubleClick += new xrmtb.XrmToolBox.Controls.CRMRecordEventHandler(this.crmGridView1_RecordDoubleClick);
             // 
             // chkCopyHeaders
             // 
@@ -117,7 +119,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.chkLocalTime);
             this.groupBox1.Controls.Add(this.lblOptionsExpander);
@@ -186,7 +188,7 @@
         }
 
         #endregion
-        private CRMWinForm.CRMGridView crmGridView1;
+        private CRMGridView crmGridView1;
         private System.Windows.Forms.CheckBox chkCopyHeaders;
         private System.Windows.Forms.CheckBox chkIndexCol;
         private System.Windows.Forms.CheckBox chkIdCol;

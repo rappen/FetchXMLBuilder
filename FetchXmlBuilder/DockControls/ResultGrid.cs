@@ -1,10 +1,10 @@
-﻿using Cinteros.Xrm.CRMWinForm;
-using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
+using xrmtb.XrmToolBox.Controls;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {

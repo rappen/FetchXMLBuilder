@@ -1,5 +1,4 @@
-﻿using Cinteros.Xrm.CRMWinForm;
-using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Cinteros.Xrm.FetchXmlBuilder.Forms;
 using Cinteros.Xrm.XmlEditorUtils;
@@ -18,6 +17,7 @@ using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
 using WeifenLuo.WinFormsUI.Docking;
+using xrmtb.XrmToolBox.Controls;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
