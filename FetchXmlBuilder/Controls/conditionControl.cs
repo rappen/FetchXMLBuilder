@@ -88,7 +88,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             try
             {
-                if (ValidateForm())
+                if (ValidateForm(silent))
                 {
                     if (!silent && cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem)
                     {
@@ -120,7 +120,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
         }
 
-        private bool ValidateForm()
+        private bool ValidateForm(bool silent)
         {
             var result = true;
             if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem)
@@ -244,7 +244,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
                 if (!string.IsNullOrWhiteSpace(error))
                 {
-                    MessageBox.Show(error, "Condition error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    if (!silent)
+                        MessageBox.Show(error, "Condition error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     result = false;
                 }
             }

@@ -72,7 +72,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             try
             {
-                if (ValidateForm())
+                if (ValidateForm(silent))
                 {
                     Dictionary<string, string> collection = ControlUtils.GetAttributesCollection(this.Controls, true);
                     SendSaveMessage(collection);
@@ -89,13 +89,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
         }
 
-        private bool ValidateForm()
+        private bool ValidateForm(bool silent)
         {
             if (TreeBuilderControl.IsFetchAggregate(node))
             {
                 if (string.IsNullOrWhiteSpace(txtAlias.Text))
                 {
-                    MessageBox.Show("Alias must be specified in aggregate queries", "Condition error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    if (!silent)
+                        MessageBox.Show("Alias must be specified in aggregate queries", "Condition error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     //txtAlias.Focus();
                     return false;
                 }
