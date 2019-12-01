@@ -6,6 +6,6 @@ namespace Cinteros.Xrm.XmlEditorUtils
 {
     public interface IDefinitionSavable
     {
-        void Save();
+        void Save(bool silent);
     }
 }

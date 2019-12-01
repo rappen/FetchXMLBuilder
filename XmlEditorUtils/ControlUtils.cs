@@ -78,15 +78,15 @@ namespace Cinteros.Xrm.XmlEditorUtils
             return collection;
         }
 
-        public static void FillControls(Dictionary<string, string> collection, System.Windows.Forms.Control.ControlCollection controls)
+        public static void FillControls(Dictionary<string, string> collection, System.Windows.Forms.Control.ControlCollection controls, IDefinitionSavable saveable)
         {
             foreach (Control control in controls.Cast<Control>().Where(y => y.Tag != null).OrderBy(y => y.TabIndex))
             {
-                FillControl(collection, control);
+                FillControl(collection, control, saveable);
             }
         }
 
-        public static void FillControl(Dictionary<string, string> collection, Control control)
+        public static void FillControl(Dictionary<string, string> collection, Control control, IDefinitionSavable saveable)
         {
             string attribute;
             bool required;
@@ -94,14 +94,16 @@ namespace Cinteros.Xrm.XmlEditorUtils
             if (ControlUtils.GetControlDefinition(control, out attribute, out required, out defaultvalue))
             {
                 var value = collection.ContainsKey(attribute) ? collection[attribute] : defaultvalue;
-                if (control is CheckBox)
+                if (control is CheckBox chkbox)
                 {
                     bool.TryParse(value, out bool chk);
-                    ((CheckBox)control).Checked = chk;
+                    chkbox.Checked = chk;
+                    chkbox.CheckedChanged += (s, e) => saveable.Save(true);
                 }
-                else if (control is TextBox)
+                else if (control is TextBox txt)
                 {
-                    ((TextBox)control).Text = value;
+                    txt.Text = value;
+                    txt.TextChanged += (s, e) => saveable.Save(true);
                 }
                 else if (control is ComboBox cmb)
                 {
@@ -129,6 +131,8 @@ namespace Cinteros.Xrm.XmlEditorUtils
                     {
                         cmb.Text = value;
                     }
+
+                    cmb.TextChanged += (s, e) => saveable.Save(true);
                 }
             }
         }

@@ -43,7 +43,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
             node = Node;
             PopulateControls(Node, attributes);
-            ControlUtils.FillControls(collec, this.Controls);
+            ControlUtils.FillControls(collec, this.Controls, this);
             controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
             Saved += tree.CtrlSaved;
         }
@@ -68,7 +68,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
         }
 
-        public void Save()
+        public void Save(bool silent)
         {
             try
             {
@@ -81,8 +81,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
             catch (ArgumentNullException ex)
             {
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                Focus();
+                if (!silent)
+                {
+                    MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    Focus();
+                }
             }
         }
 
@@ -119,7 +122,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             if (controlsCheckSum != ControlUtils.ControlsChecksum(this.Controls))
             {
-                Save();
+                Save(false);
             }
         }
 
