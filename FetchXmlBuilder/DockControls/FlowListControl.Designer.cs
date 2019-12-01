@@ -285,8 +285,8 @@
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockTop) 
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockBottom)));
             this.Name = "FlowListControl";
-            this.TabText = "Flow List Parameters";
-            this.Text = "Flow List Parameters";
+            this.TabText = "Power Automate List Records Parameters";
+            this.Text = "Power Automate List Records Parameters";
             this.DockStateChanged += new System.EventHandler(this.FlowListControl_DockStateChanged);
             this.panOData.ResumeLayout(false);
             this.panOData.PerformLayout();
