@@ -71,6 +71,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnDefaultQuery = new System.Windows.Forms.Button();
             this.btnFormatQuery = new System.Windows.Forms.Button();
+            this.chkUseSQL4CDS = new System.Windows.Forms.CheckBox();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -93,7 +94,7 @@
             this.gbEntities.Controls.Add(this.chkEntAll);
             this.gbEntities.Location = new System.Drawing.Point(240, 12);
             this.gbEntities.Name = "gbEntities";
-            this.gbEntities.Size = new System.Drawing.Size(168, 226);
+            this.gbEntities.Size = new System.Drawing.Size(168, 255);
             this.gbEntities.TabIndex = 2;
             this.gbEntities.TabStop = false;
             this.gbEntities.Text = "Show Entities";
@@ -232,7 +233,7 @@
             this.gbAttributes.Controls.Add(this.chkAttAll);
             this.gbAttributes.Location = new System.Drawing.Point(414, 12);
             this.gbAttributes.Name = "gbAttributes";
-            this.gbAttributes.Size = new System.Drawing.Size(168, 226);
+            this.gbAttributes.Size = new System.Drawing.Size(168, 255);
             this.gbAttributes.TabIndex = 3;
             this.gbAttributes.TabStop = false;
             this.gbAttributes.Text = "Show Attributes";
@@ -363,7 +364,7 @@
             this.gbResult.Controls.Add(this.rbResRaw);
             this.gbResult.Controls.Add(this.rbResSerialized);
             this.gbResult.Controls.Add(this.rbResGrid);
-            this.gbResult.Location = new System.Drawing.Point(12, 135);
+            this.gbResult.Location = new System.Drawing.Point(12, 164);
             this.gbResult.Name = "gbResult";
             this.gbResult.Size = new System.Drawing.Size(222, 103);
             this.gbResult.TabIndex = 1;
@@ -430,6 +431,7 @@
             // 
             // gbAppearance
             // 
+            this.gbAppearance.Controls.Add(this.chkUseSQL4CDS);
             this.gbAppearance.Controls.Add(this.chkAppAllowUncustViews);
             this.gbAppearance.Controls.Add(this.chkAppResultsNewWindow);
             this.gbAppearance.Controls.Add(this.chkAppNoSavePrompt);
@@ -437,7 +439,7 @@
             this.gbAppearance.Controls.Add(this.chkAppFriendly);
             this.gbAppearance.Location = new System.Drawing.Point(12, 12);
             this.gbAppearance.Name = "gbAppearance";
-            this.gbAppearance.Size = new System.Drawing.Size(222, 121);
+            this.gbAppearance.Size = new System.Drawing.Size(222, 146);
             this.gbAppearance.TabIndex = 0;
             this.gbAppearance.TabStop = false;
             this.gbAppearance.Text = "Appearance";
@@ -499,7 +501,7 @@
             this.panel1.Controls.Add(this.llShowWelcome);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
-            this.panel1.Location = new System.Drawing.Point(12, 393);
+            this.panel1.Location = new System.Drawing.Point(12, 415);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(567, 53);
             this.panel1.TabIndex = 5;
@@ -542,7 +544,7 @@
             // 
             this.gbDefaultQuery.Controls.Add(this.txtFetch);
             this.gbDefaultQuery.Controls.Add(this.panel2);
-            this.gbDefaultQuery.Location = new System.Drawing.Point(12, 244);
+            this.gbDefaultQuery.Location = new System.Drawing.Point(11, 273);
             this.gbDefaultQuery.Name = "gbDefaultQuery";
             this.gbDefaultQuery.Size = new System.Drawing.Size(570, 145);
             this.gbDefaultQuery.TabIndex = 6;
@@ -558,6 +560,8 @@
             xmlViewerSettings1.AttributeValue = System.Drawing.Color.Blue;
             xmlViewerSettings1.Comment = System.Drawing.Color.Empty;
             xmlViewerSettings1.Element = System.Drawing.Color.DarkRed;
+            xmlViewerSettings1.FontName = "Consolas";
+            xmlViewerSettings1.FontSize = 9F;
             xmlViewerSettings1.QuoteCharacter = '\"';
             xmlViewerSettings1.Tag = System.Drawing.Color.Blue;
             xmlViewerSettings1.Value = System.Drawing.Color.Black;
@@ -597,13 +601,23 @@
             this.btnFormatQuery.UseVisualStyleBackColor = true;
             this.btnFormatQuery.Click += new System.EventHandler(this.btnFormatQuery_Click);
             // 
+            // chkUseSQL4CDS
+            // 
+            this.chkUseSQL4CDS.AutoSize = true;
+            this.chkUseSQL4CDS.Location = new System.Drawing.Point(16, 120);
+            this.chkUseSQL4CDS.Name = "chkUseSQL4CDS";
+            this.chkUseSQL4CDS.Size = new System.Drawing.Size(197, 17);
+            this.chkUseSQL4CDS.TabIndex = 7;
+            this.chkUseSQL4CDS.Text = "Use SQL 4 CDS for SQL conversion";
+            this.chkUseSQL4CDS.UseVisualStyleBackColor = true;
+            // 
             // Settings
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(593, 456);
+            this.ClientSize = new System.Drawing.Size(593, 478);
             this.Controls.Add(this.gbDefaultQuery);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.gbAppearance);
@@ -673,5 +687,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btnFormatQuery;
         private System.Windows.Forms.Button btnDefaultQuery;
+        private System.Windows.Forms.CheckBox chkUseSQL4CDS;
     }
 }

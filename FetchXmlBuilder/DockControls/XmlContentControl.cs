@@ -52,6 +52,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             var windowSettings = fxb.settings.ContentWindows.GetContentWindow(contenttype);
             var allowedit = contenttype == ContentType.FetchXML;
             var allowparse = contenttype == ContentType.QueryExpression;
+            var allowsql = contenttype == ContentType.SQL_Query;
             chkLiveUpdate.Checked = allowedit && windowSettings.LiveUpdate;
             lblFormatExpander.GroupBoxSetState(tt, windowSettings.FormatExpanded);
             lblActionsExpander.GroupBoxSetState(tt, windowSettings.ActionExpanded);
@@ -60,6 +61,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             panFormatting.Visible = allowedit;
             panExecute.Visible = allowedit;
             panParseQE.Visible = allowparse;
+            panSQL4CDS.Visible = allowsql;
+            panSQL4CDSInfo.Visible = allowsql;
         }
 
         internal void SetFormat(SaveFormat saveFormat)
@@ -104,6 +107,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             txtXML.Text = xmlString;
             txtXML.Settings.QuoteCharacter = fxb.settings.QueryOptions.UseSingleQuotation ? '\'' : '"';
             FormatXML(true);
+        }
+
+        public void UpdateSQL(string sql, bool sql4cds)
+        {
+            txtXML.Text = sql;
+            panSQL4CDSInfo.Visible = !sql4cds;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -398,6 +407,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 ActionExpanded = gbActions.IsExpanded()
             };
             fxb.settings.ContentWindows.SetContentWindow(contenttype, windowSettings);
+        }
+
+        private void btnSQL4CDS_Click(object sender, EventArgs e)
+        {
+            fxb.EditInSQL4CDS();
         }
     }
 

@@ -259,6 +259,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         public void OnIncomingMessage(MessageBusEventArgs message)
         {
+            if (message.TargetArgument == null)
+                return;
+
             callerArgs = message;
             var fetchXml = string.Empty;
             var requestedType = "FetchXML";
@@ -792,7 +795,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             if (dockControlSQL?.Visible == true && entities != null)
             {
-                dockControlSQL.UpdateXML(GetSQLQuery());
+                var sql = GetSQLQuery(out var sql4cds);
+                dockControlSQL.UpdateSQL(sql, sql4cds);
             }
             if (dockControlFetchXmlCs?.Visible == true)
             {
@@ -1026,8 +1030,27 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return code;
         }
 
-        private string GetSQLQuery()
+        private string GetSQLQuery(out bool sql4cds)
         {
+            sql4cds = false;
+
+            if (settings.UseSQL4CDS)
+            {
+                var param = new Dictionary<string, object>
+                {
+                    ["FetchXml"] = dockControlBuilder.GetFetchString(false, false),
+                    ["ConvertOnly"] = true
+                };
+
+                OnOutgoingMessage(this, new MessageBusEventArgs("SQL 4 CDS") { TargetArgument = param });
+
+                if (param.TryGetValue("Sql", out var s))
+                {
+                    sql4cds = true;
+                    return (string)s;
+                }
+            }
+
             var sql = string.Empty;
             var fetch = dockControlBuilder.GetFetchType();
             try
@@ -1039,6 +1062,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 sql = "Failed to generate SQL Query.\n\n" + ex.Message;
             }
             return sql;
+        }
+
+        public void EditInSQL4CDS()
+        {
+            OnOutgoingMessage(this, new MessageBusEventArgs("SQL 4 CDS") { TargetArgument = dockControlBuilder.GetFetchString(false, false) });
         }
 
         private string GetCSharpCode()
