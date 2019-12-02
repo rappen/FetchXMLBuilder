@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>Build queries for D365, CRM, XRM, CDS and the Power Platform. Investigate data. Get code. Empower yourself to achieve more.</summary>
     <description>
-FetchXML Builder is used to create queries against CDS databases.
+FetchXML Builder is used to create and execute queries against CDS and Dynamics 365/CRM data.
 CDS includes technologies we know as:
 - Microsoft Dynamics 365 Customer Engagement
 - Dynamics CRM
@@ -38,7 +38,7 @@ The tool will assist in three major areas:
 3. Developer assistance generating code for
 - C# QueryExpression code
 - WebAPI / OData query string
-- Microsoft Flow List Records parameters
+- Power Automate List Records
 - SQL, JavaScript and C# stubs
 - Easy to use UI to compose queries for reports in CRM
 
@@ -48,17 +48,21 @@ To make it even more appealing, there is also the possibility to have it show "F
     </description>
     <releaseNotes>
 
--- Bug fixes --
-#256 OData v4.0 links missing ampersand character – thanks to @MarkMpn for the fix!
-#255 OData v4.0 bool filters not rendered correctly – thanks to @MarkMpn for the fix!
-#258 XML values with only whitespace are trimmed away
-  OData v4.0 url for onprem was incorrectly formed
+-- New features --
+•	Integration with the SQL 4 CDS tool! https://markcarrington.dev/sql-4-cds/
+•	Updates to tree node properties are now immediately reflected in FetchXML and treeview
+Both improvements above provided by Mark Carrington https://github.com/MarkMpn
+
+-- Internal-- 
+•	Flow now called Power Automate https://github.com/rappen/FetchXMLBuilder/issues/267
+•	Improved performance for OData v4.0 and Flow – I mean Power Automate – generation 
+•	Using latest and greatest SDKs from Microsoft
 
     </releaseNotes>
-    <copyright>Copyright Jonas Rapp 2014-2018</copyright>
+    <copyright>Copyright Jonas Rapp 2014-2019</copyright>
     <tags>XrmToolBox Plugins FetchXML Builder</tags>
     <dependencies>
-      <dependency id="XrmToolBox" version="1.2018.6.24" />
+      <dependency id="XrmToolBox" version="1.2019.11.35" />
     </dependencies>
   </metadata>
   <files>
