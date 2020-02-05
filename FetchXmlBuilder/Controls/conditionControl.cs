@@ -91,23 +91,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 if (ValidateForm(silent))
                 {
                     if (!silent && cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem)
-                    {
-                        var oper = (OperatorItem)cmbOperator.SelectedItem;
-                        if (oper.IsMultipleValuesType && !string.IsNullOrWhiteSpace(cmbValue.Text))
-                        {
-                            // Now we need to generate value nodes under this node instead of just adding the value
-                            foreach (var valuestr in cmbValue.Text.Split(','))
-                            {
-                                var value = valuestr.Trim();
-                                var attrNode = TreeNodeHelper.AddChildNode(node, "value");
-                                var coll = new Dictionary<string, string>();
-                                coll.Add("#text", value);
-                                attrNode.Tag = coll;
-                                TreeNodeHelper.SetNodeText(attrNode, form);
-                            }
-                            cmbValue.Text = "";
-                        }
-                    }
+                        ExtractCommaSeparatedValues();
+                    
                     Dictionary<string, string> collection = ControlUtils.GetAttributesCollection(this.Controls, true);
                     SendSaveMessage(collection);
                     controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
@@ -117,6 +102,25 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 if (!silent)
                     MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            }
+        }
+
+        private void ExtractCommaSeparatedValues()
+        {
+            var oper = (OperatorItem)cmbOperator.SelectedItem;
+            if (oper.IsMultipleValuesType && !string.IsNullOrWhiteSpace(cmbValue.Text))
+            {
+                // Now we need to generate value nodes under this node instead of just adding the value
+                foreach (var valuestr in cmbValue.Text.Split(','))
+                {
+                    var value = valuestr.Trim();
+                    var attrNode = TreeNodeHelper.AddChildNode(node, "value");
+                    var coll = new Dictionary<string, string>();
+                    coll.Add("#text", value);
+                    attrNode.Tag = coll;
+                    TreeNodeHelper.SetNodeText(attrNode, form);
+                }
+                cmbValue.Text = "";
             }
         }
 
@@ -272,6 +276,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (controlsCheckSum != ControlUtils.ControlsChecksum(this.Controls))
             {
                 Save(false);
+            }
+            else if (cmbOperator.SelectedItem is OperatorItem op && op.IsMultipleValuesType && !String.IsNullOrEmpty(cmbValue.Text))
+            {
+                ExtractCommaSeparatedValues();
+                Dictionary<string, string> collection = ControlUtils.GetAttributesCollection(this.Controls, true);
+                SendSaveMessage(collection);
             }
         }
 
