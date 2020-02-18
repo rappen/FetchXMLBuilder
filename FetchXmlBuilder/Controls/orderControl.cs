@@ -1,58 +1,32 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
-using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
-using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
-    public partial class orderControl : UserControl, IDefinitionSavable
+    public partial class orderControl : FetchXmlElementControlBase
     {
-        private readonly Dictionary<string, string> collec;
-        private string controlsCheckSum = "";
         private bool friendly;
-        private TreeBuilderControl tree;
+        private AttributeMetadata[] attributes;
 
-        #region Delegates
-
-        public delegate void SaveEventHandler(object sender, SaveEventArgs e);
-
-        #endregion Delegates
-
-        #region Event Handlers
-
-        public event SaveEventHandler Saved;
-
-        #endregion Event Handlers
-
-        public orderControl()
+        public orderControl() : this(null, null, null)
         {
-            InitializeComponent();
-            collec = new Dictionary<string, string>();
         }
 
-        public orderControl(TreeNode Node, AttributeMetadata[] attributes, TreeBuilderControl tree)
-            : this()
+        public orderControl(TreeNode node, AttributeMetadata[] attributes, TreeBuilderControl tree)
         {
-            this.tree = tree;
             friendly = FetchXmlBuilder.friendlyNames;
-            collec = (Dictionary<string, string>)Node.Tag;
-            if (collec == null)
-            {
-                collec = new Dictionary<string, string>();
-            }
+            this.attributes = attributes;
 
-            PopulateControls(Node, attributes);
-            ControlUtils.FillControls(collec, this.Controls, this);
-            controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
-            Saved += tree.CtrlSaved;
+            InitializeComponent();
+            InitializeFXB(null, null, tree, node);
         }
 
-        private void PopulateControls(TreeNode node, AttributeMetadata[] attributes)
+        protected override void PopulateControls()
         {
-            var aggregate = TreeBuilderControl.IsFetchAggregate(node);
+            var aggregate = TreeBuilderControl.IsFetchAggregate(Node);
             if (!aggregate)
             {
                 cmbAttribute.Items.Clear();
@@ -68,7 +42,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 cmbAlias.Items.Clear();
                 cmbAlias.Items.Add("");
-                cmbAlias.Items.AddRange(GetAliases(tree.tvFetch.Nodes[0]).ToArray());
+                cmbAlias.Items.AddRange(GetAliases(Tree.tvFetch.Nodes[0]).ToArray());
             }
             cmbAttribute.Enabled = !aggregate;
             cmbAlias.Enabled = aggregate;
@@ -96,44 +70,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 result.AddRange(GetAliases(child));
             }
             return result;
-        }
-
-        public void Save(bool silent)
-        {
-            try
-            {
-                Dictionary<string, string> collection = ControlUtils.GetAttributesCollection(this.Controls, true);
-                SendSaveMessage(collection);
-            }
-            catch (ArgumentNullException ex)
-            {
-                if (!silent)
-                    MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-            }
-            controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
-        }
-
-        /// <summary>
-        /// Sends a connection success message
-        /// </summary>
-        /// <param name="service">IOrganizationService generated</param>
-        /// <param name="parameters">Lsit of parameter</param>
-        private void SendSaveMessage(Dictionary<string, string> collection)
-        {
-            SaveEventArgs sea = new SaveEventArgs { AttributeCollection = collection };
-
-            if (Saved != null)
-            {
-                Saved(this, sea);
-            }
-        }
-
-        private void Control_Leave(object sender, EventArgs e)
-        {
-            if (controlsCheckSum != ControlUtils.ControlsChecksum(this.Controls))
-            {
-                Save(false);
-            }
         }
     }
 }
