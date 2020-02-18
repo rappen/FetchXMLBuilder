@@ -47,23 +47,32 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         protected override bool ValidateControls(bool silent)
         {
+            var valid = base.ValidateControls(silent);
+
             if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
             {
                 if (!silent)
-                    MessageBox.Show("Attribute must be specified", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    errorProvider.SetError(cmbAttribute, "Attribute is required");
 
-                return false;
+                valid = false;
+            }
+            else if (cmbAttribute.SelectedIndex == -1)
+            {
+                if (!silent)
+                    errorProvider.SetError(cmbAttribute, "Attribute is not valid");
+
+                valid = false;
             }
 
             if (TreeBuilderControl.IsFetchAggregate(Node) && string.IsNullOrWhiteSpace(txtAlias.Text))
             {
                 if (!silent)
-                    MessageBox.Show("Alias must be specified in aggregate queries", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    errorProvider.SetError(txtAlias, "Alias must be specified in aggregate queries");
                     
-                return false;
+                valid = false;
             }
 
-            return true;
+            return valid;
         }
 
         private void chkGroupBy_CheckedChanged(object sender, EventArgs e)
@@ -90,6 +99,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 cmbDateGrouping.SelectedIndex = -1;
                 chkUserTZ.Checked = false;
             }
+        }
+
+        private void cmbAttribute_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
+                errorProvider.SetError(cmbAttribute, "Attribute is required");
+            else if (cmbAttribute.SelectedIndex == -1)
+                errorProvider.SetError(cmbAttribute, "Attribute is not valid");
+            else
+                errorProvider.SetError(cmbAttribute, null);
+        }
+
+        private void txtAlias_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (TreeBuilderControl.IsFetchAggregate(Node) && string.IsNullOrWhiteSpace(txtAlias.Text))
+                errorProvider.SetError(txtAlias, "Alias must be specified in aggregate queries");
+            else
+                errorProvider.SetError(txtAlias, null);
         }
     }
 }

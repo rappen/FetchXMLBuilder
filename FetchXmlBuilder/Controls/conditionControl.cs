@@ -88,10 +88,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         protected override bool ValidateControls(bool silent)
         {
-            var result = true;
-            if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem)
+            var result = false;
+            Control errorControl = null;
+            var error = "";
+
+            if (cmbAttribute.SelectedIndex == -1)
             {
-                var error = "";
+                errorControl = cmbAttribute;
+                error = "Attribute is required";
+            }
+            else if (cmbOperator.SelectedItem is null)
+            {
+                errorControl = cmbOperator;
+                error = "Operator is required";
+            }
+            else if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem)
+            {
                 var oper = (OperatorItem)cmbOperator.SelectedItem;
                 if (oper.IsMultipleValuesType && Node.Nodes.Count == 0)
                 {   // Allow entering comma separated values, type checking is not enforced
@@ -142,6 +154,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             else
                             {
                                 error = "Operator " + oper.ToString() + " is not valid for attribute of type " + attribute.Metadata.AttributeType.ToString();
+                                errorControl = cmbOperator;
                             }
                         }
                     }
@@ -151,12 +164,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             if (!string.IsNullOrWhiteSpace(value))
                             {
                                 error = "Operator " + oper.ToString() + " does not allow value";
+                                errorControl = cmbValue;
                             }
                             break;
                         case AttributeTypeCode.Boolean:
                             if (value != "0" && value != "1")
                             {
                                 error = "Value must be 0 or 1";
+                                errorControl = cmbValue;
                             }
                             break;
                         case AttributeTypeCode.DateTime:
@@ -164,6 +179,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             if (!DateTime.TryParse(value, out date))
                             {
                                 error = "Operator " + oper.ToString() + " requires date value";
+                                errorControl = cmbValue;
                             }
                             break;
                         case AttributeTypeCode.Integer:
@@ -175,6 +191,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             if (!int.TryParse(value, out intvalue))
                             {
                                 error = "Operator " + oper.ToString() + " requires whole number value";
+                                errorControl = cmbValue;
                             }
                             break;
                         case AttributeTypeCode.Decimal:
@@ -184,6 +201,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             if (!decimal.TryParse(value, out decvalue))
                             {
                                 error = "Operator " + oper.ToString() + " requires decimal value";
+                                errorControl = cmbValue;
                             }
                             break;
                         case AttributeTypeCode.Lookup:
@@ -194,6 +212,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             if (!Guid.TryParse(value, out guidvalue))
                             {
                                 error = "Operator " + oper.ToString() + " requires a proper guid with format: " + Guid.Empty.ToString();
+                                errorControl = cmbValue;
                             }
                             break;
                         case AttributeTypeCode.String:
@@ -205,16 +224,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                         case AttributeTypeCode.CalendarRules:
                             //case AttributeTypeCode.ManagedProperty:   // ManagedProperty is a bit "undefined", so let's accept all values for now... ref issue #67
                             error = "Unsupported condition attribute type: " + valueType;
+                            errorControl = cmbAttribute;
                             break;
                     }
                 }
-                if (!string.IsNullOrWhiteSpace(error))
-                {
-                    if (!silent)
-                        MessageBox.Show(error, "Condition error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    result = false;
-                }
             }
+
+            errorProvider.SetError(cmbAttribute, null);
+            errorProvider.SetError(cmbOperator, null);
+            errorProvider.SetError(cmbValue, null);
+
+            if (!string.IsNullOrWhiteSpace(error))
+            {
+                if (!silent)
+                    errorProvider.SetError(errorControl, error);
+
+                result = false;
+            }
+
             return result;
         }
 

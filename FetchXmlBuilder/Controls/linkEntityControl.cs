@@ -240,5 +240,61 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 cmbRelationship.Width = relationshipWidth;
             }
         }
+
+        protected override bool ValidateControls(bool silent)
+        {
+            var valid = base.ValidateControls(silent);
+
+            if (cmbEntity.SelectedIndex == -1)
+            {
+                if (!silent)
+                    errorProvider.SetError(cmbEntity, "Entity is required");
+                
+                valid = false;
+            }
+
+
+            if (cmbFrom.SelectedIndex == -1)
+            {
+                if (!silent)
+                    errorProvider.SetError(cmbFrom, "From attribute is required");
+
+                valid = false;
+            }
+
+            if (cmbTo.SelectedIndex == -1)
+            {
+                if (!silent)
+                    errorProvider.SetError(cmbTo, "To attribute is required");
+
+                valid = false;
+            }
+
+            return valid;
+        }
+
+        private void cmbEntity_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (cmbEntity.SelectedIndex == -1)
+                errorProvider.SetError(cmbEntity, "Entity is required");
+            else
+                errorProvider.SetError(cmbEntity, null);
+        }
+
+        private void cmbFrom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (cmbFrom.SelectedIndex == -1)
+                errorProvider.SetError(cmbFrom, "From attribute is required");
+            else
+                errorProvider.SetError(cmbFrom, null);
+        }
+
+        private void cmbTo_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (cmbTo.SelectedIndex == -1)
+                errorProvider.SetError(cmbTo, "To attribute is required");
+            else
+                errorProvider.SetError(cmbTo, null);
+        }
     }
 }

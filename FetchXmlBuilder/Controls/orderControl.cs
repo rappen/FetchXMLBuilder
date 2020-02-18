@@ -71,5 +71,44 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
             return result;
         }
+
+        protected override bool ValidateControls(bool silent)
+        {
+            var valid = base.ValidateControls(silent);
+
+            if (cmbAttribute.Enabled && cmbAttribute.SelectedIndex == -1)
+            {
+                if (!silent)
+                    errorProvider.SetError(cmbAttribute, "Attribute is required");
+
+                valid = false;
+            }
+
+            if (cmbAlias.Enabled && cmbAlias.SelectedIndex == -1)
+            {
+                if (!silent)
+                    errorProvider.SetError(cmbAlias, "Alias is required");
+
+                valid = false;
+            }
+
+            return valid;
+        }
+
+        private void cmbAttribute_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (cmbAttribute.Enabled && cmbAttribute.SelectedIndex == -1)
+                errorProvider.SetError(cmbAttribute, "Attribute is required");
+            else
+                errorProvider.SetError(cmbAttribute, null);
+        }
+
+        private void cmbAlias_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (cmbAlias.Enabled && cmbAlias.SelectedIndex == -1)
+                errorProvider.SetError(cmbAlias, "Alias is required");
+            else
+                errorProvider.SetError(cmbAlias, null);
+        }
     }
 }

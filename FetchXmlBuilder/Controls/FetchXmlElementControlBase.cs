@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
-    public abstract class FetchXmlElementControlBase : UserControl, IDefinitionSavable
+    public class FetchXmlElementControlBase : UserControl, IDefinitionSavable
     {
         private Dictionary<string, string> collec;
         private string controlsCheckSum = "";
