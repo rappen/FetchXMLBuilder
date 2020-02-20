@@ -13,6 +13,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
     public class FetchXmlElementControlBase : UserControl, IDefinitionSavable
     {
         private Dictionary<string, string> collec;
+        private Dictionary<string, string> original;
         private string controlsCheckSum = "";
 
         public void InitializeFXB(Dictionary<string, string> collection, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree, TreeNode node)
@@ -25,6 +26,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             else if (node != null)
                 collec = (Dictionary<string, string>)node.Tag;
 
+            original = new Dictionary<string, string>(collec);
             PopulateControls();
             ControlUtils.FillControls(collec, this.Controls, this);
             controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
@@ -106,6 +108,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         protected void FillControl(Control control)
         {
             ControlUtils.FillControl(collec, control, this);
+        }
+
+        protected override bool ProcessKeyPreview(ref Message m)
+        {
+            const int WM_KEYDOWN = 0x0100;
+            const int VK_ESCAPE = 27;
+
+            if (m.Msg == WM_KEYDOWN && (int)m.WParam == VK_ESCAPE)
+            {
+                collec = new Dictionary<string, string>(original);
+                ControlUtils.FillControls(collec, this.Controls, this);
+                controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
+                SendSaveMessage(original);
+                return true;
+            }
+
+            return base.ProcessKeyPreview(ref m);
         }
     }
 }
