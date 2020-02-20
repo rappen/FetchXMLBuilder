@@ -35,7 +35,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.chkDescending = new System.Windows.Forms.CheckBox();
             this.cmbAlias = new System.Windows.Forms.ComboBox();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            this.warningProvider = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.warningProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -101,6 +103,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.errorProvider.ContainerControl = this;
             // 
+            // warningProvider
+            // 
+            this.warningProvider.ContainerControl = this;
+            // 
             // orderControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -113,6 +119,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Name = "orderControl";
             this.Size = new System.Drawing.Size(224, 115);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.warningProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -125,5 +132,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.CheckBox chkDescending;
         private System.Windows.Forms.ComboBox cmbAlias;
         private System.Windows.Forms.ErrorProvider errorProvider;
+        private System.Windows.Forms.ErrorProvider warningProvider;
     }
 }

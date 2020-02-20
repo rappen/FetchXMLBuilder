@@ -2,6 +2,7 @@
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Microsoft.Xrm.Sdk.Metadata;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
@@ -22,6 +23,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
             InitializeComponent();
             InitializeFXB(null, null, tree, node);
+            warningProvider.Icon = WarningIcon;
         }
 
         protected override void PopulateControls()
@@ -76,18 +78,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             var valid = base.ValidateControls(silent);
 
-            if (cmbAttribute.Enabled && cmbAttribute.SelectedIndex == -1)
+            if (cmbAttribute.Enabled && string.IsNullOrWhiteSpace(cmbAttribute.Text))
             {
                 if (!silent)
+                {
                     errorProvider.SetError(cmbAttribute, "Attribute is required");
+                }
 
                 valid = false;
             }
 
-            if (cmbAlias.Enabled && cmbAlias.SelectedIndex == -1)
+            if (cmbAlias.Enabled && string.IsNullOrWhiteSpace(cmbAlias.Text))
             {
                 if (!silent)
+                {
                     errorProvider.SetError(cmbAlias, "Alias is required");
+                }
 
                 valid = false;
             }
@@ -97,18 +103,38 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void cmbAttribute_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (cmbAttribute.Enabled && cmbAttribute.SelectedIndex == -1)
-                errorProvider.SetError(cmbAttribute, "Attribute is required");
-            else
-                errorProvider.SetError(cmbAttribute, null);
+            errorProvider.SetError(cmbAttribute, null);
+            warningProvider.SetError(cmbAttribute, null);
+
+            if (cmbAttribute.Enabled)
+            {
+                if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
+                {
+                    errorProvider.SetError(cmbAttribute, "Attribute is required");
+                }
+                else if (cmbAttribute.SelectedIndex == -1)
+                {
+                    warningProvider.SetError(cmbAttribute, "Attribute is not valid");
+                }
+            }
         }
 
         private void cmbAlias_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (cmbAlias.Enabled && cmbAlias.SelectedIndex == -1)
-                errorProvider.SetError(cmbAlias, "Alias is required");
-            else
-                errorProvider.SetError(cmbAlias, null);
+            errorProvider.SetError(cmbAlias, null);
+            warningProvider.SetError(cmbAlias, null);
+
+            if (cmbAlias.Enabled)
+            {
+                if (string.IsNullOrWhiteSpace(cmbAlias.Text))
+                {
+                    errorProvider.SetError(cmbAlias, "Alias is required");
+                }
+                else if (cmbAlias.SelectedIndex == -1)
+                {
+                    warningProvider.SetError(cmbAlias, "Alias is not valid");
+                }
+            }
         }
     }
 }

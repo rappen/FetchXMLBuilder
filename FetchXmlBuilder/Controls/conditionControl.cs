@@ -20,6 +20,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             InitializeComponent();
             InitializeFXB(null, fetchXmlBuilder, tree, node);
             RefreshAttributes();
+            warningProvider.Icon = WarningIcon;
         }
 
         protected override void PopulateControls()
@@ -62,7 +63,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         protected override void SaveInternal(bool silent)
         {
             if (!silent && cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem)
+            {
                 ExtractCommaSeparatedValues();
+            }
 
             base.SaveInternal(silent);
         }
@@ -88,11 +91,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         protected override bool ValidateControls(bool silent)
         {
-            var result = false;
+            var result = true;
             Control errorControl = null;
             var error = "";
 
-            if (cmbAttribute.SelectedIndex == -1)
+            if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
             {
                 errorControl = cmbAttribute;
                 error = "Attribute is required";
@@ -237,7 +240,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (!string.IsNullOrWhiteSpace(error))
             {
                 if (!silent)
+                {
                     errorProvider.SetError(errorControl, error);
+                }
 
                 result = false;
             }
@@ -374,6 +379,37 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
             }
             UpdateValueField();
+        }
+
+        private void cmbAttribute_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            errorProvider.SetError(cmbAttribute, null);
+            warningProvider.SetError(cmbAttribute, null);
+
+            if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
+            {
+                errorProvider.SetError(cmbAttribute, "Attribute is required");
+            }
+            else if (cmbAttribute.SelectedIndex == -1)
+            {
+                warningProvider.SetError(cmbAttribute, "Attribute is not valid");
+            }
+        }
+
+        private void cmbOperator_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (string.IsNullOrEmpty(cmbOperator.Text))
+            {
+                errorProvider.SetError(cmbOperator, "Operator is required");
+            }
+            else if (cmbOperator.SelectedIndex == -1)
+            {
+                errorProvider.SetError(cmbOperator, "Operator is not valid");
+            }
+            else
+            {
+                errorProvider.SetError(cmbOperator, null);
+            }
         }
     }
 
