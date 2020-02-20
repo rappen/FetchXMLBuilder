@@ -62,7 +62,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         protected override void SaveInternal(bool silent)
         {
             if (!silent && cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem)
+            {
                 ExtractCommaSeparatedValues();
+            }
 
             base.SaveInternal(silent);
         }
@@ -237,7 +239,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (!string.IsNullOrWhiteSpace(error))
             {
                 if (!silent)
+                {
                     errorProvider.SetError(errorControl, error);
+                }
 
                 result = false;
             }

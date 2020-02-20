@@ -52,14 +52,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
             {
                 if (!silent)
+                {
                     errorProvider.SetError(cmbAttribute, "Attribute is required");
+                }
 
                 valid = false;
             }
             else if (cmbAttribute.SelectedIndex == -1)
             {
                 if (!silent)
+                {
                     errorProvider.SetError(cmbAttribute, "Attribute is not valid");
+                }
 
                 valid = false;
             }
@@ -67,7 +71,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (TreeBuilderControl.IsFetchAggregate(Node) && string.IsNullOrWhiteSpace(txtAlias.Text))
             {
                 if (!silent)
+                {
                     errorProvider.SetError(txtAlias, "Alias must be specified in aggregate queries");
+                }
                     
                 valid = false;
             }
@@ -104,19 +110,29 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void cmbAttribute_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
+            {
                 errorProvider.SetError(cmbAttribute, "Attribute is required");
+            }
             else if (cmbAttribute.SelectedIndex == -1)
+            {
                 errorProvider.SetError(cmbAttribute, "Attribute is not valid");
+            }
             else
+            {
                 errorProvider.SetError(cmbAttribute, null);
+            }
         }
 
         private void txtAlias_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (TreeBuilderControl.IsFetchAggregate(Node) && string.IsNullOrWhiteSpace(txtAlias.Text))
+            {
                 errorProvider.SetError(txtAlias, "Alias must be specified in aggregate queries");
+            }
             else
+            {
                 errorProvider.SetError(txtAlias, null);
+            }
         }
     }
 }

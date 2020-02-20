@@ -22,9 +22,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             Node = node;
             Tree = tree;
             if (collection != null)
+            {
                 collec = collection;
+            }
             else if (node != null)
+            {
                 collec = (Dictionary<string, string>)node.Tag;
+            }
 
             original = new Dictionary<string, string>(collec);
             PopulateControls();
@@ -48,7 +52,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             base.OnValidating(e);
 
             if (RequiresSave())
+            {
                 e.Cancel = !Save(false);
+            }
         }
 
         protected virtual bool RequiresSave()
@@ -61,14 +67,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             try
             {
                 if (!ValidateControls(silent))
+                {
                     return false;
+                }
 
                 SaveInternal(silent);
             }
             catch (ArgumentNullException ex)
             {
                 if (!silent)
+                {
                     MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                }
 
                 return false;
             }

@@ -79,7 +79,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (cmbAttribute.Enabled && cmbAttribute.SelectedIndex == -1)
             {
                 if (!silent)
+                {
                     errorProvider.SetError(cmbAttribute, "Attribute is required");
+                }
 
                 valid = false;
             }
@@ -87,7 +89,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (cmbAlias.Enabled && cmbAlias.SelectedIndex == -1)
             {
                 if (!silent)
+                {
                     errorProvider.SetError(cmbAlias, "Alias is required");
+                }
 
                 valid = false;
             }
@@ -98,17 +102,25 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void cmbAttribute_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (cmbAttribute.Enabled && cmbAttribute.SelectedIndex == -1)
+            {
                 errorProvider.SetError(cmbAttribute, "Attribute is required");
+            }
             else
+            {
                 errorProvider.SetError(cmbAttribute, null);
+            }
         }
 
         private void cmbAlias_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (cmbAlias.Enabled && cmbAlias.SelectedIndex == -1)
+            {
                 errorProvider.SetError(cmbAlias, "Alias is required");
+            }
             else
+            {
                 errorProvider.SetError(cmbAlias, null);
+            }
         }
     }
 }

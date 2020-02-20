@@ -248,7 +248,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (cmbEntity.SelectedIndex == -1)
             {
                 if (!silent)
+                {
                     errorProvider.SetError(cmbEntity, "Entity is required");
+                }
                 
                 valid = false;
             }
@@ -257,7 +259,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (cmbFrom.SelectedIndex == -1)
             {
                 if (!silent)
+                {
                     errorProvider.SetError(cmbFrom, "From attribute is required");
+                }
 
                 valid = false;
             }
@@ -265,7 +269,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (cmbTo.SelectedIndex == -1)
             {
                 if (!silent)
+                {
                     errorProvider.SetError(cmbTo, "To attribute is required");
+                }
 
                 valid = false;
             }
@@ -276,25 +282,37 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void cmbEntity_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (cmbEntity.SelectedIndex == -1)
+            {
                 errorProvider.SetError(cmbEntity, "Entity is required");
+            }
             else
+            {
                 errorProvider.SetError(cmbEntity, null);
+            }
         }
 
         private void cmbFrom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (cmbFrom.SelectedIndex == -1)
+            {
                 errorProvider.SetError(cmbFrom, "From attribute is required");
+            }
             else
+            {
                 errorProvider.SetError(cmbFrom, null);
+            }
         }
 
         private void cmbTo_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (cmbTo.SelectedIndex == -1)
+            {
                 errorProvider.SetError(cmbTo, "To attribute is required");
+            }
             else
+            {
                 errorProvider.SetError(cmbTo, null);
+            }
         }
     }
 }
