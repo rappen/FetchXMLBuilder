@@ -56,17 +56,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             if (control == cmbAttribute)
             {
-                var warning = cmbAttribute.Items.Count > 0 && !cmbAttribute.Items.Cast<AttributeItem>().Any(a => a.ToString() == cmbAttribute.Text);
-                warningProvider.SetError(cmbAttribute, warning ? "Attribute is not valid" : null);
-                var error = string.IsNullOrWhiteSpace(cmbAttribute.Text);
-                errorProvider.SetError(cmbAttribute, error ? "Attribute is required" : null);
-                return error;
+                var valid = !string.IsNullOrWhiteSpace(cmbAttribute.Text);
+                errorProvider.SetError(cmbAttribute, valid ? null : "Attribute is required");
+                if (valid)
+                {
+                    var warning = cmbAttribute.Items.Count > 0 && !cmbAttribute.Items.Cast<AttributeItem>().Any(a => a.ToString() == cmbAttribute.Text);
+                    warningProvider.SetError(cmbAttribute, warning ? "Attribute is not valid" : null);
+                }
+                return valid;
             }
             else if (control == txtAlias)
             {
-                var error = TreeBuilderControl.IsFetchAggregate(Node) && string.IsNullOrWhiteSpace(txtAlias.Text);
-                errorProvider.SetError(txtAlias, error ? "Alias must be specified in aggregate queries" : null);
-                return error;
+                var valid = !(TreeBuilderControl.IsFetchAggregate(Node) && string.IsNullOrWhiteSpace(txtAlias.Text));
+                errorProvider.SetError(txtAlias, valid ? null : "Alias must be specified in aggregate queries");
+                return valid;
             }
             return base.ValidateControl(control);
         }
