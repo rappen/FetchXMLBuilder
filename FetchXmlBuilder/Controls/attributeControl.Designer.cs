@@ -68,7 +68,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbAttribute.Sorted = true;
             this.cmbAttribute.TabIndex = 27;
             this.cmbAttribute.Tag = "name|true";
-            this.cmbAttribute.Validating += new System.ComponentModel.CancelEventHandler(this.cmbAttribute_Validating);
+            this.cmbAttribute.Validating += new System.ComponentModel.CancelEventHandler(this.input_Validating);
             // 
             // txtAlias
             // 
@@ -79,7 +79,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.txtAlias.Size = new System.Drawing.Size(263, 20);
             this.txtAlias.TabIndex = 28;
             this.txtAlias.Tag = "alias";
-            this.txtAlias.Validating += new System.ComponentModel.CancelEventHandler(this.txtAlias_Validating);
+            this.txtAlias.Validating += new System.ComponentModel.CancelEventHandler(this.input_Validating);
             // 
             // label4
             // 

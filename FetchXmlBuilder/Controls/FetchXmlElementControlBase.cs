@@ -4,9 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
@@ -110,6 +107,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             Dictionary<string, string> collection = ControlUtils.GetAttributesCollection(this.Controls, true);
             SendSaveMessage(collection);
+        }
+
+        protected virtual bool ValidateControl(Control control)
+        {
+            return true;
         }
 
         protected virtual bool ValidateControls(bool silent)

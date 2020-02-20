@@ -1,10 +1,8 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
-using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
@@ -49,29 +47,31 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         protected override bool ValidateControls(bool silent)
         {
-            var valid = base.ValidateControls(silent);
+            return base.ValidateControls(silent) &&
+                ValidateControl(cmbAttribute) &&
+                ValidateControl(txtAlias);
+        }
 
-            if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
+        protected override bool ValidateControl(Control control)
+        {
+            if (control == cmbAttribute)
             {
-                if (!silent)
+                var valid = !string.IsNullOrWhiteSpace(cmbAttribute.Text);
+                errorProvider.SetError(cmbAttribute, valid ? null : "Attribute is required");
+                if (valid)
                 {
-                    errorProvider.SetError(cmbAttribute, "Attribute is required");
+                    var warning = cmbAttribute.Items.Count > 0 && !cmbAttribute.Items.Cast<AttributeItem>().Any(a => a.ToString() == cmbAttribute.Text);
+                    warningProvider.SetError(cmbAttribute, warning ? "Attribute is not valid" : null);
                 }
-
-                valid = false;
+                return valid;
             }
-
-            if (TreeBuilderControl.IsFetchAggregate(Node) && string.IsNullOrWhiteSpace(txtAlias.Text))
+            else if (control == txtAlias)
             {
-                if (!silent)
-                {
-                    errorProvider.SetError(txtAlias, "Alias must be specified in aggregate queries");
-                }
-                    
-                valid = false;
+                var valid = !(TreeBuilderControl.IsFetchAggregate(Node) && string.IsNullOrWhiteSpace(txtAlias.Text));
+                errorProvider.SetError(txtAlias, valid ? null : "Alias must be specified in aggregate queries");
+                return valid;
             }
-
-            return valid;
+            return base.ValidateControl(control);
         }
 
         private void chkGroupBy_CheckedChanged(object sender, EventArgs e)
@@ -100,31 +100,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
         }
 
-        private void cmbAttribute_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void input_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            warningProvider.SetError(cmbAttribute, null);
-            errorProvider.SetError(cmbAttribute, null);
-
-            if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
-            {
-                errorProvider.SetError(cmbAttribute, "Attribute is required");
-            }
-            else if (cmbAttribute.SelectedIndex == -1)
-            {
-                warningProvider.SetError(cmbAttribute, "Attribute is not valid");
-            }
-        }
-
-        private void txtAlias_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (TreeBuilderControl.IsFetchAggregate(Node) && string.IsNullOrWhiteSpace(txtAlias.Text))
-            {
-                errorProvider.SetError(txtAlias, "Alias must be specified in aggregate queries");
-            }
-            else
-            {
-                errorProvider.SetError(txtAlias, null);
-            }
+            ValidateControl(sender as Control);
         }
     }
 }
