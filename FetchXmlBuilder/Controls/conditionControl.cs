@@ -9,62 +9,31 @@ using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
-    public partial class conditionControl : UserControl, IDefinitionSavable
+    public partial class conditionControl : FetchXmlElementControlBase
     {
-        private readonly Dictionary<string, string> collec;
-        private string controlsCheckSum = "";
-        private TreeNode node;
-        private FetchXmlBuilder form;
-        private TreeBuilderControl tree;
+        public conditionControl() : this(null, null, null)
+        {
+        }
 
-        #region Delegates
-
-        public delegate void SaveEventHandler(object sender, SaveEventArgs e);
-
-        #endregion Delegates
-
-        #region Event Handlers
-
-        public event SaveEventHandler Saved;
-
-        #endregion Event Handlers
-
-        public conditionControl()
+        public conditionControl(TreeNode node, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree)
         {
             InitializeComponent();
-            collec = new Dictionary<string, string>();
-        }
-
-        public conditionControl(TreeNode Node, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree)
-            : this()
-        {
-            form = fetchXmlBuilder;
-            this.tree = tree;
-            node = Node;
-            collec = (Dictionary<string, string>)Node.Tag;
-            if (collec == null)
-            {
-                collec = new Dictionary<string, string>();
-            }
-            PopulateControls();
+            InitializeFXB(null, fetchXmlBuilder, tree, node);
             RefreshAttributes();
-            ControlUtils.FillControls(collec, this.Controls, this);
-            controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
-            Saved += tree.CtrlSaved;
         }
 
-        private void PopulateControls()
+        protected override void PopulateControls()
         {
             cmbEntity.Items.Clear();
-            var closestEntity = GetClosestEntityNode(node);
+            var closestEntity = GetClosestEntityNode(Node);
             if (closestEntity != null && closestEntity.Name == "entity")
             {
                 cmbEntity.Items.Add("");
-                cmbEntity.Items.AddRange(GetEntities(tree.tvFetch.Nodes[0]).ToArray());
+                cmbEntity.Items.AddRange(GetEntities(Tree.tvFetch.Nodes[0]).ToArray());
             }
             cmbEntity.Enabled = cmbEntity.Items.Count > 0;
             cmbOperator.Items.Clear();
-            foreach (var oper in System.Enum.GetValues(typeof(ConditionOperator)))
+            foreach (var oper in Enum.GetValues(typeof(ConditionOperator)))
             {
                 cmbOperator.Items.Add(new OperatorItem((ConditionOperator)oper));
             }
@@ -84,25 +53,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             return result;
         }
 
-        public void Save(bool silent)
+        protected override bool RequiresSave()
         {
-            try
-            {
-                if (ValidateForm(silent))
-                {
-                    if (!silent && cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem)
-                        ExtractCommaSeparatedValues();
-                    
-                    Dictionary<string, string> collection = ControlUtils.GetAttributesCollection(this.Controls, true);
-                    SendSaveMessage(collection);
-                    controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
-                }
-            }
-            catch (ArgumentNullException ex)
-            {
-                if (!silent)
-                    MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-            }
+            return base.RequiresSave() || 
+                cmbOperator.SelectedItem is OperatorItem op && op.IsMultipleValuesType && !string.IsNullOrEmpty(cmbValue.Text);
+        }
+
+        protected override void SaveInternal(bool silent)
+        {
+            if (!silent && cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem)
+                ExtractCommaSeparatedValues();
+
+            base.SaveInternal(silent);
         }
 
         private void ExtractCommaSeparatedValues()
@@ -114,24 +76,36 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 foreach (var valuestr in cmbValue.Text.Split(','))
                 {
                     var value = valuestr.Trim();
-                    var attrNode = TreeNodeHelper.AddChildNode(node, "value");
+                    var attrNode = TreeNodeHelper.AddChildNode(Node, "value");
                     var coll = new Dictionary<string, string>();
                     coll.Add("#text", value);
                     attrNode.Tag = coll;
-                    TreeNodeHelper.SetNodeText(attrNode, form);
+                    TreeNodeHelper.SetNodeText(attrNode, fxb);
                 }
                 cmbValue.Text = "";
             }
         }
 
-        private bool ValidateForm(bool silent)
+        protected override bool ValidateControls(bool silent)
         {
-            var result = true;
-            if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem)
+            var result = false;
+            Control errorControl = null;
+            var error = "";
+
+            if (cmbAttribute.SelectedIndex == -1)
             {
-                var error = "";
+                errorControl = cmbAttribute;
+                error = "Attribute is required";
+            }
+            else if (cmbOperator.SelectedItem is null)
+            {
+                errorControl = cmbOperator;
+                error = "Operator is required";
+            }
+            else if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem)
+            {
                 var oper = (OperatorItem)cmbOperator.SelectedItem;
-                if (oper.IsMultipleValuesType && node.Nodes.Count == 0)
+                if (oper.IsMultipleValuesType && Node.Nodes.Count == 0)
                 {   // Allow entering comma separated values, type checking is not enforced
                     result = true;
                 }
@@ -180,6 +154,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             else
                             {
                                 error = "Operator " + oper.ToString() + " is not valid for attribute of type " + attribute.Metadata.AttributeType.ToString();
+                                errorControl = cmbOperator;
                             }
                         }
                     }
@@ -189,12 +164,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             if (!string.IsNullOrWhiteSpace(value))
                             {
                                 error = "Operator " + oper.ToString() + " does not allow value";
+                                errorControl = cmbValue;
                             }
                             break;
                         case AttributeTypeCode.Boolean:
                             if (value != "0" && value != "1")
                             {
                                 error = "Value must be 0 or 1";
+                                errorControl = cmbValue;
                             }
                             break;
                         case AttributeTypeCode.DateTime:
@@ -202,6 +179,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             if (!DateTime.TryParse(value, out date))
                             {
                                 error = "Operator " + oper.ToString() + " requires date value";
+                                errorControl = cmbValue;
                             }
                             break;
                         case AttributeTypeCode.Integer:
@@ -213,6 +191,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             if (!int.TryParse(value, out intvalue))
                             {
                                 error = "Operator " + oper.ToString() + " requires whole number value";
+                                errorControl = cmbValue;
                             }
                             break;
                         case AttributeTypeCode.Decimal:
@@ -222,6 +201,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             if (!decimal.TryParse(value, out decvalue))
                             {
                                 error = "Operator " + oper.ToString() + " requires decimal value";
+                                errorControl = cmbValue;
                             }
                             break;
                         case AttributeTypeCode.Lookup:
@@ -232,6 +212,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             if (!Guid.TryParse(value, out guidvalue))
                             {
                                 error = "Operator " + oper.ToString() + " requires a proper guid with format: " + Guid.Empty.ToString();
+                                errorControl = cmbValue;
                             }
                             break;
                         case AttributeTypeCode.String:
@@ -243,46 +224,25 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                         case AttributeTypeCode.CalendarRules:
                             //case AttributeTypeCode.ManagedProperty:   // ManagedProperty is a bit "undefined", so let's accept all values for now... ref issue #67
                             error = "Unsupported condition attribute type: " + valueType;
+                            errorControl = cmbAttribute;
                             break;
                     }
                 }
-                if (!string.IsNullOrWhiteSpace(error))
-                {
-                    if (!silent)
-                        MessageBox.Show(error, "Condition error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    result = false;
-                }
             }
+
+            errorProvider.SetError(cmbAttribute, null);
+            errorProvider.SetError(cmbOperator, null);
+            errorProvider.SetError(cmbValue, null);
+
+            if (!string.IsNullOrWhiteSpace(error))
+            {
+                if (!silent)
+                    errorProvider.SetError(errorControl, error);
+
+                result = false;
+            }
+
             return result;
-        }
-
-        /// <summary>
-        /// Sends a connection success message
-        /// </summary>
-        /// <param name="service">IOrganizationService generated</param>
-        /// <param name="parameters">Lsit of parameter</param>
-        private void SendSaveMessage(Dictionary<string, string> collection)
-        {
-            SaveEventArgs sea = new SaveEventArgs { AttributeCollection = collection };
-
-            if (Saved != null)
-            {
-                Saved(this, sea);
-            }
-        }
-
-        private void Control_Leave(object sender, EventArgs e)
-        {
-            if (controlsCheckSum != ControlUtils.ControlsChecksum(this.Controls))
-            {
-                Save(false);
-            }
-            else if (cmbOperator.SelectedItem is OperatorItem op && op.IsMultipleValuesType && !String.IsNullOrEmpty(cmbValue.Text))
-            {
-                ExtractCommaSeparatedValues();
-                Dictionary<string, string> collection = ControlUtils.GetAttributesCollection(this.Controls, true);
-                SendSaveMessage(collection);
-            }
         }
 
         private void cmbEtity_SelectedIndexChanged(object sender, EventArgs e)
@@ -296,29 +256,29 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             var entityNode = cmbEntity.SelectedItem is EntityNode ? (EntityNode)cmbEntity.SelectedItem : null;
             if (entityNode == null)
             {
-                entityNode = new EntityNode(GetClosestEntityNode(node));
+                entityNode = new EntityNode(GetClosestEntityNode(Node));
             }
             if (entityNode == null)
             {
                 return;
             }
             var entityName = entityNode.EntityName;
-            if (form.NeedToLoadEntity(entityName))
+            if (fxb.NeedToLoadEntity(entityName))
             {
-                if (!form.working)
+                if (!fxb.working)
                 {
-                    form.LoadEntityDetails(entityName, RefreshAttributes);
+                    fxb.LoadEntityDetails(entityName, RefreshAttributes);
                 }
                 return;
             }
-            var attributes = form.GetDisplayAttributes(entityName);
+            var attributes = fxb.GetDisplayAttributes(entityName);
             foreach (var attribute in attributes)
             {
                 AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, true, FetchXmlBuilder.friendlyNames);
             }
             // RefreshFill now that attributes are loaded
-            ControlUtils.FillControl(collec, cmbAttribute, this);
-            ControlUtils.FillControl(collec, cmbValue, this);
+            FillControl(cmbAttribute);
+            FillControl(cmbValue);
         }
 
         private static TreeNode GetClosestEntityNode(TreeNode node)
@@ -354,7 +314,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                         valueType = attribute.Metadata.AttributeType;
                         if (oper.IsMultipleValuesType)
                         {
-                            if (node.Nodes.Count == 0)
+                            if (Node.Nodes.Count == 0)
                             {
                                 lblValueHint.Text = "Enter comma-separated " + valueType.ToString() + " values or add sub-nodes.";
                                 lblValueHint.Visible = true;

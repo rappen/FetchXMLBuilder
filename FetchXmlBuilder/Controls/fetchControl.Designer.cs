@@ -182,7 +182,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Controls.Add(this.label4);
             this.Name = "fetchControl";
             this.Size = new System.Drawing.Size(315, 270);
-            this.Leave += new System.EventHandler(this.Control_Leave);
             this.ResumeLayout(false);
             this.PerformLayout();
 
