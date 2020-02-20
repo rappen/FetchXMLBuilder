@@ -109,6 +109,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             SendSaveMessage(collection);
         }
 
+        protected virtual bool ValidateControl(Control control)
+        {
+            return true;
+        }
+
         protected virtual bool ValidateControls(bool silent)
         {
             return true;
