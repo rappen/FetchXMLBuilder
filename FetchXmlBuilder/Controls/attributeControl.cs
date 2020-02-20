@@ -4,6 +4,7 @@ using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
@@ -22,6 +23,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             InitializeComponent();
             this.attributes = attributes;
             InitializeFXB(null, null, tree, node);
+            warningProvider.Icon = WarningIcon;
         }
 
         protected override void PopulateControls()
@@ -54,15 +56,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 if (!silent)
                 {
                     errorProvider.SetError(cmbAttribute, "Attribute is required");
-                }
-
-                valid = false;
-            }
-            else if (cmbAttribute.SelectedIndex == -1)
-            {
-                if (!silent)
-                {
-                    errorProvider.SetError(cmbAttribute, "Attribute is not valid");
                 }
 
                 valid = false;
@@ -109,17 +102,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void cmbAttribute_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            warningProvider.SetError(cmbAttribute, null);
+            errorProvider.SetError(cmbAttribute, null);
+
             if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
             {
                 errorProvider.SetError(cmbAttribute, "Attribute is required");
             }
             else if (cmbAttribute.SelectedIndex == -1)
             {
-                errorProvider.SetError(cmbAttribute, "Attribute is not valid");
-            }
-            else
-            {
-                errorProvider.SetError(cmbAttribute, null);
+                warningProvider.SetError(cmbAttribute, "Attribute is not valid");
             }
         }
 

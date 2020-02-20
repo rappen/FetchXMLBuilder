@@ -3,6 +3,7 @@ using Cinteros.Xrm.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private Dictionary<string, string> collec;
         private Dictionary<string, string> original;
         private string controlsCheckSum = "";
+        
+        static FetchXmlElementControlBase()
+        {
+            // Create the small warning icon to use for user feedback
+            // https://stackoverflow.com/questions/3031124/is-there-a-way-to-get-different-sizes-of-the-windows-system-icons-in-net
+            Size iconSize = SystemInformation.SmallIconSize;
+            Bitmap bitmap = new Bitmap(iconSize.Width, iconSize.Height);
+
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                g.DrawImage(SystemIcons.Warning.ToBitmap(), new Rectangle(Point.Empty, iconSize));
+            }
+
+            WarningIcon = Icon.FromHandle(bitmap.GetHicon());
+        }
+
+        protected static Icon WarningIcon { get; }
 
         public void InitializeFXB(Dictionary<string, string> collection, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree, TreeNode node)
         {
@@ -136,5 +155,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
             return base.ProcessKeyPreview(ref m);
         }
+
+
     }
 }

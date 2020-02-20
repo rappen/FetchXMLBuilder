@@ -40,7 +40,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbValue = new System.Windows.Forms.ComboBox();
             this.lblValueHint = new System.Windows.Forms.Label();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            this.warningProvider = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.warningProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -66,6 +68,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbAttribute.TabIndex = 2;
             this.cmbAttribute.Tag = "attribute|true";
             this.cmbAttribute.SelectedIndexChanged += new System.EventHandler(this.cmbAttribute_SelectedIndexChanged);
+            this.cmbAttribute.Validating += new System.ComponentModel.CancelEventHandler(this.cmbAttribute_Validating);
             // 
             // label4
             // 
@@ -159,6 +162,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbOperator.TabIndex = 3;
             this.cmbOperator.Tag = "operator|true";
             this.cmbOperator.SelectedIndexChanged += new System.EventHandler(this.cmbOperator_SelectedIndexChanged);
+            this.cmbOperator.Validating += new System.ComponentModel.CancelEventHandler(this.cmbOperator_Validating);
             // 
             // label5
             // 
@@ -233,6 +237,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.errorProvider.ContainerControl = this;
             // 
+            // warningProvider
+            // 
+            this.warningProvider.ContainerControl = this;
+            // 
             // conditionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -250,6 +258,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Name = "conditionControl";
             this.Size = new System.Drawing.Size(311, 194);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.warningProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -267,5 +276,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.ComboBox cmbValue;
         private System.Windows.Forms.Label lblValueHint;
         private System.Windows.Forms.ErrorProvider errorProvider;
+        private System.Windows.Forms.ErrorProvider warningProvider;
     }
 }

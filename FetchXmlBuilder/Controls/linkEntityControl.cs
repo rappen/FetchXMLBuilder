@@ -4,6 +4,7 @@ using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
@@ -20,6 +21,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             InitializeComponent();
             InitializeFXB(null, fetchXmlBuilder, tree, node);
+            warningProvider.Icon = WarningIcon;
         }
 
         protected override void PopulateControls()
@@ -245,7 +247,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             var valid = base.ValidateControls(silent);
 
-            if (cmbEntity.SelectedIndex == -1)
+            if (string.IsNullOrWhiteSpace(cmbEntity.Text))
             {
                 if (!silent)
                 {
@@ -256,7 +258,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
 
 
-            if (cmbFrom.SelectedIndex == -1)
+            if (string.IsNullOrWhiteSpace(cmbFrom.Text))
             {
                 if (!silent)
                 {
@@ -266,7 +268,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 valid = false;
             }
 
-            if (cmbTo.SelectedIndex == -1)
+            if (string.IsNullOrWhiteSpace(cmbTo.Text))
             {
                 if (!silent)
                 {
@@ -281,37 +283,46 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void cmbEntity_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (cmbEntity.SelectedIndex == -1)
+            errorProvider.SetError(cmbEntity, null);
+            warningProvider.SetError(cmbEntity, null);
+
+            if (string.IsNullOrWhiteSpace(cmbEntity.Text))
             {
                 errorProvider.SetError(cmbEntity, "Entity is required");
             }
-            else
+            else if (cmbEntity.SelectedIndex == -1)
             {
-                errorProvider.SetError(cmbEntity, null);
+                warningProvider.SetError(cmbEntity, "Entity is not valid");
             }
         }
 
         private void cmbFrom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (cmbFrom.SelectedIndex == -1)
+            errorProvider.SetError(cmbFrom, null);
+            warningProvider.SetError(cmbFrom, null);
+            
+            if (string.IsNullOrWhiteSpace(cmbFrom.Text))
             {
                 errorProvider.SetError(cmbFrom, "From attribute is required");
             }
-            else
+            else if (cmbFrom.SelectedIndex == -1)
             {
-                errorProvider.SetError(cmbFrom, null);
+                warningProvider.SetError(cmbFrom, "From attribute is not valid");
             }
         }
 
         private void cmbTo_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (cmbTo.SelectedIndex == -1)
+            errorProvider.SetError(cmbTo, null);
+            warningProvider.SetError(cmbTo, null);
+
+            if (string.IsNullOrWhiteSpace(cmbTo.Text))
             {
                 errorProvider.SetError(cmbTo, "To attribute is required");
             }
-            else
+            else if (cmbTo.SelectedIndex == -1)
             {
-                errorProvider.SetError(cmbTo, null);
+                warningProvider.SetError(cmbTo, "To attribute is not valid");
             }
         }
     }
