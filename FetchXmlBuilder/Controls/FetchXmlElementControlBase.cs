@@ -13,6 +13,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private Dictionary<string, string> collec;
         private Dictionary<string, string> original;
         private string controlsCheckSum = "";
+        private ErrorProvider errorProvider;
+        private ErrorProvider warningProvider;
         
         static FetchXmlElementControlBase()
         {
@@ -47,10 +49,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
 
             original = new Dictionary<string, string>(collec);
+            errorProvider = new ErrorProvider(this);
+            warningProvider = new ErrorProvider(this);
+            warningProvider.Icon = WarningIcon;
             PopulateControls();
             ControlUtils.FillControls(collec, this.Controls, this);
             controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
             Saved += tree.CtrlSaved;
+            AttachValidatingEvent(this);
         }
 
         protected FetchXmlBuilder fxb { get; set; }
@@ -109,14 +115,50 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             SendSaveMessage(collection);
         }
 
-        protected virtual bool ValidateControl(Control control)
+        protected virtual ControlValidationResult ValidateControl(Control control)
         {
-            return true;
+            return null;
         }
 
         protected virtual bool ValidateControls(bool silent)
         {
-            return true;
+            return ValidateControlRecursive(this);
+        }
+
+        private bool ValidateControlRecursive(Control control)
+        {
+            var result = ValidateControl(control);
+
+            errorProvider.SetError(control, result?.Level == ControlValidationLevel.Error ? result.Message : null);
+            warningProvider.SetError(control, result?.Level == ControlValidationLevel.Warning ? result.Message : null);
+
+            var valid = result == null || result.Level != ControlValidationLevel.Error;
+
+            foreach (Control child in control.Controls)
+                valid &= ValidateControlRecursive(child);
+
+            return valid;
+        }
+
+        private void AttachValidatingEvent(Control control)
+        {
+            foreach (Control child in control.Controls)
+            {
+                child.Validating += Control_Validating;
+
+                AttachValidatingEvent(child);
+            }
+        }
+
+        private void Control_Validating(object sender, CancelEventArgs e)
+        {
+            if (sender is Control ctrl)
+            {
+                var result = ValidateControl(ctrl);
+
+                errorProvider.SetError(ctrl, result?.Level == ControlValidationLevel.Error ? result.Message : null);
+                warningProvider.SetError(ctrl, result?.Level == ControlValidationLevel.Warning ? result.Message : null);
+            }
         }
 
         /// <summary>
@@ -157,7 +199,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
             return base.ProcessKeyPreview(ref m);
         }
+    }
 
+    public enum ControlValidationLevel
+    {
+        Success,
+        Warning,
+        Error
+    }
 
+    public class ControlValidationResult
+    {
+        public ControlValidationResult(ControlValidationLevel level, string message)
+        {
+            Level = level;
+            Message = message;
+        }
+
+        public ControlValidationLevel Level { get; }
+        public string Message { get; }
     }
 }

@@ -28,7 +28,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.label2 = new System.Windows.Forms.Label();
             this.cmbAttribute = new System.Windows.Forms.ComboBox();
             this.txtAlias = new System.Windows.Forms.TextBox();
@@ -40,10 +39,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbDateGrouping = new System.Windows.Forms.ComboBox();
             this.chkUserTZ = new System.Windows.Forms.CheckBox();
             this.chkDistinct = new System.Windows.Forms.CheckBox();
-            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.warningProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.warningProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -193,14 +188,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.chkDistinct.Text = "Distinct";
             this.chkDistinct.UseVisualStyleBackColor = true;
             // 
-            // errorProvider
-            // 
-            this.errorProvider.ContainerControl = this;
-            // 
-            // warningProvider
-            // 
-            this.warningProvider.ContainerControl = this;
-            // 
             // attributeControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -218,8 +205,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Controls.Add(this.label2);
             this.Name = "attributeControl";
             this.Size = new System.Drawing.Size(293, 207);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.warningProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -237,7 +222,5 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.ComboBox cmbDateGrouping;
         private System.Windows.Forms.CheckBox chkUserTZ;
         private System.Windows.Forms.CheckBox chkDistinct;
-        private System.Windows.Forms.ErrorProvider errorProvider;
-        private System.Windows.Forms.ErrorProvider warningProvider;
     }
 }

@@ -28,16 +28,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.label2 = new System.Windows.Forms.Label();
             this.cmbAttribute = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.chkDescending = new System.Windows.Forms.CheckBox();
             this.cmbAlias = new System.Windows.Forms.ComboBox();
-            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.warningProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.warningProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -62,7 +57,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbAttribute.Sorted = true;
             this.cmbAttribute.TabIndex = 1;
             this.cmbAttribute.Tag = "attribute";
-            this.cmbAttribute.Validating += new System.ComponentModel.CancelEventHandler(this.cmbAttribute_Validating);
             // 
             // label4
             // 
@@ -97,15 +91,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbAlias.Sorted = true;
             this.cmbAlias.TabIndex = 2;
             this.cmbAlias.Tag = "alias";
-            this.cmbAlias.Validating += new System.ComponentModel.CancelEventHandler(this.cmbAlias_Validating);
-            // 
-            // errorProvider
-            // 
-            this.errorProvider.ContainerControl = this;
-            // 
-            // warningProvider
-            // 
-            this.warningProvider.ContainerControl = this;
             // 
             // orderControl
             // 
@@ -118,8 +103,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Controls.Add(this.label2);
             this.Name = "orderControl";
             this.Size = new System.Drawing.Size(224, 115);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.warningProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -131,7 +114,5 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox chkDescending;
         private System.Windows.Forms.ComboBox cmbAlias;
-        private System.Windows.Forms.ErrorProvider errorProvider;
-        private System.Windows.Forms.ErrorProvider warningProvider;
     }
 }

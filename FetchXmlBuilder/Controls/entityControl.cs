@@ -1,6 +1,7 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
@@ -14,7 +15,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             InitializeComponent();
             InitializeFXB(collection, fetchXmlBuilder, tree, null);
-            warningProvider.Icon = WarningIcon;
         }
 
         protected override void PopulateControls()
@@ -30,36 +30,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
         }
 
-        protected override bool ValidateControls(bool silent)
+        protected override ControlValidationResult ValidateControl(Control control)
         {
-            var valid = base.ValidateControls(silent);
-
-            if (string.IsNullOrWhiteSpace(cmbEntity.Text))
+            if (control == cmbEntity)
             {
-                valid = false;
-
-                if (!silent)
+                if (string.IsNullOrWhiteSpace(cmbEntity.Text))
                 {
-                    errorProvider.SetError(cmbEntity, "Entity is requried");
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Entity is required");
+                }
+
+                if (cmbEntity.SelectedIndex == -1)
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Entity is not valid");
                 }
             }
 
-            return valid;
-        }
-
-        private void cmbEntity_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            errorProvider.SetError(cmbEntity, null);
-            warningProvider.SetError(cmbEntity, null);
-
-            if (string.IsNullOrWhiteSpace(cmbEntity.Text))
-            {
-                errorProvider.SetError(cmbEntity, "Entity is required");
-            }
-            else if (cmbEntity.SelectedIndex == -1)
-            {
-                warningProvider.SetError(cmbEntity, "Entity is not valid");
-            }
+            return base.ValidateControl(control);
         }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
@@ -20,7 +21,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             InitializeComponent();
             InitializeFXB(null, fetchXmlBuilder, tree, node);
             RefreshAttributes();
-            warningProvider.Icon = WarningIcon;
         }
 
         protected override void PopulateControls()
@@ -87,167 +87,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
                 cmbValue.Text = "";
             }
-        }
-
-        protected override bool ValidateControls(bool silent)
-        {
-            var result = true;
-            Control errorControl = null;
-            var error = "";
-
-            if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
-            {
-                errorControl = cmbAttribute;
-                error = "Attribute is required";
-            }
-            else if (cmbOperator.SelectedItem is null)
-            {
-                errorControl = cmbOperator;
-                error = "Operator is required";
-            }
-            else if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem)
-            {
-                var oper = (OperatorItem)cmbOperator.SelectedItem;
-                if (oper.IsMultipleValuesType && Node.Nodes.Count == 0)
-                {   // Allow entering comma separated values, type checking is not enforced
-                    result = true;
-                }
-                else
-                {
-                    AttributeItem attribute = null;
-                    if (cmbAttribute.SelectedItem != null && cmbAttribute.SelectedItem is AttributeItem)
-                    {   // Get type from condition attribute
-                        attribute = (AttributeItem)cmbAttribute.SelectedItem;
-                    }
-                    var valueType = oper.ValueType;
-                    var attributeType = oper.AttributeType;
-                    var value = ControlUtils.GetValueFromControl(cmbValue).Trim();
-                    if (valueType == AttributeTypeCode.ManagedProperty)
-                    {   // Type not defined by operator
-                        if (attribute != null)
-                        {   // Get type from condition attribute
-                            valueType = attribute.Metadata.AttributeType;
-                        }
-                        else
-                        {   // Default, cannot determine type
-                            valueType = AttributeTypeCode.String;
-                        }
-                    }
-                    if (attributeType != null && attribute != null)
-                    {
-                        if (attributeType != attribute.Metadata.AttributeType)
-                        {
-                            // Some attribute type combinations are ok
-                            if (attributeType == AttributeTypeCode.String && attribute.Metadata.AttributeType == AttributeTypeCode.Memo)
-                            {
-                                // This is ok
-                            }
-                            else if (attributeType == AttributeTypeCode.Lookup && attribute.Metadata.AttributeType == AttributeTypeCode.Owner)
-                            {
-                                // This is ok
-                            }
-                            else if (attributeType == AttributeTypeCode.Lookup && attribute.Metadata.AttributeType == AttributeTypeCode.Customer)
-                            {
-                                // This is ok
-                            }
-                            else if (attributeType == AttributeTypeCode.Lookup && attribute.Metadata.AttributeType == AttributeTypeCode.Uniqueidentifier)
-                            {
-                                // This is also ok
-                            }
-                            else
-                            {
-                                error = "Operator " + oper.ToString() + " is not valid for attribute of type " + attribute.Metadata.AttributeType.ToString();
-                                errorControl = cmbOperator;
-                            }
-                        }
-                    }
-                    switch (valueType)
-                    {
-                        case null:
-                            if (!string.IsNullOrWhiteSpace(value))
-                            {
-                                error = "Operator " + oper.ToString() + " does not allow value";
-                                errorControl = cmbValue;
-                            }
-                            break;
-                        case AttributeTypeCode.Boolean:
-                            if (value != "0" && value != "1")
-                            {
-                                error = "Value must be 0 or 1";
-                                errorControl = cmbValue;
-                            }
-                            break;
-                        case AttributeTypeCode.DateTime:
-                            DateTime date;
-                            if (!DateTime.TryParse(value, out date))
-                            {
-                                error = "Operator " + oper.ToString() + " requires date value";
-                                errorControl = cmbValue;
-                            }
-                            break;
-                        case AttributeTypeCode.Integer:
-                        case AttributeTypeCode.State:
-                        case AttributeTypeCode.Status:
-                        case AttributeTypeCode.Picklist:
-                        case AttributeTypeCode.BigInt:
-                            int intvalue;
-                            if (!int.TryParse(value, out intvalue))
-                            {
-                                error = "Operator " + oper.ToString() + " requires whole number value";
-                                errorControl = cmbValue;
-                            }
-                            break;
-                        case AttributeTypeCode.Decimal:
-                        case AttributeTypeCode.Double:
-                        case AttributeTypeCode.Money:
-                            decimal decvalue;
-                            if (!decimal.TryParse(value, out decvalue))
-                            {
-                                error = "Operator " + oper.ToString() + " requires decimal value";
-                                errorControl = cmbValue;
-                            }
-                            break;
-                        case AttributeTypeCode.Lookup:
-                        case AttributeTypeCode.Customer:
-                        case AttributeTypeCode.Owner:
-                        case AttributeTypeCode.Uniqueidentifier:
-                            Guid guidvalue;
-                            if (!Guid.TryParse(value, out guidvalue))
-                            {
-                                error = "Operator " + oper.ToString() + " requires a proper guid with format: " + Guid.Empty.ToString();
-                                errorControl = cmbValue;
-                            }
-                            break;
-                        case AttributeTypeCode.String:
-                        case AttributeTypeCode.Memo:
-                        case AttributeTypeCode.EntityName:
-                        case AttributeTypeCode.Virtual:
-                            break;
-                        case AttributeTypeCode.PartyList:
-                        case AttributeTypeCode.CalendarRules:
-                            //case AttributeTypeCode.ManagedProperty:   // ManagedProperty is a bit "undefined", so let's accept all values for now... ref issue #67
-                            error = "Unsupported condition attribute type: " + valueType;
-                            errorControl = cmbAttribute;
-                            break;
-                    }
-                }
-            }
-
-            errorProvider.SetError(cmbAttribute, null);
-            errorProvider.SetError(cmbOperator, null);
-            errorProvider.SetError(cmbValue, null);
-
-            if (!string.IsNullOrWhiteSpace(error))
-            {
-                if (!silent)
-                {
-                    errorProvider.SetError(errorControl, error);
-                }
-
-                result = false;
-            }
-
-            return result;
         }
 
         private void cmbEtity_SelectedIndexChanged(object sender, EventArgs e)
@@ -351,6 +190,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 else
                 {
                     cmbValue.Enabled = true;
+
+                    if (cmbValue.Items.Count > 0 && cmbValue.SelectedIndex == -1 && !string.IsNullOrWhiteSpace(cmbValue.Text))
+                    {
+                        var item = cmbValue.Items.OfType<OptionsetItem>().FirstOrDefault(i => i.ToString() == cmbValue.Text);
+                        cmbValue.SelectedItem = item;
+                    }
                 }
                 if (valueType == AttributeTypeCode.Lookup || valueType == AttributeTypeCode.Customer || valueType == AttributeTypeCode.Owner || valueType == AttributeTypeCode.Uniqueidentifier)
                 {
@@ -381,35 +226,150 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             UpdateValueField();
         }
 
-        private void cmbAttribute_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        protected override ControlValidationResult ValidateControl(Control control)
         {
-            errorProvider.SetError(cmbAttribute, null);
-            warningProvider.SetError(cmbAttribute, null);
+            if (control == cmbAttribute)
+            {
+                if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Attribute is required");
+                }
 
-            if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
-            {
-                errorProvider.SetError(cmbAttribute, "Attribute is required");
+                if (cmbAttribute.SelectedIndex == -1)
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute is not valid");
+                }
             }
-            else if (cmbAttribute.SelectedIndex == -1)
+            else if (control == cmbOperator || control == cmbValue)
             {
-                warningProvider.SetError(cmbAttribute, "Attribute is not valid");
-            }
-        }
+                if (control == cmbOperator && string.IsNullOrWhiteSpace(cmbOperator.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Operator is required");
+                }
 
-        private void cmbOperator_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (string.IsNullOrEmpty(cmbOperator.Text))
-            {
-                errorProvider.SetError(cmbOperator, "Operator is required");
+                if (control == cmbOperator && cmbOperator.SelectedIndex == -1)
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Operator is not valid");
+                }
+
+                if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem oper && (!oper.IsMultipleValuesType || Node.Nodes.Count > 0))
+                {
+                    AttributeItem attribute = null;
+                    if (cmbAttribute.SelectedItem != null && cmbAttribute.SelectedItem is AttributeItem)
+                    {   // Get type from condition attribute
+                        attribute = (AttributeItem)cmbAttribute.SelectedItem;
+                    }
+                    var valueType = oper.ValueType;
+                    var attributeType = oper.AttributeType;
+                    var value = ControlUtils.GetValueFromControl(cmbValue).Trim();
+                    if (valueType == AttributeTypeCode.ManagedProperty)
+                    {   // Type not defined by operator
+                        if (attribute != null)
+                        {   // Get type from condition attribute
+                            valueType = attribute.Metadata.AttributeType;
+                        }
+                        else
+                        {   // Default, cannot determine type
+                            valueType = AttributeTypeCode.String;
+                        }
+                    }
+
+                    if (attributeType != null && attribute != null && control == cmbOperator)
+                    {
+                        if (attributeType != attribute.Metadata.AttributeType)
+                        {
+                            // Some attribute type combinations are ok
+                            if (attributeType == AttributeTypeCode.String && attribute.Metadata.AttributeType == AttributeTypeCode.Memo)
+                            {
+                                // This is ok
+                            }
+                            else if (attributeType == AttributeTypeCode.Lookup && attribute.Metadata.AttributeType == AttributeTypeCode.Owner)
+                            {
+                                // This is ok
+                            }
+                            else if (attributeType == AttributeTypeCode.Lookup && attribute.Metadata.AttributeType == AttributeTypeCode.Customer)
+                            {
+                                // This is ok
+                            }
+                            else if (attributeType == AttributeTypeCode.Lookup && attribute.Metadata.AttributeType == AttributeTypeCode.Uniqueidentifier)
+                            {
+                                // This is also ok
+                            }
+                            else
+                            {
+                                return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " is not valid for attribute of type " + attribute.Metadata.AttributeType.ToString());
+                            }
+                        }
+                    }
+
+                    if (control == cmbValue)
+                    {
+                        switch (valueType)
+                        {
+                            case null:
+                                if (!string.IsNullOrWhiteSpace(value))
+                                {
+                                    return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " does not allow value");
+                                }
+                                break;
+                            case AttributeTypeCode.Boolean:
+                                if (value != "0" && value != "1")
+                                {
+                                    return new ControlValidationResult(ControlValidationLevel.Error, "Value must be 0 or 1");
+                                }
+                                break;
+                            case AttributeTypeCode.DateTime:
+                                DateTime date;
+                                if (!DateTime.TryParse(value, out date))
+                                {
+                                    return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires date value");
+                                }
+                                break;
+                            case AttributeTypeCode.Integer:
+                            case AttributeTypeCode.State:
+                            case AttributeTypeCode.Status:
+                            case AttributeTypeCode.Picklist:
+                            case AttributeTypeCode.BigInt:
+                                int intvalue;
+                                if (!int.TryParse(value, out intvalue))
+                                {
+                                    return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires whole number value");
+                                }
+                                break;
+                            case AttributeTypeCode.Decimal:
+                            case AttributeTypeCode.Double:
+                            case AttributeTypeCode.Money:
+                                decimal decvalue;
+                                if (!decimal.TryParse(value, out decvalue))
+                                {
+                                    return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires decimal value");
+                                }
+                                break;
+                            case AttributeTypeCode.Lookup:
+                            case AttributeTypeCode.Customer:
+                            case AttributeTypeCode.Owner:
+                            case AttributeTypeCode.Uniqueidentifier:
+                                Guid guidvalue;
+                                if (!Guid.TryParse(value, out guidvalue))
+                                {
+                                    return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires a proper guid with format: " + Guid.Empty.ToString());
+                                }
+                                break;
+                            case AttributeTypeCode.String:
+                            case AttributeTypeCode.Memo:
+                            case AttributeTypeCode.EntityName:
+                            case AttributeTypeCode.Virtual:
+                                break;
+                            case AttributeTypeCode.PartyList:
+                            case AttributeTypeCode.CalendarRules:
+                                //case AttributeTypeCode.ManagedProperty:   // ManagedProperty is a bit "undefined", so let's accept all values for now... ref issue #67
+                                return new ControlValidationResult(ControlValidationLevel.Error, "Unsupported condition attribute type: " + valueType);
+                        }
+                    }
+                }
             }
-            else if (cmbOperator.SelectedIndex == -1)
-            {
-                errorProvider.SetError(cmbOperator, "Operator is not valid");
-            }
-            else
-            {
-                errorProvider.SetError(cmbOperator, null);
-            }
+
+            return base.ValidateControl(control);
         }
     }
 

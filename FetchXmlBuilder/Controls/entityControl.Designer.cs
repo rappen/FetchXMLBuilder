@@ -28,13 +28,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.label2 = new System.Windows.Forms.Label();
             this.cmbEntity = new System.Windows.Forms.ComboBox();
-            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.warningProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.warningProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -59,15 +54,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbEntity.Sorted = true;
             this.cmbEntity.TabIndex = 27;
             this.cmbEntity.Tag = "name|true";
-            this.cmbEntity.Validating += new System.ComponentModel.CancelEventHandler(this.cmbEntity_Validating);
-            // 
-            // errorProvider
-            // 
-            this.errorProvider.ContainerControl = this;
-            // 
-            // warningProvider
-            // 
-            this.warningProvider.ContainerControl = this;
             // 
             // entityControl
             // 
@@ -77,8 +63,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Controls.Add(this.label2);
             this.Name = "entityControl";
             this.Size = new System.Drawing.Size(214, 50);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.warningProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -87,7 +71,5 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         #endregion
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cmbEntity;
-        private System.Windows.Forms.ErrorProvider errorProvider;
-        private System.Windows.Forms.ErrorProvider warningProvider;
     }
 }

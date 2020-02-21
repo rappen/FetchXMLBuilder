@@ -21,7 +21,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             InitializeComponent();
             this.attributes = attributes;
             InitializeFXB(null, null, tree, node);
-            warningProvider.Icon = WarningIcon;
         }
 
         protected override void PopulateControls()
@@ -45,32 +44,28 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
         }
 
-        protected override bool ValidateControls(bool silent)
-        {
-            return base.ValidateControls(silent) &&
-                ValidateControl(cmbAttribute) &&
-                ValidateControl(txtAlias);
-        }
-
-        protected override bool ValidateControl(Control control)
+        protected override ControlValidationResult ValidateControl(Control control)
         {
             if (control == cmbAttribute)
             {
-                var valid = !string.IsNullOrWhiteSpace(cmbAttribute.Text);
-                errorProvider.SetError(cmbAttribute, valid ? null : "Attribute is required");
-                if (valid)
+                if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
                 {
-                    var warning = cmbAttribute.Items.Count > 0 && !cmbAttribute.Items.Cast<AttributeItem>().Any(a => a.ToString() == cmbAttribute.Text);
-                    warningProvider.SetError(cmbAttribute, warning ? "Attribute is not valid" : null);
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Attribute is required");
                 }
-                return valid;
+
+                if (cmbAttribute.Items.Count > 0 && !cmbAttribute.Items.Cast<AttributeItem>().Any(a => a.ToString() == cmbAttribute.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute is not valid");
+                }
             }
             else if (control == txtAlias)
             {
-                var valid = !(TreeBuilderControl.IsFetchAggregate(Node) && string.IsNullOrWhiteSpace(txtAlias.Text));
-                errorProvider.SetError(txtAlias, valid ? null : "Alias must be specified in aggregate queries");
-                return valid;
+                if (TreeBuilderControl.IsFetchAggregate(Node) && string.IsNullOrWhiteSpace(txtAlias.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Alias must be specified in aggregate queries");
+                }
             }
+
             return base.ValidateControl(control);
         }
 

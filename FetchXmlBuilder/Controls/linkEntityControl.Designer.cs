@@ -28,7 +28,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.label2 = new System.Windows.Forms.Label();
             this.cmbEntity = new System.Windows.Forms.ComboBox();
             this.cmbFrom = new System.Windows.Forms.ComboBox();
@@ -43,10 +42,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.cmbRelationship = new System.Windows.Forms.ComboBox();
-            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.warningProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.warningProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -72,7 +67,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbEntity.TabIndex = 2;
             this.cmbEntity.Tag = "name|true";
             this.cmbEntity.SelectedIndexChanged += new System.EventHandler(this.cmbEntity_SelectedIndexChanged);
-            this.cmbEntity.Validating += new System.ComponentModel.CancelEventHandler(this.cmbEntity_Validating);
             // 
             // cmbFrom
             // 
@@ -87,7 +81,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbFrom.Sorted = true;
             this.cmbFrom.TabIndex = 3;
             this.cmbFrom.Tag = "from|true";
-            this.cmbFrom.Validating += new System.ComponentModel.CancelEventHandler(this.cmbFrom_Validating);
             // 
             // label4
             // 
@@ -120,7 +113,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbTo.Sorted = true;
             this.cmbTo.TabIndex = 4;
             this.cmbTo.Tag = "to|true";
-            this.cmbTo.Validating += new System.ComponentModel.CancelEventHandler(this.cmbTo_Validating);
             // 
             // comboBox2
             // 
@@ -215,14 +207,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbRelationship.SelectedIndexChanged += new System.EventHandler(this.cmbRelationship_SelectedIndexChanged);
             this.cmbRelationship.DropDownClosed += new System.EventHandler(this.cmbRelationship_DropDownClosed);
             // 
-            // errorProvider
-            // 
-            this.errorProvider.ContainerControl = this;
-            // 
-            // warningProvider
-            // 
-            this.warningProvider.ContainerControl = this;
-            // 
             // linkEntityControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -243,8 +227,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Controls.Add(this.label2);
             this.Name = "linkEntityControl";
             this.Size = new System.Drawing.Size(247, 274);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.warningProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -265,7 +247,5 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ComboBox cmbRelationship;
-        private System.Windows.Forms.ErrorProvider errorProvider;
-        private System.Windows.Forms.ErrorProvider warningProvider;
     }
 }

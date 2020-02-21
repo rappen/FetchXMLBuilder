@@ -19,7 +19,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             InitializeComponent();
             InitializeFXB(null, fetchXmlBuilder, tree, node);
-            warningProvider.Icon = WarningIcon;
         }
 
         protected override void PopulateControls()
@@ -241,87 +240,48 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
         }
 
-        protected override bool ValidateControls(bool silent)
+        protected override ControlValidationResult ValidateControl(Control control)
         {
-            var valid = base.ValidateControls(silent);
-
-            if (string.IsNullOrWhiteSpace(cmbEntity.Text))
+            if (control == cmbEntity)
             {
-                if (!silent)
+                if (string.IsNullOrWhiteSpace(cmbEntity.Text))
                 {
-                    errorProvider.SetError(cmbEntity, "Entity is required");
-                }
-                
-                valid = false;
-            }
-
-
-            if (string.IsNullOrWhiteSpace(cmbFrom.Text))
-            {
-                if (!silent)
-                {
-                    errorProvider.SetError(cmbFrom, "From attribute is required");
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Entity is required");
                 }
 
-                valid = false;
+                if (cmbEntity.SelectedIndex == -1)
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Entity is not valid");
+                }
             }
 
-            if (string.IsNullOrWhiteSpace(cmbTo.Text))
+            if (control == cmbFrom)
             {
-                if (!silent)
+                if (string.IsNullOrWhiteSpace(cmbFrom.Text))
                 {
-                    errorProvider.SetError(cmbTo, "To attribute is required");
+                    return new ControlValidationResult(ControlValidationLevel.Error, "From attribute is required");
                 }
 
-                valid = false;
+                if (cmbFrom.SelectedIndex == -1)
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "From attribute is not valid");
+                }
             }
 
-            return valid;
-        }
+            if (control == cmbTo)
+            {
+                if (string.IsNullOrWhiteSpace(cmbTo.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Error, "To attribute is required");
+                }
 
-        private void cmbEntity_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            errorProvider.SetError(cmbEntity, null);
-            warningProvider.SetError(cmbEntity, null);
+                if (cmbTo.SelectedIndex == -1)
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "To attribute is not valid");
+                }
+            }
 
-            if (string.IsNullOrWhiteSpace(cmbEntity.Text))
-            {
-                errorProvider.SetError(cmbEntity, "Entity is required");
-            }
-            else if (cmbEntity.SelectedIndex == -1)
-            {
-                warningProvider.SetError(cmbEntity, "Entity is not valid");
-            }
-        }
-
-        private void cmbFrom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            errorProvider.SetError(cmbFrom, null);
-            warningProvider.SetError(cmbFrom, null);
-            
-            if (string.IsNullOrWhiteSpace(cmbFrom.Text))
-            {
-                errorProvider.SetError(cmbFrom, "From attribute is required");
-            }
-            else if (cmbFrom.SelectedIndex == -1)
-            {
-                warningProvider.SetError(cmbFrom, "From attribute is not valid");
-            }
-        }
-
-        private void cmbTo_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            errorProvider.SetError(cmbTo, null);
-            warningProvider.SetError(cmbTo, null);
-
-            if (string.IsNullOrWhiteSpace(cmbTo.Text))
-            {
-                errorProvider.SetError(cmbTo, "To attribute is required");
-            }
-            else if (cmbTo.SelectedIndex == -1)
-            {
-                warningProvider.SetError(cmbTo, "To attribute is not valid");
-            }
+            return base.ValidateControl(control);
         }
     }
 }

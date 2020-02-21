@@ -22,7 +22,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
             InitializeComponent();
             InitializeFXB(null, null, tree, node);
-            warningProvider.Icon = WarningIcon;
         }
 
         protected override void PopulateControls()
@@ -73,67 +72,35 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             return result;
         }
 
-        protected override bool ValidateControls(bool silent)
+        protected override ControlValidationResult ValidateControl(Control control)
         {
-            var valid = base.ValidateControls(silent);
-
-            if (cmbAttribute.Enabled && string.IsNullOrWhiteSpace(cmbAttribute.Text))
-            {
-                if (!silent)
-                {
-                    errorProvider.SetError(cmbAttribute, "Attribute is required");
-                }
-
-                valid = false;
-            }
-
-            if (cmbAlias.Enabled && string.IsNullOrWhiteSpace(cmbAlias.Text))
-            {
-                if (!silent)
-                {
-                    errorProvider.SetError(cmbAlias, "Alias is required");
-                }
-
-                valid = false;
-            }
-
-            return valid;
-        }
-
-        private void cmbAttribute_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            errorProvider.SetError(cmbAttribute, null);
-            warningProvider.SetError(cmbAttribute, null);
-
-            if (cmbAttribute.Enabled)
+            if (control == cmbAttribute)
             {
                 if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
                 {
-                    errorProvider.SetError(cmbAttribute, "Attribute is required");
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Attribute is required");
                 }
-                else if (cmbAttribute.SelectedIndex == -1)
+
+                if (cmbAttribute.SelectedIndex == -1)
                 {
-                    warningProvider.SetError(cmbAttribute, "Attribute is not valid");
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute is not valid");
                 }
             }
-        }
 
-        private void cmbAlias_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            errorProvider.SetError(cmbAlias, null);
-            warningProvider.SetError(cmbAlias, null);
-
-            if (cmbAlias.Enabled)
+            if (control == cmbAlias && cmbAlias.Enabled)
             {
                 if (string.IsNullOrWhiteSpace(cmbAlias.Text))
                 {
-                    errorProvider.SetError(cmbAlias, "Alias is required");
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Alias is required");
                 }
-                else if (cmbAlias.SelectedIndex == -1)
+                    
+                if (cmbAlias.SelectedIndex == -1)
                 {
-                    warningProvider.SetError(cmbAlias, "Alias is not valid");
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Alias is not valid");
                 }
             }
+
+            return base.ValidateControl(control);
         }
     }
 }
