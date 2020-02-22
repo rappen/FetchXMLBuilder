@@ -180,7 +180,6 @@
   <ItemGroup>
     <Compile Include="AppCode\ConnectionExtensions.cs" />
     <Compile Include="AppCode\ServiceExtensions.cs" />
-    <Compile Include="AppCode\XTBAppInsights.cs" />
     <Compile Include="AppCode\AttributeItem.cs" />
     <Compile Include="AppCode\CodeGeneratorBase.cs" />
     <Compile Include="AppCode\GroupBoxExpanderExtensions.cs" />
