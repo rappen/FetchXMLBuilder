@@ -58,7 +58,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbAttribute.FormattingEnabled = true;
             this.cmbAttribute.Location = new System.Drawing.Point(7, 56);
             this.cmbAttribute.Name = "cmbAttribute";
-            this.cmbAttribute.Size = new System.Drawing.Size(301, 21);
+            this.cmbAttribute.Size = new System.Drawing.Size(279, 21);
             this.cmbAttribute.Sorted = true;
             this.cmbAttribute.TabIndex = 2;
             this.cmbAttribute.Tag = "attribute|true";
@@ -152,7 +152,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             "yesterday"});
             this.cmbOperator.Location = new System.Drawing.Point(7, 96);
             this.cmbOperator.Name = "cmbOperator";
-            this.cmbOperator.Size = new System.Drawing.Size(301, 21);
+            this.cmbOperator.Size = new System.Drawing.Size(279, 21);
             this.cmbOperator.TabIndex = 3;
             this.cmbOperator.Tag = "operator|true";
             this.cmbOperator.SelectedIndexChanged += new System.EventHandler(this.cmbOperator_SelectedIndexChanged);
@@ -185,7 +185,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbEntity.FormattingEnabled = true;
             this.cmbEntity.Location = new System.Drawing.Point(7, 16);
             this.cmbEntity.Name = "cmbEntity";
-            this.cmbEntity.Size = new System.Drawing.Size(301, 21);
+            this.cmbEntity.Size = new System.Drawing.Size(279, 21);
             this.cmbEntity.TabIndex = 1;
             this.cmbEntity.Tag = "entityname";
             this.cmbEntity.SelectedIndexChanged += new System.EventHandler(this.cmbEtity_SelectedIndexChanged);
@@ -210,7 +210,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbValue.FormattingEnabled = true;
             this.cmbValue.Location = new System.Drawing.Point(7, 136);
             this.cmbValue.Name = "cmbValue";
-            this.cmbValue.Size = new System.Drawing.Size(301, 21);
+            this.cmbValue.Size = new System.Drawing.Size(279, 21);
             this.cmbValue.Sorted = true;
             this.cmbValue.TabIndex = 4;
             this.cmbValue.Tag = "value";
@@ -242,7 +242,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Controls.Add(this.label2);
             this.Name = "conditionControl";
             this.Size = new System.Drawing.Size(311, 194);
-            this.Leave += new System.EventHandler(this.Control_Leave);
             this.ResumeLayout(false);
             this.PerformLayout();
 

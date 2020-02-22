@@ -62,7 +62,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbEntity.FormattingEnabled = true;
             this.cmbEntity.Location = new System.Drawing.Point(7, 56);
             this.cmbEntity.Name = "cmbEntity";
-            this.cmbEntity.Size = new System.Drawing.Size(237, 21);
+            this.cmbEntity.Size = new System.Drawing.Size(214, 21);
             this.cmbEntity.Sorted = true;
             this.cmbEntity.TabIndex = 2;
             this.cmbEntity.Tag = "name|true";
@@ -77,7 +77,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbFrom.FormattingEnabled = true;
             this.cmbFrom.Location = new System.Drawing.Point(7, 96);
             this.cmbFrom.Name = "cmbFrom";
-            this.cmbFrom.Size = new System.Drawing.Size(237, 21);
+            this.cmbFrom.Size = new System.Drawing.Size(214, 21);
             this.cmbFrom.Sorted = true;
             this.cmbFrom.TabIndex = 3;
             this.cmbFrom.Tag = "from|true";
@@ -109,7 +109,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbTo.FormattingEnabled = true;
             this.cmbTo.Location = new System.Drawing.Point(7, 136);
             this.cmbTo.Name = "cmbTo";
-            this.cmbTo.Size = new System.Drawing.Size(237, 21);
+            this.cmbTo.Size = new System.Drawing.Size(214, 21);
             this.cmbTo.Sorted = true;
             this.cmbTo.TabIndex = 4;
             this.cmbTo.Tag = "to|true";
@@ -128,7 +128,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             "outer"});
             this.comboBox2.Location = new System.Drawing.Point(7, 176);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(237, 21);
+            this.comboBox2.Size = new System.Drawing.Size(214, 21);
             this.comboBox2.Sorted = true;
             this.comboBox2.TabIndex = 5;
             this.comboBox2.Tag = "link-type";
@@ -158,7 +158,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Location = new System.Drawing.Point(7, 216);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(237, 20);
+            this.textBox1.Size = new System.Drawing.Size(214, 20);
             this.textBox1.TabIndex = 6;
             this.textBox1.Tag = "alias";
             // 
@@ -201,7 +201,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbRelationship.FormattingEnabled = true;
             this.cmbRelationship.Location = new System.Drawing.Point(7, 16);
             this.cmbRelationship.Name = "cmbRelationship";
-            this.cmbRelationship.Size = new System.Drawing.Size(237, 21);
+            this.cmbRelationship.Size = new System.Drawing.Size(214, 21);
             this.cmbRelationship.TabIndex = 1;
             this.cmbRelationship.DropDown += new System.EventHandler(this.cmbRelationship_DropDown);
             this.cmbRelationship.SelectedIndexChanged += new System.EventHandler(this.cmbRelationship_SelectedIndexChanged);
@@ -227,7 +227,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Controls.Add(this.label2);
             this.Name = "linkEntityControl";
             this.Size = new System.Drawing.Size(247, 274);
-            this.Leave += new System.EventHandler(this.Control_Leave);
             this.ResumeLayout(false);
             this.PerformLayout();
 

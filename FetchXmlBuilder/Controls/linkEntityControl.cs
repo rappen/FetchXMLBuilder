@@ -1,59 +1,31 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
-using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
-    public partial class linkEntityControl : UserControl, IDefinitionSavable
+    public partial class linkEntityControl : FetchXmlElementControlBase
     {
-        private readonly Dictionary<string, string> collec;
-        private string controlsCheckSum = "";
-        private TreeNode node;
-        private FetchXmlBuilder form;
-        private int relatioshipWidth;
+        private int relationshipWidth;
 
-        #region Delegates
+        public linkEntityControl() : this(null, null, null)
+        {
+        }
 
-        public delegate void SaveEventHandler(object sender, SaveEventArgs e);
-
-        #endregion Delegates
-
-        #region Event Handlers
-
-        public event SaveEventHandler Saved;
-
-        #endregion Event Handlers
-
-        public linkEntityControl()
+        public linkEntityControl(TreeNode node, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree)
         {
             InitializeComponent();
-            collec = new Dictionary<string, string>();
+            InitializeFXB(null, fetchXmlBuilder, tree, node);
         }
 
-        public linkEntityControl(TreeNode Node, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree)
-            : this()
-        {
-            form = fetchXmlBuilder;
-            node = Node;
-            collec = (Dictionary<string, string>)node.Tag;
-            if (collec == null)
-            {
-                collec = new Dictionary<string, string>();
-            }
-            PopulateControls();
-            ControlUtils.FillControls(collec, this.Controls, this);
-            controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
-            Saved += tree.CtrlSaved;
-        }
-
-        private void PopulateControls()
+        protected override void PopulateControls()
         {
             cmbEntity.Items.Clear();
-            var entities = form.GetDisplayEntities();
+            var entities = fxb.GetDisplayEntities();
             if (entities != null)
             {
                 foreach (var entity in entities)
@@ -62,12 +34,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
             }
 
-            var parententityname = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
-            if (form.NeedToLoadEntity(parententityname))
+            var parententityname = TreeNodeHelper.GetAttributeFromNode(Node.Parent, "name");
+            if (fxb.NeedToLoadEntity(parententityname))
             {
-                if (!form.working)
+                if (!fxb.working)
                 {
-                    form.LoadEntityDetails(parententityname, RefreshRelationships);
+                    fxb.LoadEntityDetails(parententityname, RefreshRelationships);
                 }
             }
             else
@@ -77,41 +49,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             RefreshAttributes();
         }
 
-        public void Save(bool silent)
-        {
-            try
-            {
-                Dictionary<string, string> collection = ControlUtils.GetAttributesCollection(this.Controls, true);
-                SendSaveMessage(collection);
-            }
-            catch (ArgumentNullException ex)
-            {
-                if (!silent)
-                    MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-            }
-            controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
-        }
-
-        /// <summary></summary>
-        /// <param name="collection"></param>
-        private void SendSaveMessage(Dictionary<string, string> collection)
-        {
-            SaveEventArgs sea = new SaveEventArgs { AttributeCollection = collection };
-
-            if (Saved != null)
-            {
-                Saved(this, sea);
-            }
-        }
-
-        private void Control_Leave(object sender, EventArgs e)
-        {
-            if (controlsCheckSum != ControlUtils.ControlsChecksum(this.Controls))
-            {
-                Save(false);
-            }
-        }
-
         private void cmbEntity_SelectedIndexChanged(object sender, EventArgs e)
         {
             var entity = cmbEntity.SelectedItem.ToString();
@@ -119,11 +56,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 return;
             }
-            if (form.NeedToLoadEntity(entity))
+            if (fxb.NeedToLoadEntity(entity))
             {
-                if (!form.working)
+                if (!fxb.working)
                 {
-                    form.LoadEntityDetails(entity, RefreshAttributes);
+                    fxb.LoadEntityDetails(entity, RefreshAttributes);
                 }
             }
             else
@@ -135,8 +72,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void RefreshRelationships()
         {
             cmbRelationship.Items.Clear();
-            var parententityname = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
-            var entities = form.GetDisplayEntities();
+            var parententityname = TreeNodeHelper.GetAttributeFromNode(Node.Parent, "name");
+            var entities = fxb.GetDisplayEntities();
             if (entities != null && entities.ContainsKey(parententityname))
             {
                 var parententity = entities[parententityname];
@@ -150,7 +87,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     list.Clear();
                     foreach (var rel in mo)
                     {
-                        list.Add(new EntityRelationship(rel, parententityname, form));
+                        list.Add(new EntityRelationship(rel, parententityname, fxb));
                     }
                     list.Sort();
                     cmbRelationship.Items.AddRange(list.ToArray());
@@ -161,19 +98,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     list.Clear();
                     foreach (var rel in om)
                     {
-                        list.Add(new EntityRelationship(rel, parententityname, form));
+                        list.Add(new EntityRelationship(rel, parententityname, fxb));
                     }
                     list.Sort();
                     cmbRelationship.Items.AddRange(list.ToArray());
                 }
                 if (mm.Length > 0)
                 {
-                    var greatparententityname = node.Parent.Parent != null ? TreeNodeHelper.GetAttributeFromNode(node.Parent.Parent, "name") : "";
+                    var greatparententityname = Node.Parent.Parent != null ? TreeNodeHelper.GetAttributeFromNode(Node.Parent.Parent, "name") : "";
                     cmbRelationship.Items.Add("- M:M -");
                     list.Clear();
                     foreach (var rel in mm)
                     {
-                        list.Add(new EntityRelationship(rel, parententityname, form, greatparententityname));
+                        list.Add(new EntityRelationship(rel, parententityname, fxb, greatparententityname));
                     }
                     list.Sort();
                     cmbRelationship.Items.AddRange(list.ToArray());
@@ -188,7 +125,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (cmbEntity.SelectedItem != null)
             {
                 var linkentity = cmbEntity.SelectedItem.ToString();
-                var linkAttributes = form.GetDisplayAttributes(linkentity);
+                var linkAttributes = fxb.GetDisplayAttributes(linkentity);
                 foreach (var attribute in linkAttributes)
                 {
                     if (attribute.IsPrimaryId == true ||
@@ -200,8 +137,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     }
                 }
             }
-            var parententity = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
-            var parentAttributes = form.GetDisplayAttributes(parententity);
+            var parententity = TreeNodeHelper.GetAttributeFromNode(Node.Parent, "name");
+            var parentAttributes = fxb.GetDisplayAttributes(parententity);
             foreach (var attribute in parentAttributes)
             {
                 if (attribute.IsPrimaryId == true ||
@@ -219,7 +156,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (cmbRelationship.SelectedItem != null && cmbRelationship.SelectedItem is EntityRelationship)
             {
                 var rel = (EntityRelationship)cmbRelationship.SelectedItem;
-                var parent = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
+                var parent = TreeNodeHelper.GetAttributeFromNode(Node.Parent, "name");
                 if (rel.Relationship is OneToManyRelationshipMetadata)
                 {
                     var om = (OneToManyRelationshipMetadata)rel.Relationship;
@@ -246,7 +183,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     var mm = (ManyToManyRelationshipMetadata)rel.Relationship;
                     if (parent == mm.IntersectEntityName)
                     {
-                        var greatparent = TreeNodeHelper.GetAttributeFromNode(node.Parent.Parent, "name");
+                        var greatparent = TreeNodeHelper.GetAttributeFromNode(Node.Parent.Parent, "name");
                         if (greatparent == mm.Entity1LogicalName)
                         {
                             cmbEntity.Text = mm.Entity2LogicalName;
@@ -289,7 +226,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void cmbRelationship_DropDown(object sender, EventArgs e)
         {
-            relatioshipWidth = cmbRelationship.Width;
+            relationshipWidth = cmbRelationship.Width;
             if (cmbRelationship.Width < 300)
             {
                 cmbRelationship.Width = 350;
@@ -298,10 +235,54 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void cmbRelationship_DropDownClosed(object sender, EventArgs e)
         {
-            if (relatioshipWidth < 300)
+            if (relationshipWidth < 300)
             {
-                cmbRelationship.Width = relatioshipWidth;
+                cmbRelationship.Width = relationshipWidth;
             }
+        }
+
+        protected override ControlValidationResult ValidateControl(Control control)
+        {
+            if (control == cmbEntity)
+            {
+                if (string.IsNullOrWhiteSpace(cmbEntity.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Entity is required");
+                }
+
+                if (fxb.Service != null && !cmbEntity.Items.OfType<string>().Any(i => i == cmbEntity.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Entity is not valid");
+                }
+            }
+
+            if (control == cmbFrom)
+            {
+                if (string.IsNullOrWhiteSpace(cmbFrom.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Error, "From attribute is required");
+                }
+
+                if (fxb.Service != null && !cmbFrom.Items.OfType<string>().Any(i => i == cmbFrom.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "From attribute is not valid");
+                }
+            }
+
+            if (control == cmbTo)
+            {
+                if (string.IsNullOrWhiteSpace(cmbTo.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Error, "To attribute is required");
+                }
+
+                if (fxb.Service != null && !cmbTo.Items.OfType<string>().Any(i => i == cmbTo.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "To attribute is not valid");
+                }
+            }
+
+            return base.ValidateControl(control);
         }
     }
 }

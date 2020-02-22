@@ -59,7 +59,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbAttribute.FormattingEnabled = true;
             this.cmbAttribute.Location = new System.Drawing.Point(7, 16);
             this.cmbAttribute.Name = "cmbAttribute";
-            this.cmbAttribute.Size = new System.Drawing.Size(283, 21);
+            this.cmbAttribute.Size = new System.Drawing.Size(263, 21);
             this.cmbAttribute.Sorted = true;
             this.cmbAttribute.TabIndex = 27;
             this.cmbAttribute.Tag = "name|true";
@@ -70,7 +70,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtAlias.Location = new System.Drawing.Point(7, 56);
             this.txtAlias.Name = "txtAlias";
-            this.txtAlias.Size = new System.Drawing.Size(283, 20);
+            this.txtAlias.Size = new System.Drawing.Size(263, 20);
             this.txtAlias.TabIndex = 28;
             this.txtAlias.Tag = "alias";
             // 
@@ -101,7 +101,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             "sum"});
             this.cmbAggregate.Location = new System.Drawing.Point(7, 96);
             this.cmbAggregate.Name = "cmbAggregate";
-            this.cmbAggregate.Size = new System.Drawing.Size(283, 21);
+            this.cmbAggregate.Size = new System.Drawing.Size(263, 21);
             this.cmbAggregate.Sorted = true;
             this.cmbAggregate.TabIndex = 30;
             this.cmbAggregate.Tag = "aggregate";
@@ -157,7 +157,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             "year"});
             this.cmbDateGrouping.Location = new System.Drawing.Point(7, 160);
             this.cmbDateGrouping.Name = "cmbDateGrouping";
-            this.cmbDateGrouping.Size = new System.Drawing.Size(283, 21);
+            this.cmbDateGrouping.Size = new System.Drawing.Size(263, 21);
             this.cmbDateGrouping.Sorted = true;
             this.cmbDateGrouping.TabIndex = 40;
             this.cmbDateGrouping.Tag = "dategrouping";
@@ -203,7 +203,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Controls.Add(this.label2);
             this.Name = "attributeControl";
             this.Size = new System.Drawing.Size(293, 207);
-            this.Leave += new System.EventHandler(this.Control_Leave);
             this.ResumeLayout(false);
             this.PerformLayout();
 

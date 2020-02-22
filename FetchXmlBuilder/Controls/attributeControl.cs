@@ -1,64 +1,32 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
-using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
-    public partial class attributeControl : UserControl, IDefinitionSavable
+    public partial class attributeControl : FetchXmlElementControlBase
     {
-        private readonly Dictionary<string, string> collec;
-        private string controlsCheckSum = "";
-        private TreeNode node;
+        private readonly AttributeMetadata[] attributes;
         private bool aggregate;
 
-        #region Delegates
+        public attributeControl() : this(null, null, null)
+        {
+        }
 
-        public delegate void SaveEventHandler(object sender, SaveEventArgs e);
-
-        #endregion Delegates
-
-        #region Event Handlers
-
-        public event SaveEventHandler Saved;
-
-        #endregion Event Handlers
-
-        public attributeControl()
+        public attributeControl(TreeNode node, AttributeMetadata[] attributes, TreeBuilderControl tree)
         {
             InitializeComponent();
-            collec = new Dictionary<string, string>();
+            this.attributes = attributes;
+            InitializeFXB(null, null, tree, node);
         }
 
-        public attributeControl(TreeNode Node, AttributeMetadata[] attributes, TreeBuilderControl tree)
-            : this()
-        {
-            collec = (Dictionary<string, string>)Node.Tag;
-            if (collec == null)
-            {
-                collec = new Dictionary<string, string>();
-            }
-            node = Node;
-            PopulateControls(Node, attributes);
-            ControlUtils.FillControls(collec, this.Controls, this);
-            controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
-            Saved += tree.CtrlSaved;
-        }
-
-        private void PopulateControls(TreeNode node, AttributeMetadata[] attributes)
+        protected override void PopulateControls()
         {
             cmbAttribute.Items.Clear();
-            if (attributes != null)
-            {
-                foreach (var attribute in attributes)
-                {
-                    AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, false, FetchXmlBuilder.friendlyNames);
-                }
-            }
-            aggregate = TreeBuilderControl.IsFetchAggregate(node);
+            aggregate = TreeBuilderControl.IsFetchAggregate(Node);
             cmbAggregate.Enabled = aggregate;
             chkGroupBy.Enabled = aggregate;
             if (!aggregate)
@@ -66,65 +34,38 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 cmbAggregate.SelectedIndex = -1;
                 chkGroupBy.Checked = false;
             }
-        }
 
-        public void Save(bool silent)
-        {
-            try
+            if (attributes != null)
             {
-                if (ValidateForm(silent))
+                foreach (var attribute in attributes)
                 {
-                    Dictionary<string, string> collection = ControlUtils.GetAttributesCollection(this.Controls, true);
-                    SendSaveMessage(collection);
-                    controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
-                }
-            }
-            catch (ArgumentNullException ex)
-            {
-                if (!silent)
-                {
-                    MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    Focus();
+                    AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, false, FetchXmlBuilder.friendlyNames);
                 }
             }
         }
 
-        private bool ValidateForm(bool silent)
+        protected override ControlValidationResult ValidateControl(Control control)
         {
-            if (TreeBuilderControl.IsFetchAggregate(node))
+            if (control == cmbAttribute)
             {
-                if (string.IsNullOrWhiteSpace(txtAlias.Text))
+                if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
                 {
-                    if (!silent)
-                        MessageBox.Show("Alias must be specified in aggregate queries", "Condition error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    //txtAlias.Focus();
-                    return false;
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Attribute is required");
+                }
+                if (fxb.Service != null && !cmbAttribute.Items.OfType<AttributeItem>().Any(a => a.ToString() == cmbAttribute.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute is not valid");
                 }
             }
-            return true;
-        }
-
-        /// <summary>
-        /// Sends a connection success message
-        /// </summary>
-        /// <param name="service">IOrganizationService generated</param>
-        /// <param name="parameters">Lsit of parameter</param>
-        private void SendSaveMessage(Dictionary<string, string> collection)
-        {
-            SaveEventArgs sea = new SaveEventArgs { AttributeCollection = collection };
-
-            if (Saved != null)
+            else if (control == txtAlias)
             {
-                Saved(this, sea);
+                if (TreeBuilderControl.IsFetchAggregate(Node) && string.IsNullOrWhiteSpace(txtAlias.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Alias must be specified in aggregate queries");
+                }
             }
-        }
 
-        private void Control_Leave(object sender, EventArgs e)
-        {
-            if (controlsCheckSum != ControlUtils.ControlsChecksum(this.Controls))
-            {
-                Save(false);
-            }
+            return base.ValidateControl(control);
         }
 
         private void chkGroupBy_CheckedChanged(object sender, EventArgs e)
@@ -140,7 +81,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void EnableAggregateControls()
         {
             cmbDateGrouping.Enabled = chkGroupBy.Checked;
-            chkDistinct.Enabled = aggregate && !chkGroupBy.Checked;// && cmbAggregate.Text == "countcolumn";
+            chkDistinct.Enabled = aggregate && !chkGroupBy.Checked;
             if (!chkDistinct.Enabled)
             {
                 chkDistinct.Checked = false;

@@ -53,7 +53,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbAttribute.FormattingEnabled = true;
             this.cmbAttribute.Location = new System.Drawing.Point(7, 16);
             this.cmbAttribute.Name = "cmbAttribute";
-            this.cmbAttribute.Size = new System.Drawing.Size(214, 21);
+            this.cmbAttribute.Size = new System.Drawing.Size(194, 21);
             this.cmbAttribute.Sorted = true;
             this.cmbAttribute.TabIndex = 1;
             this.cmbAttribute.Tag = "attribute";
@@ -87,7 +87,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbAlias.FormattingEnabled = true;
             this.cmbAlias.Location = new System.Drawing.Point(7, 56);
             this.cmbAlias.Name = "cmbAlias";
-            this.cmbAlias.Size = new System.Drawing.Size(214, 21);
+            this.cmbAlias.Size = new System.Drawing.Size(194, 21);
             this.cmbAlias.Sorted = true;
             this.cmbAlias.TabIndex = 2;
             this.cmbAlias.Tag = "alias";
@@ -103,7 +103,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Controls.Add(this.label2);
             this.Name = "orderControl";
             this.Size = new System.Drawing.Size(224, 115);
-            this.Leave += new System.EventHandler(this.Control_Leave);
             this.ResumeLayout(false);
             this.PerformLayout();
 

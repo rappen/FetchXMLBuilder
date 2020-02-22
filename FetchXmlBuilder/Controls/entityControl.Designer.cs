@@ -50,7 +50,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbEntity.FormattingEnabled = true;
             this.cmbEntity.Location = new System.Drawing.Point(7, 16);
             this.cmbEntity.Name = "cmbEntity";
-            this.cmbEntity.Size = new System.Drawing.Size(204, 21);
+            this.cmbEntity.Size = new System.Drawing.Size(184, 21);
             this.cmbEntity.Sorted = true;
             this.cmbEntity.TabIndex = 27;
             this.cmbEntity.Tag = "name|true";
@@ -63,7 +63,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Controls.Add(this.label2);
             this.Name = "entityControl";
             this.Size = new System.Drawing.Size(214, 50);
-            this.Leave += new System.EventHandler(this.Control_Leave);
             this.ResumeLayout(false);
             this.PerformLayout();
 

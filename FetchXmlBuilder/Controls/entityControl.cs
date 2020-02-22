@@ -1,50 +1,24 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
-using Cinteros.Xrm.XmlEditorUtils;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
-    public partial class entityControl : UserControl, IDefinitionSavable
+    public partial class entityControl : FetchXmlElementControlBase
     {
-        private readonly Dictionary<string, string> collec;
-        private string controlsCheckSum = "";
-        private FetchXmlBuilder fxb;
-
-        #region Delegates
-
-        public delegate void SaveEventHandler(object sender, SaveEventArgs e);
-
-        #endregion Delegates
-
-        #region Event Handlers
-
-        public event SaveEventHandler Saved;
-
-        #endregion Event Handlers
-
-        public entityControl()
+        public entityControl() : this(new Dictionary<string, string>(), null, null)
         {
-            InitializeComponent();
-            collec = new Dictionary<string, string>();
         }
 
         public entityControl(Dictionary<string, string> collection, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree)
-            : this()
         {
-            fxb = fetchXmlBuilder;
-            if (collection != null)
-                collec = collection;
-
-            PopulateControls();
-            ControlUtils.FillControls(collec, this.Controls, this);
-            controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
-            Saved += tree.CtrlSaved;
+            InitializeComponent();
+            InitializeFXB(collection, fetchXmlBuilder, tree, null);
         }
 
-        private void PopulateControls()
+        protected override void PopulateControls()
         {
             cmbEntity.Items.Clear();
             var entities = fxb.GetDisplayEntities();
@@ -57,42 +31,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
         }
 
-        public void Save(bool silent)
+        protected override ControlValidationResult ValidateControl(Control control)
         {
-            try
+            if (control == cmbEntity)
             {
-                Dictionary<string, string> collection = ControlUtils.GetAttributesCollection(this.Controls, true);
-                SendSaveMessage(collection);
-            }
-            catch (ArgumentNullException ex)
-            {
-                if (!silent)
-                    MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-            }
-            controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
-        }
+                if (string.IsNullOrWhiteSpace(cmbEntity.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Entity is required");
+                }
 
-        /// <summary>
-        /// Sends a connection success message
-        /// </summary>
-        /// <param name="service">IOrganizationService generated</param>
-        /// <param name="parameters">Lsit of parameter</param>
-        private void SendSaveMessage(Dictionary<string, string> collection)
-        {
-            SaveEventArgs sea = new SaveEventArgs { AttributeCollection = collection };
-
-            if (Saved != null)
-            {
-                Saved(this, sea);
+                if (fxb.Service != null && !cmbEntity.Items.OfType<EntityItem>().Any(i => i.ToString() == cmbEntity.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Entity is not valid");
+                }
             }
-        }
 
-        private void Control_Leave(object sender, EventArgs e)
-        {
-            if (controlsCheckSum != ControlUtils.ControlsChecksum(this.Controls))
-            {
-                Save(false);
-            }
+            return base.ValidateControl(control);
         }
     }
 }
