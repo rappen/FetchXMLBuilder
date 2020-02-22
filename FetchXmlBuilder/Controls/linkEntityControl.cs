@@ -250,7 +250,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return new ControlValidationResult(ControlValidationLevel.Error, "Entity is required");
                 }
 
-                if (!cmbEntity.Items.OfType<string>().Any(i => i == cmbEntity.Text))
+                if (fxb.Service != null && !cmbEntity.Items.OfType<string>().Any(i => i == cmbEntity.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "Entity is not valid");
                 }
@@ -263,7 +263,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return new ControlValidationResult(ControlValidationLevel.Error, "From attribute is required");
                 }
 
-                if (!cmbFrom.Items.OfType<string>().Any(i => i == cmbFrom.Text))
+                if (fxb.Service != null && !cmbFrom.Items.OfType<string>().Any(i => i == cmbFrom.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "From attribute is not valid");
                 }
@@ -276,7 +276,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return new ControlValidationResult(ControlValidationLevel.Error, "To attribute is required");
                 }
 
-                if (!cmbTo.Items.OfType<string>().Any(i => i == cmbTo.Text))
+                if (fxb.Service != null && !cmbTo.Items.OfType<string>().Any(i => i == cmbTo.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "To attribute is not valid");
                 }

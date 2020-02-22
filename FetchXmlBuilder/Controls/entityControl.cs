@@ -40,7 +40,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return new ControlValidationResult(ControlValidationLevel.Error, "Entity is required");
                 }
 
-                if (!cmbEntity.Items.OfType<EntityItem>().Any(i => i.ToString() == cmbEntity.Text))
+                if (fxb.Service != null && !cmbEntity.Items.OfType<EntityItem>().Any(i => i.ToString() == cmbEntity.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "Entity is not valid");
                 }

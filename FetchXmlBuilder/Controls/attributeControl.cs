@@ -52,8 +52,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 {
                     return new ControlValidationResult(ControlValidationLevel.Error, "Attribute is required");
                 }
-
-                if (cmbAttribute.Items.Count > 0 && !cmbAttribute.Items.Cast<AttributeItem>().Any(a => a.ToString() == cmbAttribute.Text))
+                if (fxb.Service != null && !cmbAttribute.Items.OfType<AttributeItem>().Any(a => a.ToString() == cmbAttribute.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute is not valid");
                 }
