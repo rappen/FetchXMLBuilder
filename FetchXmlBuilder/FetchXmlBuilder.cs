@@ -259,9 +259,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         public void OnIncomingMessage(MessageBusEventArgs message)
         {
-            if (message.TargetArgument == null)
-                return;
-
             callerArgs = message;
             var fetchXml = string.Empty;
             var requestedType = "FetchXML";
