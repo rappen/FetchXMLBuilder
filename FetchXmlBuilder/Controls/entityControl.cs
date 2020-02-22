@@ -1,6 +1,7 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
@@ -39,7 +40,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return new ControlValidationResult(ControlValidationLevel.Error, "Entity is required");
                 }
 
-                if (cmbEntity.SelectedIndex == -1)
+                if (!cmbEntity.Items.OfType<EntityItem>().Any(i => i.ToString() == cmbEntity.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "Entity is not valid");
                 }

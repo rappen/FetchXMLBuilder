@@ -3,6 +3,7 @@ using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
@@ -249,7 +250,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return new ControlValidationResult(ControlValidationLevel.Error, "Entity is required");
                 }
 
-                if (cmbEntity.SelectedIndex == -1)
+                if (!cmbEntity.Items.OfType<string>().Any(i => i == cmbEntity.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "Entity is not valid");
                 }
@@ -262,7 +263,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return new ControlValidationResult(ControlValidationLevel.Error, "From attribute is required");
                 }
 
-                if (cmbFrom.SelectedIndex == -1)
+                if (!cmbFrom.Items.OfType<string>().Any(i => i == cmbFrom.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "From attribute is not valid");
                 }
@@ -275,7 +276,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return new ControlValidationResult(ControlValidationLevel.Error, "To attribute is required");
                 }
 
-                if (cmbTo.SelectedIndex == -1)
+                if (!cmbTo.Items.OfType<string>().Any(i => i == cmbTo.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "To attribute is not valid");
                 }

@@ -2,6 +2,7 @@
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Microsoft.Xrm.Sdk.Metadata;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
@@ -74,14 +75,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         protected override ControlValidationResult ValidateControl(Control control)
         {
-            if (control == cmbAttribute)
+            if (control == cmbAttribute && cmbAttribute.Enabled)
             {
                 if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Error, "Attribute is required");
                 }
 
-                if (cmbAttribute.SelectedIndex == -1)
+                if (!cmbAttribute.Items.OfType<AttributeItem>().Any(i => i.ToString() == cmbAttribute.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute is not valid");
                 }
@@ -94,7 +95,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return new ControlValidationResult(ControlValidationLevel.Error, "Alias is required");
                 }
                     
-                if (cmbAlias.SelectedIndex == -1)
+                if (!cmbAlias.Items.OfType<string>().Any(i => i == cmbAlias.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "Alias is not valid");
                 }

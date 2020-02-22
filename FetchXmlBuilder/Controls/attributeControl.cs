@@ -94,10 +94,5 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 chkUserTZ.Checked = false;
             }
         }
-
-        private void input_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            ValidateControl(sender as Control);
-        }
     }
 }

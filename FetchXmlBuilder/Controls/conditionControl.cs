@@ -235,7 +235,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return new ControlValidationResult(ControlValidationLevel.Error, "Attribute is required");
                 }
 
-                if (cmbAttribute.SelectedIndex == -1)
+                if (!cmbAttribute.Items.OfType<AttributeItem>().Any(i => i.ToString() == cmbAttribute.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute is not valid");
                 }
@@ -247,7 +247,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return new ControlValidationResult(ControlValidationLevel.Error, "Operator is required");
                 }
 
-                if (control == cmbOperator && cmbOperator.SelectedIndex == -1)
+                if (control == cmbOperator && !cmbOperator.Items.OfType<OperatorItem>().Any(i => i.ToString() == cmbOperator.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Error, "Operator is not valid");
                 }
