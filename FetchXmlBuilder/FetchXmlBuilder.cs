@@ -68,6 +68,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private Entity view;
         private AppInsights ai;
         private QueryRepository repository = new QueryRepository();
+        private bool inSql4Cds;
 
         #endregion Private Fields
 
@@ -259,6 +260,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         public void OnIncomingMessage(MessageBusEventArgs message)
         {
+            if (inSql4Cds)
+            {
+                return;
+            }
+
             callerArgs = message;
             var fetchXml = string.Empty;
             var requestedType = "FetchXML";
@@ -1039,7 +1045,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     ["ConvertOnly"] = true
                 };
 
+                inSql4Cds = true;
                 OnOutgoingMessage(this, new MessageBusEventArgs("SQL 4 CDS") { TargetArgument = param });
+                inSql4Cds = false;
 
                 if (param.TryGetValue("Sql", out var s))
                 {
