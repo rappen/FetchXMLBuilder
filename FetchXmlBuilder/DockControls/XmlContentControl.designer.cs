@@ -159,7 +159,7 @@
             xmlViewerSettings1.Tag = System.Drawing.Color.ForestGreen;
             xmlViewerSettings1.Value = System.Drawing.Color.Black;
             this.txtXML.Settings = xmlViewerSettings1;
-            this.txtXML.Size = new System.Drawing.Size(682, 265);
+            this.txtXML.Size = new System.Drawing.Size(682, 229);
             this.txtXML.TabIndex = 0;
             this.txtXML.Text = "";
             this.txtXML.TextChanged += new System.EventHandler(this.txtXML_TextChanged);
@@ -386,10 +386,10 @@
             this.panSQL4CDSInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panSQL4CDSInfo.Controls.Add(this.lblSQL4CDSInfo);
             this.panSQL4CDSInfo.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panSQL4CDSInfo.Location = new System.Drawing.Point(0, 223);
+            this.panSQL4CDSInfo.Location = new System.Drawing.Point(0, 229);
             this.panSQL4CDSInfo.Name = "panSQL4CDSInfo";
             this.panSQL4CDSInfo.Padding = new System.Windows.Forms.Padding(4);
-            this.panSQL4CDSInfo.Size = new System.Drawing.Size(682, 42);
+            this.panSQL4CDSInfo.Size = new System.Drawing.Size(682, 36);
             this.panSQL4CDSInfo.TabIndex = 11;
             // 
             // lblSQL4CDSInfo
@@ -397,11 +397,11 @@
             this.lblSQL4CDSInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblSQL4CDSInfo.Location = new System.Drawing.Point(4, 4);
             this.lblSQL4CDSInfo.Name = "lblSQL4CDSInfo";
-            this.lblSQL4CDSInfo.Size = new System.Drawing.Size(672, 32);
+            this.lblSQL4CDSInfo.Size = new System.Drawing.Size(672, 26);
             this.lblSQL4CDSInfo.TabIndex = 0;
-            this.lblSQL4CDSInfo.Text = "FetchXML to SQL conversion works better when the SQL 4 CDS tool is also installed" +
-    ". Get it from the toolbox and enable SQL 4 CDS in the FetchXML Builder settings " +
-    "to get the improved experience.";
+            this.lblSQL4CDSInfo.Text = "FetchXML to SQL conversion can also be performed with when the SQL 4 CDS tool. Ge" +
+    "t it from the Tool Library and enable SQL 4 CDS in FetchXML Builder Options to g" +
+    "et even more accurate results.";
             // 
             // XmlContentControl
             // 
