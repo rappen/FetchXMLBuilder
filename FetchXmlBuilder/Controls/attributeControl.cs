@@ -12,15 +12,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private readonly AttributeMetadata[] attributes;
         private bool aggregate;
 
-        public attributeControl() : this(null, null, null)
+        public attributeControl() : this(null, null, null, null)
         {
         }
 
-        public attributeControl(TreeNode node, AttributeMetadata[] attributes, TreeBuilderControl tree)
+        public attributeControl(TreeNode node, AttributeMetadata[] attributes, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree)
         {
             InitializeComponent();
             this.attributes = attributes;
-            InitializeFXB(null, null, tree, node);
+            InitializeFXB(null, fetchXmlBuilder, tree, node);
         }
 
         protected override void PopulateControls()

@@ -12,17 +12,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private bool friendly;
         private AttributeMetadata[] attributes;
 
-        public orderControl() : this(null, null, null)
+        public orderControl() : this(null, null, null, null)
         {
         }
 
-        public orderControl(TreeNode node, AttributeMetadata[] attributes, TreeBuilderControl tree)
+        public orderControl(TreeNode node, AttributeMetadata[] attributes, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree)
         {
             friendly = FetchXmlBuilder.friendlyNames;
             this.attributes = attributes;
 
             InitializeComponent();
-            InitializeFXB(null, null, tree, node);
+            InitializeFXB(null, fetchXmlBuilder, tree, node);
         }
 
         protected override void PopulateControls()

@@ -550,11 +550,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                                         AttributeMetadata[] attributes = fxb.GetDisplayAttributes(entityName);
                                         if (node.Name == "attribute")
                                         {
-                                            ctrl = new attributeControl(node, attributes, this);
+                                            ctrl = new attributeControl(node, attributes, fxb, this);
                                         }
                                         else if (node.Name == "order")
                                         {
-                                            ctrl = new orderControl(node, attributes, this);
+                                            ctrl = new orderControl(node, attributes, fxb, this);
                                         }
                                         break;
                                 }
