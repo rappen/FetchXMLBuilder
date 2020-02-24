@@ -15,7 +15,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private string controlsCheckSum = "";
         private ErrorProvider errorProvider;
         private ErrorProvider warningProvider;
-        
+
         static FetchXmlElementControlBase()
         {
             // Create the small warning icon to use for user feedback
@@ -49,8 +49,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
 
             original = new Dictionary<string, string>(collec);
-            errorProvider = new ErrorProvider(this);
-            warningProvider = new ErrorProvider(this);
+            errorProvider = new ErrorProvider(this)
+            {
+                BlinkStyle = ErrorBlinkStyle.NeverBlink
+            };
+            warningProvider = new ErrorProvider(this)
+            {
+                BlinkStyle = ErrorBlinkStyle.NeverBlink
+            };
             warningProvider.Icon = WarningIcon;
             PopulateControls();
             ControlUtils.FillControls(collec, this.Controls, this);
