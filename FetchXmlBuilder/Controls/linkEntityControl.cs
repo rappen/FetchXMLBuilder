@@ -149,6 +149,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     cmbTo.Items.Add(attribute.LogicalName);
                 }
             }
+            ValidateControls(true);
         }
 
         private void cmbRelationship_SelectedIndexChanged(object sender, EventArgs e)
@@ -222,6 +223,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     }
                 }
             }
+            ValidateControls(true);
         }
 
         private void cmbRelationship_DropDown(object sender, EventArgs e)

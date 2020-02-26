@@ -123,6 +123,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // RefreshFill now that attributes are loaded
             FillControl(cmbAttribute);
             FillControl(cmbValue);
+            ValidateControls(true);
         }
 
         private static TreeNode GetClosestEntityNode(TreeNode node)

@@ -57,6 +57,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
             Saved += tree.CtrlSaved;
             AttachValidatingEvent(this);
+            ValidateControls(true);
         }
 
         protected FetchXmlBuilder fxb { get; set; }
