@@ -51,6 +51,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void cmbEntity_SelectedIndexChanged(object sender, EventArgs e)
         {
+            ValidationSuspended = true;
             var entity = cmbEntity.SelectedItem.ToString();
             if (string.IsNullOrEmpty(entity))
             {
@@ -149,6 +150,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     cmbTo.Items.Add(attribute.LogicalName);
                 }
             }
+            ValidationSuspended = false;
         }
 
         private void cmbRelationship_SelectedIndexChanged(object sender, EventArgs e)
@@ -253,29 +255,32 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
             }
 
-            if (control == cmbFrom)
+            if (!string.IsNullOrWhiteSpace(cmbEntity.Text))
             {
-                if (string.IsNullOrWhiteSpace(cmbFrom.Text))
+                if (control == cmbFrom)
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Error, "From attribute is required");
+                    if (string.IsNullOrWhiteSpace(cmbFrom.Text))
+                    {
+                        return new ControlValidationResult(ControlValidationLevel.Error, "From attribute is required");
+                    }
+
+                    if (fxb.Service != null && !cmbFrom.Items.OfType<string>().Any(i => i == cmbFrom.Text))
+                    {
+                        return new ControlValidationResult(ControlValidationLevel.Warning, "From attribute is not valid");
+                    }
                 }
 
-                if (fxb.Service != null && !cmbFrom.Items.OfType<string>().Any(i => i == cmbFrom.Text))
+                if (control == cmbTo)
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "From attribute is not valid");
-                }
-            }
+                    if (string.IsNullOrWhiteSpace(cmbTo.Text))
+                    {
+                        return new ControlValidationResult(ControlValidationLevel.Error, "To attribute is required");
+                    }
 
-            if (control == cmbTo)
-            {
-                if (string.IsNullOrWhiteSpace(cmbTo.Text))
-                {
-                    return new ControlValidationResult(ControlValidationLevel.Error, "To attribute is required");
-                }
-
-                if (fxb.Service != null && !cmbTo.Items.OfType<string>().Any(i => i == cmbTo.Text))
-                {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "To attribute is not valid");
+                    if (fxb.Service != null && !cmbTo.Items.OfType<string>().Any(i => i == cmbTo.Text))
+                    {
+                        return new ControlValidationResult(ControlValidationLevel.Warning, "To attribute is not valid");
+                    }
                 }
             }
 
