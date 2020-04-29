@@ -29,14 +29,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void InitializeComponent()
         {
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textPageSize = new System.Windows.Forms.TextBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textTop = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.textPage = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.textPagingCookie = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
@@ -51,15 +51,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.label4.TabIndex = 23;
             this.label4.Text = "Page size";
             // 
-            // textBox1
+            // textPageSize
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.textPageSize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(7, 55);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(305, 20);
-            this.textBox1.TabIndex = 2;
-            this.textBox1.Tag = "count";
+            this.textPageSize.Location = new System.Drawing.Point(7, 55);
+            this.textPageSize.Name = "textPageSize";
+            this.textPageSize.Size = new System.Drawing.Size(214, 20);
+            this.textPageSize.TabIndex = 2;
+            this.textPageSize.Tag = "count";
             // 
             // checkBox1
             // 
@@ -83,15 +83,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.checkBox2.Text = "Distinct";
             this.checkBox2.UseVisualStyleBackColor = true;
             // 
-            // textBox2
+            // textTop
             // 
-            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.textTop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox2.Location = new System.Drawing.Point(7, 16);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(305, 20);
-            this.textBox2.TabIndex = 1;
-            this.textBox2.Tag = "top";
+            this.textTop.Location = new System.Drawing.Point(7, 16);
+            this.textTop.Name = "textTop";
+            this.textTop.Size = new System.Drawing.Size(214, 20);
+            this.textTop.TabIndex = 1;
+            this.textTop.Tag = "top";
             // 
             // label7
             // 
@@ -124,15 +124,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.checkBox4.Text = "Total record count";
             this.checkBox4.UseVisualStyleBackColor = true;
             // 
-            // textBox3
+            // textPage
             // 
-            this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.textPage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox3.Location = new System.Drawing.Point(7, 142);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(305, 20);
-            this.textBox3.TabIndex = 10;
-            this.textBox3.Tag = "page";
+            this.textPage.Location = new System.Drawing.Point(7, 142);
+            this.textPage.Name = "textPage";
+            this.textPage.Size = new System.Drawing.Size(214, 20);
+            this.textPage.TabIndex = 10;
+            this.textPage.Tag = "page";
             // 
             // label10
             // 
@@ -150,7 +150,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.textPagingCookie.Location = new System.Drawing.Point(7, 181);
             this.textPagingCookie.Multiline = true;
             this.textPagingCookie.Name = "textPagingCookie";
-            this.textPagingCookie.Size = new System.Drawing.Size(305, 74);
+            this.textPagingCookie.Size = new System.Drawing.Size(214, 74);
             this.textPagingCookie.TabIndex = 11;
             this.textPagingCookie.Tag = "paging-cookie";
             this.textPagingCookie.Leave += new System.EventHandler(this.textPagingCookie_Leave);
@@ -170,18 +170,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.textPagingCookie);
             this.Controls.Add(this.label11);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.textPage);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.checkBox4);
             this.Controls.Add(this.checkBox3);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.textTop);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textPageSize);
             this.Controls.Add(this.label4);
             this.Name = "fetchControl";
-            this.Size = new System.Drawing.Size(315, 270);
+            this.Size = new System.Drawing.Size(247, 270);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -189,14 +189,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         #endregion
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textPageSize;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textTop;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.CheckBox checkBox4;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox textPage;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textPagingCookie;
         private System.Windows.Forms.Label label11;
