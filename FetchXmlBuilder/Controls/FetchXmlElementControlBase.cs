@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
@@ -71,9 +72,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         protected TreeBuilderControl Tree { get; set; }
 
-        protected virtual void PopulateControls()
-        {
-        }
+        protected virtual void PopulateControls() { }
 
         protected override void OnValidating(CancelEventArgs e)
         {
@@ -87,7 +86,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         protected virtual bool RequiresSave()
         {
-            return controlsCheckSum != ControlUtils.ControlsChecksum(this.Controls);
+            return !controlsCheckSum.Equals(ControlUtils.ControlsChecksum(this.Controls));
         }
 
         public virtual bool Save(bool silent)
@@ -117,8 +116,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         protected virtual void SaveInternal(bool silent)
         {
-            Dictionary<string, string> collection = ControlUtils.GetAttributesCollection(this.Controls, true);
-            SendSaveMessage(collection);
+            SendSaveMessage(ControlUtils.GetAttributesCollection(this.Controls, true));
         }
 
         protected virtual ControlValidationResult ValidateControl(Control control)
@@ -138,22 +136,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             errorProvider.SetError(control, result?.Level == ControlValidationLevel.Error ? result.Message : null);
             warningProvider.SetError(control, result?.Level == ControlValidationLevel.Warning ? result.Message : null);
 
-            var valid = result == null || result.Level != ControlValidationLevel.Error;
+            var valid = result?.Level != ControlValidationLevel.Error;
 
-            foreach (Control child in control.Controls)
-                valid &= ValidateControlRecursive(child);
+            control.Controls.OfType<Control>().ToList().ForEach(c => valid &= ValidateControlRecursive(c));
 
             return valid;
         }
 
         private void AttachValidatingEvent(Control control)
         {
-            foreach (Control child in control.Controls)
+            control.Controls.OfType<Control>().ToList().ForEach(c =>
             {
-                child.Validating += Control_Validating;
-
-                AttachValidatingEvent(child);
-            }
+                c.Validating += Control_Validating;
+                AttachValidatingEvent(c);
+            });
         }
 
         private void Control_Validating(object sender, CancelEventArgs e)
@@ -174,12 +170,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         /// <param name="parameters">Lsit of parameter</param>
         private void SendSaveMessage(Dictionary<string, string> collection)
         {
-            SaveEventArgs sea = new SaveEventArgs { AttributeCollection = collection };
-
-            if (Saved != null)
-            {
-                Saved(this, sea);
-            }
+            Saved?.Invoke(this, new SaveEventArgs { AttributeCollection = collection });
         }
 
         public event EventHandler<SaveEventArgs> Saved;
@@ -221,7 +212,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             Level = level;
             Message = message;
         }
-
         public ControlValidationLevel Level { get; }
         public string Message { get; }
     }
