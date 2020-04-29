@@ -453,16 +453,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiOpenCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
                     tsbReturnToCaller.Visible = CallerWantsResults();
                     tsbSave.Enabled = enabled;
-                    tsmiSaveFile.Enabled = enabled && dockControlBuilder.FetchChanged && !string.IsNullOrEmpty(FileName);
+                    tsmiSaveFile.Enabled = enabled && dockControlBuilder?.FetchChanged == true && !string.IsNullOrEmpty(FileName);
                     tsmiSaveFileAs.Enabled = enabled;
                     tsmiSaveView.Enabled = enabled && Service != null && View != null && View.IsCustomizable();
                     tsmiSaveViewAs.Enabled = tsmiSaveView.Enabled;
                     tsmiSaveML.Enabled = enabled && Service != null && DynML != null;
                     tsmiSaveCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
-                    tsmiSaveCWP.Enabled = enabled && Service != null && dockControlBuilder.FetchChanged && !string.IsNullOrEmpty(CWPFeed);
+                    tsmiSaveCWP.Enabled = enabled && Service != null && dockControlBuilder?.FetchChanged == true && !string.IsNullOrEmpty(CWPFeed);
                     tsbView.Enabled = enabled;
                     tsbExecute.Enabled = enabled && Service != null;
-                    dockControlBuilder.EnableControls(enabled);
+                    dockControlBuilder?.EnableControls(enabled);
                     buttonsEnabled = enabled;
                 }
                 catch
