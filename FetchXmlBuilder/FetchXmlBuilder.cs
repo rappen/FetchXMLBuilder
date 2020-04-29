@@ -462,6 +462,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiSaveCWP.Enabled = enabled && Service != null && dockControlBuilder?.FetchChanged == true && !string.IsNullOrEmpty(CWPFeed);
                     tsbView.Enabled = enabled;
                     tsbExecute.Enabled = enabled && Service != null;
+                    tsbAbort.Visible = settings.Results.RetrieveAllPages;
                     dockControlBuilder?.EnableControls(enabled);
                     buttonsEnabled = enabled;
                 }
@@ -1379,8 +1380,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             working = true;
             LogUse("RetrieveMultiple-" + Settings.ResultOption2String(settings.Results.ResultOption, settings.Results.SerializeStyle));
             SendMessageToStatusBar(this, new StatusBarMessageEventArgs("Retrieving..."));
-            WorkAsync(new WorkAsyncInfo("Executing FetchXML...",
-                (eventargs) =>
+            tsbAbort.Enabled = true;
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Executing FetchXML...",
+                IsCancelable = true,
+                Work = (worker, eventargs) =>
                 {
                     QueryBase query;
                     try
@@ -1398,6 +1403,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     var page = 0;
                     do
                     {
+                        if (worker.CancellationPending)
+                        {
+                            eventargs.Cancel = true;
+                            break;
+                        }
                         tmpResult = Service.RetrieveMultiple(query);
                         if (resultCollection == null)
                         {
@@ -1427,7 +1437,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Retrieved {resultCollection.Entities.Count} records on {page} pages in {duration.TotalSeconds:F2} seconds"));
                         }
                     }
-                    while (settings.Results.RetrieveAllPages && query is QueryExpression && tmpResult.MoreRecords);
+                    while (!eventargs.Cancel && settings.Results.RetrieveAllPages && query is QueryExpression && tmpResult.MoreRecords);
                     ai.WriteEvent("RetrieveMultiple", resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds, HandleAIResult);
                     if (settings.Results.ResultOption == 1 && settings.Results.SerializeStyle == 2)
                     {
@@ -1443,11 +1453,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             Results = resultCollection
                         };
                     }
-                })
-            {
+                },
                 PostWorkCallBack = (completedargs) =>
                 {
                     working = false;
+                    tsbAbort.Enabled = false;
                     if (completedargs.Error != null)
                     {
                         LogError("RetrieveMultiple error: {0}", completedargs.Error);
@@ -1455,6 +1465,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         {
                             ExecuteFetch(fetch);
                         }
+                    }
+                    else if (completedargs.Cancelled)
+                    {
+                        MessageBox.Show($"Manual abort.", "Execute", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                     else if (completedargs.Result is QueryInfo queryinfo)
                     {
@@ -1978,9 +1992,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             about.ShowDialog();
         }
 
-        private void tsbCloseThisTab_Click(object sender, EventArgs e)
+        private void tsbAbort_Click(object sender, EventArgs e)
         {
-            CloseTool();
+            tsbAbort.Enabled = false;
+            CancelWorker();
         }
 
         private void tsbExecute_Click(object sender, EventArgs e)
@@ -2022,6 +2037,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                 }
                 dockControlBuilder.ApplyCurrentSettings();
+                EnableControls();
             }
         }
 

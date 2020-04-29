@@ -31,8 +31,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FetchXmlBuilder));
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
-            this.tsbCloseThisTab = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbNew = new System.Windows.Forms.ToolStripButton();
             this.tsbRepo = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiRepoSave = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,6 +74,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.dockContainer = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.tmLiveUpdate = new System.Windows.Forms.Timer(this.components);
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbAbort = new System.Windows.Forms.ToolStripButton();
             this.toolStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -83,17 +83,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.toolStripMain.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsbCloseThisTab,
-            this.toolStripSeparator4,
             this.tsbNew,
             this.tsbRepo,
             this.tsbOpen,
             this.tsbSave,
             this.toolStripSeparator6,
-            this.toolStripSeparator2,
             this.tsbUndo,
             this.tsbRedo,
+            this.toolStripSeparator2,
             this.tsbExecute,
+            this.tsbAbort,
+            this.toolStripSeparator7,
             this.tsbView,
             this.tsbReturnToCaller,
             this.toolStripSeparator3,
@@ -105,22 +105,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripMain.TabIndex = 22;
             this.toolStripMain.Text = "toolStrip1";
             this.toolStripMain.Click += new System.EventHandler(this.toolStripMain_Click);
-            // 
-            // tsbCloseThisTab
-            // 
-            this.tsbCloseThisTab.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbCloseThisTab.Image = ((System.Drawing.Image)(resources.GetObject("tsbCloseThisTab.Image")));
-            this.tsbCloseThisTab.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbCloseThisTab.Name = "tsbCloseThisTab";
-            this.tsbCloseThisTab.Size = new System.Drawing.Size(28, 28);
-            this.tsbCloseThisTab.Text = "Close this tab";
-            this.tsbCloseThisTab.ToolTipText = "Close FetchXML Builder";
-            this.tsbCloseThisTab.Click += new System.EventHandler(this.tsbCloseThisTab_Click);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 31);
             // 
             // tsbNew
             // 
@@ -510,6 +494,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tmLiveUpdate.Interval = 500;
             this.tmLiveUpdate.Tick += new System.EventHandler(this.tmLiveUpdate_Tick);
             // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 31);
+            // 
+            // tsbAbort
+            // 
+            this.tsbAbort.Enabled = false;
+            this.tsbAbort.Image = ((System.Drawing.Image)(resources.GetObject("tsbAbort.Image")));
+            this.tsbAbort.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbAbort.Name = "tsbAbort";
+            this.tsbAbort.Size = new System.Drawing.Size(65, 28);
+            this.tsbAbort.Text = "Abort";
+            this.tsbAbort.Click += new System.EventHandler(this.tsbAbort_Click);
+            // 
             // FetchXmlBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -535,9 +534,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         #endregion
 
         internal System.Windows.Forms.ToolStrip toolStripMain;
-        private System.Windows.Forms.ToolStripButton tsbCloseThisTab;
         private System.Windows.Forms.ToolStripButton tsbNew;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         internal System.Windows.Forms.ToolStripDropDownButton tsbOpen;
@@ -580,5 +577,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiRepoDelete;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowOData4;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowFlow;
+        private System.Windows.Forms.ToolStripButton tsbAbort;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
     }
 }
