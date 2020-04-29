@@ -588,7 +588,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 {
                     panelContainer.Controls.Add(ctrl);
                     ctrl.BringToFront();
-                    ctrl.Dock = DockStyle.Fill;
+                    ctrl.Dock = DockStyle.Top;
                 }
                 if (existingControl != null) panelContainer.Controls.Remove(existingControl);
             }
