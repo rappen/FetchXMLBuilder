@@ -16,9 +16,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             InitializeFXB(collection, null, tree, null);
         }
 
-        private void textBox4_Leave(object sender, EventArgs e)
+        private void textPagingCookie_Leave(object sender, EventArgs e)
         {
-            textBox4.Text = textBox4.Text.Replace("&lt;", "<").Replace("&gt;", ">").Replace("&quot;", "\"");
+            textPagingCookie.Text = textPagingCookie.Text.Replace("&lt;", "<").Replace("&gt;", ">").Replace("&quot;", "\"");
         }
+
+
     }
 }

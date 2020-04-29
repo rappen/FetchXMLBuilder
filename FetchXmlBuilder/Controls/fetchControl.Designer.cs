@@ -38,7 +38,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.textPagingCookie = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -143,17 +143,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.label10.TabIndex = 35;
             this.label10.Text = "Page";
             // 
-            // textBox4
+            // textPagingCookie
             // 
-            this.textBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.textPagingCookie.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox4.Location = new System.Drawing.Point(7, 181);
-            this.textBox4.Multiline = true;
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(305, 74);
-            this.textBox4.TabIndex = 11;
-            this.textBox4.Tag = "paging-cookie";
-            this.textBox4.Leave += new System.EventHandler(this.textBox4_Leave);
+            this.textPagingCookie.Location = new System.Drawing.Point(7, 181);
+            this.textPagingCookie.Multiline = true;
+            this.textPagingCookie.Name = "textPagingCookie";
+            this.textPagingCookie.Size = new System.Drawing.Size(305, 74);
+            this.textPagingCookie.TabIndex = 11;
+            this.textPagingCookie.Tag = "paging-cookie";
+            this.textPagingCookie.Leave += new System.EventHandler(this.textPagingCookie_Leave);
             // 
             // label11
             // 
@@ -168,7 +168,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.textPagingCookie);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.label10);
@@ -198,7 +198,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.CheckBox checkBox4;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox textPagingCookie;
         private System.Windows.Forms.Label label11;
     }
 }
