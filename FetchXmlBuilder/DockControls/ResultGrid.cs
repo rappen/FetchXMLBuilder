@@ -45,15 +45,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 return;
             }
-            var pos = 2;
-            foreach (var attribute in queryinfo.AttributesSignature?.Split('\n').Select(a => a.Trim()).Where(a => !string.IsNullOrWhiteSpace(a)))
-            {
-                if (crmGridView1.Columns.Contains(attribute))
-                {
-                    crmGridView1.Columns[attribute].DisplayIndex = pos;
-                    pos++;
-                }
-            }
+            crmGridView1.ColumnOrder = queryinfo.AttributesSignature.Replace('\n', ',');
             crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
         }
 
