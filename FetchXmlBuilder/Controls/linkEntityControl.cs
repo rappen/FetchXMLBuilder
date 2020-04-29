@@ -153,13 +153,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void cmbRelationship_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbRelationship.SelectedItem != null && cmbRelationship.SelectedItem is EntityRelationship)
+            if (cmbRelationship.SelectedItem != null && cmbRelationship.SelectedItem is EntityRelationship rel)
             {
-                var rel = (EntityRelationship)cmbRelationship.SelectedItem;
                 var parent = TreeNodeHelper.GetAttributeFromNode(Node.Parent, "name");
-                if (rel.Relationship is OneToManyRelationshipMetadata)
+                if (rel.Relationship is OneToManyRelationshipMetadata om)
                 {
-                    var om = (OneToManyRelationshipMetadata)rel.Relationship;
                     if (parent == om.ReferencedEntity)
                     {
                         cmbEntity.Text = om.ReferencingEntity;
@@ -178,9 +176,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     }
                     chkIntersect.Checked = false;
                 }
-                else if (rel.Relationship is ManyToManyRelationshipMetadata)
+                else if (rel.Relationship is ManyToManyRelationshipMetadata mm)
                 {
-                    var mm = (ManyToManyRelationshipMetadata)rel.Relationship;
                     if (parent == mm.IntersectEntityName)
                     {
                         var greatparent = TreeNodeHelper.GetAttributeFromNode(Node.Parent.Parent, "name");
