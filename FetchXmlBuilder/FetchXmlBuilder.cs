@@ -1428,14 +1428,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         }
                         page++;
                         var duration = DateTime.Now - start;
-                        if (page == 1)
-                        {
-                            SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Retrieved {resultCollection.Entities.Count} records on first page in {duration.TotalSeconds:F2} seconds"));
-                        }
-                        else
-                        {
-                            SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Retrieved {resultCollection.Entities.Count} records on {page} pages in {duration.TotalSeconds:F2} seconds"));
-                        }
+                        var pageinfo = page == 1 ? "first page" : $"{page} pages";
+                        worker.ReportProgress(0, $"Retrieved {pageinfo} in {duration.TotalSeconds:F2} sec");
+                        SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Retrieved {resultCollection.Entities.Count} records on {pageinfo} in {duration.TotalSeconds:F2} seconds"));
                     }
                     while (!eventargs.Cancel && settings.Results.RetrieveAllPages && query is QueryExpression && tmpResult.MoreRecords);
                     ai.WriteEvent("RetrieveMultiple", resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds, HandleAIResult);
@@ -1453,6 +1448,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             Results = resultCollection
                         };
                     }
+                },
+                ProgressChanged = (changeargs) =>
+                {
+                    SetWorkingMessage(changeargs.UserState.ToString());
                 },
                 PostWorkCallBack = (completedargs) =>
                 {
