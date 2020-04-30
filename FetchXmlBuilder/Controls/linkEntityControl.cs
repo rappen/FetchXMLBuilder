@@ -1,5 +1,6 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
@@ -88,7 +89,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     list.Clear();
                     foreach (var rel in mo)
                     {
-                        list.Add(new EntityRelationship(rel, parententityname, fxb));
+                        list.Add(new EntityRelationship(rel, EntityRole.Referencing, parententityname, fxb));
                     }
                     list.Sort();
                     cmbRelationship.Items.AddRange(list.ToArray());
@@ -99,7 +100,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     list.Clear();
                     foreach (var rel in om)
                     {
-                        list.Add(new EntityRelationship(rel, parententityname, fxb));
+                        list.Add(new EntityRelationship(rel, EntityRole.Referenced, parententityname, fxb));
                     }
                     list.Sort();
                     cmbRelationship.Items.AddRange(list.ToArray());
@@ -111,7 +112,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     list.Clear();
                     foreach (var rel in mm)
                     {
-                        list.Add(new EntityRelationship(rel, parententityname, fxb, greatparententityname));
+                        if (rel.Entity1LogicalName == parententityname ||
+                            rel.Entity1LogicalName == greatparententityname && rel.IntersectEntityName == parententityname)
+                        {
+                            list.Add(new EntityRelationship(rel, EntityRole.Referencing, parententityname, fxb, greatparententityname));
+                        }
+
+                        if (rel.Entity2LogicalName == parententityname ||
+                            rel.Entity2LogicalName == greatparententityname && rel.IntersectEntityName == parententityname)
+                        {
+                            list.Add(new EntityRelationship(rel, EntityRole.Referenced, parententityname, fxb, greatparententityname));
+                        }
                     }
                     list.Sort();
                     cmbRelationship.Items.AddRange(list.ToArray());
@@ -158,68 +169,103 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (cmbRelationship.SelectedItem != null && cmbRelationship.SelectedItem is EntityRelationship rel)
             {
                 var parent = TreeNodeHelper.GetAttributeFromNode(Node.Parent, "name");
-                if (rel.Relationship is OneToManyRelationshipMetadata om)
+                string entity;
+                string from;
+                string to;
+                bool intersect;
+
+                if (rel.Relationship is OneToManyRelationshipMetadata)
                 {
-                    if (parent == om.ReferencedEntity)
+                    var om = (OneToManyRelationshipMetadata)rel.Relationship;
+                    if (parent == om.ReferencedEntity && rel.Role == EntityRole.Referenced)
                     {
-                        cmbEntity.Text = om.ReferencingEntity;
-                        cmbFrom.Text = om.ReferencingAttribute;
-                        cmbTo.Text = om.ReferencedAttribute;
+                        entity = om.ReferencingEntity;
+                        from = om.ReferencingAttribute;
+                        to = om.ReferencedAttribute;
                     }
-                    else if (parent == om.ReferencingEntity)
+                    else if (parent == om.ReferencingEntity && rel.Role == EntityRole.Referencing)
                     {
-                        cmbEntity.Text = om.ReferencedEntity;
-                        cmbFrom.Text = om.ReferencedAttribute;
-                        cmbTo.Text = om.ReferencingAttribute;
+                        entity = om.ReferencedEntity;
+                        from = om.ReferencedAttribute;
+                        to = om.ReferencingAttribute;
                     }
                     else
                     {
                         MessageBox.Show("Not a valid relationship. Please enter entity and attributes manually.");
+                        return;
                     }
-                    chkIntersect.Checked = false;
+                    intersect = false;
                 }
-                else if (rel.Relationship is ManyToManyRelationshipMetadata mm)
+                else if (rel.Relationship is ManyToManyRelationshipMetadata)
                 {
+                    var mm = (ManyToManyRelationshipMetadata)rel.Relationship;
+
+                    if (fxb.NeedToLoadEntity(mm.Entity1LogicalName))
+                    {
+                        fxb.LoadEntityDetails(mm.Entity1LogicalName, null, false);
+                    }
+
+                    if (fxb.NeedToLoadEntity(mm.Entity2LogicalName))
+                    {
+                        fxb.LoadEntityDetails(mm.Entity2LogicalName, null, false);
+                    }
+
+                    var entity1PrimaryKey = fxb.GetPrimaryIdAttribute(mm.Entity1LogicalName);
+                    var entity2PrimaryKey = fxb.GetPrimaryIdAttribute(mm.Entity2LogicalName);
+
                     if (parent == mm.IntersectEntityName)
                     {
                         var greatparent = TreeNodeHelper.GetAttributeFromNode(Node.Parent.Parent, "name");
-                        if (greatparent == mm.Entity1LogicalName)
+                        if (greatparent == mm.Entity1LogicalName && rel.Role == EntityRole.Referencing)
                         {
-                            cmbEntity.Text = mm.Entity2LogicalName;
-                            cmbFrom.Text = mm.Entity2IntersectAttribute;
-                            cmbTo.Text = mm.Entity2IntersectAttribute;
+                            entity = mm.Entity2LogicalName;
+                            from = entity2PrimaryKey;
+                            to = mm.Entity2IntersectAttribute;
                         }
-                        else if (greatparent == mm.Entity2LogicalName)
+                        else if (greatparent == mm.Entity2LogicalName && rel.Role == EntityRole.Referenced)
                         {
-                            cmbEntity.Text = mm.Entity1LogicalName;
-                            cmbFrom.Text = mm.Entity1IntersectAttribute;
-                            cmbTo.Text = mm.Entity1IntersectAttribute;
+                            entity = mm.Entity1LogicalName;
+                            from = entity1PrimaryKey;
+                            to = mm.Entity1IntersectAttribute;
                         }
                         else
                         {
                             MessageBox.Show("Not a valid M:M-relationship. Please enter entity and attributes manually.");
+                            return;
                         }
+                        intersect = true;
                     }
                     else
                     {
-                        cmbEntity.Text = mm.IntersectEntityName;
-                        if (parent == mm.Entity1LogicalName)
+                        entity = mm.IntersectEntityName;
+                        if (parent == mm.Entity1LogicalName && rel.Role == EntityRole.Referencing)
                         {
-                            cmbFrom.Text = mm.Entity1IntersectAttribute;
-                            cmbTo.Text = mm.Entity1IntersectAttribute;
+                            from = mm.Entity1IntersectAttribute;
+                            to = entity1PrimaryKey;
                         }
-                        else if (parent == mm.Entity2LogicalName)
+                        else if (parent == mm.Entity2LogicalName && rel.Role == EntityRole.Referenced)
                         {
-                            cmbFrom.Text = mm.Entity2IntersectAttribute;
-                            cmbTo.Text = mm.Entity2IntersectAttribute;
+                            from = mm.Entity2IntersectAttribute;
+                            to = entity2PrimaryKey;
                         }
                         else
                         {
                             MessageBox.Show("Not a valid M:M-relationship. Please enter entity and attributes manually.");
+                            return;
                         }
-                        chkIntersect.Checked = true;
+                        intersect = true;
                     }
                 }
+                else
+                {
+                    MessageBox.Show("Not a valid relationship. Please enter entity and attributes manually.");
+                    return;
+                }
+
+                cmbEntity.Text = entity;
+                cmbFrom.Text = from;
+                cmbTo.Text = to;
+                chkIntersect.Checked = intersect;
             }
         }
 
