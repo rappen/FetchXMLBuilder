@@ -285,6 +285,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         protected override ControlValidationResult ValidateControl(Control control)
         {
+            if (control == cmbRelationship && string.IsNullOrWhiteSpace(cmbEntity.Text)&& string.IsNullOrWhiteSpace(cmbFrom.Text) && string.IsNullOrWhiteSpace(cmbTo.Text))
+            {
+                return new ControlValidationResult(ControlValidationLevel.Info, "Select a relationship to populate fields below");
+            }
             if (control == cmbEntity)
             {
                 if (string.IsNullOrWhiteSpace(cmbEntity.Text))
@@ -298,32 +302,43 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(cmbEntity.Text))
+            if (control == cmbFrom)
             {
-                if (control == cmbFrom)
+                if (string.IsNullOrWhiteSpace(cmbFrom.Text))
                 {
-                    if (string.IsNullOrWhiteSpace(cmbFrom.Text))
+                    if (string.IsNullOrWhiteSpace(cmbEntity.Text))
+                    {
+                        return new ControlValidationResult(ControlValidationLevel.Info, "Enter entity name and then select From attribute");
+                    }
+                    else
                     {
                         return new ControlValidationResult(ControlValidationLevel.Error, "From attribute is required");
                     }
-
-                    if (fxb.Service != null && !cmbFrom.Items.OfType<string>().Any(i => i == cmbFrom.Text))
-                    {
-                        return new ControlValidationResult(ControlValidationLevel.Warning, "From attribute is not valid");
-                    }
                 }
 
-                if (control == cmbTo)
+                if (fxb.Service != null && !cmbFrom.Items.OfType<string>().Any(i => i == cmbFrom.Text))
                 {
-                    if (string.IsNullOrWhiteSpace(cmbTo.Text))
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "From attribute is not valid");
+                }
+            }
+
+            if (control == cmbTo)
+            {
+                if (string.IsNullOrWhiteSpace(cmbTo.Text))
+                {
+                    if (string.IsNullOrWhiteSpace(cmbEntity.Text))
+                    {
+                        return new ControlValidationResult(ControlValidationLevel.Info, "Enter entity name and then select To attribute");
+                    }
+                    else
                     {
                         return new ControlValidationResult(ControlValidationLevel.Error, "To attribute is required");
                     }
+                }
 
-                    if (fxb.Service != null && !cmbTo.Items.OfType<string>().Any(i => i == cmbTo.Text))
-                    {
-                        return new ControlValidationResult(ControlValidationLevel.Warning, "To attribute is not valid");
-                    }
+                if (fxb.Service != null && !cmbTo.Items.OfType<string>().Any(i => i == cmbTo.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "To attribute is not valid");
                 }
             }
 
