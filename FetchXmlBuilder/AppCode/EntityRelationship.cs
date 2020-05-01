@@ -8,6 +8,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     public class EntityRelationship : IComparable
     {
         public RelationshipMetadataBase Relationship;
+        public EntityRole Role;
         public string Name = "";
 
         public EntityRelationship(RelationshipMetadataBase relation, EntityRole role, string originatingEntity, FetchXmlBuilder fxb, string originatingParent = "")
@@ -15,10 +16,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             Relationship = relation;
             Role = role;
 
-            if (relation is OneToManyRelationshipMetadata)
+            if (relation is OneToManyRelationshipMetadata om)
             {
-                var om = (OneToManyRelationshipMetadata)relation;
-
                 if (role == EntityRole.Referenced)
                 {
                     Name = fxb.GetEntityDisplayName(om.ReferencedEntity) + "." + om.ReferencedAttribute + " <- " +
@@ -30,10 +29,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         fxb.GetEntityDisplayName(om.ReferencedEntity) + "." + om.ReferencedAttribute;
                 }
             }
-            else if (relation is ManyToManyRelationshipMetadata)
+            else if (relation is ManyToManyRelationshipMetadata mm)
             {
-                var mm = (ManyToManyRelationshipMetadata)relation;
-
                 if (fxb.NeedToLoadEntity(mm.Entity1LogicalName))
                 {
                     fxb.LoadEntityDetails(mm.Entity1LogicalName, null, false);
@@ -73,7 +70,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 }
             }
         }
-        public EntityRole Role { get; set; }
 
         public override string ToString()
         {
