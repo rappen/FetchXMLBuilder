@@ -555,6 +555,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return result.ToArray();
         }
 
+        internal string GetPrimaryIdAttribute(string entityName)
+        {
+            if (entities != null && entities.TryGetValue(entityName, out var entity))
+            {
+                return entity.PrimaryIdAttribute;
+            }
+
+            return null;
+        }
+
         internal Dictionary<string, EntityMetadata> GetDisplayEntities()
         {
             var result = new Dictionary<string, EntityMetadata>();
