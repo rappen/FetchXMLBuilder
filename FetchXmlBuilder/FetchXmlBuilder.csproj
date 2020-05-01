@@ -178,6 +178,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppCode\AppInsights.cs" />
     <Compile Include="AppCode\ConnectionExtensions.cs" />
     <Compile Include="AppCode\ServiceExtensions.cs" />
     <Compile Include="AppCode\AttributeItem.cs" />

@@ -27,10 +27,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
     public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin
     {
         private const string aiEndpoint = "https://dc.services.visualstudio.com/v2/track";
-
-        //private const string aiKey = "cc7cb081-b489-421d-bb61-2ee53495c336";    // jonas@rappen.net tenant, TestAI
         private const string aiKey = "eed73022-2444-45fd-928b-5eebd8fa46a6";    // jonas@rappen.net tenant, XrmToolBox
-
         //private const string aiKey = "b6a4ec7c-ab43-4780-97cd-021e99506337";   // jonas@jonasrapp.net, XrmToolBoxInsights
 
         #region Internal Fields
@@ -66,7 +63,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private string liveUpdateXml = "";
         private int resultpanecount = 0;
         private Entity view;
-        private AppInsights ai;
+        private readonly AppCode.AppInsights ai;
         private QueryRepository repository = new QueryRepository();
         private bool inSql4Cds;
 
@@ -77,10 +74,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         public FetchXmlBuilder()
         {
             InitializeComponent();
-            ai = new AppInsights(new AiConfig(aiEndpoint, aiKey)
-            {
-                PluginName = "FetchXML Builder"
-            });
+            ai = new AppCode.AppInsights(aiEndpoint, aiKey, Assembly.GetExecutingAssembly(), "FetchXML Builder");
             var theme = new VS2015LightTheme();
             dockContainer.Theme = theme;
             dockContainer.Theme.Skin.DockPaneStripSkin.TextFont = Font;
