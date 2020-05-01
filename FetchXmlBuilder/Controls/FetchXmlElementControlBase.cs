@@ -16,25 +16,32 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private string controlsCheckSum = "";
         private ErrorProvider errorProvider;
         private ErrorProvider warningProvider;
+        private ErrorProvider infoProvider;
         private bool validationSuspended = false;
 
         static FetchXmlElementControlBase()
         {
             // Create the small warning icon to use for user feedback
             // https://stackoverflow.com/questions/3031124/is-there-a-way-to-get-different-sizes-of-the-windows-system-icons-in-net
-            Size iconSize = SystemInformation.SmallIconSize;
-            Bitmap bitmap = new Bitmap(iconSize.Width, iconSize.Height);
-
-            using (Graphics g = Graphics.FromImage(bitmap))
+            var iconSize = SystemInformation.SmallIconSize;
+            var bitmapWarning = new Bitmap(iconSize.Width, iconSize.Height);
+            using (var gw = Graphics.FromImage(bitmapWarning))
             {
-                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                g.DrawImage(SystemIcons.Warning.ToBitmap(), new Rectangle(Point.Empty, iconSize));
+                gw.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                gw.DrawImage(SystemIcons.Warning.ToBitmap(), new Rectangle(Point.Empty, iconSize));
             }
-
-            WarningIcon = Icon.FromHandle(bitmap.GetHicon());
+            WarningIcon = Icon.FromHandle(bitmapWarning.GetHicon());
+            var bitmapInfo = new Bitmap(iconSize.Width, iconSize.Height);
+            using (var gi = Graphics.FromImage(bitmapInfo))
+            {
+                gi.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                gi.DrawImage(SystemIcons.Information.ToBitmap(), new Rectangle(Point.Empty, iconSize));
+            }
+            InfoIcon = Icon.FromHandle(bitmapInfo.GetHicon());
         }
 
         protected static Icon WarningIcon { get; }
+        protected static Icon InfoIcon { get; }
 
         public void InitializeFXB(Dictionary<string, string> collection, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree, TreeNode node)
         {
@@ -57,9 +64,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             };
             warningProvider = new ErrorProvider(this)
             {
-                BlinkStyle = ErrorBlinkStyle.NeverBlink
+                BlinkStyle = ErrorBlinkStyle.NeverBlink,
+                Icon = WarningIcon
             };
-            warningProvider.Icon = WarningIcon;
+            infoProvider = new ErrorProvider(this)
+            {
+                BlinkStyle = ErrorBlinkStyle.NeverBlink,
+                Icon = InfoIcon
+            };
             PopulateControls();
             ControlUtils.FillControls(collec, this.Controls, this);
             controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
@@ -157,6 +169,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             var result = ValidateControl(control);
             errorProvider.SetError(control, result?.Level == ControlValidationLevel.Error ? result.Message : null);
             warningProvider.SetError(control, result?.Level == ControlValidationLevel.Warning ? result.Message : null);
+            infoProvider.SetError(control, result?.Level == ControlValidationLevel.Info ? result.Message : null);
             return result;
         }
 
@@ -215,6 +228,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
     public enum ControlValidationLevel
     {
         Success,
+        Info,
         Warning,
         Error
     }
