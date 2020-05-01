@@ -174,9 +174,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 string to;
                 bool intersect;
 
-                if (rel.Relationship is OneToManyRelationshipMetadata)
+                if (rel.Relationship is OneToManyRelationshipMetadata om)
                 {
-                    var om = (OneToManyRelationshipMetadata)rel.Relationship;
                     if (parent == om.ReferencedEntity && rel.Role == EntityRole.Referenced)
                     {
                         entity = om.ReferencingEntity;
@@ -196,10 +195,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     }
                     intersect = false;
                 }
-                else if (rel.Relationship is ManyToManyRelationshipMetadata)
+                else if (rel.Relationship is ManyToManyRelationshipMetadata mm)
                 {
-                    var mm = (ManyToManyRelationshipMetadata)rel.Relationship;
-
                     if (fxb.NeedToLoadEntity(mm.Entity1LogicalName))
                     {
                         fxb.LoadEntityDetails(mm.Entity1LogicalName, null, false);
