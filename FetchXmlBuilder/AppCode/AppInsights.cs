@@ -19,7 +19,7 @@
  *               Enjoy responsibly.
  * **********************************************************/
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Rappen.Helpers
 {
     using System;
     using System.Diagnostics;

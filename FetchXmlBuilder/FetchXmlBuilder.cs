@@ -63,7 +63,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private string liveUpdateXml = "";
         private int resultpanecount = 0;
         private Entity view;
-        private readonly AppCode.AppInsights ai;
+        private readonly Rappen.Helpers.AppInsights ai;
         private QueryRepository repository = new QueryRepository();
         private bool inSql4Cds;
 
@@ -74,7 +74,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         public FetchXmlBuilder()
         {
             InitializeComponent();
-            ai = new AppCode.AppInsights(aiEndpoint, aiKey, Assembly.GetExecutingAssembly(), "FetchXML Builder");
+            ai = new Rappen.Helpers.AppInsights(aiEndpoint, aiKey, Assembly.GetExecutingAssembly(), "FetchXML Builder");
             var theme = new VS2015LightTheme();
             dockContainer.Theme = theme;
             dockContainer.Theme.Skin.DockPaneStripSkin.TextFont = Font;
