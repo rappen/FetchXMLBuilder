@@ -34,7 +34,32 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 this.EnsureVisible(form.dockContainer, form.settings.DockStates.ResultView);
             }
-            crmGridView1.DataSource = entities;
+
+            BindColumns();
+            BindData();
+        }
+
+        private void BindColumns()
+        {
+            // Remove existing columns
+            for (var i = crmGridView1.ColumnCount - 1; i >= 0; i--)
+            {
+                if (crmGridView1.Columns[i].Visible)
+                {
+                    crmGridView1.Columns.RemoveAt(i);
+                }
+            }
+
+            // Create new columns
+            foreach (var colName in queryinfo.AttributesSignature.Split('\n').Where(c => !String.IsNullOrEmpty(c)))
+            {
+                crmGridView1.Columns.Add(colName, colName);
+            }
+        }
+
+        private void BindData()
+        {
+            crmGridView1.DataSource = queryinfo.Results;
             crmGridView1.Refresh();
             ArrangeColumns();
         }
@@ -45,7 +70,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 return;
             }
-            crmGridView1.ColumnOrder = queryinfo.AttributesSignature.Replace('\n', ',');
             crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
         }
 

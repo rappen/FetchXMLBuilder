@@ -147,7 +147,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
             if (entity != null)
             {
-                var alias = entity.Attributes["alias"] != null ? entity.Attributes["alias"].Value + "." : "";
+                var alias = "";
+
+                if (entity.LocalName == "link-entity")
+                {
+                    alias = entity.Attributes["alias"]?.Value;
+
+                    if (alias == null)
+                    {
+                        // No explicit alias, so calculate what alias the server will give it
+                        alias = entity.Attributes["name"].Value + GetUniqueLinkEntitySuffix(entity).ToString();
+                    }
+
+                    alias += ".";
+                }
                 var entityAttributes = entity.SelectNodes("attribute");
                 foreach (XmlNode attr in entityAttributes)
                 {
@@ -167,6 +180,39 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 }
             }
             return result;
+        }
+
+        private int GetUniqueLinkEntitySuffix(XmlNode entity)
+        {
+            var root = entity.OwnerDocument.DocumentElement;
+            var links = 0;
+
+            FindLinkElement(root, ref links, entity);
+
+            return links;
+        }
+
+        private bool FindLinkElement(XmlNode root, ref int links, XmlNode find)
+        {
+            if (root is XmlElement element && element.LocalName == "link-entity" && !element.HasAttribute("alias"))
+            {
+                links++;
+            }
+
+            if (root == find)
+            {
+                return true;
+            }
+
+            foreach (XmlNode child in root.ChildNodes)
+            {
+                if (FindLinkElement(child, ref links, find))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         internal string GetFetchString(bool format, bool validate)
