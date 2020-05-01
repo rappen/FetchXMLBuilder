@@ -166,7 +166,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 {
                     if (attr.Attributes["alias"] != null)
                     {
-                        result += alias + attr.Attributes["alias"].Value + "\n";
+                        result += attr.Attributes["alias"].Value + "\n";
                     }
                     else if (attr.Attributes["name"] != null)
                     {

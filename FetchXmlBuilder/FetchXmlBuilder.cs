@@ -1391,15 +1391,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 IsCancelable = true,
                 Work = (worker, eventargs) =>
                 {
-                    QueryBase query;
-                    try
-                    {
-                        query = dockControlBuilder.GetQueryExpression(fetch);
-                    }
-                    catch (FetchIsAggregateException)
-                    {
-                        query = new FetchExpression(fetch);
-                    }
+                    QueryBase query = new FetchExpression(fetch);
                     var attributessignature = dockControlBuilder.GetAttributesSignature(null);
                     var start = DateTime.Now;
                     EntityCollection resultCollection = null;
