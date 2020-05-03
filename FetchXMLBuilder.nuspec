@@ -48,15 +48,24 @@ To make it even more appealing, there is also the possibility to have it show "F
     </description>
     <releaseNotes>
 
--- New features --
-•	Integration with the SQL 4 CDS tool! https://markcarrington.dev/sql-4-cds/
-•	Updates to tree node properties are now immediately reflected in FetchXML and treeview
-Both improvements above provided by Mark Carrington https://github.com/MarkMpn
+-- Improvements --
+Property validation and continuous saving *
+Informational icons instead of blocking popup messages *
+Escape undoes property changes *
+Button to abort multi page retrievals https://github.com/rappen/FetchXMLBuilder/issues/287
+Continuous progress reporting for multi page retrievals
+Scrollbar when all properties do not fit https://github.com/rappen/FetchXMLBuilder/issues/282
+Improved relationship presentation *
 
--- Internal-- 
-•	Flow now called Power Automate https://github.com/rappen/FetchXMLBuilder/issues/267
-•	Improved performance for OData v4.0 and Flow – I mean Power Automate – generation 
-•	Using latest and greatest SDKs from Microsoft
+-- Fixes --
+Restored support for "in" condition operator https://github.com/rappen/FetchXMLBuilder/issues/277 *
+Return FetchXML button was sometimes hidden https://github.com/rappen/FetchXMLBuilder/issues/280
+Another link-entity issue with reversed attributes https://github.com/rappen/FetchXMLBuilder/issues/271 *
+
+Detailed release history and included commits are available here:
+https://github.com/rappen/FetchXMLBuilder/releases
+
+* Improvements/fixes provided by Mark Carrington https://github.com/MarkMpn
 
     </releaseNotes>
     <copyright>Copyright Jonas Rapp 2014-2019</copyright>
