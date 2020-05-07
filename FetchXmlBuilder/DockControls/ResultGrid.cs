@@ -18,11 +18,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             InitializeComponent();
             this.PrepareGroupBoxExpanders();
             form = fetchXmlBuilder;
-            chkFriendly.Checked = form.settings.Results.Friendly;
-            chkIdCol.Checked = form.settings.Results.Id;
-            chkIndexCol.Checked = form.settings.Results.Index;
-            chkLocalTime.Checked = form.settings.Results.LocalTime;
-            chkCopyHeaders.Checked = form.settings.Results.CopyHeaders;
+            mnuFriendly.Checked = form.settings.Results.Friendly;
+            mnuIdCol.Checked = form.settings.Results.Id;
+            mnuIndexCol.Checked = form.settings.Results.Index;
+            mnuNullCol.Checked = form.settings.Results.NullColumns;
+            mnuSysCol.Checked = form.settings.Results.SysColumns;
+            mnuLocalTime.Checked = form.settings.Results.LocalTime;
+            mnuCopyHeaders.Checked = form.settings.Results.CopyHeaders;
             ApplySettingsToGrid();
         }
 
@@ -78,6 +80,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             crmGridView1.ShowFriendlyNames = form.settings.Results.Friendly;
             crmGridView1.ShowIdColumn = form.settings.Results.Id;
             crmGridView1.ShowIndexColumn = form.settings.Results.Index;
+            //crmGridView1.ShowAllColumnsInColumnOrder = form.settings.Results.NullColumns;
+            //crmGridView1.ShowColumnsNotInColumnOrder = form.settings.Results.SysColumns;
             crmGridView1.ShowLocalTimes = form.settings.Results.LocalTime;
             crmGridView1.ClipboardCopyMode = form.settings.Results.CopyHeaders ?
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
@@ -87,11 +91,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void UpdateSettingsFromGrid()
         {
-            form.settings.Results.Friendly = chkFriendly.Checked;
-            form.settings.Results.Index = chkIndexCol.Checked;
-            form.settings.Results.Id = chkIdCol.Checked;
-            form.settings.Results.LocalTime = chkLocalTime.Checked;
-            form.settings.Results.CopyHeaders = chkCopyHeaders.Checked;
+            form.settings.Results.Friendly = mnuFriendly.Checked;
+            form.settings.Results.Index = mnuIndexCol.Checked;
+            form.settings.Results.NullColumns = mnuNullCol.Checked;
+            form.settings.Results.SysColumns = mnuSysCol.Checked;
+            form.settings.Results.Id = mnuIdCol.Checked;
+            form.settings.Results.LocalTime = mnuLocalTime.Checked;
+            form.settings.Results.CopyHeaders = mnuCopyHeaders.Checked;
             ApplySettingsToGrid();
         }
 
