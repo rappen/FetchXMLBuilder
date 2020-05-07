@@ -37,26 +37,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 this.EnsureVisible(form.dockContainer, form.settings.DockStates.ResultView);
             }
 
-            BindColumns();
+            crmGridView1.ColumnOrder = queryinfo.AttributesSignature.Trim().Replace('\n', ',');
             BindData();
-        }
-
-        private void BindColumns()
-        {
-            // Remove existing columns
-            for (var i = crmGridView1.ColumnCount - 1; i >= 0; i--)
-            {
-                if (crmGridView1.Columns[i].Visible)
-                {
-                    crmGridView1.Columns.RemoveAt(i);
-                }
-            }
-
-            // Create new columns
-            foreach (var colName in queryinfo.AttributesSignature.Split('\n').Where(c => !String.IsNullOrEmpty(c)))
-            {
-                crmGridView1.Columns.Add(colName, colName);
-            }
         }
 
         private void BindData()
@@ -80,8 +62,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             crmGridView1.ShowFriendlyNames = form.settings.Results.Friendly;
             crmGridView1.ShowIdColumn = form.settings.Results.Id;
             crmGridView1.ShowIndexColumn = form.settings.Results.Index;
-            //crmGridView1.ShowAllColumnsInColumnOrder = form.settings.Results.NullColumns;
-            //crmGridView1.ShowColumnsNotInColumnOrder = form.settings.Results.SysColumns;
+            crmGridView1.ShowAllColumnsInColumnOrder = form.settings.Results.NullColumns;
+            crmGridView1.ShowColumnsNotInColumnOrder = form.settings.Results.SysColumns;
             crmGridView1.ShowLocalTimes = form.settings.Results.LocalTime;
             crmGridView1.ClipboardCopyMode = form.settings.Results.CopyHeaders ?
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
