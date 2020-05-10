@@ -2,7 +2,6 @@
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Windows.Forms;
 using xrmtb.XrmToolBox.Controls;
 
@@ -37,23 +36,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 this.EnsureVisible(form.dockContainer, form.settings.DockStates.ResultView);
             }
 
-            crmGridView1.ColumnOrder = queryinfo.AttributesSignature.Trim().Replace('\n', ',');
-            BindData();
-        }
-
-        private void BindData()
-        {
             crmGridView1.DataSource = queryinfo.Results;
+            crmGridView1.ColumnOrder = queryinfo.AttributesSignature.Trim().Replace('\n', ',');
             crmGridView1.Refresh();
-            ArrangeColumns();
-        }
-
-        private void ArrangeColumns()
-        {
-            if (queryinfo == null)
-            {
-                return;
-            }
             crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
         }
 
@@ -68,10 +53,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             crmGridView1.ClipboardCopyMode = form.settings.Results.CopyHeaders ?
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             crmGridView1.OrganizationService = form.Service;
-            ArrangeColumns();
+            crmGridView1.Refresh();
+            crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
         }
 
-        private void UpdateSettingsFromGrid()
+        private void UpdateSettingsFromSelectedOptions()
         {
             form.settings.Results.Friendly = mnuFriendly.Checked;
             form.settings.Results.Index = mnuIndexCol.Checked;
@@ -160,7 +146,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void chkGridOptions_Click(object sender, EventArgs e)
         {
-            UpdateSettingsFromGrid();
+            UpdateSettingsFromSelectedOptions();
         }
 
         private void ResultGrid_DockStateChanged(object sender, EventArgs e)

@@ -35,22 +35,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             this.crmGridView1 = new xrmtb.XrmToolBox.Controls.CRMGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lblOptionsExpander = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.tt = new System.Windows.Forms.ToolTip(this.components);
             this.mnuOptions = new System.Windows.Forms.MenuStrip();
-            this.mnuColumnOptions = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuColumns = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuIndexCol = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuIdCol = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuNullCol = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuSysCol = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuDisplayOptions = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuBehavior = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuFriendly = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuLocalTime = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuCopyHeaders = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.tt = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.mnuOptions.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // crmGridView1
@@ -61,6 +61,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             this.crmGridView1.AllowUserToResizeRows = false;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.WhiteSmoke;
             this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.crmGridView1.AutoRefresh = false;
             this.crmGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
             this.crmGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.crmGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
@@ -92,7 +93,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             this.groupBox1.Size = new System.Drawing.Size(652, 42);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "View Options";
+            this.groupBox1.Text = "Options";
             // 
             // lblOptionsExpander
             // 
@@ -107,22 +108,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             this.lblOptionsExpander.Text = "–";
             this.lblOptionsExpander.Click += new System.EventHandler(this.lblOptionsExpander_Click);
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.groupBox1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 230);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(650, 43);
-            this.panel1.TabIndex = 5;
-            // 
             // mnuOptions
             // 
             this.mnuOptions.BackColor = System.Drawing.SystemColors.Window;
             this.mnuOptions.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.mnuOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuColumnOptions,
-            this.mnuDisplayOptions});
+            this.mnuBehavior,
+            this.mnuColumns});
             this.mnuOptions.Location = new System.Drawing.Point(3, 15);
             this.mnuOptions.Name = "mnuOptions";
             this.mnuOptions.ShowItemToolTips = true;
@@ -130,16 +122,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             this.mnuOptions.TabIndex = 61;
             this.mnuOptions.Text = "menuStrip1";
             // 
-            // mnuColumnOptions
+            // mnuColumns
             // 
-            this.mnuColumnOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuColumns.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuIndexCol,
             this.mnuIdCol,
             this.mnuNullCol,
             this.mnuSysCol});
-            this.mnuColumnOptions.Name = "mnuColumnOptions";
-            this.mnuColumnOptions.Size = new System.Drawing.Size(107, 20);
-            this.mnuColumnOptions.Text = "Column Options";
+            this.mnuColumns.Name = "mnuColumns";
+            this.mnuColumns.Size = new System.Drawing.Size(67, 20);
+            this.mnuColumns.Text = "Columns";
             // 
             // mnuIndexCol
             // 
@@ -173,15 +165,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             this.mnuSysCol.Text = "System added";
             this.mnuSysCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
-            // mnuDisplayOptions
+            // mnuBehavior
             // 
-            this.mnuDisplayOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuBehavior.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuFriendly,
             this.mnuLocalTime,
             this.mnuCopyHeaders});
-            this.mnuDisplayOptions.Name = "mnuDisplayOptions";
-            this.mnuDisplayOptions.Size = new System.Drawing.Size(102, 20);
-            this.mnuDisplayOptions.Text = "Display Options";
+            this.mnuBehavior.Name = "mnuBehavior";
+            this.mnuBehavior.Size = new System.Drawing.Size(65, 20);
+            this.mnuBehavior.Text = "Behavior";
             // 
             // mnuFriendly
             // 
@@ -206,6 +198,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             this.mnuCopyHeaders.Size = new System.Drawing.Size(180, 22);
             this.mnuCopyHeaders.Text = "Copy with Headers";
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.groupBox1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 230);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(650, 43);
+            this.panel1.TabIndex = 5;
+            // 
             // ResultGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -222,9 +223,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.panel1.ResumeLayout(false);
             this.mnuOptions.ResumeLayout(false);
             this.mnuOptions.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -236,12 +237,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         private System.Windows.Forms.Label lblOptionsExpander;
         private System.Windows.Forms.ToolTip tt;
         private System.Windows.Forms.MenuStrip mnuOptions;
-        private System.Windows.Forms.ToolStripMenuItem mnuColumnOptions;
+        private System.Windows.Forms.ToolStripMenuItem mnuColumns;
         private System.Windows.Forms.ToolStripMenuItem mnuIndexCol;
         private System.Windows.Forms.ToolStripMenuItem mnuIdCol;
         private System.Windows.Forms.ToolStripMenuItem mnuNullCol;
         private System.Windows.Forms.ToolStripMenuItem mnuSysCol;
-        private System.Windows.Forms.ToolStripMenuItem mnuDisplayOptions;
+        private System.Windows.Forms.ToolStripMenuItem mnuBehavior;
         private System.Windows.Forms.ToolStripMenuItem mnuFriendly;
         private System.Windows.Forms.ToolStripMenuItem mnuLocalTime;
         private System.Windows.Forms.ToolStripMenuItem mnuCopyHeaders;
