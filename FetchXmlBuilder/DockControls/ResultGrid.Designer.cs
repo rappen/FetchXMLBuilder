@@ -163,7 +163,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             this.mnuNullCol.Name = "mnuNullCol";
             this.mnuNullCol.Size = new System.Drawing.Size(180, 22);
             this.mnuNullCol.Text = "Without value";
-            this.mnuNullCol.Visible = false;
             this.mnuNullCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
             // mnuSysCol
@@ -172,7 +171,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             this.mnuSysCol.Name = "mnuSysCol";
             this.mnuSysCol.Size = new System.Drawing.Size(180, 22);
             this.mnuSysCol.Text = "System added";
-            this.mnuSysCol.Visible = false;
             this.mnuSysCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
             // mnuDisplayOptions

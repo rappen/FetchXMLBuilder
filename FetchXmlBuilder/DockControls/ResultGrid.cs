@@ -36,7 +36,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 this.EnsureVisible(form.dockContainer, form.settings.DockStates.ResultView);
             }
-            crmGridView1.DataSource = entities;
+
+            crmGridView1.ColumnOrder = queryinfo.AttributesSignature.Trim().Replace('\n', ',');
+            BindData();
+        }
+
+        private void BindData()
+        {
+            crmGridView1.DataSource = queryinfo.Results;
             crmGridView1.Refresh();
             ArrangeColumns();
         }
@@ -47,7 +54,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 return;
             }
-            crmGridView1.ColumnOrder = queryinfo.AttributesSignature.Replace('\n', ',');
             crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
         }
 
@@ -56,8 +62,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             crmGridView1.ShowFriendlyNames = form.settings.Results.Friendly;
             crmGridView1.ShowIdColumn = form.settings.Results.Id;
             crmGridView1.ShowIndexColumn = form.settings.Results.Index;
-            //crmGridView1.ShowAllColumnsInColumnOrder = form.settings.Results.NullColumns;
-            //crmGridView1.ShowColumnsNotInColumnOrder = form.settings.Results.SysColumns;
+            crmGridView1.ShowAllColumnsInColumnOrder = form.settings.Results.NullColumns;
+            crmGridView1.ShowColumnsNotInColumnOrder = form.settings.Results.SysColumns;
             crmGridView1.ShowLocalTimes = form.settings.Results.LocalTime;
             crmGridView1.ClipboardCopyMode = form.settings.Results.CopyHeaders ?
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
