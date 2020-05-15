@@ -13,12 +13,12 @@
     <description>
 FetchXML Builder is used to create and execute queries against CDS and Dynamics 365/CRM data.
 CDS includes technologies we know as:
-- Microsoft Dynamics 365 Customer Engagement
+- Microsoft Dynamics 365
 - Dynamics CRM
-- Common Data Service for Apps
+- Common Data Service (CDS)
 - XRM
-- PowerApps (Model Driven)
-- PowerApps (Canvas connected to D365 or CDS)
+- Power Apps (Model Driven)
+- Power Apps (Canvas connected to D365 or CDS)
 - PowerBI (connected to D365 or CDS)
       
 The tool will assist in three major areas:
@@ -47,36 +47,15 @@ The tool reads metadata from CDS to assist with selecting entities, attributes, 
 To make it even more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.
     </description>
     <releaseNotes>
-Full release notes: https://github.com/rappen/FetchXMLBuilder/releases/tag/$buildnumber$
-
--- Improvements --
-Property validation and continuous saving *
-Informational icons instead of blocking popup messages *
-Escape undoes property changes *
-Button to abort multi page retrievals https://github.com/rappen/FetchXMLBuilder/issues/287
-Continuous progress reporting for multi page retrievals
-Scrollbar when all properties do not fit https://github.com/rappen/FetchXMLBuilder/issues/282
-Improved relationship presentation *
-
--- Fixes --
-Restored support for "in" condition operator https://github.com/rappen/FetchXMLBuilder/issues/277 *
-Return FetchXML button was sometimes hidden https://github.com/rappen/FetchXMLBuilder/issues/280
-Another link-entity issue with reversed attributes https://github.com/rappen/FetchXMLBuilder/issues/271 *
-
-Detailed release history and included commits are available here:
-https://github.com/rappen/FetchXMLBuilder/releases
-
-* Improvements/fixes provided by Mark Carrington https://github.com/MarkMpn
-
+      Full release notes: https://github.com/rappen/FetchXMLBuilder/releases/tag/$buildnumber$
     </releaseNotes>
     <copyright>Copyright Jonas Rapp 2014-2020</copyright>
     <tags>XrmToolBox Plugins FetchXML Builder</tags>
     <dependencies>
-      <dependency id="XrmToolBox" version="1.2019.11.35" />
+      <dependency id="XrmToolBox" version="1.2020.4.38" />
     </dependencies>
   </metadata>
   <files>
     <file src="FetchXMLBuilder\bin\Release\Rappen.XTB.FXB.dll" target="lib\net452\Plugins" />
-    <file src="FetchXMLBuilder\bin\Release\Cinteros.Xrm.FetchXmlBuilder.dll" target="lib\net452\Plugins" />
   </files>
 </package>
