@@ -24,6 +24,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public ContentWindows ContentWindows { get; set; } = new ContentWindows();
         public bool OpenUncustomizableViews { get; set; } = false;
         public bool UseSQL4CDS { get; set; }
+        public bool UseLookup { get; set; } = true;
     }
 
     public class QueryOptions
