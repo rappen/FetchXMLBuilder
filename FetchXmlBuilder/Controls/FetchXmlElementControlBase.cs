@@ -73,8 +73,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 Icon = InfoIcon
             };
             PopulateControls();
-            ControlUtils.FillControls(collec, this.Controls, this);
-            controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
+            ControlUtils.FillControls(collec, Controls, this);
+            controlsCheckSum = ControlUtils.ControlsChecksum(Controls);
             Saved += tree.CtrlSaved;
             AttachValidatingEvent(this);
             ValidateControlRecursive(this);
