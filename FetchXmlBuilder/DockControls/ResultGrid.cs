@@ -73,7 +73,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             if (e.Entity != null)
             {
-                string url = GetEntityUrl(e.Entity);
+                var url = form.ConnectionDetail.GetEntityUrl(e.Entity);
                 if (!string.IsNullOrEmpty(url))
                 {
                     form.LogUse("OpenRecord");
@@ -82,60 +82,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
         }
 
-        private string GetEntityUrl(Entity entity)
-        {
-            var entref = entity.ToEntityReference();
-            switch (entref.LogicalName)
-            {
-                case "activitypointer":
-                    if (!entity.Contains("activitytypecode"))
-                    {
-                        MessageBox.Show("To open records of type activitypointer, attribute 'activitytypecode' must be included in the query.", "Open Record", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        entref.LogicalName = string.Empty;
-                    }
-                    else
-                    {
-                        entref.LogicalName = entity["activitytypecode"].ToString();
-                    }
-                    break;
-                case "activityparty":
-                    if (!entity.Contains("partyid"))
-                    {
-                        MessageBox.Show("To open records of type activityparty, attribute 'partyid' must be included in the query.", "Open Record", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        entref.LogicalName = string.Empty;
-                    }
-                    else
-                    {
-                        var party = (EntityReference)entity["partyid"];
-                        entref.LogicalName = party.LogicalName;
-                        entref.Id = party.Id;
-                    }
-                    break;
-            }
-            return GetEntityReferenceUrl(entref);
-        }
-
-        private string GetEntityReferenceUrl(EntityReference entref)
-        {
-            if (!string.IsNullOrEmpty(entref.LogicalName) && !entref.Id.Equals(Guid.Empty))
-            {
-                var url = form.ConnectionDetail.GetFullWebApplicationUrl();
-                url = string.Concat(url,
-                    url.EndsWith("/") ? "" : "/",
-                    "main.aspx?etn=",
-                    entref.LogicalName,
-                    "&pagetype=entityrecord&id=",
-                    entref.Id.ToString());
-                return url;
-            }
-            return string.Empty;
-        }
-
         private void crmGridView1_RecordClick(object sender, CRMRecordEventArgs e)
         {
             if (e.Value is EntityReference)
             {
-                string url = GetEntityReferenceUrl(e.Value as EntityReference);
+                string url = form.ConnectionDetail.GetEntityReferenceUrl(e.Value as EntityReference);
                 if (!string.IsNullOrEmpty(url))
                 {
                     form.LogUse("OpenParentRecord");
