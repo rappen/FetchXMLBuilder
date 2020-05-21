@@ -42,6 +42,7 @@
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.llShowWelcome = new System.Windows.Forms.LinkLabel();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -147,6 +148,7 @@
             this.listAssemblies.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listAssemblies.FullRowSelect = true;
             this.listAssemblies.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listAssemblies.HideSelection = false;
             this.listAssemblies.Location = new System.Drawing.Point(3, 16);
             this.listAssemblies.Name = "listAssemblies";
             this.listAssemblies.ShowGroups = false;
@@ -174,6 +176,17 @@
             this.pictureBox1.TabIndex = 12;
             this.pictureBox1.TabStop = false;
             // 
+            // llShowWelcome
+            // 
+            this.llShowWelcome.AutoSize = true;
+            this.llShowWelcome.Location = new System.Drawing.Point(585, 240);
+            this.llShowWelcome.Name = "llShowWelcome";
+            this.llShowWelcome.Size = new System.Drawing.Size(114, 13);
+            this.llShowWelcome.TabIndex = 17;
+            this.llShowWelcome.TabStop = true;
+            this.llShowWelcome.Text = "Show welcome screen";
+            this.llShowWelcome.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llShowWelcome_LinkClicked);
+            // 
             // About
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -181,6 +194,7 @@
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.button1;
             this.ClientSize = new System.Drawing.Size(857, 524);
+            this.Controls.Add(this.llShowWelcome);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.lblVersion);
@@ -218,5 +232,6 @@
         private System.Windows.Forms.ListView listAssemblies;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.LinkLabel llShowWelcome;
     }
 }

@@ -66,5 +66,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             System.Diagnostics.Process.Start("http://twitter.com/FetchXMLBuilder");
         }
+
+        private void llShowWelcome_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Welcome.ShowWelcome(this);
+            Close();
+        }
     }
 }
