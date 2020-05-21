@@ -16,15 +16,18 @@ namespace Cinteros.Xrm.XmlEditorUtils
             return !string.IsNullOrWhiteSpace(attribute);
         }
 
-        public static string ControlsChecksum(System.Windows.Forms.Control.ControlCollection controls)
+        public static string ControlsChecksum(Control.ControlCollection controls)
         {
-            var checksum = "";
-            foreach (Control control in controls)
+            if (controls?.Count == 0)
             {
-                if (control.Tag == null) { continue; }
-                checksum += GetValueFromControl(control) + "|";
+                return string.Empty;
             }
-            return checksum;
+            var result = string.Join("|", controls.OfType<Control>().OrderBy(c => c.TabIndex).Select(c => GetValueFromControl(c) + "|" + ControlsChecksum(c.Controls)));
+            while (result.Contains("||"))
+            {
+                result = result.Replace("||", "|");
+            }
+            return result;
         }
 
         public static string GetValueFromControl(Control control)
@@ -53,57 +56,79 @@ namespace Cinteros.Xrm.XmlEditorUtils
             return result;
         }
 
-        public static Dictionary<string, string> GetAttributesCollection(System.Windows.Forms.Control.ControlCollection controls, bool validate = false)
+        public static Dictionary<string, string> GetAttributesCollection(Control.ControlCollection controls, bool validate = false)
         {
+            if (controls?.Count == 0)
+            {
+                return null;
+            }
             Dictionary<string, string> collection = new Dictionary<string, string>();
 
-            foreach (Control control in controls.Cast<Control>().Where(y => y.Tag != null).OrderBy(y => y.TabIndex))
+            foreach (Control control in controls.OfType<Control>().OrderBy(y => y.TabIndex))
             {
-                string attribute;
-                bool required;
-                string defaultvalue;
-                if (ControlUtils.GetControlDefinition(control, out attribute, out required, out defaultvalue))
+                if (control.Tag != null)
                 {
-                    var value = ControlUtils.GetValueFromControl(control);
-                    if (validate && required && string.IsNullOrEmpty(value))
+                    string attribute;
+                    bool required;
+                    string defaultvalue;
+                    if (GetControlDefinition(control, out attribute, out required, out defaultvalue))
                     {
-                        throw new ArgumentNullException(attribute, "Field cannot be empty");
+                        var value = ControlUtils.GetValueFromControl(control);
+                        if (validate && required && string.IsNullOrEmpty(value))
+                        {
+                            throw new ArgumentNullException(attribute, "Field cannot be empty");
+                        }
+                        if (required || value != defaultvalue)
+                        {
+                            collection.Add(attribute, value);
+                        }
                     }
-                    if (required || value != defaultvalue)
+                }
+                if (GetAttributesCollection(control.Controls, validate) is Dictionary<string, string> children)
+                {
+                    foreach (var child in children)
                     {
-                        collection.Add(attribute, value);
+                        collection.Add(child.Key, child.Value);
                     }
                 }
             }
             return collection;
         }
 
-        public static void FillControls(Dictionary<string, string> collection, System.Windows.Forms.Control.ControlCollection controls, IDefinitionSavable saveable)
+        public static void FillControls(Dictionary<string, string> collection, Control.ControlCollection controls, IDefinitionSavable saveable)
         {
-            foreach (Control control in controls.Cast<Control>().Where(y => y.Tag != null).OrderBy(y => y.TabIndex))
+            if (controls?.Count == 0)
             {
-                FillControl(collection, control, saveable);
+                return;
             }
+            controls.OfType<Control>().Where(y => y.Tag != null).OrderBy(y => y.TabIndex).ToList().ForEach(c => FillControl(collection, c, saveable));
+            controls.OfType<Panel>().OrderBy(p => p.TabIndex).ToList().ForEach(p => FillControls(collection, p.Controls, saveable));
         }
 
         public static void FillControl(Dictionary<string, string> collection, Control control, IDefinitionSavable saveable)
         {
-            string attribute;
-            bool required;
-            string defaultvalue;
-            if (ControlUtils.GetControlDefinition(control, out attribute, out required, out defaultvalue))
+            if (control.Tag != null && GetControlDefinition(control, out string attribute, out bool required, out string defaultvalue))
             {
-                var value = collection.ContainsKey(attribute) ? collection[attribute] : defaultvalue;
+                if (!collection.TryGetValue(attribute, out string value))
+                {
+                    value = defaultvalue;
+                }
                 if (control is CheckBox chkbox)
                 {
                     bool.TryParse(value, out bool chk);
                     chkbox.Checked = chk;
-                    chkbox.CheckedChanged += (s, e) => saveable.Save(true);
+                    if (saveable != null)
+                    {
+                        chkbox.CheckedChanged += (s, e) => saveable.Save(true);
+                    }
                 }
                 else if (control is TextBox txt)
                 {
                     txt.Text = value;
-                    txt.TextChanged += (s, e) => saveable.Save(true);
+                    if (saveable != null)
+                    {
+                        txt.TextChanged += (s, e) => saveable.Save(true);
+                    }
                 }
                 else if (control is ComboBox cmb)
                 {
@@ -123,7 +148,7 @@ namespace Cinteros.Xrm.XmlEditorUtils
                     {
                         cmb.SelectedItem = selitem;
                     }
-                    else if (cmb.Items.IndexOf(value) >= 0)
+                    else if (value != null && cmb.Items.IndexOf(value) >= 0)
                     {
                         cmb.SelectedItem = value;
                     }
@@ -131,8 +156,10 @@ namespace Cinteros.Xrm.XmlEditorUtils
                     {
                         cmb.Text = value;
                     }
-
-                    cmb.TextChanged += (s, e) => saveable.Save(true);
+                    if (saveable != null)
+                    {
+                        cmb.TextChanged += (s, e) => saveable.Save(true);
+                    }
                 }
             }
         }
