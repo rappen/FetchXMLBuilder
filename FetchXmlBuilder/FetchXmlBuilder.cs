@@ -1417,10 +1417,34 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             resultCollection.TotalRecordCount = tmpResult.TotalRecordCount;
                             resultCollection.TotalRecordCountLimitExceeded = tmpResult.TotalRecordCountLimitExceeded;
                         }
-                        if (settings.Results.RetrieveAllPages && query is QueryExpression && tmpResult.MoreRecords)
+                        if (settings.Results.RetrieveAllPages && tmpResult.MoreRecords)
                         {
-                            ((QueryExpression)query).PageInfo.PageNumber++;
-                            ((QueryExpression)query).PageInfo.PagingCookie = tmpResult.PagingCookie;
+                            if (query is QueryExpression qex)
+                            {
+                                qex.PageInfo.PageNumber++;
+                                qex.PageInfo.PagingCookie = tmpResult.PagingCookie;
+                            }
+                            else if (query is FetchExpression fex && fex.Query is string pagefetch)
+                            {
+                                var pagedoc = new XmlDocument();
+                                pagedoc.LoadXml(pagefetch);
+                                if (pagedoc.SelectSingleNode("fetch") is XmlElement fetchnode)
+                                {
+                                    if (!int.TryParse(fetchnode.GetAttribute("page"), out int pageno))
+                                    {
+                                        pageno = 1;
+                                    }
+                                    pageno++;
+                                    fetchnode.SetAttribute("page", pageno.ToString());
+                                    fetchnode.SetAttribute("pagingcookie", tmpResult.PagingCookie);
+                                    query = new FetchExpression(pagedoc.OuterXml);
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("Unable to retrieve more pages, unexpected query.", "Retrieve all pages", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                break;
+                            }
                         }
                         page++;
                         var duration = DateTime.Now - start;
@@ -1428,7 +1452,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         worker.ReportProgress(0, $"Retrieved {pageinfo} in {duration.TotalSeconds:F2} sec");
                         SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Retrieved {resultCollection.Entities.Count} records on {pageinfo} in {duration.TotalSeconds:F2} seconds"));
                     }
-                    while (!eventargs.Cancel && settings.Results.RetrieveAllPages && query is QueryExpression && tmpResult.MoreRecords);
+                    while (!eventargs.Cancel && settings.Results.RetrieveAllPages && (query is QueryExpression || query is FetchExpression) && tmpResult.MoreRecords);
                     ai.WriteEvent("RetrieveMultiple", resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds, HandleAIResult);
                     if (settings.Results.ResultOption == 1 && settings.Results.SerializeStyle == 2)
                     {
