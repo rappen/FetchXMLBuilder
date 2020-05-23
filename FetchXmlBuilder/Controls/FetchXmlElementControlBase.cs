@@ -202,9 +202,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         public event EventHandler<SaveEventArgs> Saved;
 
-        protected void FillControl(Control control)
+        protected void ReFillControl(Control control)
         {
-            ControlUtils.FillControl(collec, control, this);
+            ControlUtils.FillControl(collec, control, null);
         }
 
         protected override bool ProcessKeyPreview(ref Message m)
@@ -215,8 +215,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (m.Msg == WM_KEYDOWN && (int)m.WParam == VK_ESCAPE)
             {
                 collec = new Dictionary<string, string>(original);
-                ControlUtils.FillControls(collec, this.Controls, this);
-                controlsCheckSum = ControlUtils.ControlsChecksum(this.Controls);
+                ControlUtils.FillControls(collec, Controls, this);
+                controlsCheckSum = ControlUtils.ControlsChecksum(Controls);
                 SendSaveMessage(original);
                 return true;
             }
