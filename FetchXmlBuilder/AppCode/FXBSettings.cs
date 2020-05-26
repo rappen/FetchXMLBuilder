@@ -62,6 +62,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public int SerializeStyle { get; set; }
         public bool RetrieveAllPages { get; set; } = false;
         public bool AlwaysNewWindow { get; set; } = false;
+        public bool QuickFilter { get; set; } = false;
     }
 
     public class DockStates
