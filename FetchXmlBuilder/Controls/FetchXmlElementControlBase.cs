@@ -19,6 +19,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private ErrorProvider infoProvider;
         private bool validationSuspended = false;
 
+        internal bool Initializing = false;
+
         static FetchXmlElementControlBase()
         {
             // Create the small warning icon to use for user feedback
@@ -45,6 +47,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         public void InitializeFXB(Dictionary<string, string> collection, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree, TreeNode node)
         {
+            Initializing = true;
             fxb = fetchXmlBuilder;
             Node = node;
             Tree = tree;
@@ -78,6 +81,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             Saved += tree.CtrlSaved;
             AttachValidatingEvent(this);
             ValidateControlRecursive(this);
+            Initializing = false;
         }
 
         protected FetchXmlBuilder fxb { get; set; }
