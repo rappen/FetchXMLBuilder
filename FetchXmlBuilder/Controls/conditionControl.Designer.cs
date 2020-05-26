@@ -208,7 +208,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbEntity.Size = new System.Drawing.Size(281, 21);
             this.cmbEntity.TabIndex = 1;
             this.cmbEntity.Tag = "entityname";
-            this.cmbEntity.SelectedIndexChanged += new System.EventHandler(this.cmbEtity_SelectedIndexChanged);
+            this.cmbEntity.SelectedIndexChanged += new System.EventHandler(this.cmbEntity_SelectedIndexChanged);
             // 
             // btnGetGuid
             // 

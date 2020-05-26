@@ -11,7 +11,6 @@ using System.Linq;
 using System.ServiceModel;
 using System.Windows.Forms;
 using xrmtb.XrmToolBox.Controls;
-using xrmtb.XrmToolBox.Controls.Controls;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
@@ -264,6 +263,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void RefreshAttributes()
         {
+            if (Initializing)
+            {
+                return;
+            }
             cmbAttribute.Items.Clear();
             var entityNode = cmbEntity.SelectedItem is EntityNode ? (EntityNode)cmbEntity.SelectedItem : null;
             if (entityNode == null)
@@ -283,15 +286,38 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
                 return;
             }
+            Initializing = true;
             var attributes = fxb.GetDisplayAttributes(entityName);
             attributes.ToList().ForEach(a => AttributeItem.AddAttributeToComboBox(cmbAttribute, a, true, FetchXmlBuilder.friendlyNames));
             // RefreshFill now that attributes are loaded
             ReFillControl(cmbAttribute);
             ReFillControl(cmbValue);
+            Initializing = false;
+            RefreshOperators();
+            UpdateValueField();
+        }
+
+        private void RefreshOperators()
+        {
+            if (Initializing)
+            {
+                return;
+            }
+            if (cmbAttribute.SelectedItem is AttributeItem attributeItem && attributeItem.Metadata.AttributeType is AttributeTypeCode attributeType)
+            {
+                //cmbOperator.SelectedItem = null;
+                cmbOperator.Items.Clear();
+                cmbOperator.Items.AddRange(OperatorItem.GetConditionsByAttributeType(attributeType));
+                ReFillControl(cmbOperator);
+            }
         }
 
         private void UpdateValueField()
         {
+            if (Initializing)
+            {
+                return;
+            }
             panValue.Visible = true;
             panValueGuids.Visible = false;
             panValueLookup.Visible = false;
@@ -438,22 +464,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void cmbAttribute_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbAttribute.SelectedItem != null)
-            {
-                var attributeType = ((AttributeItem)cmbAttribute.SelectedItem).Metadata.AttributeType;
-                if (attributeType.HasValue)
-                {
-                    var tmpColl = ControlUtils.GetAttributesCollection(this.Controls, false);
-                    cmbOperator.SelectedItem = null;
-                    cmbOperator.Items.Clear();
-                    cmbOperator.Items.AddRange(OperatorItem.GetConditionsByAttributeType(attributeType.Value));
-                    ReFillControl(cmbOperator);
-                }
-            }
-            UpdateValueField();
+            RefreshOperators();
         }
 
-        private void cmbEtity_SelectedIndexChanged(object sender, EventArgs e)
+        private void cmbEntity_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshAttributes();
         }
