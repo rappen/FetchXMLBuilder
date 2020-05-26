@@ -209,6 +209,7 @@
     <Compile Include="Controls\commentControl.Designer.cs">
       <DependentUpon>commentControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppCode\EntityNode.cs" />
     <Compile Include="Controls\FetchXmlElementControlBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
