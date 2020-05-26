@@ -79,6 +79,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             dockContainer.Theme = theme;
             dockContainer.Theme.Skin.DockPaneStripSkin.TextFont = Font;
             //dockContainer.DockBackColor = SystemColors.Window;
+            MetadataHelper.attributeProperties = new string[] { "DisplayName", "AttributeType", "IsValidForRead", "AttributeOf", "IsManaged", "IsCustomizable", "IsCustomAttribute", "IsValidForAdvancedFind", "IsPrimaryId", "IsPrimaryName", "OptionSet", "SchemaName", "Targets", "IsLogical" };
         }
 
         #endregion Public Constructors
@@ -1118,7 +1119,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 (eventargs) =>
                 {
                     EnableControls(false);
-                    eventargs.Result = MetadataHelper.LoadEntities(Service);
+                    eventargs.Result = Service.LoadEntities();
                 })
             {
                 PostWorkCallBack = (completedargs) =>

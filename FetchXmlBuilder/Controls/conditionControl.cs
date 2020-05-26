@@ -298,96 +298,110 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             cmbValue.Items.Clear();
             cmbValue.DropDownStyle = ComboBoxStyle.Simple;
             lblValueHint.Visible = false;
-            if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem oper)
+            if (cmbOperator.SelectedItem == null || !(cmbOperator.SelectedItem is OperatorItem oper))
             {
-                var valueType = oper.ValueType;
-                if (valueType == AttributeTypeCode.ManagedProperty)
-                {   // Indicates value type is determined by selected attribute
-                    if (cmbAttribute.SelectedItem is AttributeItem attribute)
+                return;
+            }
+            var valueType = oper.ValueType;
+            var attribute = cmbAttribute.SelectedItem as AttributeItem;
+            if (valueType == AttributeTypeCode.ManagedProperty && attribute != null)
+            {   // Indicates value type is determined by selected attribute
+                valueType = attribute.Metadata.AttributeType;
+                if (oper.IsMultipleValuesType)
+                {
+                    if (Node.Nodes.Count == 0)
                     {
-                        valueType = attribute.Metadata.AttributeType;
-                        if (oper.IsMultipleValuesType)
+                        lblValueHint.Text = "Enter comma-separated " + valueType.ToString() + " values or add sub-nodes.";
+                        lblValueHint.Visible = true;
+                    }
+                    else
+                    {
+                        valueType = null;
+                    }
+                }
+                else if (attribute.Metadata is EnumAttributeMetadata enummeta &&
+                         enummeta.OptionSet is OptionSetMetadata options &&
+                         !(attribute.Metadata is EntityNameAttributeMetadata))
+                {
+                    cmbValue.Items.AddRange(options.Options.Select(o => new OptionsetItem(o)).ToArray());
+                    cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
+                }
+                else if (attribute.Metadata is LookupAttributeMetadata lookupmeta)
+                {
+                    if (fxb.settings.UseLookup)
+                    {
+                        if (Guid.TryParse(cmbValue.Text, out Guid id) && !Guid.Empty.Equals(id))
                         {
-                            if (Node.Nodes.Count == 0)
+                            var loookuptargets = new List<string>();
+                            if (!string.IsNullOrWhiteSpace(txtUitype.Text))
                             {
-                                lblValueHint.Text = "Enter comma-separated " + valueType.ToString() + " values or add sub-nodes.";
-                                lblValueHint.Visible = true;
+                                loookuptargets.Add(txtUitype.Text.Trim());
                             }
                             else
                             {
-                                valueType = null;
+                                loookuptargets.AddRange(lookupmeta.Targets);
                             }
-                        }
-                        else if (attribute.Metadata is EnumAttributeMetadata enummeta &&
-                                 enummeta.OptionSet is OptionSetMetadata options &&
-                                 !(attribute.Metadata is EntityNameAttributeMetadata))
-                        {
-                            cmbValue.Items.AddRange(options.Options.Select(o => new OptionsetItem(o)).ToArray());
-                            cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
-                        }
-                        else if (attribute.Metadata is LookupAttributeMetadata lookupmeta)
-                        {
-                            if (fxb.settings.UseLookup)
+                            foreach (var target in loookuptargets)
                             {
-                                if (Guid.TryParse(cmbValue.Text, out Guid id) && !Guid.Empty.Equals(id))
+                                try
                                 {
-                                    var loookuptargets = new List<string>();
-                                    if (!string.IsNullOrWhiteSpace(txtUitype.Text))
-                                    {
-                                        loookuptargets.Add(txtUitype.Text.Trim());
-                                    }
-                                    else
-                                    {
-                                        loookuptargets.AddRange(lookupmeta.Targets);
-                                    }
-                                    foreach (var target in loookuptargets)
-                                    {
-                                        try
-                                        {
-                                            txtLookup.LogicalName = target;
-                                            txtLookup.Id = id;
-                                            txtUitype.Text = target;
-                                            break;
-                                        }
-                                        catch (FaultException<OrganizationServiceFault>)
-                                        {
-                                            // really nothing to do here, loading the record is simply nice to have
-                                        }
-                                    }
+                                    txtLookup.LogicalName = target;
+                                    txtLookup.Id = id;
+                                    txtUitype.Text = target;
+                                    break;
+                                }
+                                catch (FaultException<OrganizationServiceFault>)
+                                {
+                                    // really nothing to do here, loading the record is simply nice to have
                                 }
                             }
-                            else
-                            {
-                                txtUitype.Text = string.Empty;
-                                txtLookup.Text = string.Empty;
-                            }
                         }
                     }
-                }
-                if (valueType == null)
-                {
-                    cmbValue.Text = "";
-                    cmbValue.Enabled = false;
-                }
-                else
-                {
-                    cmbValue.Enabled = true;
-
-                    if (cmbValue.Items.Count > 0 && cmbValue.SelectedIndex == -1 && !string.IsNullOrWhiteSpace(cmbValue.Text))
+                    else
                     {
-                        var item = cmbValue.Items.OfType<OptionsetItem>().FirstOrDefault(i => i.ToString() == cmbValue.Text);
-                        cmbValue.SelectedItem = item;
+                        txtUitype.Text = string.Empty;
+                        txtLookup.Text = string.Empty;
                     }
                 }
-                if (valueType == AttributeTypeCode.Lookup ||
-                    valueType == AttributeTypeCode.Customer ||
-                    valueType == AttributeTypeCode.Owner ||
-                    valueType == AttributeTypeCode.Uniqueidentifier)
+            }
+            if (valueType == null)
+            {
+                cmbValue.Text = "";
+                cmbValue.Enabled = false;
+            }
+            else
+            {
+                cmbValue.Enabled = true;
+
+                if (cmbValue.Items.Count > 0 && cmbValue.SelectedIndex == -1 && !string.IsNullOrWhiteSpace(cmbValue.Text))
                 {
-                    panValue.Visible = !fxb.settings.UseLookup;
-                    panValueGuids.Visible = !fxb.settings.UseLookup;
-                    panValueLookup.Visible = fxb.settings.UseLookup;
+                    var item = cmbValue.Items.OfType<OptionsetItem>().FirstOrDefault(i => i.ToString() == cmbValue.Text);
+                    cmbValue.SelectedItem = item;
                 }
+            }
+            if (valueType == AttributeTypeCode.Lookup ||
+                valueType == AttributeTypeCode.Customer ||
+                valueType == AttributeTypeCode.Owner ||
+                valueType == AttributeTypeCode.Uniqueidentifier)
+            {
+                var showlookup = fxb.settings.UseLookup;
+                if (showlookup)
+                {
+                    dlgLookup.LogicalNames = null;
+                    if (attribute?.Metadata is LookupAttributeMetadata lookupmeta)
+                    {
+                        dlgLookup.LogicalNames = lookupmeta.Targets;
+                    }
+                    else if (attribute?.Metadata is AttributeMetadata attrmeta && attrmeta.IsPrimaryId == true && attrmeta.IsLogical == false)
+                    {
+                        var entitynode = new EntityNode(GetClosestEntityNode(Node));
+                        dlgLookup.LogicalNames = new string[] { entitynode.EntityName };
+                    }
+                    showlookup = dlgLookup.LogicalNames?.Length > 0;
+                }
+                panValue.Visible = !showlookup;
+                panValueGuids.Visible = !showlookup;
+                panValueLookup.Visible = showlookup;
             }
         }
 
@@ -407,19 +421,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void btnLookup_Click(object sender, EventArgs e)
         {
-            if (!(cmbAttribute.SelectedItem is AttributeItem attribute))
-            {
-                return;
-            }
-            if (attribute.Metadata is LookupAttributeMetadata meta)
-            {
-                dlgLookup.LogicalNames = meta.Targets;
-            }
-            else
-            {
-                MessageBox.Show("Cannot determine lookup entity, please enter Guid manually.", "Lookup Record", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
             Cursor = Cursors.WaitCursor;
             switch (dlgLookup.ShowDialog(this))
             {
