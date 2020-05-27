@@ -31,6 +31,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.crmGridView1 = new xrmtb.XrmToolBox.Controls.CRMGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lblOptionsExpander = new System.Windows.Forms.Label();
@@ -47,15 +48,44 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             this.panel1 = new System.Windows.Forms.Panel();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
             this.panQuickFilter = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
             this.txtQuickFilter = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.mnuQuickFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.tmFilter = new System.Windows.Forms.Timer(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
-            this.mnuOptions.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panQuickFilter.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // crmGridView1
+            // 
+            this.crmGridView1.AllowUserToAddRows = false;
+            this.crmGridView1.AllowUserToDeleteRows = false;
+            this.crmGridView1.AllowUserToOrderColumns = true;
+            this.crmGridView1.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.crmGridView1.AutoRefresh = false;
+            this.crmGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.crmGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.crmGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.crmGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
+            this.crmGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.crmGridView1.ColumnOrder = "";
+            this.crmGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.crmGridView1.EnableHeadersVisualStyles = false;
+            this.crmGridView1.EntityReferenceClickable = true;
+            this.crmGridView1.FilterColumns = "";
+            this.crmGridView1.Location = new System.Drawing.Point(0, 0);
+            this.crmGridView1.Name = "crmGridView1";
+            this.crmGridView1.ReadOnly = true;
+            this.crmGridView1.RowHeadersWidth = 24;
+            this.crmGridView1.ShowEditingIcon = false;
+            this.crmGridView1.Size = new System.Drawing.Size(650, 230);
+            this.crmGridView1.TabIndex = 1;
+            this.crmGridView1.RecordClick += new xrmtb.XrmToolBox.Controls.CRMRecordEventHandler(this.crmGridView1_RecordClick);
+            this.crmGridView1.RecordDoubleClick += new xrmtb.XrmToolBox.Controls.CRMRecordEventHandler(this.crmGridView1_RecordDoubleClick);
             // 
             // groupBox1
             // 
@@ -87,6 +117,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             // 
             this.mnuOptions.BackColor = System.Drawing.SystemColors.Window;
             this.mnuOptions.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.mnuOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuBehavior,
+            this.mnuColumns});
             this.mnuOptions.Location = new System.Drawing.Point(3, 15);
             this.mnuOptions.Name = "mnuOptions";
             this.mnuOptions.ShowItemToolTips = true;
@@ -96,6 +129,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             // 
             // mnuBehavior
             // 
+            this.mnuBehavior.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuFriendly,
+            this.mnuLocalTime,
+            this.mnuCopyHeaders,
+            this.mnuQuickFilter});
             this.mnuBehavior.Name = "mnuBehavior";
             this.mnuBehavior.Size = new System.Drawing.Size(82, 20);
             this.mnuBehavior.Text = "Appearance";
@@ -138,7 +176,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             // 
             this.mnuIndexCol.CheckOnClick = true;
             this.mnuIndexCol.Name = "mnuIndexCol";
-            this.mnuIndexCol.Size = new System.Drawing.Size(180, 22);
+            this.mnuIndexCol.Size = new System.Drawing.Size(148, 22);
             this.mnuIndexCol.Text = "Index";
             this.mnuIndexCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
@@ -146,7 +184,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             // 
             this.mnuIdCol.CheckOnClick = true;
             this.mnuIdCol.Name = "mnuIdCol";
-            this.mnuIdCol.Size = new System.Drawing.Size(180, 22);
+            this.mnuIdCol.Size = new System.Drawing.Size(148, 22);
             this.mnuIdCol.Text = "Primary Key";
             this.mnuIdCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
@@ -154,7 +192,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             // 
             this.mnuNullCol.CheckOnClick = true;
             this.mnuNullCol.Name = "mnuNullCol";
-            this.mnuNullCol.Size = new System.Drawing.Size(180, 22);
+            this.mnuNullCol.Size = new System.Drawing.Size(148, 22);
             this.mnuNullCol.Text = "Without value";
             this.mnuNullCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
@@ -162,7 +200,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             // 
             this.mnuSysCol.CheckOnClick = true;
             this.mnuSysCol.Name = "mnuSysCol";
-            this.mnuSysCol.Size = new System.Drawing.Size(180, 22);
+            this.mnuSysCol.Size = new System.Drawing.Size(148, 22);
             this.mnuSysCol.Text = "System added";
             this.mnuSysCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
@@ -185,15 +223,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             this.panQuickFilter.Size = new System.Drawing.Size(650, 31);
             this.panQuickFilter.TabIndex = 6;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(29, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Filter";
-            // 
             // txtQuickFilter
             // 
             this.txtQuickFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -203,6 +232,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             this.txtQuickFilter.Size = new System.Drawing.Size(591, 20);
             this.txtQuickFilter.TabIndex = 1;
             this.txtQuickFilter.TextChanged += new System.EventHandler(this.txtQuickFilter_TextChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Filter";
             // 
             // mnuQuickFilter
             // 
@@ -231,6 +269,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             this.Name = "ResultGrid";
             this.Text = "Result View";
             this.DockStateChanged += new System.EventHandler(this.ResultGrid_DockStateChanged);
+            ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.mnuOptions.ResumeLayout(false);
