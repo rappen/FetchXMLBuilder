@@ -54,6 +54,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             this.tmFilter = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.mnuOptions.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panQuickFilter.SuspendLayout();
             this.SuspendLayout();
