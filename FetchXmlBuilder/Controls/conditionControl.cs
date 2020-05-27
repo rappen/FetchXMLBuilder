@@ -421,7 +421,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     else if (attribute?.Metadata is AttributeMetadata attrmeta && attrmeta.IsPrimaryId == true && attrmeta.IsLogical == false)
                     {
                         var entitynode = new EntityNode(GetClosestEntityNode(Node));
-                        dlgLookup.LogicalNames = new string[] { entitynode.EntityName };
+                        dlgLookup.LogicalName = entitynode.EntityName;
                     }
                     showlookup = dlgLookup.LogicalNames?.Length > 0;
                 }
