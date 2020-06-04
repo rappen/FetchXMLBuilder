@@ -24,7 +24,7 @@ using XrmToolBox.Extensibility.Interfaces;
 
 namespace Cinteros.Xrm.FetchXmlBuilder
 {
-    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin /*, IDuplicatableTool */
+    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin, IDuplicatableTool
     {
         private const string aiEndpoint = "https://dc.services.visualstudio.com/v2/track";
         private const string aiKey = "eed73022-2444-45fd-928b-5eebd8fa46a6";    // jonas@rappen.net tenant, XrmToolBox
@@ -88,7 +88,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         public event EventHandler<MessageBusEventArgs> OnOutgoingMessage;
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
-        //public event EventHandler<DuplicateToolArgs> DuplicateRequested;
+        public event EventHandler<DuplicateToolArgs> DuplicateRequested;
 
         #endregion Public Events
 
@@ -342,6 +342,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         public void ShowAboutDialog()
         {
             tslAbout_Click(null, null);
+        }
+
+        public void ApplyState(object state)
+        {
+            if (state is string fetch && fetch.ToLowerInvariant().StartsWith("<fetch"))
+            {
+                dockControlBuilder.Init(fetch, null, false);
+            }
+        }
+
+        public object GetState()
+        {
+            return dockControlBuilder?.GetFetchString(false, false);
         }
 
         #endregion Public Methods
@@ -2018,6 +2031,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             CancelWorker();
         }
 
+        private void tsbClone_Click(object sender, EventArgs e)
+        {
+            var query = dockControlBuilder.GetFetchString(false, false);
+            var newconnection = sender == tsmiCloneNewConnection;
+            LogUse(newconnection ? "Clone-Connect" : "Clone");
+            DuplicateRequested?.Invoke(this, new DuplicateToolArgs(query, newconnection));
+        }
+
         private void tsbExecute_Click(object sender, EventArgs e)
         {
             dockControlBuilder?.tvFetch?.Focus();
@@ -2026,13 +2047,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsbNew_Click(object sender, EventArgs e)
         {
-            if (!SaveIfChanged())
+            if (sender == tsmiNew)
             {
+                if (!SaveIfChanged())
+                {
+                    return;
+                }
+                LogUse("New");
+                dockControlBuilder.Init(null, "new", false);
+                liveUpdateXml = string.Empty;
                 return;
             }
-            LogUse("New");
-            dockControlBuilder.Init(null, "new", false);
-            liveUpdateXml = string.Empty;
+            var newconnection = sender == tsmiNewNewConnection;
+            LogUse(newconnection ? "New-NewConnection" : "New-New");
+            DuplicateRequested?.Invoke(this, new DuplicateToolArgs(settings.QueryOptions.NewQueryTemplate, newconnection));
         }
 
         private void tsbOptions_Click(object sender, EventArgs e)
@@ -2239,24 +2267,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             RebuildRepositoryMenu(query);
             MessageBox.Show($"Query {query.Name} saved in repository", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
-        //public void ApplyState(object state)
-        //{
-        //    if (state is string fetch && fetch.ToLowerInvariant().StartsWith("<fetch"))
-        //    {
-        //        dockControlBuilder.Init(fetch, null, false);
-        //    }
-        //}
-
-        //public object GetState()
-        //{
-        //    return dockControlBuilder.GetFetchString(false, false);
-        //}
-
-        //private void toolStripButton1_Click(object sender, EventArgs e)
-        //{
-        //    DuplicateRequested?.Invoke(this, new DuplicateToolArgs(settings.QueryOptions.NewQueryTemplate, false));
-        //}
 
         #endregion Private Event Handlers
     }
