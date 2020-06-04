@@ -27,6 +27,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             InitializeComponent();
             txtLookup.OrganizationService = fetchXmlBuilder.Service;
             dlgLookup.Service = fetchXmlBuilder.Service;
+            Initializing = true;
+            rbUseLookup.Checked = fetchXmlBuilder.settings.UseLookup;
+            rbEnterGuid.Checked = !rbUseLookup.Checked;
             InitializeFXB(null, fetchXmlBuilder, tree, node);
             RefreshAttributes();
         }
@@ -319,8 +322,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 return;
             }
             panValue.Visible = true;
-            panValueGuids.Visible = false;
             panValueLookup.Visible = false;
+            panGuidSelector.Visible = false;
             cmbValue.Items.Clear();
             cmbValue.DropDownStyle = ComboBoxStyle.Simple;
             lblValueHint.Visible = false;
@@ -410,7 +413,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 valueType == AttributeTypeCode.Owner ||
                 valueType == AttributeTypeCode.Uniqueidentifier)
             {
-                var showlookup = fxb.settings.UseLookup;
+                var showlookup = rbUseLookup.Checked;
                 if (showlookup)
                 {
                     dlgLookup.LogicalNames = null;
@@ -425,8 +428,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     }
                     showlookup = dlgLookup.LogicalNames?.Length > 0;
                 }
+                else
+                {
+                    if (string.IsNullOrWhiteSpace(cmbValue.Text))
+                    {
+                        cmbValue.Text = Guid.Empty.ToString();
+                    }
+                }
+                panGuidSelector.Visible = true;
                 panValue.Visible = !showlookup;
-                panValueGuids.Visible = !showlookup;
                 panValueLookup.Visible = showlookup;
             }
         }
@@ -434,16 +444,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         #endregion Private Methods
 
         #region Private Event Handlers
-
-        private void btnGetGuid_Click(object sender, EventArgs e)
-        {
-            cmbValue.Text = Guid.NewGuid().ToString();
-        }
-
-        private void btnGetGuidEmpty_Click(object sender, EventArgs e)
-        {
-            cmbValue.Text = Guid.Empty.ToString();
-        }
 
         private void btnLookup_Click(object sender, EventArgs e)
         {
@@ -473,6 +473,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         }
 
         private void cmbOperator_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateValueField();
+        }
+
+        private void rbUseLookup_CheckedChanged(object sender, EventArgs e)
         {
             UpdateValueField();
         }
