@@ -1,5 +1,6 @@
 # ![FXB](http://fxb.xrmtoolbox.com/images/FXB-150-tsp.png) FetchXML Builder for XrmToolBox
 
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=rappen/FetchXMLBuilder)](https://dependabot.com)
 [![Join the chat at https://gitter.im/rappen/FetchXMLBuilder](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Cinteros/FetchXMLBuilder?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
