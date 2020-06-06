@@ -112,7 +112,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
             if (RequiresSave())
             {
-                e.Cancel = !Save(false);
+                Save(false);
             }
         }
 
