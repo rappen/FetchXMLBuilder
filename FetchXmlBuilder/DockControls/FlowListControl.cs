@@ -30,6 +30,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 lblError.Visible = true;
                 lblError.BringToFront();
             }
+            SetLink(HttpUtility.ParseQueryString(uri.Query).Get("$select"), linkSelect);
             SetLink(HttpUtility.ParseQueryString(uri.Query).Get("$apply"), linkAggr);
             SetLink(HttpUtility.ParseQueryString(uri.Query).Get("$filter"), linkFilter);
             SetLink(HttpUtility.ParseQueryString(uri.Query).Get("$orderby"), linkOrder);
