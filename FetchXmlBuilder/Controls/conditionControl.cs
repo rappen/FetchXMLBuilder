@@ -25,12 +25,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         public conditionControl(TreeNode node, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree)
         {
             InitializeComponent();
+            BeginInit();
             txtLookup.OrganizationService = fetchXmlBuilder.Service;
             dlgLookup.Service = fetchXmlBuilder.Service;
-            Initializing = true;
             rbUseLookup.Checked = fetchXmlBuilder.settings.UseLookup;
             rbEnterGuid.Checked = !rbUseLookup.Checked;
             InitializeFXB(null, fetchXmlBuilder, tree, node);
+            EndInit();
             RefreshAttributes();
         }
 
@@ -266,7 +267,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void RefreshAttributes()
         {
-            if (Initializing)
+            if (!IsInitialized)
             {
                 return;
             }
@@ -289,20 +290,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
                 return;
             }
-            Initializing = true;
+            BeginInit();
             var attributes = fxb.GetDisplayAttributes(entityName);
             attributes.ToList().ForEach(a => AttributeItem.AddAttributeToComboBox(cmbAttribute, a, true, FetchXmlBuilder.friendlyNames));
             // RefreshFill now that attributes are loaded
             ReFillControl(cmbAttribute);
             ReFillControl(cmbValue);
-            Initializing = false;
+            EndInit();
             RefreshOperators();
             UpdateValueField();
         }
 
         private void RefreshOperators()
         {
-            if (Initializing)
+            if (!IsInitialized)
             {
                 return;
             }
@@ -317,7 +318,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void UpdateValueField()
         {
-            if (Initializing)
+            if (!IsInitialized)
             {
                 return;
             }
