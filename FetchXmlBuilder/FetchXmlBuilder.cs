@@ -24,7 +24,7 @@ using XrmToolBox.Extensibility.Interfaces;
 
 namespace Cinteros.Xrm.FetchXmlBuilder
 {
-    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin
+    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin, IDuplicatableTool
     {
         private const string aiEndpoint = "https://dc.services.visualstudio.com/v2/track";
         private const string aiKey = "eed73022-2444-45fd-928b-5eebd8fa46a6";    // jonas@rappen.net tenant, XrmToolBox
@@ -79,6 +79,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             dockContainer.Theme = theme;
             dockContainer.Theme.Skin.DockPaneStripSkin.TextFont = Font;
             //dockContainer.DockBackColor = SystemColors.Window;
+            MetadataHelper.attributeProperties = new string[] { "DisplayName", "AttributeType", "IsValidForRead", "AttributeOf", "IsManaged", "IsCustomizable", "IsCustomAttribute", "IsValidForAdvancedFind", "IsPrimaryId", "IsPrimaryName", "OptionSet", "SchemaName", "Targets", "IsLogical" };
         }
 
         #endregion Public Constructors
@@ -86,8 +87,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         #region Public Events
 
         public event EventHandler<MessageBusEventArgs> OnOutgoingMessage;
-
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
+        public event EventHandler<DuplicateToolArgs> DuplicateRequested;
 
         #endregion Public Events
 
@@ -341,6 +342,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         public void ShowAboutDialog()
         {
             tslAbout_Click(null, null);
+        }
+
+        public void ApplyState(object state)
+        {
+            if (state is string fetch && fetch.ToLowerInvariant().StartsWith("<fetch"))
+            {
+                dockControlBuilder.Init(fetch, null, false);
+            }
+        }
+
+        public object GetState()
+        {
+            return dockControlBuilder?.GetFetchString(false, false);
         }
 
         #endregion Public Methods
@@ -1118,7 +1132,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 (eventargs) =>
                 {
                     EnableControls(false);
-                    eventargs.Result = MetadataHelper.LoadEntities(Service);
+                    eventargs.Result = Service.LoadEntities();
                 })
             {
                 PostWorkCallBack = (completedargs) =>
@@ -2017,6 +2031,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             CancelWorker();
         }
 
+        private void tsbClone_Click(object sender, EventArgs e)
+        {
+            var query = dockControlBuilder.GetFetchString(false, false);
+            var newconnection = sender == tsmiCloneNewConnection;
+            LogUse(newconnection ? "Clone-Connect" : "Clone");
+            DuplicateRequested?.Invoke(this, new DuplicateToolArgs(query, newconnection));
+        }
+
         private void tsbExecute_Click(object sender, EventArgs e)
         {
             dockControlBuilder?.tvFetch?.Focus();
@@ -2025,13 +2047,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsbNew_Click(object sender, EventArgs e)
         {
-            if (!SaveIfChanged())
+            if (sender == tsmiNew)
             {
+                if (!SaveIfChanged())
+                {
+                    return;
+                }
+                LogUse("New");
+                dockControlBuilder.Init(null, "new", false);
+                liveUpdateXml = string.Empty;
                 return;
             }
-            LogUse("New");
-            dockControlBuilder.Init(null, "new", false);
-            liveUpdateXml = string.Empty;
+            var newconnection = sender == tsmiNewNewConnection;
+            LogUse(newconnection ? "New-NewConnection" : "New-New");
+            DuplicateRequested?.Invoke(this, new DuplicateToolArgs(settings.QueryOptions.NewQueryTemplate, newconnection));
         }
 
         private void tsbOptions_Click(object sender, EventArgs e)

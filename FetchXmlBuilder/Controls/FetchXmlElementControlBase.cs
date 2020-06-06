@@ -20,6 +20,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private bool validationSuspended = false;
         private int initCount;
 
+        internal bool Initializing = false;
+
         static FetchXmlElementControlBase()
         {
             // Create the small warning icon to use for user feedback

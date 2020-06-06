@@ -36,28 +36,28 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.label5 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.cmbEntity = new System.Windows.Forms.ComboBox();
-            this.btnGetGuid = new System.Windows.Forms.Button();
             this.cmbValue = new System.Windows.Forms.ComboBox();
             this.lblValueHint = new System.Windows.Forms.Label();
-            this.btnGetGuidEmpty = new System.Windows.Forms.Button();
             this.panAttribte = new System.Windows.Forms.Panel();
             this.panValue = new System.Windows.Forms.Panel();
             this.panValueLookup = new System.Windows.Forms.Panel();
             this.btnLookup = new System.Windows.Forms.Button();
             this.txtLookup = new xrmtb.XrmToolBox.Controls.Controls.CDSDataTextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.panValueGuids = new System.Windows.Forms.Panel();
             this.panValueHint = new System.Windows.Forms.Panel();
             this.dlgLookup = new xrmtb.XrmToolBox.Controls.Controls.CDSLookupDialog();
             this.panUitype = new System.Windows.Forms.Panel();
             this.txtUitype = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.panGuidSelector = new System.Windows.Forms.Panel();
+            this.rbEnterGuid = new System.Windows.Forms.RadioButton();
+            this.rbUseLookup = new System.Windows.Forms.RadioButton();
             this.panAttribte.SuspendLayout();
             this.panValue.SuspendLayout();
             this.panValueLookup.SuspendLayout();
-            this.panValueGuids.SuspendLayout();
             this.panValueHint.SuspendLayout();
             this.panUitype.SuspendLayout();
+            this.panGuidSelector.SuspendLayout();
             this.SuspendLayout();
             // 
             // label2
@@ -208,17 +208,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbEntity.Size = new System.Drawing.Size(281, 21);
             this.cmbEntity.TabIndex = 1;
             this.cmbEntity.Tag = "entityname";
-            this.cmbEntity.SelectedIndexChanged += new System.EventHandler(this.cmbEtity_SelectedIndexChanged);
-            // 
-            // btnGetGuid
-            // 
-            this.btnGetGuid.Location = new System.Drawing.Point(108, 3);
-            this.btnGetGuid.Name = "btnGetGuid";
-            this.btnGetGuid.Size = new System.Drawing.Size(95, 22);
-            this.btnGetGuid.TabIndex = 40;
-            this.btnGetGuid.Text = "Generate Guid";
-            this.btnGetGuid.UseVisualStyleBackColor = true;
-            this.btnGetGuid.Click += new System.EventHandler(this.btnGetGuid_Click);
+            this.cmbEntity.SelectedIndexChanged += new System.EventHandler(this.cmbEntity_SelectedIndexChanged);
             // 
             // cmbValue
             // 
@@ -244,16 +234,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.lblValueHint.TabIndex = 41;
             this.lblValueHint.Text = "ValueHint";
             this.lblValueHint.Visible = false;
-            // 
-            // btnGetGuidEmpty
-            // 
-            this.btnGetGuidEmpty.Location = new System.Drawing.Point(7, 3);
-            this.btnGetGuidEmpty.Name = "btnGetGuidEmpty";
-            this.btnGetGuidEmpty.Size = new System.Drawing.Size(95, 22);
-            this.btnGetGuidEmpty.TabIndex = 42;
-            this.btnGetGuidEmpty.Text = "Empty Guid";
-            this.btnGetGuidEmpty.UseVisualStyleBackColor = true;
-            this.btnGetGuidEmpty.Click += new System.EventHandler(this.btnGetGuidEmpty_Click);
             // 
             // panAttribte
             // 
@@ -333,22 +313,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.label1.TabIndex = 31;
             this.label1.Text = "Record";
             // 
-            // panValueGuids
-            // 
-            this.panValueGuids.Controls.Add(this.btnGetGuidEmpty);
-            this.panValueGuids.Controls.Add(this.btnGetGuid);
-            this.panValueGuids.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panValueGuids.Location = new System.Drawing.Point(0, 200);
-            this.panValueGuids.Name = "panValueGuids";
-            this.panValueGuids.Size = new System.Drawing.Size(311, 32);
-            this.panValueGuids.TabIndex = 46;
-            this.panValueGuids.Visible = false;
-            // 
             // panValueHint
             // 
             this.panValueHint.Controls.Add(this.lblValueHint);
             this.panValueHint.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panValueHint.Location = new System.Drawing.Point(0, 232);
+            this.panValueHint.Location = new System.Drawing.Point(0, 225);
             this.panValueHint.Name = "panValueHint";
             this.panValueHint.Size = new System.Drawing.Size(311, 32);
             this.panValueHint.TabIndex = 47;
@@ -356,6 +325,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // dlgLookup
             // 
             this.dlgLookup.Entity = null;
+            this.dlgLookup.LogicalName = "";
             this.dlgLookup.LogicalNames = null;
             this.dlgLookup.Service = null;
             this.dlgLookup.Title = null;
@@ -365,7 +335,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.panUitype.Controls.Add(this.txtUitype);
             this.panUitype.Controls.Add(this.label3);
             this.panUitype.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panUitype.Location = new System.Drawing.Point(0, 264);
+            this.panUitype.Location = new System.Drawing.Point(0, 257);
             this.panUitype.Name = "panUitype";
             this.panUitype.Size = new System.Drawing.Size(311, 46);
             this.panUitype.TabIndex = 48;
@@ -390,29 +360,64 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.label3.TabIndex = 31;
             this.label3.Text = "UI Type";
             // 
+            // panGuidSelector
+            // 
+            this.panGuidSelector.Controls.Add(this.rbEnterGuid);
+            this.panGuidSelector.Controls.Add(this.rbUseLookup);
+            this.panGuidSelector.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panGuidSelector.Location = new System.Drawing.Point(0, 200);
+            this.panGuidSelector.Name = "panGuidSelector";
+            this.panGuidSelector.Size = new System.Drawing.Size(311, 25);
+            this.panGuidSelector.TabIndex = 49;
+            this.panGuidSelector.Visible = false;
+            // 
+            // rbEnterGuid
+            // 
+            this.rbEnterGuid.AutoSize = true;
+            this.rbEnterGuid.Location = new System.Drawing.Point(108, 3);
+            this.rbEnterGuid.Name = "rbEnterGuid";
+            this.rbEnterGuid.Size = new System.Drawing.Size(75, 17);
+            this.rbEnterGuid.TabIndex = 1;
+            this.rbEnterGuid.Text = "Enter Guid";
+            this.rbEnterGuid.UseVisualStyleBackColor = true;
+            // 
+            // rbUseLookup
+            // 
+            this.rbUseLookup.AutoSize = true;
+            this.rbUseLookup.Checked = true;
+            this.rbUseLookup.Location = new System.Drawing.Point(7, 3);
+            this.rbUseLookup.Name = "rbUseLookup";
+            this.rbUseLookup.Size = new System.Drawing.Size(83, 17);
+            this.rbUseLookup.TabIndex = 0;
+            this.rbUseLookup.TabStop = true;
+            this.rbUseLookup.Text = "Use Lookup";
+            this.rbUseLookup.UseVisualStyleBackColor = true;
+            this.rbUseLookup.CheckedChanged += new System.EventHandler(this.rbUseLookup_CheckedChanged);
+            // 
             // conditionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panUitype);
             this.Controls.Add(this.panValueHint);
-            this.Controls.Add(this.panValueGuids);
+            this.Controls.Add(this.panGuidSelector);
             this.Controls.Add(this.panValueLookup);
             this.Controls.Add(this.panValue);
             this.Controls.Add(this.panAttribte);
             this.Name = "conditionControl";
-            this.Size = new System.Drawing.Size(311, 275);
+            this.Size = new System.Drawing.Size(311, 258);
             this.panAttribte.ResumeLayout(false);
             this.panAttribte.PerformLayout();
             this.panValue.ResumeLayout(false);
             this.panValue.PerformLayout();
             this.panValueLookup.ResumeLayout(false);
             this.panValueLookup.PerformLayout();
-            this.panValueGuids.ResumeLayout(false);
             this.panValueHint.ResumeLayout(false);
             this.panValueHint.PerformLayout();
             this.panUitype.ResumeLayout(false);
             this.panUitype.PerformLayout();
+            this.panGuidSelector.ResumeLayout(false);
+            this.panGuidSelector.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -425,21 +430,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox cmbEntity;
-        private System.Windows.Forms.Button btnGetGuid;
         private System.Windows.Forms.ComboBox cmbValue;
         private System.Windows.Forms.Label lblValueHint;
-        private System.Windows.Forms.Button btnGetGuidEmpty;
         private System.Windows.Forms.Panel panAttribte;
         private System.Windows.Forms.Panel panValue;
         private System.Windows.Forms.Panel panValueLookup;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnLookup;
         private xrmtb.XrmToolBox.Controls.Controls.CDSDataTextBox txtLookup;
-        private System.Windows.Forms.Panel panValueGuids;
         private System.Windows.Forms.Panel panValueHint;
         private xrmtb.XrmToolBox.Controls.Controls.CDSLookupDialog dlgLookup;
         private System.Windows.Forms.Panel panUitype;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtUitype;
+        private System.Windows.Forms.Panel panGuidSelector;
+        private System.Windows.Forms.RadioButton rbEnterGuid;
+        private System.Windows.Forms.RadioButton rbUseLookup;
     }
 }
