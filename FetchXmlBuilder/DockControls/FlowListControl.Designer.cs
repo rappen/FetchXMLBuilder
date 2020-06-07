@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlowListControl));
             this.panOData = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.linkSelect = new System.Windows.Forms.LinkLabel();
             this.lblCopied = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.linkExpand = new System.Windows.Forms.LinkLabel();
@@ -48,8 +50,6 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblError = new System.Windows.Forms.Label();
             this.tm = new System.Windows.Forms.Timer(this.components);
-            this.label7 = new System.Windows.Forms.Label();
-            this.linkSelect = new System.Windows.Forms.LinkLabel();
             this.panOData.SuspendLayout();
             this.panODataLabel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -81,6 +81,31 @@
             this.panOData.Padding = new System.Windows.Forms.Padding(4);
             this.panOData.Size = new System.Drawing.Size(519, 153);
             this.panOData.TabIndex = 28;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(51, 10);
+            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(37, 13);
+            this.label7.TabIndex = 16;
+            this.label7.Text = "Select";
+            // 
+            // linkSelect
+            // 
+            this.linkSelect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.linkSelect.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.linkSelect.Location = new System.Drawing.Point(131, 8);
+            this.linkSelect.Name = "linkSelect";
+            this.linkSelect.Padding = new System.Windows.Forms.Padding(2);
+            this.linkSelect.Size = new System.Drawing.Size(376, 20);
+            this.linkSelect.TabIndex = 1;
+            this.linkSelect.TabStop = true;
+            this.linkSelect.Tag = "Select formula";
+            this.linkSelect.Text = "N/A";
+            this.linkSelect.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel_LinkClicked);
             // 
             // lblCopied
             // 
@@ -276,31 +301,6 @@
             // 
             this.tm.Interval = 2000;
             this.tm.Tick += new System.EventHandler(this.Tm_Tick);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(51, 10);
-            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(37, 13);
-            this.label7.TabIndex = 16;
-            this.label7.Text = "Select";
-            // 
-            // linkSelect
-            // 
-            this.linkSelect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.linkSelect.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.linkSelect.Location = new System.Drawing.Point(131, 8);
-            this.linkSelect.Name = "linkSelect";
-            this.linkSelect.Padding = new System.Windows.Forms.Padding(2);
-            this.linkSelect.Size = new System.Drawing.Size(376, 20);
-            this.linkSelect.TabIndex = 1;
-            this.linkSelect.TabStop = true;
-            this.linkSelect.Tag = "Aggregate transformation";
-            this.linkSelect.Text = "N/A";
-            this.linkSelect.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel_LinkClicked);
             // 
             // FlowListControl
             // 
