@@ -414,31 +414,28 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 valueType == AttributeTypeCode.Owner ||
                 valueType == AttributeTypeCode.Uniqueidentifier)
             {
-                var showlookup = rbUseLookup.Checked;
-                if (showlookup)
+                dlgLookup.LogicalNames = null;
+                if (attribute?.Metadata is LookupAttributeMetadata lookupmeta)
                 {
-                    dlgLookup.LogicalNames = null;
-                    if (attribute?.Metadata is LookupAttributeMetadata lookupmeta)
-                    {
-                        dlgLookup.LogicalNames = lookupmeta.Targets;
-                    }
-                    else if (attribute?.Metadata is AttributeMetadata attrmeta && attrmeta.IsPrimaryId == true && attrmeta.IsLogical == false)
-                    {
-                        var entitynode = new EntityNode(GetClosestEntityNode(Node));
-                        dlgLookup.LogicalName = entitynode.EntityName;
-                    }
-                    showlookup = dlgLookup.LogicalNames?.Length > 0;
+                    dlgLookup.LogicalNames = lookupmeta.Targets;
                 }
-                else
+                else if (attribute?.Metadata is AttributeMetadata attrmeta && attrmeta.IsPrimaryId == true && attrmeta.IsLogical == false)
                 {
-                    if (string.IsNullOrWhiteSpace(cmbValue.Text))
-                    {
-                        cmbValue.Text = Guid.Empty.ToString();
-                    }
+                    var entitynode = new EntityNode(GetClosestEntityNode(Node));
+                    dlgLookup.LogicalName = entitynode.EntityName;
+                }
+                rbUseLookup.Enabled = dlgLookup.LogicalNames?.Length > 0;
+                if (!rbUseLookup.Enabled)
+                {
+                    rbEnterGuid.Checked = true;
+                }
+                if (string.IsNullOrWhiteSpace(cmbValue.Text))
+                {
+                    cmbValue.Text = Guid.Empty.ToString();
                 }
                 panGuidSelector.Visible = true;
-                panValue.Visible = !showlookup;
-                panValueLookup.Visible = showlookup;
+                panValue.Visible = !rbUseLookup.Checked;
+                panValueLookup.Visible = rbUseLookup.Checked;
             }
         }
 
