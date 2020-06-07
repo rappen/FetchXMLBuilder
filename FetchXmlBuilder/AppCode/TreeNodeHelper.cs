@@ -175,6 +175,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         var attr = GetAttributeFromNode(node, "attribute");
                         var oper = GetAttributeFromNode(node, "operator");
                         var val = GetAttributeFromNode(node, "value");
+                        var uiname = GetAttributeFromNode(node, "uiname");
                         if (node.Parent != null && node.Parent.Parent != null)
                         {
                             var parent = GetAttributeFromNode(node.Parent.Parent, "name");
@@ -188,6 +189,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         {
                             oper = oper.Replace("-x-", " " + val + " ");
                             val = "";
+                        }
+                        if (!string.IsNullOrWhiteSpace(uiname) && fxb.settings.UseFriendlyNames)
+                        {
+                            val = uiname;
                         }
                         text += (" " + attr + " " + oper + " " + val).TrimEnd();
                     }
