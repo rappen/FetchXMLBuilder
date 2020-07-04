@@ -419,10 +419,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 {
                     dlgLookup.LogicalNames = lookupmeta.Targets;
                 }
-                else if (attribute?.Metadata is AttributeMetadata attrmeta && attrmeta.IsPrimaryId == true && attrmeta.IsLogical == false)
+                else if (attribute?.Metadata is AttributeMetadata attrmeta && attrmeta.IsPrimaryId == true)
                 {
-                    var entitynode = new EntityNode(GetClosestEntityNode(Node));
-                    dlgLookup.LogicalName = entitynode.EntityName;
+                    if (attrmeta.IsLogical == false)
+                    {
+                        var entitynode = new EntityNode(GetClosestEntityNode(Node));
+                        dlgLookup.LogicalName = entitynode.EntityName;
+                    }
+                    else if (attrmeta.LogicalName.EndsWith("addressid"))
+                    {
+                        dlgLookup.LogicalName = "customeraddress";
+                    }
                 }
                 rbUseLookup.Enabled = dlgLookup.LogicalNames?.Length > 0;
                 if (!rbUseLookup.Enabled)
