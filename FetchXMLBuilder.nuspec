@@ -6,11 +6,13 @@
     <title>FetchXML Builder for XrmToolBox</title>
     <authors>Jonas Rapp</authors>
     <owners>rappen</owners>
-    <projectUrl>http://fxb.xrmtoolbox.com</projectUrl>
-    <iconUrl>http://fxb.xrmtoolbox.com/images/FXB-150-tsp.png</iconUrl>
+    <projectUrl>http://fetchxmlbuilder.com</projectUrl>
+    <iconUrl>https://fetchxmlbuilder.com/fxb150/</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <summary>Build queries for D365, CRM, XRM, CDS and the Power Platform. Investigate data. Get code. Empower yourself to achieve more.</summary>
+    <summary>Build queries for Microsoft Common Data Service, CRM, XRM and the Power Platform. Investigate data. Get code. Empower yourself to achieve more.</summary>
     <description>
+Build queries for Microsoft Common Data Service, CRM, XRM and the Power Platform. Investigate data. Get code. Empower yourself to achieve more.
+
 FetchXML Builder is used to create and execute queries against CDS and Dynamics 365/CRM data.
 CDS includes technologies we know as:
 - Microsoft Dynamics 365
