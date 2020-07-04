@@ -9,5 +9,5 @@ Works well with Microsoft Dynamics CRM 2011-2016 and Microsoft Dynamics 365, onl
 
 *Written by Jonas Rapp, Stockholm, Sweden.*
 
-### Visit the FetchXML Builder homepage at http://fxb.xrmtoolbox.com !
+### Visit the FetchXML Builder homepage at https://fetchxmlbuilder.com !
 
