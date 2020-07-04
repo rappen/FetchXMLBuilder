@@ -58,6 +58,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.panValueHint.SuspendLayout();
             this.panUitype.SuspendLayout();
             this.panGuidSelector.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -325,6 +326,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // dlgLookup
             // 
             this.dlgLookup.Entity = null;
+            this.dlgLookup.IncludePersonalViews = true;
             this.dlgLookup.LogicalName = "";
             this.dlgLookup.LogicalNames = null;
             this.dlgLookup.Service = null;
@@ -418,6 +420,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.panUitype.PerformLayout();
             this.panGuidSelector.ResumeLayout(false);
             this.panGuidSelector.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 
         }
