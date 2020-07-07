@@ -13,10 +13,10 @@ Works well with Microsoft Dynamics CRM 2011-2016 and Microsoft Dynamics 365, onl
 
 ## Need more info?
 
-### Visit the FetchXML Builder homepage at https://fetchxmlbuilder.com !
+**Visit the FetchXML Builder homepage at https://fetchxmlbuilder.com !**
 
 ---
 
 ## Questions? Feedback? Praise?
 
-### Visit the FetchXML Builder forum at https://fetchxmlbuilder.com/forum !
+**Visit the FetchXML Builder forum at https://fetchxmlbuilder.com/forum !**
