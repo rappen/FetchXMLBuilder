@@ -621,7 +621,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                             break;
 
                         case "value":
-                            ctrl = new valueControl(collec, this);
+                            ctrl = new valueControl(node, fxb, this);
                             break;
 
                         case "#comment":
