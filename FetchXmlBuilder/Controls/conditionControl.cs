@@ -452,31 +452,35 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 panValueLookup.Visible = rbUseLookup.Checked;
             }
 
-            switch (oper.GetValue())
+            if (string.IsNullOrWhiteSpace(cmbEntity.Text))
             {
-                case "eq":
-                case "ne":
-                case "gt":
-                case "ge":
-                case "lt":
-                case "le":
-                    panValueOf.Visible = true;
-                    cmbValueOf.Items.Clear();
-                    if (attribute != null)
-                    {
-                        foreach (AttributeItem item in cmbAttribute.Items)
+                switch (oper.GetValue())
+                {
+                    case "eq":
+                    case "ne":
+                    case "gt":
+                    case "ge":
+                    case "lt":
+                    case "le":
+                        panValueOf.Visible = true;
+                        cmbValueOf.Items.Clear();
+                        if (attribute != null)
                         {
-                            if (item.Metadata.AttributeType == attribute.Metadata.AttributeType)
+                            foreach (AttributeItem item in cmbAttribute.Items)
                             {
-                                cmbValueOf.Items.Add(new AttributeItem(item.Metadata));
+                                if (item.Metadata.AttributeType == attribute.Metadata.AttributeType)
+                                {
+                                    cmbValueOf.Items.Add(new AttributeItem(item.Metadata));
+                                }
                             }
                         }
-                    }
-                    break;
+                        break;
+                }
+            }
 
-                default:
-                    cmbValueOf.Text = "";
-                    break;
+            if (!panValueOf.Visible)
+            {
+                cmbValueOf.Text = "";
             }
         }
 
