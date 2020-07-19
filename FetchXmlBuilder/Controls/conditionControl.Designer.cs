@@ -52,12 +52,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.panGuidSelector = new System.Windows.Forms.Panel();
             this.rbEnterGuid = new System.Windows.Forms.RadioButton();
             this.rbUseLookup = new System.Windows.Forms.RadioButton();
+            this.panValueOf = new System.Windows.Forms.Panel();
+            this.cmbValueOf = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.panAttribte.SuspendLayout();
             this.panValue.SuspendLayout();
             this.panValueLookup.SuspendLayout();
             this.panValueHint.SuspendLayout();
             this.panUitype.SuspendLayout();
             this.panGuidSelector.SuspendLayout();
+            this.panValueOf.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -396,12 +400,46 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.rbUseLookup.UseVisualStyleBackColor = true;
             this.rbUseLookup.CheckedChanged += new System.EventHandler(this.rbUseLookup_CheckedChanged);
             // 
+            // panValueOf
+            // 
+            this.panValueOf.Controls.Add(this.cmbValueOf);
+            this.panValueOf.Controls.Add(this.label6);
+            this.panValueOf.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panValueOf.Location = new System.Drawing.Point(0, 303);
+            this.panValueOf.Name = "panValueOf";
+            this.panValueOf.Size = new System.Drawing.Size(311, 40);
+            this.panValueOf.TabIndex = 50;
+            // 
+            // cmbValueOf
+            // 
+            this.cmbValueOf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbValueOf.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cmbValueOf.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cmbValueOf.FormattingEnabled = true;
+            this.cmbValueOf.Location = new System.Drawing.Point(7, 16);
+            this.cmbValueOf.Name = "cmbValueOf";
+            this.cmbValueOf.Size = new System.Drawing.Size(281, 21);
+            this.cmbValueOf.Sorted = true;
+            this.cmbValueOf.TabIndex = 32;
+            this.cmbValueOf.Tag = "valueof";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(4, 2);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(48, 13);
+            this.label6.TabIndex = 31;
+            this.label6.Text = "Value Of";
+            // 
             // conditionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panUitype);
             this.Controls.Add(this.panValueHint);
+            this.Controls.Add(this.panValueOf);
             this.Controls.Add(this.panGuidSelector);
             this.Controls.Add(this.panValueLookup);
             this.Controls.Add(this.panValue);
@@ -420,6 +458,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.panUitype.PerformLayout();
             this.panGuidSelector.ResumeLayout(false);
             this.panGuidSelector.PerformLayout();
+            this.panValueOf.ResumeLayout(false);
+            this.panValueOf.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 
@@ -449,5 +489,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.Panel panGuidSelector;
         private System.Windows.Forms.RadioButton rbEnterGuid;
         private System.Windows.Forms.RadioButton rbUseLookup;
+        private System.Windows.Forms.Panel panValueOf;
+        private System.Windows.Forms.ComboBox cmbValueOf;
+        private System.Windows.Forms.Label label6;
     }
 }
