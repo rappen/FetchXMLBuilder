@@ -15,6 +15,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         /// <summary>Property that indicates if operator allows "values" collection</summary>
         public bool IsMultipleValuesType { get { return GetIsMultipleValuesType(); } }
 
+        /// <summary>Property that indicates if operator allows column comparison</summary>
+        public bool SupportsColumnComparison { get { return GetSupportsColumnComparison(); } }
+
         /// <summary>Property that indicates what type the attribute must be of for the condition to be valid</summary>
         public AttributeTypeCode? AttributeType { get { return GetAttributeType(); } }
 
@@ -181,7 +184,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         private bool GetIsMultipleValuesType()
         {
-            var result = false;
             switch (oper)
             {
                 case ConditionOperator.In:
@@ -191,10 +193,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case ConditionOperator.InFiscalPeriodAndYear:
                 case ConditionOperator.InOrAfterFiscalPeriodAndYear:
                 case ConditionOperator.InOrBeforeFiscalPeriodAndYear:
-                    result = true;
-                    break;
+                    return true;
             }
-            return result;
+            return false;
+        }
+
+        private bool GetSupportsColumnComparison()
+        {
+            switch (oper)
+            {
+                case ConditionOperator.Equal:
+                case ConditionOperator.NotEqual:
+                case ConditionOperator.GreaterThan:
+                case ConditionOperator.GreaterEqual:
+                case ConditionOperator.LessThan:
+                case ConditionOperator.LessEqual:
+                    return true;
+            }
+            return false;
         }
 
         private AttributeTypeCode? GetAttributeType()
