@@ -9,19 +9,19 @@
     <projectUrl>http://fetchxmlbuilder.com</projectUrl>
     <iconUrl>https://fetchxmlbuilder.com/fxb150/</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <summary>Build queries for Microsoft Common Data Service, CRM, XRM and the Power Platform. Investigate data. Get code. Empower yourself to achieve more.</summary>
+    <summary>Build queries for Microsoft Dataflex, Dynamics 365 and the Power Platform. Investigate data. Get code. Empower yourself to achieve more.</summary>
     <description>
-Build queries for Microsoft Common Data Service, CRM, XRM and the Power Platform. Investigate data. Get code. Empower yourself to achieve more.
+Build queries for Microsoft Dataflex, Dynamics 365 and the Power Platform. Investigate data. Get code. Empower yourself to achieve more.
 
-FetchXML Builder is used to create and execute queries against CDS and Dynamics 365/CRM data.
-CDS includes technologies we know as:
+FetchXML Builder is used to create and execute queries against Microsoft Dataflex and Dynamics 365/CRM data.
+Dataflex and Dataflex Pro include technologies we know as:
 - Microsoft Dynamics 365
 - Dynamics CRM
-- Common Data Service (CDS)
 - XRM
 - Power Apps (Model Driven)
-- Power Apps (Canvas connected to D365 or CDS)
-- PowerBI (connected to D365 or CDS)
+- Power Apps (Canvas connected to D365 or Dataflex)
+- PowerBI (connected to D365 or Dataflex)
+- Microsoft Teams apps
       
 The tool will assist in three major areas:
 
@@ -32,7 +32,7 @@ The tool will assist in three major areas:
 - attributes from multi-level linked entities
 - update existing views with altered queries
 
-2. Querying CDS/CRM for information not (easily) found in the UI
+2. Querying Dataflex/CRM for information not (easily) found in the UI
 - system / internal entities
 - attributes hidden in CRM UI
 - join on other fields than relationships
@@ -44,7 +44,7 @@ The tool will assist in three major areas:
 - SQL, JavaScript and C# stubs
 - Easy to use UI to compose queries for reports in CRM
 
-The tool reads metadata from CDS to assist with selecting entities, attributes, relations and to perform validation of condition values.
+The tool reads metadata from Microsoft Dataflex and Dynamics 365 / CRM to assist with selecting entities, attributes, relations and to perform validation of condition values.
 
 To make it even more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.
     </description>
