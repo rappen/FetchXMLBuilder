@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
 using WeifenLuo.WinFormsUI.Docking;
@@ -1352,7 +1351,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             tsbRepo.Tag = selectedquery;
             dockControlBuilder.SetFetchName(selectedquery != null ? $"Repo: {selectedquery.Name}" : null);
-            var oldqueries = tsbRepo.DropDownItems.Cast<ToolStripItem>().Where(m => m.Tag is QueryDefinition || m.Tag == "folder").ToList();
+            var oldqueries = tsbRepo.DropDownItems.Cast<ToolStripItem>().Where(m => m.Tag is QueryDefinition || m.Tag?.ToString() == "folder").ToList();
             foreach (var oldmenu in oldqueries)
             {
                 tsbRepo.DropDownItems.Remove(oldmenu);
@@ -2248,6 +2247,63 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             SaveRepository();
             RebuildRepositoryMenu(query);
             MessageBox.Show($"Query {query.Name} saved in repository", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void tsmiRepoExport_Click(object sender, EventArgs e)
+        {
+            var sfd = new SaveFileDialog
+            {
+                Title = "Select a location and file name to save the repository",
+                Filter = "FXB Repository (*.fxbrepo)|*.fxbrepo"
+            };
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                XmlSerializerHelper.SerializeToFile(repository, sfd.FileName);
+                MessageBox.Show($"The entire repository has been saved to file\n{sfd.FileName}", "Export repository", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void tsmiRepoImport_Click(object sender, EventArgs e)
+        {
+            var ofd = new OpenFileDialog
+            {
+                Title = "Select a FetchXML Builder Repository file",
+                Filter = "FXB Repository (*.fxbrepo)|*.fxbrepo"
+            };
+
+            if (ofd.ShowDialog() == DialogResult.OK && File.Exists(ofd.FileName))
+            {
+                try
+                {
+                    var document = new XmlDocument();
+                    document.Load(ofd.FileName);
+                    var repo = (QueryRepository)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(QueryRepository));
+                    var reponame = Path.ChangeExtension(Path.GetFileName(ofd.FileName), "").Trim('.');
+                    if (MessageBox.Show($"Confirm importing {repo.Queries.Count} queries into repository folder \"{reponame}\".", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
+                    {
+                        return;
+                    }
+                    repo.Queries.ForEach(q => repository.Queries.Add(new QueryDefinition { Name = reponame + "\\" + q.Name, Fetch = q.Fetch }));
+                    SaveRepository();
+                    RebuildRepositoryMenu(null);
+                    MessageBox.Show($"Repository {reponame} has been imported.", "Import repository", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error attempting to load and deserialize file \"{ofd.FileName}\"", ex);
+                }
+            }
+        }
+
+        private void tsmiRepoDeleteAll_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show($"Confirm deleting all {repository.Queries.Count} queries in the repository!\nThis can not be undone.", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
+            {
+                return;
+            }
+            repository.Queries.Clear();
+            SaveRepository();
+            RebuildRepositoryMenu(null);
         }
 
         #endregion Private Event Handlers
