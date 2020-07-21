@@ -2085,6 +2085,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                 }
                 dockControlBuilder.ApplyCurrentSettings();
+                dockControlFetchXml?.ApplyCurrentSettings();
                 EnableControls();
             }
         }

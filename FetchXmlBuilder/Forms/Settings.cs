@@ -36,6 +36,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             }
             cmbSeralizationStyle.SelectedIndex = settings.Results.SerializeStyle;
             chkResAllPages.Checked = settings.Results.RetrieveAllPages;
+            propXmlColors.SelectedObject = settings.XmlColors;
+            settings.XmlColors.ApplyToControl(txtFetch);
             txtFetch.Text = settings.QueryOptions.NewQueryTemplate;
             txtFetch.Process();
             chkEntAll.Checked = settings.Entity.All;
@@ -78,6 +80,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             settings.OpenUncustomizableViews = chkAppAllowUncustViews.Checked;
             settings.UseSQL4CDS = chkUseSQL4CDS.Checked;
             settings.UseLookup = chkUseLookup.Checked;
+            settings.XmlColors = propXmlColors.SelectedObject as XmlColors;
             settings.Entity.All = chkEntAll.Checked;
             settings.Entity.Customizable = chkEntCustomizable.Checked;
             settings.Entity.Uncustomizable = chkEntUncustomizable.Checked;
@@ -253,6 +256,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             txtFetch.Text = QueryOptions.DefaultNewQuery;
             txtFetch.Process();
+        }
+
+        private void propXmlColors_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            if (propXmlColors.SelectedObject is XmlColors colors)
+            {
+                colors.ApplyToControl(txtFetch);
+            }
+        }
+
+        private void btnResetXmlColors_Click(object sender, EventArgs e)
+        {
+            var colors = new XmlColors();
+            propXmlColors.SelectedObject = colors;
+            colors.ApplyToControl(txtFetch);
         }
     }
 }

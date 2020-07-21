@@ -1,4 +1,6 @@
-﻿namespace Cinteros.Xrm.FetchXmlBuilder.Forms
+﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+
+namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 {
     partial class Settings
     {
@@ -28,7 +30,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings1 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
+            xrmtb.XrmToolBox.Controls.XMLViewerSettings xmlViewerSettings1 = new xrmtb.XrmToolBox.Controls.XMLViewerSettings();
+            Cinteros.Xrm.FetchXmlBuilder.AppCode.XmlColors xmlColors1 = new Cinteros.Xrm.FetchXmlBuilder.AppCode.XmlColors();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             this.gbEntities = new System.Windows.Forms.GroupBox();
             this.chkEntOnlyAF = new System.Windows.Forms.CheckBox();
@@ -51,28 +54,32 @@
             this.chkAttManaged = new System.Windows.Forms.CheckBox();
             this.chkAttAll = new System.Windows.Forms.CheckBox();
             this.gbResult = new System.Windows.Forms.GroupBox();
-            this.chkResAllPages = new System.Windows.Forms.CheckBox();
             this.cmbSeralizationStyle = new System.Windows.Forms.ComboBox();
             this.rbResRaw = new System.Windows.Forms.RadioButton();
             this.rbResSerialized = new System.Windows.Forms.RadioButton();
+            this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
             this.rbResGrid = new System.Windows.Forms.RadioButton();
+            this.chkResAllPages = new System.Windows.Forms.CheckBox();
             this.gbAppearance = new System.Windows.Forms.GroupBox();
+            this.chkUseLookup = new System.Windows.Forms.CheckBox();
             this.chkUseSQL4CDS = new System.Windows.Forms.CheckBox();
             this.chkAppAllowUncustViews = new System.Windows.Forms.CheckBox();
-            this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
-            this.chkAppNoSavePrompt = new System.Windows.Forms.CheckBox();
             this.chkAppSingle = new System.Windows.Forms.CheckBox();
             this.chkAppFriendly = new System.Windows.Forms.CheckBox();
+            this.chkAppNoSavePrompt = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.llShowWelcome = new System.Windows.Forms.LinkLabel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.gbDefaultQuery = new System.Windows.Forms.GroupBox();
+            this.txtFetch = new xrmtb.XrmToolBox.Controls.XMLViewer();
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnDefaultQuery = new System.Windows.Forms.Button();
             this.btnFormatQuery = new System.Windows.Forms.Button();
-            this.txtFetch = new CSRichTextBoxSyntaxHighlighting.XMLViewer();
-            this.chkUseLookup = new System.Windows.Forms.CheckBox();
+            this.gbXml = new System.Windows.Forms.GroupBox();
+            this.gbBehavior = new System.Windows.Forms.GroupBox();
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
+            this.btnResetXmlColors = new System.Windows.Forms.Button();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -80,6 +87,8 @@
             this.panel1.SuspendLayout();
             this.gbDefaultQuery.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.gbXml.SuspendLayout();
+            this.gbBehavior.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbEntities
@@ -93,10 +102,10 @@
             this.gbEntities.Controls.Add(this.chkEntUnmanaged);
             this.gbEntities.Controls.Add(this.chkEntManaged);
             this.gbEntities.Controls.Add(this.chkEntAll);
-            this.gbEntities.Location = new System.Drawing.Point(240, 12);
+            this.gbEntities.Location = new System.Drawing.Point(12, 259);
             this.gbEntities.Name = "gbEntities";
-            this.gbEntities.Size = new System.Drawing.Size(168, 255);
-            this.gbEntities.TabIndex = 2;
+            this.gbEntities.Size = new System.Drawing.Size(222, 209);
+            this.gbEntities.TabIndex = 5;
             this.gbEntities.TabStop = false;
             this.gbEntities.Text = "Show Entities";
             // 
@@ -232,10 +241,10 @@
             this.gbAttributes.Controls.Add(this.chkAttUnmanaged);
             this.gbAttributes.Controls.Add(this.chkAttManaged);
             this.gbAttributes.Controls.Add(this.chkAttAll);
-            this.gbAttributes.Location = new System.Drawing.Point(414, 12);
+            this.gbAttributes.Location = new System.Drawing.Point(240, 259);
             this.gbAttributes.Name = "gbAttributes";
-            this.gbAttributes.Size = new System.Drawing.Size(168, 255);
-            this.gbAttributes.TabIndex = 3;
+            this.gbAttributes.Size = new System.Drawing.Size(222, 209);
+            this.gbAttributes.TabIndex = 6;
             this.gbAttributes.TabStop = false;
             this.gbAttributes.Text = "Show Attributes";
             // 
@@ -360,30 +369,22 @@
             // 
             // gbResult
             // 
-            this.gbResult.Controls.Add(this.chkResAllPages);
             this.gbResult.Controls.Add(this.cmbSeralizationStyle);
             this.gbResult.Controls.Add(this.rbResRaw);
             this.gbResult.Controls.Add(this.rbResSerialized);
+            this.gbResult.Controls.Add(this.chkAppResultsNewWindow);
             this.gbResult.Controls.Add(this.rbResGrid);
-            this.gbResult.Location = new System.Drawing.Point(12, 184);
+            this.gbResult.Location = new System.Drawing.Point(12, 143);
             this.gbResult.Name = "gbResult";
-            this.gbResult.Size = new System.Drawing.Size(222, 103);
-            this.gbResult.TabIndex = 1;
+            this.gbResult.Size = new System.Drawing.Size(222, 105);
+            this.gbResult.TabIndex = 3;
             this.gbResult.TabStop = false;
             this.gbResult.Text = "Result view";
             // 
-            // chkResAllPages
-            // 
-            this.chkResAllPages.AutoSize = true;
-            this.chkResAllPages.Location = new System.Drawing.Point(16, 80);
-            this.chkResAllPages.Name = "chkResAllPages";
-            this.chkResAllPages.Size = new System.Drawing.Size(111, 17);
-            this.chkResAllPages.TabIndex = 4;
-            this.chkResAllPages.Text = "Retrieve all pages";
-            this.chkResAllPages.UseVisualStyleBackColor = true;
-            // 
             // cmbSeralizationStyle
             // 
+            this.cmbSeralizationStyle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbSeralizationStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSeralizationStyle.Enabled = false;
             this.cmbSeralizationStyle.FormattingEnabled = true;
@@ -418,6 +419,16 @@
             this.rbResSerialized.UseVisualStyleBackColor = true;
             this.rbResSerialized.CheckedChanged += new System.EventHandler(this.rbResSerialized_CheckedChanged);
             // 
+            // chkAppResultsNewWindow
+            // 
+            this.chkAppResultsNewWindow.AutoSize = true;
+            this.chkAppResultsNewWindow.Location = new System.Drawing.Point(16, 80);
+            this.chkAppResultsNewWindow.Name = "chkAppResultsNewWindow";
+            this.chkAppResultsNewWindow.Size = new System.Drawing.Size(192, 17);
+            this.chkAppResultsNewWindow.TabIndex = 5;
+            this.chkAppResultsNewWindow.Text = "Always open results in new window";
+            this.chkAppResultsNewWindow.UseVisualStyleBackColor = true;
+            // 
             // rbResGrid
             // 
             this.rbResGrid.AutoSize = true;
@@ -430,26 +441,44 @@
             this.rbResGrid.Text = "View";
             this.rbResGrid.UseVisualStyleBackColor = true;
             // 
+            // chkResAllPages
+            // 
+            this.chkResAllPages.AutoSize = true;
+            this.chkResAllPages.Location = new System.Drawing.Point(16, 20);
+            this.chkResAllPages.Name = "chkResAllPages";
+            this.chkResAllPages.Size = new System.Drawing.Size(111, 17);
+            this.chkResAllPages.TabIndex = 4;
+            this.chkResAllPages.Text = "Retrieve all pages";
+            this.chkResAllPages.UseVisualStyleBackColor = true;
+            // 
             // gbAppearance
             // 
             this.gbAppearance.Controls.Add(this.chkUseLookup);
             this.gbAppearance.Controls.Add(this.chkUseSQL4CDS);
             this.gbAppearance.Controls.Add(this.chkAppAllowUncustViews);
-            this.gbAppearance.Controls.Add(this.chkAppResultsNewWindow);
-            this.gbAppearance.Controls.Add(this.chkAppNoSavePrompt);
             this.gbAppearance.Controls.Add(this.chkAppSingle);
             this.gbAppearance.Controls.Add(this.chkAppFriendly);
             this.gbAppearance.Location = new System.Drawing.Point(12, 12);
             this.gbAppearance.Name = "gbAppearance";
-            this.gbAppearance.Size = new System.Drawing.Size(222, 166);
-            this.gbAppearance.TabIndex = 0;
+            this.gbAppearance.Size = new System.Drawing.Size(222, 125);
+            this.gbAppearance.TabIndex = 1;
             this.gbAppearance.TabStop = false;
             this.gbAppearance.Text = "Appearance";
+            // 
+            // chkUseLookup
+            // 
+            this.chkUseLookup.AutoSize = true;
+            this.chkUseLookup.Location = new System.Drawing.Point(15, 100);
+            this.chkUseLookup.Name = "chkUseLookup";
+            this.chkUseLookup.Size = new System.Drawing.Size(193, 17);
+            this.chkUseLookup.TabIndex = 8;
+            this.chkUseLookup.Text = "Use Lookup control instead of Guid";
+            this.chkUseLookup.UseVisualStyleBackColor = true;
             // 
             // chkUseSQL4CDS
             // 
             this.chkUseSQL4CDS.AutoSize = true;
-            this.chkUseSQL4CDS.Location = new System.Drawing.Point(16, 120);
+            this.chkUseSQL4CDS.Location = new System.Drawing.Point(15, 80);
             this.chkUseSQL4CDS.Name = "chkUseSQL4CDS";
             this.chkUseSQL4CDS.Size = new System.Drawing.Size(197, 17);
             this.chkUseSQL4CDS.TabIndex = 7;
@@ -459,32 +488,12 @@
             // chkAppAllowUncustViews
             // 
             this.chkAppAllowUncustViews.AutoSize = true;
-            this.chkAppAllowUncustViews.Location = new System.Drawing.Point(16, 100);
+            this.chkAppAllowUncustViews.Location = new System.Drawing.Point(15, 60);
             this.chkAppAllowUncustViews.Name = "chkAppAllowUncustViews";
             this.chkAppAllowUncustViews.Size = new System.Drawing.Size(198, 17);
             this.chkAppAllowUncustViews.TabIndex = 6;
             this.chkAppAllowUncustViews.Text = "Allow opening uncustomizable views";
             this.chkAppAllowUncustViews.UseVisualStyleBackColor = true;
-            // 
-            // chkAppResultsNewWindow
-            // 
-            this.chkAppResultsNewWindow.AutoSize = true;
-            this.chkAppResultsNewWindow.Location = new System.Drawing.Point(16, 80);
-            this.chkAppResultsNewWindow.Name = "chkAppResultsNewWindow";
-            this.chkAppResultsNewWindow.Size = new System.Drawing.Size(192, 17);
-            this.chkAppResultsNewWindow.TabIndex = 5;
-            this.chkAppResultsNewWindow.Text = "Always open results in new window";
-            this.chkAppResultsNewWindow.UseVisualStyleBackColor = true;
-            // 
-            // chkAppNoSavePrompt
-            // 
-            this.chkAppNoSavePrompt.AutoSize = true;
-            this.chkAppNoSavePrompt.Location = new System.Drawing.Point(16, 60);
-            this.chkAppNoSavePrompt.Name = "chkAppNoSavePrompt";
-            this.chkAppNoSavePrompt.Size = new System.Drawing.Size(159, 17);
-            this.chkAppNoSavePrompt.TabIndex = 4;
-            this.chkAppNoSavePrompt.Text = "Do not prompt to save to file";
-            this.chkAppNoSavePrompt.UseVisualStyleBackColor = true;
             // 
             // chkAppSingle
             // 
@@ -506,6 +515,16 @@
             this.chkAppFriendly.Text = "Friendly names (CTRL+F)";
             this.chkAppFriendly.UseVisualStyleBackColor = true;
             // 
+            // chkAppNoSavePrompt
+            // 
+            this.chkAppNoSavePrompt.AutoSize = true;
+            this.chkAppNoSavePrompt.Location = new System.Drawing.Point(16, 40);
+            this.chkAppNoSavePrompt.Name = "chkAppNoSavePrompt";
+            this.chkAppNoSavePrompt.Size = new System.Drawing.Size(159, 17);
+            this.chkAppNoSavePrompt.TabIndex = 4;
+            this.chkAppNoSavePrompt.Text = "Do not prompt to save to file";
+            this.chkAppNoSavePrompt.UseVisualStyleBackColor = true;
+            // 
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -513,10 +532,10 @@
             this.panel1.Controls.Add(this.llShowWelcome);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
-            this.panel1.Location = new System.Drawing.Point(12, 443);
+            this.panel1.Location = new System.Drawing.Point(12, 614);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(567, 53);
-            this.panel1.TabIndex = 5;
+            this.panel1.Size = new System.Drawing.Size(449, 53);
+            this.panel1.TabIndex = 8;
             // 
             // llShowWelcome
             // 
@@ -533,7 +552,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(486, 19);
+            this.btnCancel.Location = new System.Drawing.Point(370, 19);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 1;
@@ -544,7 +563,7 @@
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(403, 19);
+            this.btnOK.Location = new System.Drawing.Point(289, 19);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 0;
@@ -554,25 +573,46 @@
             // 
             // gbDefaultQuery
             // 
-            this.gbDefaultQuery.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.gbDefaultQuery.Controls.Add(this.txtFetch);
             this.gbDefaultQuery.Controls.Add(this.panel2);
-            this.gbDefaultQuery.Location = new System.Drawing.Point(11, 301);
+            this.gbDefaultQuery.Location = new System.Drawing.Point(12, 474);
             this.gbDefaultQuery.Name = "gbDefaultQuery";
-            this.gbDefaultQuery.Size = new System.Drawing.Size(570, 145);
-            this.gbDefaultQuery.TabIndex = 6;
+            this.gbDefaultQuery.Size = new System.Drawing.Size(451, 129);
+            this.gbDefaultQuery.TabIndex = 7;
             this.gbDefaultQuery.TabStop = false;
             this.gbDefaultQuery.Text = "Default New Query";
+            // 
+            // txtFetch
+            // 
+            this.txtFetch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtFetch.CurrentParseError = null;
+            this.txtFetch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtFetch.FormatAsYouType = true;
+            this.txtFetch.Location = new System.Drawing.Point(3, 16);
+            this.txtFetch.Name = "txtFetch";
+            xmlViewerSettings1.AttributeKey = System.Drawing.Color.Red;
+            xmlViewerSettings1.AttributeValue = System.Drawing.Color.Blue;
+            xmlViewerSettings1.Comment = System.Drawing.Color.Empty;
+            xmlViewerSettings1.Element = System.Drawing.Color.DarkRed;
+            xmlViewerSettings1.FontName = "Consolas";
+            xmlViewerSettings1.FontSize = 9F;
+            xmlViewerSettings1.QuoteCharacter = '\"';
+            xmlViewerSettings1.Tag = System.Drawing.Color.Blue;
+            xmlViewerSettings1.Value = System.Drawing.Color.Black;
+            this.txtFetch.Settings = xmlViewerSettings1;
+            this.txtFetch.Size = new System.Drawing.Size(364, 110);
+            this.txtFetch.TabIndex = 4;
+            this.txtFetch.Text = "";
+            this.txtFetch.Leave += new System.EventHandler(this.txtFetch_Leave);
             // 
             // panel2
             // 
             this.panel2.Controls.Add(this.btnDefaultQuery);
             this.panel2.Controls.Add(this.btnFormatQuery);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel2.Location = new System.Drawing.Point(486, 16);
+            this.panel2.Location = new System.Drawing.Point(367, 16);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(81, 126);
+            this.panel2.Size = new System.Drawing.Size(81, 110);
             this.panel2.TabIndex = 5;
             // 
             // btnDefaultQuery
@@ -587,7 +627,8 @@
             // 
             // btnFormatQuery
             // 
-            this.btnFormatQuery.Location = new System.Drawing.Point(3, 100);
+            this.btnFormatQuery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnFormatQuery.Location = new System.Drawing.Point(3, 84);
             this.btnFormatQuery.Name = "btnFormatQuery";
             this.btnFormatQuery.Size = new System.Drawing.Size(75, 23);
             this.btnFormatQuery.TabIndex = 0;
@@ -595,43 +636,69 @@
             this.btnFormatQuery.UseVisualStyleBackColor = true;
             this.btnFormatQuery.Click += new System.EventHandler(this.btnFormatQuery_Click);
             // 
-            // txtFetch
+            // gbXml
             // 
-            this.txtFetch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtFetch.Location = new System.Drawing.Point(3, 16);
-            this.txtFetch.Name = "txtFetch";
-            xmlViewerSettings1.AttributeKey = System.Drawing.Color.Red;
-            xmlViewerSettings1.AttributeValue = System.Drawing.Color.Blue;
-            xmlViewerSettings1.Comment = System.Drawing.Color.Empty;
-            xmlViewerSettings1.Element = System.Drawing.Color.DarkRed;
-            xmlViewerSettings1.FontName = "Consolas";
-            xmlViewerSettings1.FontSize = 9F;
-            xmlViewerSettings1.QuoteCharacter = '\"';
-            xmlViewerSettings1.Tag = System.Drawing.Color.Blue;
-            xmlViewerSettings1.Value = System.Drawing.Color.Black;
-            this.txtFetch.Settings = xmlViewerSettings1;
-            this.txtFetch.Size = new System.Drawing.Size(483, 126);
-            this.txtFetch.TabIndex = 4;
-            this.txtFetch.Text = "";
-            this.txtFetch.Leave += new System.EventHandler(this.txtFetch_Leave);
+            this.gbXml.Controls.Add(this.btnResetXmlColors);
+            this.gbXml.Controls.Add(this.propXmlColors);
+            this.gbXml.Location = new System.Drawing.Point(240, 83);
+            this.gbXml.Name = "gbXml";
+            this.gbXml.Size = new System.Drawing.Size(222, 165);
+            this.gbXml.TabIndex = 4;
+            this.gbXml.TabStop = false;
+            this.gbXml.Text = "XML color scheme";
             // 
-            // chkUseLookup
+            // gbBehavior
             // 
-            this.chkUseLookup.AutoSize = true;
-            this.chkUseLookup.Location = new System.Drawing.Point(16, 140);
-            this.chkUseLookup.Name = "chkUseLookup";
-            this.chkUseLookup.Size = new System.Drawing.Size(193, 17);
-            this.chkUseLookup.TabIndex = 8;
-            this.chkUseLookup.Text = "Use Lookup control instead of Guid";
-            this.chkUseLookup.UseVisualStyleBackColor = true;
+            this.gbBehavior.Controls.Add(this.chkResAllPages);
+            this.gbBehavior.Controls.Add(this.chkAppNoSavePrompt);
+            this.gbBehavior.Location = new System.Drawing.Point(241, 12);
+            this.gbBehavior.Name = "gbBehavior";
+            this.gbBehavior.Size = new System.Drawing.Size(222, 65);
+            this.gbBehavior.TabIndex = 2;
+            this.gbBehavior.TabStop = false;
+            this.gbBehavior.Text = "Behavior";
+            // 
+            // propXmlColors
+            // 
+            this.propXmlColors.CanShowVisualStyleGlyphs = false;
+            this.propXmlColors.HelpVisible = false;
+            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.Location = new System.Drawing.Point(1, 19);
+            this.propXmlColors.Name = "propXmlColors";
+            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            xmlColors1.AttributeKey = System.Drawing.Color.Red;
+            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
+            xmlColors1.Comment = System.Drawing.Color.Empty;
+            xmlColors1.Element = System.Drawing.Color.DarkRed;
+            xmlColors1.Tag = System.Drawing.Color.Blue;
+            xmlColors1.Value = System.Drawing.Color.Black;
+            this.propXmlColors.SelectedObject = xmlColors1;
+            this.propXmlColors.Size = new System.Drawing.Size(218, 104);
+            this.propXmlColors.TabIndex = 7;
+            this.propXmlColors.ToolbarVisible = false;
+            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
+            // 
+            // btnResetXmlColors
+            // 
+            this.btnResetXmlColors.Location = new System.Drawing.Point(142, 129);
+            this.btnResetXmlColors.Name = "btnResetXmlColors";
+            this.btnResetXmlColors.Size = new System.Drawing.Size(75, 23);
+            this.btnResetXmlColors.TabIndex = 8;
+            this.btnResetXmlColors.Text = "Reset";
+            this.btnResetXmlColors.UseVisualStyleBackColor = true;
+            this.btnResetXmlColors.Click += new System.EventHandler(this.btnResetXmlColors_Click);
             // 
             // Settings
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(593, 506);
+            this.ClientSize = new System.Drawing.Size(475, 677);
+            this.Controls.Add(this.gbBehavior);
+            this.Controls.Add(this.gbXml);
             this.Controls.Add(this.gbDefaultQuery);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.gbAppearance);
@@ -655,6 +722,9 @@
             this.panel1.PerformLayout();
             this.gbDefaultQuery.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            this.gbXml.ResumeLayout(false);
+            this.gbBehavior.ResumeLayout(false);
+            this.gbBehavior.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -697,11 +767,15 @@
         private System.Windows.Forms.LinkLabel llShowWelcome;
         private System.Windows.Forms.CheckBox chkAppAllowUncustViews;
         private System.Windows.Forms.GroupBox gbDefaultQuery;
-        internal CSRichTextBoxSyntaxHighlighting.XMLViewer txtFetch;
+        internal xrmtb.XrmToolBox.Controls.XMLViewer txtFetch;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btnFormatQuery;
         private System.Windows.Forms.Button btnDefaultQuery;
         private System.Windows.Forms.CheckBox chkUseSQL4CDS;
         private System.Windows.Forms.CheckBox chkUseLookup;
+        private System.Windows.Forms.PropertyGrid propXmlColors;
+        private System.Windows.Forms.GroupBox gbXml;
+        private System.Windows.Forms.GroupBox gbBehavior;
+        private System.Windows.Forms.Button btnResetXmlColors;
     }
 }
