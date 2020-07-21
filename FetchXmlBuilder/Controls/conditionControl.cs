@@ -150,6 +150,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
                     if (control == cmbValue)
                     {
+                        if (!string.IsNullOrWhiteSpace(cmbValueOf.Text) && !string.IsNullOrWhiteSpace(cmbValue.Text))
+                        {
+                            return new ControlValidationResult(ControlValidationLevel.Error, "Value and Value Of cannot both be set");
+                        }
+
                         switch (valueType)
                         {
                             case null:
@@ -296,6 +301,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // RefreshFill now that attributes are loaded
             ReFillControl(cmbAttribute);
             ReFillControl(cmbValue);
+            ReFillControl(cmbValueOf);
             EndInit();
             RefreshOperators();
             UpdateValueField();
@@ -323,6 +329,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 return;
             }
             panValue.Visible = true;
+            panValueOf.Visible = false;
             panValueLookup.Visible = false;
             panGuidSelector.Visible = false;
             cmbValue.Items.Clear();
@@ -443,6 +450,27 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 panGuidSelector.Visible = true;
                 panValue.Visible = !rbUseLookup.Checked;
                 panValueLookup.Visible = rbUseLookup.Checked;
+            }
+
+            if (oper.SupportsColumnComparison && !(cmbEntity.SelectedItem is EntityNode))
+            {
+                panValueOf.Visible = true;
+                cmbValueOf.Items.Clear();
+                if (attribute != null)
+                {
+                    foreach (AttributeItem item in cmbAttribute.Items)
+                    {
+                        if (item.Metadata.AttributeType == attribute.Metadata.AttributeType)
+                        {
+                            cmbValueOf.Items.Add(new AttributeItem(item.Metadata));
+                        }
+                    }
+                }
+            }
+
+            if (!panValueOf.Visible)
+            {
+                cmbValueOf.Text = "";
             }
         }
 
