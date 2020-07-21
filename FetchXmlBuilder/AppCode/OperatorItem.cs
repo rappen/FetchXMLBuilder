@@ -193,6 +193,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case ConditionOperator.InFiscalPeriodAndYear:
                 case ConditionOperator.InOrAfterFiscalPeriodAndYear:
                 case ConditionOperator.InOrBeforeFiscalPeriodAndYear:
+                case ConditionOperator.ContainValues:
+                case ConditionOperator.DoesNotContainValues:
                     return true;
             }
             return false;
@@ -287,7 +289,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return result;
         }
 
-        public static OperatorItem[] GetConditionsByAttributeType(AttributeTypeCode valueType)
+        public static OperatorItem[] GetConditionsByAttributeType(AttributeTypeCode valueType, string attributeTypeName)
         {
             var validConditionsList = new List<OperatorItem>
             {
@@ -419,6 +421,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserOrUserHierarchyAndTeams));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserOrUserTeams));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserTeams));
+                    break;
+                case AttributeTypeCode.Virtual:
+                    if (attributeTypeName == "MultiSelectPicklistType")
+                    {
+                        validConditionsList.Add(new OperatorItem(ConditionOperator.ContainValues));
+                        validConditionsList.Add(new OperatorItem(ConditionOperator.DoesNotContainValues));
+                    }
                     break;
             }
             return validConditionsList.ToArray();

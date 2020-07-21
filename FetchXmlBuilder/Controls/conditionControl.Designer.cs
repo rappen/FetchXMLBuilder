@@ -174,7 +174,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             "this-year",
             "today",
             "tomorrow",
-            "yesterday"});
+            "yesterday",
+            "contains-values",
+            "not-contains-values"});
             this.cmbOperator.Location = new System.Drawing.Point(7, 96);
             this.cmbOperator.Name = "cmbOperator";
             this.cmbOperator.Size = new System.Drawing.Size(281, 21);
