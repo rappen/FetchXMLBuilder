@@ -452,29 +452,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 panValueLookup.Visible = rbUseLookup.Checked;
             }
 
-            if (string.IsNullOrWhiteSpace(cmbEntity.Text))
+            if (oper.SupportsColumnComparison && !(cmbEntity.SelectedItem is EntityNode))
             {
-                switch (oper.GetValue())
+                panValueOf.Visible = true;
+                cmbValueOf.Items.Clear();
+                if (attribute != null)
                 {
-                    case "eq":
-                    case "ne":
-                    case "gt":
-                    case "ge":
-                    case "lt":
-                    case "le":
-                        panValueOf.Visible = true;
-                        cmbValueOf.Items.Clear();
-                        if (attribute != null)
+                    foreach (AttributeItem item in cmbAttribute.Items)
+                    {
+                        if (item.Metadata.AttributeType == attribute.Metadata.AttributeType)
                         {
-                            foreach (AttributeItem item in cmbAttribute.Items)
-                            {
-                                if (item.Metadata.AttributeType == attribute.Metadata.AttributeType)
-                                {
-                                    cmbValueOf.Items.Add(new AttributeItem(item.Metadata));
-                                }
-                            }
+                            cmbValueOf.Items.Add(new AttributeItem(item.Metadata));
                         }
-                        break;
+                    }
                 }
             }
 
