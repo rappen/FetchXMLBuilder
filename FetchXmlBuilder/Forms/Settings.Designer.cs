@@ -54,9 +54,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.chkAttManaged = new System.Windows.Forms.CheckBox();
             this.chkAttAll = new System.Windows.Forms.CheckBox();
             this.gbResult = new System.Windows.Forms.GroupBox();
-            this.cmbSeralizationStyle = new System.Windows.Forms.ComboBox();
             this.rbResRaw = new System.Windows.Forms.RadioButton();
-            this.rbResSerialized = new System.Windows.Forms.RadioButton();
+            this.rbResSerializedXML = new System.Windows.Forms.RadioButton();
             this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
             this.rbResGrid = new System.Windows.Forms.RadioButton();
             this.chkResAllPages = new System.Windows.Forms.CheckBox();
@@ -77,9 +76,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.btnDefaultQuery = new System.Windows.Forms.Button();
             this.btnFormatQuery = new System.Windows.Forms.Button();
             this.gbXml = new System.Windows.Forms.GroupBox();
-            this.gbBehavior = new System.Windows.Forms.GroupBox();
-            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.btnResetXmlColors = new System.Windows.Forms.Button();
+            this.gbBehavior = new System.Windows.Forms.GroupBox();
+            this.rbResSerializedJSON = new System.Windows.Forms.RadioButton();
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -369,60 +369,41 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // 
             // gbResult
             // 
-            this.gbResult.Controls.Add(this.cmbSeralizationStyle);
+            this.gbResult.Controls.Add(this.rbResSerializedJSON);
             this.gbResult.Controls.Add(this.rbResRaw);
-            this.gbResult.Controls.Add(this.rbResSerialized);
-            this.gbResult.Controls.Add(this.chkAppResultsNewWindow);
+            this.gbResult.Controls.Add(this.rbResSerializedXML);
             this.gbResult.Controls.Add(this.rbResGrid);
             this.gbResult.Location = new System.Drawing.Point(12, 143);
             this.gbResult.Name = "gbResult";
-            this.gbResult.Size = new System.Drawing.Size(222, 105);
+            this.gbResult.Size = new System.Drawing.Size(222, 110);
             this.gbResult.TabIndex = 3;
             this.gbResult.TabStop = false;
             this.gbResult.Text = "Result view";
             // 
-            // cmbSeralizationStyle
-            // 
-            this.cmbSeralizationStyle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbSeralizationStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSeralizationStyle.Enabled = false;
-            this.cmbSeralizationStyle.FormattingEnabled = true;
-            this.cmbSeralizationStyle.Items.AddRange(new object[] {
-            "Explicit XML",
-            "Basic XML",
-            "JSON",
-            "EntityCollection"});
-            this.cmbSeralizationStyle.Location = new System.Drawing.Point(92, 38);
-            this.cmbSeralizationStyle.Name = "cmbSeralizationStyle";
-            this.cmbSeralizationStyle.Size = new System.Drawing.Size(122, 21);
-            this.cmbSeralizationStyle.TabIndex = 2;
-            // 
             // rbResRaw
             // 
             this.rbResRaw.AutoSize = true;
-            this.rbResRaw.Location = new System.Drawing.Point(16, 60);
+            this.rbResRaw.Location = new System.Drawing.Point(16, 80);
             this.rbResRaw.Name = "rbResRaw";
             this.rbResRaw.Size = new System.Drawing.Size(102, 17);
-            this.rbResRaw.TabIndex = 3;
+            this.rbResRaw.TabIndex = 4;
             this.rbResRaw.Text = "Raw fetch result";
             this.rbResRaw.UseVisualStyleBackColor = true;
             // 
-            // rbResSerialized
+            // rbResSerializedXML
             // 
-            this.rbResSerialized.AutoSize = true;
-            this.rbResSerialized.Location = new System.Drawing.Point(16, 40);
-            this.rbResSerialized.Name = "rbResSerialized";
-            this.rbResSerialized.Size = new System.Drawing.Size(70, 17);
-            this.rbResSerialized.TabIndex = 1;
-            this.rbResSerialized.Text = "Serialized";
-            this.rbResSerialized.UseVisualStyleBackColor = true;
-            this.rbResSerialized.CheckedChanged += new System.EventHandler(this.rbResSerialized_CheckedChanged);
+            this.rbResSerializedXML.AutoSize = true;
+            this.rbResSerializedXML.Location = new System.Drawing.Point(16, 40);
+            this.rbResSerializedXML.Name = "rbResSerializedXML";
+            this.rbResSerializedXML.Size = new System.Drawing.Size(95, 17);
+            this.rbResSerializedXML.TabIndex = 2;
+            this.rbResSerializedXML.Text = "Serialized XML";
+            this.rbResSerializedXML.UseVisualStyleBackColor = true;
             // 
             // chkAppResultsNewWindow
             // 
             this.chkAppResultsNewWindow.AutoSize = true;
-            this.chkAppResultsNewWindow.Location = new System.Drawing.Point(16, 80);
+            this.chkAppResultsNewWindow.Location = new System.Drawing.Point(16, 60);
             this.chkAppResultsNewWindow.Name = "chkAppResultsNewWindow";
             this.chkAppResultsNewWindow.Size = new System.Drawing.Size(192, 17);
             this.chkAppResultsNewWindow.TabIndex = 5;
@@ -436,7 +417,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.rbResGrid.Location = new System.Drawing.Point(16, 20);
             this.rbResGrid.Name = "rbResGrid";
             this.rbResGrid.Size = new System.Drawing.Size(48, 17);
-            this.rbResGrid.TabIndex = 0;
+            this.rbResGrid.TabIndex = 1;
             this.rbResGrid.TabStop = true;
             this.rbResGrid.Text = "View";
             this.rbResGrid.UseVisualStyleBackColor = true;
@@ -447,7 +428,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.chkResAllPages.Location = new System.Drawing.Point(16, 20);
             this.chkResAllPages.Name = "chkResAllPages";
             this.chkResAllPages.Size = new System.Drawing.Size(111, 17);
-            this.chkResAllPages.TabIndex = 4;
+            this.chkResAllPages.TabIndex = 1;
             this.chkResAllPages.Text = "Retrieve all pages";
             this.chkResAllPages.UseVisualStyleBackColor = true;
             // 
@@ -640,23 +621,44 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // 
             this.gbXml.Controls.Add(this.btnResetXmlColors);
             this.gbXml.Controls.Add(this.propXmlColors);
-            this.gbXml.Location = new System.Drawing.Point(240, 83);
+            this.gbXml.Location = new System.Drawing.Point(240, 103);
             this.gbXml.Name = "gbXml";
-            this.gbXml.Size = new System.Drawing.Size(222, 165);
+            this.gbXml.Size = new System.Drawing.Size(222, 150);
             this.gbXml.TabIndex = 4;
             this.gbXml.TabStop = false;
             this.gbXml.Text = "XML color scheme";
+            // 
+            // btnResetXmlColors
+            // 
+            this.btnResetXmlColors.Location = new System.Drawing.Point(142, 121);
+            this.btnResetXmlColors.Name = "btnResetXmlColors";
+            this.btnResetXmlColors.Size = new System.Drawing.Size(75, 23);
+            this.btnResetXmlColors.TabIndex = 8;
+            this.btnResetXmlColors.Text = "Reset";
+            this.btnResetXmlColors.UseVisualStyleBackColor = true;
+            this.btnResetXmlColors.Click += new System.EventHandler(this.btnResetXmlColors_Click);
             // 
             // gbBehavior
             // 
             this.gbBehavior.Controls.Add(this.chkResAllPages);
             this.gbBehavior.Controls.Add(this.chkAppNoSavePrompt);
+            this.gbBehavior.Controls.Add(this.chkAppResultsNewWindow);
             this.gbBehavior.Location = new System.Drawing.Point(241, 12);
             this.gbBehavior.Name = "gbBehavior";
-            this.gbBehavior.Size = new System.Drawing.Size(222, 65);
+            this.gbBehavior.Size = new System.Drawing.Size(222, 85);
             this.gbBehavior.TabIndex = 2;
             this.gbBehavior.TabStop = false;
             this.gbBehavior.Text = "Behavior";
+            // 
+            // rbResSerializedJSON
+            // 
+            this.rbResSerializedJSON.AutoSize = true;
+            this.rbResSerializedJSON.Location = new System.Drawing.Point(15, 60);
+            this.rbResSerializedJSON.Name = "rbResSerializedJSON";
+            this.rbResSerializedJSON.Size = new System.Drawing.Size(101, 17);
+            this.rbResSerializedJSON.TabIndex = 3;
+            this.rbResSerializedJSON.Text = "Serialized JSON";
+            this.rbResSerializedJSON.UseVisualStyleBackColor = true;
             // 
             // propXmlColors
             // 
@@ -667,27 +669,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.propXmlColors.Name = "propXmlColors";
             this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
             xmlColors1.AttributeKey = System.Drawing.Color.Red;
+            xmlColors1.AttributeKeyColor = "Red";
             xmlColors1.AttributeValue = System.Drawing.Color.Blue;
-            xmlColors1.Comment = System.Drawing.Color.Empty;
+            xmlColors1.AttributeValueColor = "Blue";
+            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            xmlColors1.CommentColor = "0";
             xmlColors1.Element = System.Drawing.Color.DarkRed;
+            xmlColors1.ElementColor = "DarkRed";
             xmlColors1.Tag = System.Drawing.Color.Blue;
+            xmlColors1.TagColor = "Blue";
             xmlColors1.Value = System.Drawing.Color.Black;
+            xmlColors1.ValueColor = "Black";
             this.propXmlColors.SelectedObject = xmlColors1;
             this.propXmlColors.Size = new System.Drawing.Size(218, 104);
             this.propXmlColors.TabIndex = 7;
             this.propXmlColors.ToolbarVisible = false;
             this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
             this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
-            // 
-            // btnResetXmlColors
-            // 
-            this.btnResetXmlColors.Location = new System.Drawing.Point(142, 129);
-            this.btnResetXmlColors.Name = "btnResetXmlColors";
-            this.btnResetXmlColors.Size = new System.Drawing.Size(75, 23);
-            this.btnResetXmlColors.TabIndex = 8;
-            this.btnResetXmlColors.Text = "Reset";
-            this.btnResetXmlColors.UseVisualStyleBackColor = true;
-            this.btnResetXmlColors.Click += new System.EventHandler(this.btnResetXmlColors_Click);
             // 
             // Settings
             // 
@@ -759,8 +757,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.RadioButton rbResGrid;
         private System.Windows.Forms.RadioButton rbResRaw;
-        private System.Windows.Forms.RadioButton rbResSerialized;
-        private System.Windows.Forms.ComboBox cmbSeralizationStyle;
+        private System.Windows.Forms.RadioButton rbResSerializedXML;
         private System.Windows.Forms.CheckBox chkResAllPages;
         private System.Windows.Forms.CheckBox chkAppNoSavePrompt;
         private System.Windows.Forms.CheckBox chkAppResultsNewWindow;
@@ -777,5 +774,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private System.Windows.Forms.GroupBox gbXml;
         private System.Windows.Forms.GroupBox gbBehavior;
         private System.Windows.Forms.Button btnResetXmlColors;
+        private System.Windows.Forms.RadioButton rbResSerializedJSON;
     }
 }

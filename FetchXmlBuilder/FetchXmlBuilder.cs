@@ -514,15 +514,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 return;
             }
-            var fetchType = settings.Results.ResultOption;
-            switch (fetchType)
+            switch (settings.Results.ResultOutput)
             {
-                case 0:
-                case 1:
+                case ResultOutput.Grid:
+                case ResultOutput.XML:
+                case ResultOutput.JSON:
                     RetrieveMultiple(fetch);
                     break;
 
-                case 3:
+                case ResultOutput.Raw:
                     ExecuteFetch(fetch);
                     break;
 
@@ -1396,7 +1396,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void RetrieveMultiple(string fetch)
         {
             working = true;
-            LogUse("RetrieveMultiple-" + Settings.ResultOption2String(settings.Results.ResultOption, settings.Results.SerializeStyle));
+            LogUse("RetrieveMultiple-" + settings.Results.ResultOutput.ToString());
             SendMessageToStatusBar(this, new StatusBarMessageEventArgs("Retrieving..."));
             tsbAbort.Enabled = true;
             WorkAsync(new WorkAsyncInfo
@@ -1468,7 +1468,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     while (!eventargs.Cancel && settings.Results.RetrieveAllPages && (query is QueryExpression || query is FetchExpression) && tmpResult.MoreRecords);
                     ai.WriteEvent("RetrieveMultiple", resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds, HandleAIResult);
-                    if (settings.Results.ResultOption == 1 && settings.Results.SerializeStyle == 2)
+                    if (settings.Results.ResultOutput == ResultOutput.JSON)
                     {
                         var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented);
                         eventargs.Result = json;
@@ -1505,56 +1505,37 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     else if (completedargs.Result is QueryInfo queryinfo)
                     {
-                        if (settings.Results.ResultOption == 0)
+                        switch (settings.Results.ResultOutput)
                         {
-                            if (settings.Results.AlwaysNewWindow)
-                            {
-                                var newresults = new ResultGrid(this);
-                                resultpanecount++;
-                                newresults.Text = $"Results ({resultpanecount})";
-                                newresults.Show(dockContainer, settings.DockStates.ResultView);
-                                newresults.SetData(queryinfo);
-                            }
-                            else
-                            {
-                                if (dockControlGrid?.IsDisposed != false)
+                            case ResultOutput.Grid:
+                                if (settings.Results.AlwaysNewWindow)
                                 {
-                                    dockControlGrid = new ResultGrid(this);
-                                    dockControlGrid.Show(dockContainer, settings.DockStates.ResultView);
+                                    var newresults = new ResultGrid(this);
+                                    resultpanecount++;
+                                    newresults.Text = $"Results ({resultpanecount})";
+                                    newresults.Show(dockContainer, settings.DockStates.ResultView);
+                                    newresults.SetData(queryinfo);
                                 }
-                                dockControlGrid.SetData(queryinfo);
-                                dockControlGrid.Activate();
-                            }
-                        }
-                        else if (settings.Results.ResultOption == 1)
-                        {
-                            if (settings.Results.SerializeStyle == 0)
-                            {
+                                else
+                                {
+                                    if (dockControlGrid?.IsDisposed != false)
+                                    {
+                                        dockControlGrid = new ResultGrid(this);
+                                        dockControlGrid.Show(dockContainer, settings.DockStates.ResultView);
+                                    }
+                                    dockControlGrid.SetData(queryinfo);
+                                    dockControlGrid.Activate();
+                                }
+                                break;
+                            case ResultOutput.XML:
                                 var serialized = EntityCollectionSerializer.Serialize(queryinfo.Results, SerializationStyle.Explicit);
                                 ShowResultControl(serialized.OuterXml, ContentType.Serialized_Result_XML, SaveFormat.XML, settings.DockStates.FetchResult);
-                            }
-                            else if (settings.Results.SerializeStyle == 1)
-                            {
-                                var serialized = EntityCollectionSerializer.Serialize(queryinfo.Results, SerializationStyle.Basic);
-                                ShowResultControl(serialized.OuterXml, ContentType.Serialized_Result_XML, SaveFormat.XML, settings.DockStates.FetchResult);
-                            }
-                            else if (settings.Results.SerializeStyle == 3)
-                            {
-                                var serializer = new DataContractSerializer(typeof(EntityCollection), null, int.MaxValue, false, false, null, new KnownTypesResolver());
-                                var sw = new StringWriter();
-                                var xw = new XmlTextWriter(sw);
-                                serializer.WriteObject(xw, entities);
-                                xw.Close();
-                                sw.Close();
-                                var serialized = sw.ToString();
-                                ShowResultControl(serialized, ContentType.Serialized_Result_XML, SaveFormat.XML, settings.DockStates.FetchResult);
-                            }
+                                break;
                         }
                     }
-                    else if (settings.Results.ResultOption == 1 && settings.Results.SerializeStyle == 2 && completedargs.Result is string)
+                    else if (settings.Results.ResultOutput == ResultOutput.JSON && completedargs.Result is string json)
                     {
-                        var result = completedargs.Result.ToString();
-                        ShowResultControl(result, ContentType.Serialized_Result_JSON, SaveFormat.JSON, settings.DockStates.FetchResult);
+                        ShowResultControl(json, ContentType.Serialized_Result_JSON, SaveFormat.JSON, settings.DockStates.FetchResult);
                     }
                 }
             });

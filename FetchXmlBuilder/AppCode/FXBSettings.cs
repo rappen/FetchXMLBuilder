@@ -63,8 +63,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool SysColumns { get; set; } = true;
         public bool LocalTime { get; set; }
         public bool CopyHeaders { get; set; } = true;
-        public int ResultOption { get; set; }
-        public int SerializeStyle { get; set; }
+        public ResultOutput ResultOutput { get; set; }
         public bool RetrieveAllPages { get; set; } = false;
         public bool AlwaysNewWindow { get; set; } = false;
         public bool QuickFilter { get; set; } = false;
@@ -204,5 +203,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             viewer.Settings.Tag = Tag;
             viewer.Settings.Value = Value;
         }
+    }
+
+    public enum ResultOutput
+    {
+        Grid = 0,
+        XML = 1,
+        JSON = 2,
+        Raw = 3
     }
 }
