@@ -181,6 +181,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         {
                             var parent = GetAttributeFromNode(node.Parent.Parent, "name");
                             attr = fxb.GetAttributeDisplayName(parent, attr);
+                            valueOf = fxb.GetAttributeDisplayName(parent, valueOf);
                         }
                         if (!string.IsNullOrEmpty(ent))
                         {
