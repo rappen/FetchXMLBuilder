@@ -317,7 +317,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 //cmbOperator.SelectedItem = null;
                 cmbOperator.Items.Clear();
-                cmbOperator.Items.AddRange(OperatorItem.GetConditionsByAttributeType(attributeType, attributeItem.Metadata.AttributeTypeName.Value));
+                cmbOperator.Items.AddRange(OperatorItem.GetConditionsByAttributeType(attributeType, attributeItem.Metadata.AttributeTypeName?.Value));
                 ReFillControl(cmbOperator);
             }
         }
