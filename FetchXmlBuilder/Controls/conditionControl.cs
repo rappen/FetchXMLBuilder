@@ -301,10 +301,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // RefreshFill now that attributes are loaded
             ReFillControl(cmbAttribute);
             ReFillControl(cmbValue);
-            ReFillControl(cmbValueOf);
             EndInit();
             RefreshOperators();
             UpdateValueField();
+            ReFillControl(cmbValueOf);
         }
 
         private void RefreshOperators()
