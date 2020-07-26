@@ -155,6 +155,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             return new ControlValidationResult(ControlValidationLevel.Error, "Value and Value Of cannot both be set");
                         }
 
+                        if (!string.IsNullOrWhiteSpace(cmbValueOf.Text))
+                        {
+                            return null;
+                        }
+
                         switch (valueType)
                         {
                             case null:
