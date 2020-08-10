@@ -181,6 +181,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             case AttributeTypeCode.Status:
                             case AttributeTypeCode.Picklist:
                             case AttributeTypeCode.BigInt:
+                            case AttributeTypeCode.EntityName:
                                 int intvalue;
                                 if (!int.TryParse(value, out intvalue))
                                 {
@@ -208,7 +209,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                                 break;
                             case AttributeTypeCode.String:
                             case AttributeTypeCode.Memo:
-                            case AttributeTypeCode.EntityName:
                             case AttributeTypeCode.Virtual:
                                 break;
                             case AttributeTypeCode.PartyList:
@@ -362,6 +362,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 {
                     cmbValue.Items.AddRange(options.Options.Select(o => new OptionsetItem(o)).ToArray());
                     cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
+                }
+                else if (attribute.Metadata is EntityNameAttributeMetadata)
+                {
+                    var entities = fxb.GetDisplayEntities();
+                    if (entities != null)
+                    {
+                        foreach (var entity in entities)
+                        {
+                            cmbValue.Items.Add(new EntityNameItem(entity.Value));
+                        }
+                        cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
+                    }
                 }
                 else if (attribute.Metadata is LookupAttributeMetadata lookupmeta)
                 {

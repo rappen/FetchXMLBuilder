@@ -315,7 +315,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 valueType != AttributeTypeCode.Lookup &&
                 valueType != AttributeTypeCode.Customer &&
                 valueType != AttributeTypeCode.Owner &&
-                valueType != AttributeTypeCode.Uniqueidentifier)
+                valueType != AttributeTypeCode.Uniqueidentifier &&
+                valueType != AttributeTypeCode.EntityName)
             {
                 validConditionsList.Add(new OperatorItem(ConditionOperator.BeginsWith));
                 validConditionsList.Add(new OperatorItem(ConditionOperator.DoesNotBeginWith));
