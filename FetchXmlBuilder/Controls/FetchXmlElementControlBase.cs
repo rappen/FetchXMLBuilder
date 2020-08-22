@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
-    public class FetchXmlElementControlBase : UserControl, IDefinitionSavable, ISupportInitializeNotification
+    public class FetchXmlElementControlBase : UserControl, IDefinitionSavable
     {
         private Dictionary<string, string> collec;
         private Dictionary<string, string> original;
@@ -18,7 +18,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private ErrorProvider warningProvider;
         private ErrorProvider infoProvider;
         private bool validationSuspended = false;
-        private int initCount;
 
         static FetchXmlElementControlBase()
         {
@@ -46,8 +45,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         public void InitializeFXB(Dictionary<string, string> collection, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree, TreeNode node)
         {
-            BeginInit();
-
             fxb = fetchXmlBuilder;
             Node = node;
             Tree = tree;
@@ -81,8 +78,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             Saved += tree.CtrlSaved;
             AttachValidatingEvent(this);
             ValidateControlRecursive(this);
-
-            EndInit();
         }
 
         protected FetchXmlBuilder fxb { get; set; }
@@ -113,7 +108,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
             if (RequiresSave())
             {
-                Save(false);
+                e.Cancel = !Save(false);
             }
         }
 
@@ -122,7 +117,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             return !controlsCheckSum.Equals(ControlUtils.ControlsChecksum(this.Controls));
         }
 
-        public virtual bool Save(bool keyPress)
+        public virtual bool Save(bool silent)
         {
             try
             {
@@ -131,11 +126,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return false;
                 }
 
-                SaveInternal(keyPress);
+                SaveInternal(silent);
             }
             catch (ArgumentNullException ex)
             {
-                if (!keyPress)
+                if (!silent)
                 {
                     MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 }
@@ -147,12 +142,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             return true;
         }
 
-        protected virtual void SaveInternal(bool keyPress)
+        protected virtual void SaveInternal(bool silent)
         {
-            if (IsInitialized)
-            {
-                SendSaveMessage(ControlUtils.GetAttributesCollection(this.Controls, true), keyPress);
-            }
+            SendSaveMessage(ControlUtils.GetAttributesCollection(this.Controls, true));
         }
 
         protected virtual ControlValidationResult ValidateControl(Control control)
@@ -203,20 +195,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         /// </summary>
         /// <param name="service">IOrganizationService generated</param>
         /// <param name="parameters">Lsit of parameter</param>
-        private void SendSaveMessage(Dictionary<string, string> collection, bool keyPress)
+        private void SendSaveMessage(Dictionary<string, string> collection)
         {
-            Saved?.Invoke(this, new SaveEventArgs { AttributeCollection = collection, KeyPress = keyPress });
+            Saved?.Invoke(this, new SaveEventArgs { AttributeCollection = collection });
         }
 
         public event EventHandler<SaveEventArgs> Saved;
 
         protected void ReFillControl(Control control)
         {
-            BeginInit();
-
             ControlUtils.FillControl(collec, control, null);
-
-            EndInit();
         }
 
         protected override bool ProcessKeyPreview(ref Message m)
@@ -229,29 +217,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 collec = new Dictionary<string, string>(original);
                 ControlUtils.FillControls(collec, Controls, this);
                 controlsCheckSum = ControlUtils.ControlsChecksum(Controls);
-                SendSaveMessage(original, false);
+                SendSaveMessage(original);
                 return true;
             }
 
             return base.ProcessKeyPreview(ref m);
         }
-
-        public void BeginInit()
-        {
-            initCount++;
-        }
-
-        public void EndInit()
-        {
-            initCount--;
-
-            if (initCount == 0)
-                Initialized?.Invoke(this, EventArgs.Empty);
-        }
-
-        public event EventHandler Initialized;
-
-        public bool IsInitialized => initCount == 0;
     }
 
     public enum ControlValidationLevel

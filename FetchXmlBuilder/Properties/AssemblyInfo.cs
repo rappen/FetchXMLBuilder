@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("FetchXML Builder")]
-[assembly: AssemblyDescription("Build queries for Microsoft Dataflex, Dynamics 365 and the Power Platform. Investigate data. Get code. Empower yourself to achieve more.")]
+[assembly: AssemblyDescription("Build queries for D365, CRM, XRM, CDS and the Power Platform. Investigate data. Get code. Empower yourself to achieve more.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Jonas Rapp, Sweden")]
 [assembly: AssemblyProduct("FetchXML Builder")]
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.2020.07.1017")]
-[assembly: AssemblyFileVersion("1.2020.07.1017")]
+[assembly: AssemblyVersion("1.2020.05.1016")]
+[assembly: AssemblyFileVersion("1.2020.05.1016")]

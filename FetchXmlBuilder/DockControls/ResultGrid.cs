@@ -24,7 +24,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             mnuSysCol.Checked = form.settings.Results.SysColumns;
             mnuLocalTime.Checked = form.settings.Results.LocalTime;
             mnuCopyHeaders.Checked = form.settings.Results.CopyHeaders;
-            mnuQuickFilter.Checked = form.settings.Results.QuickFilter;
             ApplySettingsToGrid();
         }
 
@@ -39,7 +38,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
             crmGridView1.DataSource = queryinfo.Results;
             crmGridView1.ColumnOrder = queryinfo.AttributesSignature.Trim().Replace('\n', ',');
-            RefreshData();
+            crmGridView1.Refresh();
+            crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
         }
 
         private void ApplySettingsToGrid()
@@ -53,8 +53,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             crmGridView1.ClipboardCopyMode = form.settings.Results.CopyHeaders ?
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             crmGridView1.OrganizationService = form.Service;
-            panQuickFilter.Visible = form.settings.Results.QuickFilter;
-            RefreshData();
+            crmGridView1.Refresh();
+            crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
         }
 
         private void UpdateSettingsFromSelectedOptions()
@@ -66,25 +66,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             form.settings.Results.Id = mnuIdCol.Checked;
             form.settings.Results.LocalTime = mnuLocalTime.Checked;
             form.settings.Results.CopyHeaders = mnuCopyHeaders.Checked;
-            form.settings.Results.QuickFilter = mnuQuickFilter.Checked;
             ApplySettingsToGrid();
-        }
-
-        private void RefreshData()
-        {
-            if (panQuickFilter.Visible)
-            {
-                crmGridView1.FilterColumns = crmGridView1.ColumnOrder;
-                crmGridView1.FilterText = txtQuickFilter.Text;
-            }
-            else
-            {
-                crmGridView1.FilterText = string.Empty;
-            }
-            crmGridView1.SuspendLayout();
-            crmGridView1.Refresh();
-            crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
-            crmGridView1.ResumeLayout();
         }
 
         private void crmGridView1_RecordDoubleClick(object sender, CRMRecordEventArgs e)
@@ -130,27 +112,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         private void lblOptionsExpander_Click(object sender, EventArgs e)
         {
             (sender as System.Windows.Forms.Label)?.GroupBoxSetState(tt);
-        }
-
-        private void txtQuickFilter_TextChanged(object sender, EventArgs e)
-        {
-            tmFilter.Stop();
-            tmFilter.Start();
-        }
-
-        private void mnuQuickFilter_Click(object sender, EventArgs e)
-        {
-            UpdateSettingsFromSelectedOptions();
-            if (panQuickFilter.Visible)
-            {
-                txtQuickFilter.Focus();
-            }
-        }
-
-        private void tmFilter_Tick(object sender, EventArgs e)
-        {
-            tmFilter.Stop();
-            RefreshData();
         }
     }
 }

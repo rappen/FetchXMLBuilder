@@ -54,7 +54,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://fetchxmlbuilder.com");
+            System.Diagnostics.Process.Start("http://fxb.xrmtoolbox.com");
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

@@ -11,7 +11,5 @@ namespace Cinteros.Xrm.XmlEditorUtils
     public class SaveEventArgs : EventArgs
     {
         public Dictionary<string, string> AttributeCollection { get; set; }
-
-        public bool KeyPress { get; set; }
     }
 }

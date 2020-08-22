@@ -54,10 +54,10 @@
             this.linkLabel1.Location = new System.Drawing.Point(513, 190);
             this.linkLabel1.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(280, 22);
+            this.linkLabel1.Size = new System.Drawing.Size(270, 22);
             this.linkLabel1.TabIndex = 2;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "https://fetchxmlbuilder.com";
+            this.linkLabel1.Text = "http://fxb.xrmtoolbox.com/";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // label2

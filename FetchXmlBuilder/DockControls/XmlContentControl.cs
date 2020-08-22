@@ -25,7 +25,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             InitializeComponent();
             this.PrepareGroupBoxExpanders();
             fxb = caller;
-            ApplyCurrentSettings();
             if (contentType == ContentType.FetchXML)
             {
                 txtXML.KeyUp += fxb.LiveXML_KeyUp;
@@ -413,11 +412,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         private void btnSQL4CDS_Click(object sender, EventArgs e)
         {
             fxb.EditInSQL4CDS();
-        }
-
-        internal void ApplyCurrentSettings()
-        {
-            fxb.settings.XmlColors.ApplyToControl(txtXML);
         }
     }
 

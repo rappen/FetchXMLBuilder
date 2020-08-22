@@ -117,21 +117,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             tvFetch.SelectedNode.Tag = e.AttributeCollection;
             TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, fxb);
             FetchChanged = treeChecksum != GetTreeChecksum(null);
-
-            if (!e.KeyPress)
+            var origin = "";
+            if (sender is IDefinitionSavable)
             {
-                var origin = "";
-                if (sender is IDefinitionSavable)
+                origin = sender.ToString().Replace("Cinteros.Xrm.FetchXmlBuilder.Controls.", "").Replace("Control", "");
+                foreach (var attr in e.AttributeCollection)
                 {
-                    origin = sender.ToString().Replace("Cinteros.Xrm.FetchXmlBuilder.Controls.", "").Replace("Control", "");
-                    foreach (var attr in e.AttributeCollection)
-                    {
-                        origin += "\n  " + attr.Key + "=" + attr.Value;
-                    }
+                    origin += "\n  " + attr.Key + "=" + attr.Value;
                 }
-                RecordHistory(origin);
             }
-
+            RecordHistory(origin);
             fxb.UpdateLiveXML();
         }
 
@@ -621,7 +616,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                             break;
 
                         case "value":
-                            ctrl = new valueControl(node, fxb, this);
+                            ctrl = new valueControl(collec, this);
                             break;
 
                         case "#comment":

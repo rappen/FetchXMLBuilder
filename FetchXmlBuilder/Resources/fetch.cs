@@ -83,10 +83,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool uihiddenSpecified;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string valueof;
     }
     
     /// <remarks/>

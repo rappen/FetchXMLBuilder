@@ -30,14 +30,14 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlContentControl));
-            xrmtb.XrmToolBox.Controls.XMLViewerSettings xmlViewerSettings1 = new xrmtb.XrmToolBox.Controls.XMLViewerSettings();
+            CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings1 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnExecute = new System.Windows.Forms.Button();
             this.btnParseQE = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.panCancel = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.txtXML = new xrmtb.XrmToolBox.Controls.XMLViewer();
+            this.txtXML = new CSRichTextBoxSyntaxHighlighting.XMLViewer();
             this.panActions = new System.Windows.Forms.Panel();
             this.gbActions = new System.Windows.Forms.GroupBox();
             this.panSQL4CDS = new System.Windows.Forms.Panel();
@@ -145,10 +145,8 @@
             // txtXML
             // 
             this.txtXML.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtXML.CurrentParseError = null;
             this.txtXML.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtXML.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtXML.FormatAsYouType = true;
             this.txtXML.Location = new System.Drawing.Point(0, 0);
             this.txtXML.Name = "txtXML";
             xmlViewerSettings1.AttributeKey = System.Drawing.Color.Blue;
@@ -450,7 +448,7 @@
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Panel panCancel;
         private System.Windows.Forms.Button btnCancel;
-        internal xrmtb.XrmToolBox.Controls.XMLViewer txtXML;
+        internal CSRichTextBoxSyntaxHighlighting.XMLViewer txtXML;
         internal System.Windows.Forms.Button btnExecute;
         internal System.Windows.Forms.Button btnParseQE;
         private System.Windows.Forms.Button btnSave;

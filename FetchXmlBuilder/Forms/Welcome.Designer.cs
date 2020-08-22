@@ -92,7 +92,7 @@
             this.llWeb.Size = new System.Drawing.Size(133, 13);
             this.llWeb.TabIndex = 17;
             this.llWeb.TabStop = true;
-            this.llWeb.Text = "https://fetchxmlbuilder.com";
+            this.llWeb.Text = "http://fxb.xrmtoolbox.com/";
             this.llWeb.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llWeb_LinkClicked);
             // 
             // txtNotes

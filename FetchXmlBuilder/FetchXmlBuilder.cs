@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
 using WeifenLuo.WinFormsUI.Docking;
@@ -23,7 +24,7 @@ using XrmToolBox.Extensibility.Interfaces;
 
 namespace Cinteros.Xrm.FetchXmlBuilder
 {
-    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin, IDuplicatableTool
+    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin
     {
         private const string aiEndpoint = "https://dc.services.visualstudio.com/v2/track";
         private const string aiKey = "eed73022-2444-45fd-928b-5eebd8fa46a6";    // jonas@rappen.net tenant, XrmToolBox
@@ -78,7 +79,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             dockContainer.Theme = theme;
             dockContainer.Theme.Skin.DockPaneStripSkin.TextFont = Font;
             //dockContainer.DockBackColor = SystemColors.Window;
-            MetadataHelper.attributeProperties = new string[] { "DisplayName", "AttributeType", "IsValidForRead", "AttributeOf", "IsManaged", "IsCustomizable", "IsCustomAttribute", "IsValidForAdvancedFind", "IsPrimaryId", "IsPrimaryName", "OptionSet", "SchemaName", "Targets", "IsLogical" };
         }
 
         #endregion Public Constructors
@@ -86,8 +86,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         #region Public Events
 
         public event EventHandler<MessageBusEventArgs> OnOutgoingMessage;
+
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
-        public event EventHandler<DuplicateToolArgs> DuplicateRequested;
 
         #endregion Public Events
 
@@ -343,19 +343,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             tslAbout_Click(null, null);
         }
 
-        public void ApplyState(object state)
-        {
-            if (state is string fetch && fetch.ToLowerInvariant().StartsWith("<fetch"))
-            {
-                dockControlBuilder.Init(fetch, null, false);
-            }
-        }
-
-        public object GetState()
-        {
-            return dockControlBuilder?.GetFetchString(false, false);
-        }
-
         #endregion Public Methods
 
         #region Internal Methods
@@ -513,15 +500,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 return;
             }
-            switch (settings.Results.ResultOutput)
+            var fetchType = settings.Results.ResultOption;
+            switch (fetchType)
             {
-                case ResultOutput.Grid:
-                case ResultOutput.XML:
-                case ResultOutput.JSON:
+                case 0:
+                case 1:
                     RetrieveMultiple(fetch);
                     break;
 
-                case ResultOutput.Raw:
+                case 3:
                     ExecuteFetch(fetch);
                     break;
 
@@ -1131,7 +1118,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 (eventargs) =>
                 {
                     EnableControls(false);
-                    eventargs.Result = Service.LoadEntities();
+                    eventargs.Result = MetadataHelper.LoadEntities(Service);
                 })
             {
                 PostWorkCallBack = (completedargs) =>
@@ -1351,7 +1338,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             tsbRepo.Tag = selectedquery;
             dockControlBuilder.SetFetchName(selectedquery != null ? $"Repo: {selectedquery.Name}" : null);
-            var oldqueries = tsbRepo.DropDownItems.Cast<ToolStripItem>().Where(m => m.Tag is QueryDefinition || m.Tag?.ToString() == "folder").ToList();
+            var oldqueries = tsbRepo.DropDownItems.Cast<ToolStripItem>().Where(m => m.Tag is QueryDefinition || m.Tag == "folder").ToList();
             foreach (var oldmenu in oldqueries)
             {
                 tsbRepo.DropDownItems.Remove(oldmenu);
@@ -1395,7 +1382,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void RetrieveMultiple(string fetch)
         {
             working = true;
-            LogUse("RetrieveMultiple-" + settings.Results.ResultOutput.ToString());
+            LogUse("RetrieveMultiple-" + Settings.ResultOption2String(settings.Results.ResultOption, settings.Results.SerializeStyle));
             SendMessageToStatusBar(this, new StatusBarMessageEventArgs("Retrieving..."));
             tsbAbort.Enabled = true;
             WorkAsync(new WorkAsyncInfo
@@ -1467,7 +1454,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     while (!eventargs.Cancel && settings.Results.RetrieveAllPages && (query is QueryExpression || query is FetchExpression) && tmpResult.MoreRecords);
                     ai.WriteEvent("RetrieveMultiple", resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds, HandleAIResult);
-                    if (settings.Results.ResultOutput == ResultOutput.JSON)
+                    if (settings.Results.ResultOption == 1 && settings.Results.SerializeStyle == 2)
                     {
                         var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented);
                         eventargs.Result = json;
@@ -1504,37 +1491,56 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     else if (completedargs.Result is QueryInfo queryinfo)
                     {
-                        switch (settings.Results.ResultOutput)
+                        if (settings.Results.ResultOption == 0)
                         {
-                            case ResultOutput.Grid:
-                                if (settings.Results.AlwaysNewWindow)
+                            if (settings.Results.AlwaysNewWindow)
+                            {
+                                var newresults = new ResultGrid(this);
+                                resultpanecount++;
+                                newresults.Text = $"Results ({resultpanecount})";
+                                newresults.Show(dockContainer, settings.DockStates.ResultView);
+                                newresults.SetData(queryinfo);
+                            }
+                            else
+                            {
+                                if (dockControlGrid?.IsDisposed != false)
                                 {
-                                    var newresults = new ResultGrid(this);
-                                    resultpanecount++;
-                                    newresults.Text = $"Results ({resultpanecount})";
-                                    newresults.Show(dockContainer, settings.DockStates.ResultView);
-                                    newresults.SetData(queryinfo);
+                                    dockControlGrid = new ResultGrid(this);
+                                    dockControlGrid.Show(dockContainer, settings.DockStates.ResultView);
                                 }
-                                else
-                                {
-                                    if (dockControlGrid?.IsDisposed != false)
-                                    {
-                                        dockControlGrid = new ResultGrid(this);
-                                        dockControlGrid.Show(dockContainer, settings.DockStates.ResultView);
-                                    }
-                                    dockControlGrid.SetData(queryinfo);
-                                    dockControlGrid.Activate();
-                                }
-                                break;
-                            case ResultOutput.XML:
+                                dockControlGrid.SetData(queryinfo);
+                                dockControlGrid.Activate();
+                            }
+                        }
+                        else if (settings.Results.ResultOption == 1)
+                        {
+                            if (settings.Results.SerializeStyle == 0)
+                            {
                                 var serialized = EntityCollectionSerializer.Serialize(queryinfo.Results, SerializationStyle.Explicit);
                                 ShowResultControl(serialized.OuterXml, ContentType.Serialized_Result_XML, SaveFormat.XML, settings.DockStates.FetchResult);
-                                break;
+                            }
+                            else if (settings.Results.SerializeStyle == 1)
+                            {
+                                var serialized = EntityCollectionSerializer.Serialize(queryinfo.Results, SerializationStyle.Basic);
+                                ShowResultControl(serialized.OuterXml, ContentType.Serialized_Result_XML, SaveFormat.XML, settings.DockStates.FetchResult);
+                            }
+                            else if (settings.Results.SerializeStyle == 3)
+                            {
+                                var serializer = new DataContractSerializer(typeof(EntityCollection), null, int.MaxValue, false, false, null, new KnownTypesResolver());
+                                var sw = new StringWriter();
+                                var xw = new XmlTextWriter(sw);
+                                serializer.WriteObject(xw, entities);
+                                xw.Close();
+                                sw.Close();
+                                var serialized = sw.ToString();
+                                ShowResultControl(serialized, ContentType.Serialized_Result_XML, SaveFormat.XML, settings.DockStates.FetchResult);
+                            }
                         }
                     }
-                    else if (settings.Results.ResultOutput == ResultOutput.JSON && completedargs.Result is string json)
+                    else if (settings.Results.ResultOption == 1 && settings.Results.SerializeStyle == 2 && completedargs.Result is string)
                     {
-                        ShowResultControl(json, ContentType.Serialized_Result_JSON, SaveFormat.JSON, settings.DockStates.FetchResult);
+                        var result = completedargs.Result.ToString();
+                        ShowResultControl(result, ContentType.Serialized_Result_JSON, SaveFormat.JSON, settings.DockStates.FetchResult);
                     }
                 }
             });
@@ -2011,14 +2017,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             CancelWorker();
         }
 
-        private void tsbClone_Click(object sender, EventArgs e)
-        {
-            var query = dockControlBuilder.GetFetchString(false, false);
-            var newconnection = sender == tsmiCloneNewConnection;
-            LogUse(newconnection ? "Clone-Connect" : "Clone");
-            DuplicateRequested?.Invoke(this, new DuplicateToolArgs(query, newconnection));
-        }
-
         private void tsbExecute_Click(object sender, EventArgs e)
         {
             dockControlBuilder?.tvFetch?.Focus();
@@ -2027,20 +2025,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsbNew_Click(object sender, EventArgs e)
         {
-            if (sender == tsmiNew)
+            if (!SaveIfChanged())
             {
-                if (!SaveIfChanged())
-                {
-                    return;
-                }
-                LogUse("New");
-                dockControlBuilder.Init(null, "new", false);
-                liveUpdateXml = string.Empty;
                 return;
             }
-            var newconnection = sender == tsmiNewNewConnection;
-            LogUse(newconnection ? "New-NewConnection" : "New-New");
-            DuplicateRequested?.Invoke(this, new DuplicateToolArgs(settings.QueryOptions.NewQueryTemplate, newconnection));
+            LogUse("New");
+            dockControlBuilder.Init(null, "new", false);
+            liveUpdateXml = string.Empty;
         }
 
         private void tsbOptions_Click(object sender, EventArgs e)
@@ -2065,7 +2056,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                 }
                 dockControlBuilder.ApplyCurrentSettings();
-                dockControlFetchXml?.ApplyCurrentSettings();
                 EnableControls();
             }
         }
@@ -2247,63 +2237,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             SaveRepository();
             RebuildRepositoryMenu(query);
             MessageBox.Show($"Query {query.Name} saved in repository", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void tsmiRepoExport_Click(object sender, EventArgs e)
-        {
-            var sfd = new SaveFileDialog
-            {
-                Title = "Select a location and file name to save the repository",
-                Filter = "FXB Repository (*.fxbrepo)|*.fxbrepo"
-            };
-            if (sfd.ShowDialog() == DialogResult.OK)
-            {
-                XmlSerializerHelper.SerializeToFile(repository, sfd.FileName);
-                MessageBox.Show($"The entire repository has been saved to file\n{sfd.FileName}", "Export repository", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
-        private void tsmiRepoImport_Click(object sender, EventArgs e)
-        {
-            var ofd = new OpenFileDialog
-            {
-                Title = "Select a FetchXML Builder Repository file",
-                Filter = "FXB Repository (*.fxbrepo)|*.fxbrepo"
-            };
-
-            if (ofd.ShowDialog() == DialogResult.OK && File.Exists(ofd.FileName))
-            {
-                try
-                {
-                    var document = new XmlDocument();
-                    document.Load(ofd.FileName);
-                    var repo = (QueryRepository)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(QueryRepository));
-                    var reponame = Path.ChangeExtension(Path.GetFileName(ofd.FileName), "").Trim('.');
-                    if (MessageBox.Show($"Confirm importing {repo.Queries.Count} queries into repository folder \"{reponame}\".", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
-                    {
-                        return;
-                    }
-                    repo.Queries.ForEach(q => repository.Queries.Add(new QueryDefinition { Name = reponame + "\\" + q.Name, Fetch = q.Fetch }));
-                    SaveRepository();
-                    RebuildRepositoryMenu(null);
-                    MessageBox.Show($"Repository {reponame} has been imported.", "Import repository", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"Error attempting to load and deserialize file \"{ofd.FileName}\"", ex);
-                }
-            }
-        }
-
-        private void tsmiRepoDeleteAll_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show($"Confirm deleting all {repository.Queries.Count} queries in the repository!\nThis can not be undone.", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
-            {
-                return;
-            }
-            repository.Queries.Clear();
-            SaveRepository();
-            RebuildRepositoryMenu(null);
         }
 
         #endregion Private Event Handlers

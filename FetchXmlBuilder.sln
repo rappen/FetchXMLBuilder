@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28407.52
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FetchXMLBuilder", "FetchXmlBuilder\FetchXMLBuilder.csproj", "{D746CBE7-7787-47FC-B773-F089A44DF8C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FetchXMLBuilder", "FetchXMLBuilder\FetchXMLBuilder.csproj", "{D746CBE7-7787-47FC-B773-F089A44DF8C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlEditorUtils", "XmlEditorUtils\XmlEditorUtils.csproj", "{9FC7BDF7-321C-4B96-9B70-D75A16BD7685}"
 EndProject

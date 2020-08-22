@@ -15,9 +15,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         /// <summary>Property that indicates if operator allows "values" collection</summary>
         public bool IsMultipleValuesType { get { return GetIsMultipleValuesType(); } }
 
-        /// <summary>Property that indicates if operator allows column comparison</summary>
-        public bool SupportsColumnComparison { get { return GetSupportsColumnComparison(); } }
-
         /// <summary>Property that indicates what type the attribute must be of for the condition to be valid</summary>
         public AttributeTypeCode? AttributeType { get { return GetAttributeType(); } }
 
@@ -184,6 +181,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         private bool GetIsMultipleValuesType()
         {
+            var result = false;
             switch (oper)
             {
                 case ConditionOperator.In:
@@ -193,26 +191,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case ConditionOperator.InFiscalPeriodAndYear:
                 case ConditionOperator.InOrAfterFiscalPeriodAndYear:
                 case ConditionOperator.InOrBeforeFiscalPeriodAndYear:
-                case ConditionOperator.ContainValues:
-                case ConditionOperator.DoesNotContainValues:
-                    return true;
+                    result = true;
+                    break;
             }
-            return false;
-        }
-
-        private bool GetSupportsColumnComparison()
-        {
-            switch (oper)
-            {
-                case ConditionOperator.Equal:
-                case ConditionOperator.NotEqual:
-                case ConditionOperator.GreaterThan:
-                case ConditionOperator.GreaterEqual:
-                case ConditionOperator.LessThan:
-                case ConditionOperator.LessEqual:
-                    return true;
-            }
-            return false;
+            return result;
         }
 
         private AttributeTypeCode? GetAttributeType()
@@ -289,7 +271,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return result;
         }
 
-        public static OperatorItem[] GetConditionsByAttributeType(AttributeTypeCode valueType, string attributeTypeName)
+        public static OperatorItem[] GetConditionsByAttributeType(AttributeTypeCode valueType)
         {
             var validConditionsList = new List<OperatorItem>
             {
@@ -421,13 +403,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserOrUserHierarchyAndTeams));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserOrUserTeams));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserTeams));
-                    break;
-                case AttributeTypeCode.Virtual:
-                    if (attributeTypeName == "MultiSelectPicklistType")
-                    {
-                        validConditionsList.Add(new OperatorItem(ConditionOperator.ContainValues));
-                        validConditionsList.Add(new OperatorItem(ConditionOperator.DoesNotContainValues));
-                    }
                     break;
             }
             return validConditionsList.ToArray();

@@ -29,7 +29,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void InitializeComponent()
         {
             this.label2 = new System.Windows.Forms.Label();
-            this.cmbValue = new System.Windows.Forms.ComboBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label2
@@ -43,21 +43,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // textBox1
             // 
-            this.cmbValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbValue.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cmbValue.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cmbValue.Location = new System.Drawing.Point(7, 16);
-            this.cmbValue.Name = "cmbValue";
-            this.cmbValue.Size = new System.Drawing.Size(161, 20);
-            this.cmbValue.TabIndex = 23;
-            this.cmbValue.Tag = "#text|true";
+            this.textBox1.Location = new System.Drawing.Point(7, 16);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(161, 20);
+            this.textBox1.TabIndex = 23;
+            this.textBox1.Tag = "#text|true";
             // 
             // valueControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.cmbValue);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label2);
             this.Name = "valueControl";
             this.Size = new System.Drawing.Size(171, 47);
@@ -68,6 +66,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         #endregion
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox cmbValue;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
