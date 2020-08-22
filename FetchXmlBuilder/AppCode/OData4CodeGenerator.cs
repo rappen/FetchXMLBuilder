@@ -118,11 +118,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
                     if (linkitem.Items != null)
                     {
-                        if (!linkitem.intersect && linkitem.Items.Where(i => i is FetchLinkEntityType).ToList().Count > 0)
-                        {
-                            throw new Exception("OData queries only support one level of link entities");
-                        }
-
                         if (!child)
                         {
                             if (linkitem.Items.Where(i => i is filter).ToList().Count > 0)
@@ -133,17 +128,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                                     {
                                         var targetLogicalName = linkitem.name;
                                         GetEntityMetadata(targetLogicalName, sender);
-                                        if (condition.attribute == sender.entities[targetLogicalName].PrimaryIdAttribute)
-                                        {
-                                            if (!String.IsNullOrEmpty(filterString))
-                                                filterString += $" {filter.type} ";
+                                        if (!String.IsNullOrEmpty(filterString))
+                                            filterString += $" {filter.type} ";
 
-                                            filterString += navigationProperty + "/" + GetCondition(linkitem.name, condition, sender);
-                                        }
-                                        else
-                                        {
-                                            throw new Exception($"OData queries do not support filter on link entities except by primary key. Filter on {linkitem.name}.{condition.attribute} is not allowed");
-                                        }
+                                        filterString += navigationProperty + "/" + GetCondition(linkitem.name, condition, sender);
                                     }
                                 }
                             }
@@ -184,7 +172,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return string.Join(",", resultList);
         }
 
-        private static string GetExpandedSelect(FetchLinkEntityType linkitem, FetchXmlBuilder sender)
+        private static string GetExpandedSelect(FetchLinkEntityType linkitem, FetchXmlBuilder sender, string entityname = "")
         {
             if (linkitem.Items == null)
             {
@@ -221,7 +209,27 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
 
             var resultList = GetAttributeNames(linkentity, attributeitems, sender);
-            return string.Join(",", resultList);
+            return string.Join(",", resultList) + GetNestedExpand(linkitem, sender, linkitem.name);
+        }
+
+        private static string GetNestedExpand(FetchLinkEntityType linkitem, FetchXmlBuilder sender, string entityname)
+        {
+            var resultList = new List<string>();
+            var linkitems = linkitem.Items.Where(i => i is FetchLinkEntityType).ToList();
+            if (linkitem.intersect || linkitems.Count == 0)
+            {
+                return "";
+            }
+            foreach (FetchLinkEntityType linkentityitem in linkitems)
+            {
+                var navigationProperty = LinkItemToNavigationProperty(entityname, linkentityitem, sender, out var child);
+                if (child)
+                {
+                    throw new Exception($"The navigation property '{navigationProperty}' can't be expanded. Only many-to-one relationships are supported for nested expansion in OData queries.");
+                }
+                resultList.Add(navigationProperty + "($select=" + GetExpandedSelect(linkentityitem, sender, linkentityitem.name) + ")");
+            }
+            return ";$expand=" + string.Join(",", resultList);
         }
 
         private static string GetFilter(FetchEntityType entity, FetchXmlBuilder sender, string expandFilter)
