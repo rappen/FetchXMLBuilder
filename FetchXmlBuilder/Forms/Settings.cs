@@ -28,14 +28,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             chkAppAllowUncustViews.Checked = settings.OpenUncustomizableViews;
             chkUseSQL4CDS.Checked = settings.UseSQL4CDS;
             chkUseLookup.Checked = settings.UseLookup;
-            switch (settings.Results.ResultOption)
+            switch (settings.Results.ResultOutput)
             {
-                case 1: rbResSerialized.Checked = true; break;
-                case 3: rbResRaw.Checked = true; break;
+                case ResultOutput.XML: rbResSerializedXML.Checked = true; break;
+                case ResultOutput.JSON: rbResSerializedJSON.Checked = true; break;
+                case ResultOutput.Raw: rbResRaw.Checked = true; break;
                 default: rbResGrid.Checked = true; break;
             }
-            cmbSeralizationStyle.SelectedIndex = settings.Results.SerializeStyle;
             chkResAllPages.Checked = settings.Results.RetrieveAllPages;
+            propXmlColors.SelectedObject = settings.XmlColors;
+            settings.XmlColors.ApplyToControl(txtFetch);
             txtFetch.Text = settings.QueryOptions.NewQueryTemplate;
             txtFetch.Process();
             chkEntAll.Checked = settings.Entity.All;
@@ -72,12 +74,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             settings.QueryOptions.NewQueryTemplate = txtFetch.Text;
             settings.DoNotPromptToSave = chkAppNoSavePrompt.Checked;
             settings.Results.AlwaysNewWindow = chkAppResultsNewWindow.Checked;
-            settings.Results.ResultOption = rbResSerialized.Checked ? 1 : rbResRaw.Checked ? 3 : 0;
-            settings.Results.SerializeStyle = cmbSeralizationStyle.SelectedIndex;
+            settings.Results.ResultOutput = rbResSerializedXML.Checked ? ResultOutput.XML : rbResSerializedJSON.Checked ? ResultOutput.JSON : rbResRaw.Checked ? ResultOutput.Raw : ResultOutput.Grid;
             settings.Results.RetrieveAllPages = chkResAllPages.Checked;
             settings.OpenUncustomizableViews = chkAppAllowUncustViews.Checked;
             settings.UseSQL4CDS = chkUseSQL4CDS.Checked;
             settings.UseLookup = chkUseLookup.Checked;
+            settings.XmlColors = propXmlColors.SelectedObject as XmlColors;
             settings.Entity.All = chkEntAll.Checked;
             settings.Entity.Customizable = chkEntCustomizable.Checked;
             settings.Entity.Uncustomizable = chkEntUncustomizable.Checked;
@@ -193,22 +195,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             }
         }
 
-        internal static object ResultOption2String(int outputtype, int outputstyle)
-        {
-            switch (outputtype)
-            {
-                case 0: return "View";
-                case 1: return outputstyle == 1 ? "Basic" : outputstyle == 2 ? "JSON" : outputstyle == 3 ? "EntityCollection" : "Explicit";
-                case 3: return "FetchResult";
-            }
-            return "unknown";
-        }
-
-        private void rbResSerialized_CheckedChanged(object sender, EventArgs e)
-        {
-            cmbSeralizationStyle.Enabled = rbResSerialized.Checked;
-        }
-
         private void llShowWelcome_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             fxb.LogUse("ShowWelcome-Manual");
@@ -253,6 +239,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             txtFetch.Text = QueryOptions.DefaultNewQuery;
             txtFetch.Process();
+        }
+
+        private void propXmlColors_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            if (propXmlColors.SelectedObject is XmlColors colors)
+            {
+                colors.ApplyToControl(txtFetch);
+            }
+        }
+
+        private void btnResetXmlColors_Click(object sender, EventArgs e)
+        {
+            var colors = new XmlColors();
+            propXmlColors.SelectedObject = colors;
+            colors.ApplyToControl(txtFetch);
         }
     }
 }

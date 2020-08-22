@@ -1,8 +1,12 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
+using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
+using xrmtb.XrmToolBox.Controls;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
@@ -25,6 +29,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool OpenUncustomizableViews { get; set; } = false;
         public bool UseSQL4CDS { get; set; }
         public bool UseLookup { get; set; } = true;
+        public XmlColors XmlColors { get; set; } = new XmlColors();
     }
 
     public class QueryOptions
@@ -58,10 +63,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool SysColumns { get; set; } = true;
         public bool LocalTime { get; set; }
         public bool CopyHeaders { get; set; } = true;
-        public int ResultOption { get; set; }
-        public int SerializeStyle { get; set; }
+        public ResultOutput ResultOutput { get; set; }
         public bool RetrieveAllPages { get; set; } = false;
         public bool AlwaysNewWindow { get; set; } = false;
+        public bool QuickFilter { get; set; } = false;
     }
 
     public class DockStates
@@ -160,5 +165,51 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         {
             return Name;
         }
+    }
+
+    public class XmlColors
+    {
+        [Browsable(false)]
+        public string ElementColor { get { return Element.Name; } set { Element = Color.FromName(value); } }
+        [Browsable(false)]
+        public string ValueColor { get { return Value.Name; } set { Value = Color.FromName(value); } }
+        [Browsable(false)]
+        public string AttributeKeyColor { get { return AttributeKey.Name; } set { AttributeKey = Color.FromName(value); } }
+        [Browsable(false)]
+        public string AttributeValueColor { get { return AttributeValue.Name; } set { AttributeValue = Color.FromName(value); } }
+        [Browsable(false)]
+        public string CommentColor { get { return Comment.Name; } set { Comment = Color.FromName(value); } }
+        [Browsable(false)]
+        public string TagColor { get { return Tag.Name; } set { Tag = Color.FromName(value); } }
+        [XmlIgnore()]
+        public Color Element { get; set; } = Color.DarkRed;
+        [XmlIgnore()]
+        public Color Value { get; set; } = Color.Black;
+        [XmlIgnore()]
+        public Color AttributeKey { get; set; } = Color.Red;
+        [XmlIgnore()]
+        public Color AttributeValue { get; set; } = Color.Blue;
+        [XmlIgnore()]
+        public Color Comment { get; set; } = Color.Gray;
+        [XmlIgnore()]
+        public Color Tag { get; set; } = Color.Blue;
+
+        public void ApplyToControl(XMLViewer viewer)
+        {
+            viewer.Settings.AttributeKey = AttributeKey;
+            viewer.Settings.AttributeValue = AttributeValue;
+            viewer.Settings.Comment = Comment;
+            viewer.Settings.Element = Element;
+            viewer.Settings.Tag = Tag;
+            viewer.Settings.Value = Value;
+        }
+    }
+
+    public enum ResultOutput
+    {
+        Grid = 0,
+        XML = 1,
+        JSON = 2,
+        Raw = 3
     }
 }

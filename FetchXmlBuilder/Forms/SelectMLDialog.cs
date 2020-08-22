@@ -15,6 +15,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             InitializeComponent();
             Caller = caller;
+            caller.settings.XmlColors.ApplyToControl(txtFetch);
             PopulateForm();
         }
 
