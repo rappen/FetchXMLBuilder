@@ -11,7 +11,6 @@ using System.Linq;
 using System.ServiceModel;
 using System.Windows.Forms;
 using xrmtb.XrmToolBox.Controls;
-using xrmtb.XrmToolBox.Controls.Controls;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
@@ -26,9 +25,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         public conditionControl(TreeNode node, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree)
         {
             InitializeComponent();
+            BeginInit();
             txtLookup.OrganizationService = fetchXmlBuilder.Service;
             dlgLookup.Service = fetchXmlBuilder.Service;
+            rbUseLookup.Checked = fetchXmlBuilder.settings.UseLookup;
+            rbEnterGuid.Checked = !rbUseLookup.Checked;
             InitializeFXB(null, fetchXmlBuilder, tree, node);
+            EndInit();
             RefreshAttributes();
         }
 
@@ -147,6 +150,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
                     if (control == cmbValue)
                     {
+                        if (!string.IsNullOrWhiteSpace(cmbValueOf.Text) && !string.IsNullOrWhiteSpace(cmbValue.Text))
+                        {
+                            return new ControlValidationResult(ControlValidationLevel.Error, "Value and Value Of cannot both be set");
+                        }
+
                         switch (valueType)
                         {
                             case null:
@@ -264,6 +272,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void RefreshAttributes()
         {
+            if (!IsInitialized)
+            {
+                return;
+            }
             cmbAttribute.Items.Clear();
             var entityNode = cmbEntity.SelectedItem is EntityNode ? (EntityNode)cmbEntity.SelectedItem : null;
             if (entityNode == null)
@@ -283,111 +295,182 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
                 return;
             }
+            BeginInit();
             var attributes = fxb.GetDisplayAttributes(entityName);
             attributes.ToList().ForEach(a => AttributeItem.AddAttributeToComboBox(cmbAttribute, a, true, FetchXmlBuilder.friendlyNames));
             // RefreshFill now that attributes are loaded
             ReFillControl(cmbAttribute);
             ReFillControl(cmbValue);
+            ReFillControl(cmbValueOf);
+            EndInit();
+            RefreshOperators();
+            UpdateValueField();
+        }
+
+        private void RefreshOperators()
+        {
+            if (!IsInitialized)
+            {
+                return;
+            }
+            if (cmbAttribute.SelectedItem is AttributeItem attributeItem && attributeItem.Metadata.AttributeType is AttributeTypeCode attributeType)
+            {
+                //cmbOperator.SelectedItem = null;
+                cmbOperator.Items.Clear();
+                cmbOperator.Items.AddRange(OperatorItem.GetConditionsByAttributeType(attributeType, attributeItem.Metadata.AttributeTypeName?.Value));
+                ReFillControl(cmbOperator);
+            }
         }
 
         private void UpdateValueField()
         {
+            if (!IsInitialized)
+            {
+                return;
+            }
             panValue.Visible = true;
-            panValueGuids.Visible = false;
+            panValueOf.Visible = false;
             panValueLookup.Visible = false;
+            panGuidSelector.Visible = false;
             cmbValue.Items.Clear();
             cmbValue.DropDownStyle = ComboBoxStyle.Simple;
             lblValueHint.Visible = false;
-            if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem oper)
+            if (cmbOperator.SelectedItem == null || !(cmbOperator.SelectedItem is OperatorItem oper))
             {
-                var valueType = oper.ValueType;
-                if (valueType == AttributeTypeCode.ManagedProperty)
-                {   // Indicates value type is determined by selected attribute
-                    if (cmbAttribute.SelectedItem is AttributeItem attribute)
+                return;
+            }
+            var valueType = oper.ValueType;
+            var attribute = cmbAttribute.SelectedItem as AttributeItem;
+            if (valueType == AttributeTypeCode.ManagedProperty && attribute != null)
+            {   // Indicates value type is determined by selected attribute
+                valueType = attribute.Metadata.AttributeType;
+                if (oper.IsMultipleValuesType)
+                {
+                    if (Node.Nodes.Count == 0)
                     {
-                        valueType = attribute.Metadata.AttributeType;
-                        if (oper.IsMultipleValuesType)
+                        lblValueHint.Text = "Enter comma-separated " + valueType.ToString() + " values or add sub-nodes.";
+                        lblValueHint.Visible = true;
+                    }
+                    else
+                    {
+                        valueType = null;
+                    }
+                }
+                else if (attribute.Metadata is EnumAttributeMetadata enummeta &&
+                         enummeta.OptionSet is OptionSetMetadata options &&
+                         !(attribute.Metadata is EntityNameAttributeMetadata))
+                {
+                    cmbValue.Items.AddRange(options.Options.Select(o => new OptionsetItem(o)).ToArray());
+                    cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
+                }
+                else if (attribute.Metadata is LookupAttributeMetadata lookupmeta)
+                {
+                    if (fxb.settings.UseLookup)
+                    {
+                        if (Guid.TryParse(cmbValue.Text, out Guid id) && !Guid.Empty.Equals(id))
                         {
-                            if (Node.Nodes.Count == 0)
+                            var loookuptargets = new List<string>();
+                            if (!string.IsNullOrWhiteSpace(txtUitype.Text))
                             {
-                                lblValueHint.Text = "Enter comma-separated " + valueType.ToString() + " values or add sub-nodes.";
-                                lblValueHint.Visible = true;
+                                loookuptargets.Add(txtUitype.Text.Trim());
                             }
                             else
                             {
-                                valueType = null;
+                                loookuptargets.AddRange(lookupmeta.Targets);
                             }
-                        }
-                        else if (attribute.Metadata is EnumAttributeMetadata enummeta &&
-                                 enummeta.OptionSet is OptionSetMetadata options &&
-                                 !(attribute.Metadata is EntityNameAttributeMetadata))
-                        {
-                            cmbValue.Items.AddRange(options.Options.Select(o => new OptionsetItem(o)).ToArray());
-                            cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
-                        }
-                        else if (attribute.Metadata is LookupAttributeMetadata lookupmeta)
-                        {
-                            if (fxb.settings.UseLookup)
+                            foreach (var target in loookuptargets)
                             {
-                                if (Guid.TryParse(cmbValue.Text, out Guid id) && !Guid.Empty.Equals(id))
+                                try
                                 {
-                                    var loookuptargets = new List<string>();
-                                    if (!string.IsNullOrWhiteSpace(txtUitype.Text))
-                                    {
-                                        loookuptargets.Add(txtUitype.Text.Trim());
-                                    }
-                                    else
-                                    {
-                                        loookuptargets.AddRange(lookupmeta.Targets);
-                                    }
-                                    foreach (var target in loookuptargets)
-                                    {
-                                        try
-                                        {
-                                            txtLookup.LogicalName = target;
-                                            txtLookup.Id = id;
-                                            txtUitype.Text = target;
-                                            break;
-                                        }
-                                        catch (FaultException<OrganizationServiceFault>)
-                                        {
-                                            // really nothing to do here, loading the record is simply nice to have
-                                        }
-                                    }
+                                    txtLookup.LogicalName = target;
+                                    txtLookup.Id = id;
+                                    txtUitype.Text = target;
+                                    break;
+                                }
+                                catch (FaultException<OrganizationServiceFault>)
+                                {
+                                    // really nothing to do here, loading the record is simply nice to have
                                 }
                             }
-                            else
-                            {
-                                txtUitype.Text = string.Empty;
-                                txtLookup.Text = string.Empty;
-                            }
+                        }
+                    }
+                    else
+                    {
+                        txtUitype.Text = string.Empty;
+                        txtLookup.Text = string.Empty;
+                    }
+                }
+            }
+            if (valueType == null)
+            {
+                cmbValue.Text = "";
+                cmbValue.Enabled = false;
+            }
+            else
+            {
+                cmbValue.Enabled = true;
+
+                if (cmbValue.Items.Count > 0 && cmbValue.SelectedIndex == -1 && !string.IsNullOrWhiteSpace(cmbValue.Text))
+                {
+                    var item = cmbValue.Items.OfType<OptionsetItem>().FirstOrDefault(i => i.ToString() == cmbValue.Text);
+                    cmbValue.SelectedItem = item;
+                }
+            }
+            if (valueType == AttributeTypeCode.Lookup ||
+                valueType == AttributeTypeCode.Customer ||
+                valueType == AttributeTypeCode.Owner ||
+                valueType == AttributeTypeCode.Uniqueidentifier)
+            {
+                dlgLookup.LogicalNames = null;
+                if (attribute?.Metadata is LookupAttributeMetadata lookupmeta)
+                {
+                    dlgLookup.LogicalNames = lookupmeta.Targets;
+                }
+                else if (attribute?.Metadata is AttributeMetadata attrmeta && attrmeta.IsPrimaryId == true)
+                {
+                    if (attrmeta.IsLogical == false)
+                    {
+                        var entitynode = new EntityNode(GetClosestEntityNode(Node));
+                        dlgLookup.LogicalName = entitynode.EntityName;
+                    }
+                    else if (attrmeta.LogicalName.EndsWith("addressid"))
+                    {
+                        dlgLookup.LogicalName = "customeraddress";
+                    }
+                }
+                rbUseLookup.Enabled = dlgLookup.LogicalNames?.Length > 0;
+                if (!rbUseLookup.Enabled)
+                {
+                    rbEnterGuid.Checked = true;
+                }
+                if (string.IsNullOrWhiteSpace(cmbValue.Text))
+                {
+                    cmbValue.Text = Guid.Empty.ToString();
+                }
+                panGuidSelector.Visible = true;
+                panValue.Visible = !rbUseLookup.Checked;
+                panValueLookup.Visible = rbUseLookup.Checked;
+            }
+
+            if (oper.SupportsColumnComparison && !(cmbEntity.SelectedItem is EntityNode))
+            {
+                panValueOf.Visible = true;
+                cmbValueOf.Items.Clear();
+                if (attribute != null)
+                {
+                    foreach (AttributeItem item in cmbAttribute.Items)
+                    {
+                        if (item.Metadata.AttributeType == attribute.Metadata.AttributeType)
+                        {
+                            cmbValueOf.Items.Add(new AttributeItem(item.Metadata));
                         }
                     }
                 }
-                if (valueType == null)
-                {
-                    cmbValue.Text = "";
-                    cmbValue.Enabled = false;
-                }
-                else
-                {
-                    cmbValue.Enabled = true;
+            }
 
-                    if (cmbValue.Items.Count > 0 && cmbValue.SelectedIndex == -1 && !string.IsNullOrWhiteSpace(cmbValue.Text))
-                    {
-                        var item = cmbValue.Items.OfType<OptionsetItem>().FirstOrDefault(i => i.ToString() == cmbValue.Text);
-                        cmbValue.SelectedItem = item;
-                    }
-                }
-                if (valueType == AttributeTypeCode.Lookup ||
-                    valueType == AttributeTypeCode.Customer ||
-                    valueType == AttributeTypeCode.Owner ||
-                    valueType == AttributeTypeCode.Uniqueidentifier)
-                {
-                    panValue.Visible = !fxb.settings.UseLookup;
-                    panValueGuids.Visible = !fxb.settings.UseLookup;
-                    panValueLookup.Visible = fxb.settings.UseLookup;
-                }
+            if (!panValueOf.Visible)
+            {
+                cmbValueOf.Text = "";
             }
         }
 
@@ -395,31 +478,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         #region Private Event Handlers
 
-        private void btnGetGuid_Click(object sender, EventArgs e)
-        {
-            cmbValue.Text = Guid.NewGuid().ToString();
-        }
-
-        private void btnGetGuidEmpty_Click(object sender, EventArgs e)
-        {
-            cmbValue.Text = Guid.Empty.ToString();
-        }
-
         private void btnLookup_Click(object sender, EventArgs e)
         {
-            if (!(cmbAttribute.SelectedItem is AttributeItem attribute))
-            {
-                return;
-            }
-            if (attribute.Metadata is LookupAttributeMetadata meta)
-            {
-                dlgLookup.LogicalNames = meta.Targets;
-            }
-            else
-            {
-                MessageBox.Show("Cannot determine lookup entity, please enter Guid manually.", "Lookup Record", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
             Cursor = Cursors.WaitCursor;
             switch (dlgLookup.ShowDialog(this))
             {
@@ -437,27 +497,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void cmbAttribute_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbAttribute.SelectedItem != null)
-            {
-                var attributeType = ((AttributeItem)cmbAttribute.SelectedItem).Metadata.AttributeType;
-                if (attributeType.HasValue)
-                {
-                    var tmpColl = ControlUtils.GetAttributesCollection(this.Controls, false);
-                    cmbOperator.SelectedItem = null;
-                    cmbOperator.Items.Clear();
-                    cmbOperator.Items.AddRange(OperatorItem.GetConditionsByAttributeType(attributeType.Value));
-                    ReFillControl(cmbOperator);
-                }
-            }
-            UpdateValueField();
+            RefreshOperators();
         }
 
-        private void cmbEtity_SelectedIndexChanged(object sender, EventArgs e)
+        private void cmbEntity_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshAttributes();
         }
 
         private void cmbOperator_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateValueField();
+        }
+
+        private void rbUseLookup_CheckedChanged(object sender, EventArgs e)
         {
             UpdateValueField();
         }
@@ -474,40 +527,5 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         }
 
         #endregion Private Event Handlers
-    }
-
-    public class EntityNode
-    {
-        #region Public Fields
-
-        public string EntityName;
-
-        #endregion Public Fields
-
-        #region Private Fields
-
-        private string name;
-
-        #endregion Private Fields
-
-        #region Public Constructors
-
-        public EntityNode(TreeNode node)
-        {
-            EntityName = TreeNodeHelper.GetAttributeFromNode(node, "name");
-            var alias = TreeNodeHelper.GetAttributeFromNode(node, "alias");
-            name = !string.IsNullOrEmpty(alias) ? alias : EntityName;
-        }
-
-        #endregion Public Constructors
-
-        #region Public Methods
-
-        public override string ToString()
-        {
-            return name;
-        }
-
-        #endregion Public Methods
     }
 }

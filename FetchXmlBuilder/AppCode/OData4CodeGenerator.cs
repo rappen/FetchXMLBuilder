@@ -674,6 +674,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
                     result += FormatValue(valueType, condition.value);
                 }
+                else if (!string.IsNullOrEmpty(condition.valueof))
+                {
+                    result += condition.valueof;
+                }
             }
             return result;
         }

@@ -259,10 +259,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return;
                 }
 
+                BeginInit();
                 cmbEntity.Text = entity;
                 cmbFrom.Text = from;
                 cmbTo.Text = to;
                 chkIntersect.Checked = intersect;
+                EndInit();
+                Save(false);
             }
         }
 

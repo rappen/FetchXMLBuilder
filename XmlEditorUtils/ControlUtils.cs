@@ -105,6 +105,91 @@ namespace Cinteros.Xrm.XmlEditorUtils
             controls.OfType<Panel>().OrderBy(p => p.TabIndex).ToList().ForEach(p => FillControls(collection, p.Controls, saveable));
         }
 
+        class TextBoxEventHandler
+        {
+            private readonly TextBox txt;
+            private readonly IDefinitionSavable saveable;
+            private bool attachedValidated;
+
+            public TextBoxEventHandler(TextBox txt, IDefinitionSavable saveable)
+            {
+                this.txt = txt;
+                this.saveable = saveable;
+            }
+
+            public void Attach()
+            {
+                txt.TextChanged += OnTextChanged;
+            }
+
+            private void OnTextChanged(object sender, EventArgs e)
+            {
+                saveable.Save(true);
+
+                if (!attachedValidated)
+                {
+                    txt.Validated += OnValidated;
+                    attachedValidated = true;
+                }
+            }
+
+            private void OnValidated(object sender, EventArgs e)
+            {
+                saveable.Save(false);
+                txt.Validated -= OnValidated;
+                attachedValidated = false;
+            }
+        }
+
+        class ComboBoxEventHandler
+        {
+            private readonly ComboBox cmb;
+            private readonly IDefinitionSavable saveable;
+            private bool attachedValidated;
+
+            public ComboBoxEventHandler(ComboBox cmb, IDefinitionSavable saveable)
+            {
+                this.cmb = cmb;
+                this.saveable = saveable;
+            }
+
+            public void Attach()
+            {
+                cmb.TextChanged += OnTextChanged;
+                cmb.SelectedIndexChanged += OnSelectedIndexChanged;
+            }
+
+            private void OnSelectedIndexChanged(object sender, EventArgs e)
+            {
+                saveable.Save(false);
+                cmb.Validated -= OnValidated;
+                attachedValidated = false;
+            }
+
+            private void OnTextChanged(object sender, EventArgs e)
+            {
+                if (cmb.SelectedIndex != -1)
+                {
+                    return;
+                }
+
+                saveable.Save(true);
+
+                if (!attachedValidated)
+                {
+                    cmb.Validated += OnValidated;
+                    attachedValidated = true;
+                }
+            }
+
+            private void OnValidated(object sender, EventArgs e)
+            {
+                saveable.Save(false);
+                cmb.Validated -= OnValidated;
+                attachedValidated = false;
+            }
+        }
+
         public static void FillControl(Dictionary<string, string> collection, Control control, IDefinitionSavable saveable)
         {
             if (control.Tag != null && GetControlDefinition(control, out string attribute, out bool required, out string defaultvalue))
@@ -119,7 +204,7 @@ namespace Cinteros.Xrm.XmlEditorUtils
                     chkbox.Checked = chk;
                     if (saveable != null)
                     {
-                        chkbox.CheckedChanged += (s, e) => saveable.Save(true);
+                        chkbox.CheckedChanged += (s, e) => saveable.Save(false);
                     }
                 }
                 else if (control is TextBox txt)
@@ -127,7 +212,7 @@ namespace Cinteros.Xrm.XmlEditorUtils
                     txt.Text = value;
                     if (saveable != null)
                     {
-                        txt.TextChanged += (s, e) => saveable.Save(true);
+                        new TextBoxEventHandler(txt, saveable).Attach();
                     }
                 }
                 else if (control is ComboBox cmb)
@@ -158,7 +243,7 @@ namespace Cinteros.Xrm.XmlEditorUtils
                     }
                     if (saveable != null)
                     {
-                        cmb.TextChanged += (s, e) => saveable.Save(true);
+                        new ComboBoxEventHandler(cmb, saveable).Attach();
                     }
                 }
             }
