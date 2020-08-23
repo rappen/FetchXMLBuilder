@@ -328,47 +328,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         result += " ne null";
                         break;
                     case @operator.like:
+                        result = $"contains({attrMeta.LogicalName}, '{condition.value}')";
+                        break;
                     case @operator.notlike:
-                        string func;
-                        var value = condition.value;
-
-                        if (value.StartsWith("%") && value.EndsWith("%") && value.Length >= 2)
-                        {
-                            func = "contains";
-                            value = value.Substring(1, value.Length - 2);
-                        }
-                        else if (value.StartsWith("%"))
-                        {
-                            func = "endswith";
-                            value = value.Substring(1);
-                        }
-                        else if (value.EndsWith("%"))
-                        {
-                            func = "startswith";
-                            value = value.Substring(0, value.Length - 1);
-                        }
-                        else
-                        {
-                            if (ContainsLikeWildcards(value))
-                                throw new Exception("Unsupported LIKE wildcard " + condition.value);
-
-                            result += " eq ";
-                            break;
-                        }
-
-                        if (ContainsLikeWildcards(value))
-                            throw new Exception("Unsupported LIKE wildcard " + condition.value);
-
-                        result = $"{func}({attrMeta.LogicalName}, '{FormatValue(typeof(string), value)}')";
-
-                        if (condition.@operator == @operator.notlike)
-                            result = "not " + result;
+                        result = $"not contains({attrMeta.LogicalName}, '{condition.value}')";
                         break;
                     case @operator.beginswith:
-                        result = $"startswith({attrMeta.LogicalName}, '{FormatValue(typeof(string), condition.value)}')";
+                        result = $"startswith({attrMeta.LogicalName}, '{condition.value}')";
                         break;
                     case @operator.endswith:
-                        result = $"endswith({attrMeta.LogicalName}, '{FormatValue(typeof(string), condition.value)}')";
+                        result = $"endswith({attrMeta.LogicalName}, '{condition.value}')";
                         break;
                     case @operator.above:
                         function = "Above";
@@ -703,11 +672,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 }
             }
             return result;
-        }
-
-        private static bool ContainsLikeWildcards(string value)
-        {
-            return value.Contains("%") || value.Contains("_");
         }
 
         private static string GetPropertyName(AttributeMetadata attr)
