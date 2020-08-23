@@ -114,7 +114,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 foreach (FetchLinkEntityType linkitem in linkitems)
                 {
-                    var navigationProperty = LinkItemToNavigationProperty(entity.name, linkitem, sender, out var child);
+                    var navigationProperty = LinkItemToNavigationProperty(entity.name, linkitem, sender, out var child, out var manyToManyNextLink);
 
                     if (linkitem.Items != null)
                     {
@@ -131,7 +131,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                                         if (!String.IsNullOrEmpty(filterString))
                                             filterString += $" {filter.type} ";
 
-                                        filterString += navigationProperty + "/" + GetCondition(linkitem.name, condition, sender);
+                                        filterString += GetCondition(linkitem.name, condition, sender, navigationProperty + "/");
                                     }
                                 }
                             }
@@ -142,11 +142,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         }
                     }
 
-                    var expandedSelect = GetExpandedSelect(linkitem, sender);
-                    var childFilter = child ? linkitem.Items?.OfType<filter>().FirstOrDefault() : null;
-                    var expandedFilter = childFilter == null ? null : GetFilter(linkitem.name, childFilter, sender);
-                    var childOrders = child ? linkitem.Items?.OfType<FetchOrderType>().ToList() : null;
-                    var expandedOrder = childOrders == null ? null : GetOrder(linkitem.name, sender, childOrders);
+                    var currentLinkItem = linkitem;
+                    if (manyToManyNextLink != null)
+                        currentLinkItem = manyToManyNextLink; // For Many to Many relationship, get the link item of the 2nd link instead of the join table
+
+                    var expandedSelect = GetExpandedSelect(currentLinkItem, sender);
+                    var childFilter = child ? currentLinkItem.Items?.OfType<filter>().FirstOrDefault() : null;
+                    var expandedFilter = childFilter == null ? null : GetFilter(currentLinkItem.name, childFilter, sender);
+                    var childOrders = child ? currentLinkItem.Items?.OfType<FetchOrderType>().ToList() : null;
+                    var expandedOrder = childOrders == null ? null : GetOrder(currentLinkItem.name, sender, childOrders);
 
                     if (String.IsNullOrEmpty(expandedSelect) && String.IsNullOrEmpty(expandedFilter) && String.IsNullOrEmpty(expandedOrder))
                     {
@@ -157,7 +161,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         var options = new List<string>();
 
                         if (!String.IsNullOrEmpty(expandedSelect))
-                            options.Add("$select=" + expandedSelect);
+                            options.Add(expandedSelect);
 
                         if (!String.IsNullOrEmpty(expandedFilter))
                             options.Add("$filter=" + expandedFilter);
@@ -175,9 +179,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         private static string GetExpandedSelect(FetchLinkEntityType linkitem, FetchXmlBuilder sender, string entityname = "")
         {
             if (linkitem.Items == null)
-            {
-                return "";
-            }
+                return null;
 
             var linkentity = linkitem.name;
             if (linkentity == null)
@@ -209,7 +211,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
 
             var resultList = GetAttributeNames(linkentity, attributeitems, sender);
-            return string.Join(",", resultList) + GetNestedExpand(linkitem, sender, linkitem.name);
+            var expandedSelect = string.Join(",", resultList);
+            var nestedExpand = GetNestedExpand(linkitem, sender, linkitem.name);
+
+            var options = new List<string>();
+            if (!String.IsNullOrEmpty(expandedSelect))
+                options.Add("$select=" + expandedSelect);
+
+            if (!String.IsNullOrEmpty(nestedExpand))
+                options.Add("$expand=" + nestedExpand);
+
+            return String.Join(";", options);
         }
 
         private static string GetNestedExpand(FetchLinkEntityType linkitem, FetchXmlBuilder sender, string entityname)
@@ -222,14 +234,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
             foreach (FetchLinkEntityType linkentityitem in linkitems)
             {
-                var navigationProperty = LinkItemToNavigationProperty(entityname, linkentityitem, sender, out var child);
-                if (child)
+                var navigationProperty = LinkItemToNavigationProperty(entityname, linkentityitem, sender, out var child, out var manyToManyNextLink);
+                var expandedSelect = GetExpandedSelect(linkentityitem, sender, linkentityitem.name);
+                if (String.IsNullOrEmpty(expandedSelect))
                 {
-                    throw new Exception($"The navigation property '{navigationProperty}' can't be expanded. Only many-to-one relationships are supported for nested expansion in OData queries.");
+                    resultList.Add(navigationProperty);
                 }
-                resultList.Add(navigationProperty + "($select=" + GetExpandedSelect(linkentityitem, sender, linkentityitem.name) + ")");
+                else
+                {
+                    resultList.Add(navigationProperty + "(" + expandedSelect + ")");
+                }
             }
-            return ";$expand=" + string.Join(",", resultList);
+            return string.Join(",", resultList);
         }
 
         private static string GetFilter(FetchEntityType entity, FetchXmlBuilder sender, string expandFilter)
@@ -297,7 +313,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return result;
         }
 
-        private static string GetCondition(string entityName, condition condition, FetchXmlBuilder sender)
+        private static string GetCondition(string entityName, condition condition, FetchXmlBuilder sender, string navigationProperty = "")
         {
             var result = "";
             if (!string.IsNullOrEmpty(condition.attribute))
@@ -311,7 +327,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 {
                     throw new Exception($"No metadata for attribute: {entityName}.{condition.attribute}");
                 }
-                result = GetPropertyName(attrMeta);
+                result = navigationProperty + GetPropertyName(attrMeta);
                 string function = null;
                 var functionParameters = 1;
                 var functionParameterType = typeof(string);
@@ -336,16 +352,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         result += " ne null";
                         break;
                     case @operator.like:
-                        result = $"contains({attrMeta.LogicalName}, '{condition.value}')";
+                        result = $"contains({navigationProperty + attrMeta.LogicalName}, '{condition.value}')";
                         break;
                     case @operator.notlike:
-                        result = $"not contains({attrMeta.LogicalName}, '{condition.value}')";
+                        result = $"not contains({navigationProperty + attrMeta.LogicalName}, '{condition.value}')";
                         break;
                     case @operator.beginswith:
-                        result = $"startswith({attrMeta.LogicalName}, '{condition.value}')";
+                        result = $"startswith({navigationProperty + attrMeta.LogicalName}, '{condition.value}')";
                         break;
                     case @operator.endswith:
-                        result = $"endswith({attrMeta.LogicalName}, '{condition.value}')";
+                        result = $"endswith({navigationProperty + attrMeta.LogicalName}, '{condition.value}')";
                         break;
                     case @operator.above:
                         function = "Above";
@@ -621,13 +637,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 if (!String.IsNullOrEmpty(function))
                 {
                     if (functionParameters == Int32.MaxValue)
-                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}',PropertyValues=[{String.Join(",", condition.Items.Select(i => FormatValue(functionParameterType, i.Value)))}])";
+                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{navigationProperty + attrMeta.LogicalName}',PropertyValues=[{String.Join(",", condition.Items.Select(i => FormatValue(functionParameterType, i.Value)))}])";
                     else if (functionParameters == 0)
-                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}')";
+                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{navigationProperty + attrMeta.LogicalName}')";
                     else if (functionParameters == 1)
-                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}',PropertyValue={FormatValue(functionParameterType, condition.value)})";
+                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{navigationProperty + attrMeta.LogicalName}',PropertyValue={FormatValue(functionParameterType, condition.value)})";
                     else
-                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}',{String.Join(",", condition.Items.Select((i, idx) => $"Property{idx + 1}={FormatValue(functionParameterType, i.Value)}"))})";
+                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{navigationProperty + attrMeta.LogicalName}',{String.Join(",", condition.Items.Select((i, idx) => $"Property{idx + 1}={FormatValue(functionParameterType, i.Value)}"))})";
                 }
 
                 if (!string.IsNullOrEmpty(condition.value) && !result.Contains("("))
@@ -816,8 +832,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
         }
 
-        private static string LinkItemToNavigationProperty(string entityname, FetchLinkEntityType linkitem, FetchXmlBuilder sender, out bool child)
+        private static string LinkItemToNavigationProperty(string entityname, FetchLinkEntityType linkitem, FetchXmlBuilder sender, out bool child, out FetchLinkEntityType manyToManyNextLink)
         {
+            manyToManyNextLink = null;
             GetEntityMetadata(entityname, sender);
             var entity = sender.entities[entityname];
             foreach (var relation in entity.OneToManyRelationships
@@ -902,6 +919,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         relation.Entity2IntersectAttribute == nextlink.to)
                     {
                         child = true;
+                        manyToManyNextLink = nextlink;
                         return relation.Entity1NavigationPropertyName;
                     }
                 }
@@ -927,6 +945,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         relation.Entity1IntersectAttribute == nextlink.from)
                     {
                         child = true;
+                        manyToManyNextLink = nextlink;
                         return relation.Entity2NavigationPropertyName;
                     }
                 }
