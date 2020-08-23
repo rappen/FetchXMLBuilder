@@ -345,16 +345,31 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         result += " ne null";
                         break;
                     case @operator.like:
-                        result = $"contains({HttpUtility.UrlEncode(attrMeta.LogicalName)}, '{HttpUtility.UrlEncode(condition.value)}')";
-                        break;
                     case @operator.notlike:
-                        result = $"not contains({HttpUtility.UrlEncode(attrMeta.LogicalName)}, '{HttpUtility.UrlEncode(condition.value)}')";
+                        result = $"contains({HttpUtility.UrlEncode(attrMeta.LogicalName)}, {FormatValue(typeof(string), condition.value)})";
+
+                        if (condition.@operator == @operator.notlike)
+                        {
+                            result = "not " + result;
+                        }
                         break;
                     case @operator.beginswith:
-                        result = $"startswith({HttpUtility.UrlEncode(attrMeta.LogicalName)}, '{HttpUtility.UrlEncode(condition.value)}')";
+                    case @operator.notbeginwith:
+                        result = $"startswith({HttpUtility.UrlEncode(attrMeta.LogicalName)}, {FormatValue(typeof(string), condition.value)})";
+
+                        if (condition.@operator == @operator.notbeginwith)
+                        {
+                            result = "not " + result;
+                        }
                         break;
                     case @operator.endswith:
-                        result = $"endswith({HttpUtility.UrlEncode(attrMeta.LogicalName)}, '{HttpUtility.UrlEncode(condition.value)}')";
+                    case @operator.notendwith:
+                        result = $"endswith({HttpUtility.UrlEncode(attrMeta.LogicalName)}, {FormatValue(typeof(string), condition.value)})";
+
+                        if (condition.@operator == @operator.notendwith)
+                        {
+                            result = "not " + result;
+                        }
                         break;
                     case @operator.above:
                         function = "Above";
