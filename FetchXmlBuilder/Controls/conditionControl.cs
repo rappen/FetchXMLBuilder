@@ -181,6 +181,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             case AttributeTypeCode.Status:
                             case AttributeTypeCode.Picklist:
                             case AttributeTypeCode.BigInt:
+                            case AttributeTypeCode.EntityName:
                                 int intvalue;
                                 if (!int.TryParse(value, out intvalue))
                                 {
@@ -208,7 +209,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                                 break;
                             case AttributeTypeCode.String:
                             case AttributeTypeCode.Memo:
-                            case AttributeTypeCode.EntityName:
                             case AttributeTypeCode.Virtual:
                                 break;
                             case AttributeTypeCode.PartyList:
@@ -361,7 +361,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                          !(attribute.Metadata is EntityNameAttributeMetadata))
                 {
                     cmbValue.Items.AddRange(options.Options.Select(o => new OptionsetItem(o)).ToArray());
+                    var value = cmbValue.Text;
                     cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
+                    cmbValue.SelectedItem = cmbValue.Items.OfType<OptionsetItem>().FirstOrDefault(i => i.GetValue() == value);
+                }
+                else if (attribute.Metadata is EntityNameAttributeMetadata)
+                {
+                    var entities = fxb.GetDisplayEntities();
+                    if (entities != null)
+                    {
+                        cmbValue.Items.AddRange(entities.Select(e => new EntityNameItem(e.Value)).ToArray());
+                        var value = cmbValue.Text;
+                        cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
+                        cmbValue.SelectedItem = cmbValue.Items.OfType<EntityNameItem>().FirstOrDefault(i => i.GetValue() == value);
+                    }
                 }
                 else if (attribute.Metadata is LookupAttributeMetadata lookupmeta)
                 {
@@ -401,6 +414,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     }
                 }
             }
+
             if (valueType == null)
             {
                 cmbValue.Text = "";
@@ -409,13 +423,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             else
             {
                 cmbValue.Enabled = true;
-
-                if (cmbValue.Items.Count > 0 && cmbValue.SelectedIndex == -1 && !string.IsNullOrWhiteSpace(cmbValue.Text))
-                {
-                    var item = cmbValue.Items.OfType<OptionsetItem>().FirstOrDefault(i => i.ToString() == cmbValue.Text);
-                    cmbValue.SelectedItem = item;
-                }
             }
+
             if (valueType == AttributeTypeCode.Lookup ||
                 valueType == AttributeTypeCode.Customer ||
                 valueType == AttributeTypeCode.Owner ||
