@@ -1,4 +1,4 @@
-# ![FXB](https://fetchxmlbuilder.com/FXB150) FetchXML Builder for XrmToolBox
+# ![FXB](https://fetchxmlbuilder.com/origdocs/fxb150) FetchXML Builder for XrmToolBox
 
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=rappen/FetchXMLBuilder)](https://dependabot.com)
 
