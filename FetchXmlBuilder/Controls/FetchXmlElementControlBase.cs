@@ -151,13 +151,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             if (IsInitialized)
             {
-                SendSaveMessage(GetAttributesCollection(), keyPress);
+                SendSaveMessage(ControlUtils.GetAttributesCollection(this.Controls, true), keyPress);
             }
-        }
-
-        protected virtual Dictionary<string,string> GetAttributesCollection()
-        {
-            return ControlUtils.GetAttributesCollection(this.Controls, true);
         }
 
         protected virtual ControlValidationResult ValidateControl(Control control)
