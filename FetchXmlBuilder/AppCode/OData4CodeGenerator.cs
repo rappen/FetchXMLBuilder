@@ -382,7 +382,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         functionParameters = Int32.MaxValue;
                         break;
                     case @operator.containvalues:
-                        function = "ContainsValues";
+                        function = "ContainValues";
                         functionParameters = Int32.MaxValue;
                         break;
                     case @operator.notcontainvalues:
