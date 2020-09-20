@@ -72,6 +72,47 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             base.SaveInternal(silent);
         }
 
+        protected override Dictionary<string, string> GetAttributesCollection()
+        {
+            var attr = base.GetAttributesCollection();
+
+            if (attr.TryGetValue("operator", out var op) && attr.TryGetValue("value", out var value))
+            {
+                if (op == "begins-with")
+                {
+                    attr["operator"] = "like";
+                    attr["value"] = value + "%";
+                }
+                else if (op == "not-begin-with")
+                {
+                    attr["operator"] = "not-like";
+                    attr["value"] = value + "%";
+                }
+                else if (op == "ends-with")
+                {
+                    attr["operator"] = "like";
+                    attr["value"] = "%" + value;
+                }
+                else if (op == "not-end-with")
+                {
+                    attr["operator"] = "not-like";
+                    attr["value"] = "%" + value;
+                }
+                else if (op == "contains")
+                {
+                    attr["operator"] = "like";
+                    attr["value"] = "%" + value + "%";
+                }
+                else if (op == "does-not-contain")
+                {
+                    attr["operator"] = "not-like";
+                    attr["value"] = "%" + value + "%";
+                }
+            }
+
+            return attr;
+        }
+
         protected override ControlValidationResult ValidateControl(Control control)
         {
             if (control == cmbAttribute)
@@ -155,6 +196,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             return new ControlValidationResult(ControlValidationLevel.Error, "Value and Value Of cannot both be set");
                         }
 
+                        if (!string.IsNullOrWhiteSpace(cmbValueOf.Text))
+                        {
+                            return null;
+                        }
+
                         switch (valueType)
                         {
                             case null:
@@ -181,6 +227,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             case AttributeTypeCode.Status:
                             case AttributeTypeCode.Picklist:
                             case AttributeTypeCode.BigInt:
+                            case AttributeTypeCode.EntityName:
                                 int intvalue;
                                 if (!int.TryParse(value, out intvalue))
                                 {
@@ -208,7 +255,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                                 break;
                             case AttributeTypeCode.String:
                             case AttributeTypeCode.Memo:
-                            case AttributeTypeCode.EntityName:
                             case AttributeTypeCode.Virtual:
                                 break;
                             case AttributeTypeCode.PartyList:
@@ -301,10 +347,70 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // RefreshFill now that attributes are loaded
             ReFillControl(cmbAttribute);
             ReFillControl(cmbValue);
-            ReFillControl(cmbValueOf);
             EndInit();
             RefreshOperators();
             UpdateValueField();
+            NormalizeLike();
+            ReFillControl(cmbValueOf);
+        }
+
+        private void NormalizeLike()
+        {
+            var op = cmbOperator.SelectedItem as OperatorItem;
+
+            if (op == null)
+            {
+                return;
+            }
+
+            var value = cmbValue.Text;
+
+            if (String.IsNullOrWhiteSpace(value))
+            {
+                return;
+            }
+
+            if (op.GetValue() == "like" || op.GetValue() == "not-like")
+            {
+                string newOp = null;
+
+                if (value.StartsWith("%") && value.EndsWith("%") && value.Length >= 2)
+                {
+                    newOp = "contains";
+                    value = value.Substring(1, value.Length - 2);
+                }
+                else if (value.StartsWith("%"))
+                {
+                    newOp = "ends-with";
+                    value = value.Substring(1);
+                }
+                else if (value.EndsWith("%"))
+                {
+                    newOp = "begins-with";
+                    value = value.Substring(0, value.Length - 1);
+                }
+
+                if (newOp != null)
+                {
+                    if (op.GetValue() == "not-like")
+                    {
+                        newOp = "not-" + newOp.Replace("s-", "-");
+
+                        if (newOp == "not-contains")
+                        {
+                            newOp = "does-not-contain";
+                        }
+                    }
+
+                    var newOpItem = cmbOperator.Items.OfType<OperatorItem>().FirstOrDefault(o => o.GetValue() == newOp);
+
+                    if (newOpItem != null)
+                    {
+                        cmbOperator.SelectedItem = newOpItem;
+                        cmbValue.Text = value;
+                    }
+                }
+            }
         }
 
         private void RefreshOperators()
@@ -361,7 +467,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                          !(attribute.Metadata is EntityNameAttributeMetadata))
                 {
                     cmbValue.Items.AddRange(options.Options.Select(o => new OptionsetItem(o)).ToArray());
+                    var value = cmbValue.Text;
                     cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
+                    cmbValue.SelectedItem = cmbValue.Items.OfType<OptionsetItem>().FirstOrDefault(i => i.GetValue() == value);
+                }
+                else if (attribute.Metadata is EntityNameAttributeMetadata)
+                {
+                    var entities = fxb.GetDisplayEntities();
+                    if (entities != null)
+                    {
+                        cmbValue.Items.AddRange(entities.Select(e => new EntityNameItem(e.Value)).ToArray());
+                        var value = cmbValue.Text;
+                        cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
+                        cmbValue.SelectedItem = cmbValue.Items.OfType<EntityNameItem>().FirstOrDefault(i => i.GetValue() == value);
+                    }
                 }
                 else if (attribute.Metadata is LookupAttributeMetadata lookupmeta)
                 {
@@ -401,6 +520,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     }
                 }
             }
+
             if (valueType == null)
             {
                 cmbValue.Text = "";
@@ -409,13 +529,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             else
             {
                 cmbValue.Enabled = true;
-
-                if (cmbValue.Items.Count > 0 && cmbValue.SelectedIndex == -1 && !string.IsNullOrWhiteSpace(cmbValue.Text))
-                {
-                    var item = cmbValue.Items.OfType<OptionsetItem>().FirstOrDefault(i => i.ToString() == cmbValue.Text);
-                    cmbValue.SelectedItem = item;
-                }
             }
+
             if (valueType == AttributeTypeCode.Lookup ||
                 valueType == AttributeTypeCode.Customer ||
                 valueType == AttributeTypeCode.Owner ||
