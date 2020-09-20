@@ -59,7 +59,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://jonasrapp.net");
+            System.Diagnostics.Process.Start("https://jonasr.app");
         }
 
         private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

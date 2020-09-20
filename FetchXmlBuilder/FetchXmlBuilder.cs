@@ -27,7 +27,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
     {
         private const string aiEndpoint = "https://dc.services.visualstudio.com/v2/track";
         private const string aiKey = "eed73022-2444-45fd-928b-5eebd8fa46a6";    // jonas@rappen.net tenant, XrmToolBox
-        //private const string aiKey = "b6a4ec7c-ab43-4780-97cd-021e99506337";   // jonas@jonasrapp.net, XrmToolBoxInsights
+        //private const string aiKey = "b6a4ec7c-ab43-4780-97cd-021e99506337";   // jonas@jonasr.app, XrmToolBoxInsights
 
         #region Internal Fields
 
@@ -106,7 +106,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         public string HelpUrl
         {
-            get { return "http://jonasrapp.net/fxb"; }
+            get { return "https://fetchxmlbuilder.com?utm_source=XTBHelp"; }
         }
 
         public string RepositoryName

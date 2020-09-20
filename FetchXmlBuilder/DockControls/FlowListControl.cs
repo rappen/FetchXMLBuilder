@@ -25,7 +25,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
             catch
             {
-                uri = new Uri("https://jonasrapp.net");
+                uri = new Uri("https://fetchxmlbuilder.com");
                 lblError.Text = url;
                 lblError.Visible = true;
                 lblError.BringToFront();
