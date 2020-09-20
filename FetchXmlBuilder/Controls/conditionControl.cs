@@ -196,6 +196,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             return new ControlValidationResult(ControlValidationLevel.Error, "Value and Value Of cannot both be set");
                         }
 
+                        if (!string.IsNullOrWhiteSpace(cmbValueOf.Text))
+                        {
+                            return null;
+                        }
+
                         switch (valueType)
                         {
                             case null:
@@ -342,11 +347,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // RefreshFill now that attributes are loaded
             ReFillControl(cmbAttribute);
             ReFillControl(cmbValue);
-            ReFillControl(cmbValueOf);
             EndInit();
             RefreshOperators();
             UpdateValueField();
             NormalizeLike();
+            ReFillControl(cmbValueOf);
         }
 
         private void NormalizeLike()

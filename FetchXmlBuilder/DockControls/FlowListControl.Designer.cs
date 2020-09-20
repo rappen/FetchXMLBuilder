@@ -105,6 +105,7 @@
             this.linkSelect.TabStop = true;
             this.linkSelect.Tag = "Select formula";
             this.linkSelect.Text = "N/A";
+            this.linkSelect.UseMnemonic = false;
             this.linkSelect.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel_LinkClicked);
             // 
             // lblCopied
@@ -141,6 +142,7 @@
             this.linkExpand.TabStop = true;
             this.linkExpand.Tag = "Expand Query";
             this.linkExpand.Text = "N/A";
+            this.linkExpand.UseMnemonic = false;
             this.linkExpand.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel_LinkClicked);
             // 
             // linkTop
@@ -156,6 +158,7 @@
             this.linkTop.TabStop = true;
             this.linkTop.Tag = "Top Count";
             this.linkTop.Text = "N/A";
+            this.linkTop.UseMnemonic = false;
             this.linkTop.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel_LinkClicked);
             // 
             // linkOrder
@@ -171,6 +174,7 @@
             this.linkOrder.TabStop = true;
             this.linkOrder.Tag = "Order By";
             this.linkOrder.Text = "N/A";
+            this.linkOrder.UseMnemonic = false;
             this.linkOrder.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel_LinkClicked);
             // 
             // linkFilter
@@ -186,6 +190,7 @@
             this.linkFilter.TabStop = true;
             this.linkFilter.Tag = "Filter Query";
             this.linkFilter.Text = "N/A";
+            this.linkFilter.UseMnemonic = false;
             this.linkFilter.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel_LinkClicked);
             // 
             // label5

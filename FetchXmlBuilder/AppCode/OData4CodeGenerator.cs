@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
@@ -233,15 +234,31 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 var and = true;
                 foreach (filter filteritem in filteritems)
                 {
-                    resultList.Append(GetFilter(entity.name, filteritem, sender));
+                    var filterText = GetFilter(entity.name, filteritem, sender);
+
+                    if (String.IsNullOrWhiteSpace(filterText))
+                    {
+                        continue;
+                    }
+
+                    if (resultList.Length > 0)
+                    {
+                        resultList.Append(" and ");
+                    }
+
+                    resultList.Append(filterText);
+                    
                     if (filteritem.type == filterType.or)
                         and = false;
                 }
+
                 var result = resultList.ToString();
-                if (result.StartsWith("(") && result.EndsWith(")"))
+
+                if (filteritems.Count == 1 && result.StartsWith("(") && result.EndsWith(")"))
                 {
                     result = result.Substring(1, result.Length - 2);
                 }
+
                 if (!String.IsNullOrEmpty(expandFilter))
                 {
                     if (!and)
@@ -328,16 +345,31 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         result += " ne null";
                         break;
                     case @operator.like:
-                        result = $"contains({attrMeta.LogicalName}, '{condition.value}')";
-                        break;
                     case @operator.notlike:
-                        result = $"not contains({attrMeta.LogicalName}, '{condition.value}')";
+                        result = $"contains({HttpUtility.UrlEncode(attrMeta.LogicalName)}, {FormatValue(typeof(string), condition.value)})";
+
+                        if (condition.@operator == @operator.notlike)
+                        {
+                            result = "not " + result;
+                        }
                         break;
                     case @operator.beginswith:
-                        result = $"startswith({attrMeta.LogicalName}, '{condition.value}')";
+                    case @operator.notbeginwith:
+                        result = $"startswith({HttpUtility.UrlEncode(attrMeta.LogicalName)}, {FormatValue(typeof(string), condition.value)})";
+
+                        if (condition.@operator == @operator.notbeginwith)
+                        {
+                            result = "not " + result;
+                        }
                         break;
                     case @operator.endswith:
-                        result = $"endswith({attrMeta.LogicalName}, '{condition.value}')";
+                    case @operator.notendwith:
+                        result = $"endswith({HttpUtility.UrlEncode(attrMeta.LogicalName)}, {FormatValue(typeof(string), condition.value)})";
+
+                        if (condition.@operator == @operator.notendwith)
+                        {
+                            result = "not " + result;
+                        }
                         break;
                     case @operator.above:
                         function = "Above";
@@ -350,7 +382,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         functionParameters = Int32.MaxValue;
                         break;
                     case @operator.containvalues:
-                        function = "ContainsValues";
+                        function = "ContainValues";
                         functionParameters = Int32.MaxValue;
                         break;
                     case @operator.notcontainvalues:
@@ -613,13 +645,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 if (!String.IsNullOrEmpty(function))
                 {
                     if (functionParameters == Int32.MaxValue)
-                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}',PropertyValues=[{String.Join(",", condition.Items.Select(i => FormatValue(functionParameterType, i.Value)))}])";
+                        return $"Microsoft.Dynamics.CRM.{HttpUtility.UrlEncode(function)}(PropertyName='{HttpUtility.UrlEncode(attrMeta.LogicalName)}',PropertyValues=[{String.Join(",", condition.Items.Select(i => FormatValue(functionParameterType, i.Value)))}])";
                     else if (functionParameters == 0)
-                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}')";
+                        return $"Microsoft.Dynamics.CRM.{HttpUtility.UrlEncode(function)}(PropertyName='{HttpUtility.UrlEncode(attrMeta.LogicalName)}')";
                     else if (functionParameters == 1)
-                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}',PropertyValue={FormatValue(functionParameterType, condition.value)})";
+                        return $"Microsoft.Dynamics.CRM.{HttpUtility.UrlEncode(function)}(PropertyName='{HttpUtility.UrlEncode(attrMeta.LogicalName)}',PropertyValue={FormatValue(functionParameterType, condition.value)})";
                     else
-                        return $"Microsoft.Dynamics.CRM.{function}(PropertyName='{attrMeta.LogicalName}',{String.Join(",", condition.Items.Select((i, idx) => $"Property{idx + 1}={FormatValue(functionParameterType, i.Value)}"))})";
+                        return $"Microsoft.Dynamics.CRM.{HttpUtility.UrlEncode(function)}(PropertyName='{HttpUtility.UrlEncode(attrMeta.LogicalName)}',{String.Join(",", condition.Items.Select((i, idx) => $"Property{idx + 1}={FormatValue(functionParameterType, i.Value)}"))})";
                 }
 
                 if (!string.IsNullOrEmpty(condition.value) && !result.Contains("("))
@@ -685,7 +717,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         private static string FormatValue(Type type, string s)
         {
             if (type == typeof(string))
-                return "'" + s.Replace("'", "''") + "'";
+                return "'" + HttpUtility.UrlEncode(s.Replace("'", "''")) + "'";
 
             if (type == typeof(DateTime))
             {
@@ -703,7 +735,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             if (type == typeof(Guid))
                 return Guid.Parse(s).ToString();
 
-            return Convert.ChangeType(s, type).ToString();
+            return HttpUtility.UrlEncode(Convert.ChangeType(s, type).ToString());
         }
 
         private static string GetOrder(FetchEntityType entity, FetchXmlBuilder sender)
