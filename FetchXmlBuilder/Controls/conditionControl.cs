@@ -72,6 +72,47 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             base.SaveInternal(silent);
         }
 
+        protected override Dictionary<string, string> GetAttributesCollection()
+        {
+            var attr = base.GetAttributesCollection();
+
+            if (attr.TryGetValue("operator", out var op) && attr.TryGetValue("value", out var value))
+            {
+                if (op == "begins-with")
+                {
+                    attr["operator"] = "like";
+                    attr["value"] = value + "%";
+                }
+                else if (op == "not-begin-with")
+                {
+                    attr["operator"] = "not-like";
+                    attr["value"] = value + "%";
+                }
+                else if (op == "ends-with")
+                {
+                    attr["operator"] = "like";
+                    attr["value"] = "%" + value;
+                }
+                else if (op == "not-end-with")
+                {
+                    attr["operator"] = "not-like";
+                    attr["value"] = "%" + value;
+                }
+                else if (op == "contains")
+                {
+                    attr["operator"] = "like";
+                    attr["value"] = "%" + value + "%";
+                }
+                else if (op == "does-not-contain")
+                {
+                    attr["operator"] = "not-like";
+                    attr["value"] = "%" + value + "%";
+                }
+            }
+
+            return attr;
+        }
+
         protected override ControlValidationResult ValidateControl(Control control)
         {
             if (control == cmbAttribute)
@@ -309,7 +350,67 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             EndInit();
             RefreshOperators();
             UpdateValueField();
+            NormalizeLike();
             ReFillControl(cmbValueOf);
+        }
+
+        private void NormalizeLike()
+        {
+            var op = cmbOperator.SelectedItem as OperatorItem;
+
+            if (op == null)
+            {
+                return;
+            }
+
+            var value = cmbValue.Text;
+
+            if (String.IsNullOrWhiteSpace(value))
+            {
+                return;
+            }
+
+            if (op.GetValue() == "like" || op.GetValue() == "not-like")
+            {
+                string newOp = null;
+
+                if (value.StartsWith("%") && value.EndsWith("%") && value.Length >= 2)
+                {
+                    newOp = "contains";
+                    value = value.Substring(1, value.Length - 2);
+                }
+                else if (value.StartsWith("%"))
+                {
+                    newOp = "ends-with";
+                    value = value.Substring(1);
+                }
+                else if (value.EndsWith("%"))
+                {
+                    newOp = "begins-with";
+                    value = value.Substring(0, value.Length - 1);
+                }
+
+                if (newOp != null)
+                {
+                    if (op.GetValue() == "not-like")
+                    {
+                        newOp = "not-" + newOp.Replace("s-", "-");
+
+                        if (newOp == "not-contains")
+                        {
+                            newOp = "does-not-contain";
+                        }
+                    }
+
+                    var newOpItem = cmbOperator.Items.OfType<OperatorItem>().FirstOrDefault(o => o.GetValue() == newOp);
+
+                    if (newOpItem != null)
+                    {
+                        cmbOperator.SelectedItem = newOpItem;
+                        cmbValue.Text = value;
+                    }
+                }
+            }
         }
 
         private void RefreshOperators()
