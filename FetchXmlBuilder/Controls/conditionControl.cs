@@ -16,6 +16,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
     public partial class conditionControl : FetchXmlElementControlBase
     {
+        #region Private Properties
+
+        private bool valueOfSupported = false;
+
+        #endregion Private Properties
+
         #region Public Constructors
 
         public conditionControl() : this(null, null, null)
@@ -26,6 +32,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             InitializeComponent();
             BeginInit();
+            valueOfSupported = fetchXmlBuilder.CDSVersion >= new Version(9, 1, 0, 19562);
             txtLookup.OrganizationService = fetchXmlBuilder.Service;
             dlgLookup.Service = fetchXmlBuilder.Service;
             rbUseLookup.Checked = fetchXmlBuilder.settings.UseLookup;
@@ -347,11 +354,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // RefreshFill now that attributes are loaded
             ReFillControl(cmbAttribute);
             ReFillControl(cmbValue);
+            if (valueOfSupported)
+            {
+                ReFillControl(cmbValueOf);
+            }
             EndInit();
             RefreshOperators();
             UpdateValueField();
             NormalizeLike();
-            ReFillControl(cmbValueOf);
         }
 
         private void NormalizeLike()
@@ -567,7 +577,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 panValueLookup.Visible = rbUseLookup.Checked;
             }
 
-            if (oper.SupportsColumnComparison && !(cmbEntity.SelectedItem is EntityNode))
+            if (valueOfSupported && oper.SupportsColumnComparison && !(cmbEntity.SelectedItem is EntityNode))
             {
                 panValueOf.Visible = true;
                 cmbValueOf.Items.Clear();

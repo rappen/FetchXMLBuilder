@@ -37,6 +37,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal FXBSettings settings = new FXBSettings();
         internal TreeBuilderControl dockControlBuilder;
         internal bool working = false;
+        internal Version CDSVersion = new Version();
 
         #endregion Internal Fields
 
@@ -1935,12 +1936,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             entityShitList.Clear();
             View = null;
             views = null;
-            var orgver = new Version(e.ConnectionDetail.OrganizationVersion);
+            CDSVersion = new Version(e.ConnectionDetail.OrganizationVersion);
             LogInfo("Connected CRM version: {0} (Major: {1} Minor: {2})",
-                orgver, e.ConnectionDetail.OrganizationMajorVersion, e.ConnectionDetail.OrganizationMinorVersion);
+                CDSVersion, e.ConnectionDetail.OrganizationMajorVersion, e.ConnectionDetail.OrganizationMinorVersion);
             // Verifying version where MetadataChanges request exists https://msdn.microsoft.com/en-us/library/jj863599(v=crm.5).aspx
             // According to TechNet 2011 UR12 is 05.00.9690.3218 https://social.technet.microsoft.com/wiki/contents/articles/8062.crm-2011-build-and-version-numbers-for-update-rollups.aspx
-            var orgok = orgver >= new Version(05, 00, 9690, 3218);
+            var orgok = CDSVersion >= new Version(05, 00, 9690, 3218);
             if (orgok)
             {
                 if (!working)
@@ -1951,7 +1952,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             else
             {
                 LogError("CRM version too old for FXB");
-                MessageBox.Show($"RetrieveMetadataChangesRequest was introduced in\nMicrosoft Dynamics CRM 2011 UR12 (5.0.9690.3218)\nCurrent version is {orgver}\n\nPlease connect to a newer organization to use this cool tool.",
+                MessageBox.Show($"RetrieveMetadataChangesRequest was introduced in\nMicrosoft Dynamics CRM 2011 UR12 (5.0.9690.3218)\nCurrent version is {CDSVersion}\n\nPlease connect to a newer organization to use this cool tool.",
                     "Organization too old", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             EnableControls(orgok && buttonsEnabled);
