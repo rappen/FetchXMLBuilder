@@ -354,13 +354,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // RefreshFill now that attributes are loaded
             ReFillControl(cmbAttribute);
             ReFillControl(cmbValue);
+            EndInit();
+            RefreshOperators();
+            UpdateValueField();
             if (valueOfSupported)
             {
                 ReFillControl(cmbValueOf);
             }
-            EndInit();
-            RefreshOperators();
-            UpdateValueField();
             NormalizeLike();
         }
 
