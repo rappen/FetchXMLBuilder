@@ -357,10 +357,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             EndInit();
             RefreshOperators();
             UpdateValueField();
-            if (valueOfSupported)
-            {
-                ReFillControl(cmbValueOf);
-            }
+            RefreshValueOf();
             NormalizeLike();
         }
 
@@ -438,6 +435,37 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
         }
 
+        private void RefreshValueOf()
+        {
+            if (!IsInitialized)
+            {
+                return;
+            }
+            panValueOf.Visible = false;
+            if (!valueOfSupported || !(cmbOperator.SelectedItem is OperatorItem oper) || !(cmbAttribute.SelectedItem is AttributeItem attribute))
+            {
+                return;
+            }
+            if (oper.SupportsColumnComparison && !(cmbEntity.SelectedItem is EntityNode))
+            {
+                panValueOf.Visible = true;
+                cmbValueOf.Items.Clear();
+                if (attribute != null)
+                {
+                    cmbValueOf.Items.AddRange(cmbAttribute.Items
+                        .Cast<AttributeItem>()
+                        .Where(a => a.Metadata.AttributeType == attribute.Metadata.AttributeType)
+                        .Select(a => new AttributeItem(a.Metadata))
+                        .ToArray());
+                }
+            }
+            else
+            {
+                cmbValueOf.Text = "";
+            }
+            ReFillControl(cmbValueOf);
+        }
+
         private void UpdateValueField()
         {
             if (!IsInitialized)
@@ -445,7 +473,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 return;
             }
             panValue.Visible = true;
-            panValueOf.Visible = false;
             panValueLookup.Visible = false;
             panGuidSelector.Visible = false;
             cmbValue.Items.Clear();
@@ -492,42 +519,36 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                         cmbValue.SelectedItem = cmbValue.Items.OfType<EntityNameItem>().FirstOrDefault(i => i.GetValue() == value);
                     }
                 }
-                else if (attribute.Metadata is LookupAttributeMetadata lookupmeta)
+                else if (attribute.Metadata is LookupAttributeMetadata lookupmeta && fxb.settings.UseLookup && Guid.TryParse(cmbValue.Text, out Guid id) && !Guid.Empty.Equals(id))
                 {
-                    if (fxb.settings.UseLookup)
+                    var loookuptargets = new List<string>();
+                    if (!string.IsNullOrWhiteSpace(txtUitype.Text))
                     {
-                        if (Guid.TryParse(cmbValue.Text, out Guid id) && !Guid.Empty.Equals(id))
-                        {
-                            var loookuptargets = new List<string>();
-                            if (!string.IsNullOrWhiteSpace(txtUitype.Text))
-                            {
-                                loookuptargets.Add(txtUitype.Text.Trim());
-                            }
-                            else
-                            {
-                                loookuptargets.AddRange(lookupmeta.Targets);
-                            }
-                            foreach (var target in loookuptargets)
-                            {
-                                try
-                                {
-                                    txtLookup.LogicalName = target;
-                                    txtLookup.Id = id;
-                                    txtUitype.Text = target;
-                                    break;
-                                }
-                                catch (FaultException<OrganizationServiceFault>)
-                                {
-                                    // really nothing to do here, loading the record is simply nice to have
-                                }
-                            }
-                        }
+                        loookuptargets.Add(txtUitype.Text.Trim());
                     }
                     else
                     {
-                        txtUitype.Text = string.Empty;
-                        txtLookup.Text = string.Empty;
+                        loookuptargets.AddRange(lookupmeta.Targets);
                     }
+                    foreach (var target in loookuptargets)
+                    {
+                        try
+                        {
+                            txtLookup.LogicalName = target;
+                            txtLookup.Id = id;
+                            txtUitype.Text = target;
+                            break;
+                        }
+                        catch (FaultException<OrganizationServiceFault>)
+                        {
+                            // really nothing to do here, loading the record is simply nice to have
+                        }
+                    }
+                }
+                else
+                {
+                    txtUitype.Text = string.Empty;
+                    txtLookup.Text = string.Empty;
                 }
             }
 
@@ -576,27 +597,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 panValue.Visible = !rbUseLookup.Checked;
                 panValueLookup.Visible = rbUseLookup.Checked;
             }
-
-            if (valueOfSupported && oper.SupportsColumnComparison && !(cmbEntity.SelectedItem is EntityNode))
-            {
-                panValueOf.Visible = true;
-                cmbValueOf.Items.Clear();
-                if (attribute != null)
-                {
-                    foreach (AttributeItem item in cmbAttribute.Items)
-                    {
-                        if (item.Metadata.AttributeType == attribute.Metadata.AttributeType)
-                        {
-                            cmbValueOf.Items.Add(new AttributeItem(item.Metadata));
-                        }
-                    }
-                }
-            }
-
-            if (!panValueOf.Visible)
-            {
-                cmbValueOf.Text = "";
-            }
         }
 
         #endregion Private Methods
@@ -623,6 +623,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void cmbAttribute_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshOperators();
+            UpdateValueField();
+            RefreshValueOf();
         }
 
         private void cmbEntity_SelectedIndexChanged(object sender, EventArgs e)
@@ -633,6 +635,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void cmbOperator_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateValueField();
+            RefreshValueOf();
         }
 
         private void rbUseLookup_CheckedChanged(object sender, EventArgs e)
