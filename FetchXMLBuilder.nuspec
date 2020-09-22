@@ -50,7 +50,7 @@ To make it even more appealing, there is also the possibility to have it show "F
     </description>
     <releaseNotes>
       Full release notes:
-      👉 https://github.com/rappen/FetchXMLBuilder/releases/tag/$buildnumber$
+      https://github.com/rappen/FetchXMLBuilder/releases/tag/$buildnumber$
     </releaseNotes>
     <copyright>Copyright Jonas Rapp 2014-2020</copyright>
     <tags>XrmToolBox Plugins FetchXML Builder</tags>
