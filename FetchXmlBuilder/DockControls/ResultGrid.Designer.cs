@@ -160,7 +160,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             this.mnuCopyHeaders.CheckOnClick = true;
             this.mnuCopyHeaders.Name = "mnuCopyHeaders";
             this.mnuCopyHeaders.Size = new System.Drawing.Size(180, 22);
-            this.mnuCopyHeaders.Text = "Copy with Headers";
+            this.mnuCopyHeaders.Text = "Copy with Headers";            
+            this.mnuCopyHeaders.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
             // mnuColumns
             // 
