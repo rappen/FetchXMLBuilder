@@ -30,6 +30,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             this.label2 = new System.Windows.Forms.Label();
             this.cmbType = new System.Windows.Forms.ComboBox();
+            this.chkIsQF = new System.Windows.Forms.CheckBox();
+            this.chkOverrideQFLimit = new System.Windows.Forms.CheckBox();
+            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -60,14 +63,40 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbType.TabIndex = 27;
             this.cmbType.Tag = "type";
             // 
+            // chkIsQF
+            // 
+            this.chkIsQF.AutoSize = true;
+            this.chkIsQF.Location = new System.Drawing.Point(7, 43);
+            this.chkIsQF.Name = "chkIsQF";
+            this.chkIsQF.Size = new System.Drawing.Size(88, 17);
+            this.chkIsQF.TabIndex = 28;
+            this.chkIsQF.Tag = "isquickfindfields";
+            this.chkIsQF.Text = "Is Quick Find";
+            this.chkIsQF.UseVisualStyleBackColor = true;
+            this.chkIsQF.CheckedChanged += new System.EventHandler(this.chkIsQF_CheckedChanged);
+            // 
+            // chkOverrideQFLimit
+            // 
+            this.chkOverrideQFLimit.AutoSize = true;
+            this.chkOverrideQFLimit.Location = new System.Drawing.Point(7, 66);
+            this.chkOverrideQFLimit.Name = "chkOverrideQFLimit";
+            this.chkOverrideQFLimit.Size = new System.Drawing.Size(128, 17);
+            this.chkOverrideQFLimit.TabIndex = 29;
+            this.chkOverrideQFLimit.Tag = "overridequickfindrecordlimitenabled";
+            this.chkOverrideQFLimit.Text = "Override Record Limit";
+            this.chkOverrideQFLimit.UseVisualStyleBackColor = true;
+            // 
             // filterControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.chkOverrideQFLimit);
+            this.Controls.Add(this.chkIsQF);
             this.Controls.Add(this.cmbType);
             this.Controls.Add(this.label2);
             this.Name = "filterControl";
-            this.Size = new System.Drawing.Size(257, 57);
+            this.Size = new System.Drawing.Size(257, 95);
+            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -76,5 +105,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         #endregion
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cmbType;
+        private System.Windows.Forms.CheckBox chkIsQF;
+        private System.Windows.Forms.CheckBox chkOverrideQFLimit;
     }
 }
