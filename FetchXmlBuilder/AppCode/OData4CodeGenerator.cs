@@ -150,17 +150,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
             odata.Select.AddRange(ConvertSelect(entity.name, entity.Items, fxb));
             odata.OrderBy.AddRange(ConvertOrder(entity.name, entity.Items, fxb));
-            odata.Filter.AddRange(ConvertFilters(entity.name, entity.Items, fxb));
-            odata.Expand.AddRange(ConvertJoins(entity.name, entity.Items, fxb));
+            odata.Filter.AddRange(ConvertFilters(entity.name, entity.Items, fxb, entity.Items));
+            odata.Expand.AddRange(ConvertJoins(entity.name, entity.Items, fxb, entity.Items));
 
             // Add extra filters to simulate inner joins
             var count = 1;
-            odata.Filter.AddRange(ConvertInnerJoinFilters(entity.name, entity.Items, fxb, "", ref count));
+            odata.Filter.AddRange(ConvertInnerJoinFilters(entity.name, entity.Items, fxb, entity.Items, "", ref count));
 
             return odata;
         }
 
-        private static List<FilterOData> ConvertInnerJoinFilters(string entityName, object[] items, FetchXmlBuilder fxb, string path, ref int count)
+        private static List<FilterOData> ConvertInnerJoinFilters(string entityName, object[] items, FetchXmlBuilder fxb, object[] rootEntityItems, string path, ref int count)
         {
             var filters = new List<FilterOData>();
 
@@ -173,7 +173,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
                 if (!child)
                 {
-                    var childFilter = currentLinkEntity.Items == null ? new List<FilterOData>() : ConvertFilters(currentLinkEntity.name, currentLinkEntity.Items, fxb, propertyName + "/").ToList();
+                    var childFilter = currentLinkEntity.Items == null ? new List<FilterOData>() : ConvertFilters(currentLinkEntity.name, currentLinkEntity.Items, fxb, rootEntityItems, propertyName + "/").ToList();
 
                     if (childFilter.Count == 0)
                     {
@@ -183,7 +183,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
                     if (currentLinkEntity.Items != null)
                     {
-                        childFilter.AddRange(ConvertInnerJoinFilters(currentLinkEntity.name, currentLinkEntity.Items, fxb, path + propertyName + "/", ref count));
+                        childFilter.AddRange(ConvertInnerJoinFilters(currentLinkEntity.name, currentLinkEntity.Items, fxb, rootEntityItems, path + propertyName + "/", ref count));
                     }
 
                     filters.AddRange(childFilter);
@@ -191,7 +191,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 else
                 {
                     var rangeVariable = "o" + (count++);
-                    var childFilter = currentLinkEntity.Items == null ? new List<FilterOData>() : ConvertFilters(currentLinkEntity.name, currentLinkEntity.Items, fxb, $"{rangeVariable}/").ToList();
+                    var childFilter = currentLinkEntity.Items == null ? new List<FilterOData>() : ConvertFilters(currentLinkEntity.name, currentLinkEntity.Items, fxb, rootEntityItems, $"{rangeVariable}/").ToList();
 
                     if (childFilter.Count == 0)
                     {
@@ -201,7 +201,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
                     if (currentLinkEntity.Items != null)
                     {
-                        childFilter.AddRange(ConvertInnerJoinFilters(currentLinkEntity.name, currentLinkEntity.Items, fxb, path + rangeVariable + "/", ref count));
+                        childFilter.AddRange(ConvertInnerJoinFilters(currentLinkEntity.name, currentLinkEntity.Items, fxb, rootEntityItems, path + rangeVariable + "/", ref count));
                     }
 
                     var condition = propertyName + $"/any({rangeVariable}:{String.Join(" and ", childFilter)})";
@@ -212,7 +212,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return filters;
         }
 
-        private static IEnumerable<LinkEntityOData> ConvertJoins(string entityName, object[] items, FetchXmlBuilder fxb)
+        private static IEnumerable<LinkEntityOData> ConvertJoins(string entityName, object[] items, FetchXmlBuilder fxb, object[] rootEntityItems)
         {
             foreach (var linkEntity in items.OfType<FetchLinkEntityType>().Where(l => l.Items != null && l.Items.Any()))
             {
@@ -221,15 +221,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 expand.PropertyName = LinkItemToNavigationProperty(entityName, currentLinkEntity, fxb, out _, out var manyToManyNextLink);
                 currentLinkEntity = manyToManyNextLink ?? currentLinkEntity;
                 expand.Select.AddRange(ConvertSelect(currentLinkEntity.name, currentLinkEntity.Items, fxb));
-
-                if (linkEntity.linktype == "outer")
-                {
-                    // Inner join filters will be added separately at the root entity level - no need to duplicate them here
-                    expand.Filter.AddRange(ConvertFilters(currentLinkEntity.name, currentLinkEntity.Items, fxb));
-                }
+                expand.Filter.AddRange(ConvertFilters(currentLinkEntity.name, currentLinkEntity.Items, fxb, rootEntityItems));
 
                 // Recurse into child joins
-                expand.Expand.AddRange(ConvertJoins(currentLinkEntity.name, currentLinkEntity.Items, fxb));
+                expand.Expand.AddRange(ConvertJoins(currentLinkEntity.name, currentLinkEntity.Items, fxb, rootEntityItems));
 
                 yield return expand;
             }
@@ -263,7 +258,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
         }
 
-        private static IEnumerable<FilterOData> ConvertFilters(string entityName, object[] items, FetchXmlBuilder fxb, string navigationProperty = "")
+        private static IEnumerable<FilterOData> ConvertFilters(string entityName, object[] items, FetchXmlBuilder fxb, object[] rootEntityItems, string navigationProperty = "")
         {
             return items
                 .OfType<filter>()
@@ -271,29 +266,68 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 .Select(f =>
                 {
                     var filterOData = new FilterOData { And = f.type == filterType.and };
-                    filterOData.Conditions.AddRange(ConvertConditions(entityName, f.Items, fxb, navigationProperty));
-                    filterOData.Filters.AddRange(ConvertFilters(entityName, f.Items, fxb, navigationProperty));
+                    filterOData.Conditions.AddRange(ConvertConditions(entityName, f.Items, fxb, rootEntityItems, navigationProperty));
+                    filterOData.Filters.AddRange(ConvertFilters(entityName, f.Items, fxb, rootEntityItems, navigationProperty));
                     return filterOData;
                 });
         }
 
-        private static IEnumerable<string> ConvertConditions(string entityName, object[] items, FetchXmlBuilder fxb, string navigationProperty = "")
+        private static IEnumerable<string> ConvertConditions(string entityName, object[] items, FetchXmlBuilder fxb, object[] rootEntityItems, string navigationProperty = "")
         {
             return items
                 .OfType<condition>()
-                .Select(c => GetCondition(entityName, c, fxb, navigationProperty));
+                .Select(c => GetCondition(entityName, c, fxb, rootEntityItems, navigationProperty));
         }
 
-        private static string GetCondition(string entityName, condition condition, FetchXmlBuilder sender, string navigationProperty = "")
+        private static string GetCondition(string entityName, condition condition, FetchXmlBuilder fxb, object[] rootEntityItems, string navigationProperty = "")
         {
             var result = "";
             if (!string.IsNullOrEmpty(condition.attribute))
             {
                 if (!String.IsNullOrEmpty(condition.entityname))
-                    throw new ApplicationException($"OData queries do not support filtering on link entities. If filtering on the primary key of an N:1 related entity, please add the filter to the link entity itself");
+                {
+                    var linkEntity = FindLinkEntity(entityName, rootEntityItems, fxb, condition.entityname, "", out navigationProperty, out var child);
 
-                GetEntityMetadata(entityName, sender);
-                var attrMeta = sender.GetAttribute(entityName, condition.attribute);
+                    if (linkEntity == null)
+                    {
+                        throw new Exception($"Cannot find filter entity " + condition.entityname);
+                    }
+
+                    if (child)
+                    {
+                        // Filtering a child collection separately has different semantics in OData vs. FetchXML, e.g.:
+                        //
+                        // <fetch top="50" >
+                        //   <entity name="account" >
+                        //     <attribute name="name" />
+                        //     <filter type="or" >
+                        //       <condition attribute="name" operator="eq" value="fxb" />
+                        //       <condition entityname="contact" attribute="firstname" operator="eq" value="jonas" />
+                        //     </filter>
+                        //     <link-entity name="contact" from="parentcustomerid" to="accountid" link-type="inner" >
+                        //       <attribute name="fullname" />
+                        //       <filter>
+                        //         <condition attribute="lastname" operator="eq" value="rapp" />
+                        //       </filter>
+                        //     </link-entity>
+                        //   </entity>
+                        // </fetch>
+                        //
+                        // gives a result only where a contact matches both the firstname and lastname filters, unless the account name is "fxb"
+                        // in which case only the lastname filter needs to match. By comparison, the similar OData query
+                        //
+                        // /accounts?$select=name&$expand=contact_customer_accounts($select=fullname;$filter=lastname eq 'rapp')&$filter=(name eq 'fxb' or contact_customer_accounts/any(o1:(o1/firstname eq 'jonas'))) and (contact_customer_accounts/any(o1:(o1/lastname eq 'rapp')))&$top=50
+                        //
+                        // applies the firstname and lastname filters separately on the full list of contacts, so as long as one contact matches the firstname
+                        // filter it doesn't matter if it is the same record that matches the lastname filter.
+                        throw new Exception("Cannot apply filter to child collection " + navigationProperty);
+                    }
+
+                    entityName = linkEntity.name;
+                }
+
+                GetEntityMetadata(entityName, fxb);
+                var attrMeta = fxb.GetAttribute(entityName, condition.attribute);
                 if (attrMeta == null)
                 {
                     throw new Exception($"No metadata for attribute: {entityName}.{condition.attribute}");
@@ -324,7 +358,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         break;
                     case @operator.like:
                     case @operator.notlike:
-                        result = $"contains({HttpUtility.UrlEncode(navigationProperty + attrMeta.LogicalName)}, {FormatValue(typeof(string), condition.value)})";
+                        var value = condition.value;
+                        var func = "contains";
+
+                        if (value.IndexOf('%') == value.Length - 1)
+                        {
+                            value = value.Substring(0, value.Length - 1);
+                            func = "startswith";
+                        }
+                        else if (value.LastIndexOf('%') == 0)
+                        {
+                            value = value.Substring(1);
+                            func = "endswith";
+                        }
+
+                        result = $"{func}({HttpUtility.UrlEncode(navigationProperty + attrMeta.LogicalName)}, {FormatValue(typeof(string), value)})";
 
                         if (condition.@operator == @operator.notlike)
                         {
@@ -682,6 +730,35 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 }
             }
             return result;
+        }
+
+        private static FetchLinkEntityType FindLinkEntity(string entityName, object[] items, FetchXmlBuilder fxb, string alias, string path, out string navigationProperty, out bool child)
+        {
+            child = false;
+            navigationProperty = path;
+
+            foreach (var linkItem in items.OfType<FetchLinkEntityType>())
+            {
+                var currentLinkItem = linkItem;
+                var propertyName = LinkItemToNavigationProperty(entityName, linkItem, fxb, out child, out var manyToManyNextLink);
+                currentLinkItem = manyToManyNextLink ?? currentLinkItem;
+
+                navigationProperty = path + propertyName + "/";
+
+                if (linkItem.alias == alias || (string.IsNullOrEmpty(linkItem.alias) && linkItem.name == alias))
+                {
+                    return linkItem;
+                }
+
+                var childMatch = FindLinkEntity(linkItem.name, linkItem.Items, fxb, alias, navigationProperty, out navigationProperty, out child);
+
+                if (childMatch != null)
+                {
+                    return childMatch;
+                }
+            }
+
+            return null;
         }
 
         private static string GetPropertyName(AttributeMetadata attr)
