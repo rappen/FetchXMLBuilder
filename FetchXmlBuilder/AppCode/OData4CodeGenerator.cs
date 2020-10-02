@@ -9,83 +9,208 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
     public class OData4CodeGenerator
     {
+        class LinkEntityOData
+        {
+            protected virtual string Separator => ";";
+
+            public string PropertyName { get; set; }
+
+            public List<string> Select { get; } = new List<string>();
+
+            public List<LinkEntityOData> Expand { get; } = new List<LinkEntityOData>();
+
+            public List<FilterOData> Filter { get; } = new List<FilterOData>();
+
+            protected virtual IEnumerable<string> GetParts()
+            {
+                if (Select.Any())
+                    yield return "$select=" + String.Join(",", Select);
+
+                if (Expand.Any())
+                    yield return "$expand=" + String.Join(",", Expand.Select(e => $"{e.PropertyName}({e})"));
+
+                if (Filter.Any())
+                    yield return "$filter=" + String.Join(" and ", Filter);
+            }
+
+            public override string ToString()
+            {
+                return String.Join(Separator, GetParts());
+            }
+        }
+
+        class FilterOData
+        {
+            public bool And { get; set; }
+
+            public List<string> Conditions { get; } = new List<string>();
+
+            public List<FilterOData> Filters { get; } = new List<FilterOData>();
+
+            public override string ToString()
+            {
+                if (Conditions.Count == 0 && Filters.Count == 0)
+                    return null;
+
+                var items = Conditions.Select(c => c.ToString())
+                    .Concat(Filters.Select(f => f.ToString()))
+                    .Where(c => !String.IsNullOrEmpty(c));
+
+                var logicalOperator = And ? " and " : " or ";
+
+                return "(" + String.Join(logicalOperator, items) + ")";
+
+            }
+        }
+
+        class ConditionOData
+        {
+
+        }
+
+        class EntityOData : LinkEntityOData
+        {
+            public int? Top { get; set; }
+
+            public List<OrderOData> OrderBy { get; } = new List<OrderOData>();
+
+            protected override string Separator => "&";
+
+            protected override IEnumerable<string> GetParts()
+            {
+                foreach (var part in base.GetParts())
+                    yield return part;
+
+                if (OrderBy.Any())
+                    yield return "$orderby=" + String.Join(",", OrderBy);
+
+                if (Top != null)
+                    yield return "$top=" + Top;
+            }
+
+            public override string ToString()
+            {
+                var query = base.ToString();
+
+                return "/" + PropertyName + (String.IsNullOrEmpty(query) ? "" : ("?" + query));
+            }
+        }
+
+        class OrderOData
+        {
+            public string PropertyName { get; set; }
+
+            public bool Descending { get; set; }
+
+            public override string ToString()
+            {
+                return PropertyName + (Descending ? " desc" : " asc");
+            }
+        }
+
         public static string GetOData4Query(FetchType fetch, string organizationServiceUrl, FetchXmlBuilder sender)
         {
             if (sender.Service == null)
             {
                 throw new Exception("Must have an active connection to CRM to compose OData query.");
             }
-            var url = organizationServiceUrl;
+
+            var converted = ConvertOData(fetch, sender);
+
+            var url = organizationServiceUrl + converted;
+            return url;
+        }
+
+        private static EntityOData ConvertOData(FetchType fetch, FetchXmlBuilder fxb)
+        {
             var entity = fetch.Items.Where(i => i is FetchEntityType).FirstOrDefault() as FetchEntityType;
+
             if (entity == null)
             {
                 throw new Exception("Fetch must contain entity definition");
             }
-            url += "/" + LogicalToCollectionName(entity.name, sender);
 
-            var query = "";
+            var odata = new EntityOData();
+            odata.PropertyName = LogicalToCollectionName(entity.name, fxb);
+
             if (!string.IsNullOrEmpty(fetch.top))
             {
-                query = AppendQuery(query, "$top", fetch.top);
+                odata.Top = Int32.Parse(fetch.top);
             }
-            if (entity.Items != null)
+
+            if (entity.Items == null)
             {
-                if (fetch.aggregate)
-                {
-                    var aggregate = GetAggregate(entity, sender);
-                    var filter = GetFilter(entity, sender, null);
-
-                    var apply = aggregate;
-                    if (!String.IsNullOrEmpty(filter))
-                        apply = $"filter({filter})/{aggregate}";
-
-                    query = AppendQuery(query, "$apply", apply);
-                }
-                else
-                {
-                    var select = GetSelect(entity, sender);
-                    var order = GetOrder(entity, sender);
-                    var expandFilter = "";
-                    var expand = GetExpand(entity, sender, ref expandFilter);
-                    var filter = GetFilter(entity, sender, expandFilter);
-
-                    query = AppendQuery(query, "$select", select);
-                    query = AppendQuery(query, "$orderby", order);
-                    query = AppendQuery(query, "$expand", expand);
-                    query = AppendQuery(query, "$filter", filter);
-                }
+                return odata;
             }
 
-            if (!string.IsNullOrEmpty(query))
+            if (fetch.aggregate)
             {
-                url += "?" + query;
+                throw new NotImplementedException();
             }
 
-            return url;
+            odata.Select.AddRange(ConvertSelect(entity.name, entity.Items, fxb));
+            odata.OrderBy.AddRange(ConvertOrder(entity.name, entity.Items, fxb));
+            odata.Filter.AddRange(ConvertFilters(entity.name, entity.Items, fxb));
+            odata.Expand.AddRange(ConvertJoins(entity.name, entity.Items, fxb));
+            var count = 1;
+            odata.Filter.AddRange(ConvertInnerJoinFilters(entity.name, entity.Items, fxb, "", ref count));
+
+            return odata;
         }
 
-        private static string AppendQuery(string query, string paramname, string append)
+        private static List<FilterOData> ConvertInnerJoinFilters(string entityName, object[] items, FetchXmlBuilder fxb, string path, ref int count)
         {
-            var result = new StringBuilder(query);
-            if (!string.IsNullOrEmpty(append))
+            var filters = new List<FilterOData>();
+
+            foreach (var linkEntity in items.OfType<FetchLinkEntityType>().Where(l => l.linktype == "inner"))
             {
-                if (!string.IsNullOrEmpty(query))
+                var propertyName = path + LinkItemToNavigationProperty(entityName, linkEntity, fxb, out var child, out _);
+
+                if (!child)
+                    continue;
+
+                var rangeVariable = "o" + (count++);
+                var childFilter = linkEntity.Items == null ? new List<FilterOData>() : ConvertFilters(linkEntity.name, linkEntity.Items, fxb, $"{rangeVariable}/").ToList();
+
+                if (childFilter.Count == 0)
                 {
-                    result.Append("&");
+                    GetEntityMetadata(linkEntity.name, fxb);
+                    childFilter.Add(new FilterOData { Conditions = { $"{rangeVariable}/{fxb.entities[linkEntity.name].PrimaryIdAttribute} ne null" } });
                 }
-                result.Append(paramname + "=" + append);
+
+                if (linkEntity.Items != null)
+                {
+                    childFilter.AddRange(ConvertInnerJoinFilters(linkEntity.name, linkEntity.Items, fxb, path + rangeVariable + "/", ref count));
+                }
+
+                var condition = propertyName + $"/any({rangeVariable}:{String.Join(" and ", childFilter)})";
+                filters.Add(new FilterOData { Conditions = { condition } });
             }
-            return result.ToString();
+
+            return filters;
         }
 
-        private static string GetSelect(FetchEntityType entity, FetchXmlBuilder sender)
+        private static IEnumerable<LinkEntityOData> ConvertJoins(string entityName, object[] items, FetchXmlBuilder fxb)
         {
-            var attributeitems = entity.Items
+            foreach (var linkEntity in items.OfType<FetchLinkEntityType>().Where(l => l.Items != null && l.Items.Any()))
+            {
+                var expand = new LinkEntityOData();
+                expand.PropertyName = LinkItemToNavigationProperty(entityName, linkEntity, fxb, out _, out _);
+                expand.Select.AddRange(ConvertSelect(linkEntity.name, linkEntity.Items, fxb));
+                expand.Filter.AddRange(ConvertFilters(linkEntity.name, linkEntity.Items, fxb));
+                expand.Expand.AddRange(ConvertJoins(linkEntity.name, linkEntity.Items, fxb));
+
+                yield return expand;
+            }
+        }
+
+        private static IEnumerable<string> ConvertSelect(string entityName, object[] items, FetchXmlBuilder fxb)
+        {
+            var attributeitems = items
                 .OfType<FetchAttributeType>()
                 .Where(i => i.name != null);
 
-            var result = GetAttributeNames(entity.name, attributeitems, sender);
-            return string.Join(",", result);
+            return GetAttributeNames(entityName, attributeitems, fxb);
         }
 
         private static IEnumerable<string> GetAttributeNames(string entityName, IEnumerable<FetchAttributeType> attributeitems, FetchXmlBuilder sender)
@@ -107,227 +232,25 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
         }
 
-        private static string GetExpand(FetchEntityType entity, FetchXmlBuilder sender, ref string filterString)
+        private static IEnumerable<FilterOData> ConvertFilters(string entityName, object[] items, FetchXmlBuilder fxb, string navigationProperty = "")
         {
-            var resultList = new List<string>();
-            var linkitems = entity.Items.Where(i => i is FetchLinkEntityType).ToList();
-            if (linkitems.Count > 0)
-            {
-                foreach (FetchLinkEntityType linkitem in linkitems)
+            return items
+                .OfType<filter>()
+                .Where(f => f.Items != null && f.Items.Any())
+                .Select(f =>
                 {
-                    var navigationProperty = LinkItemToNavigationProperty(entity.name, linkitem, sender, out var child, out var manyToManyNextLink);
-
-                    if (linkitem.Items != null)
-                    {
-                        if (!child)
-                        {
-                            if (linkitem.Items.Where(i => i is filter).ToList().Count > 0)
-                            {
-                                foreach (var filter in linkitem.Items.OfType<filter>())
-                                {
-                                    foreach (var condition in filter.Items.OfType<condition>())
-                                    {
-                                        var targetLogicalName = linkitem.name;
-                                        GetEntityMetadata(targetLogicalName, sender);
-                                        if (!String.IsNullOrEmpty(filterString))
-                                            filterString += $" {filter.type} ";
-
-                                        filterString += GetCondition(linkitem.name, condition, sender, navigationProperty + "/");
-                                    }
-                                }
-                            }
-                            if (linkitem.Items.Where(i => i is FetchOrderType).ToList().Count > 0)
-                            {
-                                throw new Exception("OData queries do not support sorting on parent link entities");
-                            }
-                        }
-                    }
-
-                    var currentLinkItem = linkitem;
-                    if (manyToManyNextLink != null)
-                        currentLinkItem = manyToManyNextLink; // For Many to Many relationship, get the link item of the 2nd link instead of the join table
-
-                    var expandedSelect = GetExpandedSelect(currentLinkItem, sender);
-                    var childFilter = child ? currentLinkItem.Items?.OfType<filter>().FirstOrDefault() : null;
-                    var expandedFilter = childFilter == null ? null : GetFilter(currentLinkItem.name, childFilter, sender);
-                    var childOrders = child ? currentLinkItem.Items?.OfType<FetchOrderType>().ToList() : null;
-                    var expandedOrder = childOrders == null ? null : GetOrder(currentLinkItem.name, sender, childOrders);
-
-                    if (String.IsNullOrEmpty(expandedSelect) && String.IsNullOrEmpty(expandedFilter) && String.IsNullOrEmpty(expandedOrder))
-                    {
-                        resultList.Add(navigationProperty);
-                    }
-                    else
-                    {
-                        var options = new List<string>();
-
-                        if (!String.IsNullOrEmpty(expandedSelect))
-                            options.Add(expandedSelect);
-
-                        if (!String.IsNullOrEmpty(expandedFilter))
-                            options.Add("$filter=" + expandedFilter);
-
-                        if (!String.IsNullOrEmpty(expandedOrder))
-                            options.Add("$orderby=" + expandedOrder);
-
-                        resultList.Add(navigationProperty + "(" + String.Join(";", options) + ")");
-                    }
-                }
-            }
-            return string.Join(",", resultList);
+                    var filterOData = new FilterOData { And = f.type == filterType.and };
+                    filterOData.Conditions.AddRange(ConvertConditions(entityName, f.Items, fxb, navigationProperty));
+                    filterOData.Filters.AddRange(ConvertFilters(entityName, f.Items, fxb, navigationProperty));
+                    return filterOData;
+                });
         }
 
-        private static string GetExpandedSelect(FetchLinkEntityType linkitem, FetchXmlBuilder sender, string entityname = "")
+        private static IEnumerable<string> ConvertConditions(string entityName, object[] items, FetchXmlBuilder fxb, string navigationProperty = "")
         {
-            if (linkitem.Items == null)
-                return null;
-
-            var linkentity = linkitem.name;
-            if (linkentity == null)
-                return null;
-
-            var attributeitems = linkitem.Items
-                .OfType<FetchAttributeType>()
-                .Where(i => i.name != null);
-
-            if (linkitem.intersect)
-            {
-                var linkitems = linkitem.Items.Where(i => i is FetchLinkEntityType).ToList();
-                if (linkitems.Count > 1)
-                {
-                    throw new Exception("Invalid M:M-relation definition for OData");
-                }
-                if (linkitems.Count == 1)
-                {
-                    var nextlink = (FetchLinkEntityType)linkitems[0];
-                    linkentity = nextlink.name;
-
-                    if (nextlink.Items == null)
-                        return null;
-
-                    attributeitems = nextlink.Items
-                        .OfType<FetchAttributeType>()
-                        .Where(i => i.name != null);
-                }
-            }
-
-            var resultList = GetAttributeNames(linkentity, attributeitems, sender);
-            var expandedSelect = string.Join(",", resultList);
-            var nestedExpand = GetNestedExpand(linkitem, sender, linkitem.name);
-
-            var options = new List<string>();
-            if (!String.IsNullOrEmpty(expandedSelect))
-                options.Add("$select=" + expandedSelect);
-
-            if (!String.IsNullOrEmpty(nestedExpand))
-                options.Add("$expand=" + nestedExpand);
-
-            return String.Join(";", options);
-        }
-
-        private static string GetNestedExpand(FetchLinkEntityType linkitem, FetchXmlBuilder sender, string entityname)
-        {
-            var resultList = new List<string>();
-            var linkitems = linkitem.Items.Where(i => i is FetchLinkEntityType).ToList();
-            if (linkitem.intersect || linkitems.Count == 0)
-            {
-                return "";
-            }
-            foreach (FetchLinkEntityType linkentityitem in linkitems)
-            {
-                var navigationProperty = LinkItemToNavigationProperty(entityname, linkentityitem, sender, out var child, out var manyToManyNextLink);
-                var expandedSelect = GetExpandedSelect(linkentityitem, sender, linkentityitem.name);
-                if (String.IsNullOrEmpty(expandedSelect))
-                {
-                    resultList.Add(navigationProperty);
-                }
-                else
-                {
-                    resultList.Add(navigationProperty + "(" + expandedSelect + ")");
-                }
-            }
-            return string.Join(",", resultList);
-        }
-
-        private static string GetFilter(FetchEntityType entity, FetchXmlBuilder sender, string expandFilter)
-        {
-            var resultList = new StringBuilder();
-            var filteritems = entity.Items.Where(i => i is filter && ((filter)i).Items != null && ((filter)i).Items.Length > 0).ToList();
-            if (filteritems.Count > 0)
-            {
-                var and = true;
-                foreach (filter filteritem in filteritems)
-                {
-                    var filterText = GetFilter(entity.name, filteritem, sender);
-
-                    if (String.IsNullOrWhiteSpace(filterText))
-                    {
-                        continue;
-                    }
-
-                    if (resultList.Length > 0)
-                    {
-                        resultList.Append(" and ");
-                    }
-
-                    resultList.Append(filterText);
-                    
-                    if (filteritem.type == filterType.or)
-                        and = false;
-                }
-
-                var result = resultList.ToString();
-
-                if (filteritems.Count == 1 && result.StartsWith("(") && result.EndsWith(")"))
-                {
-                    result = result.Substring(1, result.Length - 2);
-                }
-
-                if (!String.IsNullOrEmpty(expandFilter))
-                {
-                    if (!and)
-                        result = "(" + result + ")";
-
-                    result += " and " + expandFilter;
-                }
-                return result;
-            }
-            return expandFilter;
-        }
-
-        private static string GetFilter(string entity, filter filteritem, FetchXmlBuilder sender)
-        {
-            var result = "";
-            if (filteritem.Items == null || filteritem.Items.Length == 0)
-            {
-                return "";
-            }
-            var logical = filteritem.type == filterType.or ? " or " : " and ";
-            if (filteritem.Items.Length > 1)
-            {
-                result = "(";
-            }
-            foreach (var item in filteritem.Items)
-            {
-                if (item is condition)
-                {
-                    result += GetCondition(entity, item as condition, sender);
-                }
-                else if (item is filter)
-                {
-                    result += GetFilter(entity, item as filter, sender);
-                }
-                result += logical;
-            }
-            if (result.EndsWith(logical))
-            {
-                result = result.Substring(0, result.Length - logical.Length);
-            }
-            if (filteritem.Items.Length > 1)
-            {
-                result += ")";
-            }
-            return result;
+            return items
+                .OfType<condition>()
+                .Select(c => GetCondition(entityName, c, fxb, navigationProperty));
         }
 
         private static string GetCondition(string entityName, condition condition, FetchXmlBuilder sender, string navigationProperty = "")
@@ -762,38 +685,32 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return HttpUtility.UrlEncode(Convert.ChangeType(s, type).ToString());
         }
 
-        private static string GetOrder(FetchEntityType entity, FetchXmlBuilder sender)
+        private static IEnumerable<OrderOData> ConvertOrder(string entityName, object[] items, FetchXmlBuilder sender)
         {
-            var orderitems = entity.Items
+            return items
                 .OfType<FetchOrderType>()
-                .Where(i => i.attribute != null);
-            return GetOrder(entity.name, sender, orderitems);
+                .Where(o => o.attribute != null)
+                .Select(o => ConvertOrder(entityName, o, sender));
         }
 
-        private static string GetOrder(string entityName, FetchXmlBuilder sender, IEnumerable<FetchOrderType> orderitems)
+        private static OrderOData ConvertOrder(string entityName, FetchOrderType orderitem, FetchXmlBuilder sender)
         {
-            var results = new List<string>();
+            if (!String.IsNullOrEmpty(orderitem.alias))
+                throw new ApplicationException($"OData queries do not support ordering on link entities. Please remove the sort on {orderitem.alias}.{orderitem.attribute}");
 
-            foreach (FetchOrderType orderitem in orderitems)
+            var attrMetadata = sender.entities[entityName].Attributes.SingleOrDefault(a => a.LogicalName == orderitem.attribute);
+            if (attrMetadata == null)
+                throw new ApplicationException($"No metadata for attribute {entityName}.{orderitem.attribute}");
+
+            var odata = new OrderOData
             {
-                if (!String.IsNullOrEmpty(orderitem.alias))
-                    throw new ApplicationException($"OData queries do not support ordering on link entities. Please remove the sort on {orderitem.alias}.{orderitem.attribute}");
+                PropertyName = GetPropertyName(attrMetadata),
+                Descending = orderitem.descending
+            };
 
-                var attrMetadata = sender.entities[entityName].Attributes.SingleOrDefault(a => a.LogicalName == orderitem.attribute);
-                if (attrMetadata == null)
-                    throw new ApplicationException($"No metadata for attribute {entityName}.{orderitem.attribute}");
-
-                var result = GetPropertyName(attrMetadata);
-                if (orderitem.descending)
-                {
-                    result += " desc";
-                }
-                results.Add(result);
-            }
-
-            return String.Join(",", results);
+            return odata;
         }
-
+        /*
         private static string GetAggregate(FetchEntityType entity, FetchXmlBuilder sender)
         {
             var groups = entity.Items.OfType<FetchAttributeType>()
@@ -844,7 +761,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
             throw new ApplicationException("Unknown aggregate type " + aggregate);
         }
-
+        */
         private static string LogicalToCollectionName(string entity, FetchXmlBuilder sender)
         {
             GetEntityMetadata(entity, sender);
@@ -876,9 +793,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     r.ReferencingEntity == linkitem.name &&
                     r.ReferencingAttribute == linkitem.from))
             {
-                if (linkitem.linktype != "outer")
-                    throw new ApplicationException($"OData queries do not support inner joins on 1:N relationships. Try changing link to {linkitem.name} to an outer join");
-
                 child = true;
                 return relation.ReferencedEntityNavigationPropertyName;
             }
@@ -889,44 +803,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     r.ReferencedEntity == linkitem.name &&
                     r.ReferencedAttribute == linkitem.from))
             {
-                // OData $expand is equivalent to an outer join. Replicate inner join behaviour by adding a not-null filter on primary key
-                // of related record type
-                if (linkitem.linktype != "outer")
-                {
-                    if (linkitem.Items == null)
-                    {
-                        linkitem.Items = new object[0];
-                    }
-                    var filter = linkitem.Items.OfType<filter>().FirstOrDefault(f => f.type == filterType.and);
-                    if (filter == null)
-                    {
-                        filter = new filter
-                        {
-                            type = filterType.and,
-                            Items = new object[0]
-                        };
-                        var items = new List<object>(linkitem.Items);
-                        items.Add(filter);
-                        linkitem.Items = items.ToArray();
-                    }
-                    GetEntityMetadata(linkitem.name, sender);
-                    var linkedEntity = sender.entities[linkitem.name];
-                    var condition = filter.Items.OfType<condition>()
-                        .FirstOrDefault(c => c.attribute == linkedEntity.PrimaryIdAttribute && c.@operator == @operator.notnull);
-
-                    if (condition == null)
-                    {
-                        condition = new condition
-                        {
-                            attribute = linkedEntity.PrimaryIdAttribute,
-                            @operator = @operator.notnull
-                        };
-                        var items = new List<object>(filter.Items);
-                        items.Add(condition);
-                        filter.Items = items.ToArray();
-                    }
-                }
-
                 child = false;
                 return relation.ReferencingEntityNavigationPropertyName;
             }
@@ -943,10 +819,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 if (linkitems.Count == 1)
                 {
                     var nextlink = (FetchLinkEntityType)linkitems[0];
-                    if (nextlink.linktype != "outer")
-                    {
-                        throw new Exception($"OData queries do not support inner joins on N:N relationships. Try changing link to {nextlink.name} to an outer join");
-                    }
                     if (relation.Entity2LogicalName == nextlink.name &&
                         relation.Entity2IntersectAttribute == nextlink.to)
                     {
@@ -969,10 +841,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 if (linkitems.Count == 1)
                 {
                     var nextlink = (FetchLinkEntityType)linkitems[0];
-                    if (nextlink.linktype != "outer")
-                    {
-                        throw new Exception($"OData queries do not support inner joins on N:N relationships. Try changing link to {nextlink.name} to an outer join");
-                    }
                     if (relation.Entity1LogicalName == nextlink.name &&
                         relation.Entity1IntersectAttribute == nextlink.from)
                     {
