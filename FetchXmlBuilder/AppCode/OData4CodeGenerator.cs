@@ -63,21 +63,38 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
         }
 
-        class ConditionOData
-        {
-
-        }
-
         class EntityOData : LinkEntityOData
         {
             public int? Top { get; set; }
 
             public List<OrderOData> OrderBy { get; } = new List<OrderOData>();
 
+            public List<string> Groups { get; } = new List<string>();
+
+            public List<string> Aggregates { get; } = new List<string>();
+
             protected override string Separator => "&";
 
             protected override IEnumerable<string> GetParts()
             {
+                if (Aggregates.Any())
+                {
+                    var aggregate = $"aggregate({String.Join(",", Aggregates)})";
+
+                    if (Groups.Any())
+                    {
+                        aggregate = $"groupby(({String.Join(",", Groups)}),{aggregate})";
+                    }
+
+                    if (Filter.Any())
+                    {
+                        aggregate = $"filter({String.Join(" and ", Filter)})/{aggregate}";
+                    }
+
+                    yield return "$apply=" + aggregate;
+                    yield break;
+                }
+
                 foreach (var part in base.GetParts())
                     yield return part;
 
@@ -145,7 +162,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
             if (fetch.aggregate)
             {
-                throw new NotImplementedException();
+                odata.Groups.AddRange(ConvertGroups(entity.Items));
+                odata.Aggregates.AddRange(ConvertAggregates(entity.Items));
             }
 
             odata.Select.AddRange(ConvertSelect(entity.name, entity.Items, fxb));
@@ -158,6 +176,39 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             odata.Filter.AddRange(ConvertInnerJoinFilters(entity.name, entity.Items, fxb, entity.Items, "", ref count));
 
             return odata;
+        }
+
+        private static IEnumerable<string> ConvertGroups(object[] items)
+        {
+            return items.OfType<FetchAttributeType>()
+                .Where(a => a.groupbySpecified)
+                .Select(a => a.name);
+        }
+
+        private static IEnumerable<string> ConvertAggregates(object[] items)
+        {
+            return items.OfType<FetchAttributeType>()
+                .Where(a => a.aggregateSpecified)
+                .Select(a => a.aggregate == AggregateType.count ? $"$count as {a.alias}" : $"{a.name} with {GetAggregateType(a.aggregate)} as {a.alias}");
+        }
+
+        private static string GetAggregateType(AggregateType aggregate)
+        {
+            switch (aggregate)
+            {
+                case AggregateType.avg:
+                    return "average";
+
+                case AggregateType.countcolumn:
+                    return "countdistinct";
+
+                case AggregateType.max:
+                case AggregateType.min:
+                case AggregateType.sum:
+                    return aggregate.ToString();
+            }
+
+            throw new ApplicationException("Unknown aggregate type " + aggregate);
         }
 
         private static List<FilterOData> ConvertInnerJoinFilters(string entityName, object[] items, FetchXmlBuilder fxb, object[] rootEntityItems, string path, ref int count)
@@ -251,9 +302,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
             foreach (FetchAttributeType attributeitem in attributeitems)
             {
-                if (!String.IsNullOrEmpty(attributeitem.alias))
-                    throw new ApplicationException($"OData queries do not support aliasing columns except for aggregate queries");
-
                 var attrMeta = entityMeta.Attributes.SingleOrDefault(a => a.LogicalName == attributeitem.name);
 
                 if (attrMeta == null)
