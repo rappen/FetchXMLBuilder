@@ -218,10 +218,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 var currentLinkEntity = linkEntity;
                 var expand = new LinkEntityOData();
-                expand.PropertyName = LinkItemToNavigationProperty(entityName, currentLinkEntity, fxb, out _, out var manyToManyNextLink);
+                expand.PropertyName = LinkItemToNavigationProperty(entityName, currentLinkEntity, fxb, out var child, out var manyToManyNextLink);
                 currentLinkEntity = manyToManyNextLink ?? currentLinkEntity;
                 expand.Select.AddRange(ConvertSelect(currentLinkEntity.name, currentLinkEntity.Items, fxb));
-                expand.Filter.AddRange(ConvertFilters(currentLinkEntity.name, currentLinkEntity.Items, fxb, rootEntityItems));
+
+                if (linkEntity.linktype == "outer" || child)
+                {
+                    // Don't need to add filters at this point for single-valued properties in inner joins, they'll be added separately later
+                    expand.Filter.AddRange(ConvertFilters(currentLinkEntity.name, currentLinkEntity.Items, fxb, rootEntityItems));
+                }
 
                 // Recurse into child joins
                 expand.Expand.AddRange(ConvertJoins(currentLinkEntity.name, currentLinkEntity.Items, fxb, rootEntityItems));
