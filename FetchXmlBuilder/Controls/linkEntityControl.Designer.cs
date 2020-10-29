@@ -42,6 +42,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.cmbRelationship = new System.Windows.Forms.ComboBox();
+            this.rbAttrIdOnly = new System.Windows.Forms.RadioButton();
+            this.rbAttrAll = new System.Windows.Forms.RadioButton();
+            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -176,7 +179,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(100, 244);
+            this.checkBox2.Location = new System.Drawing.Point(106, 244);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(56, 17);
             this.checkBox2.TabIndex = 8;
@@ -207,10 +210,35 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbRelationship.SelectedIndexChanged += new System.EventHandler(this.cmbRelationship_SelectedIndexChanged);
             this.cmbRelationship.DropDownClosed += new System.EventHandler(this.cmbRelationship_DropDownClosed);
             // 
+            // rbAttrIdOnly
+            // 
+            this.rbAttrIdOnly.AutoSize = true;
+            this.rbAttrIdOnly.Checked = true;
+            this.rbAttrIdOnly.Location = new System.Drawing.Point(106, 267);
+            this.rbAttrIdOnly.Name = "rbAttrIdOnly";
+            this.rbAttrIdOnly.Size = new System.Drawing.Size(103, 17);
+            this.rbAttrIdOnly.TabIndex = 40;
+            this.rbAttrIdOnly.TabStop = true;
+            this.rbAttrIdOnly.Text = "Id / Lookup only";
+            this.rbAttrIdOnly.UseVisualStyleBackColor = true;
+            // 
+            // rbAttrAll
+            // 
+            this.rbAttrAll.AutoSize = true;
+            this.rbAttrAll.Location = new System.Drawing.Point(7, 267);
+            this.rbAttrAll.Name = "rbAttrAll";
+            this.rbAttrAll.Size = new System.Drawing.Size(82, 17);
+            this.rbAttrAll.TabIndex = 41;
+            this.rbAttrAll.Text = "All attributes";
+            this.rbAttrAll.UseVisualStyleBackColor = true;
+            this.rbAttrAll.CheckedChanged += new System.EventHandler(this.rbAttr_CheckedChanged);
+            // 
             // linkEntityControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.rbAttrAll);
+            this.Controls.Add(this.rbAttrIdOnly);
             this.Controls.Add(this.cmbRelationship);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.checkBox2);
@@ -226,7 +254,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Controls.Add(this.cmbEntity);
             this.Controls.Add(this.label2);
             this.Name = "linkEntityControl";
-            this.Size = new System.Drawing.Size(247, 274);
+            this.Size = new System.Drawing.Size(247, 304);
+            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -247,5 +276,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ComboBox cmbRelationship;
+        private System.Windows.Forms.RadioButton rbAttrIdOnly;
+        private System.Windows.Forms.RadioButton rbAttrAll;
     }
 }
