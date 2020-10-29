@@ -137,31 +137,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (cmbEntity.SelectedItem != null)
             {
                 var linkentity = cmbEntity.SelectedItem.ToString();
-                var linkAttributes = fxb.GetDisplayAttributes(linkentity);
-                foreach (var attribute in linkAttributes)
-                {
-                    if (attribute.IsPrimaryId == true ||
-                        attribute.AttributeType == AttributeTypeCode.Lookup ||
-                        attribute.AttributeType == AttributeTypeCode.Customer ||
-                        attribute.AttributeType == AttributeTypeCode.Owner)
-                    {
-                        cmbFrom.Items.Add(attribute.LogicalName);
-                    }
-                }
+                cmbFrom.Items.AddRange(GetRelevantLinkAttributes(linkentity));
             }
             var parententity = TreeNodeHelper.GetAttributeFromNode(Node.Parent, "name");
-            var parentAttributes = fxb.GetDisplayAttributes(parententity);
-            foreach (var attribute in parentAttributes)
-            {
-                if (attribute.IsPrimaryId == true ||
-                    attribute.AttributeType == AttributeTypeCode.Lookup ||
-                    attribute.AttributeType == AttributeTypeCode.Customer ||
-                    attribute.AttributeType == AttributeTypeCode.Owner)
-                {
-                    cmbTo.Items.Add(attribute.LogicalName);
-                }
-            }
+            cmbTo.Items.AddRange(GetRelevantLinkAttributes(parententity));
             ValidationSuspended = false;
+        }
+
+        private string[] GetRelevantLinkAttributes(string entity)
+        {
+            var linkAttributes = fxb.GetDisplayAttributes(entity);
+            return linkAttributes
+                .Where(a => a.IsPrimaryId == true ||
+                    a.AttributeType == AttributeTypeCode.Uniqueidentifier ||
+                    a.AttributeType == AttributeTypeCode.Lookup ||
+                    a.AttributeType == AttributeTypeCode.Customer ||
+                    a.AttributeType == AttributeTypeCode.Owner)
+                .Select(a => a.LogicalName)
+                .ToArray();
         }
 
         private void cmbRelationship_SelectedIndexChanged(object sender, EventArgs e)
@@ -288,7 +281,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         protected override ControlValidationResult ValidateControl(Control control)
         {
-            if (control == cmbRelationship && string.IsNullOrWhiteSpace(cmbEntity.Text)&& string.IsNullOrWhiteSpace(cmbFrom.Text) && string.IsNullOrWhiteSpace(cmbTo.Text))
+            if (control == cmbRelationship && string.IsNullOrWhiteSpace(cmbEntity.Text) && string.IsNullOrWhiteSpace(cmbFrom.Text) && string.IsNullOrWhiteSpace(cmbTo.Text))
             {
                 return new ControlValidationResult(ControlValidationLevel.Info, "Select a relationship to populate fields below");
             }
