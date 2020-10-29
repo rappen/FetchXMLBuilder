@@ -20,7 +20,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         public linkEntityControl(TreeNode node, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree)
         {
             InitializeComponent();
+            BeginInit();
+            rbAttrIdOnly.Checked = fetchXmlBuilder.settings.LinkEntityIdAttributesOnly;
+            rbAttrAll.Checked = !rbAttrIdOnly.Checked;
             InitializeFXB(null, fetchXmlBuilder, tree, node);
+            EndInit();
+            RefreshAttributes();
         }
 
         protected override void PopulateControls()
@@ -132,6 +137,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void RefreshAttributes()
         {
+            if (!IsInitialized)
+            {
+                return;
+            }
             cmbFrom.Items.Clear();
             cmbTo.Items.Clear();
             if (cmbEntity.SelectedItem != null)
@@ -147,14 +156,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private string[] GetRelevantLinkAttributes(string entity)
         {
             var linkAttributes = fxb.GetDisplayAttributes(entity);
-            return linkAttributes
-                .Where(a => a.IsPrimaryId == true ||
-                    a.AttributeType == AttributeTypeCode.Uniqueidentifier ||
-                    a.AttributeType == AttributeTypeCode.Lookup ||
-                    a.AttributeType == AttributeTypeCode.Customer ||
-                    a.AttributeType == AttributeTypeCode.Owner)
-                .Select(a => a.LogicalName)
-                .ToArray();
+            if (rbAttrIdOnly.Checked)
+            {
+                linkAttributes = linkAttributes
+                    .Where(a => a.IsPrimaryId == true ||
+                        a.AttributeType == AttributeTypeCode.Uniqueidentifier ||
+                        a.AttributeType == AttributeTypeCode.Lookup ||
+                        a.AttributeType == AttributeTypeCode.Customer ||
+                        a.AttributeType == AttributeTypeCode.Owner)
+                    .ToArray();
+            }
+            return linkAttributes.Select(a => a.LogicalName).ToArray();
         }
 
         private void cmbRelationship_SelectedIndexChanged(object sender, EventArgs e)
@@ -339,6 +351,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
 
             return base.ValidateControl(control);
+        }
+
+        private void rbAttr_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!IsInitialized)
+            {
+                return;
+            }
+            if (fxb != null && fxb.settings != null)
+            {
+                fxb.settings.LinkEntityIdAttributesOnly = rbAttrIdOnly.Checked;
+            }
+            RefreshAttributes();
+            Save(false);
         }
     }
 }
