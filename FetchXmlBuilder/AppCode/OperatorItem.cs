@@ -230,8 +230,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case ConditionOperator.EqualUserOrUserTeams:
                 case ConditionOperator.EqualBusinessId:
                 case ConditionOperator.NotEqualBusinessId:
-                case ConditionOperator.EqualUserLanguage:
                     result = AttributeTypeCode.Lookup;
+                    break;
+                case ConditionOperator.EqualUserLanguage:
+                    result = AttributeTypeCode.Integer;
                     break;
                 case ConditionOperator.Yesterday:
                 case ConditionOperator.Today:
@@ -343,6 +345,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 validConditionsList.Add(new OperatorItem(ConditionOperator.GreaterEqual));
                 validConditionsList.Add(new OperatorItem(ConditionOperator.LessThan));
                 validConditionsList.Add(new OperatorItem(ConditionOperator.LessEqual));
+            }
+            if (valueType == AttributeTypeCode.Integer ||
+                valueType == AttributeTypeCode.BigInt ||
+                valueType == AttributeTypeCode.Decimal ||
+                valueType == AttributeTypeCode.Double)
+            {
+                validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserLanguage));
             }
             switch (valueType)
             {
