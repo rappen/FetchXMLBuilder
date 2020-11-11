@@ -28,6 +28,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             chkAppAllowUncustViews.Checked = settings.OpenUncustomizableViews;
             chkUseSQL4CDS.Checked = settings.UseSQL4CDS;
             chkUseLookup.Checked = settings.UseLookup;
+            chkShowHelp.Checked = settings.ShowHelpLinks;
             switch (settings.Results.ResultOutput)
             {
                 case ResultOutput.XML: rbResSerializedXML.Checked = true; break;
@@ -79,6 +80,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             settings.OpenUncustomizableViews = chkAppAllowUncustViews.Checked;
             settings.UseSQL4CDS = chkUseSQL4CDS.Checked;
             settings.UseLookup = chkUseLookup.Checked;
+            settings.ShowHelpLinks = chkShowHelp.Checked;
             settings.XmlColors = propXmlColors.SelectedObject as XmlColors;
             settings.Entity.All = chkEntAll.Checked;
             settings.Entity.Customizable = chkEntCustomizable.Checked;

@@ -10,6 +10,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -861,6 +862,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     working = false;
                 }
             });
+        }
+
+        internal void HelpClick(object sender)
+        {
+            if (sender is Control control && control.Tag is string tag && tag.StartsWith("http"))
+            {
+                Process.Start(tag);
+            }
         }
 
         #endregion Internal Methods

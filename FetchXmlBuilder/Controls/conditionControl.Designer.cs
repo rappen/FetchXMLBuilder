@@ -55,6 +55,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.panValueOf = new System.Windows.Forms.Panel();
             this.cmbValueOf = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panAttribte.SuspendLayout();
             this.panValue.SuspendLayout();
             this.panValueLookup.SuspendLayout();
@@ -62,6 +64,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.panUitype.SuspendLayout();
             this.panGuidSelector.SuspendLayout();
             this.panValueOf.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -244,6 +248,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // panAttribte
             // 
+            this.panAttribte.Controls.Add(this.pictureBox1);
             this.panAttribte.Controls.Add(this.cmbOperator);
             this.panAttribte.Controls.Add(this.label2);
             this.panAttribte.Controls.Add(this.cmbAttribute);
@@ -324,7 +329,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             this.panValueHint.Controls.Add(this.lblValueHint);
             this.panValueHint.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panValueHint.Location = new System.Drawing.Point(0, 225);
+            this.panValueHint.Location = new System.Drawing.Point(0, 265);
             this.panValueHint.Name = "panValueHint";
             this.panValueHint.Size = new System.Drawing.Size(311, 32);
             this.panValueHint.TabIndex = 47;
@@ -343,7 +348,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.panUitype.Controls.Add(this.txtUitype);
             this.panUitype.Controls.Add(this.label3);
             this.panUitype.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panUitype.Location = new System.Drawing.Point(0, 257);
+            this.panUitype.Location = new System.Drawing.Point(0, 297);
             this.panUitype.Name = "panUitype";
             this.panUitype.Size = new System.Drawing.Size(311, 46);
             this.panUitype.TabIndex = 48;
@@ -404,10 +409,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // panValueOf
             // 
+            this.panValueOf.Controls.Add(this.pictureBox3);
             this.panValueOf.Controls.Add(this.cmbValueOf);
             this.panValueOf.Controls.Add(this.label6);
             this.panValueOf.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panValueOf.Location = new System.Drawing.Point(0, 303);
+            this.panValueOf.Location = new System.Drawing.Point(0, 225);
             this.panValueOf.Name = "panValueOf";
             this.panValueOf.Size = new System.Drawing.Size(311, 40);
             this.panValueOf.TabIndex = 50;
@@ -434,6 +440,32 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.label6.Size = new System.Drawing.Size(48, 13);
             this.label6.TabIndex = 31;
             this.label6.Text = "Value Of";
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
+            this.pictureBox3.Location = new System.Drawing.Point(53, 2);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox3.TabIndex = 44;
+            this.pictureBox3.TabStop = false;
+            this.pictureBox3.Tag = "https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/column-c" +
+    "omparison";
+            this.pictureBox3.Click += new System.EventHandler(this.helpIcon_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(37, 2);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox1.TabIndex = 45;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Tag = "https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/use-fetc" +
+    "hxml-left-outer-join-query-records-not-in";
+            this.pictureBox1.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // conditionControl
             // 
@@ -462,6 +494,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.panGuidSelector.PerformLayout();
             this.panValueOf.ResumeLayout(false);
             this.panValueOf.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 
@@ -494,5 +528,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.Panel panValueOf;
         private System.Windows.Forms.ComboBox cmbValueOf;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.PictureBox pictureBox3;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

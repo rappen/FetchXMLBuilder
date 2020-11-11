@@ -5,14 +5,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
     public partial class filterControl : FetchXmlElementControlBase
     {
-        public filterControl() : this(null, null)
+        public filterControl() : this(null, null, null)
         {
         }
 
-        public filterControl(Dictionary<string, string> collection, TreeBuilderControl tree)
+        public filterControl(Dictionary<string, string> collection, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree)
         {
             InitializeComponent();
-            InitializeFXB(collection, null, tree, null);
+            InitializeFXB(collection, fetchXmlBuilder, tree, null);
         }
 
         protected override void PopulateControls()
@@ -33,6 +33,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void chkIsQF_CheckedChanged(object sender, System.EventArgs e)
         {
             EnableQFControls();
+        }
+
+        private void helpIcon_Click(object sender, System.EventArgs e)
+        {
+            fxb.HelpClick(sender);
         }
     }
 }

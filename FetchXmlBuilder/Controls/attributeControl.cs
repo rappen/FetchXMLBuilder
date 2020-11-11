@@ -93,5 +93,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 chkUserTZ.Checked = false;
             }
         }
+
+        private void helpIcon_Click(object sender, EventArgs e)
+        {
+            fxb.HelpClick(sender);
+        }
     }
 }

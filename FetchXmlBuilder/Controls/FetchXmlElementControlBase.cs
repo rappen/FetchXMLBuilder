@@ -75,6 +75,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 BlinkStyle = ErrorBlinkStyle.NeverBlink,
                 Icon = InfoIcon
             };
+            ShowHelpIcon(this, fxb.settings.ShowHelpLinks);
             PopulateControls();
             ControlUtils.FillControls(collec, Controls, this);
             controlsCheckSum = ControlUtils.ControlsChecksum(Controls);
@@ -103,6 +104,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     ValidateControlRecursive(this);
                 }
             }
+        }
+
+        private void ShowHelpIcon(Control control, bool show)
+        {
+            control.Controls.OfType<Control>().ToList().ForEach(c =>
+            {
+                if (c.Tag is string tag && tag.StartsWith("http"))
+                {
+                    c.Visible = show;
+                }
+                ShowHelpIcon(c, show);
+            });
         }
 
         protected virtual void PopulateControls() { }

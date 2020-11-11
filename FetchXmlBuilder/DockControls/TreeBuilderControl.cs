@@ -543,7 +543,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     switch (node.Name)
                     {
                         case "fetch":
-                            ctrl = new fetchControl(collec, this);
+                            ctrl = new fetchControl(collec, fxb, this);
                             break;
 
                         case "entity":
@@ -613,7 +613,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                             break;
 
                         case "filter":
-                            ctrl = new filterControl(collec, this);
+                            ctrl = new filterControl(collec, fxb, this);
                             break;
 
                         case "condition":

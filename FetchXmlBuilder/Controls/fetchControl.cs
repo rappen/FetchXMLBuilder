@@ -7,14 +7,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
     public partial class fetchControl : FetchXmlElementControlBase
     {
-        public fetchControl() : this(null, null)
+        public fetchControl() : this(null, null, null)
         {
         }
 
-        public fetchControl(Dictionary<string, string> collection, TreeBuilderControl tree)
+        public fetchControl(Dictionary<string, string> collection, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree)
         {
             InitializeComponent();
-            InitializeFXB(collection, null, tree, null);
+            InitializeFXB(collection, fetchXmlBuilder, tree, null);
         }
 
         private void textPagingCookie_Leave(object sender, EventArgs e)
@@ -46,6 +46,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
             }
             return base.ValidateControl(control);
+        }
+        private void helpIcon_Click(object sender, EventArgs e)
+        {
+            fxb.HelpClick(sender);
         }
     }
 }

@@ -655,5 +655,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         }
 
         #endregion Private Event Handlers
+
+        private void helpIcon_Click(object sender, EventArgs e)
+        {
+            fxb.HelpClick(sender);
+        }
     }
 }
