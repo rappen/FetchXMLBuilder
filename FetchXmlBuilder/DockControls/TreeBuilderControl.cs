@@ -509,10 +509,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
             else
             {
-                string nodeText = ClickedTag;
-                updateNode = TreeNodeHelper.AddChildNode(tvFetch.SelectedNode, nodeText);
+                updateNode = TreeNodeHelper.AddChildNode(tvFetch.SelectedNode, ClickedTag);
                 RecordHistory("add " + updateNode.Name);
                 HandleNodeSelection(updateNode);
+                if (fxb.settings.AddConditionToFilter && ClickedTag.Equals("filter"))
+                {
+                    HandleNodeMenuClick("condition");
+                    return;
+                }
             }
             if (updateNode != null)
             {

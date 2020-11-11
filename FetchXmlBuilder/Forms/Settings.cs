@@ -26,6 +26,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             chkAppNoSavePrompt.Checked = settings.DoNotPromptToSave;
             chkAppResultsNewWindow.Checked = settings.Results.AlwaysNewWindow;
             chkAppAllowUncustViews.Checked = settings.OpenUncustomizableViews;
+            chkAddConditionToFilter.Checked = settings.AddConditionToFilter;
             chkUseSQL4CDS.Checked = settings.UseSQL4CDS;
             chkUseLookup.Checked = settings.UseLookup;
             chkShowHelp.Checked = settings.ShowHelpLinks;
@@ -78,6 +79,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             settings.Results.ResultOutput = rbResSerializedXML.Checked ? ResultOutput.XML : rbResSerializedJSON.Checked ? ResultOutput.JSON : rbResRaw.Checked ? ResultOutput.Raw : ResultOutput.Grid;
             settings.Results.RetrieveAllPages = chkResAllPages.Checked;
             settings.OpenUncustomizableViews = chkAppAllowUncustViews.Checked;
+            settings.AddConditionToFilter = chkAddConditionToFilter.Checked;
             settings.UseSQL4CDS = chkUseSQL4CDS.Checked;
             settings.UseLookup = chkUseLookup.Checked;
             settings.ShowHelpLinks = chkShowHelp.Checked;

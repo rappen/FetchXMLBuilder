@@ -61,11 +61,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
             this.chkResAllPages = new System.Windows.Forms.CheckBox();
             this.gbAppearance = new System.Windows.Forms.GroupBox();
+            this.chkShowHelp = new System.Windows.Forms.CheckBox();
             this.chkUseLookup = new System.Windows.Forms.CheckBox();
-            this.chkUseSQL4CDS = new System.Windows.Forms.CheckBox();
             this.chkAppAllowUncustViews = new System.Windows.Forms.CheckBox();
             this.chkAppSingle = new System.Windows.Forms.CheckBox();
             this.chkAppFriendly = new System.Windows.Forms.CheckBox();
+            this.chkUseSQL4CDS = new System.Windows.Forms.CheckBox();
             this.chkAppNoSavePrompt = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.llShowWelcome = new System.Windows.Forms.LinkLabel();
@@ -80,7 +81,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.btnResetXmlColors = new System.Windows.Forms.Button();
             this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.gbBehavior = new System.Windows.Forms.GroupBox();
-            this.chkShowHelp = new System.Windows.Forms.CheckBox();
+            this.chkAddConditionToFilter = new System.Windows.Forms.CheckBox();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -103,7 +104,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbEntities.Controls.Add(this.chkEntUnmanaged);
             this.gbEntities.Controls.Add(this.chkEntManaged);
             this.gbEntities.Controls.Add(this.chkEntAll);
-            this.gbEntities.Location = new System.Drawing.Point(12, 259);
+            this.gbEntities.Location = new System.Drawing.Point(12, 274);
             this.gbEntities.Name = "gbEntities";
             this.gbEntities.Size = new System.Drawing.Size(222, 209);
             this.gbEntities.TabIndex = 5;
@@ -242,7 +243,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbAttributes.Controls.Add(this.chkAttUnmanaged);
             this.gbAttributes.Controls.Add(this.chkAttManaged);
             this.gbAttributes.Controls.Add(this.chkAttAll);
-            this.gbAttributes.Location = new System.Drawing.Point(239, 259);
+            this.gbAttributes.Location = new System.Drawing.Point(239, 274);
             this.gbAttributes.Name = "gbAttributes";
             this.gbAttributes.Size = new System.Drawing.Size(222, 209);
             this.gbAttributes.TabIndex = 6;
@@ -374,9 +375,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbResult.Controls.Add(this.rbResRaw);
             this.gbResult.Controls.Add(this.rbResSerializedXML);
             this.gbResult.Controls.Add(this.rbResGrid);
-            this.gbResult.Location = new System.Drawing.Point(12, 143);
+            this.gbResult.Location = new System.Drawing.Point(239, 12);
             this.gbResult.Name = "gbResult";
-            this.gbResult.Size = new System.Drawing.Size(222, 110);
+            this.gbResult.Size = new System.Drawing.Size(222, 105);
             this.gbResult.TabIndex = 3;
             this.gbResult.TabStop = false;
             this.gbResult.Text = "Result view";
@@ -429,7 +430,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.chkAppResultsNewWindow.Location = new System.Drawing.Point(16, 60);
             this.chkAppResultsNewWindow.Name = "chkAppResultsNewWindow";
             this.chkAppResultsNewWindow.Size = new System.Drawing.Size(192, 17);
-            this.chkAppResultsNewWindow.TabIndex = 5;
+            this.chkAppResultsNewWindow.TabIndex = 3;
             this.chkAppResultsNewWindow.Text = "Always open results in new window";
             this.chkAppResultsNewWindow.UseVisualStyleBackColor = true;
             // 
@@ -457,6 +458,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbAppearance.TabStop = false;
             this.gbAppearance.Text = "Appearance";
             // 
+            // chkShowHelp
+            // 
+            this.chkShowHelp.AutoSize = true;
+            this.chkShowHelp.Location = new System.Drawing.Point(16, 100);
+            this.chkShowHelp.Name = "chkShowHelp";
+            this.chkShowHelp.Size = new System.Drawing.Size(100, 17);
+            this.chkShowHelp.TabIndex = 9;
+            this.chkShowHelp.Text = "Show help links";
+            this.chkShowHelp.UseVisualStyleBackColor = true;
+            // 
             // chkUseLookup
             // 
             this.chkUseLookup.AutoSize = true;
@@ -466,16 +477,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.chkUseLookup.TabIndex = 8;
             this.chkUseLookup.Text = "Use Lookup control instead of Guid";
             this.chkUseLookup.UseVisualStyleBackColor = true;
-            // 
-            // chkUseSQL4CDS
-            // 
-            this.chkUseSQL4CDS.AutoSize = true;
-            this.chkUseSQL4CDS.Location = new System.Drawing.Point(16, 80);
-            this.chkUseSQL4CDS.Name = "chkUseSQL4CDS";
-            this.chkUseSQL4CDS.Size = new System.Drawing.Size(197, 17);
-            this.chkUseSQL4CDS.TabIndex = 7;
-            this.chkUseSQL4CDS.Text = "Use SQL 4 CDS for SQL conversion";
-            this.chkUseSQL4CDS.UseVisualStyleBackColor = true;
             // 
             // chkAppAllowUncustViews
             // 
@@ -507,13 +508,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.chkAppFriendly.Text = "Friendly names (CTRL+F)";
             this.chkAppFriendly.UseVisualStyleBackColor = true;
             // 
+            // chkUseSQL4CDS
+            // 
+            this.chkUseSQL4CDS.AutoSize = true;
+            this.chkUseSQL4CDS.Location = new System.Drawing.Point(16, 100);
+            this.chkUseSQL4CDS.Name = "chkUseSQL4CDS";
+            this.chkUseSQL4CDS.Size = new System.Drawing.Size(197, 17);
+            this.chkUseSQL4CDS.TabIndex = 5;
+            this.chkUseSQL4CDS.Text = "Use SQL 4 CDS for SQL conversion";
+            this.chkUseSQL4CDS.UseVisualStyleBackColor = true;
+            // 
             // chkAppNoSavePrompt
             // 
             this.chkAppNoSavePrompt.AutoSize = true;
             this.chkAppNoSavePrompt.Location = new System.Drawing.Point(16, 40);
             this.chkAppNoSavePrompt.Name = "chkAppNoSavePrompt";
             this.chkAppNoSavePrompt.Size = new System.Drawing.Size(159, 17);
-            this.chkAppNoSavePrompt.TabIndex = 4;
+            this.chkAppNoSavePrompt.TabIndex = 2;
             this.chkAppNoSavePrompt.Text = "Do not prompt to save to file";
             this.chkAppNoSavePrompt.UseVisualStyleBackColor = true;
             // 
@@ -524,7 +535,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.panel1.Controls.Add(this.llShowWelcome);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
-            this.panel1.Location = new System.Drawing.Point(12, 612);
+            this.panel1.Location = new System.Drawing.Point(12, 633);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(449, 53);
             this.panel1.TabIndex = 8;
@@ -567,7 +578,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // 
             this.gbDefaultQuery.Controls.Add(this.txtFetch);
             this.gbDefaultQuery.Controls.Add(this.panel2);
-            this.gbDefaultQuery.Location = new System.Drawing.Point(12, 474);
+            this.gbDefaultQuery.Location = new System.Drawing.Point(12, 489);
             this.gbDefaultQuery.Name = "gbDefaultQuery";
             this.gbDefaultQuery.Size = new System.Drawing.Size(451, 129);
             this.gbDefaultQuery.TabIndex = 7;
@@ -632,9 +643,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // 
             this.gbXml.Controls.Add(this.btnResetXmlColors);
             this.gbXml.Controls.Add(this.propXmlColors);
-            this.gbXml.Location = new System.Drawing.Point(240, 123);
+            this.gbXml.Location = new System.Drawing.Point(239, 123);
             this.gbXml.Name = "gbXml";
-            this.gbXml.Size = new System.Drawing.Size(222, 130);
+            this.gbXml.Size = new System.Drawing.Size(222, 145);
             this.gbXml.TabIndex = 4;
             this.gbXml.TabStop = false;
             this.gbXml.Text = "XML color scheme";
@@ -642,7 +653,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // btnResetXmlColors
             // 
             this.btnResetXmlColors.Image = ((System.Drawing.Image)(resources.GetObject("btnResetXmlColors.Image")));
-            this.btnResetXmlColors.Location = new System.Drawing.Point(179, 94);
+            this.btnResetXmlColors.Location = new System.Drawing.Point(177, 114);
             this.btnResetXmlColors.Name = "btnResetXmlColors";
             this.btnResetXmlColors.Size = new System.Drawing.Size(30, 23);
             this.btnResetXmlColors.TabIndex = 8;
@@ -678,26 +689,27 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // 
             // gbBehavior
             // 
+            this.gbBehavior.Controls.Add(this.chkAddConditionToFilter);
             this.gbBehavior.Controls.Add(this.chkResAllPages);
             this.gbBehavior.Controls.Add(this.chkUseSQL4CDS);
             this.gbBehavior.Controls.Add(this.chkAppNoSavePrompt);
             this.gbBehavior.Controls.Add(this.chkAppResultsNewWindow);
-            this.gbBehavior.Location = new System.Drawing.Point(241, 12);
+            this.gbBehavior.Location = new System.Drawing.Point(12, 143);
             this.gbBehavior.Name = "gbBehavior";
-            this.gbBehavior.Size = new System.Drawing.Size(222, 105);
+            this.gbBehavior.Size = new System.Drawing.Size(222, 125);
             this.gbBehavior.TabIndex = 2;
             this.gbBehavior.TabStop = false;
             this.gbBehavior.Text = "Behavior";
             // 
-            // chkShowHelp
+            // chkAddConditionToFilter
             // 
-            this.chkShowHelp.AutoSize = true;
-            this.chkShowHelp.Location = new System.Drawing.Point(16, 100);
-            this.chkShowHelp.Name = "chkShowHelp";
-            this.chkShowHelp.Size = new System.Drawing.Size(100, 17);
-            this.chkShowHelp.TabIndex = 9;
-            this.chkShowHelp.Text = "Show help links";
-            this.chkShowHelp.UseVisualStyleBackColor = true;
+            this.chkAddConditionToFilter.AutoSize = true;
+            this.chkAddConditionToFilter.Location = new System.Drawing.Point(16, 80);
+            this.chkAddConditionToFilter.Name = "chkAddConditionToFilter";
+            this.chkAddConditionToFilter.Size = new System.Drawing.Size(193, 17);
+            this.chkAddConditionToFilter.TabIndex = 4;
+            this.chkAddConditionToFilter.Text = "Add Condition to Filter automatically";
+            this.chkAddConditionToFilter.UseVisualStyleBackColor = true;
             // 
             // Settings
             // 
@@ -706,7 +718,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(475, 675);
+            this.ClientSize = new System.Drawing.Size(475, 696);
             this.Controls.Add(this.gbBehavior);
             this.Controls.Add(this.gbXml);
             this.Controls.Add(this.gbDefaultQuery);
@@ -788,5 +800,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private System.Windows.Forms.Button btnResetXmlColors;
         private System.Windows.Forms.RadioButton rbResSerializedJSON;
         private System.Windows.Forms.CheckBox chkShowHelp;
+        private System.Windows.Forms.CheckBox chkAddConditionToFilter;
     }
 }
