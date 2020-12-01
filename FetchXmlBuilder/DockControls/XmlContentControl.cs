@@ -178,7 +178,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                         "Would you like to submit an issue to FetchXML Builder to be able to handle this?",
                         "Decode FetchXML", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
                     {
-                        System.Diagnostics.Process.Start("https://github.com/rappen/FetchXMLBuilder/issues/new");
+                        FetchXmlBuilder.OpenURL("https://github.com/rappen/FetchXMLBuilder/issues/new");
                     }
                     return;
                 }

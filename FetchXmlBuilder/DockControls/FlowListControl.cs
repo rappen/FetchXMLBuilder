@@ -73,7 +73,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void LinkHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://docs.microsoft.com/en-us/connectors/commondataservice/#list-records");
+            FetchXmlBuilder.OpenURL("https://docs.microsoft.com/en-us/connectors/commondataservice/#list-records");
         }
     }
 }

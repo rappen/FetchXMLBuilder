@@ -41,12 +41,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void llTwitter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://twitter.com/FetchXMLBuilder");
+            FetchXmlBuilder.OpenURL("http://twitter.com/FetchXMLBuilder");
         }
 
         private void llWeb_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://fetchxmlbuilder.com");
+            FetchXmlBuilder.OpenURL("https://fetchxmlbuilder.com");
         }
 
         private void lblContinue_Click(object sender, EventArgs e)
@@ -74,7 +74,7 @@ Jonas", "Anonymous statistics", MessageBoxButtons.OK, MessageBoxIcon.Information
             {
                 url = "https://twitter.com/" + url.Substring(1);
             }
-            System.Diagnostics.Process.Start(url);
+            FetchXmlBuilder.OpenURL(url);
         }
 
         private void cmbVersions_SelectedIndexChanged(object sender, EventArgs e)

@@ -50,7 +50,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             if (linkOData.Links.Count > 0 && linkOData.Links[0].Enabled)
             {
-                System.Diagnostics.Process.Start(linkOData.Links[0].LinkData as string);
+                FetchXmlBuilder.OpenURL(linkOData.Links[0].LinkData as string);
                 fxb.LogUse("ExecuteOData" + version);
             }
             else
@@ -76,7 +76,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             if (e.Button == MouseButtons.Left && e.Link.Enabled)
             {
-                System.Diagnostics.Process.Start(e.Link.LinkData as string);
+                FetchXmlBuilder.OpenURL(e.Link.LinkData as string);
                 fxb.LogUse("ExecuteOData" + version);
             }
         }

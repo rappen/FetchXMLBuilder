@@ -54,17 +54,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://fetchxmlbuilder.com");
+            FetchXmlBuilder.OpenURL("https://fetchxmlbuilder.com");
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://jonasr.app");
+            FetchXmlBuilder.OpenURL("https://jonasr.app");
         }
 
         private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://twitter.com/FetchXMLBuilder");
+            FetchXmlBuilder.OpenURL("http://twitter.com/FetchXMLBuilder");
         }
 
         private void llShowWelcome_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

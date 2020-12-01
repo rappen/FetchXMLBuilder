@@ -650,7 +650,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (!string.IsNullOrEmpty(url))
             {
                 fxb.LogUse("OpenRecord");
-                Process.Start(url);
+                FetchXmlBuilder.OpenURL(url);
             }
         }
 
