@@ -228,6 +228,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
                     if (childFilter.Count == 0)
                     {
+                        if (propertyName.Split('/').Length >= 2)
+                        {
+                            // Filtering on nested link-entities is not currently supported
+                            // See https://github.com/rappen/FetchXMLBuilder/issues/415
+                            throw new Exception($"Cannot include inner join on nested link-entity {propertyName}. Try rearranging your query to have inner joins on first-level link-entities only");
+                        }
+
                         GetEntityMetadata(currentLinkEntity.name, fxb);
                         filters.Add(new FilterOData { Conditions = { $"{propertyName}/{fxb.entities[currentLinkEntity.name].PrimaryIdAttribute} ne null" } });
                     }
@@ -377,6 +384,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
 
                     entityName = linkEntity.name;
+                }
+
+                if (navigationProperty.Split('/').Length >= 3)
+                {
+                    // Filtering on nested link-entities is not currently supported
+                    // See https://github.com/rappen/FetchXMLBuilder/issues/415
+                    throw new Exception($"Cannot filter on nested link-entity {navigationProperty}. Try rearranging your query to have filters in first-level link-entities only");
                 }
 
                 GetEntityMetadata(entityName, fxb);
