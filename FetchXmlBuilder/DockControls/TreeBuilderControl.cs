@@ -70,6 +70,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         #region Internal Methods
 
+        internal bool IsFetchAggregate()
+        {
+            return IsFetchAggregate(tvFetch.Nodes.Cast<TreeNode>().FirstOrDefault());
+        }
+
         internal static bool IsFetchAggregate(TreeNode node)
         {
             var aggregate = false;

@@ -472,6 +472,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsbView.Enabled = enabled;
                     tsbExecute.Enabled = enabled && Service != null;
                     tsbAbort.Visible = settings.Results.RetrieveAllPages;
+                    tsbBDU.Visible = callerArgs?.SourcePlugin != "Bulk Data Updater";
+                    tsbBDU.Enabled = enabled && (dockControlBuilder?.IsFetchAggregate() == false);
                     dockControlBuilder?.EnableControls(enabled);
                     buttonsEnabled = enabled;
                 }
@@ -2322,6 +2324,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             repository.Queries.Clear();
             SaveRepository();
             RebuildRepositoryMenu(null);
+        }
+
+        private void tsbBDU_Click(object sender, EventArgs e)
+        {
+            OnOutgoingMessage(this, new MessageBusEventArgs("Bulk Data Updater", true) { TargetArgument = dockControlBuilder.GetFetchString(true, true) });
         }
 
         #endregion Private Event Handlers
