@@ -19,7 +19,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         {
             varList.Clear();
             var code = new StringBuilder();
-            var qename = GetVarName("QE" + QEx.EntityName);
+            var qename = GetVarName("query");
             code.AppendLine("// Instantiate QueryExpression " + qename);
             code.AppendLine("var " + qename + " = new QueryExpression(\"" + QEx.EntityName + "\");");
             if (QEx.NoLock)
@@ -86,7 +86,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         private static string GetLinkEntity(LinkEntity link, string LineStart)
         {
             var code = new StringBuilder();
-            var linkname = GetVarName(LineStart + "_" + link.LinkToEntityName);
+            var linkname = GetVarName(string.IsNullOrEmpty(link.EntityAlias) ? LineStart + "_" + link.LinkToEntityName : link.EntityAlias);
             code.AppendLine();
             code.AppendLine("// Add link-entity " + linkname);
             var join = link.JoinOperator == JoinOperator.Inner ? "" : ", JoinOperator." + link.JoinOperator.ToString();
