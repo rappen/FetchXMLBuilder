@@ -82,6 +82,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.gbBehavior = new System.Windows.Forms.GroupBox();
             this.chkAddConditionToFilter = new System.Windows.Forms.CheckBox();
+            this.chkShowButtonTexts = new System.Windows.Forms.CheckBox();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -104,7 +105,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbEntities.Controls.Add(this.chkEntUnmanaged);
             this.gbEntities.Controls.Add(this.chkEntManaged);
             this.gbEntities.Controls.Add(this.chkEntAll);
-            this.gbEntities.Location = new System.Drawing.Point(12, 274);
+            this.gbEntities.Location = new System.Drawing.Point(12, 294);
             this.gbEntities.Name = "gbEntities";
             this.gbEntities.Size = new System.Drawing.Size(222, 209);
             this.gbEntities.TabIndex = 5;
@@ -243,7 +244,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbAttributes.Controls.Add(this.chkAttUnmanaged);
             this.gbAttributes.Controls.Add(this.chkAttManaged);
             this.gbAttributes.Controls.Add(this.chkAttAll);
-            this.gbAttributes.Location = new System.Drawing.Point(239, 274);
+            this.gbAttributes.Location = new System.Drawing.Point(239, 294);
             this.gbAttributes.Name = "gbAttributes";
             this.gbAttributes.Size = new System.Drawing.Size(222, 209);
             this.gbAttributes.TabIndex = 6;
@@ -446,6 +447,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // 
             // gbAppearance
             // 
+            this.gbAppearance.Controls.Add(this.chkShowButtonTexts);
             this.gbAppearance.Controls.Add(this.chkShowHelp);
             this.gbAppearance.Controls.Add(this.chkUseLookup);
             this.gbAppearance.Controls.Add(this.chkAppAllowUncustViews);
@@ -453,7 +455,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbAppearance.Controls.Add(this.chkAppFriendly);
             this.gbAppearance.Location = new System.Drawing.Point(12, 12);
             this.gbAppearance.Name = "gbAppearance";
-            this.gbAppearance.Size = new System.Drawing.Size(222, 125);
+            this.gbAppearance.Size = new System.Drawing.Size(222, 145);
             this.gbAppearance.TabIndex = 1;
             this.gbAppearance.TabStop = false;
             this.gbAppearance.Text = "Appearance";
@@ -578,9 +580,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // 
             this.gbDefaultQuery.Controls.Add(this.txtFetch);
             this.gbDefaultQuery.Controls.Add(this.panel2);
-            this.gbDefaultQuery.Location = new System.Drawing.Point(12, 489);
+            this.gbDefaultQuery.Location = new System.Drawing.Point(12, 509);
             this.gbDefaultQuery.Name = "gbDefaultQuery";
-            this.gbDefaultQuery.Size = new System.Drawing.Size(451, 129);
+            this.gbDefaultQuery.Size = new System.Drawing.Size(451, 109);
             this.gbDefaultQuery.TabIndex = 7;
             this.gbDefaultQuery.TabStop = false;
             this.gbDefaultQuery.Text = "Default New Query";
@@ -603,7 +605,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             xmlViewerSettings1.Tag = System.Drawing.Color.Blue;
             xmlViewerSettings1.Value = System.Drawing.Color.Black;
             this.txtFetch.Settings = xmlViewerSettings1;
-            this.txtFetch.Size = new System.Drawing.Size(364, 110);
+            this.txtFetch.Size = new System.Drawing.Size(364, 90);
             this.txtFetch.TabIndex = 4;
             this.txtFetch.Text = "";
             this.txtFetch.Leave += new System.EventHandler(this.txtFetch_Leave);
@@ -615,7 +617,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel2.Location = new System.Drawing.Point(367, 16);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(81, 110);
+            this.panel2.Size = new System.Drawing.Size(81, 90);
             this.panel2.TabIndex = 5;
             // 
             // btnDefaultQuery
@@ -631,7 +633,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // btnFormatQuery
             // 
             this.btnFormatQuery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnFormatQuery.Location = new System.Drawing.Point(3, 84);
+            this.btnFormatQuery.Location = new System.Drawing.Point(3, 64);
             this.btnFormatQuery.Name = "btnFormatQuery";
             this.btnFormatQuery.Size = new System.Drawing.Size(75, 23);
             this.btnFormatQuery.TabIndex = 0;
@@ -694,7 +696,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbBehavior.Controls.Add(this.chkUseSQL4CDS);
             this.gbBehavior.Controls.Add(this.chkAppNoSavePrompt);
             this.gbBehavior.Controls.Add(this.chkAppResultsNewWindow);
-            this.gbBehavior.Location = new System.Drawing.Point(12, 143);
+            this.gbBehavior.Location = new System.Drawing.Point(12, 163);
             this.gbBehavior.Name = "gbBehavior";
             this.gbBehavior.Size = new System.Drawing.Size(222, 125);
             this.gbBehavior.TabIndex = 2;
@@ -710,6 +712,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.chkAddConditionToFilter.TabIndex = 4;
             this.chkAddConditionToFilter.Text = "Add Condition to Filter automatically";
             this.chkAddConditionToFilter.UseVisualStyleBackColor = true;
+            // 
+            // chkShowButtonTexts
+            // 
+            this.chkShowButtonTexts.AutoSize = true;
+            this.chkShowButtonTexts.Location = new System.Drawing.Point(16, 120);
+            this.chkShowButtonTexts.Name = "chkShowButtonTexts";
+            this.chkShowButtonTexts.Size = new System.Drawing.Size(111, 17);
+            this.chkShowButtonTexts.TabIndex = 10;
+            this.chkShowButtonTexts.Text = "Show button texts";
+            this.chkShowButtonTexts.UseVisualStyleBackColor = true;
             // 
             // Settings
             // 
@@ -801,5 +813,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private System.Windows.Forms.RadioButton rbResSerializedJSON;
         private System.Windows.Forms.CheckBox chkShowHelp;
         private System.Windows.Forms.CheckBox chkAddConditionToFilter;
+        private System.Windows.Forms.CheckBox chkShowButtonTexts;
     }
 }

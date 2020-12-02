@@ -31,6 +31,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool UseSQL4CDS { get; set; }
         public bool UseLookup { get; set; } = true;
         public bool ShowHelpLinks { get; set; } = true;
+        public bool ShowButtonTexts { get; set; } = true;
         public bool LinkEntityIdAttributesOnly { get; set; } = true;
         public XmlColors XmlColors { get; set; } = new XmlColors();
     }

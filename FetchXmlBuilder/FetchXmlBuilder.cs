@@ -890,6 +890,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void ApplySettings()
         {
             var connsett = GetConnectionSetting();
+            toolStripMain.Items.OfType<ToolStripItem>().ToList().ForEach(i => i.DisplayStyle = settings.ShowButtonTexts ? ToolStripItemDisplayStyle.ImageAndText : ToolStripItemDisplayStyle.Image);
             if (connsett != null && !string.IsNullOrWhiteSpace(connsett.FetchXML))
             {
                 dockControlBuilder.Init(connsett.FetchXML, "loaded from last session", false);
@@ -2080,6 +2081,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         LogUse("Deny", true);
                     }
                 }
+                ApplySettings();
                 dockControlBuilder.ApplyCurrentSettings();
                 dockControlFetchXml?.ApplyCurrentSettings();
                 EnableControls();
