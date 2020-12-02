@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		FetchXMLBuilder.nuspec = FetchXMLBuilder.nuspec
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FXBTests", "FXBTests\FXBTests.csproj", "{8F32EF58-AC53-49DE-957B-102D78368377}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{9FC7BDF7-321C-4B96-9B70-D75A16BD7685}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FC7BDF7-321C-4B96-9B70-D75A16BD7685}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FC7BDF7-321C-4B96-9B70-D75A16BD7685}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F32EF58-AC53-49DE-957B-102D78368377}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F32EF58-AC53-49DE-957B-102D78368377}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F32EF58-AC53-49DE-957B-102D78368377}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F32EF58-AC53-49DE-957B-102D78368377}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

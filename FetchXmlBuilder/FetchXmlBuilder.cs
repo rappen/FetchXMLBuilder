@@ -874,19 +874,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         internal static void OpenURL(string url)
         {
-            if (url.ToLowerInvariant().Contains("microsoft.com") && !url.ToLowerInvariant().Contains("5002475"))
-            {
-                var param = url.Contains("?") ? "&" : "?";
-                param += "WT.mc_id=BA-MVP-5002475";
-                if (url.Contains("#"))
-                {
-                    url = url.Split('#')[0] + param + "#" + url.Split('#')[1];
-                }
-                else
-                {
-                    url += param;
-                }
-            }
+            url = Utils.ProcessURL(url);
             Process.Start(url);
         }
 
