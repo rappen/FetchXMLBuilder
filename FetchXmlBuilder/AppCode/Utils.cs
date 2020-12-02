@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Specialized;
+using System.Linq;
 using System.Web;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
     public static class Utils
     {
-        private const string DocsAndLearnToken = "WT.mc_id=BA-MVP-5002475";
-        private const string UTMTokens = "utm_source=FXB&utm_medium=XrmToolBox";
+        private static NameValueCollection commonparams = new NameValueCollection { { "utm_source", "FetchXMLBuilder" }, { "utm_medium", "XrmToolBox" } };
+        private static NameValueCollection microsoftparams = new NameValueCollection { { "WT.mc_id", "BA-MVP-5002475" } };
 
         public static string ProcessURL(string url)
         {
@@ -18,10 +20,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             var qry = HttpUtility.ParseQueryString(urib.Query);
             if (urib.Host.ToLowerInvariant().Contains("microsoft.com"))
             {
-                qry["WT.mc_id"] = "BA-MVP-5002475";
+                microsoftparams.AllKeys.ToList().ForEach(k => qry[k] = microsoftparams[k]);
             }
-            qry["utm_source"] = "FetchXMLBuilder";
-            qry["utm_medium"] = "XrmToolBox";
+            commonparams.AllKeys.ToList().ForEach(k => qry[k] = commonparams[k]);
 
             urib.Query = qry.ToString();
             return urib.Uri.ToString();
