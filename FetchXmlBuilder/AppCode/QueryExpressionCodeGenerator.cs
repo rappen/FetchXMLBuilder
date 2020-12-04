@@ -199,6 +199,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 }
                 tokenvalue = tokenvalue.Substring(0, tokenvalue.IndexOf(">>>"));
                 var token = tokenvalue.Split('|')[0];
+                token = GetVarName(token);
                 var value = tokenvalue.Split('|')[1];
                 variables.AppendLine($"var {token} = {value};");
                 code = code.Replace("<<<" + tokenvalue + ">>>", token);
