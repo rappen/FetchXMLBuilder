@@ -130,6 +130,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     if (cond.Values.Count > 0)
                     {
                         values = ", " + GetConditionValues(cond.Values, token);
+
+                        if (cond.CompareColumns)
+                        {
+                            values = ", true" + values;
+                        }
                     }
                     code.AppendLine($"{LineStart}.AddCondition({entity}\"{cond.AttributeName}\", ConditionOperator.{cond.Operator.ToString()}{values});");
                 }
