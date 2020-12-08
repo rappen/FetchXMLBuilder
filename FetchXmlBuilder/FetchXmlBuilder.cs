@@ -18,6 +18,7 @@ using System.Windows.Forms;
 using System.Xml;
 using WeifenLuo.WinFormsUI.Docking;
 using xrmtb.XrmToolBox.Controls;
+using XrmToolBox;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
@@ -67,6 +68,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private readonly Rappen.Helpers.AppInsights ai;
         private QueryRepository repository = new QueryRepository();
         private bool inSql4Cds;
+        private bool bduexists;
 
         #endregion Private Fields
 
@@ -472,7 +474,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsbView.Enabled = enabled;
                     tsbExecute.Enabled = enabled && Service != null;
                     tsbAbort.Visible = settings.Results.RetrieveAllPages;
-                    tsbBDU.Visible = callerArgs?.SourcePlugin != "Bulk Data Updater";
+                    tsbBDU.Visible = bduexists && callerArgs?.SourcePlugin != "Bulk Data Updater";
                     tsbBDU.Enabled = enabled && (dockControlBuilder?.IsFetchAggregate() == false);
                     dockControlBuilder?.EnableControls(enabled);
                     buttonsEnabled = enabled;
@@ -913,6 +915,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private bool CallerWantsResults()
         {
             return callerArgs != null;
+        }
+
+        private void CheckIntegrationTools()
+        {
+            var bduname = tsbBDU.Tag.ToString();
+            bduexists = PluginManagerExtended.Instance.Plugins.Any(p => p.Metadata.Name == bduname);
         }
 
         private void CreateRepoMenuItem(QueryDefinition query)
@@ -1980,6 +1988,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             LoadSetting();
             LogUse("Load");
+            CheckIntegrationTools();
             SetupDockControls();
             ApplySettings();
             RebuildRepositoryMenu(null);
@@ -2278,7 +2287,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             };
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                XmlSerializerHelper.SerializeToFile(repository, sfd.FileName);
+                McTools.Xrm.Connection.XmlSerializerHelper.SerializeToFile(repository, sfd.FileName);
                 MessageBox.Show($"The entire repository has been saved to file\n{sfd.FileName}", "Export repository", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -2297,7 +2306,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     var document = new XmlDocument();
                     document.Load(ofd.FileName);
-                    var repo = (QueryRepository)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(QueryRepository));
+                    var repo = (QueryRepository)McTools.Xrm.Connection.XmlSerializerHelper.Deserialize(document.OuterXml, typeof(QueryRepository));
                     var reponame = Path.ChangeExtension(Path.GetFileName(ofd.FileName), "").Trim('.');
                     if (MessageBox.Show($"Confirm importing {repo.Queries.Count} queries into repository folder \"{reponame}\".", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
                     {

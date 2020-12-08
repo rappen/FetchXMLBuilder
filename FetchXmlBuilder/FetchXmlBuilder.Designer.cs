@@ -82,9 +82,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiResetWindowLayout = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbReturnToCaller = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbBDU = new System.Windows.Forms.ToolStripButton();
             this.tsbOptions = new System.Windows.Forms.ToolStripButton();
             this.tslAbout = new System.Windows.Forms.ToolStripLabel();
-            this.tsbBDU = new System.Windows.Forms.ToolStripButton();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.dockContainer = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.tmLiveUpdate = new System.Windows.Forms.Timer(this.components);
@@ -574,6 +574,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 31);
             // 
+            // tsbBDU
+            // 
+            this.tsbBDU.Image = ((System.Drawing.Image)(resources.GetObject("tsbBDU.Image")));
+            this.tsbBDU.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbBDU.Name = "tsbBDU";
+            this.tsbBDU.Size = new System.Drawing.Size(130, 28);
+            this.tsbBDU.Tag = "Bulk Data Updater";
+            this.tsbBDU.Text = "Bulk Data Updater";
+            this.tsbBDU.ToolTipText = "Open current query in Bulk Data Updater to update the records";
+            this.tsbBDU.Click += new System.EventHandler(this.tsbBDU_Click);
+            // 
             // tsbOptions
             // 
             this.tsbOptions.Image = ((System.Drawing.Image)(resources.GetObject("tsbOptions.Image")));
@@ -589,19 +600,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tslAbout.Image = ((System.Drawing.Image)(resources.GetObject("tslAbout.Image")));
             this.tslAbout.IsLink = true;
             this.tslAbout.Name = "tslAbout";
-            this.tslAbout.Size = new System.Drawing.Size(106, 28);
+            this.tslAbout.Size = new System.Drawing.Size(106, 24);
             this.tslAbout.Text = "by Jonas Rapp";
             this.tslAbout.Click += new System.EventHandler(this.tslAbout_Click);
-            // 
-            // tsbBDU
-            // 
-            this.tsbBDU.Image = ((System.Drawing.Image)(resources.GetObject("tsbBDU.Image")));
-            this.tsbBDU.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbBDU.Name = "tsbBDU";
-            this.tsbBDU.Size = new System.Drawing.Size(130, 28);
-            this.tsbBDU.Text = "Bulk Data Updater";
-            this.tsbBDU.ToolTipText = "Open current query in Bulk Data Updater to update the records";
-            this.tsbBDU.Click += new System.EventHandler(this.tsbBDU_Click);
             // 
             // splitter2
             // 
