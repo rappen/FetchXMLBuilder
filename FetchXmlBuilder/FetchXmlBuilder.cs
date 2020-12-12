@@ -897,11 +897,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return Path.Combine(Paths.SettingsPath, "Cinteros.Xrm.FetchXmlBuilder_[DockPanels].xml");
         }
 
-        private void ApplySettings()
+        private void ApplySettings(bool reloadquery)
         {
             var connsett = GetConnectionSetting();
             toolStripMain.Items.OfType<ToolStripItem>().ToList().ForEach(i => i.DisplayStyle = settings.ShowButtonTexts ? ToolStripItemDisplayStyle.ImageAndText : ToolStripItemDisplayStyle.Image);
-            if (connsett != null && !string.IsNullOrWhiteSpace(connsett.FetchXML))
+            if (reloadquery && connsett != null && !string.IsNullOrWhiteSpace(connsett.FetchXML))
             {
                 dockControlBuilder.Init(connsett.FetchXML, "loaded from last session", false);
             }
@@ -1914,7 +1914,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         LogUse("Deny", true);
                     }
                 }
-                ApplySettings();
+                ApplySettings(false);
                 dockControlBuilder.ApplyCurrentSettings();
                 dockControlFetchXml?.ApplyCurrentSettings();
                 EnableControls();
@@ -2024,7 +2024,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             LogUse("Load");
             CheckIntegrationTools();
             SetupDockControls();
-            ApplySettings();
+            ApplySettings(true);
             RebuildRepositoryMenu(null);
             TreeNodeHelper.AddContextMenu(null, dockControlBuilder);
             EnableControls(true);
