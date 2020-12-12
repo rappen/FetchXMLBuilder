@@ -456,11 +456,6 @@
   <ItemGroup>
     <None Include="ReleaseNotes\ReadMe.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Cinteros.Xrm.FetchXmlBuilder.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>ilmerge.exe /target:library /targetplatform:v4,"C:\Windows\Microsoft.NET\Framework\v4.0.30319" "/out:Rappen.XTB.FXB.dll" "$(TargetFileName)" "Rappen.XmlEditorUtils.dll" "xrmtb.XrmToolBox.Controls.dll"

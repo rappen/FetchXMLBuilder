@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("FetchXML Builder")]
-[assembly: AssemblyDescription("Build queries for Microsoft Common Data Service, Dynamics 365 and the Power Platform. Investigate data. Get code. Empower yourself to achieve more.")]
+[assembly: AssemblyDescription("Build queries for Microsoft Dataverse and the Power Platform. Investigate data. Get code. Empower yourself to achieve more.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Jonas Rapp, Sweden")]
 [assembly: AssemblyProduct("FetchXML Builder")]
