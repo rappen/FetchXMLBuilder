@@ -345,6 +345,7 @@
       <DependentUpon>fetch.xsd</DependentUpon>
     </Compile>
     <Compile Include="AppCode\SQLQueryGenerator.cs" />
+    <Compile Include="XrmToolBoxToolIds.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\commentControl.resx">

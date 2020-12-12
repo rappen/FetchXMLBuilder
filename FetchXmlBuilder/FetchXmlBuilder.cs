@@ -19,13 +19,14 @@ using System.Xml;
 using WeifenLuo.WinFormsUI.Docking;
 using xrmtb.XrmToolBox.Controls;
 using XrmToolBox;
+using XrmToolBox.Constants;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
 
 namespace Cinteros.Xrm.FetchXmlBuilder
 {
-    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin, IDuplicatableTool
+    public partial class FetchXmlBuilder : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin, IDuplicatableTool/*, ISettingsPlugin*/
     {
         private const string aiEndpoint = "https://dc.services.visualstudio.com/v2/track";
         private const string aiKey = "eed73022-2444-45fd-928b-5eebd8fa46a6";    // jonas@rappen.net tenant, XrmToolBox
@@ -345,6 +346,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         public void ShowAboutDialog()
         {
             tslAbout_Click(null, null);
+        }
+
+        public void ShowSettings()
+        {
+            ShowFXBSettings();
         }
 
         public void ApplyState(object state)
@@ -1887,6 +1893,34 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             UpdateLiveXML();
         }
 
+        private void ShowFXBSettings()
+        {
+            var allowStats = settings.LogUsage;
+            var settingDlg = new Settings(this);
+            LogUse("OpenOptions");
+            if (settingDlg.ShowDialog(this) == DialogResult.OK)
+            {
+                LogUse("SaveOptions");
+                settings = settingDlg.GetSettings();
+                views = null;
+                if (allowStats != settings.LogUsage)
+                {
+                    if (settings.LogUsage == true)
+                    {
+                        LogUse("Accept", true);
+                    }
+                    else if (!settings.LogUsage == true)
+                    {
+                        LogUse("Deny", true);
+                    }
+                }
+                ApplySettings();
+                dockControlBuilder.ApplyCurrentSettings();
+                dockControlFetchXml?.ApplyCurrentSettings();
+                EnableControls();
+            }
+        }
+
         private void ShowODataControl(ref ODataControl control, int version)
         {
             LogUse($"Show-OData{version}.0");
@@ -2073,30 +2107,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void tsbOptions_Click(object sender, EventArgs e)
         {
-            var allowStats = settings.LogUsage;
-            var settingDlg = new Settings(this);
-            LogUse("OpenOptions");
-            if (settingDlg.ShowDialog(this) == DialogResult.OK)
-            {
-                LogUse("SaveOptions");
-                settings = settingDlg.GetSettings();
-                views = null;
-                if (allowStats != settings.LogUsage)
-                {
-                    if (settings.LogUsage == true)
-                    {
-                        LogUse("Accept", true);
-                    }
-                    else if (!settings.LogUsage == true)
-                    {
-                        LogUse("Deny", true);
-                    }
-                }
-                ApplySettings();
-                dockControlBuilder.ApplyCurrentSettings();
-                dockControlFetchXml?.ApplyCurrentSettings();
-                EnableControls();
-            }
+            ShowFXBSettings();
         }
 
         private void tsbRedo_Click(object sender, EventArgs e)
@@ -2338,6 +2349,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsbBDU_Click(object sender, EventArgs e)
         {
             OnOutgoingMessage(this, new MessageBusEventArgs("Bulk Data Updater", true) { TargetArgument = dockControlBuilder.GetFetchString(true, true) });
+            //OnOutgoingMessage(this, new MessageBusEventArgs(XrmToolBoxToolIds.BulkDataUpdater.ToString(), true) { TargetArgument = dockControlBuilder.GetFetchString(true, true) });
         }
 
         #endregion Private Event Handlers

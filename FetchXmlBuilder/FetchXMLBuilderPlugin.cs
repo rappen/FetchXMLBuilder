@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
+using XrmToolBox.Constants;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
@@ -18,5 +20,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             return new FetchXmlBuilder();
         }
+
+        //public override Guid GetId() => XrmToolBoxToolIds.FetchXMLBuilder;
     }
 }
