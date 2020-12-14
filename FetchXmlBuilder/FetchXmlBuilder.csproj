@@ -441,6 +441,7 @@
     <EmbeddedResource Include="ReleaseNotes\1.2020.7.rtf" />
     <EmbeddedResource Include="ReleaseNotes\1.2020.9.rtf" />
     <EmbeddedResource Include="ReleaseNotes\1.2020.11.rtf" />
+    <EmbeddedResource Include="ReleaseNotes\1.2020.12.rtf" />
     <None Include="Resources\XSD fetch.cs.cmd" />
     <None Include="XrmToolBox.exe.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

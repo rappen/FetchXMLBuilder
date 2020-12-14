@@ -16,10 +16,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         ExportMetadata("SecondaryFontColor", "#0000FF")]
     public partial class FetchXMLBuilderPlugin : PluginBase
     {
-        public override IXrmToolBoxPluginControl GetControl()
-        {
-            return new FetchXmlBuilder();
-        }
+        public override IXrmToolBoxPluginControl GetControl() => new FetchXmlBuilder();
 
         //public override Guid GetId() => XrmToolBoxToolIds.FetchXMLBuilder;
     }
