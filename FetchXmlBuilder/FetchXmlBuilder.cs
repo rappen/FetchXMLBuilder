@@ -925,8 +925,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void CheckIntegrationTools()
         {
-            var bduname = tsbBDU.Tag.ToString();
-            bduexists = PluginManagerExtended.Instance.Plugins.Any(p => p.Metadata.Name == bduname);
+            bduexists = PluginManagerExtended.Instance.Plugins.Any(p =>
+                p.Metadata.Name == "Bulk Data Updater" && new Version(p.Value.GetVersion()) > new Version(1, 2020, 12, 4));
         }
 
         private void CreateRepoMenuItem(QueryDefinition query)

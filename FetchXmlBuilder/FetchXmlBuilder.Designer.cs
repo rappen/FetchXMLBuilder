@@ -580,7 +580,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbBDU.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbBDU.Name = "tsbBDU";
             this.tsbBDU.Size = new System.Drawing.Size(130, 28);
-            this.tsbBDU.Tag = "Bulk Data Updater";
+            this.tsbBDU.Tag = "";
             this.tsbBDU.Text = "Bulk Data Updater";
             this.tsbBDU.ToolTipText = "Open current query in Bulk Data Updater to update the records";
             this.tsbBDU.Click += new System.EventHandler(this.tsbBDU_Click);
