@@ -95,7 +95,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 if (!string.IsNullOrEmpty(url))
                 {
                     form.LogUse("OpenRecord");
-                    FetchXmlBuilder.OpenURL(url);
+                    Process.Start(url);
                 }
             }
         }
@@ -108,7 +108,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 if (!string.IsNullOrEmpty(url))
                 {
                     form.LogUse("OpenParentRecord");
-                    FetchXmlBuilder.OpenURL(url);
+                    Process.Start(url);
                 }
             }
         }

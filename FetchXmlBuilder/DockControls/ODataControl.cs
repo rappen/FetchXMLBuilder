@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
@@ -50,7 +51,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             if (linkOData.Links.Count > 0 && linkOData.Links[0].Enabled)
             {
-                FetchXmlBuilder.OpenURL(linkOData.Links[0].LinkData as string);
+                Process.Start(linkOData.Links[0].LinkData as string);
                 fxb.LogUse("ExecuteOData" + version);
             }
             else
@@ -76,7 +77,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             if (e.Button == MouseButtons.Left && e.Link.Enabled)
             {
-                FetchXmlBuilder.OpenURL(e.Link.LinkData as string);
+                Process.Start(e.Link.LinkData as string);
                 fxb.LogUse("ExecuteOData" + version);
             }
         }
