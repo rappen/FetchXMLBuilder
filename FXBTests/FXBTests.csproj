@@ -145,7 +145,6 @@
     <Reference Include="XrmToolBox.Extensibility, Version=1.2020.11.42, Culture=neutral, PublicKeyToken=null" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Metadata\Account.cs" />
     <Compile Include="OData4Tests.cs" />
     <Compile Include="QueryExpressionTests.cs" />
     <Compile Include="RetrieveMetadataChangesRequestExecutor.cs" />

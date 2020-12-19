@@ -13,6 +13,7 @@ using McTools.Xrm.Connection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
 
 namespace FXBTests
 {
@@ -34,17 +35,107 @@ namespace FXBTests
             Assert.AreEqual("https://example.crm.dynamics.com/api/data/v9.0/accounts?$select=name", odata);
         }
 
+        [TestMethod]
+        public void LeftOuterJoinParentLink()
+        {
+            var fetch = @"
+                <fetch>
+                    <entity name='account'>
+                        <attribute name='name' />
+                        <link-entity name='contact' from='contactid' to='primarycontactid' link-type='outer'>
+                            <attribute name='firstname' />
+                        </link-entity>
+                    </entity>
+                </fetch>";
+
+            var odata = ConvertFetchToOData(fetch);
+
+            Assert.AreEqual("https://example.crm.dynamics.com/api/data/v9.0/accounts?$select=name&$expand=primarycontactid($select=firstname)", odata);
+        }
+
         private string ConvertFetchToOData(string fetch)
         {
             var context = new XrmFakedContext();
-            context.InitializeMetadata(Assembly.GetExecutingAssembly());
+
+            // FakeXrmEasy doesn't currently implement RetrieveMetadataChangesRequest - implement that here
             context.AddFakeMessageExecutor<RetrieveMetadataChangesRequest>(new RetrieveMetadataChangesRequestExecutor());
 
-            foreach (var entity in context.CreateMetadataQuery())
+            // Add basic metadata
+            var relationships = new[]
             {
-                entity.LogicalCollectionName = entity.LogicalName + "s";
+                new OneToManyRelationshipMetadata
+                {
+                    SchemaName = "account_contacts",
+                    ReferencedEntity = "account",
+                    ReferencedAttribute = "accountid",
+                    ReferencingEntity = "contact",
+                    ReferencingAttribute = "parentcustomerid"
+                },
+                new OneToManyRelationshipMetadata
+                {
+                    SchemaName = "account_primarycontact",
+                    ReferencedEntity = "contact",
+                    ReferencedAttribute = "contactid",
+                    ReferencingEntity = "account",
+                    ReferencingAttribute = "primarycontactid"
+                }
+            };
+
+            var entities = new[]
+            {
+                new EntityMetadata
+                {
+                    LogicalName = "account",
+                    LogicalCollectionName = "accounts"
+                },
+                new EntityMetadata
+                {
+                    LogicalName = "contact",
+                    LogicalCollectionName = "contacts"
+                }
+            };
+
+            var attributes = new Dictionary<string, AttributeMetadata[]>
+            {
+                ["account"] = new AttributeMetadata[]
+                {
+                    new UniqueIdentifierAttributeMetadata
+                    {
+                        LogicalName = "accountid"
+                    },
+                    new StringAttributeMetadata
+                    {
+                        LogicalName = "name"
+                    },
+                    new LookupAttributeMetadata
+                    {
+                        LogicalName = "primarycontactid",
+                        Targets = new[] { "contact" }
+                    }
+                },
+                ["contact"] = new AttributeMetadata[]
+                {
+                    new UniqueIdentifierAttributeMetadata
+                    {
+                        LogicalName = "contactid"
+                    },
+                    new StringAttributeMetadata
+                    {
+                        LogicalName = "firstname"
+                    },
+                    new LookupAttributeMetadata
+                    {
+                        LogicalName = "parentcustomerid",
+                        Targets = new[] { "account", "contact" }
+                    }
+                }
+            };
+
+            SetRelationships(entities, relationships);
+            SetAttributes(entities, attributes);
+
+            foreach (var entity in entities)
                 context.SetEntityMetadata(entity);
-            }
 
             var org = context.GetOrganizationService();
 
@@ -59,6 +150,38 @@ namespace FXBTests
 
                 return OData4CodeGenerator.GetOData4Query(parsed, $"https://example.crm.dynamics.com/api/data/v{con.OrganizationMajorVersion}.{con.OrganizationMinorVersion}", fxb);
             }
+        }
+
+        private void SetAttributes(EntityMetadata[] entities, Dictionary<string, AttributeMetadata[]> attributes)
+        {
+            foreach (var entity in entities)
+            {
+                SetSealedProperty(entity, nameof(EntityMetadata.Attributes), attributes[entity.LogicalName]);
+            }
+        }
+
+        private void SetRelationships(EntityMetadata[] entities, OneToManyRelationshipMetadata[] relationships)
+        {
+            foreach (var relationship in relationships)
+            {
+                relationship.ReferencingEntityNavigationPropertyName = relationship.ReferencingAttribute;
+                relationship.ReferencedEntityNavigationPropertyName = relationship.SchemaName;
+            }
+
+            foreach (var entity in entities)
+            {
+                var oneToMany = relationships.Where(r => r.ReferencedEntity == entity.LogicalName).ToArray();
+                var manyToOne = relationships.Where(r => r.ReferencingEntity == entity.LogicalName).ToArray();
+
+                SetSealedProperty(entity, nameof(EntityMetadata.OneToManyRelationships), oneToMany);
+                SetSealedProperty(entity, nameof(EntityMetadata.ManyToOneRelationships), manyToOne);
+            }
+        }
+
+        private void SetSealedProperty(object target, string name, object value)
+        {
+            var prop = target.GetType().GetProperty(name);
+            prop.SetValue(target, value, null);
         }
     }
 }
