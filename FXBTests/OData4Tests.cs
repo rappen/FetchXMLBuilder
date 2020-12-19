@@ -53,6 +53,24 @@ namespace FXBTests
             Assert.AreEqual("https://example.crm.dynamics.com/api/data/v9.0/accounts?$select=name&$expand=primarycontactid($select=firstname)", odata);
         }
 
+        [TestMethod]
+        public void LeftOuterJoinChildLink()
+        {
+            var fetch = @"
+                <fetch>
+                    <entity name='account'>
+                        <attribute name='name' />
+                        <link-entity name='contact' from='parentcustomerid' to='accountid' link-type='outer'>
+                            <attribute name='firstname' />
+                        </link-entity>
+                    </entity>
+                </fetch>";
+
+            var odata = ConvertFetchToOData(fetch);
+
+            Assert.AreEqual("https://example.crm.dynamics.com/api/data/v9.0/accounts?$select=name&$expand=account_contacts($select=firstname)", odata);
+        }
+
         private string ConvertFetchToOData(string fetch)
         {
             var context = new XrmFakedContext();
