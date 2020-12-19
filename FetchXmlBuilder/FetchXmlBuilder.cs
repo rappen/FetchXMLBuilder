@@ -75,10 +75,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         #region Public Constructors
 
-        public FetchXmlBuilder()
+        public FetchXmlBuilder() : this(false)
+        {
+        }
+
+        public FetchXmlBuilder(bool test)
         {
             InitializeComponent();
-            ai = new Rappen.Helpers.AppInsights(aiEndpoint, aiKey, Assembly.GetExecutingAssembly(), "FetchXML Builder");
+            ai = test ? null : new Rappen.Helpers.AppInsights(aiEndpoint, aiKey, Assembly.GetExecutingAssembly(), "FetchXML Builder");
             var theme = new VS2015LightTheme();
             dockContainer.Theme = theme;
             dockContainer.Theme.Skin.DockPaneStripSkin.TextFont = Font;
@@ -769,7 +773,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         internal void LogUse(string action, bool forceLog = false, double? count = null, double? duration = null)
         {
-            ai.WriteEvent(action, count, duration, HandleAIResult);
+            ai?.WriteEvent(action, count, duration, HandleAIResult);
             if (settings.LogUsage == true || forceLog)
             {
                 LogUsage.DoLog(action);
@@ -852,7 +856,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     string fetchXml = QueryExpressionCodeGenerator.GetFetchXmlFromCSharpQueryExpression(query, Service);
                     var stop = DateTime.Now;
                     var duration = stop - start;
-                    ai.WriteEvent("QueryExpressionToFetchXml", null, duration.TotalMilliseconds, HandleAIResult);
+                    ai?.WriteEvent("QueryExpressionToFetchXml", null, duration.TotalMilliseconds, HandleAIResult);
                     SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Execution time: {duration}"));
                     eventargs.Result = fetchXml;
                 })
@@ -995,7 +999,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     var resp = (ExecuteFetchResponse)Service.Execute(new ExecuteFetchRequest() { FetchXml = fetch });
                     var stop = DateTime.Now;
                     var duration = stop - start;
-                    ai.WriteEvent("ExecuteFetch", null, duration.TotalMilliseconds, HandleAIResult);
+                    ai?.WriteEvent("ExecuteFetch", null, duration.TotalMilliseconds, HandleAIResult);
                     SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Execution time: {duration}"));
                     eventargs.Result = resp.FetchXmlResult;
                 })
@@ -1205,6 +1209,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     var resp = (RetrieveMetadataChangesResponse)Result;
                     if (resp.EntityMetadata.Count == 1)
                     {
+                        if (entities == null)
+                        {
+                            entities = new Dictionary<string, EntityMetadata>();
+                        }
+
                         if (entities.ContainsKey(entityName))
                         {
                             entities[entityName] = resp.EntityMetadata[0];
@@ -1221,7 +1230,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                 }
                 working = false;
-                dockControlBuilder.UpdateCurrentNode();
+                dockControlBuilder?.UpdateCurrentNode();
                 UpdateLiveXML();
             }
             working = false;
@@ -1499,7 +1508,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Retrieved {resultCollection.Entities.Count} records on {pageinfo} in {duration.TotalSeconds:F2} seconds"));
                     }
                     while (!eventargs.Cancel && settings.Results.RetrieveAllPages && (query is QueryExpression || query is FetchExpression) && tmpResult.MoreRecords);
-                    ai.WriteEvent("RetrieveMultiple", resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds, HandleAIResult);
+                    ai?.WriteEvent("RetrieveMultiple", resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds, HandleAIResult);
                     if (settings.Results.ResultOutput == ResultOutput.JSON)
                     {
                         var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented);
