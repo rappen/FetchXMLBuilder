@@ -68,7 +68,7 @@ namespace FXBTests
 
             var odata = ConvertFetchToOData(fetch);
 
-            Assert.AreEqual("https://example.crm.dynamics.com/api/data/v9.0/accounts?$select=name&$expand=account_contacts($select=firstname)", odata);
+            Assert.AreEqual("https://example.crm.dynamics.com/api/data/v9.0/accounts?$select=name&$expand=contact_customer_accounts($select=firstname)", odata);
         }
 
         [TestMethod]
@@ -214,6 +214,27 @@ namespace FXBTests
         }
 
         [TestMethod]
+        public void InnerJoinParentLinkWithComplexFilter()
+        {
+            var fetch = @"
+                <fetch>
+                    <entity name='account'>
+                        <attribute name='name' />
+                        <link-entity name='contact' from='contactid' to='primarycontactid' link-type='inner'>
+                            <attribute name='firstname' />
+                            <filter>
+                                <condition attribute='createdon' operator='on' value='2020-01-01' />
+                            </filter>
+                        </link-entity>
+                    </entity>
+                </fetch>";
+
+            var odata = ConvertFetchToOData(fetch);
+
+            Assert.AreEqual("https://example.crm.dynamics.com/api/data/v9.0/accounts?$select=name&$expand=primarycontactid($select=firstname)&$filter=(primarycontactid/Microsoft.Dynamics.CRM.On(PropertyName='createdon',PropertyValue='2020-01-01'))", odata);
+        }
+
+        [TestMethod]
         public void InnerJoinChildLink()
         {
             var fetch = @"
@@ -228,7 +249,7 @@ namespace FXBTests
 
             var odata = ConvertFetchToOData(fetch);
 
-            Assert.AreEqual("https://example.crm.dynamics.com/api/data/v9.0/accounts?$select=name&$expand=account_contacts($select=firstname)&$filter=(account_contacts/any(o1:(o1/contactid ne null)))", odata);
+            Assert.AreEqual("https://example.crm.dynamics.com/api/data/v9.0/accounts?$select=name&$expand=contact_customer_accounts($select=firstname)&$filter=(contact_customer_accounts/any(o1:(o1/contactid ne null)))", odata);
         }
 
         [TestMethod]
@@ -249,7 +270,67 @@ namespace FXBTests
 
             var odata = ConvertFetchToOData(fetch);
 
-            Assert.AreEqual("https://example.crm.dynamics.com/api/data/v9.0/accounts?$select=name&$expand=account_contacts($select=firstname;$filter=(firstname eq 'Mark'))&$filter=(account_contacts/any(o1:(o1/firstname eq 'Mark')))", odata);
+            Assert.AreEqual("https://example.crm.dynamics.com/api/data/v9.0/accounts?$select=name&$expand=contact_customer_accounts($select=firstname;$filter=(firstname eq 'Mark'))&$filter=(contact_customer_accounts/any(o1:(o1/firstname eq 'Mark')))", odata);
+        }
+
+        [TestMethod]
+        public void InnerJoinChildLinkWithComplexFilter()
+        {
+            var fetch = @"
+                <fetch>
+                    <entity name='account'>
+                        <attribute name='name' />
+                        <link-entity name='contact' from='parentcustomerid' to='accountid' link-type='inner'>
+                            <attribute name='firstname' />
+                            <filter>
+                                <condition attribute='createdon' operator='on' value='2020-01-01' />
+                            </filter>
+                        </link-entity>
+                    </entity>
+                </fetch>";
+
+            var odata = ConvertFetchToOData(fetch);
+
+            Assert.AreEqual("https://example.crm.dynamics.com/api/data/v9.0/accounts?$select=name&$expand=contact_customer_accounts($select=firstname;$filter=(Microsoft.Dynamics.CRM.On(PropertyName='createdon',PropertyValue='2020-01-01')))&$filter=(contact_customer_accounts/any(o1:(o1/Microsoft.Dynamics.CRM.On(PropertyName='createdon',PropertyValue='2020-01-01'))))", odata);
+        }
+
+        [TestMethod]
+        public void FilterPrefix()
+        {
+            var fetch = @"
+                <fetch>
+                    <entity name='account'>
+                        <attribute name='name' />
+                        <filter>
+                            <condition attribute='name' operator='like' value='FXB%' />
+                        </filter>
+                    </entity>
+                </fetch>";
+
+            var odata = ConvertFetchToOData(fetch);
+
+            Assert.AreEqual("https://example.crm.dynamics.com/api/data/v9.0/accounts?$select=name&$filter=(startswith(name, 'FXB'))", odata);
+        }
+
+        [TestMethod]
+        public void InnerJoinChildLinkWithPRefixFilter()
+        {
+            var fetch = @"
+                <fetch>
+                    <entity name='account'>
+                        <attribute name='name' />
+                        <link-entity name='contact' from='parentcustomerid' to='accountid' link-type='inner'>
+                            <attribute name='firstname' />
+                            <filter>
+                                <condition attribute='firstname' operator='like' value='FXB%' />
+                            </filter>
+                        </link-entity>
+                    </entity>
+                </fetch>";
+
+            var odata = ConvertFetchToOData(fetch);
+
+            Assert.AreEqual("https://example.crm.dynamics.com/api/data/v9.0/accounts?$select=name&$expand=contact_customer_accounts($select=firstname;$filter=(startswith(firstname, 'FXB')))&$filter=(contact_customer_accounts/any(o1:(startswith(o1%2ffirstname, 'FXB'))))", odata);
         }
 
         private string ConvertFetchToOData(string fetch)
@@ -264,7 +345,7 @@ namespace FXBTests
             {
                 new OneToManyRelationshipMetadata
                 {
-                    SchemaName = "account_contacts",
+                    SchemaName = "contact_customer_accounts",
                     ReferencedEntity = "account",
                     ReferencedAttribute = "accountid",
                     ReferencingEntity = "contact",
@@ -330,6 +411,10 @@ namespace FXBTests
                     {
                         LogicalName = "parentcustomerid",
                         Targets = new[] { "account", "contact" }
+                    },
+                    new DateTimeAttributeMetadata
+                    {
+                        LogicalName = "createdon"
                     }
                 }
             };
