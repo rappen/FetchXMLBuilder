@@ -313,7 +313,7 @@ namespace FXBTests
         }
 
         [TestMethod]
-        public void InnerJoinChildLinkWithPRefixFilter()
+        public void InnerJoinChildLinkWithPrefixFilter()
         {
             var fetch = @"
                 <fetch>
@@ -331,6 +331,42 @@ namespace FXBTests
             var odata = ConvertFetchToOData(fetch);
 
             Assert.AreEqual("https://example.crm.dynamics.com/api/data/v9.0/accounts?$select=name&$expand=contact_customer_accounts($select=firstname;$filter=(startswith(firstname, 'FXB')))&$filter=(contact_customer_accounts/any(o1:(startswith(o1%2ffirstname, 'FXB'))))", odata);
+        }
+
+        [TestMethod]
+        public void FilterOnEntityName()
+        {
+            var fetch = @"
+                <fetch>
+                    <entity name='connection'>
+                        <attribute name='connectionid' />
+                        <filter>
+                            <condition attribute='record1idobjecttypecode' operator='eq' value='8' />
+                        </filter>
+                    </entity>
+                </fetch>";
+
+            var odata = ConvertFetchToOData(fetch);
+
+            Assert.AreEqual("https://example.crm.dynamics.com/api/data/v9.0/connections?$select=connectionid&$filter=(record1idobjecttypecode eq 8)", odata);
+        }
+
+        [TestMethod]
+        public void FilterOnOptionSet()
+        {
+            var fetch = @"
+                <fetch>
+                    <entity name='connection'>
+                        <attribute name='connectionid' />
+                        <filter>
+                            <condition attribute='record1objecttypecode' operator='eq' value='8' />
+                        </filter>
+                    </entity>
+                </fetch>";
+
+            var odata = ConvertFetchToOData(fetch);
+
+            Assert.AreEqual("https://example.crm.dynamics.com/api/data/v9.0/connections?$select=connectionid&$filter=(record1objecttypecode eq 8)", odata);
         }
 
         private string ConvertFetchToOData(string fetch)
@@ -372,6 +408,11 @@ namespace FXBTests
                 {
                     LogicalName = "contact",
                     LogicalCollectionName = "contacts"
+                },
+                new EntityMetadata
+                {
+                    LogicalName = "connection",
+                    LogicalCollectionName = "connections"
                 }
             };
 
@@ -415,6 +456,21 @@ namespace FXBTests
                     new DateTimeAttributeMetadata
                     {
                         LogicalName = "createdon"
+                    }
+                },
+                ["connection"] = new AttributeMetadata[]
+                {
+                    new UniqueIdentifierAttributeMetadata
+                    {
+                        LogicalName = "connectionid"
+                    },
+                    new EntityNameAttributeMetadata
+                    {
+                        LogicalName = "record1idobjecttypecode"
+                    },
+                    new PicklistAttributeMetadata
+                    {
+                        LogicalName = "record1objecttypecode"
                     }
                 }
             };

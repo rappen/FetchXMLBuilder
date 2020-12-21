@@ -774,6 +774,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         case AttributeTypeCode.State:
                         case AttributeTypeCode.Status:
                         case AttributeTypeCode.Picklist:
+                        case AttributeTypeCode.EntityName:
                             valueType = typeof(int);
                             break;
 
