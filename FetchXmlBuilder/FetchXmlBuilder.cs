@@ -530,6 +530,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 case ResultOutput.Grid:
                 case ResultOutput.XML:
                 case ResultOutput.JSON:
+                case ResultOutput.JSONWebAPI:
                     RetrieveMultiple(fetch);
                     break;
 
@@ -1502,7 +1503,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     ai.WriteEvent("RetrieveMultiple", resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds, HandleAIResult);
                     if (settings.Results.ResultOutput == ResultOutput.JSON)
                     {
-                        var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented);
+                        var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented, JsonFormat.Legacy);
+                        eventargs.Result = json;
+                    }
+                    else if (settings.Results.ResultOutput == ResultOutput.JSONWebAPI)
+                    {
+                        var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented, JsonFormat.WebApi);
                         eventargs.Result = json;
                     }
                     else
@@ -1565,7 +1571,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                                 break;
                         }
                     }
-                    else if (settings.Results.ResultOutput == ResultOutput.JSON && completedargs.Result is string json)
+                    else if ((settings.Results.ResultOutput == ResultOutput.JSON || settings.Results.ResultOutput == ResultOutput.JSONWebAPI) && completedargs.Result is string json)
                     {
                         ShowResultControl(json, ContentType.Serialized_Result_JSON, SaveFormat.JSON, settings.DockStates.FetchResult);
                     }

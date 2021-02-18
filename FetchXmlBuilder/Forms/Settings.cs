@@ -35,6 +35,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             {
                 case ResultOutput.XML: rbResSerializedXML.Checked = true; break;
                 case ResultOutput.JSON: rbResSerializedJSON.Checked = true; break;
+                case ResultOutput.JSONWebAPI: rbResSerializedJSONWebAPI.Checked = true; break;
                 case ResultOutput.Raw: rbResRaw.Checked = true; break;
                 default: rbResGrid.Checked = true; break;
             }
@@ -77,7 +78,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             settings.QueryOptions.NewQueryTemplate = txtFetch.Text;
             settings.DoNotPromptToSave = chkAppNoSavePrompt.Checked;
             settings.Results.AlwaysNewWindow = chkAppResultsNewWindow.Checked;
-            settings.Results.ResultOutput = rbResSerializedXML.Checked ? ResultOutput.XML : rbResSerializedJSON.Checked ? ResultOutput.JSON : rbResRaw.Checked ? ResultOutput.Raw : ResultOutput.Grid;
+            settings.Results.ResultOutput = rbResSerializedXML.Checked ? ResultOutput.XML : rbResSerializedJSON.Checked ? ResultOutput.JSON : rbResRaw.Checked ? ResultOutput.Raw : rbResSerializedJSONWebAPI.Checked ? ResultOutput.JSONWebAPI : ResultOutput.Grid;
             settings.Results.RetrieveAllPages = chkResAllPages.Checked;
             settings.OpenUncustomizableViews = chkAppAllowUncustViews.Checked;
             settings.AddConditionToFilter = chkAddConditionToFilter.Checked;

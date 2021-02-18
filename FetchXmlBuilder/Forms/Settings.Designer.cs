@@ -61,6 +61,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
             this.chkResAllPages = new System.Windows.Forms.CheckBox();
             this.gbAppearance = new System.Windows.Forms.GroupBox();
+            this.chkShowButtonTexts = new System.Windows.Forms.CheckBox();
             this.chkShowHelp = new System.Windows.Forms.CheckBox();
             this.chkUseLookup = new System.Windows.Forms.CheckBox();
             this.chkAppAllowUncustViews = new System.Windows.Forms.CheckBox();
@@ -82,7 +83,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.gbBehavior = new System.Windows.Forms.GroupBox();
             this.chkAddConditionToFilter = new System.Windows.Forms.CheckBox();
-            this.chkShowButtonTexts = new System.Windows.Forms.CheckBox();
+            this.rbResSerializedJSONWebAPI = new System.Windows.Forms.RadioButton();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -372,13 +373,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // 
             // gbResult
             // 
+            this.gbResult.Controls.Add(this.rbResSerializedJSONWebAPI);
             this.gbResult.Controls.Add(this.rbResSerializedJSON);
             this.gbResult.Controls.Add(this.rbResRaw);
             this.gbResult.Controls.Add(this.rbResSerializedXML);
             this.gbResult.Controls.Add(this.rbResGrid);
             this.gbResult.Location = new System.Drawing.Point(239, 12);
             this.gbResult.Name = "gbResult";
-            this.gbResult.Size = new System.Drawing.Size(222, 105);
+            this.gbResult.Size = new System.Drawing.Size(222, 125);
             this.gbResult.TabIndex = 3;
             this.gbResult.TabStop = false;
             this.gbResult.Text = "Result view";
@@ -386,17 +388,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // rbResSerializedJSON
             // 
             this.rbResSerializedJSON.AutoSize = true;
-            this.rbResSerializedJSON.Location = new System.Drawing.Point(15, 60);
+            this.rbResSerializedJSON.Location = new System.Drawing.Point(12, 59);
             this.rbResSerializedJSON.Name = "rbResSerializedJSON";
-            this.rbResSerializedJSON.Size = new System.Drawing.Size(101, 17);
+            this.rbResSerializedJSON.Size = new System.Drawing.Size(180, 17);
             this.rbResSerializedJSON.TabIndex = 3;
-            this.rbResSerializedJSON.Text = "Serialized JSON";
+            this.rbResSerializedJSON.Text = "Serialized JSON - Legacy Format";
             this.rbResSerializedJSON.UseVisualStyleBackColor = true;
             // 
             // rbResRaw
             // 
             this.rbResRaw.AutoSize = true;
-            this.rbResRaw.Location = new System.Drawing.Point(16, 80);
+            this.rbResRaw.Location = new System.Drawing.Point(12, 99);
             this.rbResRaw.Name = "rbResRaw";
             this.rbResRaw.Size = new System.Drawing.Size(102, 17);
             this.rbResRaw.TabIndex = 4;
@@ -406,7 +408,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // rbResSerializedXML
             // 
             this.rbResSerializedXML.AutoSize = true;
-            this.rbResSerializedXML.Location = new System.Drawing.Point(16, 40);
+            this.rbResSerializedXML.Location = new System.Drawing.Point(12, 39);
             this.rbResSerializedXML.Name = "rbResSerializedXML";
             this.rbResSerializedXML.Size = new System.Drawing.Size(95, 17);
             this.rbResSerializedXML.TabIndex = 2;
@@ -417,7 +419,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // 
             this.rbResGrid.AutoSize = true;
             this.rbResGrid.Checked = true;
-            this.rbResGrid.Location = new System.Drawing.Point(16, 20);
+            this.rbResGrid.Location = new System.Drawing.Point(12, 19);
             this.rbResGrid.Name = "rbResGrid";
             this.rbResGrid.Size = new System.Drawing.Size(48, 17);
             this.rbResGrid.TabIndex = 1;
@@ -459,6 +461,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbAppearance.TabIndex = 1;
             this.gbAppearance.TabStop = false;
             this.gbAppearance.Text = "Appearance";
+            // 
+            // chkShowButtonTexts
+            // 
+            this.chkShowButtonTexts.AutoSize = true;
+            this.chkShowButtonTexts.Location = new System.Drawing.Point(16, 120);
+            this.chkShowButtonTexts.Name = "chkShowButtonTexts";
+            this.chkShowButtonTexts.Size = new System.Drawing.Size(111, 17);
+            this.chkShowButtonTexts.TabIndex = 10;
+            this.chkShowButtonTexts.Text = "Show button texts";
+            this.chkShowButtonTexts.UseVisualStyleBackColor = true;
             // 
             // chkShowHelp
             // 
@@ -645,7 +657,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // 
             this.gbXml.Controls.Add(this.btnResetXmlColors);
             this.gbXml.Controls.Add(this.propXmlColors);
-            this.gbXml.Location = new System.Drawing.Point(239, 123);
+            this.gbXml.Location = new System.Drawing.Point(240, 143);
             this.gbXml.Name = "gbXml";
             this.gbXml.Size = new System.Drawing.Size(222, 145);
             this.gbXml.TabIndex = 4;
@@ -713,15 +725,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.chkAddConditionToFilter.Text = "Add Condition to Filter automatically";
             this.chkAddConditionToFilter.UseVisualStyleBackColor = true;
             // 
-            // chkShowButtonTexts
+            // rbResSerializedJSONWebAPI
             // 
-            this.chkShowButtonTexts.AutoSize = true;
-            this.chkShowButtonTexts.Location = new System.Drawing.Point(16, 120);
-            this.chkShowButtonTexts.Name = "chkShowButtonTexts";
-            this.chkShowButtonTexts.Size = new System.Drawing.Size(111, 17);
-            this.chkShowButtonTexts.TabIndex = 10;
-            this.chkShowButtonTexts.Text = "Show button texts";
-            this.chkShowButtonTexts.UseVisualStyleBackColor = true;
+            this.rbResSerializedJSONWebAPI.AutoSize = true;
+            this.rbResSerializedJSONWebAPI.Location = new System.Drawing.Point(12, 79);
+            this.rbResSerializedJSONWebAPI.Name = "rbResSerializedJSONWebAPI";
+            this.rbResSerializedJSONWebAPI.Size = new System.Drawing.Size(188, 17);
+            this.rbResSerializedJSONWebAPI.TabIndex = 5;
+            this.rbResSerializedJSONWebAPI.Text = "Serialized JSON - Web API Format";
+            this.rbResSerializedJSONWebAPI.UseVisualStyleBackColor = true;
             // 
             // Settings
             // 
@@ -814,5 +826,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private System.Windows.Forms.CheckBox chkShowHelp;
         private System.Windows.Forms.CheckBox chkAddConditionToFilter;
         private System.Windows.Forms.CheckBox chkShowButtonTexts;
+        private System.Windows.Forms.RadioButton rbResSerializedJSONWebAPI;
     }
 }
