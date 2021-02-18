@@ -214,6 +214,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         Grid = 0,
         XML = 1,
         JSON = 2,
-        Raw = 3
+        Raw = 3,
+        JSONWebAPI = 4
     }
 }
