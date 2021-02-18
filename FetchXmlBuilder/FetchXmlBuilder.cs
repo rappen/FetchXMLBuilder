@@ -2,6 +2,7 @@
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Cinteros.Xrm.FetchXmlBuilder.Forms;
 using Cinteros.Xrm.XmlEditorUtils;
+using MarkMpn.FetchXmlToWebAPI;
 using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
@@ -616,12 +617,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     throw new Exception("Must have an active connection to CRM to compose OData query.");
                 }
-                FetchType fetch = dockControlBuilder.GetFetchType();
                 var odata = string.Empty;
                 switch (version)
                 {
                     case 2:
-                        odata = ODataCodeGenerator.GetODataQuery(fetch, ConnectionDetail.OrganizationDataServiceUrl, this);
+                        odata = ODataCodeGenerator.GetODataQuery(dockControlBuilder.GetFetchType(), ConnectionDetail.OrganizationDataServiceUrl, this);
                         break;
                     case 4:
                         // Find correct WebAPI base url
@@ -629,7 +629,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         if (!baseUrl.EndsWith("/"))
                             baseUrl += "/";
                         var url = new Uri(new Uri(baseUrl), $"api/data/v{ConnectionDetail.OrganizationMajorVersion}.{ConnectionDetail.OrganizationMinorVersion}");
-                        odata = OData4CodeGenerator.GetOData4Query(fetch, url.ToString(), this);
+                        var converter = new FetchXmlToWebAPIConverter(new WebAPIMetadataProvider(this), url.ToString());
+                        odata = converter.ConvertFetchXmlToWebAPI(dockControlBuilder.GetFetchString(false, false));
                         break;
                 }
                 return odata;
