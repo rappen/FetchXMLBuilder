@@ -193,7 +193,6 @@
     <Compile Include="AppCode\FXBSettings.cs" />
     <Compile Include="AppCode\JavascriptCodeGenerator.cs" />
     <Compile Include="AppCode\LogUsage.cs" />
-    <Compile Include="AppCode\OData4CodeGenerator.cs" />
     <Compile Include="AppCode\ODataCodeGenerator.cs" />
     <Compile Include="AppCode\OptionsetItem.cs" />
     <Compile Include="AppCode\QueryInfo.cs" />
@@ -345,6 +344,7 @@
       <DependentUpon>fetch.xsd</DependentUpon>
     </Compile>
     <Compile Include="AppCode\SQLQueryGenerator.cs" />
+    <Compile Include="WebAPIMetadataProvider.cs" />
     <Compile Include="XrmToolBoxToolIds.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -457,6 +457,7 @@
   <ItemGroup>
     <None Include="ReleaseNotes\ReadMe.txt" />
   </ItemGroup>
+  <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>ilmerge.exe /target:library /targetplatform:v4,"C:\Windows\Microsoft.NET\Framework\v4.0.30319" "/out:Rappen.XTB.FXB.dll" "$(TargetFileName)" "Rappen.XmlEditorUtils.dll" "xrmtb.XrmToolBox.Controls.dll"
