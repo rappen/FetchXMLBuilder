@@ -1,0 +1,3 @@
+[submodule "MarkMpn.FetchXmlToWebAPI"]
+	path = MarkMpn.FetchXmlToWebAPI
+	url = https://github.com/MarkMpn/MarkMpn.FetchXmlToWebAPI.git
