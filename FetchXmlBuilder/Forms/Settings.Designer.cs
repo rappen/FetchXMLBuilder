@@ -54,6 +54,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.chkAttManaged = new System.Windows.Forms.CheckBox();
             this.chkAttAll = new System.Windows.Forms.CheckBox();
             this.gbResult = new System.Windows.Forms.GroupBox();
+            this.rbResSerializedJSONWebAPI = new System.Windows.Forms.RadioButton();
             this.rbResSerializedJSON = new System.Windows.Forms.RadioButton();
             this.rbResRaw = new System.Windows.Forms.RadioButton();
             this.rbResSerializedXML = new System.Windows.Forms.RadioButton();
@@ -80,10 +81,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.btnFormatQuery = new System.Windows.Forms.Button();
             this.gbXml = new System.Windows.Forms.GroupBox();
             this.btnResetXmlColors = new System.Windows.Forms.Button();
-            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.gbBehavior = new System.Windows.Forms.GroupBox();
             this.chkAddConditionToFilter = new System.Windows.Forms.CheckBox();
-            this.rbResSerializedJSONWebAPI = new System.Windows.Forms.RadioButton();
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -385,14 +385,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbResult.TabStop = false;
             this.gbResult.Text = "Result view";
             // 
+            // rbResSerializedJSONWebAPI
+            // 
+            this.rbResSerializedJSONWebAPI.AutoSize = true;
+            this.rbResSerializedJSONWebAPI.Location = new System.Drawing.Point(12, 79);
+            this.rbResSerializedJSONWebAPI.Name = "rbResSerializedJSONWebAPI";
+            this.rbResSerializedJSONWebAPI.Size = new System.Drawing.Size(140, 17);
+            this.rbResSerializedJSONWebAPI.TabIndex = 5;
+            this.rbResSerializedJSONWebAPI.Text = "JSON - Web API Format";
+            this.rbResSerializedJSONWebAPI.UseVisualStyleBackColor = true;
+            // 
             // rbResSerializedJSON
             // 
             this.rbResSerializedJSON.AutoSize = true;
             this.rbResSerializedJSON.Location = new System.Drawing.Point(12, 59);
             this.rbResSerializedJSON.Name = "rbResSerializedJSON";
-            this.rbResSerializedJSON.Size = new System.Drawing.Size(180, 17);
+            this.rbResSerializedJSON.Size = new System.Drawing.Size(157, 17);
             this.rbResSerializedJSON.TabIndex = 3;
-            this.rbResSerializedJSON.Text = "Serialized JSON - Legacy Format";
+            this.rbResSerializedJSON.Text = "JSON - Custom detail format";
             this.rbResSerializedJSON.UseVisualStyleBackColor = true;
             // 
             // rbResRaw
@@ -410,9 +420,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.rbResSerializedXML.AutoSize = true;
             this.rbResSerializedXML.Location = new System.Drawing.Point(12, 39);
             this.rbResSerializedXML.Name = "rbResSerializedXML";
-            this.rbResSerializedXML.Size = new System.Drawing.Size(95, 17);
+            this.rbResSerializedXML.Size = new System.Drawing.Size(151, 17);
             this.rbResSerializedXML.TabIndex = 2;
-            this.rbResSerializedXML.Text = "Serialized XML";
+            this.rbResSerializedXML.Text = "XML - Custom detail format";
             this.rbResSerializedXML.UseVisualStyleBackColor = true;
             // 
             // rbResGrid
@@ -674,6 +684,30 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.btnResetXmlColors.UseVisualStyleBackColor = true;
             this.btnResetXmlColors.Click += new System.EventHandler(this.btnResetXmlColors_Click);
             // 
+            // gbBehavior
+            // 
+            this.gbBehavior.Controls.Add(this.chkAddConditionToFilter);
+            this.gbBehavior.Controls.Add(this.chkResAllPages);
+            this.gbBehavior.Controls.Add(this.chkUseSQL4CDS);
+            this.gbBehavior.Controls.Add(this.chkAppNoSavePrompt);
+            this.gbBehavior.Controls.Add(this.chkAppResultsNewWindow);
+            this.gbBehavior.Location = new System.Drawing.Point(12, 163);
+            this.gbBehavior.Name = "gbBehavior";
+            this.gbBehavior.Size = new System.Drawing.Size(222, 125);
+            this.gbBehavior.TabIndex = 2;
+            this.gbBehavior.TabStop = false;
+            this.gbBehavior.Text = "Behavior";
+            // 
+            // chkAddConditionToFilter
+            // 
+            this.chkAddConditionToFilter.AutoSize = true;
+            this.chkAddConditionToFilter.Location = new System.Drawing.Point(16, 80);
+            this.chkAddConditionToFilter.Name = "chkAddConditionToFilter";
+            this.chkAddConditionToFilter.Size = new System.Drawing.Size(193, 17);
+            this.chkAddConditionToFilter.TabIndex = 4;
+            this.chkAddConditionToFilter.Text = "Add Condition to Filter automatically";
+            this.chkAddConditionToFilter.UseVisualStyleBackColor = true;
+            // 
             // propXmlColors
             // 
             this.propXmlColors.CanShowVisualStyleGlyphs = false;
@@ -700,40 +734,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.propXmlColors.ToolbarVisible = false;
             this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
             this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
-            // 
-            // gbBehavior
-            // 
-            this.gbBehavior.Controls.Add(this.chkAddConditionToFilter);
-            this.gbBehavior.Controls.Add(this.chkResAllPages);
-            this.gbBehavior.Controls.Add(this.chkUseSQL4CDS);
-            this.gbBehavior.Controls.Add(this.chkAppNoSavePrompt);
-            this.gbBehavior.Controls.Add(this.chkAppResultsNewWindow);
-            this.gbBehavior.Location = new System.Drawing.Point(12, 163);
-            this.gbBehavior.Name = "gbBehavior";
-            this.gbBehavior.Size = new System.Drawing.Size(222, 125);
-            this.gbBehavior.TabIndex = 2;
-            this.gbBehavior.TabStop = false;
-            this.gbBehavior.Text = "Behavior";
-            // 
-            // chkAddConditionToFilter
-            // 
-            this.chkAddConditionToFilter.AutoSize = true;
-            this.chkAddConditionToFilter.Location = new System.Drawing.Point(16, 80);
-            this.chkAddConditionToFilter.Name = "chkAddConditionToFilter";
-            this.chkAddConditionToFilter.Size = new System.Drawing.Size(193, 17);
-            this.chkAddConditionToFilter.TabIndex = 4;
-            this.chkAddConditionToFilter.Text = "Add Condition to Filter automatically";
-            this.chkAddConditionToFilter.UseVisualStyleBackColor = true;
-            // 
-            // rbResSerializedJSONWebAPI
-            // 
-            this.rbResSerializedJSONWebAPI.AutoSize = true;
-            this.rbResSerializedJSONWebAPI.Location = new System.Drawing.Point(12, 79);
-            this.rbResSerializedJSONWebAPI.Name = "rbResSerializedJSONWebAPI";
-            this.rbResSerializedJSONWebAPI.Size = new System.Drawing.Size(188, 17);
-            this.rbResSerializedJSONWebAPI.TabIndex = 5;
-            this.rbResSerializedJSONWebAPI.Text = "Serialized JSON - Web API Format";
-            this.rbResSerializedJSONWebAPI.UseVisualStyleBackColor = true;
             // 
             // Settings
             // 
