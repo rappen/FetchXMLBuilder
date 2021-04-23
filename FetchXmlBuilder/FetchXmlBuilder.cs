@@ -788,13 +788,26 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         internal bool NeedToLoadEntity(string entityName)
         {
-            return
+            var needed =
                 !string.IsNullOrEmpty(entityName) &&
                 !entityShitList.Contains(entityName) &&
                 Service != null &&
                 (entities == null ||
                  !entities.ContainsKey(entityName) ||
                  entities[entityName].Attributes == null);
+
+            if (needed && ConnectionDetail.MetadataCache != null)
+            {
+                var entity = ConnectionDetail.MetadataCache.SingleOrDefault(e => e.LogicalName == entityName);
+
+                if (entity != null)
+                {
+                    entities[entityName] = entity;
+                    needed = false;
+                }
+            }
+
+            return needed;
         }
 
         internal void UpdateLiveXML(bool preventxmlupdate = false)
