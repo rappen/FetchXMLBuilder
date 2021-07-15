@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            xrmtb.XrmToolBox.Controls.XMLViewerSettings xmlViewerSettings1 = new xrmtb.XrmToolBox.Controls.XMLViewerSettings();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectMLDialog));
             this.panel1 = new System.Windows.Forms.Panel();
             this.cmbML = new System.Windows.Forms.ComboBox();
@@ -40,7 +39,7 @@
             this.panCancel = new System.Windows.Forms.Panel();
             this.button2 = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.txtFetch = new xrmtb.XrmToolBox.Controls.XMLViewer();
+            this.txtFetch = new ScintillaNET.Scintilla();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panOk.SuspendLayout();
@@ -152,20 +151,11 @@
             // txtFetch
             // 
             this.txtFetch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtFetch.Enabled = false;
             this.txtFetch.Location = new System.Drawing.Point(0, 0);
             this.txtFetch.Name = "txtFetch";
-            this.txtFetch.ReadOnly = true;
-            xmlViewerSettings1.AttributeKey = System.Drawing.Color.Red;
-            xmlViewerSettings1.AttributeValue = System.Drawing.Color.Blue;
-            xmlViewerSettings1.Comment = System.Drawing.Color.Empty;
-            xmlViewerSettings1.Element = System.Drawing.Color.DarkRed;
-            xmlViewerSettings1.QuoteCharacter = '\"';
-            xmlViewerSettings1.Tag = System.Drawing.Color.Blue;
-            xmlViewerSettings1.Value = System.Drawing.Color.Black;
-            this.txtFetch.Settings = xmlViewerSettings1;
             this.txtFetch.Size = new System.Drawing.Size(566, 338);
-            this.txtFetch.TabIndex = 3;
-            this.txtFetch.Text = "";
+            this.txtFetch.TabIndex = 0;
             // 
             // SelectMLDialog
             // 
@@ -201,8 +191,7 @@
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Panel panCancel;
         private System.Windows.Forms.Button button2;
-        internal xrmtb.XrmToolBox.Controls.XMLViewer txtFetch;
         private System.Windows.Forms.Button btnRefresh;
-
+        private ScintillaNET.Scintilla txtFetch;
     }
 }

@@ -15,7 +15,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             InitializeComponent();
             Caller = caller;
-            caller.settings.XmlColors.ApplyToControl(txtFetch);
+            txtFetch.ConfigureForXml(caller.settings);
             PopulateForm();
         }
 
@@ -67,8 +67,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             if (cmbML.SelectedItem is ViewItem)
             {
-                txtFetch.Text = ((ViewItem)cmbML.SelectedItem).GetFetch();
-                txtFetch.Process();
+                txtFetch.FormatXML(((ViewItem)cmbML.SelectedItem).GetFetch(), Caller.settings);
                 btnOk.Enabled = true;
             }
             else

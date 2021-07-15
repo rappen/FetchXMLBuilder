@@ -30,7 +30,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            xrmtb.XrmToolBox.Controls.XMLViewerSettings xmlViewerSettings1 = new xrmtb.XrmToolBox.Controls.XMLViewerSettings();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             Cinteros.Xrm.FetchXmlBuilder.AppCode.XmlColors xmlColors1 = new Cinteros.Xrm.FetchXmlBuilder.AppCode.XmlColors();
             this.gbEntities = new System.Windows.Forms.GroupBox();
@@ -75,15 +74,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.gbDefaultQuery = new System.Windows.Forms.GroupBox();
-            this.txtFetch = new xrmtb.XrmToolBox.Controls.XMLViewer();
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnDefaultQuery = new System.Windows.Forms.Button();
             this.btnFormatQuery = new System.Windows.Forms.Button();
             this.gbXml = new System.Windows.Forms.GroupBox();
             this.btnResetXmlColors = new System.Windows.Forms.Button();
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.gbBehavior = new System.Windows.Forms.GroupBox();
             this.chkAddConditionToFilter = new System.Windows.Forms.CheckBox();
-            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
+            this.txtFetch = new ScintillaNET.Scintilla();
             this.gbEntities.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbResult.SuspendLayout();
@@ -609,29 +608,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbDefaultQuery.TabStop = false;
             this.gbDefaultQuery.Text = "Default New Query";
             // 
-            // txtFetch
-            // 
-            this.txtFetch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtFetch.CurrentParseError = null;
-            this.txtFetch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtFetch.FormatAsYouType = true;
-            this.txtFetch.Location = new System.Drawing.Point(3, 16);
-            this.txtFetch.Name = "txtFetch";
-            xmlViewerSettings1.AttributeKey = System.Drawing.Color.Red;
-            xmlViewerSettings1.AttributeValue = System.Drawing.Color.Blue;
-            xmlViewerSettings1.Comment = System.Drawing.Color.Empty;
-            xmlViewerSettings1.Element = System.Drawing.Color.DarkRed;
-            xmlViewerSettings1.FontName = "Consolas";
-            xmlViewerSettings1.FontSize = 9F;
-            xmlViewerSettings1.QuoteCharacter = '\"';
-            xmlViewerSettings1.Tag = System.Drawing.Color.Blue;
-            xmlViewerSettings1.Value = System.Drawing.Color.Black;
-            this.txtFetch.Settings = xmlViewerSettings1;
-            this.txtFetch.Size = new System.Drawing.Size(364, 90);
-            this.txtFetch.TabIndex = 4;
-            this.txtFetch.Text = "";
-            this.txtFetch.Leave += new System.EventHandler(this.txtFetch_Leave);
-            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.btnDefaultQuery);
@@ -684,30 +660,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.btnResetXmlColors.UseVisualStyleBackColor = true;
             this.btnResetXmlColors.Click += new System.EventHandler(this.btnResetXmlColors_Click);
             // 
-            // gbBehavior
-            // 
-            this.gbBehavior.Controls.Add(this.chkAddConditionToFilter);
-            this.gbBehavior.Controls.Add(this.chkResAllPages);
-            this.gbBehavior.Controls.Add(this.chkUseSQL4CDS);
-            this.gbBehavior.Controls.Add(this.chkAppNoSavePrompt);
-            this.gbBehavior.Controls.Add(this.chkAppResultsNewWindow);
-            this.gbBehavior.Location = new System.Drawing.Point(12, 163);
-            this.gbBehavior.Name = "gbBehavior";
-            this.gbBehavior.Size = new System.Drawing.Size(222, 125);
-            this.gbBehavior.TabIndex = 2;
-            this.gbBehavior.TabStop = false;
-            this.gbBehavior.Text = "Behavior";
-            // 
-            // chkAddConditionToFilter
-            // 
-            this.chkAddConditionToFilter.AutoSize = true;
-            this.chkAddConditionToFilter.Location = new System.Drawing.Point(16, 80);
-            this.chkAddConditionToFilter.Name = "chkAddConditionToFilter";
-            this.chkAddConditionToFilter.Size = new System.Drawing.Size(193, 17);
-            this.chkAddConditionToFilter.TabIndex = 4;
-            this.chkAddConditionToFilter.Text = "Add Condition to Filter automatically";
-            this.chkAddConditionToFilter.UseVisualStyleBackColor = true;
-            // 
             // propXmlColors
             // 
             this.propXmlColors.CanShowVisualStyleGlyphs = false;
@@ -734,6 +686,38 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.propXmlColors.ToolbarVisible = false;
             this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
             this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
+            // 
+            // gbBehavior
+            // 
+            this.gbBehavior.Controls.Add(this.chkAddConditionToFilter);
+            this.gbBehavior.Controls.Add(this.chkResAllPages);
+            this.gbBehavior.Controls.Add(this.chkUseSQL4CDS);
+            this.gbBehavior.Controls.Add(this.chkAppNoSavePrompt);
+            this.gbBehavior.Controls.Add(this.chkAppResultsNewWindow);
+            this.gbBehavior.Location = new System.Drawing.Point(12, 163);
+            this.gbBehavior.Name = "gbBehavior";
+            this.gbBehavior.Size = new System.Drawing.Size(222, 125);
+            this.gbBehavior.TabIndex = 2;
+            this.gbBehavior.TabStop = false;
+            this.gbBehavior.Text = "Behavior";
+            // 
+            // chkAddConditionToFilter
+            // 
+            this.chkAddConditionToFilter.AutoSize = true;
+            this.chkAddConditionToFilter.Location = new System.Drawing.Point(16, 80);
+            this.chkAddConditionToFilter.Name = "chkAddConditionToFilter";
+            this.chkAddConditionToFilter.Size = new System.Drawing.Size(193, 17);
+            this.chkAddConditionToFilter.TabIndex = 4;
+            this.chkAddConditionToFilter.Text = "Add Condition to Filter automatically";
+            this.chkAddConditionToFilter.UseVisualStyleBackColor = true;
+            // 
+            // txtFetch
+            // 
+            this.txtFetch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtFetch.Location = new System.Drawing.Point(3, 16);
+            this.txtFetch.Name = "txtFetch";
+            this.txtFetch.Size = new System.Drawing.Size(364, 90);
+            this.txtFetch.TabIndex = 6;
             // 
             // Settings
             // 
@@ -812,7 +796,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private System.Windows.Forms.LinkLabel llShowWelcome;
         private System.Windows.Forms.CheckBox chkAppAllowUncustViews;
         private System.Windows.Forms.GroupBox gbDefaultQuery;
-        internal xrmtb.XrmToolBox.Controls.XMLViewer txtFetch;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btnFormatQuery;
         private System.Windows.Forms.Button btnDefaultQuery;
@@ -827,5 +810,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private System.Windows.Forms.CheckBox chkAddConditionToFilter;
         private System.Windows.Forms.CheckBox chkShowButtonTexts;
         private System.Windows.Forms.RadioButton rbResSerializedJSONWebAPI;
+        private ScintillaNET.Scintilla txtFetch;
     }
 }
