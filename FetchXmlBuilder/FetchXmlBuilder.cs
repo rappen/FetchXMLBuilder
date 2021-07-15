@@ -788,26 +788,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         internal bool NeedToLoadEntity(string entityName)
         {
-            var needed =
+            return
                 !string.IsNullOrEmpty(entityName) &&
                 !entityShitList.Contains(entityName) &&
                 Service != null &&
                 (entities == null ||
                  !entities.ContainsKey(entityName) ||
                  entities[entityName].Attributes == null);
-
-            if (needed && ConnectionDetail.MetadataCache != null)
-            {
-                var entity = ConnectionDetail.MetadataCache.SingleOrDefault(e => e.LogicalName == entityName);
-
-                if (entity != null)
-                {
-                    entities[entityName] = entity;
-                    needed = false;
-                }
-            }
-
-            return needed;
         }
 
         internal void UpdateLiveXML(bool preventxmlupdate = false)
@@ -1179,6 +1166,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 (eventargs) =>
                 {
                     EnableControls(false);
+
+                    if (ConnectionDetail.MetadataCacheLoader != null)
+                        ConnectionDetail.MetadataCacheLoader.ConfigureAwait(false).GetAwaiter().GetResult();
+
                     eventargs.Result = Service.LoadEntities();
                 })
             {
@@ -1190,7 +1181,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     else
                     {
-                        if (completedargs.Result is RetrieveMetadataChangesResponse)
+                        if (ConnectionDetail.MetadataCache != null)
+                        {
+                            entities = ConnectionDetail.MetadataCache.ToDictionary(e => e.LogicalName);
+                        }
+                        else if (completedargs.Result is RetrieveMetadataChangesResponse)
                         {
                             entities = new Dictionary<string, EntityMetadata>();
                             foreach (var entity in ((RetrieveMetadataChangesResponse)completedargs.Result).EntityMetadata)
@@ -1202,6 +1197,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     UpdateLiveXML();
                     working = false;
                     EnableControls(true);
+                    dockControlBuilder.ApplyCurrentSettings();
                 }
             });
         }
