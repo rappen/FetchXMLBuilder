@@ -1168,7 +1168,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     EnableControls(false);
 
                     if (ConnectionDetail.MetadataCacheLoader != null)
-                        ConnectionDetail.MetadataCacheLoader.ConfigureAwait(false).GetAwaiter().GetResult();
+                    {
+                        try
+                        {
+                            ConnectionDetail.MetadataCacheLoader.ConfigureAwait(false).GetAwaiter().GetResult();
+                            return;
+                        }
+                        catch
+                        {
+                            // Error loading cache, use fallback
+                        }
+                    }
 
                     eventargs.Result = Service.LoadEntities();
                 })
