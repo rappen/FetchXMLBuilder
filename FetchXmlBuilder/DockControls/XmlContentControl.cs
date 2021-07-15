@@ -25,7 +25,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             InitializeComponent();
             this.PrepareGroupBoxExpanders();
             fxb = caller;
-            ApplyCurrentSettings();
             if (contentType == ContentType.FetchXML)
             {
                 txtXML.KeyUp += fxb.LiveXML_KeyUp;
@@ -64,6 +63,32 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             panParseQE.Visible = allowparse;
             panSQL4CDS.Visible = allowsql;
             panSQL4CDSInfo.Visible = allowsql;
+
+            switch (contentType)
+            {
+                case ContentType.FetchXML:
+                case ContentType.FetchXML_Result:
+                case ContentType.Serialized_Result_XML:
+                    txtXML.ConfigureForXml(fxb.settings);
+                    break;
+
+                case ContentType.SQL_Query:
+                    txtXML.ConfigureForSQL();
+                    break;
+
+                case ContentType.CSharp_Query:
+                case ContentType.QueryExpression:
+                    txtXML.ConfigureForCSharp();
+                    break;
+
+                case ContentType.JavaScript_Query:
+                    txtXML.ConfigureForJavaScript();
+                    break;
+
+                case ContentType.Serialized_Result_JSON:
+                    txtXML.ConfigureForJSON();
+                    break;
+            }
         }
 
         internal void SetFormat(SaveFormat saveFormat)
@@ -74,7 +99,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void btnFormat_Click(object sender, EventArgs e)
         {
-            FormatXML(false);
+            FormatXML(txtXML.Text, false);
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -82,11 +107,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             fxb.dockControlBuilder.Init(txtXML.Text, "manual edit", true);
         }
 
-        private void FormatXML(bool silent)
+        private void FormatXML(string text, bool silent)
         {
             try
             {
-                txtXML.Process();
+                txtXML.FormatXML(text, fxb.settings);
             }
             catch (Exception ex)
             {
@@ -99,15 +124,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void XmlContentDisplayDialog_KeyDown(object sender, KeyEventArgs e)
         {
-            RichTextBox textBox = txtXML;
-            findtext = FindTextHandler.HandleFindKeyPress(e, textBox, findtext);
+            findtext = FindTextHandler.HandleFindKeyPress(e, txtXML, findtext);
         }
 
         public void UpdateXML(string xmlString)
         {
-            txtXML.Text = xmlString;
-            txtXML.Settings.QuoteCharacter = fxb.settings.QueryOptions.UseSingleQuotation ? '\'' : '"';
-            FormatXML(true);
+            if (txtXML.Lexer == ScintillaNET.Lexer.Xml)
+                FormatXML(xmlString, true);
+            else
+                txtXML.Text = xmlString;
         }
 
         public void UpdateSQL(string sql, bool sql4cds)
@@ -150,7 +175,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             };
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                txtXML.SaveFile(sfd.FileName, RichTextBoxStreamType.PlainText);
+                File.WriteAllText(sfd.FileName, txtXML.Text);
                 MessageBox.Show($"{format} saved to {sfd.FileName}");
             }
         }
@@ -183,7 +208,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     return;
                 }
             }
-            FormatXML(false);
+            FormatXML(txtXML.Text, false);
         }
 
         private void FormatAsHtml()
@@ -418,6 +443,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         internal void ApplyCurrentSettings()
         {
             fxb.settings.XmlColors.ApplyToControl(txtXML);
+        }
+
+        private void txtXML_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar < 32)
+            {
+                // Prevent control characters from getting inserted into the text buffer
+                e.Handled = true;
+                return;
+            }
         }
     }
 

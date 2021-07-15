@@ -15,7 +15,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             InitializeComponent();
             Caller = caller;
-            caller.settings.XmlColors.ApplyToControl(txtFetch);
+            txtFetch.ConfigureForXml(caller.settings);
             PopulateForm();
         }
 
@@ -119,8 +119,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             if (cmbView.SelectedItem is ViewItem viewitem)
             {
-                txtFetch.Text = viewitem.GetFetch();
-                txtFetch.Process();
+                txtFetch.FormatXML(viewitem.GetFetch(), Caller.settings);
                 lblNotCusomizable.Visible = !viewitem.IsCustomizable;
                 btnOk.Enabled = true;
             }
