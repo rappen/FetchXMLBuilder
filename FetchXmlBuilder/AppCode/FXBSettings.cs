@@ -1,9 +1,12 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.DockControls;
+using ScintillaNET;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Xml;
 using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
 using xrmtb.XrmToolBox.Controls;
@@ -196,16 +199,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         [XmlIgnore()]
         public Color Comment { get; set; } = Color.Gray;
         [XmlIgnore()]
+        [Browsable(false)]
         public Color Tag { get; set; } = Color.Blue;
 
-        public void ApplyToControl(XMLViewer viewer)
+        public void ApplyToControl(Scintilla viewer)
         {
-            viewer.Settings.AttributeKey = AttributeKey;
-            viewer.Settings.AttributeValue = AttributeValue;
-            viewer.Settings.Comment = Comment;
-            viewer.Settings.Element = Element;
-            viewer.Settings.Tag = Tag;
-            viewer.Settings.Value = Value;
+            viewer.Styles[Style.Default].ForeColor = Value;
+            viewer.Styles[Style.Xml.Attribute].ForeColor = AttributeKey;
+            viewer.Styles[Style.Xml.DoubleString].ForeColor = AttributeValue;
+            viewer.Styles[Style.Xml.SingleString].ForeColor = AttributeValue;
+            viewer.Styles[Style.Xml.Comment].ForeColor = Comment;
+            viewer.Styles[Style.Xml.Entity].ForeColor = Value;
+            viewer.Styles[Style.Xml.Tag].ForeColor = Element;
+            viewer.Styles[Style.Xml.TagEnd].ForeColor = Element;
         }
     }
 

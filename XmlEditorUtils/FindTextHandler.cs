@@ -1,10 +1,11 @@
 ﻿using System.Windows.Forms;
+using ScintillaNET;
 
 namespace Cinteros.Xrm.XmlEditorUtils
 {
     public class FindTextHandler
     {
-        public static string HandleFindKeyPress(KeyEventArgs e, RichTextBox textBox, string findtext)
+        public static string HandleFindKeyPress(KeyEventArgs e, Scintilla textBox, string findtext)
         {
             var result = findtext;
             var findHandled = false;
@@ -30,7 +31,7 @@ namespace Cinteros.Xrm.XmlEditorUtils
             return result;
         }
 
-        private static int FindTheText(RichTextBox textBox, string text, int start)
+        private static int FindTheText(Scintilla textBox, string text, int start)
         {
             // Initialize the return value to false by default.
             int returnValue = -1;
@@ -43,11 +44,14 @@ namespace Cinteros.Xrm.XmlEditorUtils
                     textBox.Focus();
                 }
                 // Obtain the location of the search string in richTextBox1.
-                int indexToText = textBox.Find(text, start, RichTextBoxFinds.None);
+                textBox.TargetStart = start;
+                textBox.TargetEnd = textBox.TextLength;
+                int indexToText = textBox.SearchInTarget(text);
                 // Determine whether the text was found in richTextBox1.
                 if (indexToText >= 0)
                 {
                     returnValue = indexToText;
+                    textBox.SetSel(textBox.TargetStart, textBox.TargetEnd);
                 }
             }
             if (returnValue == -1)
