@@ -1,11 +1,16 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 using Cinteros.Xrm.XmlEditorUtils;
+using ScintillaNET;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
@@ -28,6 +33,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             if (contentType == ContentType.FetchXML)
             {
                 txtXML.KeyUp += fxb.LiveXML_KeyUp;
+                InitIntellisense();
             }
             SetContentType(contentType);
             SetFormat(saveFormat);
@@ -453,6 +459,298 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 e.Handled = true;
                 return;
             }
+        }
+
+        private void InitIntellisense()
+        {
+            txtXML.CharAdded += txtXML_CharAdded;
+        }
+
+        private void txtXML_CharAdded(object sender, CharAddedEventArgs e)
+        {
+            var stack = new Stack<object>();
+            var text = txtXML.Text.Substring(0, txtXML.CurrentPosition);
+
+            var rootType = typeof(FetchType);
+            var rootElementName = ((XmlRootAttribute)Attribute.GetCustomAttribute(rootType, typeof(XmlRootAttribute))).ElementName;
+
+            var childElements = new Dictionary<Type, Dictionary<string, Tuple<MemberInfo, Type>>>();
+
+            var root = default(object);
+            var inComment = false;
+            var inElement = false;
+            var inEndElement = false;
+            var elementNameStart = -1;
+            var attributeNameStart = -1;
+            var attributeName = default(string);
+            var attributeValueStart = -1;
+            var valueQuoteChar = '\0';
+            var textStart = -1;
+
+            for (var i = 0; i < text.Length; i++)
+            {
+                var ch = text[i];
+
+                if (ch == '<' && !inElement)
+                {
+                    if (i < text.Length - 3 && text[i + 1] == '!' && text[i + 2] == '-' && text[i + 3] == '-')
+                    {
+                        inComment = true;
+                    }
+                    else
+                    {
+                        inElement = true;
+                        elementNameStart = i + 1;
+
+                        if (textStart != -1 && textStart < i && root != null)
+                        {
+                            var textValue = text.Substring(textStart, i - textStart);
+
+                            var parent = stack.Peek();
+                            var textMember = parent
+                                .GetType()
+                                .GetMembers()
+                                .SingleOrDefault(member => member.GetCustomAttribute(typeof(XmlTextAttribute)) != null);
+
+                            if (textMember is PropertyInfo prop)
+                                prop.SetValue(parent, textValue);
+                            else if (textMember is FieldInfo field)
+                                field.SetValue(parent, textValue);
+
+                            textStart = -1;
+                        }
+                    }
+                }
+                else if (ch == '/' && inElement && i == elementNameStart)
+                {
+                    inEndElement = true;
+                }
+                else if (inComment && ch == '>' && text[i - 1] == '-' && text[i - 2] == '-')
+                {
+                    inComment = false;
+                }
+                else if (elementNameStart != -1 && (ch == '>' || ch == ' ' || ch == '/') && !inEndElement)
+                {
+                    var elementName = text.Substring(elementNameStart, i - elementNameStart);
+
+                    if (root == null)
+                    {
+                        if (elementName != rootElementName)
+                            return;
+
+                        root = Activator.CreateInstance(rootType);
+                        stack.Push(root);
+                    }
+                    else
+                    {
+                        var parent = stack.Peek();
+
+                        if (!childElements.TryGetValue(parent.GetType(), out var knownChildElements))
+                        {
+                            knownChildElements = parent
+                                .GetType()
+                                .GetMembers()
+                                .SelectMany(member => member
+                                    .GetCustomAttributes(typeof(XmlElementAttribute))
+                                    .Cast<XmlElementAttribute>()
+                                    .Select(attr => new { Member = member, Attribute = attr })
+                                    )
+                                .ToDictionary(
+                                    tuple => tuple.Attribute.ElementName,
+                                    tuple =>
+                                    {
+                                        if (tuple.Attribute.Type != null)
+                                            return new Tuple<MemberInfo, Type>(tuple.Member, tuple.Attribute.Type);
+
+                                        var p = tuple.Member as PropertyInfo;
+                                        var f = tuple.Member as FieldInfo;
+                                        var targetType = p?.PropertyType ?? f.FieldType;
+
+                                        if (targetType.IsArray)
+                                            targetType = targetType.GetElementType();
+
+                                        return new Tuple<MemberInfo, Type>(tuple.Member, targetType);
+                                    }
+                                );
+
+                            childElements[parent.GetType()] = knownChildElements;
+                        }
+
+                        if (!knownChildElements.TryGetValue(elementName, out var elementDetails))
+                            return;
+
+                        var element = Activator.CreateInstance(elementDetails.Item2);
+                        stack.Push(element);
+
+                        if (elementDetails.Item1 is PropertyInfo prop)
+                        {
+                            if (prop.PropertyType.IsArray)
+                            {
+                                var array = (Array)prop.GetValue(parent);
+                                if (array == null)
+                                {
+                                    array = Array.CreateInstance(prop.PropertyType.GetElementType(), 1);
+                                }
+                                else
+                                {
+                                    var existing = array;
+                                    array = Array.CreateInstance(prop.PropertyType.GetElementType(), array.Length + 1);
+                                    existing.CopyTo(array, 0);
+                                }
+
+                                array.SetValue(element, array.Length - 1);
+                                prop.SetValue(parent, array);
+                            }
+                            else
+                            {
+                                prop.SetValue(parent, element);
+                            }
+                        }
+                        else if (elementDetails.Item1 is FieldInfo field)
+                        {
+                            if (field.FieldType.IsArray)
+                            {
+                                var array = (Array) field.GetValue(parent);
+                                if (array == null)
+                                {
+                                    array = Array.CreateInstance(field.FieldType.GetElementType(), 1);
+                                }
+                                else
+                                {
+                                    var existing = array;
+                                    array = Array.CreateInstance(field.FieldType.GetElementType(), array.Length + 1);
+                                    existing.CopyTo(array, 0);
+                                }
+
+                                array.SetValue(element, array.Length - 1);
+                                field.SetValue(parent, array);
+                            }
+                            else
+                            {
+                                field.SetValue(parent, element);
+                            }
+                        }
+                    }
+
+                    elementNameStart = -1;
+
+                    if (ch == '>')
+                    {
+                        inElement = false;
+                        textStart = i + 1;
+                    }
+                }
+                else if (inElement && elementNameStart == -1 && attributeNameStart == -1 && attributeName == null && ch != ' ' && ch != '/' && ch != '>')
+                {
+                    attributeNameStart = i;
+                }
+                else if (attributeNameStart != -1 && ch == '=')
+                {
+                    attributeName = text.Substring(attributeNameStart, i - attributeNameStart).ToLowerInvariant();
+                    attributeNameStart = -1;
+                }
+                else if (attributeName != null && attributeValueStart == -1 && (ch == '\'' || ch == '"'))
+                {
+                    valueQuoteChar = ch;
+                    attributeValueStart = i + 1;
+                }
+                else if (attributeValueStart != -1 && ch == valueQuoteChar)
+                {
+                    var attributeValue = text.Substring(attributeValueStart, i - attributeValueStart);
+                    attributeValueStart = -1;
+                    valueQuoteChar = '\0';
+
+                    var obj = stack.Peek();
+                    var member = obj
+                        .GetType()
+                        .GetMembers()
+                        .SingleOrDefault(p =>
+                        {
+                            var attrs = Attribute.GetCustomAttributes(p, typeof(XmlAttributeAttribute));
+                            return attrs
+                                .Cast<XmlAttributeAttribute>()
+                                .Any(a => a.AttributeName == attributeName || (String.IsNullOrEmpty(a.AttributeName) && p.Name == attributeName));
+                        });
+
+                    if (member != null)
+                    {
+                        if (member is PropertyInfo prop)
+                            prop.SetValue(obj, ChangeType(prop.PropertyType, attributeValue));
+                        else if (member is FieldInfo field)
+                            field.SetValue(obj, ChangeType(field.FieldType, attributeValue));
+                    }
+
+                    attributeName = null;
+                }
+                else if (ch == '>' && inElement)
+                {
+                    if (text[i - 1] == '/' || inEndElement)
+                    {
+                        if (stack.Count == 0)
+                            return;
+
+                        stack.Pop();
+                    }
+                    else
+                    {
+                        textStart = i + 1;
+                    }
+
+                    inElement = false;
+                    inEndElement = false;
+                    elementNameStart = -1;
+                }
+            }
+
+            // Create suggestions based on the current parser state
+            if (inComment)
+            {
+                // We're entering a comment, nothing useful to suggest
+            }
+            else if (elementNameStart != -1)
+            {
+                // We're entering an element name
+            }
+            else if (attributeNameStart != -1)
+            {
+                // We're entering an attribute name
+            }
+            else if (attributeName != null)
+            {
+                // We're entering an attribute value
+
+                if (attributeValueStart == -1)
+                {
+                    // We need to suggest the whole value, including quotes
+                }
+                else
+                {
+                    // We've already got a partial value to complete
+                }
+            }
+            else
+            {
+                // We're entering a text value
+            }
+        }
+
+        private object ChangeType(Type type, string value)
+        {
+            if (type.IsEnum)
+            {
+                // Check if there are custom XmlEnumAttributes defined
+                var xmlValue = type
+                    .GetFields()
+                    .Select(field => new { Field = field, XmlEnum = field.GetCustomAttribute<XmlEnumAttribute>() })
+                    .SingleOrDefault(field => field.XmlEnum?.Name == value);
+
+                if (xmlValue != null)
+                    return xmlValue.Field.GetValue(null);
+
+                return Enum.Parse(type, value);
+            }
+
+            return Convert.ChangeType(value, type);
         }
     }
 
