@@ -493,6 +493,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (valueType == AttributeTypeCode.ManagedProperty && attribute != null)
             {   // Indicates value type is determined by selected attribute
                 valueType = attribute.Metadata.AttributeType;
+                var managedProp = attribute.Metadata as ManagedPropertyAttributeMetadata;
+                if (managedProp != null)
+                {
+                    valueType = managedProp.ValueAttributeTypeCode;
+                }
                 if (oper.IsMultipleValuesType)
                 {
                     if (Node.Nodes.Count == 0)
@@ -550,6 +555,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             // really nothing to do here, loading the record is simply nice to have
                         }
                     }
+                }
+                else if (managedProp != null && managedProp.ValueAttributeTypeCode == AttributeTypeCode.Boolean)
+                {
+                    cmbValue.Items.Add(new OptionsetItem(new OptionMetadata(new Microsoft.Xrm.Sdk.Label(new LocalizedLabel("False", 0), null), 0)));
+                    cmbValue.Items.Add(new OptionsetItem(new OptionMetadata(new Microsoft.Xrm.Sdk.Label(new LocalizedLabel("True", 0), null), 1)));
+                    var value = cmbValue.Text;
+                    cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
+                    cmbValue.SelectedItem = cmbValue.Items.OfType<OptionsetItem>().FirstOrDefault(i => i.GetValue() == value);
                 }
                 else
                 {
