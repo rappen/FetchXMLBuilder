@@ -20,7 +20,6 @@ using System.Xml;
 using WeifenLuo.WinFormsUI.Docking;
 using xrmtb.XrmToolBox.Controls;
 using XrmToolBox;
-using XrmToolBox.Constants;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
@@ -92,7 +91,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         #region Public Events
 
         public event EventHandler<MessageBusEventArgs> OnOutgoingMessage;
+
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
+
         public event EventHandler<DuplicateToolArgs> DuplicateRequested;
 
         #endregion Public Events
@@ -624,6 +625,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     case 2:
                         odata = ODataCodeGenerator.GetODataQuery(dockControlBuilder.GetFetchType(), ConnectionDetail.OrganizationDataServiceUrl, this);
                         break;
+
                     case 4:
                         // Find correct WebAPI base url
                         var baseUrl = ConnectionDetail.WebApplicationUrl;
@@ -1167,18 +1169,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     EnableControls(false);
 
-                    if (ConnectionDetail.MetadataCacheLoader != null)
-                    {
-                        try
-                        {
-                            ConnectionDetail.MetadataCacheLoader.ConfigureAwait(false).GetAwaiter().GetResult();
-                            return;
-                        }
-                        catch
-                        {
-                            // Error loading cache, use fallback
-                        }
-                    }
+                    //if (ConnectionDetail.MetadataCacheLoader != null)
+                    //{
+                    //    try
+                    //    {
+                    //        ConnectionDetail.MetadataCacheLoader.ConfigureAwait(false).GetAwaiter().GetResult();
+                    //        return;
+                    //    }
+                    //    catch
+                    //    {
+                    //        // Error loading cache, use fallback
+                    //    }
+                    //}
 
                     eventargs.Result = Service.LoadEntities();
                 })
@@ -1191,11 +1193,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     else
                     {
-                        if (ConnectionDetail.MetadataCache != null)
-                        {
-                            entities = ConnectionDetail.MetadataCache.ToDictionary(e => e.LogicalName);
-                        }
-                        else if (completedargs.Result is RetrieveMetadataChangesResponse)
+                        //if (ConnectionDetail.MetadataCache != null)
+                        //{
+                        //    entities = ConnectionDetail.MetadataCache.ToDictionary(e => e.LogicalName);
+                        //}
+                        //else
+                        if (completedargs.Result is RetrieveMetadataChangesResponse)
                         {
                             entities = new Dictionary<string, EntityMetadata>();
                             foreach (var entity in ((RetrieveMetadataChangesResponse)completedargs.Result).EntityMetadata)
@@ -1585,6 +1588,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                                     dockControlGrid.Activate();
                                 }
                                 break;
+
                             case ResultOutput.XML:
                                 var serialized = EntityCollectionSerializer.Serialize(queryinfo.Results, SerializationStyle.Explicit);
                                 ShowResultControl(serialized.OuterXml, ContentType.Serialized_Result_XML, SaveFormat.XML, settings.DockStates.FetchResult);
