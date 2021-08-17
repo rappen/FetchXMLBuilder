@@ -1187,7 +1187,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         MessageBox.Show(completedargs.Error.Message);
                     }
-                    else if (completedargs.Result is RetrieveMetadataChangesResponse)
+                    else
                     {
                         entities = new Dictionary<string, EntityMetadata>();
                         foreach (var entity in ((RetrieveMetadataChangesResponse)completedargs.Result).EntityMetadata)
@@ -1195,7 +1195,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             entities.Add(entity.LogicalName, entity);
                         }
                     }
-                    
                     UpdateLiveXML();
                     working = false;
                     EnableControls(true);
