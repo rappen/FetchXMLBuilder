@@ -16,10 +16,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FXBTests", "FXBTests\FXBTes
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MarkMpn.FetchXmlToWebAPI", "MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.shproj", "{543E6D79-2913-4B00-AAAC-5661F6ADB1A5}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MarkMpn.XmlSchemaAutocomplete", "MarkMpn.XmlSerializerAutoComplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutocomplete.shproj", "{CE3B0F1B-1668-4AC3-A7AD-FE1872C6BCC3}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MarkMpn.XmlSchemaAutocomplete.Scintilla", "MarkMpn.XmlSerializerAutoComplete\MarkMpn.XmlSchemaAutocomplete.Scintilla\MarkMpn.XmlSchemaAutocomplete.Scintilla.shproj", "{4C497B9C-B9DD-4B3D-8ECC-C504AFCADD65}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		MarkMpn.XmlSerializerAutoComplete\MarkMpn.XmlSchemaAutocomplete.Scintilla\MarkMpn.XmlSchemaAutocomplete.Scintilla.projitems*{4c497b9c-b9dd-4b3d-8ecc-c504afcadd65}*SharedItemsImports = 13
 		MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems*{543e6d79-2913-4b00-aaac-5661f6adb1a5}*SharedItemsImports = 13
+		MarkMpn.XmlSerializerAutoComplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutoComplete.projitems*{ce3b0f1b-1668-4ac3-a7ad-fe1872c6bcc3}*SharedItemsImports = 13
 		MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
+		MarkMpn.XmlSerializerAutoComplete\MarkMpn.XmlSchemaAutocomplete.Scintilla\MarkMpn.XmlSchemaAutocomplete.Scintilla.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
+		MarkMpn.XmlSerializerAutoComplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutoComplete.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -476,6 +476,8 @@
     <None Include="ReleaseNotes\ReadMe.txt" />
   </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
+  <Import Project="..\MarkMpn.XmlSerializerAutoComplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutoComplete.projitems" Label="Shared" />
+  <Import Project="..\MarkMpn.XmlSerializerAutoComplete\MarkMpn.XmlSchemaAutocomplete.Scintilla\MarkMpn.XmlSchemaAutocomplete.Scintilla.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>ilmerge.exe /target:library /targetplatform:v4,"C:\Windows\Microsoft.NET\Framework\v4.0.30319" "/out:Rappen.XTB.FXB.dll" "$(TargetFileName)" "Rappen.XmlEditorUtils.dll" "xrmtb.XrmToolBox.Controls.dll"
