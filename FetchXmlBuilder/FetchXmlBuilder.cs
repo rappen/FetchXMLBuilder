@@ -1245,7 +1245,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                 }
                 working = false;
-                dockControlBuilder.UpdateCurrentNode();
+                dockControlBuilder.UpdateAllNode();
                 UpdateLiveXML();
             }
             working = false;

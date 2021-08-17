@@ -362,6 +362,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             TreeNodeHelper.SetNodeText(tvFetch.SelectedNode, fxb);
         }
 
+        internal void UpdateChildNode(TreeNode node)
+        {
+            TreeNodeHelper.SetNodeText(node, fxb);
+            node.Nodes.OfType<TreeNode>().ToList().ForEach(n => TreeNodeHelper.SetNodeText(n, fxb));
+            node.Nodes.OfType<TreeNode>().ToList().ForEach(n => UpdateChildNode(n));
+        }
+
+        internal void UpdateAllNode()
+        {
+            tvFetch.Nodes.OfType<TreeNode>().ToList().ForEach(n => UpdateChildNode(n));
+        }
+
         private static bool IsFetchAggregate(XmlDocument xml)
         {
             var fetchnode = xml.SelectSingleNode("fetch");
@@ -441,11 +453,39 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 return;
             }
+            if (fxb.entities != null)
+            {
+                var entitys = GetEntitysForFetch(fetchDoc);
+                entitys = entitys.Where(e => fxb.entities[e].Attributes == null).ToList();
+                entitys?.ForEach(e => fxb.LoadEntityDetails(e, null, false));
+            }
             XmlNode definitionXmlNode = fetchDoc.DocumentElement;
             tvFetch.Nodes.Clear();
             TreeNodeHelper.AddTreeViewNode(tvFetch, definitionXmlNode, this, fxb);
             tvFetch.ExpandAll();
             ManageMenuDisplay();
+        }
+
+        private static List<string> GetEntitysForFetch(XmlDocument fetchDoc)
+        {
+            var result = new List<string>();
+            var ent = fetchDoc.SelectSingleNode("fetch/entity");
+            result.Add(ent.Attributes.GetNamedItem("name").Value);
+            result.AddRange(GetEntitysChilds(ent));
+            result = result.Distinct().ToList();
+            return result;
+        }
+
+        private static List<string> GetEntitysChilds(XmlNode ent)
+        {
+            var result = new List<string>();
+            var childent = ent.SelectNodes("link-entity");
+            foreach (XmlNode child in childent)
+            {
+                result.Add(child.Attributes.GetNamedItem("name").Value);
+                result.AddRange(GetEntitysChilds(child));
+            }
+            return result;
         }
 
         private XmlDocument GetFetchDocument()
