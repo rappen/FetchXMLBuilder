@@ -30,14 +30,12 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlContentControl));
-            xrmtb.XrmToolBox.Controls.XMLViewerSettings xmlViewerSettings1 = new xrmtb.XrmToolBox.Controls.XMLViewerSettings();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnExecute = new System.Windows.Forms.Button();
             this.btnParseQE = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.panCancel = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.txtXML = new xrmtb.XrmToolBox.Controls.XMLViewer();
             this.panActions = new System.Windows.Forms.Panel();
             this.gbActions = new System.Windows.Forms.GroupBox();
             this.panSQL4CDS = new System.Windows.Forms.Panel();
@@ -60,6 +58,7 @@
             this.tt = new System.Windows.Forms.ToolTip(this.components);
             this.panSQL4CDSInfo = new System.Windows.Forms.Panel();
             this.lblSQL4CDSInfo = new System.Windows.Forms.Label();
+            this.txtXML = new ScintillaNET.Scintilla();
             this.panCancel.SuspendLayout();
             this.panActions.SuspendLayout();
             this.gbActions.SuspendLayout();
@@ -141,30 +140,6 @@
             this.btnCancel.Text = "Close";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
-            // txtXML
-            // 
-            this.txtXML.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtXML.CurrentParseError = null;
-            this.txtXML.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtXML.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtXML.FormatAsYouType = true;
-            this.txtXML.Location = new System.Drawing.Point(0, 0);
-            this.txtXML.Name = "txtXML";
-            xmlViewerSettings1.AttributeKey = System.Drawing.Color.Blue;
-            xmlViewerSettings1.AttributeValue = System.Drawing.Color.DarkRed;
-            xmlViewerSettings1.Comment = System.Drawing.Color.Gray;
-            xmlViewerSettings1.Element = System.Drawing.Color.DarkGreen;
-            xmlViewerSettings1.FontName = "Consolas";
-            xmlViewerSettings1.FontSize = 9F;
-            xmlViewerSettings1.QuoteCharacter = '\"';
-            xmlViewerSettings1.Tag = System.Drawing.Color.ForestGreen;
-            xmlViewerSettings1.Value = System.Drawing.Color.Black;
-            this.txtXML.Settings = xmlViewerSettings1;
-            this.txtXML.Size = new System.Drawing.Size(682, 229);
-            this.txtXML.TabIndex = 0;
-            this.txtXML.Text = "";
-            this.txtXML.TextChanged += new System.EventHandler(this.txtXML_TextChanged);
             // 
             // panActions
             // 
@@ -405,6 +380,15 @@
     "t it from the Tool Library and enable SQL 4 CDS in FetchXML Builder Options to g" +
     "et even more accurate results.";
             // 
+            // txtXML
+            // 
+            this.txtXML.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtXML.Location = new System.Drawing.Point(0, 0);
+            this.txtXML.Name = "txtXML";
+            this.txtXML.Size = new System.Drawing.Size(682, 229);
+            this.txtXML.TabIndex = 12;
+            this.txtXML.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtXML_KeyPress);
+            // 
             // XmlContentControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -424,9 +408,9 @@
             this.Name = "XmlContentControl";
             this.DockStateChanged += new System.EventHandler(this.XmlContentDisplayDialog_DockStateChanged);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.XmlContentDisplayDialog_FormClosing);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.XmlContentDisplayDialog_KeyDown);
             this.Load += new System.EventHandler(this.XmlContentDisplayDialog_Load);
             this.VisibleChanged += new System.EventHandler(this.XmlContentDisplayDialog_VisibleChanged);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.XmlContentDisplayDialog_KeyDown);
             this.panCancel.ResumeLayout(false);
             this.panActions.ResumeLayout(false);
             this.gbActions.ResumeLayout(false);
@@ -450,7 +434,6 @@
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Panel panCancel;
         private System.Windows.Forms.Button btnCancel;
-        internal xrmtb.XrmToolBox.Controls.XMLViewer txtXML;
         internal System.Windows.Forms.Button btnExecute;
         internal System.Windows.Forms.Button btnParseQE;
         private System.Windows.Forms.Button btnSave;
@@ -476,5 +459,6 @@
         private System.Windows.Forms.Button btnSQL4CDS;
         private System.Windows.Forms.Panel panSQL4CDSInfo;
         private System.Windows.Forms.Label lblSQL4CDSInfo;
+        internal ScintillaNET.Scintilla txtXML;
     }
 }

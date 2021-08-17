@@ -41,9 +41,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             }
             chkResAllPages.Checked = settings.Results.RetrieveAllPages;
             propXmlColors.SelectedObject = settings.XmlColors;
-            settings.XmlColors.ApplyToControl(txtFetch);
-            txtFetch.Text = settings.QueryOptions.NewQueryTemplate;
-            txtFetch.Process();
+            txtFetch.ConfigureForXml(settings);
+            txtFetch.FormatXML(settings.QueryOptions.NewQueryTemplate, settings);
             chkEntAll.Checked = settings.Entity.All;
             if (!settings.Entity.All)
             {
@@ -212,7 +211,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             try
             {
-                txtFetch.Process();
+                txtFetch.FormatXML(txtFetch.Text, fxb.settings);
             }
             catch (Exception ex)
             {
@@ -224,8 +223,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             if (string.IsNullOrWhiteSpace(txtFetch.Text))
             {
-                txtFetch.Text = QueryOptions.DefaultNewQuery;
-                txtFetch.Process();
+                txtFetch.FormatXML(QueryOptions.DefaultNewQuery, fxb.settings);
             }
         }
 
@@ -233,7 +231,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             try
             {
-                txtFetch.Process();
+                txtFetch.FormatXML(txtFetch.Text, fxb.settings);
             }
             catch (Exception ex)
             {
@@ -244,8 +242,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void btnDefaultQuery_Click(object sender, EventArgs e)
         {
-            txtFetch.Text = QueryOptions.DefaultNewQuery;
-            txtFetch.Process();
+            txtFetch.FormatXML(QueryOptions.DefaultNewQuery, fxb.settings);
         }
 
         private void propXmlColors_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)

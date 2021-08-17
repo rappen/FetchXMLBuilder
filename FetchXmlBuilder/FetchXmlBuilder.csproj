@@ -360,6 +360,7 @@
       <DependentUpon>fetch.xsd</DependentUpon>
     </Compile>
     <Compile Include="AppCode\SQLQueryGenerator.cs" />
+    <Compile Include="ScintillaHelper.cs" />
     <Compile Include="WebAPIMetadataProvider.cs" />
     <Compile Include="XrmToolBoxToolIds.cs" />
   </ItemGroup>

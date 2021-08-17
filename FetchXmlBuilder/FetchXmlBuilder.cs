@@ -20,7 +20,6 @@ using System.Xml;
 using WeifenLuo.WinFormsUI.Docking;
 using xrmtb.XrmToolBox.Controls;
 using XrmToolBox;
-using XrmToolBox.Constants;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
@@ -92,7 +91,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         #region Public Events
 
         public event EventHandler<MessageBusEventArgs> OnOutgoingMessage;
+
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
+
         public event EventHandler<DuplicateToolArgs> DuplicateRequested;
 
         #endregion Public Events
@@ -624,6 +625,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     case 2:
                         odata = ODataCodeGenerator.GetODataQuery(dockControlBuilder.GetFetchType(), ConnectionDetail.OrganizationDataServiceUrl, this);
                         break;
+
                     case 4:
                         // Find correct WebAPI base url
                         var baseUrl = ConnectionDetail.WebApplicationUrl;
@@ -1232,7 +1234,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                 }
                 working = false;
-                dockControlBuilder.UpdateCurrentNode();
+                dockControlBuilder.UpdateAllNode();
                 UpdateLiveXML();
             }
             working = false;
@@ -1575,6 +1577,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                                     dockControlGrid.Activate();
                                 }
                                 break;
+
                             case ResultOutput.XML:
                                 var serialized = EntityCollectionSerializer.Serialize(queryinfo.Results, SerializationStyle.Explicit);
                                 ShowResultControl(serialized.OuterXml, ContentType.Serialized_Result_XML, SaveFormat.XML, settings.DockStates.FetchResult);
