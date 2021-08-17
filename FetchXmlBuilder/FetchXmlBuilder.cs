@@ -1169,15 +1169,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
                     if (ConnectionDetail.MetadataCacheLoader != null)
                     {
-                        try
+                        var loader = ConnectionDetail.MetadataCacheLoader;
+                        loader.ContinueWith(task =>
                         {
-                            ConnectionDetail.MetadataCacheLoader.ConfigureAwait(false).GetAwaiter().GetResult();
-                            return;
-                        }
-                        catch
-                        {
-                            // Error loading cache, use fallback
-                        }
+                            entities = ConnectionDetail.MetadataCache.ToDictionary(e => e.LogicalName);
+                        });
                     }
 
                     eventargs.Result = Service.LoadEntities();
@@ -1189,21 +1185,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         MessageBox.Show(completedargs.Error.Message);
                     }
-                    else
+                    else if (completedargs.Result is RetrieveMetadataChangesResponse)
                     {
-                        if (ConnectionDetail.MetadataCache != null)
+                        entities = new Dictionary<string, EntityMetadata>();
+                        foreach (var entity in ((RetrieveMetadataChangesResponse)completedargs.Result).EntityMetadata)
                         {
-                            entities = ConnectionDetail.MetadataCache.ToDictionary(e => e.LogicalName);
-                        }
-                        else if (completedargs.Result is RetrieveMetadataChangesResponse)
-                        {
-                            entities = new Dictionary<string, EntityMetadata>();
-                            foreach (var entity in ((RetrieveMetadataChangesResponse)completedargs.Result).EntityMetadata)
-                            {
-                                entities.Add(entity.LogicalName, entity);
-                            }
+                            entities.Add(entity.LogicalName, entity);
                         }
                     }
+                    
                     UpdateLiveXML();
                     working = false;
                     EnableControls(true);
