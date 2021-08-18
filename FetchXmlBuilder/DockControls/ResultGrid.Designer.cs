@@ -1,6 +1,4 @@
-﻿using xrmtb.XrmToolBox.Controls;
-
-namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
+﻿namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
     partial class ResultGrid
     {
@@ -32,7 +30,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.crmGridView1 = new xrmtb.XrmToolBox.Controls.CRMGridView();
+            this.crmGridView1 = new Rappen.XTB.Helpers.Controls.XRMDataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lblOptionsExpander = new System.Windows.Forms.Label();
             this.mnuOptions = new System.Windows.Forms.MenuStrip();
@@ -82,11 +80,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             this.crmGridView1.Name = "crmGridView1";
             this.crmGridView1.ReadOnly = true;
             this.crmGridView1.RowHeadersWidth = 24;
+            this.crmGridView1.Service = null;
             this.crmGridView1.ShowEditingIcon = false;
             this.crmGridView1.Size = new System.Drawing.Size(650, 230);
             this.crmGridView1.TabIndex = 1;
-            this.crmGridView1.RecordClick += new xrmtb.XrmToolBox.Controls.CRMRecordEventHandler(this.crmGridView1_RecordClick);
-            this.crmGridView1.RecordDoubleClick += new xrmtb.XrmToolBox.Controls.CRMRecordEventHandler(this.crmGridView1_RecordDoubleClick);
+            this.crmGridView1.RecordClick += new Rappen.XTB.Helpers.Controls.XRMRecordEventHandler(this.crmGridView1_RecordClick);
+            this.crmGridView1.RecordDoubleClick += new Rappen.XTB.Helpers.Controls.XRMRecordEventHandler(this.crmGridView1_RecordDoubleClick);
             // 
             // groupBox1
             // 
@@ -160,10 +159,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             this.mnuCopyHeaders.CheckOnClick = true;
             this.mnuCopyHeaders.Name = "mnuCopyHeaders";
             this.mnuCopyHeaders.Size = new System.Drawing.Size(180, 22);
-            this.mnuCopyHeaders.Text = "Copy with Headers";            
+            this.mnuCopyHeaders.Text = "Copy with Headers";
             this.mnuCopyHeaders.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
-            // mnuColumns
+             // mnuColumns
             // 
             this.mnuColumns.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuIndexCol,
@@ -284,7 +283,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         }
 
         #endregion
-        private CRMGridView crmGridView1;
+        private Rappen.XTB.Helpers.Controls.XRMDataGridView crmGridView1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lblOptionsExpander;

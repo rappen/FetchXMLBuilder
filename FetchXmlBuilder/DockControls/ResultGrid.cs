@@ -3,7 +3,6 @@ using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
-using xrmtb.XrmToolBox.Controls;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
@@ -52,7 +51,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             crmGridView1.ShowLocalTimes = form.settings.Results.LocalTime;
             crmGridView1.ClipboardCopyMode = form.settings.Results.CopyHeaders ?
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
-            crmGridView1.OrganizationService = form.Service;
+            crmGridView1.Service = form.Service;
             panQuickFilter.Visible = form.settings.Results.QuickFilter;
             RefreshData();
         }
@@ -87,7 +86,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             crmGridView1.ResumeLayout();
         }
 
-        private void crmGridView1_RecordDoubleClick(object sender, CRMRecordEventArgs e)
+        private void crmGridView1_RecordDoubleClick(object sender, Rappen.XTB.Helpers.Controls.XRMRecordEventArgs e)
         {
             if (e.Entity != null)
             {
@@ -100,7 +99,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
         }
 
-        private void crmGridView1_RecordClick(object sender, CRMRecordEventArgs e)
+        private void crmGridView1_RecordClick(object sender, Rappen.XTB.Helpers.Controls.XRMRecordEventArgs e)
         {
             if (e.Value is EntityReference)
             {
