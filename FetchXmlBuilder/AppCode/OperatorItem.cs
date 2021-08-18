@@ -32,44 +32,64 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 case ConditionOperator.Equal:
                     return "eq";
+
                 case ConditionOperator.NotEqual:
-                    return "neq";
+                    return "ne";
+
                 case ConditionOperator.GreaterThan:
                     return "gt";
+
                 case ConditionOperator.LessThan:
                     return "lt";
+
                 case ConditionOperator.GreaterEqual:
                     return "ge";
+
                 case ConditionOperator.LessEqual:
                     return "le";
+
                 case ConditionOperator.EqualUserId:
                     return "eq-userid";
+
                 case ConditionOperator.NotEqualUserId:
                     return "ne-userid";
+
                 case ConditionOperator.EqualUserOrUserHierarchy:
                     return "eq-useroruserhierarchy";
+
                 case ConditionOperator.EqualUserOrUserHierarchyAndTeams:
                     return "eq-useroruserhierarchyandteams";
+
                 case ConditionOperator.EqualBusinessId:
                     return "eq-businessid";
+
                 case ConditionOperator.NotEqualBusinessId:
                     return "ne-businessid";
+
                 case ConditionOperator.EqualUserLanguage:
                     return "eq-userlanguage";
+
                 case ConditionOperator.DoesNotBeginWith:
                     return "not-begin-with";
+
                 case ConditionOperator.DoesNotEndWith:
                     return "not-end-with";
+
                 case ConditionOperator.EqualUserTeams:
                     return "eq-userteams";
+
                 case ConditionOperator.EqualUserOrUserTeams:
                     return "eq-useroruserteams";
+
                 case ConditionOperator.Last7Days:
                     return "last-seven-days";
+
                 case ConditionOperator.Next7Days:
                     return "next-seven-days";
+
                 case ConditionOperator.AboveOrEqual:
                     return "eq-or-above";
+
                 case ConditionOperator.UnderOrEqual:
                     return "eq-or-under";
             }
@@ -139,18 +159,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case ConditionOperator.LastFiscalPeriod:
                     result = null;
                     break;
+
                 case ConditionOperator.Like:
                 case ConditionOperator.NotLike:
                 case ConditionOperator.Contains:
                 case ConditionOperator.DoesNotContain:
                     result = AttributeTypeCode.String;
                     break;
+
                 case ConditionOperator.On:
                 case ConditionOperator.OnOrBefore:
                 case ConditionOperator.OnOrAfter:
                 case ConditionOperator.NotOn:
                     result = AttributeTypeCode.DateTime;
                     break;
+
                 case ConditionOperator.LastXHours:
                 case ConditionOperator.NextXHours:
                 case ConditionOperator.LastXDays:
@@ -232,9 +255,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case ConditionOperator.NotEqualBusinessId:
                     result = AttributeTypeCode.Lookup;
                     break;
+
                 case ConditionOperator.EqualUserLanguage:
                     result = AttributeTypeCode.Integer;
                     break;
+
                 case ConditionOperator.Yesterday:
                 case ConditionOperator.Today:
                 case ConditionOperator.Tomorrow:
@@ -281,6 +306,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case ConditionOperator.NextXFiscalPeriods:
                     result = AttributeTypeCode.DateTime;
                     break;
+
                 case ConditionOperator.Like:
                 case ConditionOperator.NotLike:
                 case ConditionOperator.Contains:
@@ -414,6 +440,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     validConditionsList.Add(new OperatorItem(ConditionOperator.NotOn));
 
                     break;
+
                 case AttributeTypeCode.Uniqueidentifier:
                     validConditionsList.Add(new OperatorItem(ConditionOperator.Above));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.AboveOrEqual));
@@ -423,6 +450,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualBusinessId));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserId));
                     break;
+
                 case AttributeTypeCode.Owner:
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualBusinessId));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserId));
@@ -432,6 +460,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserOrUserTeams));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserTeams));
                     break;
+
                 case AttributeTypeCode.Virtual:
                     if (attributeTypeName == "MultiSelectPicklistType")
                     {
