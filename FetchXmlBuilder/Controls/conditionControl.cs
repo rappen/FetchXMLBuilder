@@ -87,32 +87,32 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 if (op == "begins-with")
                 {
                     attr["operator"] = "like";
-                    attr["value"] = value + "%";
+                    attr["value"] = EscapeLikeWildcards(value) + "%";
                 }
                 else if (op == "not-begin-with")
                 {
                     attr["operator"] = "not-like";
-                    attr["value"] = value + "%";
+                    attr["value"] = EscapeLikeWildcards(value) + "%";
                 }
                 else if (op == "ends-with")
                 {
                     attr["operator"] = "like";
-                    attr["value"] = "%" + value;
+                    attr["value"] = "%" + EscapeLikeWildcards(value);
                 }
                 else if (op == "not-end-with")
                 {
                     attr["operator"] = "not-like";
-                    attr["value"] = "%" + value;
+                    attr["value"] = "%" + EscapeLikeWildcards(value);
                 }
                 else if (op == "contains")
                 {
                     attr["operator"] = "like";
-                    attr["value"] = "%" + value + "%";
+                    attr["value"] = "%" + EscapeLikeWildcards(value) + "%";
                 }
                 else if (op == "does-not-contain")
                 {
                     attr["operator"] = "not-like";
-                    attr["value"] = "%" + value + "%";
+                    attr["value"] = "%" + EscapeLikeWildcards(value) + "%";
                 }
             }
 
@@ -205,6 +205,30 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                         if (!string.IsNullOrWhiteSpace(cmbValueOf.Text))
                         {
                             return null;
+                        }
+
+                        if (oper.GetValue() == "like" && !string.IsNullOrWhiteSpace(cmbValue.Text))
+                        {
+                            // Check for mismatched square brackets
+                            var inBrackets = false;
+
+                            foreach (var ch in cmbValue.Text)
+                            {
+                                if (ch == '[')
+                                {
+                                    inBrackets = true;
+                                }
+                                else if (ch == ']')
+                                {
+                                    inBrackets = false;
+                                }
+                            }
+
+                            if (inBrackets)
+                            {
+                                // Last open bracket was not closed
+                                return new ControlValidationResult(ControlValidationLevel.Error, "LIKE pattern has mismatched brackets. Add closing brackets for each character range.\r\n\r\nTo match the character '[', use '[[]'");
+                            }
                         }
 
                         switch (valueType)
@@ -403,8 +427,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     value = value.Substring(0, value.Length - 1);
                 }
 
-                if (newOp != null)
+                if (newOp != null && AreAllLikeWildcardsEscaped(value))
                 {
+                    value = UnescapeLikeWildcards(value);
+
                     if (op.GetValue() == "not-like")
                     {
                         newOp = "not-" + newOp.Replace("s-", "-");
@@ -424,6 +450,69 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     }
                 }
             }
+        }
+
+        private string EscapeLikeWildcards(string value)
+        {
+            return value
+                .Replace("[", "[[]")
+                .Replace("%", "[%]")
+                .Replace("_", "[_]");
+        }
+
+        private bool AreAllLikeWildcardsEscaped(string value)
+        {
+            var bracketStart = -1;
+
+            for (var i = 0; i < value.Length; i++)
+            {
+                var ch = value[i];
+
+                if (ch != '%' && ch != '_' && ch != '[' && ch != ']')
+                {
+                    if (bracketStart != -1)
+                    {
+                        // We've got a non-wildcard character in brackets - it's not an escaped wildcard
+                        return false;
+                    }
+
+                    continue;
+                }
+
+                if (bracketStart == -1)
+                {
+                    if (ch == '[')
+                    {
+                        bracketStart = i;
+                    }
+                    else
+                    {
+                        // We've got a wildcard character outside of brackets - it's not escaped
+                        return false;
+                    }
+                }
+
+                if (ch == ']')
+                {
+                    if (i > bracketStart + 2)
+                    {
+                        // We've got more than a single character in the brackets - it's not a single escaped wildcard
+                        return false;
+                    }
+
+                    bracketStart = -1;
+                }
+            }
+
+            return true;
+        }
+
+        private string UnescapeLikeWildcards(string value)
+        {
+            return value
+                .Replace("[_]", "_")
+                .Replace("[%]", "%")
+                .Replace("[[]", "[");
         }
 
         private void RefreshOperators()
