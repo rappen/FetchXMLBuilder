@@ -105,7 +105,7 @@ namespace Cinteros.Xrm.XmlEditorUtils
             controls.OfType<Panel>().OrderBy(p => p.TabIndex).ToList().ForEach(p => FillControls(collection, p.Controls, saveable));
         }
 
-        class TextBoxEventHandler
+        private class TextBoxEventHandler
         {
             private readonly TextBox txt;
             private readonly IDefinitionSavable saveable;
@@ -141,7 +141,7 @@ namespace Cinteros.Xrm.XmlEditorUtils
             }
         }
 
-        class ComboBoxEventHandler
+        private class ComboBoxEventHandler
         {
             private readonly ComboBox cmb;
             private readonly IDefinitionSavable saveable;
@@ -192,7 +192,7 @@ namespace Cinteros.Xrm.XmlEditorUtils
 
         public static void FillControl(Dictionary<string, string> collection, Control control, IDefinitionSavable saveable)
         {
-            if (control.Tag != null && GetControlDefinition(control, out string attribute, out bool required, out string defaultvalue))
+            if (control.Tag != null && control.Tag != "uiname" && GetControlDefinition(control, out string attribute, out bool required, out string defaultvalue))
             {
                 if (!collection.TryGetValue(attribute, out string value))
                 {
