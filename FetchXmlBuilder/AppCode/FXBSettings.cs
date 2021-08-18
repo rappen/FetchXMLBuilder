@@ -4,12 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Xml;
 using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
-using xrmtb.XrmToolBox.Controls;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
@@ -112,14 +109,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case ContentType.Serialized_Result_JSON:
                 case ContentType.Serialized_Result_XML:
                     return FetchResult;
+
                 case ContentType.FetchXML:
                     return FetchXmlWindow;
+
                 case ContentType.SQL_Query:
                     return SQLWindow;
+
                 case ContentType.QueryExpression:
                     return QueryExpressionWindow;
+
                 case ContentType.CSharp_Query:
                     return FetchXmlCsWindow;
+
                 case ContentType.JavaScript_Query:
                     return FetchXmlJsWindow;
             }
@@ -133,15 +135,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case ContentType.FetchXML:
                     FetchXmlWindow = windowSettings;
                     break;
+
                 case ContentType.SQL_Query:
                     SQLWindow = windowSettings;
                     break;
+
                 case ContentType.QueryExpression:
                     QueryExpressionWindow = windowSettings;
                     break;
+
                 case ContentType.CSharp_Query:
                     FetchXmlCsWindow = windowSettings;
                     break;
+
                 case ContentType.JavaScript_Query:
                     FetchXmlJsWindow = windowSettings;
                     break;
@@ -168,6 +174,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     {
         public string Name { get; set; }
         public string Fetch { get; set; }
+
         public override string ToString()
         {
             return Name;
@@ -178,26 +185,37 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     {
         [Browsable(false)]
         public string ElementColor { get { return Element.Name; } set { Element = Color.FromName(value); } }
+
         [Browsable(false)]
         public string ValueColor { get { return Value.Name; } set { Value = Color.FromName(value); } }
+
         [Browsable(false)]
         public string AttributeKeyColor { get { return AttributeKey.Name; } set { AttributeKey = Color.FromName(value); } }
+
         [Browsable(false)]
         public string AttributeValueColor { get { return AttributeValue.Name; } set { AttributeValue = Color.FromName(value); } }
+
         [Browsable(false)]
         public string CommentColor { get { return Comment.Name; } set { Comment = Color.FromName(value); } }
+
         [Browsable(false)]
         public string TagColor { get { return Tag.Name; } set { Tag = Color.FromName(value); } }
+
         [XmlIgnore()]
         public Color Element { get; set; } = Color.DarkRed;
+
         [XmlIgnore()]
         public Color Value { get; set; } = Color.Black;
+
         [XmlIgnore()]
         public Color AttributeKey { get; set; } = Color.Red;
+
         [XmlIgnore()]
         public Color AttributeValue { get; set; } = Color.Blue;
+
         [XmlIgnore()]
         public Color Comment { get; set; } = Color.Gray;
+
         [XmlIgnore()]
         [Browsable(false)]
         public Color Tag { get; set; } = Color.Blue;
