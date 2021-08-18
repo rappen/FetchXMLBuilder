@@ -616,8 +616,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             switch (dlgLookup.ShowDialog(this))
             {
                 case DialogResult.OK:
-                    xrmRecord.Record = dlgLookup.Entity;
-                    txtUitype.Text = dlgLookup.Entity.LogicalName;
+                    xrmRecord.Record = dlgLookup.Record;
+                    txtUitype.Text = dlgLookup.Record.LogicalName;
                     break;
 
                 case DialogResult.Abort:

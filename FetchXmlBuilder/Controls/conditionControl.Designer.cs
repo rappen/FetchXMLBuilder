@@ -46,7 +46,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.xrmRecord = new Rappen.XTB.Helpers.Controls.XRMRecordHost();
             this.label1 = new System.Windows.Forms.Label();
             this.panValueHint = new System.Windows.Forms.Panel();
-            this.dlgLookup = new xrmtb.XrmToolBox.Controls.Controls.CDSLookupDialog();
+            this.dlgLookup = new Rappen.XTB.Helpers.Controls.XRMLookupDialog();
             this.panUitype = new System.Windows.Forms.Panel();
             this.txtUitype = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -340,7 +340,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // dlgLookup
             // 
-            this.dlgLookup.Entity = null;
+            this.dlgLookup.Record = null;
             this.dlgLookup.IncludePersonalViews = true;
             this.dlgLookup.LogicalName = "";
             this.dlgLookup.LogicalNames = null;
@@ -523,7 +523,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private Rappen.XTB.Helpers.Controls.XRMRecordHost xrmRecord;
         private Rappen.XTB.Helpers.Controls.XRMColumnText txtLookup;
         private System.Windows.Forms.Panel panValueHint;
-        private xrmtb.XrmToolBox.Controls.Controls.CDSLookupDialog dlgLookup;
+        private Rappen.XTB.Helpers.Controls.XRMLookupDialog dlgLookup;
         private System.Windows.Forms.Panel panUitype;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtUitype;
