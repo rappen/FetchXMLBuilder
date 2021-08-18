@@ -42,7 +42,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.panValue = new System.Windows.Forms.Panel();
             this.panValueLookup = new System.Windows.Forms.Panel();
             this.btnLookup = new System.Windows.Forms.Button();
-            this.txtLookup = new xrmtb.XrmToolBox.Controls.Controls.CDSDataTextBox();
+            this.txtLookup = new Rappen.XTB.Helpers.Controls.XRMColumnText();
+            this.xrmRecord = new Rappen.XTB.Helpers.Controls.XRMRecordHost();
             this.label1 = new System.Windows.Forms.Label();
             this.panValueHint = new System.Windows.Forms.Panel();
             this.dlgLookup = new xrmtb.XrmToolBox.Controls.Controls.CDSLookupDialog();
@@ -80,7 +81,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // cmbAttribute
             // 
-            this.cmbAttribute.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.cmbAttribute.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbAttribute.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbAttribute.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
@@ -104,7 +105,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // cmbOperator
             // 
-            this.cmbOperator.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.cmbOperator.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbOperator.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbOperator.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
@@ -208,7 +209,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // cmbEntity
             // 
-            this.cmbEntity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.cmbEntity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbEntity.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbEntity.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
@@ -223,7 +224,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // cmbValue
             // 
-            this.cmbValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.cmbValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbValue.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbValue.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
@@ -296,25 +297,28 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // txtLookup
             // 
-            this.txtLookup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtLookup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtLookup.BackColor = System.Drawing.SystemColors.Window;
-            this.txtLookup.Clickable = true;
+            this.txtLookup.Column = null;
             this.txtLookup.Cursor = System.Windows.Forms.Cursors.Hand;
             this.txtLookup.DisplayFormat = "";
-            this.txtLookup.Entity = null;
-            this.txtLookup.EntityReference = null;
             this.txtLookup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline);
             this.txtLookup.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.txtLookup.Id = new System.Guid("00000000-0000-0000-0000-000000000000");
             this.txtLookup.Location = new System.Drawing.Point(7, 16);
-            this.txtLookup.LogicalName = null;
             this.txtLookup.Name = "txtLookup";
-            this.txtLookup.OrganizationService = null;
+            this.txtLookup.RecordHost = this.xrmRecord;
             this.txtLookup.Size = new System.Drawing.Size(254, 20);
             this.txtLookup.TabIndex = 32;
             this.txtLookup.Tag = "uiname";
-            this.txtLookup.RecordClick += new xrmtb.XrmToolBox.Controls.CDSRecordEventHandler(this.txtLookup_RecordClick);
+            this.txtLookup.Click += new System.EventHandler(this.txtLookup_Click);
+            // 
+            // xrmRecord
+            // 
+            this.xrmRecord.Id = new System.Guid("00000000-0000-0000-0000-000000000000");
+            this.xrmRecord.LogicalName = null;
+            this.xrmRecord.Record = null;
+            this.xrmRecord.Service = null;
             // 
             // label1
             // 
@@ -356,7 +360,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // txtUitype
             // 
-            this.txtUitype.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtUitype.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUitype.Location = new System.Drawing.Point(7, 16);
             this.txtUitype.Name = "txtUitype";
@@ -420,7 +424,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // cmbValueOf
             // 
-            this.cmbValueOf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.cmbValueOf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbValueOf.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbValueOf.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
@@ -516,7 +520,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.Panel panValueLookup;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnLookup;
-        private xrmtb.XrmToolBox.Controls.Controls.CDSDataTextBox txtLookup;
+        private Rappen.XTB.Helpers.Controls.XRMRecordHost xrmRecord;
+        private Rappen.XTB.Helpers.Controls.XRMColumnText txtLookup;
         private System.Windows.Forms.Panel panValueHint;
         private xrmtb.XrmToolBox.Controls.Controls.CDSLookupDialog dlgLookup;
         private System.Windows.Forms.Panel panUitype;
