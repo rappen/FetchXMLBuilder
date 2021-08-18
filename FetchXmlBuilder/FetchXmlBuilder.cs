@@ -9,6 +9,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using NuGet.Packaging;
 using Rappen.XTB.Helpers.Extensions;
 using Rappen.XTB.Helpers.Serialization;
 using System;
@@ -1174,15 +1175,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
                     //if (ConnectionDetail.MetadataCacheLoader != null)
                     //{
-                    //    try
+                    //    var loader = ConnectionDetail.MetadataCacheLoader;
+                    //    loader.ContinueWith(task =>
                     //    {
-                    //        ConnectionDetail.MetadataCacheLoader.ConfigureAwait(false).GetAwaiter().GetResult();
-                    //        return;
-                    //    }
-                    //    catch
-                    //    {
-                    //        // Error loading cache, use fallback
-                    //    }
+                    //        entities = ConnectionDetail.MetadataCache.ToDictionary(e => e.LogicalName);
+                    //    });
                     //}
 
                     eventargs.Result = Service.LoadEntities();
@@ -1196,18 +1193,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     else
                     {
-                        //if (ConnectionDetail.MetadataCache != null)
-                        //{
-                        //    entities = ConnectionDetail.MetadataCache.ToDictionary(e => e.LogicalName);
-                        //}
-                        //else
-                        if (completedargs.Result is RetrieveMetadataChangesResponse)
+                        if (completedargs.Result is RetrieveMetadataChangesResponse meta)
                         {
                             entities = new Dictionary<string, EntityMetadata>();
-                            foreach (var entity in ((RetrieveMetadataChangesResponse)completedargs.Result).EntityMetadata)
-                            {
-                                entities.Add(entity.LogicalName, entity);
-                            }
+                            entities.AddRange(meta.EntityMetadata.ToDictionary(e => e.LogicalName));
                         }
                     }
                     UpdateLiveXML();
