@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>faf35e13-1a84-45b3-a315-c62d15ac888a</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>FXBEditorUtils</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ControlUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FindTextHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IComboBoxItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IDefinitionSavable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ListViewItemComparer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Prompt.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SaveEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TreeNodeCapabilities.cs" />
+  </ItemGroup>
+</Project>
