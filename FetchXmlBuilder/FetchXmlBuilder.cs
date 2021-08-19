@@ -9,6 +9,9 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using NuGet.Packaging;
+using Rappen.XTB.Helpers.Extensions;
+using Rappen.XTB.Helpers.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,9 +21,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 using WeifenLuo.WinFormsUI.Docking;
-using xrmtb.XrmToolBox.Controls;
 using XrmToolBox;
-using XrmToolBox.Constants;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
@@ -84,7 +85,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             dockContainer.Theme = theme;
             dockContainer.Theme.Skin.DockPaneStripSkin.TextFont = Font;
             //dockContainer.DockBackColor = SystemColors.Window;
-            MetadataHelper.attributeProperties = new string[] { "DisplayName", "AttributeType", "IsValidForRead", "AttributeOf", "IsManaged", "IsCustomizable", "IsCustomAttribute", "IsValidForAdvancedFind", "IsPrimaryId", "IsPrimaryName", "OptionSet", "SchemaName", "Targets", "IsLogical" };
+            MetadataExtensions.attributeProperties = MetadataExtensions.attributeProperties.Union(new string[] {
+                "DisplayName", "AttributeType", "IsValidForRead", "AttributeOf", "IsManaged", "IsCustomizable", "IsCustomAttribute", "IsValidForAdvancedFind", "IsPrimaryId", "IsPrimaryName", "OptionSet", "SchemaName", "Targets", "IsLogical"
+            }).ToArray();
         }
 
         #endregion Public Constructors
@@ -92,7 +95,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         #region Public Events
 
         public event EventHandler<MessageBusEventArgs> OnOutgoingMessage;
+
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
+
         public event EventHandler<DuplicateToolArgs> DuplicateRequested;
 
         #endregion Public Events
@@ -624,6 +629,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     case 2:
                         odata = ODataCodeGenerator.GetODataQuery(dockControlBuilder.GetFetchType(), ConnectionDetail.OrganizationDataServiceUrl, this);
                         break;
+
                     case 4:
                         // Find correct WebAPI base url
                         var baseUrl = ConnectionDetail.WebApplicationUrl;
@@ -665,7 +671,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 WorkAsync(new WorkAsyncInfo($"Loading {name}...",
                     (eventargs) =>
                     {
-                        eventargs.Result = MetadataHelper.LoadEntityDetails(Service, entityName, ConnectionDetail.OrganizationMajorVersion, ConnectionDetail.OrganizationMinorVersion);
+                        eventargs.Result = MetadataExtensions.LoadEntityDetails(Service, entityName, ConnectionDetail.OrganizationMajorVersion, ConnectionDetail.OrganizationMinorVersion);
                     })
                 {
                     PostWorkCallBack = (completedargs) =>
@@ -682,7 +688,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 try
                 {
-                    var resp = MetadataHelper.LoadEntityDetails(Service, entityName, ConnectionDetail.OrganizationMajorVersion, ConnectionDetail.OrganizationMinorVersion);
+                    var resp = MetadataExtensions.LoadEntityDetails(Service, entityName, ConnectionDetail.OrganizationMajorVersion, ConnectionDetail.OrganizationMinorVersion);
                     LoadEntityDetailsCompleted(entityName, resp, null);
                 }
                 catch (Exception e)
@@ -1167,18 +1173,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     EnableControls(false);
 
-                    if (ConnectionDetail.MetadataCacheLoader != null)
-                    {
-                        try
-                        {
-                            ConnectionDetail.MetadataCacheLoader.ConfigureAwait(false).GetAwaiter().GetResult();
-                            return;
-                        }
-                        catch
-                        {
-                            // Error loading cache, use fallback
-                        }
-                    }
+                    //if (ConnectionDetail.MetadataCacheLoader != null)
+                    //{
+                    //    var loader = ConnectionDetail.MetadataCacheLoader;
+                    //    loader.ContinueWith(task =>
+                    //    {
+                    //        entities = ConnectionDetail.MetadataCache.ToDictionary(e => e.LogicalName);
+                    //    });
+                    //}
 
                     eventargs.Result = Service.LoadEntities();
                 })
@@ -1191,17 +1193,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                     else
                     {
-                        if (ConnectionDetail.MetadataCache != null)
-                        {
-                            entities = ConnectionDetail.MetadataCache.ToDictionary(e => e.LogicalName);
-                        }
-                        else if (completedargs.Result is RetrieveMetadataChangesResponse)
+                        if (completedargs.Result is RetrieveMetadataChangesResponse meta)
                         {
                             entities = new Dictionary<string, EntityMetadata>();
-                            foreach (var entity in ((RetrieveMetadataChangesResponse)completedargs.Result).EntityMetadata)
-                            {
-                                entities.Add(entity.LogicalName, entity);
-                            }
+                            entities.AddRange(meta.EntityMetadata.ToDictionary(e => e.LogicalName));
                         }
                     }
                     UpdateLiveXML();
@@ -1242,7 +1237,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     }
                 }
                 working = false;
-                dockControlBuilder.UpdateCurrentNode();
+                dockControlBuilder.UpdateAllNode();
                 UpdateLiveXML();
             }
             working = false;
@@ -1523,12 +1518,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     ai.WriteEvent("RetrieveMultiple", resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds, HandleAIResult);
                     if (settings.Results.ResultOutput == ResultOutput.JSON)
                     {
-                        var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented, JsonFormat.Legacy);
+                        var json = EntityCollectionSerializer.ToJSONComplex(resultCollection, Formatting.Indented);
                         eventargs.Result = json;
                     }
                     else if (settings.Results.ResultOutput == ResultOutput.JSONWebAPI)
                     {
-                        var json = EntityCollectionSerializer.ToJSON(resultCollection, Formatting.Indented, JsonFormat.WebApi);
+                        var json = EntityCollectionSerializer.ToJSONSimple(resultCollection, Formatting.Indented);
                         eventargs.Result = json;
                     }
                     else
@@ -1585,6 +1580,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                                     dockControlGrid.Activate();
                                 }
                                 break;
+
                             case ResultOutput.XML:
                                 var serialized = EntityCollectionSerializer.Serialize(queryinfo.Results, SerializationStyle.Explicit);
                                 ShowResultControl(serialized.OuterXml, ContentType.Serialized_Result_XML, SaveFormat.XML, settings.DockStates.FetchResult);

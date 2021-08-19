@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.28407.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FetchXMLBuilder", "FetchXmlBuilder\FetchXMLBuilder.csproj", "{D746CBE7-7787-47FC-B773-F089A44DF8C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlEditorUtils", "XmlEditorUtils\XmlEditorUtils.csproj", "{9FC7BDF7-321C-4B96-9B70-D75A16BD7685}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{13AB47EF-2E67-4179-876C-88816794849B}"
 	ProjectSection(SolutionItems) = preProject
 		FetchXMLBuilder.nuspec = FetchXMLBuilder.nuspec
@@ -16,16 +14,24 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FXBTests", "FXBTests\FXBTes
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MarkMpn.FetchXmlToWebAPI", "MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.shproj", "{543E6D79-2913-4B00-AAAC-5661F6ADB1A5}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rappen.XTB.Helpers", "Rappen.XTB.Helper\Rappen.XTB.Helpers.shproj", "{0B88B381-EE9D-41E8-A62C-90152C42DE90}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "FXBEditorUtils", "FXBEditorUtils\FXBEditorUtils.shproj", "{FAF35E13-1A84-45B3-A315-C62D15AC888A}"
+EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MarkMpn.XmlSchemaAutocomplete", "MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutocomplete.shproj", "{CE3B0F1B-1668-4AC3-A7AD-FE1872C6BCC3}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MarkMpn.XmlSchemaAutocomplete.Scintilla", "MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutocomplete.Scintilla\MarkMpn.XmlSchemaAutocomplete.Scintilla.shproj", "{4C497B9C-B9DD-4B3D-8ECC-C504AFCADD65}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Rappen.XTB.Helper\Rappen.XTB.Helpers.projitems*{0b88b381-ee9d-41e8-a62c-90152c42de90}*SharedItemsImports = 13
 		MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutocomplete.Scintilla\MarkMpn.XmlSchemaAutocomplete.Scintilla.projitems*{4c497b9c-b9dd-4b3d-8ecc-c504afcadd65}*SharedItemsImports = 13
 		MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems*{543e6d79-2913-4b00-aaac-5661f6adb1a5}*SharedItemsImports = 13
+		FXBEditorUtils\FXBEditorUtils.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
 		MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutoComplete.projitems*{ce3b0f1b-1668-4ac3-a7ad-fe1872c6bcc3}*SharedItemsImports = 13
 		MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
+		Rappen.XTB.Helper\Rappen.XTB.Helpers.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
+		FXBEditorUtils\FXBEditorUtils.projitems*{faf35e13-1a84-45b3-a315-c62d15ac888a}*SharedItemsImports = 13
 		MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutocomplete.Scintilla\MarkMpn.XmlSchemaAutocomplete.Scintilla.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
 		MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutoComplete.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
 	EndGlobalSection
@@ -38,10 +44,6 @@ Global
 		{D746CBE7-7787-47FC-B773-F089A44DF8C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D746CBE7-7787-47FC-B773-F089A44DF8C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D746CBE7-7787-47FC-B773-F089A44DF8C9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9FC7BDF7-321C-4B96-9B70-D75A16BD7685}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9FC7BDF7-321C-4B96-9B70-D75A16BD7685}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9FC7BDF7-321C-4B96-9B70-D75A16BD7685}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9FC7BDF7-321C-4B96-9B70-D75A16BD7685}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8F32EF58-AC53-49DE-957B-102D78368377}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8F32EF58-AC53-49DE-957B-102D78368377}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F32EF58-AC53-49DE-957B-102D78368377}.Release|Any CPU.ActiveCfg = Release|Any CPU

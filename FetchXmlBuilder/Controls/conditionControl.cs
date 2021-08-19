@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.Windows.Forms;
-using xrmtb.XrmToolBox.Controls;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
@@ -33,7 +32,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             InitializeComponent();
             BeginInit();
             valueOfSupported = fetchXmlBuilder.CDSVersion >= new Version(9, 1, 0, 19562);
-            txtLookup.OrganizationService = fetchXmlBuilder.Service;
+            xrmRecord.Service = fetchXmlBuilder.Service;
             dlgLookup.Service = fetchXmlBuilder.Service;
             rbUseLookup.Checked = fetchXmlBuilder.settings.UseLookup;
             rbEnterGuid.Checked = !rbUseLookup.Checked;
@@ -88,32 +87,32 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 if (op == "begins-with")
                 {
                     attr["operator"] = "like";
-                    attr["value"] = value + "%";
+                    attr["value"] = EscapeLikeWildcards(value) + "%";
                 }
                 else if (op == "not-begin-with")
                 {
                     attr["operator"] = "not-like";
-                    attr["value"] = value + "%";
+                    attr["value"] = EscapeLikeWildcards(value) + "%";
                 }
                 else if (op == "ends-with")
                 {
                     attr["operator"] = "like";
-                    attr["value"] = "%" + value;
+                    attr["value"] = "%" + EscapeLikeWildcards(value);
                 }
                 else if (op == "not-end-with")
                 {
                     attr["operator"] = "not-like";
-                    attr["value"] = "%" + value;
+                    attr["value"] = "%" + EscapeLikeWildcards(value);
                 }
                 else if (op == "contains")
                 {
                     attr["operator"] = "like";
-                    attr["value"] = "%" + value + "%";
+                    attr["value"] = "%" + EscapeLikeWildcards(value) + "%";
                 }
                 else if (op == "does-not-contain")
                 {
                     attr["operator"] = "not-like";
-                    attr["value"] = "%" + value + "%";
+                    attr["value"] = "%" + EscapeLikeWildcards(value) + "%";
                 }
             }
 
@@ -208,6 +207,30 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             return null;
                         }
 
+                        if (oper.GetValue() == "like" && !string.IsNullOrWhiteSpace(cmbValue.Text))
+                        {
+                            // Check for mismatched square brackets
+                            var inBrackets = false;
+
+                            foreach (var ch in cmbValue.Text)
+                            {
+                                if (ch == '[')
+                                {
+                                    inBrackets = true;
+                                }
+                                else if (ch == ']')
+                                {
+                                    inBrackets = false;
+                                }
+                            }
+
+                            if (inBrackets)
+                            {
+                                // Last open bracket was not closed
+                                return new ControlValidationResult(ControlValidationLevel.Error, "LIKE pattern has mismatched brackets. Add closing brackets for each character range.\r\n\r\nTo match the character '[', use '[[]'");
+                            }
+                        }
+
                         switch (valueType)
                         {
                             case null:
@@ -216,12 +239,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                                     return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " does not allow value");
                                 }
                                 break;
+
                             case AttributeTypeCode.Boolean:
                                 if (value != "0" && value != "1")
                                 {
                                     return new ControlValidationResult(ControlValidationLevel.Error, "Value must be 0 or 1");
                                 }
                                 break;
+
                             case AttributeTypeCode.DateTime:
                                 DateTime date;
                                 if (!DateTime.TryParse(value, out date))
@@ -229,6 +254,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                                     return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires date value");
                                 }
                                 break;
+
                             case AttributeTypeCode.Integer:
                             case AttributeTypeCode.State:
                             case AttributeTypeCode.Status:
@@ -241,6 +267,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                                     return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires whole number value");
                                 }
                                 break;
+
                             case AttributeTypeCode.Decimal:
                             case AttributeTypeCode.Double:
                             case AttributeTypeCode.Money:
@@ -250,6 +277,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                                     return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires decimal value");
                                 }
                                 break;
+
                             case AttributeTypeCode.Lookup:
                             case AttributeTypeCode.Customer:
                             case AttributeTypeCode.Owner:
@@ -260,10 +288,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                                     return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires a proper guid with format: " + Guid.Empty.ToString());
                                 }
                                 break;
+
                             case AttributeTypeCode.String:
                             case AttributeTypeCode.Memo:
                             case AttributeTypeCode.Virtual:
                                 break;
+
                             case AttributeTypeCode.PartyList:
                             case AttributeTypeCode.CalendarRules:
                                 //case AttributeTypeCode.ManagedProperty:   // ManagedProperty is a bit "undefined", so let's accept all values for now... ref issue #67
@@ -397,8 +427,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     value = value.Substring(0, value.Length - 1);
                 }
 
-                if (newOp != null)
+                if (newOp != null && AreAllLikeWildcardsEscaped(value))
                 {
+                    value = UnescapeLikeWildcards(value);
+
                     if (op.GetValue() == "not-like")
                     {
                         newOp = "not-" + newOp.Replace("s-", "-");
@@ -418,6 +450,69 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     }
                 }
             }
+        }
+
+        private string EscapeLikeWildcards(string value)
+        {
+            return value
+                .Replace("[", "[[]")
+                .Replace("%", "[%]")
+                .Replace("_", "[_]");
+        }
+
+        private bool AreAllLikeWildcardsEscaped(string value)
+        {
+            var bracketStart = -1;
+
+            for (var i = 0; i < value.Length; i++)
+            {
+                var ch = value[i];
+
+                if (ch != '%' && ch != '_' && ch != '[' && ch != ']')
+                {
+                    if (bracketStart != -1)
+                    {
+                        // We've got a non-wildcard character in brackets - it's not an escaped wildcard
+                        return false;
+                    }
+
+                    continue;
+                }
+
+                if (bracketStart == -1)
+                {
+                    if (ch == '[')
+                    {
+                        bracketStart = i;
+                    }
+                    else
+                    {
+                        // We've got a wildcard character outside of brackets - it's not escaped
+                        return false;
+                    }
+                }
+
+                if (ch == ']')
+                {
+                    if (i > bracketStart + 2)
+                    {
+                        // We've got more than a single character in the brackets - it's not a single escaped wildcard
+                        return false;
+                    }
+
+                    bracketStart = -1;
+                }
+            }
+
+            return true;
+        }
+
+        private string UnescapeLikeWildcards(string value)
+        {
+            return value
+                .Replace("[_]", "_")
+                .Replace("[%]", "%")
+                .Replace("[[]", "[");
         }
 
         private void RefreshOperators()
@@ -487,6 +582,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             if (valueType == AttributeTypeCode.ManagedProperty && attribute != null)
             {   // Indicates value type is determined by selected attribute
                 valueType = attribute.Metadata.AttributeType;
+                var managedProp = attribute.Metadata as ManagedPropertyAttributeMetadata;
+                if (managedProp != null)
+                {
+                    valueType = managedProp.ValueAttributeTypeCode;
+                }
                 if (oper.IsMultipleValuesType)
                 {
                     if (Node.Nodes.Count == 0)
@@ -534,8 +634,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     {
                         try
                         {
-                            txtLookup.LogicalName = target;
-                            txtLookup.Id = id;
+                            xrmRecord.LogicalName = target;
+                            xrmRecord.Id = id;
                             txtUitype.Text = target;
                             break;
                         }
@@ -545,8 +645,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                         }
                     }
                 }
+                else if (managedProp != null && managedProp.ValueAttributeTypeCode == AttributeTypeCode.Boolean)
+                {
+                    cmbValue.Items.Add(new OptionsetItem(new OptionMetadata(new Microsoft.Xrm.Sdk.Label(new LocalizedLabel("False", 0), null), 0)));
+                    cmbValue.Items.Add(new OptionsetItem(new OptionMetadata(new Microsoft.Xrm.Sdk.Label(new LocalizedLabel("True", 0), null), 1)));
+                    var value = cmbValue.Text;
+                    cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
+                    cmbValue.SelectedItem = cmbValue.Items.OfType<OptionsetItem>().FirstOrDefault(i => i.GetValue() == value);
+                }
                 else
                 {
+                    xrmRecord.Record = null;
                     txtUitype.Text = string.Empty;
                     txtLookup.Text = string.Empty;
                 }
@@ -609,14 +718,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             switch (dlgLookup.ShowDialog(this))
             {
                 case DialogResult.OK:
-                    txtLookup.Entity = dlgLookup.Entity;
-                    txtUitype.Text = dlgLookup.Entity.LogicalName;
+                    xrmRecord.Record = dlgLookup.Record;
+                    txtUitype.Text = dlgLookup.Record.LogicalName;
                     break;
+
                 case DialogResult.Abort:
-                    txtLookup.Entity = null;
+                    xrmRecord.Record = null;
                     break;
             }
-            cmbValue.Text = (txtLookup?.Entity?.Id ?? Guid.Empty).ToString();
+            cmbValue.Text = (xrmRecord?.Record?.Id ?? Guid.Empty).ToString();
             Cursor = Cursors.Default;
         }
 
@@ -643,10 +753,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             UpdateValueField();
         }
 
-        private void txtLookup_RecordClick(object sender, CDSRecordEventArgs e)
+        private void txtLookup_Click(object sender, EventArgs e)
         {
-            var url = fxb.ConnectionDetail.GetEntityUrl(e.Entity);
-            url = fxb.ConnectionDetail.GetEntityReferenceUrl(txtLookup.EntityReference);
+            var url = fxb.ConnectionDetail.GetEntityUrl(xrmRecord.Record);
+            url = fxb.ConnectionDetail.GetEntityReferenceUrl(xrmRecord.Record.ToEntityReference());
             if (!string.IsNullOrEmpty(url))
             {
                 fxb.LogUse("OpenRecord");
