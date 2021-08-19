@@ -1,6 +1,6 @@
 [submodule "MarkMpn.FetchXmlToWebAPI"]
 	path = MarkMpn.FetchXmlToWebAPI
 	url = https://github.com/MarkMpn/MarkMpn.FetchXmlToWebAPI.git
-[submodule "MarkMpn.XmlSerializerAutoComplete"]
-	path = MarkMpn.XmlSerializerAutoComplete
-	url = https://github.com/MarkMpn/MarkMpn.XmlSerializerAutoComplete
+[submodule "MarkMpn.XmlSchemaAutoComplete"]
+	path = MarkMpn.XmlSchemaAutoComplete
+	url = https://github.com/MarkMpn/MarkMpn.XmlSchemaAutoComplete
