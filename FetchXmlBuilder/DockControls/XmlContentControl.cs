@@ -2,17 +2,14 @@
 using Cinteros.Xrm.XmlEditorUtils;
 using MarkMpn.XmlSchemaAutocomplete.Scintilla;
 using Microsoft.Xrm.Sdk.Metadata;
-using ScintillaNET;
+using Rappen.XTB.Helpers.Extensions;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Serialization;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
@@ -585,11 +582,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 var entityNode = e.Attribute.Name == "from" ? e.Element : (XmlElement)e.Element.ParentNode;
                 var otherEntityNode = e.Attribute.Name == "from" ? (XmlElement)e.Element.ParentNode : e.Element;
 
-                if (entityNode != null && fxb.entities.TryGetValue(entityNode.GetAttribute("name"), out var entity) && entity.Attributes != null)
+                if (entityNode != null && TryGetAttributes(entityNode.GetAttribute("name"), out var entity))
                 {
                     var attributes = entity.Attributes.Where(attr => attr.IsValidForRead != false && attr.AttributeOf == null);
 
-                    if (otherEntityNode != null && fxb.entities.TryGetValue(otherEntityNode.GetAttribute("name"), out var otherEntity) && otherEntity.Attributes != null)
+                    if (otherEntityNode != null && TryGetAttributes(otherEntityNode.GetAttribute("name"), out var otherEntity))
                     {
                         // Only suggest attributes of the same type. If the other attribute isn't specified yet, offer the
                         // primary key and foreign key attributes
@@ -633,7 +630,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
                 if (entityNode != null && (entityNode.Name == "entity" || entityNode.Name == "link-entity"))
                 {
-                    if (fxb.entities.TryGetValue(entityNode.GetAttribute("name"), out var entity) && entity.Attributes != null)
+                    if (TryGetAttributes(entityNode.GetAttribute("name"), out var entity))
                     {
                         var attr = entity.Attributes.SingleOrDefault(a => a.LogicalName == e.Element.GetAttribute("attribute"));
 
@@ -652,7 +649,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 return true;
 
             if (fxb.NeedToLoadEntity(entityName))
-                fxb.LoadEntityDetails(entityName, null);
+            {
+                // NOTE: Don't do:
+                // fxb.LoadEntityDetails(entityName, null);
+                // This causes a refresh of the XML from the current tree view, overwriting our changes as we type!
+                // We also don't really want the "Loading..." popup to show while we're typing, so just start the metadata loading in a background task directly
+                Task.Run(() =>
+                {
+                    var resp = MetadataExtensions.LoadEntityDetails(fxb.Service, entityName, fxb.ConnectionDetail.OrganizationMajorVersion, fxb.ConnectionDetail.OrganizationMinorVersion);
+
+                    if (resp.EntityMetadata.Count == 1)
+                    {
+                        fxb.entities[entityName] = resp.EntityMetadata[0];
+                    }
+                });
+            }
 
             return false;
         }
