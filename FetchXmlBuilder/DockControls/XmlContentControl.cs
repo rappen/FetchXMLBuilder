@@ -562,7 +562,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
                 if (entityNode != null && (entityNode.Name == "entity" || entityNode.Name == "link-entity"))
                 {
-                    if (fxb.entities.TryGetValue(entityNode.GetAttribute("name"), out var entity) && entity.Attributes != null)
+                    if (TryGetAttributes(entityNode.GetAttribute("name"), out var entity))
                     {
                         var attributes = entity.Attributes.Where(attr => attr.IsValidForRead != false && attr.AttributeOf == null);
 
@@ -604,6 +604,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
                     e.Suggestions.AddRange(attributes.OrderBy(attr => attr.LogicalName).Select(attr => new AttributeMetadataSuggestion(attr, fxb.settings.UseFriendlyNames)));
                 }
+                else if (fxb.NeedToLoadEntity(entityNode.GetAttribute("name")))
+                {
+                    fxb.LoadEntityDetails(entityNode.GetAttribute("name"), null);
+                }
             }
 
             // Autocomplete alias names for <condition> and <order> elements
@@ -640,6 +644,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     }
                 }
             }
+        }
+
+        private bool TryGetAttributes(string entityName, out EntityMetadata entity)
+        {
+            if (fxb.entities.TryGetValue(entityName, out entity) && entity.Attributes != null)
+                return true;
+
+            if (fxb.NeedToLoadEntity(entityName))
+                fxb.LoadEntityDetails(entityName, null);
+
+            return false;
         }
 
         private bool IsCompatibleType(AttributeMetadata a, AttributeMetadata attr)
