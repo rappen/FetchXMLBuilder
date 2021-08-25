@@ -21,6 +21,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         private SaveFormat format;
 
         private MarkMpn.XmlSchemaAutocomplete.Autocomplete<FetchType> _autocomplete;
+        private bool _usedAutocomplete;
 
         internal XmlContentControl(FetchXmlBuilder caller) : this(ContentType.FetchXML, SaveFormat.XML, caller)
         {
@@ -531,6 +532,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
             var helper = new ScintillaXmlHelper(txtXML, _autocomplete);
             helper.Menu.ImageList = autocompleteImageList;
+            helper.Menu.Opening += (sender, e) =>
+            {
+                if (_usedAutocomplete)
+                    return;
+
+                // Log this only once per instance, not per keypress
+                fxb.LogUse("Autocomplete");
+                _usedAutocomplete = true;
+            };
             helper.Attach();
         }
 
