@@ -778,10 +778,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal void LogUse(string action, bool forceLog = false, double? count = null, double? duration = null)
         {
             ai.WriteEvent(action, count, duration, HandleAIResult);
-            if (settings.LogUsage == true || forceLog)
-            {
-                LogUsage.DoLog(action);
-            }
         }
 
         private void HandleAIResult(string result)
@@ -860,7 +856,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     string fetchXml = QueryExpressionCodeGenerator.GetFetchXmlFromCSharpQueryExpression(query, Service);
                     var stop = DateTime.Now;
                     var duration = stop - start;
-                    ai.WriteEvent("QueryExpressionToFetchXml", null, duration.TotalMilliseconds, HandleAIResult);
+                    LogUse("QueryExpressionToFetchXml", false, null, duration.TotalMilliseconds);
                     SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Execution time: {duration}"));
                     eventargs.Result = fetchXml;
                 })
@@ -919,7 +915,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (!version.Equals(settings.CurrentVersion))
             {
                 // Reset some settings when new version is deployed
-                settings.LogUsage = true;
                 settings.CurrentVersion = version;
                 LogUse("ShowWelcome");
                 Welcome.ShowWelcome(this);
@@ -1003,7 +998,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     var resp = (ExecuteFetchResponse)Service.Execute(new ExecuteFetchRequest() { FetchXml = fetch });
                     var stop = DateTime.Now;
                     var duration = stop - start;
-                    ai.WriteEvent("ExecuteFetch", null, duration.TotalMilliseconds, HandleAIResult);
+                    LogUse("ExecuteFetch", false, null, duration.TotalMilliseconds);
                     SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Execution time: {duration}"));
                     eventargs.Result = resp.FetchXmlResult;
                 })
@@ -1515,7 +1510,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Retrieved {resultCollection.Entities.Count} records on {pageinfo} in {duration.TotalSeconds:F2} seconds"));
                     }
                     while (!eventargs.Cancel && settings.Results.RetrieveAllPages && (query is QueryExpression || query is FetchExpression) && tmpResult.MoreRecords);
-                    ai.WriteEvent("RetrieveMultiple", resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds, HandleAIResult);
+                    LogUse("RetrieveMultiple", false, resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds);
                     if (settings.Results.ResultOutput == ResultOutput.JSON)
                     {
                         var json = EntityCollectionSerializer.ToJSONComplex(resultCollection, Formatting.Indented);
@@ -1917,7 +1912,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void ShowFXBSettings()
         {
-            var allowStats = settings.LogUsage;
             var settingDlg = new Settings(this);
             LogUse("OpenOptions");
             if (settingDlg.ShowDialog(this) == DialogResult.OK)
@@ -1925,17 +1919,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 LogUse("SaveOptions");
                 settings = settingDlg.GetSettings();
                 views = null;
-                if (allowStats != settings.LogUsage)
-                {
-                    if (settings.LogUsage == true)
-                    {
-                        LogUse("Accept", true);
-                    }
-                    else if (!settings.LogUsage == true)
-                    {
-                        LogUse("Deny", true);
-                    }
-                }
                 ApplySettings(false);
                 dockControlBuilder.ApplyCurrentSettings();
                 dockControlFetchXml?.ApplyCurrentSettings();

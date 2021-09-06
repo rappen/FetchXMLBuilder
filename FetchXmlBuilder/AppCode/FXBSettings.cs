@@ -19,7 +19,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public MetadataOptions Entity { get; set; } = new MetadataOptions();
         public MetadataOptions Attribute { get; set; } = new MetadataOptions();
         public ResultOptions Results { get; set; } = new ResultOptions();
-        public bool? LogUsage { get; set; }
         public string CurrentVersion { get; set; }
         public string LastOpenedViewEntity { get; set; }
         public Guid LastOpenedViewId { get; set; }
