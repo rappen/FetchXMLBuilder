@@ -619,16 +619,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                         cmbValue.SelectedItem = cmbValue.Items.OfType<EntityNameItem>().FirstOrDefault(i => i.GetValue() == value);
                     }
                 }
-                else if (attribute.Metadata is LookupAttributeMetadata lookupmeta && fxb.settings.UseLookup && Guid.TryParse(cmbValue.Text, out Guid id) && !Guid.Empty.Equals(id))
+                else if (fxb.settings.UseLookup
+                    && (attribute.Metadata is LookupAttributeMetadata
+                        || attribute.Metadata.AttributeType == AttributeTypeCode.Uniqueidentifier)
+                    && Guid.TryParse(cmbValue.Text, out Guid id) && !Guid.Empty.Equals(id))
                 {
                     var loookuptargets = new List<string>();
                     if (!string.IsNullOrWhiteSpace(txtUitype.Text))
                     {
                         loookuptargets.Add(txtUitype.Text.Trim());
                     }
-                    else
+                    else if (attribute.Metadata is LookupAttributeMetadata lookupmeta)
                     {
                         loookuptargets.AddRange(lookupmeta.Targets);
+                    }
+                    else if (attribute.Metadata.AttributeType == AttributeTypeCode.Uniqueidentifier)
+                    {
+                        loookuptargets.Add(attribute.Metadata.EntityLogicalName);
                     }
                     foreach (var target in loookuptargets)
                     {

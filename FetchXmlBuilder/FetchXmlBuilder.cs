@@ -86,7 +86,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             dockContainer.Theme.Skin.DockPaneStripSkin.TextFont = Font;
             //dockContainer.DockBackColor = SystemColors.Window;
             MetadataExtensions.attributeProperties = MetadataExtensions.attributeProperties.Union(new string[] {
-                "DisplayName", "AttributeType", "IsValidForRead", "AttributeOf", "IsManaged", "IsCustomizable", "IsCustomAttribute", "IsValidForAdvancedFind", "IsPrimaryId", "IsPrimaryName", "OptionSet", "SchemaName", "Targets", "IsLogical"
+                "DisplayName",
+                "AttributeType",
+                "IsValidForRead",
+                "AttributeOf",
+                "IsManaged",
+                "IsCustomizable",
+                "IsCustomAttribute",
+                "IsValidForAdvancedFind",
+                "IsPrimaryId",
+                "IsPrimaryName",
+                "OptionSet",
+                "SchemaName",
+                "Targets",
+                "IsLogical",
+                "EntityLogicalName"
             }).ToArray();
         }
 
