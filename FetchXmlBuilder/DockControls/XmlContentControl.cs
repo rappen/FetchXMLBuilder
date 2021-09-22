@@ -549,7 +549,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             // Autocomplete entity names for <entity> and <link-entity> elements
             if ((e.Element.Name == "entity" || e.Element.Name == "link-entity") && e.Attribute.Name == "name")
             {
-                e.Suggestions.AddRange(fxb.entities.Values.Select(entity => new EntityMetadataSuggestion(entity)));
+                e.Suggestions.AddRange(fxb.GetDisplayEntities().Values.Select(entity => new EntityMetadataSuggestion(entity)));
             }
 
             // Autocomplete prefiltering parameter name
@@ -569,14 +569,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
                 if (entityNode != null && (entityNode.Name == "entity" || entityNode.Name == "link-entity"))
                 {
-                    if (TryGetAttributes(entityNode.GetAttribute("name"), out var entity))
+                    if (TryGetAttributes(entityNode.GetAttribute("name"), out _, out var attrs))
                     {
-                        var attributes = entity.Attributes.Where(attr => attr.IsValidForRead != false && attr.AttributeOf == null);
+                        var attributes = attrs.Where(attr => attr.IsValidForRead != false && attr.AttributeOf == null);
 
                         if (e.Element.Name == "condition" && e.Attribute.Name == "valueof")
                         {
                             // Only suggest attributes of the same type
-                            var attr = entity.Attributes.SingleOrDefault(a => a.LogicalName == e.Element.GetAttribute("attribute"));
+                            var attr = attrs.SingleOrDefault(a => a.LogicalName == e.Element.GetAttribute("attribute"));
                             if (attr != null)
                                 attributes = attributes.Where(a => IsCompatibleType(a, attr));
                         }
@@ -592,17 +592,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 var entityNode = e.Attribute.Name == "from" ? e.Element : (XmlElement)e.Element.ParentNode;
                 var otherEntityNode = e.Attribute.Name == "from" ? (XmlElement)e.Element.ParentNode : e.Element;
 
-                if (entityNode != null && TryGetAttributes(entityNode.GetAttribute("name"), out var entity))
+                if (entityNode != null && TryGetAttributes(entityNode.GetAttribute("name"), out var entity, out var attrs))
                 {
-                    var attributes = entity.Attributes.Where(attr => attr.IsValidForRead != false && attr.AttributeOf == null);
+                    var attributes = attrs.Where(attr => attr.IsValidForRead != false && attr.AttributeOf == null);
 
-                    if (otherEntityNode != null && TryGetAttributes(otherEntityNode.GetAttribute("name"), out var otherEntity))
+                    if (otherEntityNode != null && TryGetAttributes(otherEntityNode.GetAttribute("name"), out var otherEntity, out var otherAttrs))
                     {
                         // Only suggest attributes of the same type. If the other attribute isn't specified yet, offer the
                         // primary key and foreign key attributes
                         // TODO: Offer all attributes if user is entering something other than the primary or foreign keys
                         // Maybe always offer all attributes but highlight the best ones?
-                        var attr = otherEntity.Attributes.SingleOrDefault(a => a.LogicalName == e.Element.GetAttribute(e.Attribute.Name == "from" ? "to" : "from"));
+                        var attr = otherAttrs.SingleOrDefault(a => a.LogicalName == e.Element.GetAttribute(e.Attribute.Name == "from" ? "to" : "from"));
                         if (attr != null)
                             attributes = attributes.Where(a => IsCompatibleType(a, attr));
                         else
@@ -640,9 +640,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
                 if (entityNode != null && (entityNode.Name == "entity" || entityNode.Name == "link-entity"))
                 {
-                    if (TryGetAttributes(entityNode.GetAttribute("name"), out var entity))
+                    if (TryGetAttributes(entityNode.GetAttribute("name"), out _, out var attrs))
                     {
-                        var attr = entity.Attributes.SingleOrDefault(a => a.LogicalName == e.Element.GetAttribute("attribute"));
+                        var attr = attrs.SingleOrDefault(a => a.LogicalName == e.Element.GetAttribute("attribute"));
 
                         if (attr is EnumAttributeMetadata enumAttr)
                         {
@@ -653,10 +653,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
         }
 
-        private bool TryGetAttributes(string entityName, out EntityMetadata entity)
+        private bool TryGetAttributes(string entityName, out EntityMetadata entity, out AttributeMetadata[] attributes)
         {
             if (fxb.entities.TryGetValue(entityName, out entity) && entity.Attributes != null)
+            {
+                attributes = fxb.GetDisplayAttributes(entityName);
                 return true;
+            }
 
             if (fxb.NeedToLoadEntity(entityName))
             {
@@ -675,6 +678,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 });
             }
 
+            attributes = null;
             return false;
         }
 
