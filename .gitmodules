@@ -4,3 +4,6 @@
 [submodule "Rappen.XTB.Helper"]
 	path = Rappen.XTB.Helper
 	url = https://github.com/rappen/Rappen.XTB.Helper
+[submodule "MsCrmTools.MetadataBrowser"]
+	path = MsCrmTools.MetadataBrowser
+	url = https://github.com/MscrmTools/MsCrmTools.MetadataBrowser
