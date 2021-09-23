@@ -18,15 +18,16 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rappen.XTB.Helpers", "Rappe
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "FXBEditorUtils", "FXBEditorUtils\FXBEditorUtils.shproj", "{FAF35E13-1A84-45B3-A315-C62D15AC888A}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MsCrmTools.MetadataBrowser.Shared", "MsCrmTools.MetadataBrowser.Shared\MsCrmTools.MetadataBrowser.Shared.shproj", "{9C6AADAA-CF44-4BCE-90C7-79E6C6EF6DEC}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MsCrmTools.MetadataBrowser.Shared", "MsCrmTools.MetadataBrowser\MsCrmTools.MetadataBrowser\MsCrmTools.MetadataBrowser.Shared.shproj", "{9C6AADAA-CF44-4BCE-90C7-79E6C6EF6DEC}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Rappen.XTB.Helper\Rappen.XTB.Helpers.projitems*{0b88b381-ee9d-41e8-a62c-90152c42de90}*SharedItemsImports = 13
 		MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems*{543e6d79-2913-4b00-aaac-5661f6adb1a5}*SharedItemsImports = 13
-		MsCrmTools.MetadataBrowser.Shared\MsCrmTools.MetadataBrowser.Shared.projitems*{9c6aadaa-cf44-4bce-90c7-79e6c6ef6dec}*SharedItemsImports = 13
+		MsCrmTools.MetadataBrowser\MsCrmTools.MetadataBrowser\MsCrmTools.MetadataBrowser.Shared.projitems*{9c6aadaa-cf44-4bce-90c7-79e6c6ef6dec}*SharedItemsImports = 13
 		FXBEditorUtils\FXBEditorUtils.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
 		MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
+		MsCrmTools.MetadataBrowser\MsCrmTools.MetadataBrowser\MsCrmTools.MetadataBrowser.Shared.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
 		Rappen.XTB.Helper\Rappen.XTB.Helpers.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
 		FXBEditorUtils\FXBEditorUtils.projitems*{faf35e13-1a84-45b3-a315-c62d15ac888a}*SharedItemsImports = 13
 	EndGlobalSection
