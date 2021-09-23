@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.MetadataBrowser.AppCode;
 using MsCrmTools.MetadataBrowser.AppCode.AttributeMd;
+using System.Diagnostics;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {
@@ -18,19 +19,30 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             if (meta is EntityMetadata ent)
             {
-                Text = $"Meta Entity {fxb.GetEntityDisplayName(ent.LogicalName)}";
+                lblInfo1Value.Text= fxb.GetEntityDisplayName(ent.LogicalName);
+                panInfo1.Visible = true;
+                panInfo2.Visible = false;
                 propMeta.SelectedObject = new EntityMetadataInfo(ent);
             }
             else if (meta is AttributeMetadata att)
             {
-                Text = $"Meta Attribute {fxb.GetAttributeDisplayName(att.EntityLogicalName, att.LogicalName)}";
+                lblInfo1Value.Text = fxb.GetEntityDisplayName(att.EntityLogicalName);
+                lblInfo2Value.Text = fxb.GetAttributeDisplayName(att.EntityLogicalName, att.LogicalName);
+                panInfo1.Visible = true;
+                panInfo2.Visible = true;
                 propMeta.SelectedObject = new AttributeMetadataInfo(att);
             }
             else
             {
-                Text = "Metadata";
+                panInfo1.Visible = false;
+                panInfo2.Visible = false;
                 propMeta.SelectedObject = null;
             }
+        }
+
+        private void linkLabel1_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://github.com/MscrmTools/MsCrmTools.MetadataBrowser/wiki");
         }
     }
 }
