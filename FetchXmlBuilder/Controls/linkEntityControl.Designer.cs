@@ -70,6 +70,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbEntity.TabIndex = 2;
             this.cmbEntity.Tag = "name|true";
             this.cmbEntity.SelectedIndexChanged += new System.EventHandler(this.cmbEntity_SelectedIndexChanged);
+            this.cmbEntity.Enter += new System.EventHandler(this.cmbEntity_Enter);
             // 
             // cmbFrom
             // 
@@ -84,6 +85,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbFrom.Sorted = true;
             this.cmbFrom.TabIndex = 3;
             this.cmbFrom.Tag = "from|true";
+            this.cmbFrom.Enter += new System.EventHandler(this.cmbEntity_Enter);
             // 
             // label4
             // 
@@ -116,6 +118,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbTo.Sorted = true;
             this.cmbTo.TabIndex = 4;
             this.cmbTo.Tag = "to|true";
+            this.cmbTo.Enter += new System.EventHandler(this.cmbEntity_Enter);
             // 
             // comboBox2
             // 

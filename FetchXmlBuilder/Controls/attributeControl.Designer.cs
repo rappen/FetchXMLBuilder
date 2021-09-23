@@ -71,6 +71,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbAttribute.Sorted = true;
             this.cmbAttribute.TabIndex = 27;
             this.cmbAttribute.Tag = "name|true";
+            this.cmbAttribute.SelectedIndexChanged += new System.EventHandler(this.cmbAttribute_SelectedIndexChanged);
             // 
             // txtAlias
             // 

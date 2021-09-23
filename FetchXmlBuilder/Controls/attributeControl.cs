@@ -98,5 +98,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             fxb.HelpClick(sender);
         }
+
+        private void cmbAttribute_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fxb.ShowMetadata(Metadata());
+        }
+
+        public override MetadataBase Metadata()
+        {
+            if (cmbAttribute.SelectedItem is AttributeItem item)
+            {
+                return item.Metadata;
+            }
+            return base.Metadata();
+        }
     }
 }
