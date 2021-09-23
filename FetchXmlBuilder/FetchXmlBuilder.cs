@@ -63,6 +63,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private FlowListControl dockControlFlowList;
         private XmlContentControl dockControlQExp;
         private XmlContentControl dockControlSQL;
+        private MetadataControl dockControlMeta;
         private Entity dynml;
         private string fileName;
         private string liveUpdateXml = "";
@@ -273,6 +274,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             dockControlFlowList?.Close();
             dockControlQExp?.Close();
             dockControlSQL?.Close();
+            dockControlMeta?.Close();
             SaveSetting();
             LogUse("Close");
         }
@@ -685,12 +687,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 WorkAsync(new WorkAsyncInfo($"Loading {name}...",
                     (eventargs) =>
                     {
-                        eventargs.Result = MetadataExtensions.LoadEntityDetails(Service, entityName, ConnectionDetail.OrganizationMajorVersion, ConnectionDetail.OrganizationMinorVersion);
+                        eventargs.Result = MetadataExtensions.LoadEntityDetails(Service, entityName);
                     })
                 {
                     PostWorkCallBack = (completedargs) =>
                     {
-                        LoadEntityDetailsCompleted(entityName, completedargs.Result as OrganizationResponse, completedargs.Error);
+                        LoadEntityDetailsCompleted(entityName, completedargs.Error == null ? completedargs.Result as EntityMetadata : null, completedargs.Error);
                         if (completedargs.Error == null && detailsLoaded != null)
                         {
                             detailsLoaded();
@@ -702,7 +704,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 try
                 {
-                    var resp = MetadataExtensions.LoadEntityDetails(Service, entityName, ConnectionDetail.OrganizationMajorVersion, ConnectionDetail.OrganizationMinorVersion);
+                    var resp = MetadataExtensions.LoadEntityDetails(Service, entityName);
                     LoadEntityDetailsCompleted(entityName, resp, null);
                 }
                 catch (Exception e)
@@ -856,6 +858,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (dockControlFetchXmlJs?.Visible == true)
             {
                 dockControlFetchXmlJs.UpdateXML(GetJavaScriptCode());
+            }
+            if (dockControlMeta?.Visible == true)
+            {
+                dockControlMeta.UpdateMeta(dockControlBuilder.SelectedMetadata());
+            }
+        }
+
+        internal void ShowMetadata(MetadataBase meta)
+        {
+            if (dockControlMeta?.Visible == true)
+            {
+                dockControlMeta.UpdateMeta(meta);
             }
         }
 
@@ -1216,7 +1230,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             });
         }
 
-        private void LoadEntityDetailsCompleted(string entityName, OrganizationResponse Result, Exception Error)
+        private void LoadEntityDetailsCompleted(string entityName, EntityMetadata Result, Exception Error)
         {
             if (Error != null)
             {
@@ -1225,25 +1239,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             else
             {
-                if (Result is RetrieveMetadataChangesResponse)
+                if (Result != null)
                 {
-                    var resp = (RetrieveMetadataChangesResponse)Result;
-                    if (resp.EntityMetadata.Count == 1)
+                    if (entities.ContainsKey(entityName))
                     {
-                        if (entities.ContainsKey(entityName))
-                        {
-                            entities[entityName] = resp.EntityMetadata[0];
-                        }
-                        else
-                        {
-                            entities.Add(entityName, resp.EntityMetadata[0]);
-                        }
+                        entities[entityName] = Result;
                     }
                     else
                     {
-                        entityShitList.Add(entityName);
-                        MessageBox.Show("Metadata not found for entity " + entityName, "Load attribute metadata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        entities.Add(entityName, Result);
                     }
+                }
+                else
+                {
+                    entityShitList.Add(entityName);
+                    MessageBox.Show("Metadata not found for entity " + entityName, "Load attribute metadata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 working = false;
                 dockControlBuilder.UpdateAllNode();
@@ -1924,6 +1934,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             UpdateLiveXML();
         }
 
+        private void ShowMetadataControl(ref MetadataControl control, DockState defaultstate)
+        {
+            LogUse($"Show-Metadata");
+            if (control?.IsDisposed != false)
+            {
+                control = new MetadataControl(this);
+                control.Show(dockContainer, defaultstate);
+            }
+            else
+            {
+                control.EnsureVisible(dockContainer, defaultstate);
+            }
+            UpdateLiveXML();
+        }
+
         private void ShowFXBSettings()
         {
             var settingDlg = new Settings(this);
@@ -2198,6 +2223,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsmiShowFetchXML_Click(object sender, EventArgs e)
         {
             ShowContentControl(ref dockControlFetchXml, ContentType.FetchXML, SaveFormat.None, settings.DockStates.FetchXML);
+        }
+
+        private void tsmiShowMetadata_Click(object sender, EventArgs e)
+        {
+            ShowMetadataControl(ref dockControlMeta, DockState.DockRight);
         }
 
         private void tsmiShowFetchXMLcs_Click(object sender, EventArgs e)

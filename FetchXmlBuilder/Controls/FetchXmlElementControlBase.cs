@@ -1,5 +1,6 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Cinteros.Xrm.XmlEditorUtils;
+using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -270,6 +271,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         public event EventHandler Initialized;
 
         public bool IsInitialized => initCount == 0;
+
+        public virtual MetadataBase Metadata()
+        {
+            return null;
+        }
     }
 
     public enum ControlValidationLevel

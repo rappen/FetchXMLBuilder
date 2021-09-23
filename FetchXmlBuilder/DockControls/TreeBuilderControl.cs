@@ -26,6 +26,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         private FetchXmlBuilder fxb;
         private HistoryManager historyMgr = new HistoryManager();
         private string treeChecksum = "";
+        private FetchXmlElementControlBase ctrl;
 
         #endregion Private Fields
 
@@ -259,6 +260,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 result = serializer.Deserialize(reader);
             }
             return result as FetchType;
+        }
+
+        internal MetadataBase SelectedMetadata()
+        {
+            return ctrl?.Metadata();
         }
 
         internal QueryExpression GetQueryExpression(string fetch = null, bool validate = true)
@@ -587,7 +593,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     return;
                 }
 
-                UserControl ctrl = null;
+                ctrl = null;
                 Control existingControl = panelContainer.Controls.Count > 0 ? panelContainer.Controls[0] : null;
                 if (node != null)
                 {
@@ -697,6 +703,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     ctrl.Dock = DockStyle.Top;
                 }
                 if (existingControl != null) panelContainer.Controls.Remove(existingControl);
+                fxb.ShowMetadata(ctrl?.Metadata());
             }
             ManageMenuDisplay();
         }
