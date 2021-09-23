@@ -1,5 +1,6 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
+using Microsoft.Xrm.Sdk.Metadata;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -24,10 +25,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             var entities = fxb.GetDisplayEntities();
             if (entities != null)
             {
-                foreach (var entity in entities)
-                {
-                    cmbEntity.Items.Add(new EntityItem(entity.Value));
-                }
+                cmbEntity.Items.AddRange(entities.Select(e => new EntityItem(e.Value)).ToArray());
             }
         }
 
@@ -47,6 +45,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
 
             return base.ValidateControl(control);
+        }
+
+        private void cmbEntity_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            fxb.ShowMetadata(Metadata());
+        }
+
+        public override MetadataBase Metadata()
+        {
+            if (cmbEntity.SelectedItem is EntityItem item)
+            {
+                return item.Meta;
+            }
+            if (fxb.entities.TryGetValue(cmbEntity.Text, out EntityMetadata meta))
+            {
+                return meta;
+            }
+            return base.Metadata();
         }
     }
 }

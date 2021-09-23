@@ -742,6 +742,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             RefreshOperators();
             UpdateValueField();
             RefreshValueOf();
+            fxb.ShowMetadata(Metadata());
         }
 
         private void cmbEntity_SelectedIndexChanged(object sender, EventArgs e)
@@ -776,6 +777,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void helpIcon_Click(object sender, EventArgs e)
         {
             fxb.HelpClick(sender);
+        }
+
+        public override MetadataBase Metadata()
+        {
+            if (cmbAttribute.SelectedItem is AttributeItem item)
+            {
+                return item.Metadata;
+            }
+            return base.Metadata();
         }
     }
 }

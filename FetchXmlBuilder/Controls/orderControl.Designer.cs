@@ -33,6 +33,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.label4 = new System.Windows.Forms.Label();
             this.chkDescending = new System.Windows.Forms.CheckBox();
             this.cmbAlias = new System.Windows.Forms.ComboBox();
+            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -57,6 +58,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbAttribute.Sorted = true;
             this.cmbAttribute.TabIndex = 1;
             this.cmbAttribute.Tag = "attribute";
+            this.cmbAttribute.SelectedIndexChanged += new System.EventHandler(this.cmbAttribute_SelectedIndexChanged);
             // 
             // label4
             // 
@@ -103,6 +105,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Controls.Add(this.label2);
             this.Name = "orderControl";
             this.Size = new System.Drawing.Size(224, 115);
+            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
