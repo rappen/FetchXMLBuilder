@@ -124,6 +124,7 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
@@ -310,6 +311,12 @@
     <Compile Include="DockControls\FlowListControl.Designer.cs">
       <DependentUpon>FlowListControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="DockControls\MetadataControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DockControls\MetadataControl.Designer.cs">
+      <DependentUpon>MetadataControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="DockControls\ODataControl.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -421,6 +428,9 @@
     <EmbeddedResource Include="DockControls\FlowListControl.resx">
       <DependentUpon>FlowListControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="DockControls\MetadataControl.resx">
+      <DependentUpon>MetadataControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DockControls\ODataControl.resx">
       <DependentUpon>ODataControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -498,6 +508,7 @@
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\Rappen.XTB.Helper\Rappen.XTB.Helpers.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />
+  <Import Project="..\MsCrmTools.MetadataBrowser\MsCrmTools.MetadataBrowser\MsCrmTools.MetadataBrowser.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Debug (
