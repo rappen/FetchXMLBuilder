@@ -7,6 +7,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     {
         private EntityMetadata meta = null;
 
+        public EntityMetadata Meta { get => meta; }
+
         public EntityItem(EntityMetadata Entity)
         {
             meta = Entity;
