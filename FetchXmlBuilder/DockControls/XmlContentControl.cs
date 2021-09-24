@@ -744,7 +744,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             Value = attr.LogicalName;
             Title = attr.DisplayName?.UserLocalizedLabel?.Label;
             Description = attr.Description?.UserLocalizedLabel?.Label;
-            DisplayName = useDisplayName ? Title : Value;
+            DisplayName = useDisplayName ? $"{Title} ({Value})" : Value;
         }
     }
 
@@ -755,7 +755,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             Value = entity.LogicalName;
             Title = entity.DisplayName?.UserLocalizedLabel?.Label;
             Description = entity.Description?.UserLocalizedLabel?.Label;
-            DisplayName = useDisplayName ? Title : Value;
+            DisplayName = useDisplayName ? $"{Title} ({Value})" : Value;
         }
     }
 }
