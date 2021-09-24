@@ -549,7 +549,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             // Autocomplete entity names for <entity> and <link-entity> elements
             if ((e.Element.Name == "entity" || e.Element.Name == "link-entity") && e.Attribute.Name == "name")
             {
-                e.Suggestions.AddRange(fxb.GetDisplayEntities().Values.Select(entity => new EntityMetadataSuggestion(entity)));
+                e.Suggestions.AddRange(fxb.GetDisplayEntities().Values.Select(entity => new EntityMetadataSuggestion(entity, fxb.settings.UseFriendlyNames)));
             }
 
             // Autocomplete prefiltering parameter name
@@ -581,7 +581,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                                 attributes = attributes.Where(a => IsCompatibleType(a, attr));
                         }
 
-                        e.Suggestions.AddRange(attributes.OrderBy(attr => attr.LogicalName).Select(attr => new AttributeMetadataSuggestion(attr)));
+                        e.Suggestions.AddRange(attributes.OrderBy(attr => attr.LogicalName).Select(attr => new AttributeMetadataSuggestion(attr, fxb.settings.UseFriendlyNames)));
                     }
                 }
             }
@@ -609,7 +609,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                             attributes = attributes.Where(a => a.LogicalName == entity.PrimaryIdAttribute || a is LookupAttributeMetadata lookup && lookup.Targets.Contains(otherEntity.LogicalName));
                     }
 
-                    e.Suggestions.AddRange(attributes.OrderBy(attr => attr.LogicalName).Select(attr => new AttributeMetadataSuggestion(attr)));
+                    e.Suggestions.AddRange(attributes.OrderBy(attr => attr.LogicalName).Select(attr => new AttributeMetadataSuggestion(attr, fxb.settings.UseFriendlyNames)));
                 }
                 else if (fxb.NeedToLoadEntity(entityNode.GetAttribute("name")))
                 {
@@ -739,21 +739,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
     class AttributeMetadataSuggestion : MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion
     {
-        public AttributeMetadataSuggestion(AttributeMetadata attr)
+        public AttributeMetadataSuggestion(AttributeMetadata attr, bool useDisplayName)
         {
             Value = attr.LogicalName;
             Title = attr.DisplayName?.UserLocalizedLabel?.Label;
             Description = attr.Description?.UserLocalizedLabel?.Label;
+            DisplayName = useDisplayName ? Title : Value;
         }
     }
 
     class EntityMetadataSuggestion : MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion
     {
-        public EntityMetadataSuggestion(EntityMetadata entity)
+        public EntityMetadataSuggestion(EntityMetadata entity, bool useDisplayName)
         {
             Value = entity.LogicalName;
             Title = entity.DisplayName?.UserLocalizedLabel?.Label;
             Description = entity.Description?.UserLocalizedLabel?.Label;
+            DisplayName = useDisplayName ? Title : Value;
         }
     }
 }
