@@ -34,7 +34,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.chkIsQF = new System.Windows.Forms.CheckBox();
             this.chkOverrideQFLimit = new System.Windows.Forms.CheckBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -102,10 +104,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
     "nd-limit";
             this.pictureBox1.Click += new System.EventHandler(this.helpIcon_Click);
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(56, 2);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox2.TabIndex = 47;
+            this.pictureBox2.TabStop = false;
+            this.pictureBox2.Tag = "https://docs.microsoft.com/en-us/powerapps/developer/data-platform/org-service/us" +
+    "e-filterexpression-class";
+            this.pictureBox2.Click += new System.EventHandler(this.helpIcon_Click);
+            // 
             // filterControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.chkOverrideQFLimit);
             this.Controls.Add(this.chkIsQF);
@@ -114,6 +130,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Name = "filterControl";
             this.Size = new System.Drawing.Size(257, 95);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -126,5 +143,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.CheckBox chkIsQF;
         private System.Windows.Forms.CheckBox chkOverrideQFLimit;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBox2;
     }
 }
