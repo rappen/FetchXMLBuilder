@@ -20,7 +20,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlTypeAttribute()]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="", IsNullable=false)]
     public partial class condition {
         
@@ -94,7 +94,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlTypeAttribute()]
     public partial class conditionValue {
         
         /// <remarks/>
@@ -245,7 +245,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlTypeAttribute()]
     [System.Xml.Serialization.XmlRootAttribute("all-attributes", Namespace="", IsNullable=false)]
     public partial class allattributes {
     }
@@ -410,7 +410,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=false)]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="", IsNullable=false)]
     public partial class filter {
         
@@ -440,7 +440,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlTypeAttribute()]
     public enum filterType {
         
         /// <remarks/>
@@ -934,7 +934,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlTypeAttribute()]
     public enum FetchTypeMapping {
         
         /// <remarks/>
@@ -947,7 +947,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlTypeAttribute()]
     public enum FetchTypeOutputformat {
         
         /// <remarks/>
@@ -976,7 +976,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlTypeAttribute()]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="", IsNullable=false)]
     public partial class savedquery {
         
@@ -1046,7 +1046,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlTypeAttribute()]
     public partial class savedqueryFetchxml {
         
         /// <remarks/>
@@ -1058,7 +1058,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlTypeAttribute()]
     public partial class savedqueryColumnsetxml {
         
         /// <remarks/>
@@ -1070,7 +1070,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlTypeAttribute()]
     public partial class savedqueryColumnsetxmlColumnset {
         
         /// <remarks/>
@@ -1104,7 +1104,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlTypeAttribute()]
     public partial class savedqueryColumnsetxmlColumnsetColumn {
         
         /// <remarks/>
@@ -1129,7 +1129,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlTypeAttribute()]
     public partial class savedqueryColumnsetxmlColumnsetFilter {
         
         /// <remarks/>
@@ -1162,7 +1162,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlTypeAttribute()]
     public partial class savedqueryColumnsetxmlColumnsetFilterCondition {
         
         /// <remarks/>
@@ -1206,7 +1206,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlTypeAttribute()]
     public partial class savedqueryLayoutxml {
         
         /// <remarks/>
@@ -1218,7 +1218,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlTypeAttribute()]
     public partial class savedqueryLayoutxmlGrid {
         
         /// <remarks/>
@@ -1266,7 +1266,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlTypeAttribute()]
     public partial class savedqueryLayoutxmlGridRow {
         
         /// <remarks/>
@@ -1295,7 +1295,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    [System.Xml.Serialization.XmlTypeAttribute()]
     public partial class savedqueryLayoutxmlGridRowCell {
         
         /// <remarks/>

@@ -59,6 +59,7 @@
             this.panSQL4CDSInfo = new System.Windows.Forms.Panel();
             this.lblSQL4CDSInfo = new System.Windows.Forms.Label();
             this.txtXML = new ScintillaNET.Scintilla();
+            this.autocompleteImageList = new System.Windows.Forms.ImageList(this.components);
             this.panCancel.SuspendLayout();
             this.panActions.SuspendLayout();
             this.gbActions.SuspendLayout();
@@ -389,6 +390,16 @@
             this.txtXML.TabIndex = 12;
             this.txtXML.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtXML_KeyPress);
             // 
+            // autocompleteImageList
+            // 
+            this.autocompleteImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("autocompleteImageList.ImageStream")));
+            this.autocompleteImageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.autocompleteImageList.Images.SetKeyName(0, "XMLIntellisenseElement_16x.png");
+            this.autocompleteImageList.Images.SetKeyName(1, "XMLIntellisenseAttribute_16x.png");
+            this.autocompleteImageList.Images.SetKeyName(2, "XMLIntellisenseAttributeHighConfidence_16x.png");
+            this.autocompleteImageList.Images.SetKeyName(3, "XMLIntelliSenseDescendant_16x.png");
+            this.autocompleteImageList.Images.SetKeyName(4, "XMLIntellisenseElement_16x.png");
+            // 
             // XmlContentControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -408,9 +419,9 @@
             this.Name = "XmlContentControl";
             this.DockStateChanged += new System.EventHandler(this.XmlContentDisplayDialog_DockStateChanged);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.XmlContentDisplayDialog_FormClosing);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.XmlContentDisplayDialog_KeyDown);
             this.Load += new System.EventHandler(this.XmlContentDisplayDialog_Load);
             this.VisibleChanged += new System.EventHandler(this.XmlContentDisplayDialog_VisibleChanged);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.XmlContentDisplayDialog_KeyDown);
             this.panCancel.ResumeLayout(false);
             this.panActions.ResumeLayout(false);
             this.gbActions.ResumeLayout(false);
@@ -460,5 +471,6 @@
         private System.Windows.Forms.Panel panSQL4CDSInfo;
         private System.Windows.Forms.Label lblSQL4CDSInfo;
         internal ScintillaNET.Scintilla txtXML;
+        private System.Windows.Forms.ImageList autocompleteImageList;
     }
 }

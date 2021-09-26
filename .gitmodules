@@ -4,6 +4,11 @@
 [submodule "Rappen.XTB.Helper"]
 	path = Rappen.XTB.Helper
 	url = https://github.com/rappen/Rappen.XTB.Helper
+	branch = main
+[submodule "MarkMpn.XmlSchemaAutoComplete"]
+	path = MarkMpn.XmlSchemaAutoComplete
+	url = https://github.com/MarkMpn/MarkMpn.XmlSchemaAutoComplete
+	branch = main
 [submodule "MsCrmTools.MetadataBrowser"]
 	path = MsCrmTools.MetadataBrowser
 	url = https://github.com/MscrmTools/MsCrmTools.MetadataBrowser
