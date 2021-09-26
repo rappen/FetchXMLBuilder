@@ -958,6 +958,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
         }
 
+        private void showMetadataToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fxb.ShowMetadataControl();
+        }
+
         #endregion Control Event Handlers
     }
 }

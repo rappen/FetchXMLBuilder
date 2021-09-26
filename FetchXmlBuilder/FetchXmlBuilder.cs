@@ -1934,6 +1934,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             UpdateLiveXML();
         }
 
+        internal void ShowMetadataControl()
+        {
+            ShowMetadataControl(ref dockControlMeta, DockState.DockRight);
+        }
+
         private void ShowMetadataControl(ref MetadataControl control, DockState defaultstate)
         {
             LogUse($"Show-Metadata");
