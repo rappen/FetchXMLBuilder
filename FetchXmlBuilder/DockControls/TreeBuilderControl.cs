@@ -26,6 +26,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         private FetchXmlBuilder fxb;
         private HistoryManager historyMgr = new HistoryManager();
         private string treeChecksum = "";
+        private FetchXmlElementControlBase ctrl;
 
         #endregion Private Fields
 
@@ -261,6 +262,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             return result as FetchType;
         }
 
+        internal MetadataBase SelectedMetadata()
+        {
+            return ctrl?.Metadata();
+        }
+
         internal QueryExpression GetQueryExpression(string fetch = null, bool validate = true)
         {
             if (fxb.Service == null)
@@ -456,7 +462,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             if (fxb.entities != null)
             {
                 var entitys = GetEntitysForFetch(fetchDoc);
-                entitys = entitys.Where(e => fxb.entities[e].Attributes == null).ToList();
+                entitys = entitys?.Where(e => !string.IsNullOrEmpty(e) && fxb.entities.ContainsKey(e) && fxb.entities[e].Attributes == null)?.ToList();
                 entitys?.ForEach(e => fxb.LoadEntityDetails(e, null, false));
             }
             XmlNode definitionXmlNode = fetchDoc.DocumentElement;
@@ -469,7 +475,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         private static List<string> GetEntitysForFetch(XmlDocument fetchDoc)
         {
             var result = new List<string>();
-            var ent = fetchDoc.SelectSingleNode("fetch/entity");
+            if (!(fetchDoc.SelectSingleNode("fetch/entity") is XmlNode ent))
+            {
+                return null;
+            }
             result.Add(ent.Attributes.GetNamedItem("name").Value);
             result.AddRange(GetEntitysChilds(ent));
             result = result.Distinct().ToList();
@@ -479,7 +488,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         private static List<string> GetEntitysChilds(XmlNode ent)
         {
             var result = new List<string>();
-            var childent = ent.SelectNodes("link-entity");
+            if (!(ent.SelectNodes("link-entity") is XmlNodeList childent))
+            {
+                return null;
+            }
             foreach (XmlNode child in childent)
             {
                 result.Add(child.Attributes.GetNamedItem("name").Value);
@@ -581,7 +593,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     return;
                 }
 
-                UserControl ctrl = null;
+                ctrl = null;
                 Control existingControl = panelContainer.Controls.Count > 0 ? panelContainer.Controls[0] : null;
                 if (node != null)
                 {
@@ -691,6 +703,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     ctrl.Dock = DockStyle.Top;
                 }
                 if (existingControl != null) panelContainer.Controls.Remove(existingControl);
+                fxb.ShowMetadata(ctrl?.Metadata());
             }
             ManageMenuDisplay();
         }
@@ -943,6 +956,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 HandleNodeSelection(e.Node);
             }
+        }
+
+        private void showMetadataToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fxb.ShowMetadataControl();
         }
 
         #endregion Control Event Handlers

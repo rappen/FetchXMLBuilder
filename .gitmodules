@@ -9,3 +9,6 @@
 	path = MarkMpn.XmlSchemaAutoComplete
 	url = https://github.com/MarkMpn/MarkMpn.XmlSchemaAutoComplete
 	branch = main
+[submodule "MsCrmTools.MetadataBrowser"]
+	path = MsCrmTools.MetadataBrowser
+	url = https://github.com/MscrmTools/MsCrmTools.MetadataBrowser

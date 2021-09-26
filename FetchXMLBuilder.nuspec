@@ -6,7 +6,7 @@
     <title>FetchXML Builder for XrmToolBox</title>
     <authors>Jonas Rapp</authors>
     <owners>rappen</owners>
-    <projectUrl>http://fetchxmlbuilder.com</projectUrl>
+    <projectUrl>https://fetchxmlbuilder.com</projectUrl>
     <iconUrl>https://fetchxmlbuilder.com/fxb150/</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>Build queries for Microsoft Dataverse and the Power Platform. Investigate data. Get code. Empower yourself to achieve more.</summary>

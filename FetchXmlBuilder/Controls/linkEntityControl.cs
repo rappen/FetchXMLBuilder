@@ -151,6 +151,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             var parententity = TreeNodeHelper.GetAttributeFromNode(Node.Parent, "name");
             cmbTo.Items.AddRange(GetRelevantLinkAttributes(parententity));
             ValidationSuspended = false;
+            fxb.ShowMetadata(Metadata());
         }
 
         private string[] GetRelevantLinkAttributes(string entity)
@@ -365,6 +366,57 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
             RefreshAttributes();
             Save(false);
+        }
+
+        public override MetadataBase Metadata()
+        {
+            if (cmbFrom.Focused)
+            {
+                if (!string.IsNullOrWhiteSpace(cmbFrom.Text) &&
+                    GetEntityMetadata() is EntityMetadata emeta &&
+                    emeta.Attributes.FirstOrDefault(a => a.LogicalName == cmbFrom.Text) is AttributeMetadata ameta)
+                {
+                    return ameta;
+                }
+            }
+            else if (cmbTo.Focused)
+            {
+                var parententity = TreeNodeHelper.GetAttributeFromNode(Node.Parent, "name");
+                if (!string.IsNullOrWhiteSpace(cmbTo.Text) &&
+                    fxb.entities.TryGetValue(parententity, out EntityMetadata pmeta) &&
+                    pmeta.Attributes.FirstOrDefault(a => a.LogicalName == cmbTo.Text) is AttributeMetadata pameta)
+                {
+                    return pameta;
+                }
+            }
+            else
+            {
+                return GetEntityMetadata();
+            }
+            return base.Metadata();
+        }
+
+        private MetadataBase GetEntityMetadata()
+        {
+            if (cmbEntity.SelectedItem is EntityItem item)
+            {
+                return item.Meta;
+            }
+            if (fxb.entities.TryGetValue(cmbEntity.Text, out EntityMetadata meta))
+            {
+                return meta;
+            }
+            return null;
+        }
+
+        private void cmbEntity_Enter(object sender, EventArgs e)
+        {
+            fxb.ShowMetadata(Metadata());
+        }
+
+        private void helpIcon_Click(object sender, System.EventArgs e)
+        {
+            fxb.HelpClick(sender);
         }
     }
 }

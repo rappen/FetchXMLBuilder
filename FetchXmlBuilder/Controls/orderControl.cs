@@ -103,5 +103,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
             return base.ValidateControl(control);
         }
+
+        public override MetadataBase Metadata()
+        {
+            if (cmbAttribute.SelectedItem is AttributeItem item)
+            {
+                return item.Metadata;
+            }
+            return base.Metadata();
+        }
+
+        private void cmbAttribute_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            fxb.ShowMetadata(Metadata());
+        }
     }
 }

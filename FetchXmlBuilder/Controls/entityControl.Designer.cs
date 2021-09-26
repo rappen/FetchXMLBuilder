@@ -30,6 +30,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             this.label2 = new System.Windows.Forms.Label();
             this.cmbEntity = new System.Windows.Forms.ComboBox();
+            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -54,6 +55,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbEntity.Sorted = true;
             this.cmbEntity.TabIndex = 27;
             this.cmbEntity.Tag = "name|true";
+            this.cmbEntity.SelectedIndexChanged += new System.EventHandler(this.cmbEntity_SelectedIndexChanged);
             // 
             // entityControl
             // 
@@ -63,6 +65,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Controls.Add(this.label2);
             this.Name = "entityControl";
             this.Size = new System.Drawing.Size(214, 50);
+            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
