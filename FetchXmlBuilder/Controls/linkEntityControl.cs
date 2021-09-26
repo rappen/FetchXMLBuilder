@@ -413,5 +413,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             fxb.ShowMetadata(Metadata());
         }
+
+        private void helpIcon_Click(object sender, System.EventArgs e)
+        {
+            fxb.HelpClick(sender);
+        }
     }
 }

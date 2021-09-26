@@ -28,6 +28,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(linkEntityControl));
             this.label2 = new System.Windows.Forms.Label();
             this.cmbEntity = new System.Windows.Forms.ComboBox();
             this.cmbFrom = new System.Windows.Forms.ComboBox();
@@ -44,6 +45,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbRelationship = new System.Windows.Forms.ComboBox();
             this.rbAttrIdOnly = new System.Windows.Forms.RadioButton();
             this.rbAttrAll = new System.Windows.Forms.RadioButton();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -236,10 +241,36 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.rbAttrAll.UseVisualStyleBackColor = true;
             this.rbAttrAll.CheckedChanged += new System.EventHandler(this.rbAttr_CheckedChanged);
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(69, 2);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox2.TabIndex = 48;
+            this.pictureBox2.TabStop = false;
+            this.pictureBox2.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.query.linkentity";
+            this.pictureBox2.Click += new System.EventHandler(this.helpIcon_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(54, 162);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox1.TabIndex = 49;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.query.joinoperator";
+            this.pictureBox1.Click += new System.EventHandler(this.helpIcon_Click);
+            // 
             // linkEntityControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.rbAttrAll);
             this.Controls.Add(this.rbAttrIdOnly);
             this.Controls.Add(this.cmbRelationship);
@@ -258,6 +289,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Controls.Add(this.label2);
             this.Name = "linkEntityControl";
             this.Size = new System.Drawing.Size(247, 304);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -281,5 +314,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.ComboBox cmbRelationship;
         private System.Windows.Forms.RadioButton rbAttrIdOnly;
         private System.Windows.Forms.RadioButton rbAttrAll;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

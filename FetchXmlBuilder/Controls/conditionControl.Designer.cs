@@ -39,6 +39,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.cmbValue = new System.Windows.Forms.ComboBox();
             this.lblValueHint = new System.Windows.Forms.Label();
             this.panAttribte = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panValue = new System.Windows.Forms.Panel();
             this.panValueLookup = new System.Windows.Forms.Panel();
             this.btnLookup = new System.Windows.Forms.Button();
@@ -54,11 +55,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.rbEnterGuid = new System.Windows.Forms.RadioButton();
             this.rbUseLookup = new System.Windows.Forms.RadioButton();
             this.panValueOf = new System.Windows.Forms.Panel();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.cmbValueOf = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panAttribte.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panValue.SuspendLayout();
             this.panValueLookup.SuspendLayout();
             this.panValueHint.SuspendLayout();
@@ -66,7 +69,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.panGuidSelector.SuspendLayout();
             this.panValueOf.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -81,7 +85,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // cmbAttribute
             // 
-            this.cmbAttribute.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.cmbAttribute.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbAttribute.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbAttribute.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
@@ -105,7 +109,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // cmbOperator
             // 
-            this.cmbOperator.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.cmbOperator.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbOperator.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbOperator.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
@@ -209,7 +213,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // cmbEntity
             // 
-            this.cmbEntity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.cmbEntity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbEntity.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbEntity.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
@@ -224,7 +228,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // cmbValue
             // 
-            this.cmbValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.cmbValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbValue.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbValue.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
@@ -249,6 +253,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // panAttribte
             // 
+            this.panAttribte.Controls.Add(this.pictureBox2);
+            this.panAttribte.Controls.Add(this.pictureBox4);
             this.panAttribte.Controls.Add(this.pictureBox1);
             this.panAttribte.Controls.Add(this.cmbOperator);
             this.panAttribte.Controls.Add(this.label2);
@@ -261,6 +267,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.panAttribte.Name = "panAttribte";
             this.panAttribte.Size = new System.Drawing.Size(311, 120);
             this.panAttribte.TabIndex = 43;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(37, 2);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox1.TabIndex = 45;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Tag = "https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/use-fetc" +
+    "hxml-left-outer-join-query-records-not-in";
+            this.pictureBox1.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // panValue
             // 
@@ -297,7 +316,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // txtLookup
             // 
-            this.txtLookup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.txtLookup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtLookup.BackColor = System.Drawing.SystemColors.Window;
             this.txtLookup.Column = null;
@@ -340,10 +359,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // dlgLookup
             // 
-            this.dlgLookup.Record = null;
             this.dlgLookup.IncludePersonalViews = true;
             this.dlgLookup.LogicalName = "";
             this.dlgLookup.LogicalNames = null;
+            this.dlgLookup.Record = null;
             this.dlgLookup.Service = null;
             this.dlgLookup.Title = null;
             // 
@@ -360,7 +379,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             // 
             // txtUitype
             // 
-            this.txtUitype.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.txtUitype.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUitype.Location = new System.Drawing.Point(7, 16);
             this.txtUitype.Name = "txtUitype";
@@ -422,9 +441,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.panValueOf.Size = new System.Drawing.Size(311, 40);
             this.panValueOf.TabIndex = 50;
             // 
+            // pictureBox3
+            // 
+            this.pictureBox3.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
+            this.pictureBox3.Location = new System.Drawing.Point(53, 2);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox3.TabIndex = 44;
+            this.pictureBox3.TabStop = false;
+            this.pictureBox3.Tag = "https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/column-c" +
+    "omparison";
+            this.pictureBox3.Click += new System.EventHandler(this.helpIcon_Click);
+            // 
             // cmbValueOf
             // 
-            this.cmbValueOf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.cmbValueOf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbValueOf.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbValueOf.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
@@ -445,31 +477,31 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.label6.TabIndex = 31;
             this.label6.Text = "Value Of";
             // 
-            // pictureBox3
+            // pictureBox4
             // 
-            this.pictureBox3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(53, 2);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(14, 14);
-            this.pictureBox3.TabIndex = 44;
-            this.pictureBox3.TabStop = false;
-            this.pictureBox3.Tag = "https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/column-c" +
-    "omparison";
-            this.pictureBox3.Click += new System.EventHandler(this.helpIcon_Click);
+            this.pictureBox4.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
+            this.pictureBox4.Location = new System.Drawing.Point(49, 42);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox4.TabIndex = 46;
+            this.pictureBox4.TabStop = false;
+            this.pictureBox4.Tag = "https://docs.microsoft.com/en-us/powerapps/developer/data-platform/entity-attribu" +
+    "te-metadata";
+            this.pictureBox4.Click += new System.EventHandler(this.helpIcon_Click);
             // 
-            // pictureBox1
+            // pictureBox2
             // 
-            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(37, 2);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(14, 14);
-            this.pictureBox1.TabIndex = 45;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Tag = "https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/use-fetc" +
-    "hxml-left-outer-join-query-records-not-in";
-            this.pictureBox1.Click += new System.EventHandler(this.helpIcon_Click);
+            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(52, 82);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox2.TabIndex = 47;
+            this.pictureBox2.TabStop = false;
+            this.pictureBox2.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.query.conditionoper" +
+    "ator";
+            this.pictureBox2.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // conditionControl
             // 
@@ -486,6 +518,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.Size = new System.Drawing.Size(311, 258);
             this.panAttribte.ResumeLayout(false);
             this.panAttribte.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panValue.ResumeLayout(false);
             this.panValue.PerformLayout();
             this.panValueLookup.ResumeLayout(false);
@@ -499,7 +532,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             this.panValueOf.ResumeLayout(false);
             this.panValueOf.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 
@@ -535,5 +569,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.PictureBox pictureBox4;
     }
 }
