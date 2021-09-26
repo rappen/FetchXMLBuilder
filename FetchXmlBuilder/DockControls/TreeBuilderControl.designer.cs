@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TreeBuilderControl));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tvFetch = new System.Windows.Forms.TreeView();
             this.panProperties = new System.Windows.Forms.Panel();
@@ -52,6 +53,8 @@
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.showMetadataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -232,9 +235,11 @@
             this.uncommentToolStripMenuItem,
             this.toolStripMenuItem1,
             this.moveUpToolStripMenuItem,
-            this.moveDownToolStripMenuItem});
+            this.moveDownToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.showMetadataToolStripMenuItem});
             this.nodeMenu.Name = "nodeMenu";
-            this.nodeMenu.Size = new System.Drawing.Size(203, 170);
+            this.nodeMenu.Size = new System.Drawing.Size(203, 220);
             this.nodeMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
             // selectAttributesToolStripMenuItem
@@ -293,6 +298,19 @@
             this.moveDownToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.moveDownToolStripMenuItem.Text = "Move down";
             this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonMoveDown_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(199, 6);
+            // 
+            // showMetadataToolStripMenuItem
+            // 
+            this.showMetadataToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showMetadataToolStripMenuItem.Image")));
+            this.showMetadataToolStripMenuItem.Name = "showMetadataToolStripMenuItem";
+            this.showMetadataToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.showMetadataToolStripMenuItem.Text = "Show Metadata";
+            this.showMetadataToolStripMenuItem.Click += new System.EventHandler(this.showMetadataToolStripMenuItem_Click);
             // 
             // TreeBuilderControl
             // 
@@ -353,5 +371,7 @@
         private System.Windows.Forms.Panel panProperties;
         internal System.Windows.Forms.Label lblQAExpander;
         private System.Windows.Forms.ToolTip tt;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem showMetadataToolStripMenuItem;
     }
 }
