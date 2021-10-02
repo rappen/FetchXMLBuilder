@@ -256,6 +256,12 @@
     <Compile Include="Controls\FetchXmlElementControlBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Controls\metadataControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\metadataControl.Designer.cs">
+      <DependentUpon>metadataControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\orderControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -399,6 +405,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Controls\commentControl.resx">
       <DependentUpon>commentControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\metadataControl.resx">
+      <DependentUpon>metadataControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\orderControl.resx">
       <DependentUpon>orderControl.cs</DependentUpon>
