@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.MetadataBrowser.AppCode;
 using MsCrmTools.MetadataBrowser.AppCode.AttributeMd;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
 
@@ -8,6 +9,34 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
     public partial class metadataControl : UserControl
     {
+        private bool header = true;
+
+        [Category("Dataverse Metadata")]
+        [Description("True to show entity and attribute to the metadata.")]
+        [DefaultValue(true)]
+        [Browsable(true)]
+        public bool Header
+        {
+            get => header;
+            set
+            {
+                header = value;
+                SetMeta(null);
+            }
+        }
+
+        [Category("Dataverse Metadata")]
+        [Description("True to show a header separator.")]
+        [DefaultValue(true)]
+        [Browsable(true)]
+        public bool HeaderSeparator { get => panSeparator1.Visible; set => panSeparator1.Visible = value; }
+
+        [Category("Dataverse Metadata")]
+        [Description("True to show a header separator.")]
+        [DefaultValue(true)]
+        [Browsable(true)]
+        public bool MscrmLinkSeparator { get => panSeparator2.Visible; set => panSeparator2.Visible = value; }
+
         public metadataControl()
         {
             InitializeComponent();
@@ -20,10 +49,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         internal void SetMeta(MetadataBase meta)
         {
+            panInfo1.Visible = header;
+            panInfo2.Visible = header;
+            panel2.Visible = header;
             if (meta is EntityMetadata ent)
             {
                 lblInfo1Value.Text = ent.LogicalName;
-                panInfo1.Visible = true;
                 panInfo2.Visible = false;
                 propMeta.SelectedObject = new EntityMetadataInfo(ent);
             }
@@ -31,15 +62,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 lblInfo1Value.Text = att.EntityLogicalName;
                 lblInfo2Value.Text = att.LogicalName;
-                panInfo1.Visible = true;
-                panInfo2.Visible = true;
                 propMeta.SelectedObject = new AttributeMetadataInfo(att);
             }
             else
             {
-                panInfo1.Visible = false;
-                panInfo2.Visible = false;
-                propMeta.SelectedObject = null;
+                lblInfo1Value.Text = "";
+                lblInfo2Value.Text = "";
+                propMeta.SelectedObject = meta;
             }
         }
     }
