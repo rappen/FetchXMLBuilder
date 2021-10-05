@@ -14,7 +14,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         internal void UpdateMeta(MetadataBase meta)
         {
-            metadataControl1.SetMeta(meta);
+            metadataControl1.SelectedObject = meta;
         }
     }
 }

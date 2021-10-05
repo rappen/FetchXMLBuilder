@@ -127,7 +127,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             if (lvAttributes.SelectedItems.Cast<ListViewItem>().FirstOrDefault() is ListViewItem item &&
                 item.Tag is AttributeMetadata meta)
             {
-                metadataControl1.SetMeta(meta);
+                metadataControl1.SelectedObject = meta;
             }
         }
     }
