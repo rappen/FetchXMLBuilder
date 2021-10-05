@@ -3,6 +3,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 {
@@ -21,11 +22,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void GenerateAllItems(List<AttributeMetadata> attributes, List<string> selectedAttributes)
         {
+            chkMetamore_CheckedChanged(null, null);
             allItems = new List<ListViewItem>();
             foreach (var attribute in attributes)
             {
                 var name = attribute.DisplayName.UserLocalizedLabel != null ? attribute.DisplayName.UserLocalizedLabel.Label : attribute.LogicalName;
-                var item = new ListViewItem(new string[] { name, attribute.LogicalName, attribute.AttributeType.ToString() });
+                var item = new ListViewItem(new string[] { 
+                    name, 
+                    attribute.LogicalName, 
+                    attribute.AttributeType.ToString(),
+                    attribute.IsValidForRead.Value.ToString(),
+                    attribute.IsValidForCreate.Value.ToString(),
+                    attribute.IsValidForUpdate.Value.ToString(),
+                    attribute.IsCustomAttribute.Value.ToString()
+                });
                 item.Name = attribute.LogicalName;
                 item.Text = name;
                 item.Tag = attribute;
@@ -85,6 +95,40 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private void txtFilter_TextChanged(object sender, EventArgs e)
         {
             PopulateAttributes();
+        }
+
+        private void chkMetamore_CheckedChanged(object sender, EventArgs e)
+        {
+            foreach (var col in from ColumnHeader col in lvAttributes.Columns
+                                where col.Tag?.ToString() == "meta"
+                                select col)
+            {
+                ShowHideMeta(chkMetamore.Checked, col);
+            }
+            splitContainer1.Panel2Collapsed = !chkMetamore.Checked;
+            var width = (from ColumnHeader col in lvAttributes.Columns select col.Width).Sum() + 50;
+            Width = Math.Max(width, 400) + splitContainer1.Panel2.Width;
+        }
+
+        private void ShowHideMeta(bool on, ColumnHeader col)
+        {
+            if (on)
+            {
+                col.AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
+            }
+            else
+            {
+                col.Width = 0;
+            }
+        }
+
+        private void lvAttributes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lvAttributes.SelectedItems.Cast<ListViewItem>().FirstOrDefault() is ListViewItem item &&
+                item.Tag is AttributeMetadata meta)
+            {
+                metadataControl1.SetMeta(meta);
+            }
         }
     }
 }
