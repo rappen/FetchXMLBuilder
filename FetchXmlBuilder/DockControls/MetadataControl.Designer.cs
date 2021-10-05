@@ -30,7 +30,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MetadataControl));
-            this.metadataControl1 = new Cinteros.Xrm.FetchXmlBuilder.Controls.metadataControl();
+            this.metadataControl1 = new Cinteros.Xrm.FetchXmlBuilder.Controls.XRMMetadataControl();
             this.SuspendLayout();
             // 
             // metadataControl1
@@ -59,6 +59,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         #endregion
 
-        private Controls.metadataControl metadataControl1;
+        private Controls.XRMMetadataControl metadataControl1;
     }
 }
