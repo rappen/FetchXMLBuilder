@@ -1,7 +1,7 @@
 ﻿
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
-    partial class metadataControl
+    partial class XRMMetadataControl
     {
         /// <summary> 
         /// Required designer variable.

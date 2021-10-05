@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {
-    public partial class metadataControl : UserControl
+    public partial class XRMMetadataControl : UserControl
     {
         private bool header = true;
 
@@ -37,7 +37,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         [Browsable(true)]
         public bool MscrmLinkSeparator { get => panSeparator2.Visible; set => panSeparator2.Visible = value; }
 
-        public metadataControl()
+        public XRMMetadataControl()
         {
             InitializeComponent();
         }
