@@ -11,6 +11,36 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
     {
         private bool header = true;
 
+        [DefaultValue(null)]
+        [Category("Dataverse Metadata")]
+        [Description("Set any EntityMetadata or AttributeMetadata.")]
+        [Browsable(true)]
+        public object SelectedObject { get => propMeta.SelectedObject;
+            set {
+                panInfo1.Visible = header;
+                panInfo2.Visible = header;
+                panel2.Visible = header;
+                if (value is EntityMetadata ent)
+                {
+                    lblInfo1Value.Text = ent.LogicalName;
+                    panInfo2.Visible = false;
+                    propMeta.SelectedObject = new EntityMetadataInfo(ent);
+                }
+                else if (value is AttributeMetadata att)
+                {
+                    lblInfo1Value.Text = att.EntityLogicalName;
+                    lblInfo2Value.Text = att.LogicalName;
+                    propMeta.SelectedObject = new AttributeMetadataInfo(att);
+                }
+                else
+                {
+                    lblInfo1Value.Text = "";
+                    lblInfo2Value.Text = "";
+                    propMeta.SelectedObject = value;
+                }
+            }
+        }
+
         [Category("Dataverse Metadata")]
         [Description("True to show entity and attribute to the metadata.")]
         [DefaultValue(true)]
@@ -21,7 +51,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             set
             {
                 header = value;
-                SetMeta(null);
+                SelectedObject = propMeta.SelectedObject;
             }
         }
 
@@ -45,31 +75,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("https://github.com/MscrmTools/MsCrmTools.MetadataBrowser/wiki");
-        }
-
-        internal void SetMeta(MetadataBase meta)
-        {
-            panInfo1.Visible = header;
-            panInfo2.Visible = header;
-            panel2.Visible = header;
-            if (meta is EntityMetadata ent)
-            {
-                lblInfo1Value.Text = ent.LogicalName;
-                panInfo2.Visible = false;
-                propMeta.SelectedObject = new EntityMetadataInfo(ent);
-            }
-            else if (meta is AttributeMetadata att)
-            {
-                lblInfo1Value.Text = att.EntityLogicalName;
-                lblInfo2Value.Text = att.LogicalName;
-                propMeta.SelectedObject = new AttributeMetadataInfo(att);
-            }
-            else
-            {
-                lblInfo1Value.Text = "";
-                lblInfo2Value.Text = "";
-                propMeta.SelectedObject = meta;
-            }
         }
     }
 }
