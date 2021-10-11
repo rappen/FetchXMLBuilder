@@ -480,7 +480,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             
             _autocomplete.AddTypeDescription<FetchEntityType>("Main Entity", "Gives the name of the entity type the query will return.");
             _autocomplete.AddMemberDescription<FetchEntityType>(nameof(FetchEntityType.enableprefiltering), "Enable Prefiltering", "If this query is being used in an SSRS report, indicates if the report can be pre-filtered by the user selecting the records to run it on.");
-            _autocomplete.AddMemberDescription<FetchEntityType>(nameof(FetchEntityType.name), "Entity nNme", "The name of the entity type the query will return.");
+            _autocomplete.AddMemberDescription<FetchEntityType>(nameof(FetchEntityType.name), "Entity Name", "The name of the entity type the query will return.");
             _autocomplete.AddMemberDescription<FetchEntityType>(nameof(FetchEntityType.prefilterparametername), "Prefilter Parameter Name", "If prefiltering is enabled, this gives the name of the parameter that will be used for the filtering.");
 
             _autocomplete.AddTypeDescription<FetchAttributeType>("Attribute", "Includes an attribute in the query results.");
@@ -497,7 +497,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             _autocomplete.AddMemberDescription<FetchLinkEntityType>(nameof(FetchLinkEntityType.alias), "Alias Name", "The alias name to apply to this linked entity.");
             _autocomplete.AddMemberDescription<FetchLinkEntityType>(nameof(FetchLinkEntityType.enableprefiltering), "Enable Prefiltering", "If this query is being used in an SSRS report, indicates if the report can be pre-filtered by the user selecting the records to run it on.");
             _autocomplete.AddMemberDescription<FetchLinkEntityType>(nameof(FetchLinkEntityType.from), "Join From Attribute", "The name of the attribute on this entity that should be used in the join.");
-            _autocomplete.AddMemberDescription<FetchLinkEntityType>(nameof(FetchLinkEntityType.intersect), "Is Intersect", "Indicates if this linked entity is a many-to-many join intsect entity. Setting this hides the link from the Advanced Find editor.");
+            _autocomplete.AddMemberDescription<FetchLinkEntityType>(nameof(FetchLinkEntityType.intersect), "Is Intersect", "Indicates if this linked entity is a many-to-many join intersect entity. Setting this hides the link from the Advanced Find editor.");
             _autocomplete.AddMemberDescription<FetchLinkEntityType>(nameof(FetchLinkEntityType.linktype), "Join Type", "The type of join to apply.");
             _autocomplete.AddMemberDescription<FetchLinkEntityType>(nameof(FetchLinkEntityType.name), "Entity Name", "The name of the entity to join to.");
             _autocomplete.AddMemberDescription<FetchLinkEntityType>(nameof(FetchLinkEntityType.prefilterparametername), "Prefilter Parameter Name", "If prefiltering is enabled, this gives the name of the parameter that will be used for the filtering.");
