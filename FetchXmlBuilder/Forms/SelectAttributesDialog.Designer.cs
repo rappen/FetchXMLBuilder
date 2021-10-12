@@ -48,8 +48,8 @@
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.metadataControl1 = new Cinteros.Xrm.FetchXmlBuilder.Controls.XRMMetadataControl();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.metadataControl1 = new Cinteros.Xrm.FetchXmlBuilder.Controls.XRMMetadataControl();
             this.panel2.SuspendLayout();
             this.panOk.SuspendLayout();
             this.panCancel.SuspendLayout();
@@ -68,7 +68,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel2.Location = new System.Drawing.Point(0, 450);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(501, 51);
+            this.panel2.Size = new System.Drawing.Size(497, 51);
             this.panel2.TabIndex = 6;
             // 
             // chkMetamore
@@ -86,7 +86,7 @@
             // 
             this.panOk.Controls.Add(this.btnOk);
             this.panOk.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panOk.Location = new System.Drawing.Point(319, 0);
+            this.panOk.Location = new System.Drawing.Point(315, 0);
             this.panOk.Name = "panOk";
             this.panOk.Size = new System.Drawing.Size(91, 51);
             this.panOk.TabIndex = 6;
@@ -105,7 +105,7 @@
             // 
             this.panCancel.Controls.Add(this.button2);
             this.panCancel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panCancel.Location = new System.Drawing.Point(410, 0);
+            this.panCancel.Location = new System.Drawing.Point(406, 0);
             this.panCancel.Name = "panCancel";
             this.panCancel.Size = new System.Drawing.Size(91, 51);
             this.panCancel.TabIndex = 5;
@@ -128,7 +128,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(501, 51);
+            this.panel1.Size = new System.Drawing.Size(497, 51);
             this.panel1.TabIndex = 8;
             // 
             // label1
@@ -146,7 +146,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFilter.Location = new System.Drawing.Point(251, 16);
             this.txtFilter.Name = "txtFilter";
-            this.txtFilter.Size = new System.Drawing.Size(237, 20);
+            this.txtFilter.Size = new System.Drawing.Size(233, 20);
             this.txtFilter.TabIndex = 1;
             this.txtFilter.TextChanged += new System.EventHandler(this.txtFilter_TextChanged);
             // 
@@ -178,7 +178,7 @@
             this.lvAttributes.Location = new System.Drawing.Point(9, 51);
             this.lvAttributes.Name = "lvAttributes";
             this.lvAttributes.ShowGroups = false;
-            this.lvAttributes.Size = new System.Drawing.Size(492, 399);
+            this.lvAttributes.Size = new System.Drawing.Size(488, 399);
             this.lvAttributes.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvAttributes.TabIndex = 8;
             this.lvAttributes.UseCompatibleStateImageBehavior = false;
@@ -211,17 +211,17 @@
             // columnHeader5
             // 
             this.columnHeader5.Tag = "meta";
-            this.columnHeader5.Text = "Create";
+            this.columnHeader5.Text = "Grid";
             // 
             // columnHeader6
             // 
             this.columnHeader6.Tag = "meta";
-            this.columnHeader6.Text = "Update";
+            this.columnHeader6.Text = "Adv.Find";
             // 
             // columnHeader7
             // 
             this.columnHeader7.Tag = "meta";
-            this.columnHeader7.Text = "Custom";
+            this.columnHeader7.Text = "Retriev";
             // 
             // splitContainer1
             // 
@@ -241,19 +241,9 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.metadataControl1);
             this.splitContainer1.Size = new System.Drawing.Size(792, 501);
-            this.splitContainer1.SplitterDistance = 501;
+            this.splitContainer1.SplitterDistance = 497;
             this.splitContainer1.SplitterWidth = 8;
             this.splitContainer1.TabIndex = 10;
-            // 
-            // metadataControl1
-            // 
-            this.metadataControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.metadataControl1.HeaderSeparator = false;
-            this.metadataControl1.Location = new System.Drawing.Point(0, 0);
-            this.metadataControl1.MscrmLinkSeparator = false;
-            this.metadataControl1.Name = "metadataControl1";
-            this.metadataControl1.Size = new System.Drawing.Size(283, 501);
-            this.metadataControl1.TabIndex = 0;
             // 
             // panel3
             // 
@@ -262,6 +252,16 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(9, 399);
             this.panel3.TabIndex = 9;
+            // 
+            // metadataControl1
+            // 
+            this.metadataControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.metadataControl1.HeaderSeparator = false;
+            this.metadataControl1.Location = new System.Drawing.Point(0, 0);
+            this.metadataControl1.MscrmLinkSeparator = false;
+            this.metadataControl1.Name = "metadataControl1";
+            this.metadataControl1.Size = new System.Drawing.Size(287, 501);
+            this.metadataControl1.TabIndex = 0;
             // 
             // SelectAttributesDialog
             // 

@@ -32,9 +32,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                     attribute.LogicalName, 
                     attribute.AttributeType.ToString(),
                     attribute.IsValidForRead.Value.ToString(),
-                    attribute.IsValidForCreate.Value.ToString(),
-                    attribute.IsValidForUpdate.Value.ToString(),
-                    attribute.IsCustomAttribute.Value.ToString()
+                    attribute.IsValidForGrid.Value.ToString(),
+                    attribute.IsValidForAdvancedFind.Value.ToString(),
+                    attribute.IsRetrievable.Value.ToString()
                 });
                 item.Name = attribute.LogicalName;
                 item.Text = name;
