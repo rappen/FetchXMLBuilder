@@ -57,7 +57,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     throw new Exception("AddTreeViewNode: Unsupported control type");
                 }
                 node.Tag = attributes;
-                AddContextMenu(node, tree);
                 foreach (XmlNode childNode in xmlNode.ChildNodes)
                 {
                     AddTreeViewNode(node, childNode, tree, fxb);
@@ -292,8 +291,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
             if (node != null)
             {
-                var nodecapabilities = new FetchNodeCapabilities(node);
+                var nodecapabilities = new FetchNodeCapabilities(node.Name, true);
 
+                if (nodecapabilities.Multiple)
+                {
+                    tree.addOneMoreToolStripMenuItem.Text = "More " + nodecapabilities.Name;
+                    tree.addOneMoreToolStripMenuItem.Tag = "MORE-" + nodecapabilities.Name;
+                    AddLinkFromCapability(tree, "+" + nodecapabilities.Name, "MORE-" + nodecapabilities.Name);
+                }
                 if (nodecapabilities.Attributes && tree.selectAttributesToolStripMenuItem.Enabled)
                 {
                     AddLinkFromCapability(tree, "Select Attributes", "SelectAttributes");
@@ -316,6 +321,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     dummy.Enabled = false;
                 }
 
+                tree.addOneMoreToolStripMenuItem.Visible = nodecapabilities.Multiple;
                 tree.selectAttributesToolStripMenuItem.Visible = nodecapabilities.Attributes;
                 tree.deleteToolStripMenuItem.Enabled = nodecapabilities.Delete;
                 tree.commentToolStripMenuItem.Enabled = nodecapabilities.Comment;
@@ -421,7 +427,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             parentXmlNode.AppendChild(newNode);
         }
 
-        internal static TreeNode AddChildNode(TreeNode parentNode, string name)
+        internal static TreeNode AddChildNode(TreeNode parentNode, string name, TreeNode sisterNode = null)
         {
             var childNode = new TreeNode(name);
             childNode.Tag = new Dictionary<string, string>();
@@ -432,20 +438,27 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
             if (parentNode != null)
             {
-                var parentCap = new FetchNodeCapabilities(parentNode);
-                var nodeIndex = parentCap.IndexOfChild(name);
-                var pos = 0;
-                while (pos < parentNode.Nodes.Count && nodeIndex >= parentCap.IndexOfChild(parentNode.Nodes[pos].Name))
+                if (sisterNode != null)
                 {
-                    pos++;
-                }
-                if (pos == parentNode.Nodes.Count)
-                {
-                    parentNode.Nodes.Add(childNode);
+                    parentNode.Nodes.Insert(sisterNode.Index + 1, childNode);
                 }
                 else
                 {
-                    parentNode.Nodes.Insert(pos, childNode);
+                    var parentCap = new FetchNodeCapabilities(parentNode.Name, true);
+                    var nodeIndex = parentCap.IndexOfChild(name);
+                    var pos = 0;
+                    while (pos < parentNode.Nodes.Count && nodeIndex >= parentCap.IndexOfChild(parentNode.Nodes[pos].Name))
+                    {
+                        pos++;
+                    }
+                    if (pos == parentNode.Nodes.Count)
+                    {
+                        parentNode.Nodes.Add(childNode);
+                    }
+                    else
+                    {
+                        parentNode.Nodes.Insert(pos, childNode);
+                    }
                 }
             }
             return childNode;

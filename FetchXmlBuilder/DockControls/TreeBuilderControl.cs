@@ -469,6 +469,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             tvFetch.Nodes.Clear();
             TreeNodeHelper.AddTreeViewNode(tvFetch, definitionXmlNode, this, fxb);
             tvFetch.ExpandAll();
+            if (tvFetch.Nodes.Count > 0)
+            {
+                tvFetch.SelectedNode = tvFetch.Nodes[0];
+            }
             ManageMenuDisplay();
         }
 
@@ -563,6 +567,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             else if (ClickedTag == "SelectAttributes")
             {
                 SelectAttributes();
+            }
+            else if (ClickedTag.StartsWith("MORE-"))
+            {
+                var nodename = ClickedTag.Substring(5);
+                updateNode = TreeNodeHelper.AddChildNode(tvFetch.SelectedNode.Parent, nodename, tvFetch.SelectedNode);
+                RecordHistory("add " + updateNode.Name);
+                HandleNodeSelection(updateNode);
             }
             else
             {

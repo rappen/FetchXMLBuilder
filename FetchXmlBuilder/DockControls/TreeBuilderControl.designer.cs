@@ -45,6 +45,7 @@
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nodeMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.selectAttributesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addOneMoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparatorBeginOfEdition = new System.Windows.Forms.ToolStripSeparator();
             this.commentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -228,6 +229,7 @@
             // 
             this.nodeMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectAttributesToolStripMenuItem,
+            this.addOneMoreToolStripMenuItem,
             this.addToolStripMenuItem,
             this.deleteToolStripMenuItem,
             this.toolStripSeparatorBeginOfEdition,
@@ -239,7 +241,7 @@
             this.toolStripSeparator1,
             this.showMetadataToolStripMenuItem});
             this.nodeMenu.Name = "nodeMenu";
-            this.nodeMenu.Size = new System.Drawing.Size(203, 220);
+            this.nodeMenu.Size = new System.Drawing.Size(203, 343);
             this.nodeMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
             // selectAttributesToolStripMenuItem
@@ -248,6 +250,12 @@
             this.selectAttributesToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.selectAttributesToolStripMenuItem.Tag = "SelectAttributes";
             this.selectAttributesToolStripMenuItem.Text = "Select attributes...";
+            // 
+            // addOneMoreToolStripMenuItem
+            // 
+            this.addOneMoreToolStripMenuItem.Name = "addOneMoreToolStripMenuItem";
+            this.addOneMoreToolStripMenuItem.Size = new System.Drawing.Size(285, 32);
+            this.addOneMoreToolStripMenuItem.Text = "Add one more";
             // 
             // deleteToolStripMenuItem
             // 
@@ -373,5 +381,6 @@
         private System.Windows.Forms.ToolTip tt;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem showMetadataToolStripMenuItem;
+        internal System.Windows.Forms.ToolStripMenuItem addOneMoreToolStripMenuItem;
     }
 }

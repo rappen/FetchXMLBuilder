@@ -16,6 +16,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)ListViewItemComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Prompt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SaveEventArgs.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TreeNodeCapabilities.cs" />
   </ItemGroup>
 </Project>
