@@ -58,7 +58,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 return item.Meta;
             }
-            if (fxb.entities.TryGetValue(cmbEntity.Text, out EntityMetadata meta))
+            if (fxb.entities != null && fxb.entities.TryGetValue(cmbEntity.Text, out EntityMetadata meta))
             {
                 return meta;
             }
