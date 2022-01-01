@@ -787,5 +787,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
             return base.Metadata();
         }
+        public override void Focus()
+        {
+            cmbAttribute.Focus();
+        }
     }
 }

@@ -82,5 +82,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
             }
         }
+
+        public override void Focus()
+        {
+            cmbValue.Focus();
+        }
     }
 }

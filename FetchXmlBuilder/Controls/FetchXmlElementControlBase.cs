@@ -276,6 +276,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             return null;
         }
+
+        public new virtual void Focus()
+        {
+            return;
+        }
     }
 
     public enum ControlValidationLevel

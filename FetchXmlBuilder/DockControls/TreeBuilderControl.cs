@@ -574,6 +574,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 updateNode = TreeNodeHelper.AddChildNode(tvFetch.SelectedNode.Parent, nodename, tvFetch.SelectedNode);
                 RecordHistory("add " + updateNode.Name);
                 HandleNodeSelection(updateNode);
+                ctrl.Focus();
             }
             else
             {
@@ -585,6 +586,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     HandleNodeMenuClick("condition");
                     return;
                 }
+                ctrl.Focus();
             }
             if (updateNode != null)
             {

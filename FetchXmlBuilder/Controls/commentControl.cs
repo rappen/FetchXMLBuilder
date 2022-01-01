@@ -14,5 +14,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             InitializeComponent();
             InitializeFXB(collection, null, tree, null);
         }
+
+        public override void Focus()
+        {
+            textBox1.Focus();
+        }
     }
 }

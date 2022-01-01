@@ -418,5 +418,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             fxb.HelpClick(sender);
         }
+
+        public override void Focus()
+        {
+            cmbRelationship.Focus();
+        }
     }
 }

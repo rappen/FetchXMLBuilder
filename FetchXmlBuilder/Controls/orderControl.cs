@@ -117,5 +117,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             fxb.ShowMetadata(Metadata());
         }
+
+        public override void Focus()
+        {
+            cmbAttribute.Focus();
+        }
     }
 }
