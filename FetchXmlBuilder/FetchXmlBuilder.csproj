@@ -41,9 +41,6 @@
     </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ILMerge">
-      <HintPath>..\packages\ILMerge.3.0.41\tools\net452\ILMerge.exe</HintPath>
-    </Reference>
     <Reference Include="McTools.Xrm.Connection, Version=1.2021.9.46, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
       <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2021.9.46\lib\net462\McTools.Xrm.Connection.dll</HintPath>
     </Reference>
@@ -520,6 +517,7 @@
   <Import Project="..\MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutoComplete.projitems" Label="Shared" />
   <Import Project="..\MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutocomplete.Scintilla\MarkMpn.XmlSchemaAutocomplete.Scintilla.projitems" Label="Shared" />
   <Import Project="..\MsCrmTools.MetadataBrowser\MsCrmTools.MetadataBrowser\MsCrmTools.MetadataBrowser.Shared.projitems" Label="Shared" />
+  <Import Project="..\Rappen.XTB.Helper\Rappen.XRM.Helpers.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Debug (
