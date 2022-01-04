@@ -477,7 +477,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             _autocomplete.AddMemberDescription<FetchType>(nameof(FetchType.pagingcookie), "Paging Cookie", "The paging cookie returned with the previous page of results. Supplying this value makes it more efficient to retrieve the next page.");
             _autocomplete.AddMemberDescription<FetchType>(nameof(FetchType.returntotalrecordcount), "Return Total Record Count", "Indicates if the total number of possible results should be returned along with this page of results.");
             _autocomplete.AddMemberDescription<FetchType>(nameof(FetchType.top), "Top Count", "The maximum number of records to return. No further pages of data will be returned.");
-            
+
             _autocomplete.AddTypeDescription<FetchEntityType>("Main Entity", "Gives the name of the entity type the query will return.");
             _autocomplete.AddMemberDescription<FetchEntityType>(nameof(FetchEntityType.enableprefiltering), "Enable Prefiltering", "If this query is being used in an SSRS report, indicates if the report can be pre-filtered by the user selecting the records to run it on.");
             _autocomplete.AddMemberDescription<FetchEntityType>(nameof(FetchEntityType.name), "Entity Name", "The name of the entity type the query will return.");
@@ -563,7 +563,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             if (((e.Element.Name == "attribute" && e.Attribute.Name == "name") || ((e.Element.Name == "condition" || e.Element.Name == "order") && e.Attribute.Name == "attribute")) ||
                 (e.Element.Name == "condition" && e.Attribute.Name == "valueof"))
             {
-                var entityNode = (XmlElement) e.Element.ParentNode;
+                var entityNode = (XmlElement)e.Element.ParentNode;
                 while (entityNode != null && entityNode.Name != "entity" && entityNode.Name != "link-entity")
                     entityNode = (XmlElement)entityNode.ParentNode;
 
@@ -655,29 +655,33 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private bool TryGetAttributes(string entityName, out EntityMetadata entity, out AttributeMetadata[] attributes)
         {
-            if (fxb.entities.TryGetValue(entityName, out entity) && entity.Attributes != null)
+            if (fxb.Service != null)
             {
-                attributes = fxb.GetDisplayAttributes(entityName);
-                return true;
-            }
-
-            if (fxb.NeedToLoadEntity(entityName))
-            {
-                // NOTE: Don't do:
-                // fxb.LoadEntityDetails(entityName, null);
-                // This causes a refresh of the XML from the current tree view, overwriting our changes as we type!
-                // We also don't really want the "Loading..." popup to show while we're typing, so just start the metadata loading in a background task directly
-                Task.Run(() =>
+                if (fxb.entities.TryGetValue(entityName, out entity) && entity.Attributes != null)
                 {
-                    var resp = MetadataExtensions.LoadEntityDetails(fxb.Service, entityName, fxb.ConnectionDetail.OrganizationMajorVersion, fxb.ConnectionDetail.OrganizationMinorVersion);
+                    attributes = fxb.GetDisplayAttributes(entityName);
+                    return true;
+                }
 
-                    if (resp.EntityMetadata.Count == 1)
+                if (fxb.NeedToLoadEntity(entityName))
+                {
+                    // NOTE: Don't do:
+                    // fxb.LoadEntityDetails(entityName, null);
+                    // This causes a refresh of the XML from the current tree view, overwriting our changes as we type!
+                    // We also don't really want the "Loading..." popup to show while we're typing, so just start the metadata loading in a background task directly
+                    Task.Run(() =>
                     {
-                        fxb.entities[entityName] = resp.EntityMetadata[0];
-                    }
-                });
+                        var resp = MetadataExtensions.LoadEntityDetails(fxb.Service, entityName, fxb.ConnectionDetail.OrganizationMajorVersion, fxb.ConnectionDetail.OrganizationMinorVersion);
+
+                        if (resp.EntityMetadata.Count == 1)
+                        {
+                            fxb.entities[entityName] = resp.EntityMetadata[0];
+                        }
+                    });
+                }
             }
 
+            entity = null;
             attributes = null;
             return false;
         }
