@@ -28,7 +28,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FetchXmlBuilder));
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
             this.tsbNew = new System.Windows.Forms.ToolStripSplitButton();
@@ -89,7 +88,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tslAbout = new System.Windows.Forms.ToolStripLabel();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.dockContainer = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.tmLiveUpdate = new System.Windows.Forms.Timer(this.components);
             this.toolStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -309,7 +307,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiOpenView.Image = ((System.Drawing.Image)(resources.GetObject("tsmiOpenView.Image")));
             this.tsmiOpenView.Name = "tsmiOpenView";
-            this.tsmiOpenView.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            this.tsmiOpenView.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
             | System.Windows.Forms.Keys.O)));
             this.tsmiOpenView.Size = new System.Drawing.Size(248, 30);
             this.tsmiOpenView.Text = "Open View...";
@@ -376,7 +374,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveView.Enabled = false;
             this.tsmiSaveView.Image = ((System.Drawing.Image)(resources.GetObject("tsmiSaveView.Image")));
             this.tsmiSaveView.Name = "tsmiSaveView";
-            this.tsmiSaveView.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            this.tsmiSaveView.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
             | System.Windows.Forms.Keys.S)));
             this.tsmiSaveView.Size = new System.Drawing.Size(234, 30);
             this.tsmiSaveView.Text = "Save View";
@@ -517,7 +515,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiShowSQL.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowSQL.Image")));
             this.tsmiShowSQL.Name = "tsmiShowSQL";
-            this.tsmiShowSQL.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            this.tsmiShowSQL.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt)
             | System.Windows.Forms.Keys.S)));
             this.tsmiShowSQL.Size = new System.Drawing.Size(297, 30);
             this.tsmiShowSQL.Text = "SQL Query";
@@ -527,7 +525,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiShowFlow.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowFlow.Image")));
             this.tsmiShowFlow.Name = "tsmiShowFlow";
-            this.tsmiShowFlow.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            this.tsmiShowFlow.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt)
             | System.Windows.Forms.Keys.P)));
             this.tsmiShowFlow.Size = new System.Drawing.Size(297, 30);
             this.tsmiShowFlow.Text = "Power Automate Parameters";
@@ -537,7 +535,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiShowOData4.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowOData4.Image")));
             this.tsmiShowOData4.Name = "tsmiShowOData4";
-            this.tsmiShowOData4.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            this.tsmiShowOData4.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt)
             | System.Windows.Forms.Keys.O)));
             this.tsmiShowOData4.Size = new System.Drawing.Size(297, 30);
             this.tsmiShowOData4.Text = "OData 4.0 (WebAPI)";
@@ -654,11 +652,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.dockContainer.Size = new System.Drawing.Size(1071, 593);
             this.dockContainer.TabIndex = 33;
             // 
-            // tmLiveUpdate
-            // 
-            this.tmLiveUpdate.Interval = 500;
-            this.tmLiveUpdate.Tick += new System.EventHandler(this.tmLiveUpdate_Tick);
-            // 
             // FetchXmlBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -711,7 +704,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiResetWindowLayout;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         internal WeifenLuo.WinFormsUI.Docking.DockPanel dockContainer;
-        private System.Windows.Forms.Timer tmLiveUpdate;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowQueryExpression;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowSQL;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowFetchXML;

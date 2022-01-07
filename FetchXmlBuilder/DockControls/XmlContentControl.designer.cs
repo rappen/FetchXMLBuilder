@@ -60,6 +60,7 @@
             this.lblSQL4CDSInfo = new System.Windows.Forms.Label();
             this.txtXML = new ScintillaNET.Scintilla();
             this.autocompleteImageList = new System.Windows.Forms.ImageList(this.components);
+            this.tmLiveUpdate = new System.Windows.Forms.Timer(this.components);
             this.panCancel.SuspendLayout();
             this.panActions.SuspendLayout();
             this.gbActions.SuspendLayout();
@@ -389,6 +390,7 @@
             this.txtXML.Size = new System.Drawing.Size(682, 229);
             this.txtXML.TabIndex = 12;
             this.txtXML.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtXML_KeyPress);
+            this.txtXML.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtXML_KeyUp);
             // 
             // autocompleteImageList
             // 
@@ -399,6 +401,11 @@
             this.autocompleteImageList.Images.SetKeyName(2, "XMLIntellisenseAttributeHighConfidence_16x.png");
             this.autocompleteImageList.Images.SetKeyName(3, "XMLIntelliSenseDescendant_16x.png");
             this.autocompleteImageList.Images.SetKeyName(4, "XMLIntellisenseElement_16x.png");
+            // 
+            // tmLiveUpdate
+            // 
+            this.tmLiveUpdate.Interval = 1000;
+            this.tmLiveUpdate.Tick += new System.EventHandler(this.tmLiveUpdate_Tick);
             // 
             // XmlContentControl
             // 
@@ -421,6 +428,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.XmlContentDisplayDialog_FormClosing);
             this.Load += new System.EventHandler(this.XmlContentDisplayDialog_Load);
             this.VisibleChanged += new System.EventHandler(this.XmlContentDisplayDialog_VisibleChanged);
+            this.Enter += new System.EventHandler(this.XmlContentControl_Enter);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.XmlContentDisplayDialog_KeyDown);
             this.panCancel.ResumeLayout(false);
             this.panActions.ResumeLayout(false);
@@ -472,5 +480,6 @@
         private System.Windows.Forms.Label lblSQL4CDSInfo;
         internal ScintillaNET.Scintilla txtXML;
         private System.Windows.Forms.ImageList autocompleteImageList;
+        private System.Windows.Forms.Timer tmLiveUpdate;
     }
 }

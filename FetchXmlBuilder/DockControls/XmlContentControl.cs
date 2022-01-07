@@ -19,6 +19,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         private FetchXmlBuilder fxb;
         private ContentType contenttype;
         private SaveFormat format;
+        private string liveUpdateXml = "";
 
         private MarkMpn.XmlSchemaAutocomplete.Autocomplete<FetchType> _autocomplete;
         private bool _usedAutocomplete;
@@ -37,7 +38,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             UpdateButtons();
             if (contentType == ContentType.FetchXML)
             {
-                txtXML.KeyUp += fxb.LiveXML_KeyUp;
                 InitIntellisense();
             }
         }
@@ -112,7 +112,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            fxb.dockControlBuilder.Init(txtXML.Text, "manual edit", true);
+            UpdateQueryBuild("manual edit", false);
         }
 
         private void FormatXML(string text, bool silent)
@@ -138,9 +138,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         public void UpdateXML(string xmlString)
         {
             if (txtXML.Lexer == ScintillaNET.Lexer.Xml)
+            {
                 FormatXML(xmlString, true);
+            }
             else
+            {
                 txtXML.Text = xmlString;
+            }
+            liveUpdateXml = xmlString;
         }
 
         public void UpdateSQL(string sql, bool sql4cds)
@@ -163,7 +168,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             fxb.QueryExpressionToFetchXml(txtXML.Text);
         }
-
 
         private void XmlContentDisplayDialog_Load(object sender, EventArgs e)
         {
@@ -710,6 +714,49 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 return true;
 
             return false;
+        }
+
+        private void XmlContentControl_Enter(object sender, EventArgs e)
+        {
+            fxb.historyisavailable = false;
+            fxb.EnableDisableHistoryButtons();
+        }
+
+        private void tmLiveUpdate_Tick(object sender, EventArgs e)
+        {
+            tmLiveUpdate.Stop();
+            if (chkLiveUpdate.Checked)
+            {
+                UpdateQueryBuild("live edit", true);
+            }
+        }
+
+        private void UpdateQueryBuild(string action, bool live)
+        {
+            try
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(txtXML.Text);
+                if (doc.OuterXml != liveUpdateXml)
+                {
+                    fxb.dockControlBuilder.ParseXML(txtXML.Text, false);
+                    fxb.UpdateLiveXML(live);
+                    fxb.historyMgr.RecordHistory(action, txtXML.Text);
+                }
+                liveUpdateXml = doc.OuterXml;
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private void txtXML_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (chkLiveUpdate.Checked && Visible && !e.Handled)
+            {
+                tmLiveUpdate.Stop();
+                tmLiveUpdate.Start();
+            }
         }
     }
 

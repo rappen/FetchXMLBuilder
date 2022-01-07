@@ -43,6 +43,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal TreeBuilderControl dockControlBuilder;
         internal bool working = false;
         internal Version CDSVersion = new Version();
+        internal HistoryManager historyMgr = new HistoryManager();
+        internal bool historyisavailable = true;
 
         #endregion Internal Fields
 
@@ -66,7 +68,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private MetadataControl dockControlMeta;
         private Entity dynml;
         private string fileName;
-        private string liveUpdateXml = "";
         private int resultpanecount = 0;
         private Entity view;
         private readonly AppInsights ai;
@@ -522,10 +523,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
-        internal void EnableDisableHistoryButtons(HistoryManager historyMgr)
+        internal void EnableDisableHistoryButtons()
         {
-            historyMgr.SetupUndoButton(tsbUndo);
-            historyMgr.SetupRedoButton(tsbRedo);
+            if (historyisavailable)
+            {
+                historyMgr.SetupUndoButton(tsbUndo);
+                historyMgr.SetupRedoButton(tsbRedo);
+            }
+            else
+            {
+                tsbUndo.Enabled = false;
+                tsbRedo.Enabled = false;
+            }
         }
 
         internal void FetchResults(string fetch = "")
@@ -661,16 +670,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             catch (Exception ex)
             {
                 return ex.Message;
-            }
-        }
-
-        internal void LiveXML_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (dockControlFetchXml != null && dockControlFetchXml.chkLiveUpdate.Checked &&
-                dockControlFetchXml.txtXML != null && dockControlFetchXml.Visible && !e.Handled)
-            {
-                tmLiveUpdate.Stop();
-                tmLiveUpdate.Start();
             }
         }
 
@@ -2079,29 +2078,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             EnableControls(true);
         }
 
-        private void tmLiveUpdate_Tick(object sender, EventArgs e)
-        {
-            tmLiveUpdate.Stop();
-            if (dockControlFetchXml != null && dockControlFetchXml.chkLiveUpdate.Checked &&
-                dockControlFetchXml.txtXML != null && dockControlFetchXml.Visible)
-            {
-                try
-                {
-                    XmlDocument doc = new XmlDocument();
-                    doc.LoadXml(dockControlFetchXml.txtXML.Text);
-                    if (doc.OuterXml != liveUpdateXml)
-                    {
-                        dockControlBuilder.ParseXML(dockControlFetchXml.txtXML.Text, false);
-                        UpdateLiveXML(true);
-                    }
-                    liveUpdateXml = doc.OuterXml;
-                }
-                catch (Exception)
-                {
-                }
-            }
-        }
-
         private void toolStripMain_Click(object sender, EventArgs e)
         {
             dockControlBuilder?.tvFetch?.Focus();
@@ -2146,7 +2122,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 }
                 LogUse("New");
                 dockControlBuilder.Init(null, "new", false);
-                liveUpdateXml = string.Empty;
                 return;
             }
             var newconnection = sender == tsmiNewNewConnection;

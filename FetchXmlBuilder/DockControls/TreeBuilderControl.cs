@@ -24,7 +24,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private bool fetchChanged = false;
         private FetchXmlBuilder fxb;
-        private HistoryManager historyMgr = new HistoryManager();
         private string treeChecksum = "";
         private FetchXmlElementControlBase ctrl;
 
@@ -333,21 +332,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         internal void RecordHistory(string action)
         {
             var fetch = GetFetchString(false, false);
-            historyMgr.RecordHistory(action, fetch);
-            fxb.EnableDisableHistoryButtons(historyMgr);
+            fxb.historyMgr.RecordHistory(action, fetch);
+            fxb.EnableDisableHistoryButtons();
         }
 
         internal void RestoreHistoryPosition(int delta)
         {
             fxb.LogUse(delta < 0 ? "Undo" : "Redo");
-            var fetch = historyMgr.RestoreHistoryPosition(delta) as string;
+            var fetch = fxb.historyMgr.RestoreHistoryPosition(delta) as string;
             if (fetch != null)
             {
                 ParseXML(fetch, false);
                 RefreshSelectedNode();
                 fxb.UpdateLiveXML();
             }
-            fxb.EnableDisableHistoryButtons(historyMgr);
+            fxb.EnableDisableHistoryButtons();
         }
 
         internal void Save(string fileName)
@@ -977,5 +976,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         }
 
         #endregion Control Event Handlers
+
+        private void TreeBuilderControl_Enter(object sender, EventArgs e)
+        {
+            fxb.historyisavailable = true;
+            fxb.EnableDisableHistoryButtons();
+        }
     }
 }
