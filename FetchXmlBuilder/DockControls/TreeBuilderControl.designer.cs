@@ -53,9 +53,10 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tt = new System.Windows.Forms.ToolTip(this.components);
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.showMetadataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tt = new System.Windows.Forms.ToolTip(this.components);
+            this.imgFetch = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -96,9 +97,12 @@
             this.tvFetch.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tvFetch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tvFetch.HideSelection = false;
+            this.tvFetch.ImageIndex = 0;
+            this.tvFetch.ImageList = this.imgFetch;
             this.tvFetch.Location = new System.Drawing.Point(0, 0);
             this.tvFetch.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tvFetch.Name = "tvFetch";
+            this.tvFetch.SelectedImageIndex = 0;
             this.tvFetch.ShowNodeToolTips = true;
             this.tvFetch.Size = new System.Drawing.Size(594, 248);
             this.tvFetch.TabIndex = 0;
@@ -206,7 +210,6 @@
             this.addMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.nothingToAddToolStripMenuItem});
             this.addMenu.Name = "addMenu";
-            this.addMenu.OwnerItem = this.addToolStripMenuItem;
             this.addMenu.Size = new System.Drawing.Size(154, 26);
             this.addMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
@@ -241,7 +244,7 @@
             this.toolStripSeparator1,
             this.showMetadataToolStripMenuItem});
             this.nodeMenu.Name = "nodeMenu";
-            this.nodeMenu.Size = new System.Drawing.Size(203, 343);
+            this.nodeMenu.Size = new System.Drawing.Size(203, 220);
             this.nodeMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
             // selectAttributesToolStripMenuItem
@@ -254,7 +257,7 @@
             // addOneMoreToolStripMenuItem
             // 
             this.addOneMoreToolStripMenuItem.Name = "addOneMoreToolStripMenuItem";
-            this.addOneMoreToolStripMenuItem.Size = new System.Drawing.Size(285, 32);
+            this.addOneMoreToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.addOneMoreToolStripMenuItem.Text = "Add one more";
             // 
             // deleteToolStripMenuItem
@@ -320,6 +323,24 @@
             this.showMetadataToolStripMenuItem.Text = "Show Metadata";
             this.showMetadataToolStripMenuItem.Click += new System.EventHandler(this.showMetadataToolStripMenuItem_Click);
             // 
+            // imgFetch
+            // 
+            this.imgFetch.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgFetch.ImageStream")));
+            this.imgFetch.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgFetch.Images.SetKeyName(0, "blank");
+            this.imgFetch.Images.SetKeyName(1, "fetch");
+            this.imgFetch.Images.SetKeyName(2, "entity");
+            this.imgFetch.Images.SetKeyName(3, "attribute");
+            this.imgFetch.Images.SetKeyName(4, "link-entity");
+            this.imgFetch.Images.SetKeyName(5, "filter");
+            this.imgFetch.Images.SetKeyName(6, "condition");
+            this.imgFetch.Images.SetKeyName(7, "value");
+            this.imgFetch.Images.SetKeyName(8, "order");
+            this.imgFetch.Images.SetKeyName(9, "#comment");
+            this.imgFetch.Images.SetKeyName(10, "info");
+            this.imgFetch.Images.SetKeyName(11, "warn");
+            this.imgFetch.Images.SetKeyName(12, "error");
+            // 
             // TreeBuilderControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -383,5 +404,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem showMetadataToolStripMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem addOneMoreToolStripMenuItem;
+        private System.Windows.Forms.ImageList imgFetch;
     }
 }

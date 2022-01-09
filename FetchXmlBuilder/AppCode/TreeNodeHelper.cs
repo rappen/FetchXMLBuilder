@@ -81,6 +81,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 return;
             }
+            node.ImageKey = node.Name;
+            node.SelectedImageKey = node.Name;
             var text = node.Name;
             Dictionary<string, string> attributes =
                 node.Tag is Dictionary<string, string> ?
