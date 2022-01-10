@@ -83,7 +83,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
             node.ImageKey = node.Name;
             node.SelectedImageKey = node.Name;
-            var text = node.Name;
+            var text = fxb.settings.ShowNodeType ? node.Name : "";
             Dictionary<string, string> attributes =
                 node.Tag is Dictionary<string, string> ?
                     (Dictionary<string, string>)node.Tag :
@@ -248,6 +248,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 text = text.Substring(0, 1).ToUpper() + text.Substring(1);
             }
+            text = text.Trim();
             node.Text = text;
             SetNodeTooltip(node);
         }

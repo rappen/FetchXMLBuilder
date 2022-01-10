@@ -62,7 +62,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.chkResAllPages = new System.Windows.Forms.CheckBox();
             this.gbAppearance = new System.Windows.Forms.GroupBox();
             this.chkShowButtonTexts = new System.Windows.Forms.CheckBox();
-            this.chkShowHelp = new System.Windows.Forms.CheckBox();
+            this.chkShowNodeTypes = new System.Windows.Forms.CheckBox();
             this.chkUseLookup = new System.Windows.Forms.CheckBox();
             this.chkAppAllowUncustViews = new System.Windows.Forms.CheckBox();
             this.chkAppSingle = new System.Windows.Forms.CheckBox();
@@ -459,7 +459,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // gbAppearance
             // 
             this.gbAppearance.Controls.Add(this.chkShowButtonTexts);
-            this.gbAppearance.Controls.Add(this.chkShowHelp);
+            this.gbAppearance.Controls.Add(this.chkShowNodeTypes);
             this.gbAppearance.Controls.Add(this.chkUseLookup);
             this.gbAppearance.Controls.Add(this.chkAppAllowUncustViews);
             this.gbAppearance.Controls.Add(this.chkAppSingle);
@@ -481,15 +481,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.chkShowButtonTexts.Text = "Show button texts";
             this.chkShowButtonTexts.UseVisualStyleBackColor = true;
             // 
-            // chkShowHelp
+            // chkShowNodeTypes
             // 
-            this.chkShowHelp.AutoSize = true;
-            this.chkShowHelp.Location = new System.Drawing.Point(16, 100);
-            this.chkShowHelp.Name = "chkShowHelp";
-            this.chkShowHelp.Size = new System.Drawing.Size(100, 17);
-            this.chkShowHelp.TabIndex = 9;
-            this.chkShowHelp.Text = "Show help links";
-            this.chkShowHelp.UseVisualStyleBackColor = true;
+            this.chkShowNodeTypes.AutoSize = true;
+            this.chkShowNodeTypes.Location = new System.Drawing.Point(16, 100);
+            this.chkShowNodeTypes.Name = "chkShowNodeTypes";
+            this.chkShowNodeTypes.Size = new System.Drawing.Size(100, 17);
+            this.chkShowNodeTypes.TabIndex = 9;
+            this.chkShowNodeTypes.Text = "Show treeview nodes types";
+            this.chkShowNodeTypes.UseVisualStyleBackColor = true;
             // 
             // chkUseLookup
             // 
@@ -806,7 +806,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private System.Windows.Forms.GroupBox gbBehavior;
         private System.Windows.Forms.Button btnResetXmlColors;
         private System.Windows.Forms.RadioButton rbResSerializedJSON;
-        private System.Windows.Forms.CheckBox chkShowHelp;
+        private System.Windows.Forms.CheckBox chkShowNodeTypes;
         private System.Windows.Forms.CheckBox chkAddConditionToFilter;
         private System.Windows.Forms.CheckBox chkShowButtonTexts;
         private System.Windows.Forms.RadioButton rbResSerializedJSONWebAPI;
