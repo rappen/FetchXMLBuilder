@@ -395,18 +395,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         internal AttributeMetadata GetAttribute(string entityName, string attributeName)
         {
-            if (entities != null && entities.ContainsKey(entityName))
+            if (entities != null && entities.ContainsKey(entityName) && entities[entityName].Attributes is AttributeMetadata[] attrs)
             {
-                if (entities[entityName].Attributes != null)
-                {
-                    foreach (var attribute in entities[entityName].Attributes)
-                    {
-                        if (attribute.LogicalName == attributeName)
-                        {
-                            return attribute;
-                        }
-                    }
-                }
+                return attrs.FirstOrDefault(a => a.LogicalName == attributeName);
             }
             return null;
         }
