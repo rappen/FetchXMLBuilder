@@ -246,6 +246,7 @@
     <Compile Include="AppCode\QueryInfo.cs" />
     <Compile Include="AppCode\QueryExpressionCodeGenerator.cs" />
     <Compile Include="AppCode\Utils.cs" />
+    <Compile Include="AppCode\Validations.cs" />
     <Compile Include="AppCode\ViewItem.cs" />
     <Compile Include="AppCode\EntityItem.cs" />
     <Compile Include="AppCode\FetchNodeCapabilities.cs" />

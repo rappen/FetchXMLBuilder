@@ -9,11 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
@@ -482,8 +480,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 return null;
             }
-            result.Add(ent.Attributes.GetNamedItem("name").Value);
-            result.AddRange(GetEntitysChilds(ent));
+            if (ent.Attributes.GetNamedItem("name") != null)
+            {
+                result.Add(ent.Attributes.GetNamedItem("name").Value);
+                result.AddRange(GetEntitysChilds(ent));
+            }
             result = result.Distinct().ToList();
             return result;
         }
@@ -497,8 +498,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
             foreach (XmlNode child in childent)
             {
-                result.Add(child.Attributes.GetNamedItem("name").Value);
-                result.AddRange(GetEntitysChilds(child));
+                if (child.Attributes.GetNamedItem("name") != null)
+                {
+                    result.Add(child.Attributes.GetNamedItem("name").Value);
+                    result.AddRange(GetEntitysChilds(child));
+                }
             }
             return result;
         }
@@ -830,6 +834,28 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
         }
 
+        private void SetWarning(TreeNode node)
+        {
+            var warning = Validations.GetWarning(node, fxb);
+            if (warning != null)
+            {
+                lblWarning.Text = "      " + warning.Message;
+                switch (warning.Level)
+                {
+                    case ControlValidationLevel.Error:
+                        lblWarning.ImageKey = "error";
+                        break;
+                    case ControlValidationLevel.Warning:
+                        lblWarning.ImageKey = "warning";
+                        break;
+                    case ControlValidationLevel.Info:
+                        lblWarning.ImageKey = "info";
+                        break;
+                }
+            }
+            lblWarning.Visible = warning != null;
+        }
+
         private void UncommentNode()
         {
             var node = tvFetch.SelectedNode;
@@ -955,6 +981,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         private void tvFetch_AfterSelect(object sender, TreeViewEventArgs e)
         {
             HandleNodeSelection(e.Node);
+            SetWarning(e.Node);
         }
 
         private void tvFetch_KeyDown(object sender, KeyEventArgs e)

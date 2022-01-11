@@ -1,4 +1,6 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.DockControls;
+﻿using Cinteros.Xrm.FetchXmlBuilder.Controls;
+using Cinteros.Xrm.FetchXmlBuilder.DockControls;
+using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -81,13 +83,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 return;
             }
-            node.ImageKey = node.Name;
-            node.SelectedImageKey = node.Name;
             var text = fxb.settings.ShowNodeType ? node.Name : "";
-            Dictionary<string, string> attributes =
-                node.Tag is Dictionary<string, string> ?
-                    (Dictionary<string, string>)node.Tag :
-                    new Dictionary<string, string>();
+            var attributes = node.Tag is Dictionary<string, string> tag ? tag : new Dictionary<string, string>();
             var agg = GetAttributeFromNode(node, "aggregate");
             var name = GetAttributeFromNode(node, "name");
             var alias = GetAttributeFromNode(node, "alias");
@@ -167,7 +164,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     var type = GetAttributeFromNode(node, "type");
                     if (!string.IsNullOrEmpty(type))
                     {
-                        text += " (" + type + ")";
+                        text += " " + type;
                     }
                     break;
                 case "condition":
@@ -249,8 +246,34 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 text = text.Substring(0, 1).ToUpper() + text.Substring(1);
             }
             text = text.Trim();
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                text = $"({node.Name})";
+            }
             node.Text = text;
-            SetNodeTooltip(node);
+            var warning = Validations.GetWarning(node, fxb);
+            if (warning != null)
+            {
+                node.ToolTipText = warning.Message;
+                switch (warning.Level)
+                {
+                    case ControlValidationLevel.Error:
+                        node.ImageKey = "error";
+                        break;
+                    case ControlValidationLevel.Warning:
+                        node.ImageKey = "warning";
+                        break;
+                    case ControlValidationLevel.Info:
+                        node.ImageKey = "info";
+                        break;
+                }
+            }
+            else
+            {
+                node.ImageKey = node.Name;
+                SetNodeTooltip(node);
+            }
+            node.SelectedImageKey = node.ImageKey;
         }
 
         internal static void SetNodeTooltip(TreeNode node)
@@ -464,6 +487,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
                 }
             }
+            childNode.ImageKey = name;
+            childNode.SelectedImageKey = childNode.ImageKey;
             return childNode;
         }
 

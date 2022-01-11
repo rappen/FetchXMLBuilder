@@ -32,6 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TreeBuilderControl));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tvFetch = new System.Windows.Forms.TreeView();
+            this.imgFetch = new System.Windows.Forms.ImageList(this.components);
+            this.lblWarning = new System.Windows.Forms.Label();
             this.panProperties = new System.Windows.Forms.Panel();
             this.gbProperties = new System.Windows.Forms.GroupBox();
             this.panelContainer = new System.Windows.Forms.Panel();
@@ -56,7 +58,6 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.showMetadataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
-            this.imgFetch = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -81,6 +82,7 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.tvFetch);
+            this.splitContainer1.Panel1.Controls.Add(this.lblWarning);
             // 
             // splitContainer1.Panel2
             // 
@@ -104,11 +106,43 @@
             this.tvFetch.Name = "tvFetch";
             this.tvFetch.SelectedImageIndex = 0;
             this.tvFetch.ShowNodeToolTips = true;
-            this.tvFetch.Size = new System.Drawing.Size(594, 248);
+            this.tvFetch.Size = new System.Drawing.Size(594, 220);
             this.tvFetch.TabIndex = 0;
             this.tvFetch.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvFetch_AfterSelect);
             this.tvFetch.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvFetch_NodeMouseClick);
             this.tvFetch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tvFetch_KeyDown);
+            // 
+            // imgFetch
+            // 
+            this.imgFetch.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgFetch.ImageStream")));
+            this.imgFetch.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgFetch.Images.SetKeyName(0, "blank");
+            this.imgFetch.Images.SetKeyName(1, "fetch");
+            this.imgFetch.Images.SetKeyName(2, "entity");
+            this.imgFetch.Images.SetKeyName(3, "attribute");
+            this.imgFetch.Images.SetKeyName(4, "link-entity");
+            this.imgFetch.Images.SetKeyName(5, "filter");
+            this.imgFetch.Images.SetKeyName(6, "condition");
+            this.imgFetch.Images.SetKeyName(7, "value");
+            this.imgFetch.Images.SetKeyName(8, "order");
+            this.imgFetch.Images.SetKeyName(9, "#comment");
+            this.imgFetch.Images.SetKeyName(10, "info");
+            this.imgFetch.Images.SetKeyName(11, "warning");
+            this.imgFetch.Images.SetKeyName(12, "error");
+            // 
+            // lblWarning
+            // 
+            this.lblWarning.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblWarning.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblWarning.ImageIndex = 11;
+            this.lblWarning.ImageList = this.imgFetch;
+            this.lblWarning.Location = new System.Drawing.Point(0, 220);
+            this.lblWarning.Name = "lblWarning";
+            this.lblWarning.Padding = new System.Windows.Forms.Padding(4, 4, 0, 0);
+            this.lblWarning.Size = new System.Drawing.Size(594, 28);
+            this.lblWarning.TabIndex = 1;
+            this.lblWarning.Text = "      Warning";
+            this.lblWarning.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panProperties
             // 
@@ -210,6 +244,7 @@
             this.addMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.nothingToAddToolStripMenuItem});
             this.addMenu.Name = "addMenu";
+            this.addMenu.OwnerItem = this.addToolStripMenuItem;
             this.addMenu.Size = new System.Drawing.Size(154, 26);
             this.addMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
@@ -323,24 +358,6 @@
             this.showMetadataToolStripMenuItem.Text = "Show Metadata";
             this.showMetadataToolStripMenuItem.Click += new System.EventHandler(this.showMetadataToolStripMenuItem_Click);
             // 
-            // imgFetch
-            // 
-            this.imgFetch.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgFetch.ImageStream")));
-            this.imgFetch.TransparentColor = System.Drawing.Color.Transparent;
-            this.imgFetch.Images.SetKeyName(0, "blank");
-            this.imgFetch.Images.SetKeyName(1, "fetch");
-            this.imgFetch.Images.SetKeyName(2, "entity");
-            this.imgFetch.Images.SetKeyName(3, "attribute");
-            this.imgFetch.Images.SetKeyName(4, "link-entity");
-            this.imgFetch.Images.SetKeyName(5, "filter");
-            this.imgFetch.Images.SetKeyName(6, "condition");
-            this.imgFetch.Images.SetKeyName(7, "value");
-            this.imgFetch.Images.SetKeyName(8, "order");
-            this.imgFetch.Images.SetKeyName(9, "#comment");
-            this.imgFetch.Images.SetKeyName(10, "info");
-            this.imgFetch.Images.SetKeyName(11, "warn");
-            this.imgFetch.Images.SetKeyName(12, "error");
-            // 
             // TreeBuilderControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -405,5 +422,6 @@
         private System.Windows.Forms.ToolStripMenuItem showMetadataToolStripMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem addOneMoreToolStripMenuItem;
         private System.Windows.Forms.ImageList imgFetch;
+        private System.Windows.Forms.Label lblWarning;
     }
 }
