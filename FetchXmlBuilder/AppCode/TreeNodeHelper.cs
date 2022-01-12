@@ -115,6 +115,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     {
                         text += " pg:" + attributes["page"];
                     }
+                    if (string.IsNullOrWhiteSpace(text))
+                    {
+                        text = "fetch";
+                    }
                     break;
                 case "entity":
                 case "link-entity":
@@ -242,11 +246,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
                     break;
             }
+            text = text.Trim();
             if (FetchXmlBuilder.friendlyNames && !string.IsNullOrEmpty(text))
             {
                 text = text.Substring(0, 1).ToUpper() + text.Substring(1);
             }
-            text = text.Trim();
             if (string.IsNullOrWhiteSpace(text))
             {
                 text = $"({node.Name})";
