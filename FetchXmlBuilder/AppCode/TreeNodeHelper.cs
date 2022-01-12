@@ -1,8 +1,8 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.Controls;
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
-using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -504,6 +504,90 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 }
             }
             return result;
+        }
+
+        internal static bool IsFetchAggregate(TreeNode node)
+        {
+            var aggregate = false;
+            while (node != null && node.Name != "fetch")
+            {
+                node = node.Parent;
+            }
+            if (node != null && node.Name == "fetch")
+            {
+                aggregate = TreeNodeHelper.GetAttributeFromNode(node, "aggregate") == "true";
+            }
+            return aggregate;
+        }
+
+        internal static bool IsFetchAggregate(string fetch)
+        {
+            var xml = new XmlDocument();
+            xml.LoadXml(fetch);
+            return IsFetchAggregate(xml);
+        }
+
+        private static bool IsFetchAggregate(XmlDocument xml)
+        {
+            var fetchnode = xml.SelectSingleNode("fetch");
+            return fetchnode.Attributes["aggregate"]?.Value == "true";
+        }
+
+        internal static List<string> GetEntitysForFetch(XmlDocument fetchDoc)
+        {
+            var result = new List<string>();
+            if (!(fetchDoc.SelectSingleNode("fetch/entity") is XmlNode ent))
+            {
+                return null;
+            }
+            if (ent.Attributes.GetNamedItem("name") != null)
+            {
+                result.Add(ent.Attributes.GetNamedItem("name").Value);
+                result.AddRange(GetEntitysChilds(ent));
+            }
+            result = result.Distinct().ToList();
+            return result;
+        }
+
+        private static List<string> GetEntitysChilds(XmlNode ent)
+        {
+            var result = new List<string>();
+            if (!(ent.SelectNodes("link-entity") is XmlNodeList childent))
+            {
+                return null;
+            }
+            foreach (XmlNode child in childent)
+            {
+                if (child.Attributes.GetNamedItem("name") != null)
+                {
+                    result.Add(child.Attributes.GetNamedItem("name").Value);
+                    result.AddRange(GetEntitysChilds(child));
+                }
+            }
+            return result;
+        }
+
+        internal static TreeNode ForThisNodeEntityNode(TreeNode node)
+        {
+            while (!node.Name.Equals("entity") && !node.Name.Equals("link-entity"))
+            {
+                node = node.Parent;
+                if (node == null)
+                {
+                    return null;
+                }
+            }
+            return (!node.Name.Equals("entity") && !node.Name.Equals("link-entity")) ? node : null;
+        }
+
+        internal static bool ForThisNodeEntityIsRoot(TreeNode node)
+        {
+            return ForThisNodeEntityNode(node)?.Name == "entity";
+        }
+
+        internal static string ForThisNodeEntityName(TreeNode node)
+        {
+            return GetAttributeFromNode(ForThisNodeEntityNode(node), "name");
         }
     }
 }

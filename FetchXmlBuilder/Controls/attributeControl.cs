@@ -26,7 +26,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         protected override void PopulateControls()
         {
             cmbAttribute.Items.Clear();
-            aggregate = TreeBuilderControl.IsFetchAggregate(Node);
+            aggregate = TreeNodeHelper.IsFetchAggregate(Node);
             cmbAggregate.Enabled = aggregate;
             chkGroupBy.Enabled = aggregate;
             if (!aggregate)
@@ -59,7 +59,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
             else if (control == txtAlias)
             {
-                if (TreeBuilderControl.IsFetchAggregate(Node) && string.IsNullOrWhiteSpace(txtAlias.Text))
+                if (TreeNodeHelper.IsFetchAggregate(Node) && string.IsNullOrWhiteSpace(txtAlias.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Error, "Alias must be specified in aggregate queries");
                 }

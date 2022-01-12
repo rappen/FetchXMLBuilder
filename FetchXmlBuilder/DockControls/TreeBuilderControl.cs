@@ -70,28 +70,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         internal bool IsFetchAggregate()
         {
-            return IsFetchAggregate(tvFetch.Nodes.Cast<TreeNode>().FirstOrDefault());
-        }
-
-        internal static bool IsFetchAggregate(TreeNode node)
-        {
-            var aggregate = false;
-            while (node != null && node.Name != "fetch")
-            {
-                node = node.Parent;
-            }
-            if (node != null && node.Name == "fetch")
-            {
-                aggregate = TreeNodeHelper.GetAttributeFromNode(node, "aggregate") == "true";
-            }
-            return aggregate;
-        }
-
-        internal static bool IsFetchAggregate(string fetch)
-        {
-            var xml = new XmlDocument();
-            xml.LoadXml(fetch);
-            return IsFetchAggregate(xml);
+            return TreeNodeHelper.IsFetchAggregate(tvFetch.Nodes.Cast<TreeNode>().FirstOrDefault());
         }
 
         internal void ApplyCurrentSettings()
@@ -274,7 +253,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 fetch = GetFetchString(false, validate);
             }
-            if (IsFetchAggregate(fetch))
+            if (TreeNodeHelper.IsFetchAggregate(fetch))
             {
                 throw new FetchIsAggregateException("QueryExpression does not support aggregate queries.");
             }
@@ -377,12 +356,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             tvFetch.Nodes.OfType<TreeNode>().ToList().ForEach(n => UpdateChildNode(n));
         }
 
-        private static bool IsFetchAggregate(XmlDocument xml)
-        {
-            var fetchnode = xml.SelectSingleNode("fetch");
-            return fetchnode.Attributes["aggregate"]?.Value == "true";
-        }
-
         #endregion Internal Methods
 
         #region Private Methods
@@ -458,7 +431,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
             if (fxb.entities != null)
             {
-                var entitys = GetEntitysForFetch(fetchDoc);
+                var entitys = TreeNodeHelper.GetEntitysForFetch(fetchDoc);
                 entitys = entitys?.Where(e => !string.IsNullOrEmpty(e) && fxb.entities.ContainsKey(e) && fxb.entities[e].Attributes == null)?.ToList();
                 entitys?.ForEach(e => fxb.LoadEntityDetails(e, null, false));
             }
@@ -471,40 +444,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 tvFetch.SelectedNode = tvFetch.Nodes[0];
             }
             ManageMenuDisplay();
-        }
-
-        private static List<string> GetEntitysForFetch(XmlDocument fetchDoc)
-        {
-            var result = new List<string>();
-            if (!(fetchDoc.SelectSingleNode("fetch/entity") is XmlNode ent))
-            {
-                return null;
-            }
-            if (ent.Attributes.GetNamedItem("name") != null)
-            {
-                result.Add(ent.Attributes.GetNamedItem("name").Value);
-                result.AddRange(GetEntitysChilds(ent));
-            }
-            result = result.Distinct().ToList();
-            return result;
-        }
-
-        private static List<string> GetEntitysChilds(XmlNode ent)
-        {
-            var result = new List<string>();
-            if (!(ent.SelectNodes("link-entity") is XmlNodeList childent))
-            {
-                return null;
-            }
-            foreach (XmlNode child in childent)
-            {
-                if (child.Attributes.GetNamedItem("name") != null)
-                {
-                    result.Add(child.Attributes.GetNamedItem("name").Value);
-                    result.AddRange(GetEntitysChilds(child));
-                }
-            }
-            return result;
         }
 
         private XmlDocument GetFetchDocument()

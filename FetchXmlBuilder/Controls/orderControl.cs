@@ -27,7 +27,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         protected override void PopulateControls()
         {
-            var aggregate = TreeBuilderControl.IsFetchAggregate(Node);
+            var aggregate = TreeNodeHelper.IsFetchAggregate(Node);
             if (!aggregate)
             {
                 cmbAttribute.Items.Clear();
