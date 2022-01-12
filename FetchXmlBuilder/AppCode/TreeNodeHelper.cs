@@ -162,10 +162,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     break;
                 case "filter":
                     var type = GetAttributeFromNode(node, "type");
-                    if (!string.IsNullOrEmpty(type))
+                    if (string.IsNullOrEmpty(type))
                     {
-                        text += " " + type;
+                        type = "(and)";
                     }
+                    text += " " + type;
                     break;
                 case "condition":
                     {
