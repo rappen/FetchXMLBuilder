@@ -577,7 +577,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     return null;
                 }
             }
-            return (!node.Name.Equals("entity") && !node.Name.Equals("link-entity")) ? node : null;
+            return (node.Name.Equals("entity") || node.Name.Equals("link-entity")) ? node : null;
         }
 
         internal static bool ForThisNodeEntityIsRoot(TreeNode node)
