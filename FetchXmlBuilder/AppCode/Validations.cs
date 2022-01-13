@@ -64,7 +64,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     {
                         if (string.IsNullOrWhiteSpace(alias))
                         {
-                            return new ControlValidationResult(ControlValidationLevel.Warning, "Aggregate should always have an Alias.");
+                            return new ControlValidationResult(ControlValidationLevel.Warning, "Aggregate should always have an Alias.", "https://docs.microsoft.com/en-us/powerapps/developer/data-platform/use-fetchxml-aggregation#about-aggregation");
                         }
 
                         if (TreeNodeHelper.GetAttributeFromNode(node, "groupby") == "true")
@@ -84,7 +84,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     {
                         if (!string.IsNullOrWhiteSpace(alias))
                         {
-                            return new ControlValidationResult(ControlValidationLevel.Info, "Alias is not recommending for not Aggregate queries.");
+                            return new ControlValidationResult(ControlValidationLevel.Info, "Alias is not recommended for not Aggregate queries.");
                         }
 
                         if (IsDistinct(node) && !HasSortOnAttribute(node))
@@ -139,7 +139,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
                     if (node.Parent.Name == "link-entity")
                     {
-                        return new ControlValidationResult(ControlValidationLevel.Info, "Sorting on a link-entity triggers legacy paging.", "https://markcarrington.dev/2021/02/23/msdyn365-internals-paging-gotchas/#sorting_on_linked_entities");
+                        return new ControlValidationResult(ControlValidationLevel.Info, "Sorting on a link-entity triggers legacy paging.", "https://docs.microsoft.com/en-us/powerapps/developer/data-platform/org-service/paging-behaviors-and-ordering#ordering-and-multiple-table-queries");
                     }
 
                     if (TreeNodeHelper.IsFetchAggregate(node) && !string.IsNullOrWhiteSpace(alias))
