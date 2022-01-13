@@ -256,7 +256,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 text = $"({node.Name})";
             }
             node.Text = text;
-            node.SelectedImageKey = node.ImageKey;
 
             var root = node;
             while (root.Parent != null)
@@ -290,6 +289,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 node.ImageKey = node.Name;
                 SetNodeTooltip(node);
             }
+            node.SelectedImageKey = node.ImageKey;
 
             foreach (var child in node.Nodes.OfType<TreeNode>())
             {
