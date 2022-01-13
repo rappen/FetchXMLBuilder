@@ -8,6 +8,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     {
         internal static ControlValidationResult GetWarning(TreeNode node, FetchXmlBuilder fxb)
         {
+            if (!fxb.settings.ShowValidation)
+            {
+                return null;
+            }
             var name = TreeNodeHelper.GetAttributeFromNode(node, "name");
             var attribute = TreeNodeHelper.GetAttributeFromNode(node, "attribute");
             var parententity = TreeNodeHelper.ForThisNodeEntityName(node);

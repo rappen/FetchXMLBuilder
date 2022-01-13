@@ -29,8 +29,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             chkAddConditionToFilter.Checked = settings.AddConditionToFilter;
             chkUseSQL4CDS.Checked = settings.UseSQL4CDS;
             chkUseLookup.Checked = settings.UseLookup;
+            chkShowHelp.Checked = settings.ShowHelpLinks;
             chkShowNodeTypes.Checked = settings.ShowNodeType;
             chkShowButtonTexts.Checked = settings.ShowButtonTexts;
+            chkShowValidation.Checked = settings.ShowValidation;
             switch (settings.Results.ResultOutput)
             {
                 case ResultOutput.XML: rbResSerializedXML.Checked = true; break;
@@ -83,8 +85,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             settings.AddConditionToFilter = chkAddConditionToFilter.Checked;
             settings.UseSQL4CDS = chkUseSQL4CDS.Checked;
             settings.UseLookup = chkUseLookup.Checked;
+            settings.ShowHelpLinks = chkShowHelp.Checked;
             settings.ShowNodeType = chkShowNodeTypes.Checked;
             settings.ShowButtonTexts = chkShowButtonTexts.Checked;
+            settings.ShowValidation = chkShowValidation.Checked;
             settings.XmlColors = propXmlColors.SelectedObject as XmlColors;
             settings.Entity.All = chkEntAll.Checked;
             settings.Entity.Customizable = chkEntCustomizable.Checked;

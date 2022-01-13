@@ -76,7 +76,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 BlinkStyle = ErrorBlinkStyle.NeverBlink,
                 Icon = InfoIcon
             };
-            ShowHelpIcon(this, true);
+            ShowHelpIcon(this, fxb?.settings?.ShowHelpLinks != false);
             PopulateControls();
             ControlUtils.FillControls(collec, Controls, this);
             controlsCheckSum = ControlUtils.ControlsChecksum(Controls);
