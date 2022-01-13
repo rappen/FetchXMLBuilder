@@ -778,7 +778,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             var warning = Validations.GetWarning(node, fxb);
             if (warning != null)
             {
-                lblWarning.Text = "      " + warning.Message;
+                var leadingSpaces = "      ";
+                lblWarning.Text = leadingSpaces + warning.Message;
                 switch (warning.Level)
                 {
                     case ControlValidationLevel.Error:
@@ -790,6 +791,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     case ControlValidationLevel.Info:
                         lblWarning.ImageKey = "info";
                         break;
+                }
+
+                if (string.IsNullOrWhiteSpace(warning.Url))
+                {
+                    lblWarning.LinkArea = new LinkArea(0, 0);
+                }
+                else
+                {
+                    lblWarning.LinkArea = new LinkArea(leadingSpaces.Length, lblWarning.Text.Length - leadingSpaces.Length);
+                    lblWarning.Tag = warning.Url;
                 }
             }
             lblWarning.Visible = warning != null;
@@ -947,6 +958,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             fxb.historyisavailable = true;
             fxb.EnableDisableHistoryButtons();
+        }
+
+        private void lblWarning_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var url = lblWarning.Tag as string;
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                url = Utils.ProcessURL(url);
+                System.Diagnostics.Process.Start(url);
+            }
         }
     }
 }
