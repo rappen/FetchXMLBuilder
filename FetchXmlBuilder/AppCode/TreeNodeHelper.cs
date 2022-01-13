@@ -267,7 +267,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
         }
 
-        private static void Validate(TreeNode node, FetchXmlBuilder fxb)
+        public static void Validate(TreeNode node, FetchXmlBuilder fxb)
         {
             var root = node;
             while (root.Parent != null)

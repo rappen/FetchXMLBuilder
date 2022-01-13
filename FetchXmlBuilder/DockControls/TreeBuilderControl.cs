@@ -419,6 +419,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             var node = tvFetch.SelectedNode;
             var updateNode = node.Parent;
             node.Remove();
+            TreeNodeHelper.Validate(updateNode, fxb);
             RecordHistory("delete " + node.Name);
             return updateNode;
         }
