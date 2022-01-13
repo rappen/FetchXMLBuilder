@@ -355,6 +355,12 @@
     <Compile Include="DockControls\ResultGrid.Designer.cs">
       <DependentUpon>ResultGrid.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ErrorDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ErrorDetail.Designer.cs">
+      <DependentUpon>ErrorDetail.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SelectAttributesDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -460,6 +466,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DockControls\ResultGrid.resx">
       <DependentUpon>ResultGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ErrorDetail.resx">
+      <DependentUpon>ErrorDetail.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SelectAttributesDialog.resx">
       <DependentUpon>SelectAttributesDialog.cs</DependentUpon>

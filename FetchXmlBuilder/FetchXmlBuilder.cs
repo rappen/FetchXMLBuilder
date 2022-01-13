@@ -771,7 +771,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     EnableControls(true);
                     if (completedargs.Error != null)
                     {
-                        MessageBox.Show(completedargs.Error.Message);
+                        ErrorDetail.ShowDialog(this, completedargs.Error); 
                     }
                     else
                     {
@@ -883,7 +883,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     if (completedargs.Error != null)
                     {
-                        MessageBox.Show(completedargs.Error.Message, "Parse QueryExpression", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ErrorDetail.ShowDialog(this, completedargs.Error, "Parse QueryExpression");
                     }
                     else if (completedargs.Result is string)
                     {
@@ -1026,7 +1026,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     working = false;
                     if (completedargs.Error != null)
                     {
-                        MessageBox.Show(completedargs.Error.Message);
+                        ErrorDetail.ShowDialog(this, completedargs.Error);
                     }
                     else if (completedargs.Result is string)
                     {
@@ -1202,7 +1202,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     if (completedargs.Error != null)
                     {
-                        MessageBox.Show(completedargs.Error.Message);
+                        ErrorDetail.ShowDialog(this, completedargs.Error, "Load Entities");
                     }
                     else
                     {
@@ -1556,10 +1556,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     if (completedargs.Error != null)
                     {
                         LogError("RetrieveMultiple error: {0}", completedargs.Error);
-                        if (MessageBox.Show(completedargs.Error.Message + "\n\nTry with result as ExecuteFetch?", "Execute", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
-                        {
-                            ExecuteFetch(fetch);
-                        }
+                        ErrorDetail.ShowDialog(this, completedargs.Error);
                     }
                     else if (completedargs.Cancelled)
                     {
@@ -1764,7 +1761,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     if (completedargs.Error != null)
                     {
-                        MessageBox.Show(completedargs.Error.Message, "Save Marketing List", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ErrorDetail.ShowDialog(this, completedargs.Error, "Save Marketing List");
                     }
                     else
                     {
@@ -1868,7 +1865,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     if (completedargs.Error != null)
                     {
-                        MessageBox.Show(completedargs.Error.Message, "Save view", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ErrorDetail.ShowDialog(this, completedargs.Error, "Save view");
                     }
                     else
                     {
