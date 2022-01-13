@@ -437,8 +437,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 entitys?.ForEach(e => fxb.LoadEntityDetails(e, null, false));
             }
             XmlNode definitionXmlNode = fetchDoc.DocumentElement;
-            tvFetch.Nodes.Clear();
-            TreeNodeHelper.AddTreeViewNode(tvFetch, definitionXmlNode, this, fxb);
+            if (tvFetch.Nodes.Count == 0)
+            {
+                TreeNodeHelper.AddTreeViewNode(tvFetch, definitionXmlNode, this, fxb);
+            }
+            else
+            {
+                TreeNodeHelper.ReplaceTreeViewNode(tvFetch, tvFetch.Nodes[0], definitionXmlNode, this, fxb);
+            }
             tvFetch.ExpandAll();
             if (tvFetch.Nodes.Count > 0)
             {

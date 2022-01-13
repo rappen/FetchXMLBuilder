@@ -82,6 +82,78 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return node;
         }
 
+        /// <summary>
+        /// Reuses an existing node in a tree to represent a new FetchXML item
+        /// </summary>
+        /// <param name="parentObject">Object (TreeNode or TreeView) where to add a new TreeNode</param>
+        /// <param name="node">The node in the tree to reuse</param>
+        /// <param name="xmlNode">Xml node from the sitemap</param>
+        /// <param name="tree">Current application form</param>
+        /// <param name="fxb"></param>
+        /// <param name="index"></param>
+        /// <param name="validate"></param>
+        /// <returns></returns>
+        public static TreeNode ReplaceTreeViewNode(object parentObject, TreeNode node, XmlNode xmlNode, TreeBuilderControl tree, FetchXmlBuilder fxb, int index = -1, bool validate = true)
+        {
+            if (xmlNode is XmlElement || xmlNode is XmlComment)
+            {
+                node.Text = xmlNode.Name;
+                node.Name = xmlNode.Name;
+                Dictionary<string, string> attributes = new Dictionary<string, string>();
+
+                if (xmlNode.NodeType == XmlNodeType.Comment)
+                {
+                    attributes.Add("#comment", xmlNode.Value);
+                    node.ForeColor = System.Drawing.Color.Gray;
+                }
+                else
+                {
+                    node.ForeColor = node.TreeView.ForeColor;
+                    if (xmlNode.Attributes != null)
+                    {
+                        foreach (XmlAttribute attr in xmlNode.Attributes)
+                        {
+                            attributes.Add(attr.Name, attr.Value);
+                        }
+                    }
+                }
+                node.Tag = attributes;
+                var i = 0;
+                foreach (XmlNode childNode in xmlNode.ChildNodes)
+                {
+                    if (i < node.Nodes.Count)
+                    {
+                        ReplaceTreeViewNode(node, node.Nodes[i], childNode, tree, fxb, validate: false);
+                    }
+                    else
+                    {
+                        AddTreeViewNode(node, childNode, tree, fxb, validate: false);
+                    }
+                    i++;
+                }
+                while (i < node.Nodes.Count)
+                {
+                    node.Nodes.RemoveAt(i);
+                }
+                SetNodeText(node, fxb, validate: false);
+            }
+            else if (xmlNode is XmlText && parentObject is TreeNode)
+            {
+                var treeNode = (TreeNode)parentObject;
+                if (treeNode.Tag is Dictionary<string, string>)
+                {
+                    var attributes = (Dictionary<string, string>)treeNode.Tag;
+                    attributes.Add("#text", ((XmlText)xmlNode).Value);
+                }
+            }
+
+            if (validate)
+            {
+                Validate(node, fxb);
+            }
+            return node;
+        }
+
         public static void SetNodeText(TreeNode node, FetchXmlBuilder fxb, bool validate = true)
         {
             if (node == null)
