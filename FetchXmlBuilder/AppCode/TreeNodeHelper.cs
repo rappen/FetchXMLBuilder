@@ -18,7 +18,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         /// <param name="xmlNode">Xml node from the sitemap</param>
         /// <param name="tree">Current application form</param>
         /// <param name="isDisabled"> </param>
-        public static TreeNode AddTreeViewNode(object parentObject, XmlNode xmlNode, TreeBuilderControl tree, FetchXmlBuilder fxb, int index = -1)
+        public static TreeNode AddTreeViewNode(object parentObject, XmlNode xmlNode, TreeBuilderControl tree, FetchXmlBuilder fxb, int index = -1, bool validate = true)
         {
             TreeNode node = null;
             if (xmlNode is XmlElement || xmlNode is XmlComment)
@@ -61,9 +61,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 node.Tag = attributes;
                 foreach (XmlNode childNode in xmlNode.ChildNodes)
                 {
-                    AddTreeViewNode(node, childNode, tree, fxb);
+                    AddTreeViewNode(node, childNode, tree, fxb, validate: false);
                 }
-                SetNodeText(node, fxb);
+                SetNodeText(node, fxb, validate: false);
             }
             else if (xmlNode is XmlText && parentObject is TreeNode)
             {
@@ -74,10 +74,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     attributes.Add("#text", ((XmlText)xmlNode).Value);
                 }
             }
+
+            if (validate)
+            {
+                Validate(node, fxb);
+            }
             return node;
         }
 
-        public static void SetNodeText(TreeNode node, FetchXmlBuilder fxb)
+        public static void SetNodeText(TreeNode node, FetchXmlBuilder fxb, bool validate = true)
         {
             if (node == null)
             {
@@ -256,7 +261,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 text = $"({node.Name})";
             }
             node.Text = text;
+            if (validate)
+            {
+                Validate(node, fxb);
+            }
+        }
 
+        private static void Validate(TreeNode node, FetchXmlBuilder fxb)
+        {
             var root = node;
             while (root.Parent != null)
             {
