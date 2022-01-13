@@ -106,7 +106,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 ShowHideMeta(chkMetamore.Checked, col);
             }
             splitContainer1.Panel2Collapsed = !chkMetamore.Checked;
-            var width = (from ColumnHeader col in lvAttributes.Columns select col.Width).Sum() + 50;
+            var width = (from ColumnHeader col in lvAttributes.Columns select col.Width).Sum() + 70;
             Width = Math.Max(width, 400) + splitContainer1.Panel2.Width;
         }
 
