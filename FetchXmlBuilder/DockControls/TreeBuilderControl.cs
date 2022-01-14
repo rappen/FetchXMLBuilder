@@ -436,7 +436,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             XmlNode definitionXmlNode = fetchDoc.DocumentElement;
             if (tvFetch.Nodes.Count == 0)
             {
-                TreeNodeHelper.AddTreeViewNode(tvFetch, definitionXmlNode, this, fxb);
+                TreeNodeHelper.ReplaceTreeViewNode(tvFetch, null, definitionXmlNode, this, fxb);
             }
             else
             {
@@ -517,14 +517,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             else if (ClickedTag.StartsWith("MORE-"))
             {
                 var nodename = ClickedTag.Substring(5);
-                updateNode = TreeNodeHelper.AddChildNode(tvFetch.SelectedNode.Parent, nodename, tvFetch.SelectedNode);
+                updateNode = TreeNodeHelper.AddChildNode(tvFetch.SelectedNode.Parent, nodename, fxb, tvFetch.SelectedNode);
                 RecordHistory("add " + updateNode.Name);
                 HandleNodeSelection(updateNode);
                 ctrl.Focus();
             }
             else
             {
-                updateNode = TreeNodeHelper.AddChildNode(tvFetch.SelectedNode, ClickedTag);
+                updateNode = TreeNodeHelper.AddChildNode(tvFetch.SelectedNode, ClickedTag, fxb);
                 RecordHistory("add " + updateNode.Name);
                 HandleNodeSelection(updateNode);
                 if (fxb.settings.AddConditionToFilter && ClickedTag.Equals("filter"))
@@ -765,7 +765,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 }
                 foreach (var attribute in selectedAttributes.Where(a => !selected.Contains(a)))
                 {   // Add new attributes
-                    var attrNode = TreeNodeHelper.AddChildNode(entityNode, "attribute");
+                    var attrNode = TreeNodeHelper.AddChildNode(entityNode, "attribute", fxb);
                     var coll = new Dictionary<string, string>();
                     coll.Add("name", attribute);
                     attrNode.Tag = coll;
