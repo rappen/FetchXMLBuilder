@@ -406,10 +406,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     comment = comment.Substring(0, comment.Length - 1) + "~";
                 }
                 var commentNode = doc.CreateComment(comment);
-                var parent = node.Parent;
-                var index = node.Index;
-                node.Parent.Nodes.Remove(node);
-                tvFetch.SelectedNode = TreeNodeHelper.AddTreeViewNode(parent, commentNode, this, fxb, index);
+                TreeNodeHelper.ReplaceTreeViewNode(node.Parent, node, commentNode, this, fxb);
                 RecordHistory("comment");
             }
         }
@@ -838,10 +835,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     try
                     {
                         doc.LoadXml(comment);
-                        var parent = node.Parent;
-                        var index = node.Index;
-                        node.Parent.Nodes.Remove(node);
-                        tvFetch.SelectedNode = TreeNodeHelper.AddTreeViewNode(parent, doc.DocumentElement, this, fxb, index);
+                        TreeNodeHelper.ReplaceTreeViewNode(node.Parent, node, doc.DocumentElement, this, fxb);
                         tvFetch.SelectedNode.Expand();
                         RecordHistory("uncomment");
                     }
