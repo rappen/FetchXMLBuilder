@@ -12,77 +12,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     internal class TreeNodeHelper
     {
         /// <summary>
-        /// Adds a new TreeNode to the parent object from the XmlNode information
-        /// </summary>
-        /// <param name="parentObject">Object (TreeNode or TreeView) where to add a new TreeNode</param>
-        /// <param name="xmlNode">Xml node from the sitemap</param>
-        /// <param name="tree">Current application form</param>
-        /// <param name="isDisabled"> </param>
-        public static TreeNode AddTreeViewNode(object parentObject, XmlNode xmlNode, TreeBuilderControl tree, FetchXmlBuilder fxb, int index = -1, bool validate = true)
-        {
-            TreeNode node = null;
-            if (xmlNode is XmlElement || xmlNode is XmlComment)
-            {
-                node = new TreeNode(xmlNode.Name);
-                node.Name = xmlNode.Name;
-                Dictionary<string, string> attributes = new Dictionary<string, string>();
-
-                if (xmlNode.NodeType == XmlNodeType.Comment)
-                {
-                    attributes.Add("#comment", xmlNode.Value);
-                    node.ForeColor = System.Drawing.Color.Gray;
-                }
-                else if (xmlNode.Attributes != null)
-                {
-                    foreach (XmlAttribute attr in xmlNode.Attributes)
-                    {
-                        attributes.Add(attr.Name, attr.Value);
-                    }
-                }
-                if (parentObject is TreeView)
-                {
-                    ((TreeView)parentObject).Nodes.Add(node);
-                }
-                else if (parentObject is TreeNode)
-                {
-                    if (index == -1)
-                    {
-                        ((TreeNode)parentObject).Nodes.Add(node);
-                    }
-                    else
-                    {
-                        ((TreeNode)parentObject).Nodes.Insert(index, node);
-                    }
-                }
-                else
-                {
-                    throw new Exception("AddTreeViewNode: Unsupported control type");
-                }
-                node.Tag = attributes;
-                foreach (XmlNode childNode in xmlNode.ChildNodes)
-                {
-                    AddTreeViewNode(node, childNode, tree, fxb, validate: false);
-                }
-                SetNodeText(node, fxb, validate: false);
-            }
-            else if (xmlNode is XmlText && parentObject is TreeNode)
-            {
-                var treeNode = (TreeNode)parentObject;
-                if (treeNode.Tag is Dictionary<string, string>)
-                {
-                    var attributes = (Dictionary<string, string>)treeNode.Tag;
-                    attributes.Add("#text", ((XmlText)xmlNode).Value);
-                }
-            }
-
-            if (validate)
-            {
-                Validate(node, fxb);
-            }
-            return node;
-        }
-
-        /// <summary>
         /// Reuses an existing node in a tree to represent a new FetchXML item
         /// </summary>
         /// <param name="parentObject">Object (TreeNode or TreeView) where to add a new TreeNode</param>
@@ -93,8 +22,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         /// <param name="index"></param>
         /// <param name="validate"></param>
         /// <returns></returns>
-        public static TreeNode ReplaceTreeViewNode(object parentObject, TreeNode node, XmlNode xmlNode, TreeBuilderControl tree, FetchXmlBuilder fxb, int index = -1, bool validate = true)
+        public static TreeNode ReplaceTreeViewNode(object parentObject, TreeNode node, XmlNode xmlNode, TreeBuilderControl tree, FetchXmlBuilder fxb, bool validate = true)
         {
+            if (node == null)
+            {
+                if (parentObject is TreeView tv)
+                    node = tv.Nodes.Add("");
+                else
+                    node = ((TreeNode)parentObject).Nodes.Add("");
+            }
+
             if (xmlNode is XmlElement || xmlNode is XmlComment)
             {
                 node.Text = xmlNode.Name;
@@ -127,7 +64,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
                     else
                     {
-                        AddTreeViewNode(node, childNode, tree, fxb, validate: false);
+                        ReplaceTreeViewNode(node, null, childNode, tree, fxb, validate: false);
                     }
                     i++;
                 }
@@ -558,7 +495,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             parentXmlNode.AppendChild(newNode);
         }
 
-        internal static TreeNode AddChildNode(TreeNode parentNode, string name, TreeNode sisterNode = null)
+        internal static TreeNode AddChildNode(TreeNode parentNode, string name, FetchXmlBuilder fxb, TreeNode sisterNode = null)
         {
             var childNode = new TreeNode(name);
             childNode.Tag = new Dictionary<string, string>();
@@ -592,8 +529,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
                 }
             }
-            childNode.ImageKey = name;
-            childNode.SelectedImageKey = childNode.ImageKey;
+            Validate(childNode, fxb);
             return childNode;
         }
 
