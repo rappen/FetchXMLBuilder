@@ -19,7 +19,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 form.Text = heading;
             }
             form.AddErrorInfo(error);
-            form.Height = 215;
+            form.Height = 200;
             form.ShowDialog(owner);
         }
 
@@ -77,8 +77,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             }
             else
             {
-                Height = 215;
+                Height = 200;
             }
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FetchXmlBuilder.OpenURL("https://github.com/rappen/FetchXMLBuilder/discussions/617");
         }
     }
 }
