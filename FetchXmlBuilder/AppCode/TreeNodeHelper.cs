@@ -14,21 +14,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         /// <summary>
         /// Reuses an existing node in a tree to represent a new FetchXML item
         /// </summary>
-        /// <param name="parentObject">Object (TreeNode or TreeView) where to add a new TreeNode</param>
+        /// <param name="parentnode">TreeNode where to add a new TreeNode</param>
         /// <param name="node">The node in the tree to reuse. Set to null to create a new node</param>
         /// <param name="xmlNode">Xml node from the sitemap</param>
-        /// <param name="tree">Current application form</param>
         /// <param name="fxb"></param>
         /// <param name="validate">Indicates whether to re-validate the tree</param>
         /// <returns>The node that was added or updated</returns>
-        public static TreeNode ReplaceTreeViewNode(object parentObject, TreeNode node, XmlNode xmlNode, TreeBuilderControl tree, FetchXmlBuilder fxb, bool validate = true)
+        public static TreeNode AddTreeViewNode(TreeNode parentnode, TreeNode node, XmlNode xmlNode, FetchXmlBuilder fxb, bool validate)
         {
             if (node == null)
             {
-                if (parentObject is TreeView tv)
-                    node = tv.Nodes.Add("");
-                else
-                    node = ((TreeNode)parentObject).Nodes.Add("");
+                node = parentnode != null ? parentnode.Nodes.Add("") : fxb.dockControlBuilder.tvFetch.Nodes.Add("");
             }
 
             if (xmlNode is XmlElement || xmlNode is XmlComment)
@@ -40,7 +36,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
                 // Copy the name and attributes from the XML element to this tree view node
                 node.Name = xmlNode.Name;
-                Dictionary<string, string> attributes = new Dictionary<string, string>();
+                var attributes = new Dictionary<string, string>();
 
                 if (xmlNode.NodeType == XmlNodeType.Comment)
                 {
@@ -50,12 +46,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 else
                 {
                     node.ForeColor = node.TreeView.ForeColor;
-                    if (xmlNode.Attributes != null)
+                    foreach (XmlAttribute attr in xmlNode.Attributes)
                     {
-                        foreach (XmlAttribute attr in xmlNode.Attributes)
-                        {
-                            attributes.Add(attr.Name, attr.Value);
-                        }
+                        attributes.Add(attr.Name, attr.Value);
                     }
                 }
                 node.Tag = attributes;
@@ -64,14 +57,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 var i = 0;
                 foreach (XmlNode childNode in xmlNode.ChildNodes)
                 {
-                    if (i < node.Nodes.Count)
-                    {
-                        ReplaceTreeViewNode(node, node.Nodes[i], childNode, tree, fxb, validate: false);
-                    }
-                    else
-                    {
-                        ReplaceTreeViewNode(node, null, childNode, tree, fxb, validate: false);
-                    }
+                    AddTreeViewNode(node, i < node.Nodes.Count ? node.Nodes[i] : null, childNode, fxb, false);
                     i++;
                 }
 
@@ -99,14 +85,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
                 }
             }
-            else if (xmlNode is XmlText && parentObject is TreeNode)
+            else if (xmlNode is XmlText text && parentnode?.Tag is Dictionary<string, string> attributes)
             {
-                var treeNode = (TreeNode)parentObject;
-                if (treeNode.Tag is Dictionary<string, string>)
-                {
-                    var attributes = (Dictionary<string, string>)treeNode.Tag;
-                    attributes.Add("#text", ((XmlText)xmlNode).Value);
-                }
+                attributes.Add("#text", text.Value);
             }
 
             if (validate)
