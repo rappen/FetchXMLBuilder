@@ -12,18 +12,33 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     internal class TreeNodeHelper
     {
         /// <summary>
-        /// Adds a new TreeNode to the parent object from the XmlNode information
+        /// Reuses an existing node in a tree to represent a new FetchXML item
         /// </summary>
         /// <param name="parentObject">Object (TreeNode or TreeView) where to add a new TreeNode</param>
+        /// <param name="node">The node in the tree to reuse. Set to null to create a new node</param>
         /// <param name="xmlNode">Xml node from the sitemap</param>
         /// <param name="tree">Current application form</param>
-        /// <param name="isDisabled"> </param>
-        public static TreeNode AddTreeViewNode(object parentObject, XmlNode xmlNode, TreeBuilderControl tree, FetchXmlBuilder fxb, int index = -1)
+        /// <param name="fxb"></param>
+        /// <param name="validate">Indicates whether to re-validate the tree</param>
+        /// <returns>The node that was added or updated</returns>
+        public static TreeNode ReplaceTreeViewNode(object parentObject, TreeNode node, XmlNode xmlNode, TreeBuilderControl tree, FetchXmlBuilder fxb, bool validate = true)
         {
-            TreeNode node = null;
+            if (node == null)
+            {
+                if (parentObject is TreeView tv)
+                    node = tv.Nodes.Add("");
+                else
+                    node = ((TreeNode)parentObject).Nodes.Add("");
+            }
+
             if (xmlNode is XmlElement || xmlNode is XmlComment)
             {
-                node = new TreeNode(xmlNode.Name);
+                // Store the current state of this node
+                var originalAttributes = node.Tag as Dictionary<string, string>;
+                var originalText = node.Text;
+                var originalName = node.Name;
+
+                // Copy the name and attributes from the XML element to this tree view node
                 node.Name = xmlNode.Name;
                 Dictionary<string, string> attributes = new Dictionary<string, string>();
 
@@ -32,38 +47,57 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     attributes.Add("#comment", xmlNode.Value);
                     node.ForeColor = System.Drawing.Color.Gray;
                 }
-                else if (xmlNode.Attributes != null)
+                else
                 {
-                    foreach (XmlAttribute attr in xmlNode.Attributes)
+                    node.ForeColor = node.TreeView.ForeColor;
+                    if (xmlNode.Attributes != null)
                     {
-                        attributes.Add(attr.Name, attr.Value);
+                        foreach (XmlAttribute attr in xmlNode.Attributes)
+                        {
+                            attributes.Add(attr.Name, attr.Value);
+                        }
                     }
                 }
-                if (parentObject is TreeView)
+                node.Tag = attributes;
+
+                // Copy any children as well. Reuse the existing children of this tree view node where possible.
+                var i = 0;
+                foreach (XmlNode childNode in xmlNode.ChildNodes)
                 {
-                    ((TreeView)parentObject).Nodes.Add(node);
-                }
-                else if (parentObject is TreeNode)
-                {
-                    if (index == -1)
+                    if (i < node.Nodes.Count)
                     {
-                        ((TreeNode)parentObject).Nodes.Add(node);
+                        ReplaceTreeViewNode(node, node.Nodes[i], childNode, tree, fxb, validate: false);
                     }
                     else
                     {
-                        ((TreeNode)parentObject).Nodes.Insert(index, node);
+                        ReplaceTreeViewNode(node, null, childNode, tree, fxb, validate: false);
+                    }
+                    i++;
+                }
+
+                // If we've got more child tree view nodes left that we don't need any longer, remove them
+                while (i < node.Nodes.Count)
+                {
+                    node.Nodes.RemoveAt(i);
+                }
+
+                // Set the text of the node based on the attribute values. We don't need to validate here, we'll
+                // do that as a single batch at the end if necessary
+                SetNodeText(node, fxb, validate: false);
+
+                // If the node is the currently selected node, check if any of the values have changed.
+                // If so, deselect it and reselect it again to refresh the rest of the UI.
+                if (node.IsSelected)
+                {
+                    if (node.Text != originalText ||
+                        node.Name != originalName ||
+                        originalAttributes == null ||
+                        String.Join(";", attributes.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Key + "=" + kvp.Value)) != String.Join(";", originalAttributes.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Key + "=" + kvp.Value)))
+                    {
+                        node.TreeView.SelectedNode = null;
+                        node.TreeView.SelectedNode = node;
                     }
                 }
-                else
-                {
-                    throw new Exception("AddTreeViewNode: Unsupported control type");
-                }
-                node.Tag = attributes;
-                foreach (XmlNode childNode in xmlNode.ChildNodes)
-                {
-                    AddTreeViewNode(node, childNode, tree, fxb);
-                }
-                SetNodeText(node, fxb);
             }
             else if (xmlNode is XmlText && parentObject is TreeNode)
             {
@@ -74,10 +108,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     attributes.Add("#text", ((XmlText)xmlNode).Value);
                 }
             }
+
+            if (validate)
+            {
+                Validate(node, fxb);
+            }
             return node;
         }
 
-        public static void SetNodeText(TreeNode node, FetchXmlBuilder fxb)
+        public static void SetNodeText(TreeNode node, FetchXmlBuilder fxb, bool validate = true)
         {
             if (node == null)
             {
@@ -256,6 +295,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 text = $"({node.Name})";
             }
             node.Text = text;
+            if (validate)
+            {
+                Validate(node, fxb);
+            }
+        }
+
+        public static void Validate(TreeNode node, FetchXmlBuilder fxb)
+        {
+            var root = node;
+            while (root.Parent != null)
+            {
+                root = root.Parent;
+            }
+            SetWarnings(root, fxb);
+        }
+
+        private static void SetWarnings(TreeNode node, FetchXmlBuilder fxb)
+        {
             var warning = Validations.GetWarning(node, fxb);
             if (warning != null)
             {
@@ -279,6 +336,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 SetNodeTooltip(node);
             }
             node.SelectedImageKey = node.ImageKey;
+
+            foreach (var child in node.Nodes.OfType<TreeNode>())
+            {
+                SetWarnings(child, fxb);
+            }
         }
 
         internal static void SetNodeTooltip(TreeNode node)
@@ -458,7 +520,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             parentXmlNode.AppendChild(newNode);
         }
 
-        internal static TreeNode AddChildNode(TreeNode parentNode, string name, TreeNode sisterNode = null)
+        internal static TreeNode AddChildNode(TreeNode parentNode, string name, FetchXmlBuilder fxb, TreeNode sisterNode = null)
         {
             var childNode = new TreeNode(name);
             childNode.Tag = new Dictionary<string, string>();
@@ -492,8 +554,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
                 }
             }
-            childNode.ImageKey = name;
-            childNode.SelectedImageKey = childNode.ImageKey;
+            Validate(childNode, fxb);
             return childNode;
         }
 

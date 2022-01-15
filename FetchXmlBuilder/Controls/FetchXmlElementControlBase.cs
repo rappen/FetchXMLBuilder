@@ -293,12 +293,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
     public class ControlValidationResult
     {
-        public ControlValidationResult(ControlValidationLevel level, string message)
+        public ControlValidationResult(ControlValidationLevel level, string message, string url = null)
         {
             Level = level;
             Message = message;
+            Url = url;
         }
         public ControlValidationLevel Level { get; }
         public string Message { get; }
+        public string Url { get; }
     }
 }

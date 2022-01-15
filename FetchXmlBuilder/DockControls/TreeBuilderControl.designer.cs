@@ -33,7 +33,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tvFetch = new System.Windows.Forms.TreeView();
             this.imgFetch = new System.Windows.Forms.ImageList(this.components);
-            this.lblWarning = new System.Windows.Forms.Label();
+            this.lblWarning = new System.Windows.Forms.LinkLabel();
             this.panProperties = new System.Windows.Forms.Panel();
             this.gbProperties = new System.Windows.Forms.GroupBox();
             this.panelContainer = new System.Windows.Forms.Panel();
@@ -136,6 +136,7 @@
             this.lblWarning.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblWarning.ImageIndex = 11;
             this.lblWarning.ImageList = this.imgFetch;
+            this.lblWarning.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
             this.lblWarning.Location = new System.Drawing.Point(0, 220);
             this.lblWarning.Name = "lblWarning";
             this.lblWarning.Padding = new System.Windows.Forms.Padding(4, 4, 0, 0);
@@ -143,6 +144,7 @@
             this.lblWarning.TabIndex = 1;
             this.lblWarning.Text = "      Warning";
             this.lblWarning.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblWarning.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblWarning_LinkClicked);
             // 
             // panProperties
             // 
@@ -422,6 +424,6 @@
         private System.Windows.Forms.ToolStripMenuItem showMetadataToolStripMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem addOneMoreToolStripMenuItem;
         private System.Windows.Forms.ImageList imgFetch;
-        private System.Windows.Forms.Label lblWarning;
+        private System.Windows.Forms.LinkLabel lblWarning;
     }
 }

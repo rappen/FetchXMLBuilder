@@ -406,10 +406,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     comment = comment.Substring(0, comment.Length - 1) + "~";
                 }
                 var commentNode = doc.CreateComment(comment);
-                var parent = node.Parent;
-                var index = node.Index;
-                node.Parent.Nodes.Remove(node);
-                tvFetch.SelectedNode = TreeNodeHelper.AddTreeViewNode(parent, commentNode, this, fxb, index);
+                TreeNodeHelper.ReplaceTreeViewNode(node.Parent, node, commentNode, this, fxb);
                 RecordHistory("comment");
             }
         }
@@ -419,6 +416,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             var node = tvFetch.SelectedNode;
             var updateNode = node.Parent;
             node.Remove();
+            TreeNodeHelper.Validate(updateNode, fxb);
             RecordHistory("delete " + node.Name);
             return updateNode;
         }
@@ -436,8 +434,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 entitys?.ForEach(e => fxb.LoadEntityDetails(e, null, false));
             }
             XmlNode definitionXmlNode = fetchDoc.DocumentElement;
-            tvFetch.Nodes.Clear();
-            TreeNodeHelper.AddTreeViewNode(tvFetch, definitionXmlNode, this, fxb);
+            if (tvFetch.Nodes.Count == 0)
+            {
+                TreeNodeHelper.ReplaceTreeViewNode(tvFetch, null, definitionXmlNode, this, fxb);
+            }
+            else
+            {
+                TreeNodeHelper.ReplaceTreeViewNode(tvFetch, tvFetch.Nodes[0], definitionXmlNode, this, fxb);
+            }
             tvFetch.ExpandAll();
             if (tvFetch.Nodes.Count > 0)
             {
@@ -513,14 +517,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             else if (ClickedTag.StartsWith("MORE-"))
             {
                 var nodename = ClickedTag.Substring(5);
-                updateNode = TreeNodeHelper.AddChildNode(tvFetch.SelectedNode.Parent, nodename, tvFetch.SelectedNode);
+                updateNode = TreeNodeHelper.AddChildNode(tvFetch.SelectedNode.Parent, nodename, fxb, tvFetch.SelectedNode);
                 RecordHistory("add " + updateNode.Name);
                 HandleNodeSelection(updateNode);
                 ctrl.Focus();
             }
             else
             {
-                updateNode = TreeNodeHelper.AddChildNode(tvFetch.SelectedNode, ClickedTag);
+                updateNode = TreeNodeHelper.AddChildNode(tvFetch.SelectedNode, ClickedTag, fxb);
                 RecordHistory("add " + updateNode.Name);
                 HandleNodeSelection(updateNode);
                 if (fxb.settings.AddConditionToFilter && ClickedTag.Equals("filter"))
@@ -761,7 +765,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 }
                 foreach (var attribute in selectedAttributes.Where(a => !selected.Contains(a)))
                 {   // Add new attributes
-                    var attrNode = TreeNodeHelper.AddChildNode(entityNode, "attribute");
+                    var attrNode = TreeNodeHelper.AddChildNode(entityNode, "attribute", fxb);
                     var coll = new Dictionary<string, string>();
                     coll.Add("name", attribute);
                     attrNode.Tag = coll;
@@ -778,7 +782,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             var warning = Validations.GetWarning(node, fxb);
             if (warning != null)
             {
-                lblWarning.Text = "      " + warning.Message;
+                var leadingSpaces = "      ";
+                lblWarning.Text = leadingSpaces + warning.Message;
                 switch (warning.Level)
                 {
                     case ControlValidationLevel.Error:
@@ -790,6 +795,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     case ControlValidationLevel.Info:
                         lblWarning.ImageKey = "info";
                         break;
+                }
+
+                if (string.IsNullOrWhiteSpace(warning.Url))
+                {
+                    lblWarning.LinkArea = new LinkArea(0, 0);
+                }
+                else
+                {
+                    lblWarning.LinkArea = new LinkArea(leadingSpaces.Length, lblWarning.Text.Length - leadingSpaces.Length);
+                    lblWarning.Tag = warning.Url;
                 }
             }
             lblWarning.Visible = warning != null;
@@ -820,10 +835,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     try
                     {
                         doc.LoadXml(comment);
-                        var parent = node.Parent;
-                        var index = node.Index;
-                        node.Parent.Nodes.Remove(node);
-                        tvFetch.SelectedNode = TreeNodeHelper.AddTreeViewNode(parent, doc.DocumentElement, this, fxb, index);
+                        TreeNodeHelper.ReplaceTreeViewNode(node.Parent, node, doc.DocumentElement, this, fxb);
                         tvFetch.SelectedNode.Expand();
                         RecordHistory("uncomment");
                     }
@@ -947,6 +959,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             fxb.historyisavailable = true;
             fxb.EnableDisableHistoryButtons();
+        }
+
+        private void lblWarning_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var url = lblWarning.Tag as string;
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                url = Utils.ProcessURL(url);
+                System.Diagnostics.Process.Start(url);
+            }
         }
     }
 }

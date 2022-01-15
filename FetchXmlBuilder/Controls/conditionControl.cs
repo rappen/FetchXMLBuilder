@@ -329,7 +329,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 foreach (var valuestr in cmbValue.Text.Split(','))
                 {
                     var value = valuestr.Trim();
-                    var attrNode = TreeNodeHelper.AddChildNode(Node, "value");
+                    var attrNode = TreeNodeHelper.AddChildNode(Node, "value", fxb);
                     var coll = new Dictionary<string, string>();
                     coll.Add("#text", value);
                     attrNode.Tag = coll;
