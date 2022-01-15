@@ -70,7 +70,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         internal bool IsFetchAggregate()
         {
-            return TreeNodeHelper.IsFetchAggregate(tvFetch.Nodes.Cast<TreeNode>().FirstOrDefault());
+            return tvFetch.Nodes.Cast<TreeNode>().FirstOrDefault().IsFetchAggregate();
         }
 
         internal void ApplyCurrentSettings()
@@ -575,7 +575,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                                 {
                                     case "entity":
                                     case "link-entity":
-                                        var entityName = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
+                                        var entityName = node.Parent.Value("name");
                                         if (fxb.NeedToLoadEntity(entityName))
                                         {
                                             if (!fxb.working)
@@ -587,7 +587,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                                         break;
                                 }
                             }
-                            var linkEntityName = TreeNodeHelper.GetAttributeFromNode(node, "name");
+                            var linkEntityName = node.Value("name");
                             if (fxb.NeedToLoadEntity(linkEntityName))
                             {
                                 if (!fxb.working)
@@ -607,7 +607,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                                 {
                                     case "entity":
                                     case "link-entity":
-                                        var entityName = TreeNodeHelper.GetAttributeFromNode(node.Parent, "name");
+                                        var entityName = node.Parent.Value("name");
                                         if (fxb.NeedToLoadEntity(entityName))
                                         {
                                             if (!fxb.working)
@@ -729,7 +729,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 MessageBox.Show("Cannot select attributes for node " + entityNode.Name, "Select attributes", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            var entityName = TreeNodeHelper.GetAttributeFromNode(entityNode, "name");
+            var entityName = entityNode.Value("name");
             if (string.IsNullOrWhiteSpace(entityName))
             {
                 MessageBox.Show("Cannot find valid entity name from node " + entityNode.Name, "Select attributes", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -741,7 +741,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 return;
             }
             var attributes = new List<AttributeMetadata>(fxb.GetDisplayAttributes(entityName));
-            var selected = entityNode.Nodes.Cast<TreeNode>().Where(n => n.Name == "attribute").Select(n => TreeNodeHelper.GetAttributeFromNode(n, "name")).Where(a => !string.IsNullOrEmpty(a)).ToList();
+            var selected = entityNode.Nodes.Cast<TreeNode>().Where(n => n.Name == "attribute").Select(n => n.Value("name")).Where(a => !string.IsNullOrEmpty(a)).ToList();
             var selectAttributesDlg = new SelectAttributesDialog(attributes, selected);
             selectAttributesDlg.StartPosition = FormStartPosition.CenterParent;
             if (selectAttributesDlg.ShowDialog() == DialogResult.OK)
@@ -751,7 +751,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 while (i < entityNode.Nodes.Count)
                 {   // Remove unselected previously added attributes
                     TreeNode subnode = entityNode.Nodes[i];
-                    var attributename = TreeNodeHelper.GetAttributeFromNode(subnode, "name");
+                    var attributename = subnode.Value("name");
                     if (subnode.Name == "attribute" && !selectedAttributes.Contains(attributename))
                     {
                         entityNode.Nodes.Remove(subnode);

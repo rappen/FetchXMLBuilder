@@ -27,7 +27,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         protected override void PopulateControls()
         {
-            var aggregate = TreeNodeHelper.IsFetchAggregate(Node);
+            var aggregate = Node.IsFetchAggregate();
             if (!aggregate)
             {
                 cmbAttribute.Items.Clear();
@@ -58,7 +58,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 {
                     if (child.Name == "attribute")
                     {
-                        var alias = TreeNodeHelper.GetAttributeFromNode(child, "alias");
+                        var alias = child.Value("alias");
                         if (!string.IsNullOrEmpty(alias))
                         {
                             result.Add(alias);

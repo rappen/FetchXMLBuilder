@@ -40,7 +40,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
             }
 
-            var parententityname = TreeNodeHelper.GetAttributeFromNode(Node.Parent, "name");
+            var parententityname = Node.Parent.Value("name");
             if (fxb.NeedToLoadEntity(parententityname))
             {
                 if (!fxb.working)
@@ -79,7 +79,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void RefreshRelationships()
         {
             cmbRelationship.Items.Clear();
-            var parententityname = TreeNodeHelper.GetAttributeFromNode(Node.Parent, "name");
+            var parententityname = Node.Parent.Value("name");
             var entities = fxb.GetDisplayEntities();
             if (entities != null && entities.ContainsKey(parententityname))
             {
@@ -112,7 +112,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
                 if (mm.Length > 0)
                 {
-                    var greatparententityname = Node.Parent.Parent != null ? TreeNodeHelper.GetAttributeFromNode(Node.Parent.Parent, "name") : "";
+                    var greatparententityname = Node.Parent.Parent != null ? Node.Parent.Parent.Value("name") : "";
                     cmbRelationship.Items.Add("- M:M -");
                     list.Clear();
                     foreach (var rel in mm)
@@ -148,7 +148,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 var linkentity = cmbEntity.SelectedItem.ToString();
                 cmbFrom.Items.AddRange(GetRelevantLinkAttributes(linkentity));
             }
-            var parententity = TreeNodeHelper.GetAttributeFromNode(Node.Parent, "name");
+            var parententity = Node.Parent.Value("name");
             cmbTo.Items.AddRange(GetRelevantLinkAttributes(parententity));
             ValidationSuspended = false;
             fxb.ShowMetadata(Metadata());
@@ -174,7 +174,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             if (cmbRelationship.SelectedItem != null && cmbRelationship.SelectedItem is EntityRelationship rel)
             {
-                var parent = TreeNodeHelper.GetAttributeFromNode(Node.Parent, "name");
+                var parent = Node.Parent.Value("name");
                 string entity;
                 string from;
                 string to;
@@ -218,7 +218,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
                     if (parent == mm.IntersectEntityName)
                     {
-                        var greatparent = TreeNodeHelper.GetAttributeFromNode(Node.Parent.Parent, "name");
+                        var greatparent = Node.Parent.Parent.Value("name");
                         if (greatparent == mm.Entity1LogicalName && rel.Role == EntityRole.Referencing)
                         {
                             entity = mm.Entity2LogicalName;
@@ -381,7 +381,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
             else if (cmbTo.Focused)
             {
-                var parententity = TreeNodeHelper.GetAttributeFromNode(Node.Parent, "name");
+                var parententity = Node.Parent.Value("name");
                 if (!string.IsNullOrWhiteSpace(cmbTo.Text) &&
                     fxb.entities.TryGetValue(parententity, out EntityMetadata pmeta) &&
                     pmeta.Attributes.FirstOrDefault(a => a.LogicalName == cmbTo.Text) is AttributeMetadata pameta)

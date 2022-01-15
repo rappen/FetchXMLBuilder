@@ -22,12 +22,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             InitializeComponent();
             InitializeFXB(null, fetchXmlBuilder, tree, node);
 
-            _attributeName = TreeNodeHelper.GetAttributeFromNode(Node.Parent, "attribute");
-            _entityName = TreeNodeHelper.GetAttributeFromNode(Node.Parent, "entity");
+            _attributeName = Node.Parent.Value("attribute");
+            _entityName = Node.Parent.Value("entity");
 
             if (String.IsNullOrWhiteSpace(_entityName))
             {
-                _entityName = TreeNodeHelper.GetAttributeFromNode(Node.Parent.Parent.Parent, "name");
+                _entityName = Node.Parent.Parent.Parent.Value("name");
             }
             else
             {

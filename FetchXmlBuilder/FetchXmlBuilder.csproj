@@ -232,6 +232,7 @@
   <ItemGroup>
     <Compile Include="AppCode\ConnectionExtensions.cs" />
     <Compile Include="AppCode\EntityNameItem.cs" />
+    <Compile Include="AppCode\Extensions.cs" />
     <Compile Include="AppCode\ServiceExtensions.cs" />
     <Compile Include="AppCode\AttributeItem.cs" />
     <Compile Include="AppCode\CodeGeneratorBase.cs" />

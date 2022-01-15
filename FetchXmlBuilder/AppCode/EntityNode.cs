@@ -21,8 +21,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         public EntityNode(TreeNode node)
         {
-            EntityName = TreeNodeHelper.GetAttributeFromNode(node, "name");
-            var alias = TreeNodeHelper.GetAttributeFromNode(node, "alias");
+            EntityName = node.Value("name");
+            var alias = node.Value("alias");
             name = !string.IsNullOrEmpty(alias) ? alias : EntityName;
         }
 

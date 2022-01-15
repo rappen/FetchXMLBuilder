@@ -105,9 +105,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
             var text = fxb.settings.ShowNodeType ? node.Name : "";
             var attributes = node.Tag is Dictionary<string, string> tag ? tag : new Dictionary<string, string>();
-            var agg = GetAttributeFromNode(node, "aggregate");
-            var name = GetAttributeFromNode(node, "name");
-            var alias = GetAttributeFromNode(node, "alias");
+            var agg = node.Value("aggregate");
+            var name = node.Value("name");
+            var alias = node.Value("alias");
             switch (node.Name)
             {
                 case "fetch":
@@ -147,7 +147,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     {
                         text += " (" + alias + ")";
                     }
-                    if (GetAttributeFromNode(node, "intersect") == "true")
+                    if (node.Value("intersect") == "true")
                     {
                         text += " M:M";
                     }
@@ -158,7 +158,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         text += " ";
                         if (node.Parent != null)
                         {
-                            var parent = GetAttributeFromNode(node.Parent, "name");
+                            var parent = node.Parent.Value("name");
                             name = fxb.GetAttributeDisplayName(parent, name);
                         }
                         if (!string.IsNullOrEmpty(agg) && !string.IsNullOrEmpty(name))
@@ -177,7 +177,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         {
                             text += name;
                         }
-                        var grp = GetAttributeFromNode(node, "groupby");
+                        var grp = node.Value("groupby");
                         if (grp == "true")
                         {
                             text += " GRP";
@@ -185,7 +185,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
                     break;
                 case "filter":
-                    var type = GetAttributeFromNode(node, "type");
+                    var type = node.Value("type");
                     if (string.IsNullOrEmpty(type))
                     {
                         type = "(and)";
@@ -194,15 +194,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     break;
                 case "condition":
                     {
-                        var ent = GetAttributeFromNode(node, "entityname");
-                        var attr = GetAttributeFromNode(node, "attribute");
-                        var oper = GetAttributeFromNode(node, "operator");
-                        var val = GetAttributeFromNode(node, "value");
-                        var valueOf = GetAttributeFromNode(node, "valueof");
-                        var uiname = GetAttributeFromNode(node, "uiname");
+                        var ent = node.Value("entityname");
+                        var attr = node.Value("attribute");
+                        var oper = node.Value("operator");
+                        var val = node.Value("value");
+                        var valueOf = node.Value("valueof");
+                        var uiname = node.Value("uiname");
                         if (node.Parent != null && node.Parent.Parent != null)
                         {
-                            var parent = GetAttributeFromNode(node.Parent.Parent, "name");
+                            var parent = node.Parent.Parent.Value("name");
                             attr = fxb.GetAttributeDisplayName(parent, attr);
                             valueOf = fxb.GetAttributeDisplayName(parent, valueOf);
                         }
@@ -227,13 +227,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
                     break;
                 case "value":
-                    var value = GetAttributeFromNode(node, "#text");
+                    var value = node.Value("#text");
                     text += " " + value;
                     break;
                 case "order":
                     {
-                        var attr = GetAttributeFromNode(node, "attribute");
-                        var desc = GetAttributeFromNode(node, "descending");
+                        var attr = node.Value("attribute");
+                        var desc = node.Value("descending");
                         if (!string.IsNullOrEmpty(alias))
                         {
                             text += " " + alias;
@@ -242,7 +242,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         {
                             if (!string.IsNullOrEmpty(attr) && node.Parent != null)
                             {
-                                var parent = GetAttributeFromNode(node.Parent, "name");
+                                var parent = node.Parent.Value("name");
                                 attr = fxb.GetAttributeDisplayName(parent, attr);
                             }
                             {
@@ -256,7 +256,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
                     break;
                 case "#comment":
-                    text = GetAttributeFromNode(node, "#comment")
+                    text = node.Value("#comment")
                         .Trim()
                         .Replace("\r\n", "  ")
                         .Replace("&apos;", "'");
@@ -326,27 +326,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         internal static void SetNodeTooltip(TreeNode node)
         {
-            if (node != null)
+            node.ToolTipText = node.GetTooltip();
+            if (node.Parent != null)
             {
-                var doc = new XmlDocument();
-                XmlNode rootNode = doc.CreateElement("root");
-                doc.AppendChild(rootNode);
-                TreeNodeHelper.AddXmlNode(node, rootNode);
-                var tooltip = "";
-                try
-                {
-                    XDocument xdoc = XDocument.Parse(rootNode.InnerXml);
-                    tooltip = xdoc.ToString();
-                }
-                catch
-                {
-                    tooltip = rootNode.InnerXml;
-                }
-                node.ToolTipText = tooltip;
-                if (node.Parent != null)
-                {
-                    SetNodeTooltip(node.Parent);
-                }
+                SetNodeTooltip(node.Parent);
             }
         }
 
@@ -539,34 +522,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return childNode;
         }
 
-        internal static string GetAttributeFromNode(TreeNode treeNode, string attribute)
-        {
-            var result = "";
-            if (treeNode != null && treeNode.Tag != null && treeNode.Tag is Dictionary<string, string>)
-            {
-                var collection = (Dictionary<string, string>)treeNode.Tag;
-                if (collection.ContainsKey(attribute))
-                {
-                    result = collection[attribute];
-                }
-            }
-            return result;
-        }
-
-        internal static bool IsFetchAggregate(TreeNode node)
-        {
-            var aggregate = false;
-            while (node != null && node.Name != "fetch")
-            {
-                node = node.Parent;
-            }
-            if (node != null && node.Name == "fetch")
-            {
-                aggregate = TreeNodeHelper.GetAttributeFromNode(node, "aggregate") == "true";
-            }
-            return aggregate;
-        }
-
         internal static bool IsFetchAggregate(string fetch)
         {
             var xml = new XmlDocument();
@@ -612,29 +567,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 }
             }
             return result;
-        }
-
-        internal static TreeNode ForThisNodeEntityNode(TreeNode node)
-        {
-            while (!node.Name.Equals("entity") && !node.Name.Equals("link-entity"))
-            {
-                node = node.Parent;
-                if (node == null)
-                {
-                    return null;
-                }
-            }
-            return (node.Name.Equals("entity") || node.Name.Equals("link-entity")) ? node : null;
-        }
-
-        internal static bool ForThisNodeEntityIsRoot(TreeNode node)
-        {
-            return ForThisNodeEntityNode(node)?.Name == "entity";
-        }
-
-        internal static string ForThisNodeEntityName(TreeNode node)
-        {
-            return GetAttributeFromNode(ForThisNodeEntityNode(node), "name");
         }
     }
 }
