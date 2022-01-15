@@ -141,7 +141,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     {
                         return new ControlValidationResult(ControlValidationLevel.Info, "Sorting on a link-entity triggers legacy paging.", "https://docs.microsoft.com/en-us/powerapps/developer/data-platform/org-service/paging-behaviors-and-ordering#ordering-and-multiple-table-queries");
                     }
-
+                    if (fxb.entities != null)
+                    {
+                        if (fxb.GetAttribute(parententity, attribute) is AttributeMetadata metaatt)
+                        {
+                        }
+                        else
+                        {
+                            return new ControlValidationResult(ControlValidationLevel.Warning, $"Order Attribute '{attribute}' is not in the table '{parententity}'.");
+                        }
+                    }
                     if (TreeNodeHelper.IsFetchAggregate(node) && !string.IsNullOrWhiteSpace(alias))
                     {
                         var attr = node.Parent.Nodes.OfType<TreeNode>()
