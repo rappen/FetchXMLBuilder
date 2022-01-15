@@ -36,7 +36,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         return new ControlValidationResult(ControlValidationLevel.Warning, "Link-Entity must include Name, To, From.");
                     }
 
-                    if (fxb.GetAttribute(name, node.Value("from")) is AttributeMetadata fromAttr && fromAttr.IsPrimaryId == false)
+                    if (node.Value("intersect") != "true" &&
+                        fxb.GetAttribute(name, node.Value("from")) is AttributeMetadata fromAttr && fromAttr.IsPrimaryId == false)
                     {
                         return new ControlValidationResult(ControlValidationLevel.Info, "Links to records that aren't parents may cause paging issues.", "https://markcarrington.dev/2021/02/23/msdyn365-internals-paging-gotchas/#multiple_linked_entities");
                     }
