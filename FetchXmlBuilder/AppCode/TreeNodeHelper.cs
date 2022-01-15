@@ -15,13 +15,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         /// Reuses an existing node in a tree to represent a new FetchXML item
         /// </summary>
         /// <param name="parentObject">Object (TreeNode or TreeView) where to add a new TreeNode</param>
-        /// <param name="node">The node in the tree to reuse</param>
+        /// <param name="node">The node in the tree to reuse. Set to null to create a new node</param>
         /// <param name="xmlNode">Xml node from the sitemap</param>
         /// <param name="tree">Current application form</param>
         /// <param name="fxb"></param>
-        /// <param name="index"></param>
-        /// <param name="validate"></param>
-        /// <returns></returns>
+        /// <param name="validate">Indicates whether to re-validate the tree</param>
+        /// <returns>The node that was added or updated</returns>
         public static TreeNode ReplaceTreeViewNode(object parentObject, TreeNode node, XmlNode xmlNode, TreeBuilderControl tree, FetchXmlBuilder fxb, bool validate = true)
         {
             if (node == null)
@@ -34,7 +33,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
             if (xmlNode is XmlElement || xmlNode is XmlComment)
             {
-                node.Text = xmlNode.Name;
+                // Store the current state of this node
+                var originalAttributes = node.Tag as Dictionary<string, string>;
+                var originalText = node.Text;
+                var originalName = node.Name;
+
+                // Copy the name and attributes from the XML element to this tree view node
                 node.Name = xmlNode.Name;
                 Dictionary<string, string> attributes = new Dictionary<string, string>();
 
@@ -55,6 +59,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
                 }
                 node.Tag = attributes;
+
+                // Copy any children as well. Reuse the existing children of this tree view node where possible.
                 var i = 0;
                 foreach (XmlNode childNode in xmlNode.ChildNodes)
                 {
@@ -68,11 +74,30 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
                     i++;
                 }
+
+                // If we've got more child tree view nodes left that we don't need any longer, remove them
                 while (i < node.Nodes.Count)
                 {
                     node.Nodes.RemoveAt(i);
                 }
+
+                // Set the text of the node based on the attribute values. We don't need to validate here, we'll
+                // do that as a single batch at the end if necessary
                 SetNodeText(node, fxb, validate: false);
+
+                // If the node is the currently selected node, check if any of the values have changed.
+                // If so, deselect it and reselect it again to refresh the rest of the UI.
+                if (node.IsSelected)
+                {
+                    if (node.Text != originalText ||
+                        node.Name != originalName ||
+                        originalAttributes == null ||
+                        String.Join(";", attributes.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Key + "=" + kvp.Value)) != String.Join(";", originalAttributes.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Key + "=" + kvp.Value)))
+                    {
+                        node.TreeView.SelectedNode = null;
+                        node.TreeView.SelectedNode = node;
+                    }
+                }
             }
             else if (xmlNode is XmlText && parentObject is TreeNode)
             {
