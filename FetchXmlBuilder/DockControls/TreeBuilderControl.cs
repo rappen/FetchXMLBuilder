@@ -434,9 +434,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 entitys?.ForEach(e => fxb.LoadEntityDetails(e, null, false));
             }
             XmlNode definitionXmlNode = fetchDoc.DocumentElement;
+            var selected = tvFetch.SelectedNode;
             TreeNodeHelper.AddTreeViewNode(null, tvFetch.Nodes?.Count > 0 ? tvFetch.Nodes[0] : null, definitionXmlNode, fxb, true);
             tvFetch.ExpandAll();
-            if (tvFetch.Nodes.Count > 0)
+            if (selected != null)
+            {
+                tvFetch.SelectedNode = selected;
+            }
+            else if (tvFetch.Nodes.Count > 0)
             {
                 tvFetch.SelectedNode = tvFetch.Nodes[0];
             }
