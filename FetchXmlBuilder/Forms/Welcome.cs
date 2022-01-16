@@ -12,7 +12,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             var assembly = Assembly.GetExecutingAssembly();
             var version = assembly.GetName().Version;
             var verurl = $"{version.Major}-{version.Minor}-{version.Build}";
-            var url = $"https://jonasr.app/fxb/releases/{verurl}";
+            var url = $"https://jonasr.app/fxb/releases/{verurl}#content";
             url = Utils.ProcessURL(url);
 
             var welcome = new Welcome();
