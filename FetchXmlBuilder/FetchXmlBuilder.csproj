@@ -502,35 +502,11 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <EmbeddedResource Include="ReleaseNotes\1.2018.1.3.rtf" />
-    <None Include="ReleaseNotes\1.2018.0.1004.rtf" />
-    <None Include="ReleaseNotes\1.2018.0.1005.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2018.2.1.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2018.2.2.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2018.4.2.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2018.6.1.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2018.8.2.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2018.12.5.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2019.4.1.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2019.9.1.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2019.12.1.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2020.5.6.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2020.6.2.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2020.7.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2020.9.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2020.11.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2020.12.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2021.4.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2021.10.rtf" />
-    <EmbeddedResource Include="ReleaseNotes\1.2022.1.rtf" />
     <None Include="Resources\XSD fetch.cs.cmd" />
     <None Include="XrmToolBox.exe.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ReleaseNotes\ReadMe.txt" />
   </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\Rappen.XTB.Helper\Rappen.XTB.Helpers.projitems" Label="Shared" />
