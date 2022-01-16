@@ -347,7 +347,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         internal void UpdateChildNode(TreeNode node)
         {
             TreeNodeHelper.SetNodeText(node, fxb);
-            node.Nodes.OfType<TreeNode>().ToList().ForEach(n => TreeNodeHelper.SetNodeText(n, fxb));
             node.Nodes.OfType<TreeNode>().ToList().ForEach(n => UpdateChildNode(n));
         }
 
@@ -431,7 +430,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 var entitys = TreeNodeHelper.GetEntitysForFetch(fetchDoc);
                 entitys = entitys?.Where(e => !string.IsNullOrEmpty(e) && fxb.entities.ContainsKey(e) && fxb.entities[e].Attributes == null)?.ToList();
-                entitys?.ForEach(e => fxb.LoadEntityDetails(e, null, false));
+                entitys?.ForEach(e => fxb.LoadEntityDetails(e, null, false, false));
             }
             XmlNode definitionXmlNode = fetchDoc.DocumentElement;
             var selected = tvFetch.SelectedNode;

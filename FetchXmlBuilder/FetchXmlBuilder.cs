@@ -664,7 +664,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
-        internal void LoadEntityDetails(string entityName, Action detailsLoaded, bool async = true)
+        internal void LoadEntityDetails(string entityName, Action detailsLoaded, bool async = true, bool update = true)
         {
             if (detailsLoaded != null && !async)
             {
@@ -682,7 +682,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     PostWorkCallBack = (completedargs) =>
                     {
-                        LoadEntityDetailsCompleted(entityName, completedargs.Error == null ? completedargs.Result as EntityMetadata : null, completedargs.Error);
+                        LoadEntityDetailsCompleted(entityName, completedargs.Error == null ? completedargs.Result as EntityMetadata : null, completedargs.Error, update);
                         if (completedargs.Error == null && detailsLoaded != null)
                         {
                             detailsLoaded();
@@ -695,11 +695,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 try
                 {
                     var resp = MetadataExtensions.LoadEntityDetails(Service, entityName);
-                    LoadEntityDetailsCompleted(entityName, resp, null);
+                    LoadEntityDetailsCompleted(entityName, resp, null, update);
                 }
                 catch (Exception e)
                 {
-                    LoadEntityDetailsCompleted(entityName, null, e);
+                    LoadEntityDetailsCompleted(entityName, null, e, update);
                 }
             }
         }
@@ -1220,7 +1220,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             });
         }
 
-        private void LoadEntityDetailsCompleted(string entityName, EntityMetadata Result, Exception Error)
+        private void LoadEntityDetailsCompleted(string entityName, EntityMetadata Result, Exception Error, bool update)
         {
             if (Error != null)
             {
@@ -1246,8 +1246,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     MessageBox.Show("Metadata not found for entity " + entityName, "Load attribute metadata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 working = false;
-                dockControlBuilder.UpdateAllNode();
-                UpdateLiveXML();
+
+                if (update)
+                {
+                    dockControlBuilder.UpdateAllNode();
+                    UpdateLiveXML();
+                }
             }
             working = false;
         }
