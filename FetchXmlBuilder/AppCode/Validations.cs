@@ -1,6 +1,5 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.Controls;
 using Microsoft.Xrm.Sdk.Metadata;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
