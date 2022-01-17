@@ -22,6 +22,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         /// <returns>The node that was added or updated</returns>
         public static TreeNode AddTreeViewNode(TreeNode parentnode, TreeNode node, XmlNode xmlNode, FetchXmlBuilder fxb, bool validate)
         {
+            if (parentnode == null && node == null && xmlNode == null)
+            {   // Don't add anything!
+                return null;
+            }
             if (node == null)
             {
                 node = parentnode != null ? parentnode.Nodes.Add("") : fxb.dockControlBuilder.tvFetch.Nodes.Add("");
