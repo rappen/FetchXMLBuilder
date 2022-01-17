@@ -36,7 +36,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 return tag[key];
             }
-            return null;
+            return string.Empty;
         }
 
         internal static bool IsFetchAggregate(this TreeNode node)
