@@ -26,13 +26,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {   // Don't add anything!
                 return null;
             }
-            if (node == null)
-            {
-                node = parentnode != null ? parentnode.Nodes.Add("") : fxb.dockControlBuilder.tvFetch.Nodes.Add("");
-            }
 
             if (xmlNode is XmlElement || xmlNode is XmlComment)
             {
+                if (node == null)
+                {
+                    node = parentnode != null ? parentnode.Nodes.Add("") : fxb.dockControlBuilder.tvFetch.Nodes.Add("");
+                }
+
                 // Store the current state of this node
                 var originalAttributes = node.Tag as Dictionary<string, string>;
                 var originalText = node.Text;
@@ -91,6 +92,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
             else if (xmlNode is XmlText text && parentnode?.Tag is Dictionary<string, string> attributes)
             {
+                node = parentnode;
                 attributes.Add("#text", text.Value);
             }
 
