@@ -529,7 +529,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     HandleNodeMenuClick("condition");
                     return;
                 }
-                ctrl.Focus();
+                ctrl?.Focus();
             }
             if (updateNode != null)
             {

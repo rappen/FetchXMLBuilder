@@ -120,15 +120,16 @@
             this.imgFetch.Images.SetKeyName(1, "fetch");
             this.imgFetch.Images.SetKeyName(2, "entity");
             this.imgFetch.Images.SetKeyName(3, "attribute");
-            this.imgFetch.Images.SetKeyName(4, "link-entity");
-            this.imgFetch.Images.SetKeyName(5, "filter");
-            this.imgFetch.Images.SetKeyName(6, "condition");
-            this.imgFetch.Images.SetKeyName(7, "value");
-            this.imgFetch.Images.SetKeyName(8, "order");
-            this.imgFetch.Images.SetKeyName(9, "#comment");
-            this.imgFetch.Images.SetKeyName(10, "info");
-            this.imgFetch.Images.SetKeyName(11, "warning");
-            this.imgFetch.Images.SetKeyName(12, "error");
+            this.imgFetch.Images.SetKeyName(4, "all-attributes");
+            this.imgFetch.Images.SetKeyName(5, "link-entity");
+            this.imgFetch.Images.SetKeyName(6, "filter");
+            this.imgFetch.Images.SetKeyName(7, "condition");
+            this.imgFetch.Images.SetKeyName(8, "value");
+            this.imgFetch.Images.SetKeyName(9, "order");
+            this.imgFetch.Images.SetKeyName(10, "#comment");
+            this.imgFetch.Images.SetKeyName(11, "info");
+            this.imgFetch.Images.SetKeyName(12, "warning");
+            this.imgFetch.Images.SetKeyName(13, "error");
             // 
             // lblWarning
             // 
