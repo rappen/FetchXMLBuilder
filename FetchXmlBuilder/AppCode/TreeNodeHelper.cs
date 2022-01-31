@@ -300,6 +300,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         private static void SetWarnings(TreeNode node, FetchXmlBuilder fxb)
         {
+            if (node == null)
+            {
+                return;
+            }
             var warning = Validations.GetWarning(node, fxb);
             if (warning != null)
             {

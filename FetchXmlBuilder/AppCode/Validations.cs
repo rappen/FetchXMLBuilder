@@ -9,7 +9,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     {
         internal static ControlValidationResult GetWarning(TreeNode node, FetchXmlBuilder fxb)
         {
-            if (!fxb.settings.ShowValidation)
+            if (!fxb.settings.ShowValidation || node == null)
             {
                 return null;
             }
