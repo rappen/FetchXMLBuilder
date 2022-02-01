@@ -9,6 +9,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     {
         internal static TreeNode LocalEntityNode(this TreeNode node)
         {
+            if (node == null)
+            {
+                return null;
+            }
             while (!node.Name.Equals("entity") && !node.Name.Equals("link-entity"))
             {
                 node = node.Parent;

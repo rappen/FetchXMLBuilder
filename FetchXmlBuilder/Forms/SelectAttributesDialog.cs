@@ -27,12 +27,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             foreach (var attribute in attributes)
             {
                 var name = attribute.DisplayName.UserLocalizedLabel != null ? attribute.DisplayName.UserLocalizedLabel.Label : attribute.LogicalName;
-                var item = new ListViewItem(new string[] { 
-                    name, 
-                    attribute.LogicalName, 
+                var item = new ListViewItem(new string[] {
+                    name,
+                    attribute.LogicalName,
                     attribute.AttributeType.ToString(),
                     attribute.IsValidForRead.Value.ToString(),
-                    attribute.IsValidForGrid.Value.ToString(),
+                    attribute.IsValidForGrid.HasValue ? attribute.IsValidForGrid.Value.ToString() : "",
                     attribute.IsValidForAdvancedFind.Value.ToString(),
                     attribute.IsRetrievable.Value.ToString()
                 });

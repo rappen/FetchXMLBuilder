@@ -50,7 +50,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     {
                         if (fxb.GetAttribute(parententity, name) is AttributeMetadata metaatt)
                         {
-                            if (metaatt.IsValidForGrid.Value == false && metaatt.IsPrimaryId.Value != true)
+                            if (metaatt.IsValidForGrid.HasValue && metaatt.IsValidForGrid.Value == false && metaatt.IsPrimaryId.Value != true)
                             {
                                 return new ControlValidationResult(ControlValidationLevel.Warning, $"Attribute '{name}' has 'IsValidForGrid=false'.");
                             }
@@ -113,7 +113,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     {
                         if (fxb.GetAttribute(parententity, attribute) is AttributeMetadata metaatt)
                         {
-                            if (metaatt.IsValidForGrid.Value == false)
+                            if (metaatt.IsValidForGrid.HasValue && metaatt.IsValidForGrid.Value == false)
                             {
                                 //  return new ControlValidationResult(ControlValidationLevel.Error, $"Attribute '{attribute}' has 'IsValidForGrid=false'.");
                             }
