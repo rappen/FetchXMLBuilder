@@ -190,7 +190,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                             }
                             else
                             {
-                                return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " is not valid for attribute of type " + attribute.Metadata.AttributeType.ToString());
+                                return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " is not valid for attribute of type " + attribute.Metadata.ToTypeString());
                             }
                         }
                     }

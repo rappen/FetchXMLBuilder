@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Xrm.Sdk.Metadata;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -93,6 +94,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
 
             return tooltip;
+        }
+
+        internal static string ToTypeString(this AttributeMetadata attribute)
+        {
+            if (attribute == null)
+            {
+                return string.Empty;
+            }
+            if (attribute.AttributeTypeName != null)
+            {
+                var result = attribute.AttributeTypeName.Value;
+                if (result.EndsWith("Type"))
+                {
+                    return result.Substring(0, result.Length - 4);
+                }
+            }
+            return attribute.AttributeType.ToString();
         }
     }
 }

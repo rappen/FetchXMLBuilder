@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
+using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 {
@@ -30,7 +31,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 var item = new ListViewItem(new string[] {
                     name,
                     attribute.LogicalName,
-                    attribute.AttributeType.ToString(),
+                    attribute.ToTypeString(),
                     attribute.IsValidForRead.Value.ToString(),
                     attribute.IsValidForGrid.HasValue ? attribute.IsValidForGrid.Value.ToString() : "",
                     attribute.IsValidForAdvancedFind.Value.ToString(),
