@@ -151,5 +151,43 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             tmFilter.Stop();
             RefreshData();
         }
+
+        private void ctxmenuGrid_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var temp1 = new ToolStripItem[mnuBehavior.DropDownItems.Count];
+            mnuBehavior.DropDownItems.CopyTo(temp1, 0);
+            foreach (var item in temp1)
+            {
+                ctxBehavior.DropDownItems.Add(item);
+            }
+            var temp2 = new ToolStripItem[mnuColumns.DropDownItems.Count];
+            mnuColumns.DropDownItems.CopyTo(temp2, 0);
+            foreach (var item in temp2)
+            {
+                ctxColumns.DropDownItems.Add(item);
+            }
+        }
+
+        private void mnuBehaviorColumns_DropDownOpening(object sender, EventArgs e)
+        {
+            var temp1 = new ToolStripItem[ctxBehavior.DropDownItems.Count];
+            ctxBehavior.DropDownItems.CopyTo(temp1, 0);
+            foreach (var item in temp1)
+            {
+                mnuBehavior.DropDownItems.Add(item);
+            }
+            var temp2 = new ToolStripItem[ctxColumns.DropDownItems.Count];
+            ctxColumns.DropDownItems.CopyTo(temp2, 0);
+            foreach (var item in temp2)
+            {
+                mnuColumns.DropDownItems.Add(item);
+            }
+        }
+
+        private void ctxFind_Click(object sender, EventArgs e)
+        {
+            mnuQuickFilter.Checked = true;
+            mnuQuickFilter_Click(sender, e);
+        }
     }
 }

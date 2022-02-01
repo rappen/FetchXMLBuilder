@@ -31,6 +31,11 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.crmGridView1 = new Rappen.XTB.Helpers.Controls.XRMDataGridView();
+            this.ctxmenuGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ctxBehavior = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxColumns = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.ctxFind = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lblOptionsExpander = new System.Windows.Forms.Label();
             this.mnuOptions = new System.Windows.Forms.MenuStrip();
@@ -38,6 +43,7 @@
             this.mnuFriendly = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuLocalTime = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuCopyHeaders = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuQuickFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuColumns = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuIndexCol = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuIdCol = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,9 +54,9 @@
             this.panQuickFilter = new System.Windows.Forms.Panel();
             this.txtQuickFilter = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.mnuQuickFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.tmFilter = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).BeginInit();
+            this.ctxmenuGrid.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.mnuOptions.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -72,20 +78,56 @@
             this.crmGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
             this.crmGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.crmGridView1.ColumnOrder = "";
+            this.crmGridView1.ContextMenuStrip = this.ctxmenuGrid;
             this.crmGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.crmGridView1.EnableHeadersVisualStyles = false;
             this.crmGridView1.EntityReferenceClickable = true;
             this.crmGridView1.FilterColumns = "";
-            this.crmGridView1.Location = new System.Drawing.Point(0, 0);
+            this.crmGridView1.Location = new System.Drawing.Point(0, 31);
             this.crmGridView1.Name = "crmGridView1";
             this.crmGridView1.ReadOnly = true;
             this.crmGridView1.RowHeadersWidth = 24;
             this.crmGridView1.Service = null;
             this.crmGridView1.ShowEditingIcon = false;
-            this.crmGridView1.Size = new System.Drawing.Size(650, 230);
+            this.crmGridView1.Size = new System.Drawing.Size(650, 199);
             this.crmGridView1.TabIndex = 1;
             this.crmGridView1.RecordClick += new Rappen.XTB.Helpers.Controls.XRMRecordEventHandler(this.crmGridView1_RecordClick);
             this.crmGridView1.RecordDoubleClick += new Rappen.XTB.Helpers.Controls.XRMRecordEventHandler(this.crmGridView1_RecordDoubleClick);
+            // 
+            // ctxmenuGrid
+            // 
+            this.ctxmenuGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ctxBehavior,
+            this.ctxColumns,
+            this.toolStripSeparator1,
+            this.ctxFind});
+            this.ctxmenuGrid.Name = "ctxmenuGrid";
+            this.ctxmenuGrid.Size = new System.Drawing.Size(181, 98);
+            this.ctxmenuGrid.Opening += new System.ComponentModel.CancelEventHandler(this.ctxmenuGrid_Opening);
+            // 
+            // ctxBehavior
+            // 
+            this.ctxBehavior.Name = "ctxBehavior";
+            this.ctxBehavior.Size = new System.Drawing.Size(180, 22);
+            this.ctxBehavior.Text = "Appearance";
+            // 
+            // ctxColumns
+            // 
+            this.ctxColumns.Name = "ctxColumns";
+            this.ctxColumns.Size = new System.Drawing.Size(180, 22);
+            this.ctxColumns.Text = "Columns";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            // 
+            // ctxFind
+            // 
+            this.ctxFind.Name = "ctxFind";
+            this.ctxFind.Size = new System.Drawing.Size(180, 22);
+            this.ctxFind.Text = "Find...";
+            this.ctxFind.Click += new System.EventHandler(this.ctxFind_Click);
             // 
             // groupBox1
             // 
@@ -137,6 +179,7 @@
             this.mnuBehavior.Name = "mnuBehavior";
             this.mnuBehavior.Size = new System.Drawing.Size(82, 20);
             this.mnuBehavior.Text = "Appearance";
+            this.mnuBehavior.DropDownOpening += new System.EventHandler(this.mnuBehaviorColumns_DropDownOpening);
             // 
             // mnuFriendly
             // 
@@ -162,7 +205,15 @@
             this.mnuCopyHeaders.Text = "Copy with Headers";
             this.mnuCopyHeaders.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
-             // mnuColumns
+            // mnuQuickFilter
+            // 
+            this.mnuQuickFilter.CheckOnClick = true;
+            this.mnuQuickFilter.Name = "mnuQuickFilter";
+            this.mnuQuickFilter.Size = new System.Drawing.Size(180, 22);
+            this.mnuQuickFilter.Text = "Quick Filter";
+            this.mnuQuickFilter.Click += new System.EventHandler(this.mnuQuickFilter_Click);
+            // 
+            // mnuColumns
             // 
             this.mnuColumns.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuIndexCol,
@@ -172,6 +223,7 @@
             this.mnuColumns.Name = "mnuColumns";
             this.mnuColumns.Size = new System.Drawing.Size(67, 20);
             this.mnuColumns.Text = "Columns";
+            this.mnuColumns.DropDownOpening += new System.EventHandler(this.mnuBehaviorColumns_DropDownOpening);
             // 
             // mnuIndexCol
             // 
@@ -243,14 +295,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Filter";
             // 
-            // mnuQuickFilter
-            // 
-            this.mnuQuickFilter.CheckOnClick = true;
-            this.mnuQuickFilter.Name = "mnuQuickFilter";
-            this.mnuQuickFilter.Size = new System.Drawing.Size(180, 22);
-            this.mnuQuickFilter.Text = "Quick Filter";
-            this.mnuQuickFilter.Click += new System.EventHandler(this.mnuQuickFilter_Click);
-            // 
             // tmFilter
             // 
             this.tmFilter.Interval = 300;
@@ -271,6 +315,7 @@
             this.Text = "Result View";
             this.DockStateChanged += new System.EventHandler(this.ResultGrid_DockStateChanged);
             ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).EndInit();
+            this.ctxmenuGrid.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.mnuOptions.ResumeLayout(false);
@@ -303,5 +348,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripMenuItem mnuQuickFilter;
         private System.Windows.Forms.Timer tmFilter;
+        private System.Windows.Forms.ContextMenuStrip ctxmenuGrid;
+        private System.Windows.Forms.ToolStripMenuItem ctxBehavior;
+        private System.Windows.Forms.ToolStripMenuItem ctxColumns;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem ctxFind;
     }
 }
