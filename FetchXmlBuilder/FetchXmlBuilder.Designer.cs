@@ -35,18 +35,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiNewNewConnection = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiNew = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsbClone = new System.Windows.Forms.ToolStripSplitButton();
             this.tsmiCloneNewTab = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiCloneNewConnection = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsbRepo = new System.Windows.Forms.ToolStripDropDownButton();
-            this.tsmiRepoSave = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiRepoDelete = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiRepoSaveAs = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiRepoExport = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiRepoImport = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiRepoDeleteAll = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbOpen = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiOpenFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -61,6 +51,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveViewAs = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveML = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveCWP = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsbRepo = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsmiRepoSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiRepoDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiRepoSaveAs = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiRepoExport = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiRepoImport = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiRepoDeleteAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbUndo = new System.Windows.Forms.ToolStripButton();
             this.tsbRedo = new System.Windows.Forms.ToolStripButton();
@@ -96,7 +95,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.toolStripMain.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbNew,
-            this.tsbClone,
             this.tsbOpen,
             this.tsbSave,
             this.tsbRepo,
@@ -126,8 +124,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbNew.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiNewNewTab,
             this.tsmiNewNewConnection,
+            this.tsmiNew,
             this.toolStripSeparator4,
-            this.tsmiNew});
+            this.tsmiCloneNewTab,
+            this.tsmiCloneNewConnection});
             this.tsbNew.Image = ((System.Drawing.Image)(resources.GetObject("tsbNew.Image")));
             this.tsbNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbNew.Name = "tsbNew";
@@ -140,8 +140,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiNewNewTab.Name = "tsmiNewNewTab";
             this.tsmiNewNewTab.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.tsmiNewNewTab.Size = new System.Drawing.Size(311, 22);
-            this.tsmiNewNewTab.Text = "New query in new tab";
+            this.tsmiNewNewTab.Size = new System.Drawing.Size(318, 22);
+            this.tsmiNewNewTab.Text = "New query to new tab";
             this.tsmiNewNewTab.Click += new System.EventHandler(this.tsbNew_Click);
             // 
             // tsmiNewNewConnection
@@ -149,42 +149,30 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiNewNewConnection.Name = "tsmiNewNewConnection";
             this.tsmiNewNewConnection.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.N)));
-            this.tsmiNewNewConnection.Size = new System.Drawing.Size(311, 22);
+            this.tsmiNewNewConnection.Size = new System.Drawing.Size(318, 22);
             this.tsmiNewNewConnection.Text = "New query with new connection";
             this.tsmiNewNewConnection.Click += new System.EventHandler(this.tsbNew_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(308, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(315, 6);
             // 
             // tsmiNew
             // 
             this.tsmiNew.Name = "tsmiNew";
             this.tsmiNew.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.N)));
-            this.tsmiNew.Size = new System.Drawing.Size(311, 22);
+            this.tsmiNew.Size = new System.Drawing.Size(318, 22);
             this.tsmiNew.Text = "New query in this tab";
             this.tsmiNew.Click += new System.EventHandler(this.tsbNew_Click);
-            // 
-            // tsbClone
-            // 
-            this.tsbClone.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiCloneNewTab,
-            this.tsmiCloneNewConnection});
-            this.tsbClone.Image = ((System.Drawing.Image)(resources.GetObject("tsbClone.Image")));
-            this.tsbClone.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbClone.Name = "tsbClone";
-            this.tsbClone.Size = new System.Drawing.Size(78, 28);
-            this.tsbClone.Text = "Clone";
-            this.tsbClone.ButtonClick += new System.EventHandler(this.tsbClone_Click);
             // 
             // tsmiCloneNewTab
             // 
             this.tsmiCloneNewTab.Name = "tsmiCloneNewTab";
             this.tsmiCloneNewTab.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.tsmiCloneNewTab.Size = new System.Drawing.Size(327, 22);
-            this.tsmiCloneNewTab.Text = "Current query in new tab";
+            this.tsmiCloneNewTab.Size = new System.Drawing.Size(318, 22);
+            this.tsmiCloneNewTab.Text = "Clone query to new tab";
             this.tsmiCloneNewTab.Click += new System.EventHandler(this.tsbClone_Click);
             // 
             // tsmiCloneNewConnection
@@ -192,88 +180,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiCloneNewConnection.Name = "tsmiCloneNewConnection";
             this.tsmiCloneNewConnection.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.Q)));
-            this.tsmiCloneNewConnection.Size = new System.Drawing.Size(327, 22);
-            this.tsmiCloneNewConnection.Text = "Current query with new connection";
+            this.tsmiCloneNewConnection.Size = new System.Drawing.Size(318, 22);
+            this.tsmiCloneNewConnection.Text = "Clone query with new connection";
             this.tsmiCloneNewConnection.Click += new System.EventHandler(this.tsbClone_Click);
-            // 
-            // tsbRepo
-            // 
-            this.tsbRepo.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiRepoSave,
-            this.tsmiRepoDelete,
-            this.tsmiRepoSaveAs,
-            this.toolStripMenuItem2,
-            this.tsmiRepoExport,
-            this.tsmiRepoImport,
-            this.tsmiRepoDeleteAll,
-            this.toolStripSeparator8});
-            this.tsbRepo.Image = ((System.Drawing.Image)(resources.GetObject("tsbRepo.Image")));
-            this.tsbRepo.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbRepo.Name = "tsbRepo";
-            this.tsbRepo.Size = new System.Drawing.Size(100, 28);
-            this.tsbRepo.Text = "Repository";
-            this.tsbRepo.Visible = false;
-            this.tsbRepo.DropDownOpening += new System.EventHandler(this.tsbRepo_DropDownOpening);
-            // 
-            // tsmiRepoSave
-            // 
-            this.tsmiRepoSave.Enabled = false;
-            this.tsmiRepoSave.Image = ((System.Drawing.Image)(resources.GetObject("tsmiRepoSave.Image")));
-            this.tsmiRepoSave.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiRepoSave.Name = "tsmiRepoSave";
-            this.tsmiRepoSave.Size = new System.Drawing.Size(195, 22);
-            this.tsmiRepoSave.Text = "Update";
-            this.tsmiRepoSave.Click += new System.EventHandler(this.tsmiRepoSave_Click);
-            // 
-            // tsmiRepoDelete
-            // 
-            this.tsmiRepoDelete.Enabled = false;
-            this.tsmiRepoDelete.Image = ((System.Drawing.Image)(resources.GetObject("tsmiRepoDelete.Image")));
-            this.tsmiRepoDelete.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiRepoDelete.Name = "tsmiRepoDelete";
-            this.tsmiRepoDelete.Size = new System.Drawing.Size(195, 22);
-            this.tsmiRepoDelete.Text = "Delete";
-            this.tsmiRepoDelete.Click += new System.EventHandler(this.tsmiRepoDelete_Click);
-            // 
-            // tsmiRepoSaveAs
-            // 
-            this.tsmiRepoSaveAs.Image = ((System.Drawing.Image)(resources.GetObject("tsmiRepoSaveAs.Image")));
-            this.tsmiRepoSaveAs.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiRepoSaveAs.Name = "tsmiRepoSaveAs";
-            this.tsmiRepoSaveAs.Size = new System.Drawing.Size(195, 22);
-            this.tsmiRepoSaveAs.Text = "Save current query as...";
-            this.tsmiRepoSaveAs.Click += new System.EventHandler(this.tsmiRepoSaveAs_Click);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(192, 6);
-            // 
-            // tsmiRepoExport
-            // 
-            this.tsmiRepoExport.Name = "tsmiRepoExport";
-            this.tsmiRepoExport.Size = new System.Drawing.Size(195, 22);
-            this.tsmiRepoExport.Text = "Export repository...";
-            this.tsmiRepoExport.Click += new System.EventHandler(this.tsmiRepoExport_Click);
-            // 
-            // tsmiRepoImport
-            // 
-            this.tsmiRepoImport.Name = "tsmiRepoImport";
-            this.tsmiRepoImport.Size = new System.Drawing.Size(195, 22);
-            this.tsmiRepoImport.Text = "Import repository...";
-            this.tsmiRepoImport.Click += new System.EventHandler(this.tsmiRepoImport_Click);
-            // 
-            // tsmiRepoDeleteAll
-            // 
-            this.tsmiRepoDeleteAll.Name = "tsmiRepoDeleteAll";
-            this.tsmiRepoDeleteAll.Size = new System.Drawing.Size(195, 22);
-            this.tsmiRepoDeleteAll.Text = "Delete all queries";
-            this.tsmiRepoDeleteAll.Click += new System.EventHandler(this.tsmiRepoDeleteAll_Click);
-            // 
-            // toolStripSeparator8
-            // 
-            this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(192, 6);
             // 
             // tsbOpen
             // 
@@ -295,14 +204,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiOpenFile.Image = ((System.Drawing.Image)(resources.GetObject("tsmiOpenFile.Image")));
             this.tsmiOpenFile.Name = "tsmiOpenFile";
             this.tsmiOpenFile.ShortcutKeyDisplayString = "Ctrl+O";
-            this.tsmiOpenFile.Size = new System.Drawing.Size(240, 22);
+            this.tsmiOpenFile.Size = new System.Drawing.Size(248, 30);
             this.tsmiOpenFile.Text = "Open File...";
             this.tsmiOpenFile.Click += new System.EventHandler(this.tsmiOpenFile_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(237, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(245, 6);
             // 
             // tsmiOpenView
             // 
@@ -310,7 +219,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiOpenView.Name = "tsmiOpenView";
             this.tsmiOpenView.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.O)));
-            this.tsmiOpenView.Size = new System.Drawing.Size(240, 22);
+            this.tsmiOpenView.Size = new System.Drawing.Size(248, 30);
             this.tsmiOpenView.Text = "Open View...";
             this.tsmiOpenView.Click += new System.EventHandler(this.tsmiOpenView_Click);
             // 
@@ -318,14 +227,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // 
             this.tsmiOpenML.Image = ((System.Drawing.Image)(resources.GetObject("tsmiOpenML.Image")));
             this.tsmiOpenML.Name = "tsmiOpenML";
-            this.tsmiOpenML.Size = new System.Drawing.Size(240, 22);
+            this.tsmiOpenML.Size = new System.Drawing.Size(248, 30);
             this.tsmiOpenML.Text = "Open Dynamic Marketing List...";
             this.tsmiOpenML.Click += new System.EventHandler(this.tsmiOpenML_Click);
             // 
             // tsmiOpenCWP
             // 
             this.tsmiOpenCWP.Name = "tsmiOpenCWP";
-            this.tsmiOpenCWP.Size = new System.Drawing.Size(240, 22);
+            this.tsmiOpenCWP.Size = new System.Drawing.Size(248, 30);
             this.tsmiOpenCWP.Text = "Open CWP Feed...";
             this.tsmiOpenCWP.Click += new System.EventHandler(this.tsmiOpenCWP_Click);
             // 
@@ -406,6 +315,85 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsmiSaveCWP.Size = new System.Drawing.Size(226, 22);
             this.tsmiSaveCWP.Text = "Save as CWP Feed...";
             this.tsmiSaveCWP.Click += new System.EventHandler(this.tsmiSaveCWP_Click);
+            // 
+            // tsbRepo
+            // 
+            this.tsbRepo.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiRepoSave,
+            this.tsmiRepoDelete,
+            this.tsmiRepoSaveAs,
+            this.toolStripMenuItem2,
+            this.tsmiRepoExport,
+            this.tsmiRepoImport,
+            this.tsmiRepoDeleteAll,
+            this.toolStripSeparator8});
+            this.tsbRepo.Image = ((System.Drawing.Image)(resources.GetObject("tsbRepo.Image")));
+            this.tsbRepo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbRepo.Name = "tsbRepo";
+            this.tsbRepo.Size = new System.Drawing.Size(100, 28);
+            this.tsbRepo.Text = "Repository";
+            this.tsbRepo.Visible = false;
+            this.tsbRepo.DropDownOpening += new System.EventHandler(this.tsbRepo_DropDownOpening);
+            // 
+            // tsmiRepoSave
+            // 
+            this.tsmiRepoSave.Enabled = false;
+            this.tsmiRepoSave.Image = ((System.Drawing.Image)(resources.GetObject("tsmiRepoSave.Image")));
+            this.tsmiRepoSave.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiRepoSave.Name = "tsmiRepoSave";
+            this.tsmiRepoSave.Size = new System.Drawing.Size(195, 22);
+            this.tsmiRepoSave.Text = "Update";
+            this.tsmiRepoSave.Click += new System.EventHandler(this.tsmiRepoSave_Click);
+            // 
+            // tsmiRepoDelete
+            // 
+            this.tsmiRepoDelete.Enabled = false;
+            this.tsmiRepoDelete.Image = ((System.Drawing.Image)(resources.GetObject("tsmiRepoDelete.Image")));
+            this.tsmiRepoDelete.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiRepoDelete.Name = "tsmiRepoDelete";
+            this.tsmiRepoDelete.Size = new System.Drawing.Size(195, 22);
+            this.tsmiRepoDelete.Text = "Delete";
+            this.tsmiRepoDelete.Click += new System.EventHandler(this.tsmiRepoDelete_Click);
+            // 
+            // tsmiRepoSaveAs
+            // 
+            this.tsmiRepoSaveAs.Image = ((System.Drawing.Image)(resources.GetObject("tsmiRepoSaveAs.Image")));
+            this.tsmiRepoSaveAs.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiRepoSaveAs.Name = "tsmiRepoSaveAs";
+            this.tsmiRepoSaveAs.Size = new System.Drawing.Size(195, 22);
+            this.tsmiRepoSaveAs.Text = "Save current query as...";
+            this.tsmiRepoSaveAs.Click += new System.EventHandler(this.tsmiRepoSaveAs_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(192, 6);
+            // 
+            // tsmiRepoExport
+            // 
+            this.tsmiRepoExport.Name = "tsmiRepoExport";
+            this.tsmiRepoExport.Size = new System.Drawing.Size(195, 22);
+            this.tsmiRepoExport.Text = "Export repository...";
+            this.tsmiRepoExport.Click += new System.EventHandler(this.tsmiRepoExport_Click);
+            // 
+            // tsmiRepoImport
+            // 
+            this.tsmiRepoImport.Name = "tsmiRepoImport";
+            this.tsmiRepoImport.Size = new System.Drawing.Size(195, 22);
+            this.tsmiRepoImport.Text = "Import repository...";
+            this.tsmiRepoImport.Click += new System.EventHandler(this.tsmiRepoImport_Click);
+            // 
+            // tsmiRepoDeleteAll
+            // 
+            this.tsmiRepoDeleteAll.Name = "tsmiRepoDeleteAll";
+            this.tsmiRepoDeleteAll.Size = new System.Drawing.Size(195, 22);
+            this.tsmiRepoDeleteAll.Text = "Delete all queries";
+            this.tsmiRepoDeleteAll.Click += new System.EventHandler(this.tsmiRepoDeleteAll_Click);
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(192, 6);
             // 
             // toolStripSeparator6
             // 
@@ -628,7 +616,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tslAbout.Image = ((System.Drawing.Image)(resources.GetObject("tslAbout.Image")));
             this.tslAbout.IsLink = true;
             this.tslAbout.Name = "tslAbout";
-            this.tslAbout.Size = new System.Drawing.Size(106, 24);
+            this.tslAbout.Size = new System.Drawing.Size(106, 28);
             this.tslAbout.Text = "by Jonas Rapp";
             this.tslAbout.Click += new System.EventHandler(this.tslAbout_Click);
             // 
@@ -726,7 +714,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiNewNewConnection;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem tsmiNew;
-        private System.Windows.Forms.ToolStripSplitButton tsbClone;
         private System.Windows.Forms.ToolStripMenuItem tsmiCloneNewTab;
         private System.Windows.Forms.ToolStripMenuItem tsmiCloneNewConnection;
         private System.Windows.Forms.ToolStripMenuItem tsmiRepoExport;
