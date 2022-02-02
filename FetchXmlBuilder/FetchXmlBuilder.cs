@@ -923,6 +923,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             var connsett = GetConnectionSetting();
             toolStripMain.Items.OfType<ToolStripItem>().ToList().ForEach(i => i.DisplayStyle = settings.ShowButtonTexts ? ToolStripItemDisplayStyle.ImageAndText : ToolStripItemDisplayStyle.Image);
+            tsbRepo.Visible = settings.ShowRepository;
             if (reloadquery && connsett != null && !string.IsNullOrWhiteSpace(connsett.FetchXML))
             {
                 dockControlBuilder.Init(connsett.FetchXML, "loaded from last session", false);

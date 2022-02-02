@@ -35,6 +35,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public XmlColors XmlColors { get; set; } = new XmlColors();
         public bool ShowNodeType { get; set; } = false;
         public bool ShowValidation { get; set; } = true;
+        public bool ShowRepository { get; set; } = false;
     }
 
     public class QueryOptions

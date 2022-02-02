@@ -33,6 +33,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             chkShowNodeTypes.Checked = settings.ShowNodeType;
             chkShowButtonTexts.Checked = settings.ShowButtonTexts;
             chkShowValidation.Checked = settings.ShowValidation;
+            chkShowRepository.Checked = settings.ShowRepository;
             switch (settings.Results.ResultOutput)
             {
                 case ResultOutput.XML: rbResSerializedXML.Checked = true; break;
@@ -89,6 +90,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             settings.ShowNodeType = chkShowNodeTypes.Checked;
             settings.ShowButtonTexts = chkShowButtonTexts.Checked;
             settings.ShowValidation = chkShowValidation.Checked;
+            settings.ShowRepository = chkShowRepository.Checked;
             settings.XmlColors = propXmlColors.SelectedObject as XmlColors;
             settings.Entity.All = chkEntAll.Checked;
             settings.Entity.Customizable = chkEntCustomizable.Checked;
