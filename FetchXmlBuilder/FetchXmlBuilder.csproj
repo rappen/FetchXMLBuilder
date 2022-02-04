@@ -393,6 +393,12 @@
       <DependentUpon>XmlContentControl.cs</DependentUpon>
     </Compile>
     <Compile Include="AppCode\FXBMessageBusArgument.cs" />
+    <Compile Include="Forms\ShowMetadataOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ShowMetadataOptions.Designer.cs">
+      <DependentUpon>ShowMetadataOptions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Welcome.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -485,6 +491,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DockControls\XmlContentControl.resx">
       <DependentUpon>XmlContentControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ShowMetadataOptions.resx">
+      <DependentUpon>ShowMetadataOptions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Welcome.resx">
       <DependentUpon>Welcome.cs</DependentUpon>

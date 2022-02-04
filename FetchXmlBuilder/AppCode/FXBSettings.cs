@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -16,8 +17,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         public bool UseFriendlyNames { get { return _useFriendlyNames; } set { _useFriendlyNames = value; FetchXmlBuilder.friendlyNames = value; } }
         public QueryOptions QueryOptions { get; set; } = new QueryOptions();
-        public MetadataOptions Entity { get; set; } = new MetadataOptions();
-        public MetadataOptions Attribute { get; set; } = new MetadataOptions();
+        public ShowMetaTypesEntity ShowEntities { get; set; } = new ShowMetaTypesEntity();
+        public ShowMetaTypesAttribute ShowAttributes { get; set; } = new ShowMetaTypesAttribute();
         public ResultOptions Results { get; set; } = new ResultOptions();
         public string CurrentVersion { get; set; }
         public string LastOpenedViewEntity { get; set; }
@@ -46,21 +47,35 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public string NewQueryTemplate { get; set; } = DefaultNewQuery;
     }
 
-    public class MetadataOptions
+    public abstract class ShowMetaTypes
     {
-        public bool All { get; set; } = true;
-        public bool Managed { get; set; }
-        public bool Unmanaged { get; set; }
-        public bool Customizable { get; set; }
-        public bool Uncustomizable { get; set; }
-        public bool Custom { get; set; }
-        public bool Standard { get; set; }
-        public bool Intersect { get; set; }
-        public bool OnlyValidAF { get; set; }
-        public bool OnlyValidRead { get; set; }
+        public CheckState IsManaged { get; set; } = CheckState.Indeterminate;
+        public CheckState IsCustom { get; set; } = CheckState.Indeterminate;
+        public CheckState IsCustomizable { get; set; } = CheckState.Indeterminate;
+        public CheckState IsValidForAdvancedFind { get; set; } = CheckState.Indeterminate;
+        public CheckState IsAuditEnabled { get; set; } = CheckState.Indeterminate;
+        public CheckState IsLogical { get; set; } = CheckState.Unchecked;
     }
 
-    public class ResultOptions
+    public class ShowMetaTypesEntity : ShowMetaTypes
+    {
+        public CheckState IsIntersect { get; set; } = CheckState.Indeterminate;  //E
+        public CheckState IsActivity { get; set; } = CheckState.Indeterminate;  //E
+        public CheckState IsActivityParty { get; set; } = CheckState.Indeterminate; //E
+        public CheckState Virtual { get; set; } = CheckState.Indeterminate;  //E
+        public int OwnershipType { get; set; } = 0;   //E
+    }
+
+    public class ShowMetaTypesAttribute : ShowMetaTypes
+    {
+        public CheckState IsValidForRead { get; set; } = CheckState.Indeterminate;  //A
+        public CheckState IsFiltered { get; set; } = CheckState.Indeterminate;  //A
+        public CheckState IsRetrievable { get; set; } = CheckState.Indeterminate;   //A
+        public CheckState IsValidForGrid { get; set; } = CheckState.Indeterminate;  //A
+        public CheckState AttributeOf { get; set; } = CheckState.Unchecked; //A
+    }
+
+     public class ResultOptions
     {
         public bool Friendly { get; set; }
         public bool Id { get; set; }

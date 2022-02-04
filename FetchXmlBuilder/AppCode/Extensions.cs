@@ -112,5 +112,29 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
             return attribute.AttributeType.ToString();
         }
+
+        internal static string TriToString(this CheckState state, string uncheck_check_indterminate)
+        {
+            var splits = uncheck_check_indterminate.Split(';');
+            if (splits.Length == 3)
+            {
+                return state.TriToString(splits[0], splits[1], splits[2]);
+            }
+            return string.Empty;
+        }
+
+        internal static string TriToString(this CheckState state, string uncheck, string check, string indeterminate)
+        {
+            switch (state)
+            {
+                case CheckState.Unchecked:
+                    return uncheck;
+                case CheckState.Checked:
+                    return check;
+                case CheckState.Indeterminate:
+                    return indeterminate;
+            }
+            return string.Empty;
+        }
     }
 }
