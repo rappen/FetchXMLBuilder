@@ -577,19 +577,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     foreach (var attribute in attributes)
                     {
-                        if (!settings.Attribute.All)
-                        {
-                            if (attribute.IsValidForRead == false) { continue; }
-                            if (!string.IsNullOrEmpty(attribute.AttributeOf)) { continue; }
-                            if (!settings.Attribute.Managed && attribute.IsManaged == true) { continue; }
-                            if (!settings.Attribute.Unmanaged && attribute.IsManaged == false) { continue; }
-                            if (!settings.Attribute.Customizable && attribute.IsCustomizable.Value) { continue; }
-                            if (!settings.Attribute.Uncustomizable && !attribute.IsCustomizable.Value) { continue; }
-                            if (!settings.Attribute.Standard && attribute.IsCustomAttribute == false) { continue; }
-                            if (!settings.Attribute.Custom && attribute.IsCustomAttribute == true) { continue; }
-                            if (settings.Attribute.OnlyValidAF && attribute.IsValidForAdvancedFind.Value == false) { continue; }
-                            if (settings.Attribute.OnlyValidRead && attribute.IsValidForRead.Value == false) { continue; }
-                        }
+                        if (!CheckMetadata(settings.ShowAttributes.IsManaged, attribute.IsManaged)) { continue; }
+                        if (!CheckMetadata(settings.ShowAttributes.IsCustom, attribute.IsCustomAttribute)) { continue; }
+                        if (!CheckMetadata(settings.ShowAttributes.IsCustomizable, attribute.IsCustomizable)) { continue; }
+                        if (!CheckMetadata(settings.ShowAttributes.IsValidForAdvancedFind, attribute.IsValidForAdvancedFind)) { continue; }
+                        if (!CheckMetadata(settings.ShowAttributes.IsAuditEnabled, attribute.IsAuditEnabled)) { continue; }
+                        if (!CheckMetadata(settings.ShowAttributes.IsLogical, attribute.IsLogical)) { continue; }
+                        if (!CheckMetadata(settings.ShowAttributes.IsValidForRead, attribute.IsValidForRead)) { continue; }
+                        if (!CheckMetadata(settings.ShowAttributes.IsValidForGrid, attribute.IsValidForGrid)) { continue; }
+                        if (!CheckMetadata(settings.ShowAttributes.IsFiltered, attribute.IsFilterable)) { continue; }
+                        if (!CheckMetadata(settings.ShowAttributes.IsRetrievable, attribute.IsRetrievable)) { continue; }
+                        if (!CheckMetadata(settings.ShowAttributes.AttributeOf, !string.IsNullOrEmpty(attribute.AttributeOf))) { continue; }
                         result.Add(attribute);
                     }
                 }
@@ -614,21 +612,40 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 foreach (var entity in entities)
                 {
-                    if (!settings.Entity.All)
-                    {
-                        if (!settings.Entity.Managed && entity.Value.IsManaged == true) { continue; }
-                        if (!settings.Entity.Unmanaged && entity.Value.IsManaged == false) { continue; }
-                        if (!settings.Entity.Customizable && entity.Value.IsCustomizable.Value) { continue; }
-                        if (!settings.Entity.Uncustomizable && !entity.Value.IsCustomizable.Value) { continue; }
-                        if (!settings.Entity.Standard && entity.Value.IsCustomEntity == false) { continue; }
-                        if (!settings.Entity.Custom && entity.Value.IsCustomEntity == true) { continue; }
-                        if (!settings.Entity.Intersect && entity.Value.IsIntersect == true) { continue; }
-                        if (settings.Entity.OnlyValidAF && entity.Value.IsValidForAdvancedFind == false) { continue; }
-                    }
+                    if (!CheckMetadata(settings.ShowEntities.IsManaged, entity.Value.IsManaged)) { continue; }
+                    if (!CheckMetadata(settings.ShowEntities.IsCustom, entity.Value.IsCustomEntity)) { continue; }
+                    if (!CheckMetadata(settings.ShowEntities.IsCustomizable, entity.Value.IsCustomizable)) { continue; }
+                    if (!CheckMetadata(settings.ShowEntities.IsValidForAdvancedFind, entity.Value.IsValidForAdvancedFind)) { continue; }
+                    if (!CheckMetadata(settings.ShowEntities.IsAuditEnabled, entity.Value.IsAuditEnabled)) { continue; }
+                    if (!CheckMetadata(settings.ShowEntities.IsLogical, entity.Value.IsLogicalEntity)) { continue; }
+                    if (!CheckMetadata(settings.ShowEntities.IsIntersect, entity.Value.IsIntersect)) { continue; }
+                    if (!CheckMetadata(settings.ShowEntities.IsActivity, entity.Value.IsActivity)) { continue; }
+                    if (!CheckMetadata(settings.ShowEntities.IsActivityParty, entity.Value.IsActivityParty)) { continue; }
+                    if (!CheckMetadata(settings.ShowEntities.Virtual, entity.Value.DataProviderId.HasValue)) { continue; }
                     result.Add(entity.Key, entity.Value);
                 }
             }
             return result;
+        }
+
+        private static bool CheckMetadata(CheckState checkstate, BooleanManagedProperty metafield)
+        {
+            return CheckMetadata(checkstate, metafield?.Value);
+        }
+
+        private static bool CheckMetadata(CheckState checkstate, bool? metafield)
+        {
+            if (metafield != null & metafield.HasValue)
+            {
+                switch (checkstate)
+                {
+                    case CheckState.Checked:
+                        return metafield.Value == true;
+                    case CheckState.Unchecked:
+                        return metafield.Value == false;
+                }
+            }
+            return true;
         }
 
         internal string GetOData(int version)
@@ -771,7 +788,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     EnableControls(true);
                     if (completedargs.Error != null)
                     {
-                        ErrorDetail.ShowDialog(this, completedargs.Error); 
+                        ErrorDetail.ShowDialog(this, completedargs.Error);
                     }
                     else
                     {
@@ -896,7 +913,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             });
         }
 
-        internal void HelpClick(object sender)
+        internal static void HelpClick(object sender)
         {
             if (sender is Control control && control.Tag is string tag && tag.StartsWith("http"))
             {
@@ -1962,6 +1979,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
+        internal void ShowSelectSettings()
+        {
+            if (ShowMetadataOptions.Show(this))
+            {
+                LogUse("SaveSelect");
+                SaveSetting();
+                ApplySettings(false);
+                dockControlBuilder.ApplyCurrentSettings();
+                dockControlFetchXml?.ApplyCurrentSettings();
+                EnableControls();
+            }
+        }
+    
         private void ShowODataControl(ref ODataControl control, int version)
         {
             LogUse($"Show-OData{version}.0");
@@ -2372,6 +2402,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             OnOutgoingMessage(this, new MessageBusEventArgs("Bulk Data Updater", true) { TargetArgument = dockControlBuilder.GetFetchString(true, true) });
             //OnOutgoingMessage(this, new MessageBusEventArgs(XrmToolBoxToolIds.BulkDataUpdater.ToString(), true) { TargetArgument = dockControlBuilder.GetFetchString(true, true) });
+        }
+
+        private void tsmiSelect_Click(object sender, EventArgs e)
+        {
+            ShowSelectSettings();
         }
 
         #endregion Private Event Handlers
