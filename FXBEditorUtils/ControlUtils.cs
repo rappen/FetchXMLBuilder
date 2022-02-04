@@ -33,24 +33,24 @@ namespace Cinteros.Xrm.XmlEditorUtils
         public static string GetValueFromControl(Control control)
         {
             var result = "";
-            if (control is CheckBox)
+            if (control is CheckBox cb)
             {
-                result = ((CheckBox)control).Checked ? "true" : "false";
+                result = cb.Checked ? "true" : "false";
             }
-            else if (control is TextBox)
+            else if (control is TextBox tx)
             {
-                result = ((TextBox)control).Text;
+                result = tx.Text;
             }
-            else if (control is ComboBox)
+            else if (control is ComboBox cb2)
             {
-                var item = ((ComboBox)control).SelectedItem;
-                if (item is IComboBoxItem)
+                var item = cb2.SelectedItem;
+                if (item is IComboBoxItem ci)
                 {
-                    result = ((IComboBoxItem)item).GetValue();
+                    result = ci.GetValue();
                 }
                 else
                 {
-                    result = ((ComboBox)control).Text;
+                    result = cb2.Text;
                 }
             }
             return result;
