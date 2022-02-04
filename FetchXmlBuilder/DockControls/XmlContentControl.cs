@@ -611,10 +611,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
                     e.Suggestions.AddRange(attributes.OrderBy(attr => attr.LogicalName).Select(attr => new AttributeMetadataSuggestion(attr, fxb.settings.UseFriendlyNames)));
                 }
-                else if (fxb.NeedToLoadEntity(entityNode.GetAttribute("name")))
-                {
-                    fxb.LoadEntityDetails(entityNode.GetAttribute("name"), null);
-                }
             }
 
             // Autocomplete alias names for <condition> and <order> elements
