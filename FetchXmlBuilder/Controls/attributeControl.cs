@@ -96,7 +96,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void helpIcon_Click(object sender, EventArgs e)
         {
-            fxb.HelpClick(sender);
+            FetchXmlBuilder.HelpClick(sender);
         }
 
         private void cmbAttribute_SelectedIndexChanged(object sender, EventArgs e)

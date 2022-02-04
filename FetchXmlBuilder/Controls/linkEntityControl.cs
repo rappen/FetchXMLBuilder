@@ -416,7 +416,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         private void helpIcon_Click(object sender, System.EventArgs e)
         {
-            fxb.HelpClick(sender);
+            FetchXmlBuilder.HelpClick(sender);
         }
 
         public override void Focus()
