@@ -195,8 +195,7 @@
             this.pictureBox8.TabIndex = 47;
             this.pictureBox8.TabStop = false;
             this.pictureBox8.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.entitymeta" +
-    "data.islogicalentity?view=dynamics-general-ce-9#microsoft-xrm-sdk-metadata-entit" +
-    "ymetadata-islogicalentity";
+    "data.islogicalentity";
             this.pictureBox8.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // pictureBox7
@@ -209,8 +208,7 @@
             this.pictureBox7.TabIndex = 46;
             this.pictureBox7.TabStop = false;
             this.pictureBox7.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.entitymeta" +
-    "data.isauditenabled?view=dynamics-general-ce-9#microsoft-xrm-sdk-metadata-entity" +
-    "metadata-isauditenabled";
+    "data.isauditenabled";
             this.pictureBox7.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // pictureBox6
@@ -223,8 +221,7 @@
             this.pictureBox6.TabIndex = 45;
             this.pictureBox6.TabStop = false;
             this.pictureBox6.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.entitymeta" +
-    "data.isvalidforadvancedfind?view=dynamics-general-ce-9#microsoft-xrm-sdk-metadat" +
-    "a-entitymetadata-isvalidforadvancedfind";
+    "data.isvalidforadvancedfind";
             this.pictureBox6.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // pictureBox5
@@ -613,7 +610,7 @@
             this.chkAAttributeOf.Location = new System.Drawing.Point(18, 261);
             this.chkAAttributeOf.Name = "chkAAttributeOf";
             this.chkAAttributeOf.Size = new System.Drawing.Size(180, 17);
-            this.chkAAttributeOf.TabIndex = 61;
+            this.chkAAttributeOf.TabIndex = 11;
             this.chkAAttributeOf.Tag = "Not Of Something Else;Of Something Else;All Attributes (AttributesOf)";
             this.chkAAttributeOf.Text = "All Attributes (AttributesOf)";
             this.chkAAttributeOf.ThreeState = true;
@@ -642,8 +639,8 @@
             this.pictureBox12.Size = new System.Drawing.Size(14, 14);
             this.pictureBox12.TabIndex = 59;
             this.pictureBox12.TabStop = false;
-            this.pictureBox12.Tag = "https://docs.microsoft.com/en-us/powerapps/developer/data-platform/activityparty-" +
-    "entity";
+            this.pictureBox12.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.attributem" +
+    "etadata.isfilterable";
             this.pictureBox12.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // pictureBox13
@@ -655,8 +652,8 @@
             this.pictureBox13.Size = new System.Drawing.Size(14, 14);
             this.pictureBox13.TabIndex = 58;
             this.pictureBox13.TabStop = false;
-            this.pictureBox13.Tag = "https://docs.microsoft.com/en-us/powerapps/developer/data-platform/activitypointe" +
-    "r-activity-entity";
+            this.pictureBox13.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.attributem" +
+    "etadata.isretrievable";
             this.pictureBox13.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // pictureBox14
@@ -668,9 +665,8 @@
             this.pictureBox14.Size = new System.Drawing.Size(14, 14);
             this.pictureBox14.TabIndex = 57;
             this.pictureBox14.TabStop = false;
-            this.pictureBox14.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.entitymeta" +
-    "data.islogicalentity?view=dynamics-general-ce-9#microsoft-xrm-sdk-metadata-entit" +
-    "ymetadata-islogicalentity";
+            this.pictureBox14.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.attributem" +
+    "etadata.islogical";
             this.pictureBox14.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // pictureBox15
@@ -682,9 +678,8 @@
             this.pictureBox15.Size = new System.Drawing.Size(14, 14);
             this.pictureBox15.TabIndex = 56;
             this.pictureBox15.TabStop = false;
-            this.pictureBox15.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.entitymeta" +
-    "data.isauditenabled?view=dynamics-general-ce-9#microsoft-xrm-sdk-metadata-entity" +
-    "metadata-isauditenabled";
+            this.pictureBox15.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.attributem" +
+    "etadata.isauditenabled";
             this.pictureBox15.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // pictureBox16
@@ -696,9 +691,8 @@
             this.pictureBox16.Size = new System.Drawing.Size(14, 14);
             this.pictureBox16.TabIndex = 55;
             this.pictureBox16.TabStop = false;
-            this.pictureBox16.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.entitymeta" +
-    "data.isvalidforadvancedfind?view=dynamics-general-ce-9#microsoft-xrm-sdk-metadat" +
-    "a-entitymetadata-isvalidforadvancedfind";
+            this.pictureBox16.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.attributem" +
+    "etadata.isvalidforadvancedfind";
             this.pictureBox16.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // pictureBox17
@@ -710,8 +704,8 @@
             this.pictureBox17.Size = new System.Drawing.Size(14, 14);
             this.pictureBox17.TabIndex = 54;
             this.pictureBox17.TabStop = false;
-            this.pictureBox17.Tag = "https://docs.microsoft.com/en-us/powerapps/maker/data-platform/create-edit-nn-rel" +
-    "ationships";
+            this.pictureBox17.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.attributem" +
+    "etadata.isvalidforgrid";
             this.pictureBox17.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // pictureBox18
@@ -723,8 +717,8 @@
             this.pictureBox18.Size = new System.Drawing.Size(14, 14);
             this.pictureBox18.TabIndex = 53;
             this.pictureBox18.TabStop = false;
-            this.pictureBox18.Tag = "https://docs.microsoft.com/en-us/powerapps/developer/data-platform/virtual-entiti" +
-    "es/get-started-ve";
+            this.pictureBox18.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.attributem" +
+    "etadata.isvalidforread";
             this.pictureBox18.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // pictureBox19
@@ -736,8 +730,8 @@
             this.pictureBox19.Size = new System.Drawing.Size(14, 14);
             this.pictureBox19.TabIndex = 52;
             this.pictureBox19.TabStop = false;
-            this.pictureBox19.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.entitymeta" +
-    "data.iscustomizable";
+            this.pictureBox19.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.attributem" +
+    "etadata.iscustomizable";
             this.pictureBox19.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // pictureBox20
@@ -749,8 +743,8 @@
             this.pictureBox20.Size = new System.Drawing.Size(14, 14);
             this.pictureBox20.TabIndex = 51;
             this.pictureBox20.TabStop = false;
-            this.pictureBox20.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.entitymeta" +
-    "data.iscustomentity";
+            this.pictureBox20.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.attributem" +
+    "etadata.iscustomattribute";
             this.pictureBox20.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // pictureBox21
@@ -763,8 +757,7 @@
             this.pictureBox21.TabIndex = 50;
             this.pictureBox21.TabStop = false;
             this.pictureBox21.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.attributem" +
-    "etadata.ismanaged?view=dynamics-general-ce-9#microsoft-xrm-sdk-metadata-attribut" +
-    "emetadata-ismanaged";
+    "etadata.ismanaged";
             this.pictureBox21.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // chkARead
