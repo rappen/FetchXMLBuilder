@@ -572,6 +572,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             panGuidSelector.Visible = false;
             cmbValue.Items.Clear();
             cmbValue.DropDownStyle = ComboBoxStyle.Simple;
+            cmbValue.AutoCompleteMode = AutoCompleteMode.None;
             lblValueHint.Visible = false;
             if (cmbOperator.SelectedItem == null || !(cmbOperator.SelectedItem is OperatorItem oper))
             {
@@ -606,6 +607,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     cmbValue.Items.AddRange(options.Options.Select(o => new OptionsetItem(o)).ToArray());
                     var value = cmbValue.Text;
                     cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
+                    cmbValue.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                     cmbValue.SelectedItem = cmbValue.Items.OfType<OptionsetItem>().FirstOrDefault(i => i.GetValue() == value);
                 }
                 else if (attribute.Metadata is EntityNameAttributeMetadata)
@@ -616,6 +618,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                         cmbValue.Items.AddRange(entities.Select(e => new EntityNameItem(e.Value)).ToArray());
                         var value = cmbValue.Text;
                         cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
+                        cmbValue.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                         cmbValue.SelectedItem = cmbValue.Items.OfType<EntityNameItem>().FirstOrDefault(i => i.GetValue() == value);
                     }
                 }
@@ -658,6 +661,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     cmbValue.Items.Add(new OptionsetItem(new OptionMetadata(new Microsoft.Xrm.Sdk.Label(new LocalizedLabel("True", 0), null), 1)));
                     var value = cmbValue.Text;
                     cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
+                    cmbValue.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                     cmbValue.SelectedItem = cmbValue.Items.OfType<OptionsetItem>().FirstOrDefault(i => i.GetValue() == value);
                 }
                 else

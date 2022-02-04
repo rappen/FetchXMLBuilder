@@ -51,6 +51,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             cmbValue.Items.Clear();
             cmbValue.DropDownStyle = ComboBoxStyle.Simple;
+            cmbValue.AutoCompleteMode = AutoCompleteMode.None;
 
             var entities = fxb.GetDisplayEntities();
             if (entities != null && entities.ContainsKey(_entityName))
@@ -74,6 +75,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                         }
 
                         cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
+                        cmbValue.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                     }
                     else if (attribute is LookupAttributeMetadata lookupmeta)
                     {
