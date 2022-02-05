@@ -104,11 +104,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
             if (attribute.AttributeTypeName != null)
             {
-                var result = attribute.AttributeTypeName.Value;
-                if (result.EndsWith("Type"))
-                {
-                    return result.Substring(0, result.Length - 4);
-                }
+                return attribute.AttributeTypeName.Value.RemoveEnd("Type");
             }
             return attribute.AttributeType.ToString();
         }
@@ -135,6 +131,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     return indeterminate;
             }
             return string.Empty;
+        }
+
+        internal static string RemoveEnd(this string text, string remove)
+        {
+            if (text == null || string.IsNullOrEmpty(remove) || !text.EndsWith(remove))
+            {
+                return text;
+            }
+            return text.Substring(0, text.Length - remove.Length);
         }
     }
 }

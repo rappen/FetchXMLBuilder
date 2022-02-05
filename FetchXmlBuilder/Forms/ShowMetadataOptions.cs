@@ -1,4 +1,5 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Linq;
 using System.Windows.Forms;
@@ -13,6 +14,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             var form = new ShowMetadataOptions();
             form.fxb = fxb;
+            form.btnPreview.Enabled = fxb.Service != null;
             form.PopulateEntitiesSettings(fxb.settings.ShowEntities);
             form.PopulateAttributesSettings(fxb.settings.ShowAttributes);
             if (form.ShowDialog() == DialogResult.OK)
@@ -27,6 +29,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private ShowMetadataOptions()
         {
             InitializeComponent();
+            Preview(false);
         }
 
         private void PopulateEntitiesSettings(ShowMetaTypesEntity setting)
@@ -101,6 +104,35 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             {
                 chk.Text = chk.CheckState.TriToString(tag);
             }
+            UpdateSelections();
+        }
+
+        private void UpdateSelections(object sender = null, EventArgs e = null)
+        {
+            var settingsentities = GetEntitiesSettings();
+            var selentities = gbEntities.Controls
+                   .OfType<CheckBox>()
+                   .Where(c => c.CheckState != CheckState.Indeterminate)
+                   .Select(c => c.Text).ToList();
+            if (settingsentities.Ownerships != null)
+            {
+                selentities.AddRange(settingsentities.Ownerships
+                    .Select(o => o.ToString().RemoveEnd("Owned")).ToList());
+            }
+            lblEntities.Text = string.Join(", ", selentities.ToArray());
+            var selattributes = gbAttributes.Controls
+                   .OfType<CheckBox>()
+                   .Where(c => c.CheckState != CheckState.Indeterminate)
+                   .Select(c => c.Text).ToList();
+            lblAttributes.Text = string.Join(", ", selattributes.ToArray());
+            if (Width < 600)
+            {
+                return;
+            }
+            var entities = fxb.GetDisplayEntities(settingsentities);
+            gbPreviewEntities.Text = $"Preview Entities selected: {entities.Count}";
+            lbPreviewEntities.Items.Clear();
+            lbPreviewEntities.Items.AddRange(entities.Keys.ToArray());
         }
 
         private void btnEClear_Click(object sender, EventArgs e)
@@ -127,6 +159,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             FetchXmlBuilder.HelpClick(sender);
+        }
+
+        private void btnPreview_Click(object sender, EventArgs e)
+        {
+            Preview(Width < 600);
+        }
+
+        private void Preview(bool preview)
+        {
+            if (preview)
+            {
+                Width = gbPreviewEntities.Left + gbPreviewEntities.Width + 30;
+                UpdateSelections();
+            }
+            else
+            {
+                Width = gbAttributes.Left + gbAttributes.Width + 30;
+            }
         }
     }
 }

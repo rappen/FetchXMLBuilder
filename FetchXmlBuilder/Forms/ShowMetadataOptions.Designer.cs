@@ -57,7 +57,6 @@
             this.chkEManaged = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.gbAttributes = new System.Windows.Forms.GroupBox();
@@ -85,6 +84,11 @@
             this.chkACustomizable = new System.Windows.Forms.CheckBox();
             this.chkACustom = new System.Windows.Forms.CheckBox();
             this.chkAManaged = new System.Windows.Forms.CheckBox();
+            this.lblEntities = new System.Windows.Forms.Label();
+            this.lbPreviewEntities = new System.Windows.Forms.ListBox();
+            this.gbPreviewEntities = new System.Windows.Forms.GroupBox();
+            this.lblAttributes = new System.Windows.Forms.Label();
+            this.btnPreview = new System.Windows.Forms.Button();
             this.gbEntities.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
@@ -110,6 +114,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox19)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox20)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox21)).BeginInit();
+            this.gbPreviewEntities.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbEntities
@@ -354,6 +359,7 @@
             this.cmbEOwnership.Name = "cmbEOwnership";
             this.cmbEOwnership.Size = new System.Drawing.Size(120, 21);
             this.cmbEOwnership.TabIndex = 11;
+            this.cmbEOwnership.SelectedIndexChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkEActivityParty
             // 
@@ -502,42 +508,30 @@
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.panel1.Controls.Add(this.btnPreview);
             this.panel1.Controls.Add(this.label4);
-            this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
-            this.panel1.Location = new System.Drawing.Point(12, 403);
+            this.panel1.Location = new System.Drawing.Point(12, 438);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(475, 58);
+            this.panel1.Size = new System.Drawing.Size(477, 58);
             this.panel1.TabIndex = 101;
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(15, 22);
+            this.label4.Location = new System.Drawing.Point(3, 12);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(278, 26);
+            this.label4.Size = new System.Drawing.Size(183, 46);
             this.label4.TabIndex = 104;
-            this.label4.Text = "These selections will never change the queries you have,\r\njust to make finding ea" +
-    "sier.";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(15, 3);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(177, 13);
-            this.label3.TabIndex = 103;
-            this.label3.Text = "These are stored between sessions.";
+            this.label4.Text = "These selections will never change the queries you have, just to make finding eas" +
+    "ier.";
             // 
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(396, 19);
+            this.btnCancel.Location = new System.Drawing.Point(307, 22);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 1;
@@ -548,7 +542,7 @@
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(315, 19);
+            this.btnOK.Location = new System.Drawing.Point(226, 22);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 0;
@@ -932,6 +926,53 @@
             this.chkAManaged.UseVisualStyleBackColor = true;
             this.chkAManaged.CheckStateChanged += new System.EventHandler(this.checkBox_CheckStateChanged);
             // 
+            // lblEntities
+            // 
+            this.lblEntities.Location = new System.Drawing.Point(12, 388);
+            this.lblEntities.Name = "lblEntities";
+            this.lblEntities.Size = new System.Drawing.Size(227, 47);
+            this.lblEntities.TabIndex = 102;
+            this.lblEntities.Text = "All entities";
+            // 
+            // lbPreviewEntities
+            // 
+            this.lbPreviewEntities.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lbPreviewEntities.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbPreviewEntities.FormattingEnabled = true;
+            this.lbPreviewEntities.Location = new System.Drawing.Point(3, 16);
+            this.lbPreviewEntities.Name = "lbPreviewEntities";
+            this.lbPreviewEntities.Size = new System.Drawing.Size(241, 455);
+            this.lbPreviewEntities.TabIndex = 103;
+            // 
+            // gbPreviewEntities
+            // 
+            this.gbPreviewEntities.Controls.Add(this.lbPreviewEntities);
+            this.gbPreviewEntities.Location = new System.Drawing.Point(514, 12);
+            this.gbPreviewEntities.Name = "gbPreviewEntities";
+            this.gbPreviewEntities.Size = new System.Drawing.Size(247, 474);
+            this.gbPreviewEntities.TabIndex = 104;
+            this.gbPreviewEntities.TabStop = false;
+            this.gbPreviewEntities.Text = "Preview Entities selected";
+            // 
+            // lblAttributes
+            // 
+            this.lblAttributes.Location = new System.Drawing.Point(262, 388);
+            this.lblAttributes.Name = "lblAttributes";
+            this.lblAttributes.Size = new System.Drawing.Size(227, 47);
+            this.lblAttributes.TabIndex = 105;
+            this.lblAttributes.Text = "All attributes";
+            // 
+            // btnPreview
+            // 
+            this.btnPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPreview.Location = new System.Drawing.Point(407, 22);
+            this.btnPreview.Name = "btnPreview";
+            this.btnPreview.Size = new System.Drawing.Size(64, 23);
+            this.btnPreview.TabIndex = 105;
+            this.btnPreview.Text = "Preview";
+            this.btnPreview.UseVisualStyleBackColor = true;
+            this.btnPreview.Click += new System.EventHandler(this.btnPreview_Click);
+            // 
             // ShowMetadataOptions
             // 
             this.AcceptButton = this.btnOK;
@@ -939,7 +980,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(499, 461);
+            this.ClientSize = new System.Drawing.Size(773, 496);
+            this.Controls.Add(this.lblAttributes);
+            this.Controls.Add(this.gbPreviewEntities);
+            this.Controls.Add(this.lblEntities);
             this.Controls.Add(this.gbAttributes);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.gbEntities);
@@ -964,7 +1008,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.gbAttributes.ResumeLayout(false);
             this.gbAttributes.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox22)).EndInit();
@@ -978,6 +1021,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox19)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox20)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox21)).EndInit();
+            this.gbPreviewEntities.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1037,8 +1081,12 @@
         private System.Windows.Forms.PictureBox pictureBox20;
         private System.Windows.Forms.PictureBox pictureBox21;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.PictureBox pictureBox22;
         internal System.Windows.Forms.CheckBox chkAAttributeOf;
+        private System.Windows.Forms.Label lblEntities;
+        private System.Windows.Forms.ListBox lbPreviewEntities;
+        private System.Windows.Forms.GroupBox gbPreviewEntities;
+        private System.Windows.Forms.Label lblAttributes;
+        private System.Windows.Forms.Button btnPreview;
     }
 }
