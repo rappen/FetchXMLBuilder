@@ -1,4 +1,5 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.DockControls;
+using Microsoft.Xrm.Sdk.Metadata;
 using ScintillaNET;
 using System;
 using System.Collections.Generic;
@@ -64,6 +65,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public CheckState IsActivityParty { get; set; } = CheckState.Indeterminate; //E
         public CheckState Virtual { get; set; } = CheckState.Indeterminate;  //E
         public int OwnershipType { get; set; } = 0;   //E
+        public OwnershipTypes[] Ownerships
+        {
+            get
+            {
+                switch (OwnershipType)
+                {
+                    case 1:
+                        return new OwnershipTypes[] { OwnershipTypes.OrganizationOwned };
+                    case 2:
+                        return new OwnershipTypes[] { OwnershipTypes.UserOwned, OwnershipTypes.TeamOwned };
+                    case 3:
+                        return new OwnershipTypes[] { OwnershipTypes.BusinessOwned, OwnershipTypes.BusinessParented };
+                    case 4:
+                        return new OwnershipTypes[] { OwnershipTypes.None };
+                }
+                return null;
+            }
+        }
     }
 
     public class ShowMetaTypesAttribute : ShowMetaTypes

@@ -566,28 +566,29 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
-        internal AttributeMetadata[] GetDisplayAttributes(string entityName)
+        internal AttributeMetadata[] GetDisplayAttributes(string entityName) => GetDisplayAttributes(entityName, settings.ShowAttributes);
+
+        internal AttributeMetadata[] GetDisplayAttributes(string entityName, ShowMetaTypesAttribute selectattributes)
         {
             var result = new List<AttributeMetadata>();
-            AttributeMetadata[] attributes = null;
             if (entities != null && entities.ContainsKey(entityName))
             {
-                attributes = entities[entityName].Attributes;
+                var attributes = entities[entityName].Attributes;
                 if (attributes != null)
                 {
                     foreach (var attribute in attributes)
                     {
-                        if (!CheckMetadata(settings.ShowAttributes.IsManaged, attribute.IsManaged)) { continue; }
-                        if (!CheckMetadata(settings.ShowAttributes.IsCustom, attribute.IsCustomAttribute)) { continue; }
-                        if (!CheckMetadata(settings.ShowAttributes.IsCustomizable, attribute.IsCustomizable)) { continue; }
-                        if (!CheckMetadata(settings.ShowAttributes.IsValidForAdvancedFind, attribute.IsValidForAdvancedFind)) { continue; }
-                        if (!CheckMetadata(settings.ShowAttributes.IsAuditEnabled, attribute.IsAuditEnabled)) { continue; }
-                        if (!CheckMetadata(settings.ShowAttributes.IsLogical, attribute.IsLogical)) { continue; }
-                        if (!CheckMetadata(settings.ShowAttributes.IsValidForRead, attribute.IsValidForRead)) { continue; }
-                        if (!CheckMetadata(settings.ShowAttributes.IsValidForGrid, attribute.IsValidForGrid)) { continue; }
-                        if (!CheckMetadata(settings.ShowAttributes.IsFiltered, attribute.IsFilterable)) { continue; }
-                        if (!CheckMetadata(settings.ShowAttributes.IsRetrievable, attribute.IsRetrievable)) { continue; }
-                        if (!CheckMetadata(settings.ShowAttributes.AttributeOf, !string.IsNullOrEmpty(attribute.AttributeOf))) { continue; }
+                        if (!CheckMetadata(selectattributes.IsManaged, attribute.IsManaged)) { continue; }
+                        if (!CheckMetadata(selectattributes.IsCustom, attribute.IsCustomAttribute)) { continue; }
+                        if (!CheckMetadata(selectattributes.IsCustomizable, attribute.IsCustomizable)) { continue; }
+                        if (!CheckMetadata(selectattributes.IsValidForAdvancedFind, attribute.IsValidForAdvancedFind)) { continue; }
+                        if (!CheckMetadata(selectattributes.IsAuditEnabled, attribute.IsAuditEnabled)) { continue; }
+                        if (!CheckMetadata(selectattributes.IsLogical, attribute.IsLogical)) { continue; }
+                        if (!CheckMetadata(selectattributes.IsValidForRead, attribute.IsValidForRead)) { continue; }
+                        if (!CheckMetadata(selectattributes.IsValidForGrid, attribute.IsValidForGrid)) { continue; }
+                        if (!CheckMetadata(selectattributes.IsFiltered, attribute.IsFilterable)) { continue; }
+                        if (!CheckMetadata(selectattributes.IsRetrievable, attribute.IsRetrievable)) { continue; }
+                        if (!CheckMetadata(selectattributes.AttributeOf, !string.IsNullOrEmpty(attribute.AttributeOf))) { continue; }
                         result.Add(attribute);
                     }
                 }
@@ -605,32 +606,30 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return null;
         }
 
-        internal Dictionary<string, EntityMetadata> GetDisplayEntities()
+        internal Dictionary<string, EntityMetadata> GetDisplayEntities() => GetDisplayEntities(settings.ShowEntities);
+
+        internal Dictionary<string, EntityMetadata> GetDisplayEntities(ShowMetaTypesEntity selectentities)
         {
             var result = new Dictionary<string, EntityMetadata>();
             if (entities != null)
             {
                 foreach (var entity in entities)
                 {
-                    if (!CheckMetadata(settings.ShowEntities.IsManaged, entity.Value.IsManaged)) { continue; }
-                    if (!CheckMetadata(settings.ShowEntities.IsCustom, entity.Value.IsCustomEntity)) { continue; }
-                    if (!CheckMetadata(settings.ShowEntities.IsCustomizable, entity.Value.IsCustomizable)) { continue; }
-                    if (!CheckMetadata(settings.ShowEntities.IsValidForAdvancedFind, entity.Value.IsValidForAdvancedFind)) { continue; }
-                    if (!CheckMetadata(settings.ShowEntities.IsAuditEnabled, entity.Value.IsAuditEnabled)) { continue; }
-                    if (!CheckMetadata(settings.ShowEntities.IsLogical, entity.Value.IsLogicalEntity)) { continue; }
-                    if (!CheckMetadata(settings.ShowEntities.IsIntersect, entity.Value.IsIntersect)) { continue; }
-                    if (!CheckMetadata(settings.ShowEntities.IsActivity, entity.Value.IsActivity)) { continue; }
-                    if (!CheckMetadata(settings.ShowEntities.IsActivityParty, entity.Value.IsActivityParty)) { continue; }
-                    if (!CheckMetadata(settings.ShowEntities.Virtual, entity.Value.DataProviderId.HasValue)) { continue; }
+                    if (!CheckMetadata(selectentities.IsManaged, entity.Value.IsManaged)) { continue; }
+                    if (!CheckMetadata(selectentities.IsCustom, entity.Value.IsCustomEntity)) { continue; }
+                    if (!CheckMetadata(selectentities.IsCustomizable, entity.Value.IsCustomizable)) { continue; }
+                    if (!CheckMetadata(selectentities.IsValidForAdvancedFind, entity.Value.IsValidForAdvancedFind)) { continue; }
+                    if (!CheckMetadata(selectentities.IsAuditEnabled, entity.Value.IsAuditEnabled)) { continue; }
+                    if (!CheckMetadata(selectentities.IsLogical, entity.Value.IsLogicalEntity)) { continue; }
+                    if (!CheckMetadata(selectentities.IsIntersect, entity.Value.IsIntersect)) { continue; }
+                    if (!CheckMetadata(selectentities.IsActivity, entity.Value.IsActivity)) { continue; }
+                    if (!CheckMetadata(selectentities.IsActivityParty, entity.Value.IsActivityParty)) { continue; }
+                    if (!CheckMetadata(selectentities.Virtual, entity.Value.DataProviderId.HasValue)) { continue; }
+                    if (!CheckMetadata(selectentities.Ownerships, entity.Value.OwnershipType)) { continue; }
                     result.Add(entity.Key, entity.Value);
                 }
             }
             return result;
-        }
-
-        private static bool CheckMetadata(CheckState checkstate, BooleanManagedProperty metafield)
-        {
-            return CheckMetadata(checkstate, metafield?.Value);
         }
 
         private static bool CheckMetadata(CheckState checkstate, bool? metafield)
@@ -644,6 +643,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     case CheckState.Unchecked:
                         return metafield.Value == false;
                 }
+            }
+            return true;
+        }
+
+        private static bool CheckMetadata(CheckState checkstate, BooleanManagedProperty metafield)
+        {
+            return CheckMetadata(checkstate, metafield?.Value);
+        }
+
+        private static bool CheckMetadata(OwnershipTypes[] options, OwnershipTypes? metafield)
+        {
+            if (options != null && options.Length > 0)
+            {
+                return metafield != null && options.Contains(metafield.Value);
             }
             return true;
         }
@@ -1991,7 +2004,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 EnableControls();
             }
         }
-    
+
         private void ShowODataControl(ref ODataControl control, int version)
         {
             LogUse($"Show-OData{version}.0");
