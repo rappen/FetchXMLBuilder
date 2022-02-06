@@ -288,7 +288,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.llShowWelcome.Size = new System.Drawing.Size(81, 13);
             this.llShowWelcome.TabIndex = 2;
             this.llShowWelcome.TabStop = true;
-            this.llShowWelcome.Text = "Show Releases";
+            this.llShowWelcome.Text = "Show Release Notes";
             this.llShowWelcome.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llShowWelcome_LinkClicked);
             // 
             // btnCancel

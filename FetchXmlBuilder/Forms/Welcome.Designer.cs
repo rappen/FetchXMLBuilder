@@ -202,7 +202,7 @@
             this.MinimumSize = new System.Drawing.Size(880, 580);
             this.Name = "Welcome";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Welcome to FetchXML Builder";
+            this.Text = "FetchXML Builder - Release Notes";
             this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.webRelease)).EndInit();

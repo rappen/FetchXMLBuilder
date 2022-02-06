@@ -184,7 +184,7 @@
             this.llShowWelcome.Size = new System.Drawing.Size(114, 13);
             this.llShowWelcome.TabIndex = 17;
             this.llShowWelcome.TabStop = true;
-            this.llShowWelcome.Text = "Show welcome screen";
+            this.llShowWelcome.Text = "Show Release Notes";
             this.llShowWelcome.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llShowWelcome_LinkClicked);
             // 
             // About
