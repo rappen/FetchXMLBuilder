@@ -52,6 +52,7 @@ Jonas", "Anonymous statistics", MessageBoxButtons.OK, MessageBoxIcon.Information
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             FetchXmlBuilder.OpenURL(webRelease.Source.ToString());
+            Close();
         }
     }
 }
