@@ -237,6 +237,7 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Error Detail";
+            this.TopMost = true;
             this.panButton.ResumeLayout(false);
             this.panInfo.ResumeLayout(false);
             this.panInfo.PerformLayout();
