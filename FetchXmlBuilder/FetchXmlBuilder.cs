@@ -965,6 +965,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 // Reset some settings when new version is deployed
                 settings.CurrentVersion = version;
+                SaveSetting();
                 LogUse("ShowWelcome");
                 Welcome.ShowWelcome(this);
             }
