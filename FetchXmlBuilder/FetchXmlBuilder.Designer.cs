@@ -108,10 +108,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             this.tsbView,
             this.tsbAbort,
             this.tsbReturnToCaller,
-            this.toolStripSeparator7,
-            this.tsbBDU,
             this.toolStripSeparator3,
             this.tsbOptions,
+            this.toolStripSeparator7,
+            this.tsbBDU,
             this.tslAbout});
             this.toolStripMain.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolStripMain.Location = new System.Drawing.Point(0, 0);
