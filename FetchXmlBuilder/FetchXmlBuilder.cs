@@ -493,6 +493,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiSaveCWP.Enabled = enabled && Service != null && dockControlBuilder?.FetchChanged == true && !string.IsNullOrEmpty(CWPFeed);
                     tsbView.Enabled = enabled;
                     tsbExecute.Enabled = enabled && Service != null;
+                    tsmiSelect.Enabled = enabled && Service != null;
                     tsbAbort.Visible = settings.Results.RetrieveAllPages;
                     tsbBDU.Visible = bduexists && callerArgs?.SourcePlugin != "Bulk Data Updater";
                     tsbBDU.Enabled = enabled && (dockControlBuilder?.IsFetchAggregate() == false);
@@ -1227,7 +1228,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     //    });
                     //}
 
-                    eventargs.Result = Service.LoadEntities();
+                    eventargs.Result = Service.LoadEntities(ConnectionDetail.OrganizationMajorVersion, ConnectionDetail.OrganizationMinorVersion);
                 })
             {
                 PostWorkCallBack = (completedargs) =>
