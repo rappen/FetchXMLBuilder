@@ -781,7 +781,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     foreach (var view in sysviews.Entities)
                     {
                         var entityname = view["returnedtypecode"].ToString();
-                        if (!string.IsNullOrWhiteSpace(entityname) && entities.ContainsKey(entityname))
+                        if (!string.IsNullOrWhiteSpace(entityname) && entities != null && entities.ContainsKey(entityname))
                         {
                             if (views == null)
                             {
@@ -802,7 +802,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     foreach (var view in userviews.Entities)
                     {
                         var entityname = view["returnedtypecode"].ToString();
-                        if (!string.IsNullOrWhiteSpace(entityname) && entities.ContainsKey(entityname))
+                        if (!string.IsNullOrWhiteSpace(entityname) && entities != null && entities.ContainsKey(entityname))
                         {
                             if (views == null)
                             {
@@ -1130,11 +1130,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private EntityMetadata GetEntity(int etc)
         {
-            foreach (EntityMetadata entity in entities.Values)
+            if (entities != null)
             {
-                if (entity.ObjectTypeCode == etc)
+                foreach (EntityMetadata entity in entities.Values)
                 {
-                    return entity;
+                    if (entity.ObjectTypeCode == etc)
+                    {
+                        return entity;
+                    }
                 }
             }
             return null;
@@ -1285,6 +1288,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 if (Result != null)
                 {
+                    if (entities == null)
+                    {
+                        entities = new Dictionary<string, EntityMetadata>();
+                    }
                     if (entities.ContainsKey(entityName))
                     {
                         entities[entityName] = Result;
