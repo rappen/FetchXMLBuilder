@@ -82,6 +82,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         public FetchXmlBuilder()
         {
             InitializeComponent();
+
+            // Tips to handle all errors from
+            // https://stackoverflow.com/questions/5762526/how-can-i-make-something-that-catches-all-unhandled-exceptions-in-a-winforms-a
+            // Add the event handler for handling non-UI thread exceptions to the event. 
+            //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Error_UnhandledException);
+
             ai = new AppInsights(aiEndpoint, aiKey, Assembly.GetExecutingAssembly(), "FetchXML Builder");
             var theme = new VS2015LightTheme();
             dockContainer.Theme = theme;
@@ -104,6 +110,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 "IsLogical",
                 "EntityLogicalName"
             }).ToArray();
+        }
+
+        private void Error_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show(e.IsTerminating.ToString());
+            if (e.ExceptionObject is Exception ex)
+            {
+                LogError($"Unhandling error: {ex}");
+                ErrorDetail.ShowDialog(this, e.ExceptionObject as Exception);
+            }
+            else
+            {
+                LogError($"Unhandling error: {e}");
+                MessageBox.Show("Unhandeled error:\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         #endregion Public Constructors
