@@ -7,32 +7,34 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 {
     public partial class ErrorDetail : Form
     {
+        private DateTime timestamp;
+
         public static void ShowDialog(Control owner, Exception error, string heading = null)
         {
             if (error == null)
             {
                 return;
             }
-            var form = new ErrorDetail();
-            if (!string.IsNullOrEmpty(heading))
-            {
-                form.Text = heading;
-            }
-            form.AddErrorInfo(error);
-            form.Height = 200;
-            form.ShowDialog(owner);
+            new ErrorDetail(error, heading).ShowDialog(owner);
         }
 
-        public ErrorDetail()
+        private ErrorDetail(Exception error, string heading)
         {
+            timestamp = DateTime.Now;
             InitializeComponent();
+            if (!string.IsNullOrEmpty(heading))
+            {
+                Text = heading;
+            }
+            AddErrorInfo(error);
+            Height = 200;
         }
 
         private void AddErrorInfo(Exception error)
         {
             try
             {
-                 var msg = error.Message;
+                var msg = error.Message;
                 if (error is FaultException<OrganizationServiceFault> srcexc)
                 {
                     msg = srcexc.Message;
@@ -43,7 +45,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                         {
                             msg = orgerr.InnerFault.Message;
                         }
-                        txtErrorCode.Text = orgerr.ErrorCode.ToString();
+                        txtErrorCode.Text = "0x" + orgerr.ErrorCode.ToString("X");
                     }
                 }
                 if (msg.StartsWith("System") && msg.Contains(": ") && msg.Split(':')[0].Length < 50)
@@ -74,7 +76,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             if (Height < 300)
             {
-                Height = 600;
+                Height = 550;
             }
             else
             {
@@ -82,9 +84,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             }
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void btnCopy_Click(object sender, EventArgs e)
         {
-            FetchXmlBuilder.OpenURL("https://github.com/rappen/FetchXMLBuilder/discussions/617");
+            var details = "Error Time: " + timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff") + "\n";
+            details += txtException.Text;
+            if (!string.IsNullOrEmpty(txtErrorCode.Text))
+            {
+                details += $" ({txtErrorCode.Text})";
+            }
+            details += $"\n{txtMessage.Text}";
+            details += $"\n{txtCallStack.Text}";
+            Clipboard.SetText(details);
+            MessageBox.Show("Copied all details.", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
