@@ -1,25 +1,31 @@
 ﻿using Microsoft.Xrm.Sdk;
+using Rappen.XTB.Helpers.XTBExtensions;
 using System;
 using System.ServiceModel;
 using System.Windows.Forms;
+using XrmToolBox.Extensibility;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 {
     public partial class ErrorDetail : Form
     {
         private DateTime timestamp;
+        private Exception exception;
+        private PluginControlBase owner;
 
-        public static void ShowDialog(Control owner, Exception error, string heading = null)
+        public static void ShowDialog(PluginControlBase owner, Exception error, string heading = null)
         {
             if (error == null)
             {
                 return;
             }
-            new ErrorDetail(error, heading).ShowDialog(owner);
+            new ErrorDetail(owner, error, heading).ShowDialog(owner);
         }
 
-        private ErrorDetail(Exception error, string heading)
+        private ErrorDetail(PluginControlBase owner, Exception error, string heading)
         {
+            this.owner = owner;
+            exception = error;
             timestamp = DateTime.Now;
             InitializeComponent();
             if (!string.IsNullOrEmpty(heading))
@@ -76,10 +82,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             if (Height < 300)
             {
+                btnDetails.Text = "Details <<";
+                panDetails.Visible = true;
+                btnCopy.Visible = true;
+                btnIssue.Visible = true;
                 Height = 550;
             }
             else
             {
+                btnDetails.Text = "Details >>";
+                panDetails.Visible = false;
+                btnCopy.Visible = false;
+                btnIssue.Visible = false;
                 Height = 200;
             }
         }
@@ -96,6 +110,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             details += $"\n{txtCallStack.Text}";
             Clipboard.SetText(details);
             MessageBox.Show("Copied all details.", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void btnIssue_Click(object sender, EventArgs e)
+        {
+            GitHub.CreateNewIssueFromError(owner, exception);
+            TopMost = false;
         }
     }
 }

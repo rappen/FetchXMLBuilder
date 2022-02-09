@@ -31,11 +31,12 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ErrorDetail));
             this.txtInfo = new System.Windows.Forms.TextBox();
             this.panButton = new System.Windows.Forms.Panel();
+            this.btnCopy = new System.Windows.Forms.Button();
             this.btnDetails = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.panInfo = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.panel3 = new System.Windows.Forms.Panel();
+            this.panDetails = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.label3 = new System.Windows.Forms.Label();
             this.txtMessage = new System.Windows.Forms.TextBox();
@@ -45,11 +46,11 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtException = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnCopy = new System.Windows.Forms.Button();
+            this.btnIssue = new System.Windows.Forms.Button();
             this.panButton.SuspendLayout();
             this.panInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.panel3.SuspendLayout();
+            this.panDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -73,14 +74,28 @@
             // 
             // panButton
             // 
-            this.panButton.Controls.Add(this.btnCopy);
             this.panButton.Controls.Add(this.btnDetails);
+            this.panButton.Controls.Add(this.btnIssue);
+            this.panButton.Controls.Add(this.btnCopy);
             this.panButton.Controls.Add(this.btnClose);
             this.panButton.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panButton.Location = new System.Drawing.Point(0, 356);
             this.panButton.Name = "panButton";
             this.panButton.Size = new System.Drawing.Size(577, 50);
             this.panButton.TabIndex = 0;
+            // 
+            // btnCopy
+            // 
+            this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCopy.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnCopy.Location = new System.Drawing.Point(162, 15);
+            this.btnCopy.Name = "btnCopy";
+            this.btnCopy.Size = new System.Drawing.Size(93, 23);
+            this.btnCopy.TabIndex = 2;
+            this.btnCopy.Text = "Copy Details";
+            this.btnCopy.UseVisualStyleBackColor = true;
+            this.btnCopy.Visible = false;
+            this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
             // 
             // btnDetails
             // 
@@ -89,16 +104,16 @@
             this.btnDetails.Name = "btnDetails";
             this.btnDetails.Size = new System.Drawing.Size(75, 23);
             this.btnDetails.TabIndex = 1;
-            this.btnDetails.Text = "Details";
+            this.btnDetails.Text = "Details >>";
             this.btnDetails.UseVisualStyleBackColor = true;
             this.btnDetails.Click += new System.EventHandler(this.btnDetails_Click);
             // 
             // btnClose
             // 
-            this.btnClose.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnClose.Location = new System.Drawing.Point(238, 15);
+            this.btnClose.Location = new System.Drawing.Point(402, 15);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(146, 23);
             this.btnClose.TabIndex = 0;
@@ -124,18 +139,19 @@
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
             // 
-            // panel3
+            // panDetails
             // 
-            this.panel3.Controls.Add(this.splitContainer1);
-            this.panel3.Controls.Add(this.txtErrorCode);
-            this.panel3.Controls.Add(this.label2);
-            this.panel3.Controls.Add(this.txtException);
-            this.panel3.Controls.Add(this.label1);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(0, 104);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(577, 252);
-            this.panel3.TabIndex = 2;
+            this.panDetails.Controls.Add(this.splitContainer1);
+            this.panDetails.Controls.Add(this.txtErrorCode);
+            this.panDetails.Controls.Add(this.label2);
+            this.panDetails.Controls.Add(this.txtException);
+            this.panDetails.Controls.Add(this.label1);
+            this.panDetails.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panDetails.Location = new System.Drawing.Point(0, 104);
+            this.panDetails.Name = "panDetails";
+            this.panDetails.Size = new System.Drawing.Size(577, 252);
+            this.panDetails.TabIndex = 2;
+            this.panDetails.Visible = false;
             // 
             // splitContainer1
             // 
@@ -195,7 +211,7 @@
             this.txtCallStack.Name = "txtCallStack";
             this.txtCallStack.ReadOnly = true;
             this.txtCallStack.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtCallStack.Size = new System.Drawing.Size(476, 86);
+            this.txtCallStack.Size = new System.Drawing.Size(476, 82);
             this.txtCallStack.TabIndex = 6;
             this.txtCallStack.WordWrap = false;
             // 
@@ -248,17 +264,18 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Exception";
             // 
-            // btnCopy
+            // btnIssue
             // 
-            this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCopy.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnCopy.Location = new System.Drawing.Point(472, 15);
-            this.btnCopy.Name = "btnCopy";
-            this.btnCopy.Size = new System.Drawing.Size(75, 23);
-            this.btnCopy.TabIndex = 2;
-            this.btnCopy.Text = "Copy";
-            this.btnCopy.UseVisualStyleBackColor = true;
-            this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
+            this.btnIssue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnIssue.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnIssue.Location = new System.Drawing.Point(261, 15);
+            this.btnIssue.Name = "btnIssue";
+            this.btnIssue.Size = new System.Drawing.Size(93, 23);
+            this.btnIssue.TabIndex = 3;
+            this.btnIssue.Text = "Create Issue...";
+            this.btnIssue.UseVisualStyleBackColor = true;
+            this.btnIssue.Visible = false;
+            this.btnIssue.Click += new System.EventHandler(this.btnIssue_Click);
             // 
             // ErrorDetail
             // 
@@ -269,7 +286,7 @@
             this.CancelButton = this.btnClose;
             this.ClientSize = new System.Drawing.Size(577, 406);
             this.ControlBox = false;
-            this.Controls.Add(this.panel3);
+            this.Controls.Add(this.panDetails);
             this.Controls.Add(this.panButton);
             this.Controls.Add(this.panInfo);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
@@ -283,8 +300,8 @@
             this.panInfo.ResumeLayout(false);
             this.panInfo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
+            this.panDetails.ResumeLayout(false);
+            this.panDetails.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -300,7 +317,7 @@
         private System.Windows.Forms.Panel panButton;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Panel panInfo;
-        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panDetails;
         private System.Windows.Forms.TextBox txtMessage;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtErrorCode;
@@ -313,5 +330,6 @@
         private System.Windows.Forms.TextBox txtCallStack;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnCopy;
+        private System.Windows.Forms.Button btnIssue;
     }
 }
