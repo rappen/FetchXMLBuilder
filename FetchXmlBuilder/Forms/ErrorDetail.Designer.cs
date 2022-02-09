@@ -42,12 +42,19 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtException = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label4 = new System.Windows.Forms.Label();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtCallStack = new System.Windows.Forms.TextBox();
             this.panButton.SuspendLayout();
             this.panInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtInfo
@@ -70,7 +77,7 @@
             this.panButton.Controls.Add(this.btnDetails);
             this.panButton.Controls.Add(this.btnClose);
             this.panButton.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panButton.Location = new System.Drawing.Point(0, 280);
+            this.panButton.Location = new System.Drawing.Point(0, 410);
             this.panButton.Name = "panButton";
             this.panButton.Size = new System.Drawing.Size(577, 50);
             this.panButton.TabIndex = 0;
@@ -119,18 +126,17 @@
             // 
             // panel3
             // 
-            this.panel3.Controls.Add(this.label4);
-            this.panel3.Controls.Add(this.linkLabel1);
-            this.panel3.Controls.Add(this.txtMessage);
-            this.panel3.Controls.Add(this.label3);
+            this.panel3.Controls.Add(this.splitContainer1);
             this.panel3.Controls.Add(this.txtErrorCode);
             this.panel3.Controls.Add(this.label2);
             this.panel3.Controls.Add(this.txtException);
             this.panel3.Controls.Add(this.label1);
+            this.panel3.Controls.Add(this.label4);
+            this.panel3.Controls.Add(this.linkLabel1);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 104);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(577, 176);
+            this.panel3.Size = new System.Drawing.Size(577, 306);
             this.panel3.TabIndex = 2;
             // 
             // txtMessage
@@ -139,17 +145,17 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtMessage.BackColor = System.Drawing.SystemColors.Window;
-            this.txtMessage.Location = new System.Drawing.Point(72, 77);
+            this.txtMessage.Location = new System.Drawing.Point(72, 4);
             this.txtMessage.Multiline = true;
             this.txtMessage.Name = "txtMessage";
             this.txtMessage.ReadOnly = true;
-            this.txtMessage.Size = new System.Drawing.Size(476, 70);
+            this.txtMessage.Size = new System.Drawing.Size(476, 69);
             this.txtMessage.TabIndex = 5;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 80);
+            this.label3.Location = new System.Drawing.Point(12, 7);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(50, 13);
             this.label3.TabIndex = 4;
@@ -195,12 +201,22 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Exception";
             // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 276);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(52, 13);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "More Info";
+            // 
             // linkLabel1
             // 
             this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(28, 38);
-            this.linkLabel1.Location = new System.Drawing.Point(70, 156);
+            this.linkLabel1.Location = new System.Drawing.Point(70, 278);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(342, 17);
             this.linkLabel1.TabIndex = 6;
@@ -209,15 +225,52 @@
             this.linkLabel1.UseCompatibleTextRendering = true;
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
-            // label4
+            // splitContainer1
             // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 154);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(52, 13);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "More Info";
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 71);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.label3);
+            this.splitContainer1.Panel1.Controls.Add(this.txtMessage);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.txtCallStack);
+            this.splitContainer1.Panel2.Controls.Add(this.label5);
+            this.splitContainer1.Size = new System.Drawing.Size(577, 190);
+            this.splitContainer1.SplitterDistance = 76;
+            this.splitContainer1.SplitterWidth = 8;
+            this.splitContainer1.TabIndex = 8;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(13, 4);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(55, 13);
+            this.label5.TabIndex = 0;
+            this.label5.Text = "Call Stack";
+            // 
+            // txtCallStack
+            // 
+            this.txtCallStack.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCallStack.BackColor = System.Drawing.SystemColors.Window;
+            this.txtCallStack.Location = new System.Drawing.Point(71, 4);
+            this.txtCallStack.Multiline = true;
+            this.txtCallStack.Name = "txtCallStack";
+            this.txtCallStack.ReadOnly = true;
+            this.txtCallStack.Size = new System.Drawing.Size(476, 99);
+            this.txtCallStack.TabIndex = 6;
+            this.txtCallStack.WordWrap = false;
             // 
             // ErrorDetail
             // 
@@ -226,7 +279,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(577, 330);
+            this.ClientSize = new System.Drawing.Size(577, 460);
             this.ControlBox = false;
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panButton);
@@ -244,6 +297,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -264,5 +323,8 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.TextBox txtCallStack;
+        private System.Windows.Forms.Label label5;
     }
 }

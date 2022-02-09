@@ -62,6 +62,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 txtInfo.Text = msg;
                 txtException.Text = error.GetType().ToString();
                 txtMessage.Text = error.Message;
+                txtCallStack.Text = error.StackTrace.Trim();
             }
             catch
             {
@@ -73,7 +74,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             if (Height < 300)
             {
-                Height = 400;
+                Height = 600;
             }
             else
             {
