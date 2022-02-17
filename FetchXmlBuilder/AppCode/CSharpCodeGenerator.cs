@@ -1,69 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.Linq;
+using System.Security;
+using System.Text;
+using System.Xml;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
-    public class CSharpCodeGenerator : CodeGeneratorBase
+    public class CSharpCodeGenerator
     {
-         public static string GetCSharpCode(string fetchXml)
+        public static string GetCSharpCode(string fetchXml)
         {
-            var data = new List<NameValue>();
-            var fetch = string.Empty;
-            var name = string.Empty;
-            fetchXml = fetchXml.Replace("\"", "'");
-            var lines = fetchXml.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var line in lines)
+            var data = new Dictionary<string, string>();
+            var xml = new XmlDocument();
+            xml.LoadXml(fetchXml);
+
+            var conditionAttributes = xml.SelectNodes("//condition/@value");
+
+            foreach (XmlAttribute attribute in conditionAttributes)
             {
-                var space = line.Substring(0, line.IndexOf("<"));
-                if (line.Trim().StartsWith("<condition"))
-                {
-                    var pattern = "('(.*?)' |'(.*?)'/>)";
-                    var matches = new Regex(pattern).Matches(line);
-                    name = matches[0].Value.Substring(1, matches[0].Value.Length - 3);
-                    if (matches.Count == 3 || matches.Count == 5)
-                    {
-                        var @operator = matches[1].Value.Substring(1, matches[1].Value.Length - 3);
-                        var value = matches[matches.Count - 1].Value.Substring(1, matches[matches.Count - 1].Value.Length - 3);
-                        var fetchData = GetFetchData(data, name, value);
-                        var codeValue = "fetchData." + fetchData.Name + "/*" + fetchData.Value + "*/";
-                        data.Add(new NameValue { Name = fetchData.Name, Value = fetchData.Value });
-                        fetch += space + "<condition attribute='" + name + "' operator='" + @operator + "' value='{" + codeValue + "}'/>\n";
-                    }
-                    else
-                        fetch += line + "\n";
-                }
-                else if (line.Trim().StartsWith("<value"))
-                {
-                    var pattern = ">.*<";
-                    var matches = new Regex(pattern).Matches(line);
-                    if (matches.Count == 1)
-                    {
-                        var value = matches[0].Value.Substring(1, matches[0].Value.Length - 2);
-                        var fetchData = GetFetchData(data, name, value);
-                        var codeValue = "fetchData." + fetchData.Name + "/*" + fetchData.Value + "*/";
-                        data.Add(new NameValue { Name = fetchData.Name, Value = fetchData.Value });
-                        fetch += space + "<value>{" + codeValue + "}</value>\n";
-                    }
-                    else
-                        fetch += line + "\n";
-                }
-                else
-                    fetch += line + "\n";
+                var value = AddData(attribute.OwnerElement.GetAttribute("attribute"), attribute.Value, data);
+                attribute.Value = $"{{{value}}}";
             }
-            var cs = string.Empty;
+
+            var conditionValues = xml.SelectNodes("//condition/value");
+
+            foreach (XmlElement val in conditionValues)
+            {
+                var value = AddData(((XmlElement)val.ParentNode).GetAttribute("attribute"), val.InnerText.Trim(), data);
+                val.InnerText = $"{{{value}}}";
+            }
+
+            var cs = "";
+
             if (data.Count > 0)
             {
-                cs += "\tvar fetchData = new {\r\n";
-                foreach (var nv in data)
-                    cs += "\t\t" + nv.Name + " = " + "\"" + nv.Value + "\",\r\n";
-                cs = cs.Substring(0, cs.Length - ",\r\n".Length);
-                cs += "\n\t};\r\n";
+                cs = "var fetchData = new {\r\n  " + String.Join(",\r\n  ", data.Select(kvp => $"{kvp.Key} = \"{kvp.Value.Replace("\\", "\\\\").Replace("\"", "\\\"")}\"")) + "\r\n};\r\n";
             }
-            cs += "\tvar fetchXml = $@\"\r\n";
-            cs += fetch.Substring(0, fetch.Length - 1);
-            cs += "\";\r\n";
+
+            var sb = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings
+            {
+                Indent = true,
+                IndentChars = "  ",
+                NewLineChars = "\r\n",
+                NewLineHandling = NewLineHandling.Replace
+            };
+            using (var writer = XmlWriter.Create(sb, settings))
+            {
+                xml.Save(writer);
+            }
+
+            cs += "var fetchXml = $@\"" + sb.Replace("\"", "\"\"").ToString() + "\";";
+
             return cs;
+        }
+
+        private static string AddData(string attribute, string value, Dictionary<string, string> data)
+        {
+            var key = attribute;
+
+            var suffix = 1;
+            while (data.ContainsKey(key))
+            {
+                suffix++;
+                key = attribute + suffix;
+            }
+
+            data[key] = value;
+
+            return $"fetchData.{key}/*{value.Replace("*/", "")}*/";
         }
     }
 }

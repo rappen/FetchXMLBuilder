@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
-    public class JavascriptCodeGenerator : CodeGeneratorBase
+    public class JavascriptCodeGenerator
     {
         public static string GetJavascriptCode(string fetchXml)
         {
