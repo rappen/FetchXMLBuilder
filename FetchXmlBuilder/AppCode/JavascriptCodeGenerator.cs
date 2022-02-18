@@ -93,7 +93,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 key = attribute + suffix;
             }
 
-            data[key] = value;
+            data[key] = SecurityElement.Escape(value);
 
             lineComponents.Add($"fetchData.{key}/*{value.Replace("*/", "")}*/");
         }

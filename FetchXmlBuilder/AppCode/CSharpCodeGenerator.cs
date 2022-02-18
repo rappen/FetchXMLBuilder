@@ -67,7 +67,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 key = attribute + suffix;
             }
 
-            data[key] = value;
+            data[key] = SecurityElement.Escape(value);
 
             return $"fetchData.{key}/*{value.Replace("*/", "")}*/";
         }
