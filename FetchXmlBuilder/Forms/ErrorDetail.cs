@@ -17,7 +17,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         public static void ShowDialog(PluginControlBase owner, Exception exception, string heading = null, string extrainfo = null)
         {
-            if (exception == null)
+            if (owner == null || exception == null)
             {
                 return;
             }
@@ -117,7 +117,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void btnIssue_Click(object sender, EventArgs e)
         {
-            GitHub.CreateNewIssueFromError(owner, exception, extrainfo);
+            owner.CreateNewIssueFromError(exception, extrainfo);
             TopMost = false;
         }
     }
