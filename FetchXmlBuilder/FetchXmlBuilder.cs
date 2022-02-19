@@ -325,6 +325,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 }
             }
             dockControlBuilder.ParseXML(fetchXml, false);
+            UpdateLiveXML();
             tsbReturnToCaller.ToolTipText = "Return " + requestedType + " to " + callerArgs.SourcePlugin;
             dockControlBuilder.RecordHistory("called from " + message.SourcePlugin);
             LogUse("CalledBy." + callerArgs.SourcePlugin);
