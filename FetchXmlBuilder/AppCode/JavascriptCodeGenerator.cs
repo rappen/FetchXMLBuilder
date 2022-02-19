@@ -1,69 +1,101 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.Linq;
+using System.Security;
+using System.Xml;
+using Newtonsoft.Json;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
-    public class JavascriptCodeGenerator : CodeGeneratorBase
+    public class JavascriptCodeGenerator
     {
         public static string GetJavascriptCode(string fetchXml)
         {
-            var data = new List<NameValue>();
-            var fetch = string.Empty;
-            var name = string.Empty;
-            fetchXml = fetchXml.Replace("\"", "'");
-            var lines = fetchXml.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var line in lines)
-            {
-                var space = line.Substring(0, line.IndexOf("<"));
-                if (line.Trim().StartsWith("<condition"))
-                {
-                    var pattern = "('(.*?)' |'(.*?)'/>)";
-                    var matches = new Regex(pattern).Matches(line);
-                    name = matches[0].Value.Substring(1, matches[0].Value.Length - 3);
-                    if (matches.Count == 3 || matches.Count == 5)
-                    {
-                        var @operator = matches[1].Value.Substring(1, matches[1].Value.Length - 3);
-                        var value = matches[matches.Count - 1].Value.Substring(1, matches[matches.Count - 1].Value.Length - 3);
-                        var fetchData = GetFetchData(data, name, value);
-                        var codeValue = "fetchData." + fetchData.Name + "/*" + fetchData.Value + "*/";
-                        data.Add(new NameValue { Name = fetchData.Name, Value = fetchData.Value });
-                        fetch += "\"" + space + "<condition attribute='" + name + "' operator='" + @operator + "' value='" + "\", " + codeValue + ", \"'/>\",\n";
-                    }
-                    else
-                        fetch += "\"" + line + "\",\n";
-                }
-                else if (line.Trim().StartsWith("<value"))
-                {
-                    var pattern = ">.*<";
-                    var matches = new Regex(pattern).Matches(line);
-                    if (matches.Count == 1)
-                    {
-                        var value = matches[0].Value.Substring(1, matches[0].Value.Length - 2);
-                        var fetchData = GetFetchData(data, name, value);
-                        var codeValue = "fetchData." + fetchData.Name + "/*" + fetchData.Value + "*/";
-                        data.Add(new NameValue { Name = fetchData.Name, Value = fetchData.Value });
-                        fetch += "\"" + space + "<value>\", " + codeValue + ", \"</value>\",\n";
-                    }
-                    else
-                        fetch += "\"" + line + "\",\n";
-                }
-                else
-                    fetch += "\"" + line + "\",\n";
-            }
-            var js = string.Empty;
+            var data = new Dictionary<string, string>();
+            var lines = new List<string>();
+            var xml = new XmlDocument();
+            xml.LoadXml(fetchXml);
+
+            Convert(xml.DocumentElement, 0, lines, data);
+
+            var js = "";
+
             if (data.Count > 0)
             {
-                js += "\tvar fetchData = {\r\n";
-                foreach (var nv in data)
-                    js += "\t\t" + nv.Name + ": " + "\"" + nv.Value + "\",\r\n";
-                js = js.Substring(0, js.Length - ",\r\n".Length);
-                js += "\n\t};\r\n";
+                js = $"var fetchData = {JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented)};\r\n";
             }
-            js += "\tvar fetchXml = [\r\n";
-            js += fetch.Substring(0, fetch.Length - 1);
-            js += "\r\n\t].join(\"\");";
+
+            js += $"var fetchXml = [\r\n{String.Join(",\r\n", lines)}\r\n].join(\"\");";
+
             return js;
+        }
+
+        private static void Convert(XmlElement element, int depth, List<string> lines, Dictionary<string, string> data)
+        {
+            var lineComponents = new List<string>();
+            var line = new string(' ', depth * 2) + $"<{element.Name}";
+
+            foreach (XmlAttribute attribute in element.Attributes)
+            {
+                line += $" {attribute.Name}='";
+
+                if (attribute.Name == "value" && element.Name == "condition")
+                {
+                    lineComponents.Add(JsonConvert.SerializeObject(line));
+                    AddData(element.GetAttribute("attribute"), attribute.Value, data, lineComponents);
+                    line = "'";
+                }
+                else
+                {
+                    line += $"{SecurityElement.Escape(attribute.Value)}'";
+                }
+            }
+
+            if (element.IsEmpty)
+            {
+                line += "/>";
+                lineComponents.Add(JsonConvert.SerializeObject(line));
+                lines.Add(String.Join(", ", lineComponents));
+            }
+            else
+            {
+                line += ">";
+                lineComponents.Add(JsonConvert.SerializeObject(line));
+
+                if (element.Name == "value" && element.ParentNode is XmlElement parentElement && parentElement.Name == "condition")
+                {
+                    AddData(parentElement.GetAttribute("attribute"), element.InnerText.Trim(), data, lineComponents);
+                    lineComponents.Add("\"</value>\"");
+                    lines.Add(String.Join(", ", lineComponents));
+                }
+                else
+                {
+                    lines.Add(String.Join(", ", lineComponents));
+                    
+                    foreach (var child in element.ChildNodes.OfType<XmlElement>())
+                    {
+                        Convert(child, depth + 1, lines, data);
+                    }
+
+                    lines.Add(JsonConvert.SerializeObject(new string(' ', depth * 2) + $"</{element.Name}>"));
+                }
+            }
+        }
+
+        private static void AddData(string attribute, string value, Dictionary<string, string> data, List<string> lineComponents)
+        {
+            var key = attribute;
+
+            var suffix = 1;
+            while (data.ContainsKey(key))
+            {
+                suffix++;
+                key = attribute + suffix;
+            }
+
+            data[key] = SecurityElement.Escape(value);
+
+            lineComponents.Add($"fetchData.{key}/*{value.Replace("*/", "")}*/");
         }
     }
 }
