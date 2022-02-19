@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xrm.Sdk;
+using Rappen.XTB.Helpers.Extensions;
 using Rappen.XTB.Helpers.XTBExtensions;
 using System;
 using System.ServiceModel;
@@ -9,30 +10,32 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 {
     public partial class ErrorDetail : Form
     {
+        private PluginControlBase owner;
         private DateTime timestamp;
         private Exception exception;
-        private PluginControlBase owner;
+        private string extrainfo;
 
-        public static void ShowDialog(PluginControlBase owner, Exception error, string heading = null)
+        public static void ShowDialog(PluginControlBase owner, Exception exception, string heading = null, string extrainfo = null)
         {
-            if (error == null)
+            if (exception == null)
             {
                 return;
             }
-            new ErrorDetail(owner, error, heading).ShowDialog(owner);
+            new ErrorDetail(owner, exception, heading, extrainfo).ShowDialog(owner);
         }
 
-        private ErrorDetail(PluginControlBase owner, Exception error, string heading)
+        private ErrorDetail(PluginControlBase owner, Exception exception, string heading, string extrainfo)
         {
             this.owner = owner;
-            exception = error;
+            this.exception = exception;
+            this.extrainfo = extrainfo;
             timestamp = DateTime.Now;
             InitializeComponent();
             if (!string.IsNullOrEmpty(heading))
             {
                 Text = heading;
             }
-            AddErrorInfo(error);
+            AddErrorInfo(exception);
             Height = 200;
         }
 
@@ -68,7 +71,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 }
                 msg = msg.Trim();
                 txtInfo.Text = msg;
-                txtException.Text = error.GetType().ToString();
+                txtException.Text = error.ToTypeString();
                 txtMessage.Text = error.Message;
                 txtCallStack.Text = error.StackTrace.Trim();
             }
@@ -82,7 +85,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             if (Height < 300)
             {
-                btnDetails.Text = "Details <<";
+                btnDetails.Text = "Hide Details";
                 panDetails.Visible = true;
                 btnCopy.Visible = true;
                 btnIssue.Visible = true;
@@ -90,7 +93,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             }
             else
             {
-                btnDetails.Text = "Details >>";
+                btnDetails.Text = "Show Details";
                 panDetails.Visible = false;
                 btnCopy.Visible = false;
                 btnIssue.Visible = false;
@@ -114,7 +117,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void btnIssue_Click(object sender, EventArgs e)
         {
-            GitHub.CreateNewIssueFromError(owner, exception);
+            GitHub.CreateNewIssueFromError(owner, exception, extrainfo);
             TopMost = false;
         }
     }

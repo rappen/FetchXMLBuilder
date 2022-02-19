@@ -31,8 +31,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ErrorDetail));
             this.txtInfo = new System.Windows.Forms.TextBox();
             this.panButton = new System.Windows.Forms.Panel();
-            this.btnCopy = new System.Windows.Forms.Button();
             this.btnDetails = new System.Windows.Forms.Button();
+            this.btnIssue = new System.Windows.Forms.Button();
+            this.btnCopy = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.panInfo = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -46,7 +47,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtException = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnIssue = new System.Windows.Forms.Button();
             this.panButton.SuspendLayout();
             this.panInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -84,11 +84,33 @@
             this.panButton.Size = new System.Drawing.Size(577, 50);
             this.panButton.TabIndex = 0;
             // 
+            // btnDetails
+            // 
+            this.btnDetails.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnDetails.Location = new System.Drawing.Point(71, 15);
+            this.btnDetails.Name = "btnDetails";
+            this.btnDetails.Size = new System.Drawing.Size(93, 23);
+            this.btnDetails.TabIndex = 1;
+            this.btnDetails.Text = "Show Details";
+            this.btnDetails.UseVisualStyleBackColor = true;
+            this.btnDetails.Click += new System.EventHandler(this.btnDetails_Click);
+            // 
+            // btnIssue
+            // 
+            this.btnIssue.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnIssue.Location = new System.Drawing.Point(269, 15);
+            this.btnIssue.Name = "btnIssue";
+            this.btnIssue.Size = new System.Drawing.Size(93, 23);
+            this.btnIssue.TabIndex = 3;
+            this.btnIssue.Text = "Create Issue";
+            this.btnIssue.UseVisualStyleBackColor = true;
+            this.btnIssue.Visible = false;
+            this.btnIssue.Click += new System.EventHandler(this.btnIssue_Click);
+            // 
             // btnCopy
             // 
-            this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCopy.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnCopy.Location = new System.Drawing.Point(162, 15);
+            this.btnCopy.Location = new System.Drawing.Point(170, 15);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(93, 23);
             this.btnCopy.TabIndex = 2;
@@ -96,17 +118,6 @@
             this.btnCopy.UseVisualStyleBackColor = true;
             this.btnCopy.Visible = false;
             this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
-            // 
-            // btnDetails
-            // 
-            this.btnDetails.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnDetails.Location = new System.Drawing.Point(71, 15);
-            this.btnDetails.Name = "btnDetails";
-            this.btnDetails.Size = new System.Drawing.Size(75, 23);
-            this.btnDetails.TabIndex = 1;
-            this.btnDetails.Text = "Details >>";
-            this.btnDetails.UseVisualStyleBackColor = true;
-            this.btnDetails.Click += new System.EventHandler(this.btnDetails_Click);
             // 
             // btnClose
             // 
@@ -211,7 +222,7 @@
             this.txtCallStack.Name = "txtCallStack";
             this.txtCallStack.ReadOnly = true;
             this.txtCallStack.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtCallStack.Size = new System.Drawing.Size(476, 82);
+            this.txtCallStack.Size = new System.Drawing.Size(476, 78);
             this.txtCallStack.TabIndex = 6;
             this.txtCallStack.WordWrap = false;
             // 
@@ -263,19 +274,6 @@
             this.label1.Size = new System.Drawing.Size(54, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Exception";
-            // 
-            // btnIssue
-            // 
-            this.btnIssue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnIssue.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnIssue.Location = new System.Drawing.Point(261, 15);
-            this.btnIssue.Name = "btnIssue";
-            this.btnIssue.Size = new System.Drawing.Size(93, 23);
-            this.btnIssue.TabIndex = 3;
-            this.btnIssue.Text = "Create Issue...";
-            this.btnIssue.UseVisualStyleBackColor = true;
-            this.btnIssue.Visible = false;
-            this.btnIssue.Click += new System.EventHandler(this.btnIssue_Click);
             // 
             // ErrorDetail
             // 

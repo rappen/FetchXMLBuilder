@@ -564,7 +564,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             if (string.IsNullOrEmpty(fetch))
             {
-                fetch = dockControlBuilder.GetFetchString(false, true);
+                fetch = dockControlBuilder.GetFetchString(true, true);
             }
             if (string.IsNullOrEmpty(fetch))
             {
@@ -824,7 +824,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     EnableControls(true);
                     if (completedargs.Error != null)
                     {
-                        ErrorDetail.ShowDialog(this, completedargs.Error);
+                        ErrorDetail.ShowDialog(this, completedargs.Error, "Loading Views");
                     }
                     else
                     {
@@ -1081,7 +1081,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     working = false;
                     if (completedargs.Error != null)
                     {
-                        ErrorDetail.ShowDialog(this, completedargs.Error);
+                        ErrorDetail.ShowDialog(this, completedargs.Error, "Execute Fetch", fetch);
                     }
                     else if (completedargs.Result is string)
                     {
@@ -1622,7 +1622,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     if (completedargs.Error != null)
                     {
                         LogError("RetrieveMultiple error: {0}", completedargs.Error);
-                        ErrorDetail.ShowDialog(this, completedargs.Error);
+                        ErrorDetail.ShowDialog(this, completedargs.Error, "Executing FetchXML", fetch);
                     }
                     else if (completedargs.Cancelled)
                     {
