@@ -448,11 +448,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     validConditionsList.Add(new OperatorItem(ConditionOperator.UnderOrEqual));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.NotUnder));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualBusinessId));
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.NotEqualBusinessId));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserId));
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.NotEqualUserId));
                     break;
 
                 case AttributeTypeCode.Owner:
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualBusinessId));
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.NotEqualBusinessId));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserId));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.NotEqualUserId));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserOrUserHierarchy));
