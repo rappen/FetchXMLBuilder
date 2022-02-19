@@ -4,6 +4,7 @@ using MarkMpn.XmlSchemaAutocomplete.Scintilla;
 using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XTB.Helpers.Extensions;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -657,7 +658,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             if (fxb.Service != null)
             {
-                if (fxb.entities.TryGetValue(entityName, out entity) && entity.Attributes != null)
+                if (fxb.entities != null && fxb.entities.TryGetValue(entityName, out entity) && entity.Attributes != null)
                 {
                     attributes = fxb.GetDisplayAttributes(entityName);
                     return true;
@@ -675,6 +676,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
                         if (resp.EntityMetadata.Count == 1)
                         {
+                            if (fxb.entities == null)
+                            {
+                                fxb.entities = new Dictionary<string, EntityMetadata>();
+                            }
                             fxb.entities[entityName] = resp.EntityMetadata[0];
                         }
                     });
