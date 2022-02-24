@@ -496,7 +496,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsbOpen.Enabled = enabled;
                     tsmiOpenFile.Enabled = enabled;
                     tsmiOpenView.Enabled = enabled && Service != null;
-                    tsmiOpenML.Enabled = enabled && Service != null;
+                    tsmiOpenML.Visible = enabled && Service != null && entities != null && entities.ContainsKey("list");
                     tsmiOpenCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
                     tsbReturnToCaller.Visible = CallerWantsResults();
                     tsbSave.Enabled = enabled;
