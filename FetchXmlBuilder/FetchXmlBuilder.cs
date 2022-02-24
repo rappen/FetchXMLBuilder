@@ -981,10 +981,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (!version.Equals(settings.CurrentVersion))
             {
                 // Reset some settings when new version is deployed
+                var oldversion = settings.CurrentVersion;
                 settings.CurrentVersion = version;
                 SaveSetting();
                 LogUse("ShowWelcome");
-                Welcome.ShowWelcome(this);
+                Welcome.ShowWelcome(this, oldversion);
             }
         }
 

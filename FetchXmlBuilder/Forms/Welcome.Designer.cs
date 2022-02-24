@@ -40,6 +40,7 @@
             this.lblLoading = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.btnClose = new System.Windows.Forms.Button();
+            this.lblVersion = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.webRelease)).BeginInit();
             this.SuspendLayout();
@@ -49,7 +50,7 @@
             this.llTwitter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.llTwitter.AutoSize = true;
             this.llTwitter.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.llTwitter.Location = new System.Drawing.Point(81, 576);
+            this.llTwitter.Location = new System.Drawing.Point(81, 591);
             this.llTwitter.Name = "llTwitter";
             this.llTwitter.Size = new System.Drawing.Size(99, 13);
             this.llTwitter.TabIndex = 24;
@@ -61,7 +62,7 @@
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(23, 576);
+            this.label4.Location = new System.Drawing.Point(23, 591);
             this.label4.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(42, 13);
@@ -74,7 +75,7 @@
             this.llWeb.AutoSize = true;
             this.llWeb.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.llWeb.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.llWeb.Location = new System.Drawing.Point(81, 592);
+            this.llWeb.Location = new System.Drawing.Point(81, 607);
             this.llWeb.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.llWeb.Name = "llWeb";
             this.llWeb.Size = new System.Drawing.Size(136, 13);
@@ -87,7 +88,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(23, 592);
+            this.label1.Location = new System.Drawing.Point(23, 607);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(33, 13);
             this.label1.TabIndex = 30;
@@ -106,7 +107,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(23, 608);
+            this.label2.Location = new System.Drawing.Point(23, 623);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(52, 13);
             this.label2.TabIndex = 32;
@@ -117,7 +118,7 @@
             this.llStats.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.llStats.AutoSize = true;
             this.llStats.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.llStats.Location = new System.Drawing.Point(81, 608);
+            this.llStats.Location = new System.Drawing.Point(81, 623);
             this.llStats.Name = "llStats";
             this.llStats.Size = new System.Drawing.Size(59, 13);
             this.llStats.TabIndex = 33;
@@ -134,7 +135,7 @@
             this.webRelease.DefaultBackgroundColor = System.Drawing.Color.White;
             this.webRelease.Location = new System.Drawing.Point(425, 12);
             this.webRelease.Name = "webRelease";
-            this.webRelease.Size = new System.Drawing.Size(738, 589);
+            this.webRelease.Size = new System.Drawing.Size(738, 604);
             this.webRelease.Source = new System.Uri("https://jonasr.app/fxb/releases/1-2021-10-002/", System.UriKind.Absolute);
             this.webRelease.TabIndex = 36;
             this.webRelease.ZoomFactor = 1D;
@@ -144,7 +145,7 @@
             // 
             this.lblLoading.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblLoading.AutoSize = true;
-            this.lblLoading.Location = new System.Drawing.Point(743, 273);
+            this.lblLoading.Location = new System.Drawing.Point(743, 280);
             this.lblLoading.Name = "lblLoading";
             this.lblLoading.Size = new System.Drawing.Size(91, 13);
             this.lblLoading.TabIndex = 37;
@@ -156,7 +157,7 @@
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Image = ((System.Drawing.Image)(resources.GetObject("linkLabel1.Image")));
             this.linkLabel1.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-            this.linkLabel1.Location = new System.Drawing.Point(431, 612);
+            this.linkLabel1.Location = new System.Drawing.Point(431, 627);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(138, 13);
             this.linkLabel1.TabIndex = 38;
@@ -169,12 +170,23 @@
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClose.Location = new System.Drawing.Point(1049, 607);
+            this.btnClose.Location = new System.Drawing.Point(1049, 622);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(114, 23);
             this.btnClose.TabIndex = 39;
             this.btnClose.Text = "Continue";
             this.btnClose.UseVisualStyleBackColor = true;
+            // 
+            // lblVersion
+            // 
+            this.lblVersion.Font = new System.Drawing.Font("Berlin Sans FB", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVersion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(66)))), ((int)(((byte)(173)))));
+            this.lblVersion.Location = new System.Drawing.Point(8, 510);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(411, 59);
+            this.lblVersion.TabIndex = 40;
+            this.lblVersion.Text = "1.2022.x.x";
+            this.lblVersion.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // Welcome
             // 
@@ -183,7 +195,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(1175, 638);
+            this.ClientSize = new System.Drawing.Size(1175, 653);
+            this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.lblLoading);
@@ -223,5 +236,6 @@
         private System.Windows.Forms.Label lblLoading;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.Label lblVersion;
     }
 }

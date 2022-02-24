@@ -7,15 +7,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 {
     public partial class Welcome : Form
     {
-        public static void ShowWelcome(Control owner)
+        public static void ShowWelcome(Control owner, string oldversion = null)
         {
             var assembly = Assembly.GetExecutingAssembly();
             var version = assembly.GetName().Version;
+            var showversion = $"{version}";
+            if (!string.IsNullOrEmpty(oldversion))
+            {
+                showversion = "New version: " + showversion + $"\nOld version: {oldversion}";
+            }
+
             var verurl = $"{version.Major}-{version.Minor}-{version.Build}";
             var url = $"https://jonasr.app/fxb/releases/{verurl}#content";
             url = Utils.ProcessURL(url);
 
             var welcome = new Welcome();
+            welcome.lblVersion.Text = showversion;
             welcome.webRelease.Source = new Uri(url);
             welcome.ShowDialog(owner);
         }
