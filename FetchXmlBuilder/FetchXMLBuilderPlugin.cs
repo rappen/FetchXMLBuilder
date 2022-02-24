@@ -14,10 +14,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         ExportMetadata("BackgroundColor", "#FFFFC0"),
         ExportMetadata("PrimaryFontColor", "#0000C0"),
         ExportMetadata("SecondaryFontColor", "#0000FF")]
-    public partial class FetchXMLBuilderPlugin : PluginBase
+    public partial class FetchXMLBuilderPlugin : PluginBase, IPayPalPlugin
     {
+        public string DonationDescription => "FetchXML Builder Fan Club";
+
+        public string EmailAccount => "jonas@rappen.net";
+
         public override IXrmToolBoxPluginControl GetControl() => new FetchXmlBuilder();
 
-        //public override Guid GetId() => XrmToolBoxToolIds.FetchXMLBuilder;
+        public override Guid GetId() => XrmToolBoxToolIds.FetchXMLBuilder;
     }
 }

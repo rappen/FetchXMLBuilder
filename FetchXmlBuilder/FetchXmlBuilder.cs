@@ -141,15 +141,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         #region Public Properties
 
-        public string DonationDescription
-        {
-            get { return "FetchXML Builder Fan Club"; }
-        }
+        public string DonationDescription => "FetchXML Builder Fan Club";
 
-        public string EmailAccount
-        {
-            get { return "jonas@rappen.net"; }
-        }
+        public string EmailAccount => "jonas@rappen.net";
 
         public string HelpUrl
         {
