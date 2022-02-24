@@ -43,10 +43,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             QElist.Criteria.AddCondition("type", ConditionOperator.Equal, true);
             QElist.Criteria.AddCondition("query", ConditionOperator.NotNull);
 
-            var lists = Caller.Service.RetrieveMultiple(QElist);
-            foreach (var list in lists.Entities)
+            try
             {
-                cmbML.Items.Add(new ViewItem(list));
+                var lists = Caller.Service.RetrieveMultiple(QElist);
+                foreach (var list in lists.Entities)
+                {
+                    cmbML.Items.Add(new ViewItem(list));
+                }
+            }
+            catch (Exception ex)
+            {
+                Caller.ShowErrorDialog(ex, "Load Lists", null, false);
             }
             Enabled = true;
         }
