@@ -19,28 +19,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             }
 
             var verurl = $"{version.Major}-{version.Minor}-{version.Build}";
-            var url = $"https://jonasr.app/fxb/releases/{verurl}#content";
-            url = Utils.ProcessURL(url);
-
-            new Welcome(showversion, url).ShowDialog(owner);
-        }
-
-        private Welcome(string version, string releasenotes)
-        {
-            InitializeComponent();
-
-            lblVersion.Text = version;
-         
+            var releasenotes = $"https://jonasr.app/fxb/releases/{verurl}#content";
+            releasenotes = Utils.ProcessURL(releasenotes);
             try
             {
-                // Using this to test available of WebView2 - tips by Guido Preite!
-                CoreWebView2Environment.GetAvailableBrowserVersionString();
-                webRelease.Source = new Uri(releasenotes);
+                new Welcome(showversion, releasenotes).ShowDialog(owner);
             }
             catch
             {
                 FetchXmlBuilder.OpenURL(releasenotes);
             }
+        }
+
+        private Welcome(string version, string releasenotes)
+        {
+            InitializeComponent();
+            lblVersion.Text = version;
+            webRelease.Source = new Uri(releasenotes);
         }
 
         private void llTwitter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
