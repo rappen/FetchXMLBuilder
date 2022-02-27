@@ -7,6 +7,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
     public partial class Settings : Form
     {
         private FetchXmlBuilder fxb;
+        bool validateinfo;
 
         public Settings(FetchXmlBuilder fxb)
         {
@@ -33,6 +34,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             chkShowNodeTypes.Checked = settings.ShowNodeType;
             chkShowButtonTexts.Checked = settings.ShowButtonTexts;
             chkShowValidation.Checked = settings.ShowValidation;
+            chkShowValidationInfo.Checked = settings.ShowValidationInfo;
             chkShowRepository.Checked = settings.ShowRepository;
             switch (settings.Results.ResultOutput)
             {
@@ -66,6 +68,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             settings.ShowNodeType = chkShowNodeTypes.Checked;
             settings.ShowButtonTexts = chkShowButtonTexts.Checked;
             settings.ShowValidation = chkShowValidation.Checked;
+            settings.ShowValidationInfo = settings.ShowValidation && chkShowValidationInfo.Checked;
             settings.ShowRepository = chkShowRepository.Checked;
             settings.XmlColors = propXmlColors.SelectedObject as XmlColors;
             return settings;
@@ -135,6 +138,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             DialogResult = DialogResult.Cancel;
             Close();
             fxb.ShowSelectSettings();
+        }
+
+        private void chkShowValidation_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkShowValidation.Checked)
+            {
+                chkShowValidationInfo.Checked = validateinfo;
+            }
+            else
+            {
+                validateinfo = chkShowValidationInfo.Checked;
+                chkShowValidationInfo.Checked = false;
+            }
+            chkShowValidationInfo.Enabled = chkShowValidation.Checked;
         }
     }
 }

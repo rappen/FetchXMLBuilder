@@ -1,4 +1,5 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Cinteros.Xrm.FetchXmlBuilder.Controls;
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Cinteros.Xrm.FetchXmlBuilder.Forms;
 using Cinteros.Xrm.XmlEditorUtils;
@@ -710,6 +711,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 return ex.Message;
             }
         }
+
+        internal ControlValidationResult GetWarning(TreeNode node)
+        {
+            if (!settings.ShowValidation || node == null)
+            {
+                return null;
+            }
+            var warning = Validations.GetWarning(node, this);
+            if (warning?.Level == ControlValidationLevel.Info && !settings.ShowValidationInfo)
+            {
+                warning = null;
+            }
+            return warning;
+        }
+
 
         internal void LoadEntityDetails(string entityName, Action detailsLoaded, bool async = true, bool update = true)
         {

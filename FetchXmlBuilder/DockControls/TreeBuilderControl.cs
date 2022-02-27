@@ -776,7 +776,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void SetWarning(TreeNode node)
         {
-            var warning = Validations.GetWarning(node, fxb);
+            var warning = fxb.GetWarning(node);
             if (warning != null)
             {
                 var leadingSpaces = "      ";

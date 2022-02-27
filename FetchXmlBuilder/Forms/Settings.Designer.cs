@@ -63,6 +63,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.btnResetXmlColors = new System.Windows.Forms.Button();
             this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.gbBehavior = new System.Windows.Forms.GroupBox();
+            this.chkShowValidationInfo = new System.Windows.Forms.CheckBox();
             this.chkShowValidation = new System.Windows.Forms.CheckBox();
             this.chkAddConditionToFilter = new System.Windows.Forms.CheckBox();
             this.chkShowRepository = new System.Windows.Forms.CheckBox();
@@ -285,7 +286,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.llShowWelcome.AutoSize = true;
             this.llShowWelcome.Location = new System.Drawing.Point(7, 24);
             this.llShowWelcome.Name = "llShowWelcome";
-            this.llShowWelcome.Size = new System.Drawing.Size(81, 13);
+            this.llShowWelcome.Size = new System.Drawing.Size(107, 13);
             this.llShowWelcome.TabIndex = 2;
             this.llShowWelcome.TabStop = true;
             this.llShowWelcome.Text = "Show Release Notes";
@@ -415,6 +416,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // 
             // gbBehavior
             // 
+            this.gbBehavior.Controls.Add(this.chkShowValidationInfo);
             this.gbBehavior.Controls.Add(this.chkShowValidation);
             this.gbBehavior.Controls.Add(this.chkAddConditionToFilter);
             this.gbBehavior.Controls.Add(this.chkUseSQL4CDS);
@@ -422,20 +424,31 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbBehavior.Controls.Add(this.chkAppAllowUncustViews);
             this.gbBehavior.Location = new System.Drawing.Point(248, 12);
             this.gbBehavior.Name = "gbBehavior";
-            this.gbBehavior.Size = new System.Drawing.Size(222, 132);
+            this.gbBehavior.Size = new System.Drawing.Size(222, 141);
             this.gbBehavior.TabIndex = 30;
             this.gbBehavior.TabStop = false;
             this.gbBehavior.Text = "Behavior";
+            // 
+            // chkShowValidationInfo
+            // 
+            this.chkShowValidationInfo.AutoSize = true;
+            this.chkShowValidationInfo.Location = new System.Drawing.Point(16, 120);
+            this.chkShowValidationInfo.Name = "chkShowValidationInfo";
+            this.chkShowValidationInfo.Size = new System.Drawing.Size(131, 17);
+            this.chkShowValidationInfo.TabIndex = 8;
+            this.chkShowValidationInfo.Text = "Show Information Tips";
+            this.chkShowValidationInfo.UseVisualStyleBackColor = true;
             // 
             // chkShowValidation
             // 
             this.chkShowValidation.AutoSize = true;
             this.chkShowValidation.Location = new System.Drawing.Point(16, 100);
             this.chkShowValidation.Name = "chkShowValidation";
-            this.chkShowValidation.Size = new System.Drawing.Size(125, 17);
+            this.chkShowValidation.Size = new System.Drawing.Size(146, 17);
             this.chkShowValidation.TabIndex = 7;
-            this.chkShowValidation.Text = "Show Validation Tips";
+            this.chkShowValidation.Text = "Show Error/Warning Tips";
             this.chkShowValidation.UseVisualStyleBackColor = true;
+            this.chkShowValidation.CheckedChanged += new System.EventHandler(this.chkShowValidation_CheckedChanged);
             // 
             // chkAddConditionToFilter
             // 
@@ -474,7 +487,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // 
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(50, 15);
-            this.linkLabel1.Location = new System.Drawing.Point(278, 163);
+            this.linkLabel1.Location = new System.Drawing.Point(278, 167);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(181, 42);
             this.linkLabel1.TabIndex = 102;
@@ -559,5 +572,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private System.Windows.Forms.CheckBox chkShowRepository;
         private System.Windows.Forms.GroupBox gbLayout;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.CheckBox chkShowValidationInfo;
     }
 }

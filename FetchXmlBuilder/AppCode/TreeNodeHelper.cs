@@ -304,7 +304,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 return;
             }
-            var warning = Validations.GetWarning(node, fxb);
+            var warning = fxb.GetWarning(node);
             if (warning != null)
             {
                 node.ToolTipText = warning.Message;
