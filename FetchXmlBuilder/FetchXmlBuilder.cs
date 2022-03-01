@@ -2464,6 +2464,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             ShowSelectSettings();
         }
 
+        private void tmsiShowReleaseNotes_Click(object sender, EventArgs e)
+        {
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            OpenURL(Welcome.GetReleaseNotesUrl(version));
+        }
+
         #endregion Private Event Handlers
     }
 }
