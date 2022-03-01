@@ -87,7 +87,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                             return new ControlValidationResult(ControlValidationLevel.Info, "Alias is not recommended for not Aggregate queries.");
                         }
 
-                        if (node.IsFetchDistinct() && !HasSortOnAttribute(node))
+                        if (node.IsFetchDistinct() && !HasSortOnAttribute(node) && !HasPrimaryIdAttribute(node.Parent, fxb))
                         {
                             return new ControlValidationResult(ControlValidationLevel.Info, "Distinct queries should be sorted by all attributes for correct paging.", "https://markcarrington.dev/2020/12/08/dataverse-paging-with-distinct/");
                         }
@@ -141,7 +141,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     {
                         return new ControlValidationResult(ControlValidationLevel.Info, "Sorting on a link-entity triggers legacy paging.", "https://docs.microsoft.com/en-us/powerapps/developer/data-platform/org-service/paging-behaviors-and-ordering#ordering-and-multiple-table-queries");
                     }
-                    if (fxb.entities != null)
+                    if (fxb.entities != null && !string.IsNullOrWhiteSpace(attribute))
                     {
                         if (fxb.GetAttribute(parententity, attribute) is AttributeMetadata metaatt)
                         {
@@ -167,6 +167,32 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     break;
             }
             return null;
+        }
+
+        private static bool HasPrimaryIdAttribute(TreeNode parent, FetchXmlBuilder fxb)
+        {
+            var entity = parent.Value("name");
+
+            if (string.IsNullOrWhiteSpace(entity))
+                return true;
+
+            if (fxb == null || fxb.entities == null)
+                return true;
+
+            if (!fxb.entities.TryGetValue(entity, out var metadata))
+                return true;
+
+            if (string.IsNullOrWhiteSpace(metadata.PrimaryIdAttribute))
+                return true;
+
+            var attr = parent.Nodes.OfType<TreeNode>()
+                .Where(n => n.Name == "attribute" && n.Value("name") == metadata.PrimaryIdAttribute)
+                .FirstOrDefault();
+
+            if (attr != null)
+                return true;
+
+            return false;
         }
 
         private static bool HasSortOnAttribute(TreeNode node)
