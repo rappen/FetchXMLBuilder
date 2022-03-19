@@ -447,7 +447,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             ManageMenuDisplay();
         }
 
-        private XmlDocument GetFetchDocument()
+        internal XmlDocument GetFetchDocument()
         {
             var doc = new XmlDocument();
             if (tvFetch.Nodes.Count > 0)

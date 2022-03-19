@@ -332,6 +332,12 @@
     <Compile Include="DockControls\ODataControl.Designer.cs">
       <DependentUpon>ODataControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="DockControls\SimplerBuilder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DockControls\SimplerBuilder.Designer.cs">
+      <DependentUpon>SimplerBuilder.cs</DependentUpon>
+    </Compile>
     <Compile Include="DockControls\TreeBuilderControl.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -450,6 +456,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DockControls\ODataControl.resx">
       <DependentUpon>ODataControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DockControls\SimplerBuilder.resx">
+      <DependentUpon>SimplerBuilder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DockControls\TreeBuilderControl.resx">
       <DependentUpon>TreeBuilderControl.cs</DependentUpon>

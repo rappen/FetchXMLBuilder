@@ -42,6 +42,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal Dictionary<string, List<Entity>> views;
         internal FXBSettings settings = new FXBSettings();
         internal TreeBuilderControl dockControlBuilder;
+        internal SimplerBuilder dockControlSimpler;
         internal bool working = false;
         internal Version CDSVersion = new Version();
         internal HistoryManager historyMgr = new HistoryManager();
@@ -281,6 +282,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             SaveDockPanels();
             dockControlBuilder?.Close();
+            dockControlSimpler?.Close();
             dockControlFetchXml?.Close();
             dockControlFetchXmlCs?.Close();
             dockControlFetchXmlJs?.Close();
@@ -515,6 +517,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsbBDU.Visible = bduexists && callerArgs?.SourcePlugin != "Bulk Data Updater";
                     tsbBDU.Enabled = enabled && (dockControlBuilder?.IsFetchAggregate() == false);
                     dockControlBuilder?.EnableControls(enabled);
+                    dockControlSimpler?.EnableControls(enabled);
                     buttonsEnabled = enabled;
                 }
                 catch
@@ -878,6 +881,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     fetch = dockControlBuilder.GetFetchString(true, false);
                 }
                 return fetch;
+            }
+            if (!preventxmlupdate && dockControlSimpler?.Visible == true)
+            {
+                dockControlSimpler.ParseXML();
             }
             if (!preventxmlupdate && dockControlFetchXml?.Visible == true)
             {
@@ -1983,6 +1990,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
+        private void ShowSimplerControl(ref SimplerBuilder control, DockState state)
+        {
+            LogUse($"Show-Simpler");
+            if (control?.IsDisposed != false)
+            {
+                control = new SimplerBuilder(this);
+                control.Show(dockContainer, state);
+            }
+            else
+            {
+                control.EnsureVisible(dockContainer, state);
+            }
+            UpdateLiveXML();
+        }
+
         private void ShowContentControl(ref XmlContentControl control, ContentType contenttype, SaveFormat save, DockState state)
         {
             LogUse($"Show-{contenttype}");
@@ -2276,6 +2298,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private void tsmiSaveView_Click(object sender, EventArgs e)
         {
             SaveView(sender == tsmiSaveViewAs);
+        }
+
+        private void tsmiShowSimpler_Click(object sender, EventArgs e)
+        {
+            ShowSimplerControl(ref dockControlSimpler, DockState.DockLeft);
         }
 
         private void tsmiShowFetchXML_Click(object sender, EventArgs e)
