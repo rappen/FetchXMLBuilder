@@ -24,7 +24,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         internal void ParseXML()
         {
-            var query = new FetchXML(fxb.dockControlBuilder.GetFetchDocument());
+            var query = new Fetch(fxb.dockControlBuilder.GetFetchDocument());
+            var a = query.ToString();
             xrmTable.SelectedIndex = -1;
             gbColumns.Controls.Clear();
             gbFilters.Controls.Clear();
