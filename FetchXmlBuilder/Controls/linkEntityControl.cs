@@ -294,6 +294,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         protected override ControlValidationResult ValidateControl(Control control)
         {
+            var parententityname = Node.Parent.LocalEntityName();
+            var parententity = fxb.Service != null && fxb.entities != null && fxb.entities.ContainsKey(parententityname) ? fxb.entities[parententityname] : null;
+            var currententity = fxb.Service != null && fxb.entities != null && fxb.entities.ContainsKey(cmbEntity.Text) ? fxb.entities[cmbEntity.Text] : null;
             if (control == cmbRelationship && string.IsNullOrWhiteSpace(cmbEntity.Text) && string.IsNullOrWhiteSpace(cmbFrom.Text) && string.IsNullOrWhiteSpace(cmbTo.Text))
             {
                 return new ControlValidationResult(ControlValidationLevel.Info, "Select a relationship to populate fields below");
@@ -302,12 +305,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 if (string.IsNullOrWhiteSpace(cmbEntity.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Error, "Entity is required");
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Entity", ControlValidationMessage.IsRequired);
                 }
 
-                if (fxb.Service != null && !cmbEntity.Items.OfType<string>().Any(i => i == cmbEntity.Text))
+                if (fxb.Service != null)
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "Entity is not valid");
+                    if (currententity == null)
+                    {
+                        return new ControlValidationResult(ControlValidationLevel.Warning, "Entity", ControlValidationMessage.NotInMetadata);
+                    }
+                    if (!cmbEntity.Items.OfType<string>().Any(i => i == cmbEntity.Text))
+                    {
+                        return new ControlValidationResult(ControlValidationLevel.Info, "Entity", ControlValidationMessage.NotShowingNow);
+                    }
                 }
             }
 
@@ -321,13 +331,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     }
                     else
                     {
-                        return new ControlValidationResult(ControlValidationLevel.Error, "From attribute is required");
+                        return new ControlValidationResult(ControlValidationLevel.Error, "From attribute", ControlValidationMessage.IsRequired);
                     }
                 }
 
+                if (currententity != null && !currententity.Attributes.Any(a => a.LogicalName == cmbFrom.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "From attribute", ControlValidationMessage.NotInMetadata);
+                }
                 if (fxb.Service != null && !cmbFrom.Items.OfType<string>().Any(i => i == cmbFrom.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "From attribute is not valid");
+                    return new ControlValidationResult(ControlValidationLevel.Info, "From attribute", ControlValidationMessage.NotShowingNow);
                 }
             }
 
@@ -341,13 +355,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     }
                     else
                     {
-                        return new ControlValidationResult(ControlValidationLevel.Error, "To attribute is required");
+                        return new ControlValidationResult(ControlValidationLevel.Error, "To attribute", ControlValidationMessage.IsRequired);
                     }
                 }
 
+                if (parententity != null && !parententity.Attributes.Any(a => a.LogicalName == cmbTo.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "To attribute", ControlValidationMessage.NotInMetadata);
+                }
                 if (fxb.Service != null && !cmbTo.Items.OfType<string>().Any(i => i == cmbTo.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "To attribute is not valid");
+                    return new ControlValidationResult(ControlValidationLevel.Info, "To attribute", ControlValidationMessage.NotShowingNow);
                 }
             }
 

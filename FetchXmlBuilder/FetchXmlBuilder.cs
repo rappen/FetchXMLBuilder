@@ -584,32 +584,31 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
+        internal AttributeMetadata[] GetAllAttribues(string entityName)
+        {
+            return entities?.ContainsKey(entityName) == true ? entities[entityName].Attributes : new AttributeMetadata[0];
+        }
+
         internal AttributeMetadata[] GetDisplayAttributes(string entityName) => GetDisplayAttributes(entityName, settings.ShowAttributes);
 
         internal AttributeMetadata[] GetDisplayAttributes(string entityName, ShowMetaTypesAttribute selectattributes)
         {
             var result = new List<AttributeMetadata>();
-            if (entities != null && entities.ContainsKey(entityName))
+            var attributes = GetAllAttribues(entityName);
+            foreach (var attribute in attributes)
             {
-                var attributes = entities[entityName].Attributes;
-                if (attributes != null)
-                {
-                    foreach (var attribute in attributes)
-                    {
-                        if (!CheckMetadata(selectattributes.IsManaged, attribute.IsManaged)) { continue; }
-                        if (!CheckMetadata(selectattributes.IsCustom, attribute.IsCustomAttribute)) { continue; }
-                        if (!CheckMetadata(selectattributes.IsCustomizable, attribute.IsCustomizable)) { continue; }
-                        if (!CheckMetadata(selectattributes.IsValidForAdvancedFind, attribute.IsValidForAdvancedFind)) { continue; }
-                        if (!CheckMetadata(selectattributes.IsAuditEnabled, attribute.IsAuditEnabled)) { continue; }
-                        if (!CheckMetadata(selectattributes.IsLogical, attribute.IsLogical)) { continue; }
-                        if (!CheckMetadata(selectattributes.IsValidForRead, attribute.IsValidForRead)) { continue; }
-                        if (!CheckMetadata(selectattributes.IsValidForGrid, attribute.IsValidForGrid)) { continue; }
-                        if (!CheckMetadata(selectattributes.IsFiltered, attribute.IsFilterable)) { continue; }
-                        if (!CheckMetadata(selectattributes.IsRetrievable, attribute.IsRetrievable)) { continue; }
-                        if (!CheckMetadata(selectattributes.AttributeOf, !string.IsNullOrEmpty(attribute.AttributeOf))) { continue; }
-                        result.Add(attribute);
-                    }
-                }
+                if (!CheckMetadata(selectattributes.IsManaged, attribute.IsManaged)) { continue; }
+                if (!CheckMetadata(selectattributes.IsCustom, attribute.IsCustomAttribute)) { continue; }
+                if (!CheckMetadata(selectattributes.IsCustomizable, attribute.IsCustomizable)) { continue; }
+                if (!CheckMetadata(selectattributes.IsValidForAdvancedFind, attribute.IsValidForAdvancedFind)) { continue; }
+                if (!CheckMetadata(selectattributes.IsAuditEnabled, attribute.IsAuditEnabled)) { continue; }
+                if (!CheckMetadata(selectattributes.IsLogical, attribute.IsLogical)) { continue; }
+                if (!CheckMetadata(selectattributes.IsValidForRead, attribute.IsValidForRead)) { continue; }
+                if (!CheckMetadata(selectattributes.IsValidForGrid, attribute.IsValidForGrid)) { continue; }
+                if (!CheckMetadata(selectattributes.IsFiltered, attribute.IsFilterable)) { continue; }
+                if (!CheckMetadata(selectattributes.IsRetrievable, attribute.IsRetrievable)) { continue; }
+                if (!CheckMetadata(selectattributes.AttributeOf, !string.IsNullOrEmpty(attribute.AttributeOf))) { continue; }
+                result.Add(attribute);
             }
             return result.ToArray();
         }

@@ -568,23 +568,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                             break;
 
                         case "link-entity":
-                            if (node.Parent != null)
+                            if (node.Parent != null && node.Parent.LocalEntityName() is string parententity && fxb.NeedToLoadEntity(parententity))
                             {
-                                switch (node.Parent.Name)
+                                if (!fxb.working)
                                 {
-                                    case "entity":
-                                    case "link-entity":
-                                        var entityName = node.Parent.Value("name");
-                                        if (fxb.NeedToLoadEntity(entityName))
-                                        {
-                                            if (!fxb.working)
-                                            {
-                                                fxb.LoadEntityDetails(entityName, RefreshSelectedNode);
-                                            }
-                                            break;
-                                        }
-                                        break;
+                                    fxb.LoadEntityDetails(parententity, RefreshSelectedNode);
                                 }
+                                break;
                             }
                             var linkEntityName = node.Value("name");
                             if (fxb.NeedToLoadEntity(linkEntityName))
@@ -600,31 +590,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
                         case "attribute":
                         case "order":
-                            if (node.Parent != null)
+                            if (node.LocalEntityName() is string entity && !string.IsNullOrWhiteSpace(entity))
                             {
-                                switch (node.Parent.Name)
+                                if (fxb.NeedToLoadEntity(entity))
                                 {
-                                    case "entity":
-                                    case "link-entity":
-                                        var entityName = node.Parent.Value("name");
-                                        if (fxb.NeedToLoadEntity(entityName))
-                                        {
-                                            if (!fxb.working)
-                                            {
-                                                fxb.LoadEntityDetails(entityName, RefreshSelectedNode);
-                                            }
-                                            break;
-                                        }
-                                        AttributeMetadata[] attributes = fxb.GetDisplayAttributes(entityName);
-                                        if (node.Name == "attribute")
-                                        {
-                                            ctrl = new attributeControl(node, attributes, fxb, this);
-                                        }
-                                        else if (node.Name == "order")
-                                        {
-                                            ctrl = new orderControl(node, attributes, fxb, this);
-                                        }
-                                        break;
+                                    if (!fxb.working)
+                                    {
+                                        fxb.LoadEntityDetails(entity, RefreshSelectedNode);
+                                    }
+                                    break;
+                                }
+                                AttributeMetadata[] attributes = fxb.GetDisplayAttributes(entity);
+                                if (node.Name == "attribute")
+                                {
+                                    ctrl = new attributeControl(node, attributes, fxb, this);
+                                }
+                                else if (node.Name == "order")
+                                {
+                                    ctrl = new orderControl(node, attributes, fxb, this);
                                 }
                             }
                             break;

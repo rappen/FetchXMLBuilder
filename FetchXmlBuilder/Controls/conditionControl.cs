@@ -125,24 +125,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Error, "Attribute is required");
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Attribute", ControlValidationMessage.IsRequired);
                 }
 
                 if (fxb.Service != null && !cmbAttribute.Items.OfType<AttributeItem>().Any(i => i.ToString() == cmbAttribute.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute is not valid");
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute", ControlValidationMessage.InValid);
                 }
             }
             else if (control == cmbOperator || control == cmbValue)
             {
                 if (control == cmbOperator && string.IsNullOrWhiteSpace(cmbOperator.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Error, "Operator is required");
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Operator", ControlValidationMessage.IsRequired);
                 }
 
                 if (control == cmbOperator && !cmbOperator.Items.OfType<OperatorItem>().Any(i => i.ToString() == cmbOperator.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Error, "Operator is not valid");
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Operator", ControlValidationMessage.InValid);
                 }
 
                 if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem oper && (!oper.IsMultipleValuesType || Node.Nodes.Count > 0))

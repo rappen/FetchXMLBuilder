@@ -10,6 +10,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
     public partial class attributeControl : FetchXmlElementControlBase
     {
         private readonly AttributeMetadata[] attributes;
+        private readonly AttributeMetadata[] allattributes;
         private bool aggregate;
 
         public attributeControl() : this(null, null, null, null)
@@ -20,6 +21,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             InitializeComponent();
             this.attributes = attributes;
+            allattributes = fetchXmlBuilder.GetAllAttribues(node.LocalEntityName());
             InitializeFXB(null, fetchXmlBuilder, tree, node);
         }
 
@@ -50,11 +52,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Error, "Attribute is required");
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Attribute", ControlValidationMessage.IsRequired);
                 }
-                if (fxb.Service != null && !cmbAttribute.Items.OfType<AttributeItem>().Any(a => a.ToString() == cmbAttribute.Text))
+                if (fxb.Service != null)
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute is not valid");
+                    if (!allattributes.Any(a=>a.LogicalName == cmbAttribute.Text))
+                    {
+                        return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute", ControlValidationMessage.NotInMetadata);
+                    }
+                    if (!cmbAttribute.Items.OfType<AttributeItem>().Any(a => a.ToString() == cmbAttribute.Text))
+                    {
+                        return new ControlValidationResult(ControlValidationLevel.Info, "Attribute", ControlValidationMessage.NotShowingNow);
+                    }
                 }
             }
             else if (control == txtAlias)
