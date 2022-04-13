@@ -132,9 +132,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
                     break;
                 case "order":
-                    if (string.IsNullOrWhiteSpace(attribute) && string.IsNullOrWhiteSpace(alias))
+                    if (node.IsFetchAggregate())
                     {
-                        return new ControlValidationResult(ControlValidationLevel.Warning, "Order Name must be included.");
+                        if (string.IsNullOrWhiteSpace(alias))
+                        {
+                            return new ControlValidationResult(ControlValidationLevel.Warning, "Order Alias must be included in aggregate query.", "https://docs.microsoft.com/en-us/power-apps/developer/data-platform/use-fetchxml-aggregation#order-by");
+                        }
+                        if (!string.IsNullOrWhiteSpace(attribute))
+                        {
+                            return new ControlValidationResult(ControlValidationLevel.Warning, "Order Name must NOT be included in aggregate query.", "https://docs.microsoft.com/en-us/power-apps/developer/data-platform/use-fetchxml-aggregation#order-by");
+                        }
+                    }
+                    else
+                    {
+                        if (string.IsNullOrWhiteSpace(attribute))
+                        {
+                            return new ControlValidationResult(ControlValidationLevel.Warning, "Order Name must be included.");
+                        }
                     }
 
                     if (node.Parent.Name == "link-entity")
