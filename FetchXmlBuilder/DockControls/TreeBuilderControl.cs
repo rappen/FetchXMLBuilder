@@ -553,7 +553,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 Control existingControl = panelContainer.Controls.Count > 0 ? panelContainer.Controls[0] : null;
                 if (node != null)
                 {
-                    TreeNodeHelper.AddContextMenu(node, this);
+                    TreeNodeHelper.AddContextMenu(node, this, fxb.settings.QueryOptions);
                     this.deleteToolStripMenuItem.Text = "Delete " + node.Name;
                     var collec = (Dictionary<string, string>)node.Tag;
 

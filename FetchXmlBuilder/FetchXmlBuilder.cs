@@ -2151,7 +2151,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             SetupDockControls();
             ApplySettings(true);
             RebuildRepositoryMenu(null);
-            TreeNodeHelper.AddContextMenu(null, dockControlBuilder);
+            TreeNodeHelper.AddContextMenu(null, dockControlBuilder, settings.QueryOptions);
             EnableControls(true);
         }
 

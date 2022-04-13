@@ -88,6 +88,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void crmGridView1_RecordDoubleClick(object sender, Rappen.XTB.Helpers.Controls.XRMRecordEventArgs e)
         {
+            if (!form.settings.Results.ClickableLinks)
+            {
+                return;
+            }
             if (e.Value is EntityReference entref && form.ConnectionDetail.GetEntityReferenceUrl(entref) is string urlref && !string.IsNullOrEmpty(urlref))
             {
                 form.LogUse("OpenParentRecord");

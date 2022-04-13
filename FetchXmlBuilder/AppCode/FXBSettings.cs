@@ -47,6 +47,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool ShowQuickActions { get; set; } = true;
         public bool UseSingleQuotation { get; set; }
         public string NewQueryTemplate { get; set; } = DefaultNewQuery;
+        public bool ShowAllAttributes { get; set; } = false;
     }
 
     public abstract class ShowMetaTypes
@@ -108,6 +109,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool RetrieveAllPages { get; set; } = false;
         public bool AlwaysNewWindow { get; set; } = false;
         public bool QuickFilter { get; set; } = false;
+        public bool ClickableLinks { get; set; } = true;
     }
 
     public class DockStates
