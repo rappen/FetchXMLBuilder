@@ -52,7 +52,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         {
                             if (metaatt.IsValidForGrid.HasValue && metaatt.IsValidForGrid.Value == false && metaatt.IsPrimaryId.Value != true)
                             {
-                                return new ControlValidationResult(ControlValidationLevel.Warning, $"Attribute '{name}' has 'IsValidForGrid=false'.");
+                                return new ControlValidationResult(ControlValidationLevel.Info, $"Attribute '{name}' has 'IsValidForGrid=false'.");
                             }
                         }
                         else
