@@ -38,7 +38,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return new ControlValidationResult(ControlValidationLevel.Error, "Entity", ControlValidationMessage.IsRequired);
                 }
 
-                if (!(cmbEntity.SelectedItem is EntityItem) && fxb.Service != null)
+                if (!(cmbEntity.SelectedItem is EntityItem) && fxb.entities != null)
                 {
                     if (!fxb.entities.Any(e => e.Key == cmbEntity.Text))
                     {
@@ -49,7 +49,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                         return new ControlValidationResult(ControlValidationLevel.Info, "Entity", ControlValidationMessage.NotShowingNow);
                     }
                 }
-                if (fxb.Service != null && !cmbEntity.Items.OfType<EntityItem>().Any(i => i.ToString() == cmbEntity.Text))
+                if (fxb.entities != null && !cmbEntity.Items.OfType<EntityItem>().Any(i => i.ToString() == cmbEntity.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "Entity", ControlValidationMessage.IsRequired);
                 }

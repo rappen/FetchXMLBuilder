@@ -80,10 +80,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             cmbRelationship.Items.Clear();
             var parententityname = Node.Parent.Value("name");
-            var entities = fxb.GetDisplayEntities();
-            if (entities != null && entities.ContainsKey(parententityname))
+            var parententity = fxb.GetEntity(parententityname);
+            if (parententity != null)
             {
-                var parententity = entities[parententityname];
                 var mo = parententity.ManyToOneRelationships;
                 var om = parententity.OneToManyRelationships;
                 var mm = parententity.ManyToManyRelationships;
@@ -295,8 +294,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         protected override ControlValidationResult ValidateControl(Control control)
         {
             var parententityname = Node.Parent.LocalEntityName();
-            var parententity = fxb.Service != null && fxb.entities != null && fxb.entities.ContainsKey(parententityname) ? fxb.entities[parententityname] : null;
-            var currententity = fxb.Service != null && fxb.entities != null && fxb.entities.ContainsKey(cmbEntity.Text) ? fxb.entities[cmbEntity.Text] : null;
+            var parententity = fxb.entities != null && fxb.entities.ContainsKey(parententityname) ? fxb.entities[parententityname] : null;
+            var currententity = fxb.entities != null && fxb.entities.ContainsKey(cmbEntity.Text) ? fxb.entities[cmbEntity.Text] : null;
             if (control == cmbRelationship && string.IsNullOrWhiteSpace(cmbEntity.Text) && string.IsNullOrWhiteSpace(cmbFrom.Text) && string.IsNullOrWhiteSpace(cmbTo.Text))
             {
                 return new ControlValidationResult(ControlValidationLevel.Info, "Select a relationship to populate fields below");
@@ -308,7 +307,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return new ControlValidationResult(ControlValidationLevel.Error, "Entity", ControlValidationMessage.IsRequired);
                 }
 
-                if (fxb.Service != null)
+                if (fxb.entities != null)
                 {
                     if (currententity == null)
                     {
@@ -339,7 +338,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "From attribute", ControlValidationMessage.NotInMetadata);
                 }
-                if (fxb.Service != null && !cmbFrom.Items.OfType<string>().Any(i => i == cmbFrom.Text))
+                if (fxb.entities != null && !cmbFrom.Items.OfType<string>().Any(i => i == cmbFrom.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Info, "From attribute", ControlValidationMessage.NotShowingNow);
                 }
@@ -363,7 +362,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "To attribute", ControlValidationMessage.NotInMetadata);
                 }
-                if (fxb.Service != null && !cmbTo.Items.OfType<string>().Any(i => i == cmbTo.Text))
+                if (fxb.entities != null && !cmbTo.Items.OfType<string>().Any(i => i == cmbTo.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Info, "To attribute", ControlValidationMessage.NotShowingNow);
                 }

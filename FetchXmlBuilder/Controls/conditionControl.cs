@@ -128,7 +128,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return new ControlValidationResult(ControlValidationLevel.Error, "Attribute", ControlValidationMessage.IsRequired);
                 }
 
-                if (fxb.Service != null && !cmbAttribute.Items.OfType<AttributeItem>().Any(i => i.ToString() == cmbAttribute.Text))
+                if (fxb.entities != null && !cmbAttribute.Items.OfType<AttributeItem>().Any(i => i.ToString() == cmbAttribute.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute", ControlValidationMessage.InValid);
                 }

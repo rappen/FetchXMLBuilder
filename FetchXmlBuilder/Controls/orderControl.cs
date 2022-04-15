@@ -82,7 +82,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 {
                     return new ControlValidationResult(ControlValidationLevel.Error, "Attribute", ControlValidationMessage.IsRequired);
                 }
-                if (fxb.Service != null)
+                if (fxb.entities != null)
                 {
                     if (!allattributes.Any(a => a.LogicalName == cmbAttribute.Text))
                     {
