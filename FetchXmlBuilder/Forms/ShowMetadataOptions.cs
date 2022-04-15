@@ -60,6 +60,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             chkARead.CheckState = setting.IsValidForRead;
             chkARetrievable.CheckState = setting.IsRetrievable;
             chkAAttributeOf.CheckState = setting.AttributeOf;
+            chkAShowPrimary.Checked = setting.AlwaysPrimary;
+            chkAShowAddress.Checked = setting.AlwaysAddresses;
         }
 
         private ShowMetaTypesEntity GetEntitiesSettings()
@@ -94,7 +96,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 IsValidForGrid = chkAGrid.CheckState,
                 IsFiltered = chkAFiltered.CheckState,
                 IsRetrievable = chkARetrievable.CheckState,
-                AttributeOf = chkAAttributeOf.CheckState
+                AttributeOf = chkAAttributeOf.CheckState,
+                AlwaysPrimary=chkAShowPrimary.Checked,
+                AlwaysAddresses=chkAShowAddress.Checked
             };
         }
 
@@ -124,6 +128,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                    .OfType<CheckBox>()
                    .Where(c => c.CheckState != CheckState.Indeterminate)
                    .Select(c => c.Text).ToList();
+            if (chkAShowPrimary.Checked)
+            {
+                selattributes.Add("Always Primary");
+            }
+            if (chkAShowAddress.Checked)
+            {
+                selattributes.Add("Always Addresses");
+            }
             lblAttributes.Text = string.Join(", ", selattributes.ToArray());
             if (Width < 600)
             {
@@ -177,6 +189,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             {
                 Width = gbAttributes.Left + gbAttributes.Width + 30;
             }
+        }
+
+        private void chkAShowAlways_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateSelections();
         }
     }
 }

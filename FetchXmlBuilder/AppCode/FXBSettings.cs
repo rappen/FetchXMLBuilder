@@ -95,9 +95,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public CheckState IsRetrievable { get; set; } = CheckState.Indeterminate;   //A
         public CheckState IsValidForGrid { get; set; } = CheckState.Indeterminate;  //A
         public CheckState AttributeOf { get; set; } = CheckState.Unchecked; //A
+        public bool AlwaysPrimary { get; set; } = true;
+        public bool AlwaysAddresses { get; set; } = true;
     }
 
-     public class ResultOptions
+    public class ResultOptions
     {
         public bool Friendly { get; set; }
         public bool Id { get; set; }

@@ -588,6 +588,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             var attributes = GetAllAttribues(entityName);
             foreach (var attribute in attributes)
             {
+                if (selectattributes.AlwaysPrimary && attribute.IsLogical != true && (attribute.IsPrimaryId == true || attribute.IsPrimaryName == true))
+                {
+                    result.Add(attribute);
+                    continue;
+                }
+                if (selectattributes.AlwaysAddresses && attribute.IsLogical == true && attribute.AttributeType != AttributeTypeCode.Virtual && attribute.LogicalName.StartsWith("address"))
+                {
+                    result.Add(attribute);
+                    continue;
+                }
                 if (!CheckMetadata(selectattributes.IsManaged, attribute.IsManaged)) { continue; }
                 if (!CheckMetadata(selectattributes.IsCustom, attribute.IsCustomAttribute)) { continue; }
                 if (!CheckMetadata(selectattributes.IsCustomizable, attribute.IsCustomizable)) { continue; }
