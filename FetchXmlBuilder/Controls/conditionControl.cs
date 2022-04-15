@@ -265,6 +265,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             return base.ValidateControl(control);
         }
 
+        protected override Dictionary<string, string> GetAttributesCollection()
+        {
+            var result = base.GetAttributesCollection();
+            if (!result.ContainsKey("value") && cmbValue.Enabled && cmbValue.DropDownStyle == ComboBoxStyle.Simple)
+            {
+                result.Add("value", "");
+            }
+            return result;
+        }
+
         #endregion Protected Methods
 
         #region Private Methods
@@ -625,6 +635,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
             return base.Metadata();
         }
+
         public override void Focus()
         {
             cmbAttribute.Focus();
