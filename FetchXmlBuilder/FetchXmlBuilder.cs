@@ -10,7 +10,6 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
-using NuGet.Packaging;
 using Rappen.XTB.Helpers.Extensions;
 using Rappen.XTB.Helpers.Serialization;
 using System;
@@ -40,7 +39,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal Dictionary<string, EntityMetadata> entities;
         internal static bool friendlyNames = false;
         internal Dictionary<string, List<Entity>> views;
-        internal FXBSettings settings = new FXBSettings();
+        internal FXBSettings settings;
         internal TreeBuilderControl dockControlBuilder;
         internal bool working = false;
         internal Version CDSVersion = new Version();
@@ -111,6 +110,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 "IsLogical",
                 "EntityLogicalName"
             }).ToArray();
+            LoadSetting();
         }
 
         private void Error_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -146,20 +146,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         public string EmailAccount => "jonas@rappen.net";
 
-        public string HelpUrl
-        {
-            get { return "https://fetchxmlbuilder.com?utm_source=XTBHelp"; }
-        }
+        public string HelpUrl => "https://fetchxmlbuilder.com?utm_source=XTBHelp";
 
-        public string RepositoryName
-        {
-            get { return "FetchXMLBuilder"; }
-        }
+        public string RepositoryName => "FetchXMLBuilder";
 
-        public string UserName
-        {
-            get { return "rappen"; }
-        }
+        public string UserName => "rappen";
 
         #endregion Public Properties
 
@@ -725,7 +716,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return warning;
         }
 
-
         internal void LoadEntityDetails(string entityName, Action detailsLoaded, bool async = true, bool update = true)
         {
             if (detailsLoaded != null && !async)
@@ -1139,6 +1129,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return result;
         }
 
+        internal EntityMetadata GetEntity(string entityname)
+        {
+            return entities?.Select(e => e.Value)?.FirstOrDefault(e => e.LogicalName == entityname);
+        }
+
         private EntityMetadata GetEntity(int etc)
         {
             if (entities != null)
@@ -1244,28 +1239,37 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return js;
         }
 
-        private void LoadEntities()
+        private void LoadEntities(ConnectionDetail connectionDetail)
         {
             working = true;
             entities = null;
             entityShitList = new List<string>();
-            WorkAsync(new WorkAsyncInfo("Loading entities...",
-                (eventargs) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading entities...",
+                Work = (worker, eventargs) =>
                 {
                     EnableControls(false);
 
-                    //if (ConnectionDetail.MetadataCacheLoader != null)
-                    //{
-                    //    var loader = ConnectionDetail.MetadataCacheLoader;
-                    //    loader.ContinueWith(task =>
-                    //    {
-                    //        entities = ConnectionDetail.MetadataCache.ToDictionary(e => e.LogicalName);
-                    //    });
-                    //}
-
-                    eventargs.Result = Service.LoadEntities(ConnectionDetail.OrganizationMajorVersion, ConnectionDetail.OrganizationMinorVersion);
-                })
-            {
+                    if (settings.TryMetadataCache && connectionDetail.MetadataCacheLoader != null)
+                    {   // Try cache metadata
+                        if (connectionDetail.MetadataCache != null)
+                        {   // Already cached
+                            eventargs.Result = connectionDetail.MetadataCache;
+                        }
+                        else
+                        {   // Load to cache
+                            connectionDetail.MetadataCacheLoader.ContinueWith(task =>
+                            {   // Waiting for loaded
+                                SetAfterEntitiesLoaded(task.Result?.EntityMetadata);
+                            });
+                        }
+                    }
+                    else
+                    {   // Load as usual, the old way
+                        eventargs.Result = Service.LoadEntities(connectionDetail.OrganizationMajorVersion, connectionDetail.OrganizationMinorVersion);
+                    }
+                },
                 PostWorkCallBack = (completedargs) =>
                 {
                     if (completedargs.Error != null)
@@ -1276,16 +1280,39 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         if (completedargs.Result is RetrieveMetadataChangesResponse meta)
                         {
-                            entities = new Dictionary<string, EntityMetadata>();
-                            entities.AddRange(meta.EntityMetadata.ToDictionary(e => e.LogicalName));
+                            SetAfterEntitiesLoaded(meta.EntityMetadata);
+                        }
+                        else if (completedargs.Result is IEnumerable<EntityMetadata> entitiesmeta)
+                        {
+                            SetAfterEntitiesLoaded(entitiesmeta);
                         }
                     }
-                    UpdateLiveXML();
-                    working = false;
-                    EnableControls(true);
-                    dockControlBuilder.ApplyCurrentSettings();
+                    SetAfterEntitiesLoaded(null);
                 }
             });
+        }
+
+        private void SetAfterEntitiesLoaded(IEnumerable<EntityMetadata> newEntityMetadata)
+        {
+            MethodInvoker mi = delegate
+            {
+                if (newEntityMetadata != null)
+                {
+                    entities = newEntityMetadata?.ToDictionary(e => e.LogicalName);
+                }
+                UpdateLiveXML();
+                working = false;
+                EnableControls(true);
+                dockControlBuilder?.ApplyCurrentSettings();
+            };
+            if (InvokeRequired)
+            {
+                Invoke(mi);
+            }
+            else
+            {
+                mi();
+            }
         }
 
         private void LoadEntityDetailsCompleted(string entityName, EntityMetadata Result, Exception Error, bool update)
@@ -1293,7 +1320,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (Error != null)
             {
                 entityShitList.Add(entityName);
-                MessageBox.Show(Error.Message, "Load attribute metadata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ShowErrorDialog(Error, "Load attribute metadata");
             }
             else
             {
@@ -2024,7 +2051,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (settingDlg.ShowDialog(this) == DialogResult.OK)
             {
                 LogUse("SaveOptions");
+                var oldtrycachemetadata = settings.TryMetadataCache;
                 settings = settingDlg.GetSettings();
+                if (Service != null && oldtrycachemetadata != settings.TryMetadataCache)
+                {
+                    var msg = settings.TryMetadataCache ?
+                        "It is now trying to retrieve chached metadata in the background, and may take a few or many seconds." :
+                        "Metadata is now reloaded in the old fashioned way.";
+                    if (MessageBox.Show("The 'Use cache metadata' flag has been changed.\n\n" + msg + "\n\nClick Cancel to NOT change this.",
+                        "Metadata changed", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.Cancel)
+                    {
+                        settings.TryMetadataCache = !settings.TryMetadataCache;
+                    }
+                    else
+                    {
+                        LoadEntities(ConnectionDetail);
+                    }
+                }
+                SaveSetting();
                 views = null;
                 ApplySettings(false);
                 dockControlBuilder.ApplyCurrentSettings();
@@ -2131,7 +2175,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 if (!working)
                 {
-                    LoadEntities();
+                    LoadEntities(e.ConnectionDetail);
                 }
             }
             else
@@ -2145,7 +2189,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void FetchXmlBuilder_Load(object sender, EventArgs e)
         {
-            LoadSetting();
             LogUse("Load");
             CheckIntegrationTools();
             SetupDockControls();
