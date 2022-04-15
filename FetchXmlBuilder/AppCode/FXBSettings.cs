@@ -39,6 +39,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool ShowValidation { get; set; } = true;
         public bool ShowValidationInfo { get; set; } = true;
         public bool ShowRepository { get; set; } = false;
+        public bool TryMetadataCache { get; set; } = true;
     }
 
     public class QueryOptions
@@ -196,7 +197,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
     public class FXBConnectionSettings
     {
-        public string FetchXML { get; set; } = string.Empty;
+        public string FetchXML { get; set; } = QueryOptions.DefaultNewQuery;
     }
 
     public class QueryRepository

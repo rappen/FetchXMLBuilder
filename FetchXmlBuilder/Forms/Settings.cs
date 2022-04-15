@@ -43,6 +43,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             propXmlColors.SelectedObject = settings.XmlColors;
             txtFetch.ConfigureForXml(settings);
             txtFetch.FormatXML(settings.QueryOptions.NewQueryTemplate, settings);
+            chkTryMetadataCache.Checked = settings.TryMetadataCache;
         }
 
         private int SettingResultToComboBoxItem(ResultOutput resultOutput)
@@ -80,6 +81,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             settings.ShowRepository = chkShowRepository.Checked;
             settings.QueryOptions.ShowAllAttributes = chkShowAllAttributes.Checked;
             settings.XmlColors = propXmlColors.SelectedObject as XmlColors;
+            settings.TryMetadataCache = chkTryMetadataCache.Checked;
             return settings;
         }
 

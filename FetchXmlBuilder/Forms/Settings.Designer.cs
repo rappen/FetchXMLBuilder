@@ -33,6 +33,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             Cinteros.Xrm.FetchXmlBuilder.AppCode.XmlColors xmlColors1 = new Cinteros.Xrm.FetchXmlBuilder.AppCode.XmlColors();
             this.gbResult = new System.Windows.Forms.GroupBox();
+            this.chkClickableLinks = new System.Windows.Forms.CheckBox();
+            this.cmbResult = new System.Windows.Forms.ComboBox();
             this.chkResAllPages = new System.Windows.Forms.CheckBox();
             this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
             this.gbAppearance = new System.Windows.Forms.GroupBox();
@@ -56,17 +58,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.btnFormatQuery = new System.Windows.Forms.Button();
             this.gbXml = new System.Windows.Forms.GroupBox();
             this.btnResetXmlColors = new System.Windows.Forms.Button();
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.gbBehavior = new System.Windows.Forms.GroupBox();
             this.chkShowValidationInfo = new System.Windows.Forms.CheckBox();
             this.chkShowValidation = new System.Windows.Forms.CheckBox();
             this.chkAddConditionToFilter = new System.Windows.Forms.CheckBox();
             this.chkShowRepository = new System.Windows.Forms.CheckBox();
             this.gbLayout = new System.Windows.Forms.GroupBox();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.chkShowAllAttributes = new System.Windows.Forms.CheckBox();
-            this.cmbResult = new System.Windows.Forms.ComboBox();
-            this.chkClickableLinks = new System.Windows.Forms.CheckBox();
-            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkTryMetadataCache = new System.Windows.Forms.CheckBox();
             this.gbResult.SuspendLayout();
             this.gbAppearance.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -75,6 +77,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbXml.SuspendLayout();
             this.gbBehavior.SuspendLayout();
             this.gbLayout.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbResult
@@ -89,6 +92,31 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbResult.TabIndex = 40;
             this.gbResult.TabStop = false;
             this.gbResult.Text = "Result";
+            // 
+            // chkClickableLinks
+            // 
+            this.chkClickableLinks.AutoSize = true;
+            this.chkClickableLinks.Location = new System.Drawing.Point(16, 100);
+            this.chkClickableLinks.Name = "chkClickableLinks";
+            this.chkClickableLinks.Size = new System.Drawing.Size(157, 17);
+            this.chkClickableLinks.TabIndex = 14;
+            this.chkClickableLinks.Text = "Double-click links on results";
+            this.chkClickableLinks.UseVisualStyleBackColor = true;
+            // 
+            // cmbResult
+            // 
+            this.cmbResult.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbResult.FormattingEnabled = true;
+            this.cmbResult.Items.AddRange(new object[] {
+            "View",
+            "XML (custom format)",
+            "JSON (custom format)",
+            "JSON (web api format)",
+            "Raw result"});
+            this.cmbResult.Location = new System.Drawing.Point(16, 20);
+            this.cmbResult.Name = "cmbResult";
+            this.cmbResult.Size = new System.Drawing.Size(192, 21);
+            this.cmbResult.TabIndex = 13;
             // 
             // chkResAllPages
             // 
@@ -330,6 +358,33 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.btnResetXmlColors.UseVisualStyleBackColor = true;
             this.btnResetXmlColors.Click += new System.EventHandler(this.btnResetXmlColors_Click);
             // 
+            // propXmlColors
+            // 
+            this.propXmlColors.CanShowVisualStyleGlyphs = false;
+            this.propXmlColors.HelpVisible = false;
+            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.Location = new System.Drawing.Point(1, 19);
+            this.propXmlColors.Name = "propXmlColors";
+            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            xmlColors1.AttributeKey = System.Drawing.Color.Red;
+            xmlColors1.AttributeKeyColor = "Red";
+            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
+            xmlColors1.AttributeValueColor = "Blue";
+            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            xmlColors1.CommentColor = "0";
+            xmlColors1.Element = System.Drawing.Color.DarkRed;
+            xmlColors1.ElementColor = "DarkRed";
+            xmlColors1.Tag = System.Drawing.Color.Blue;
+            xmlColors1.TagColor = "Blue";
+            xmlColors1.Value = System.Drawing.Color.Black;
+            xmlColors1.ValueColor = "Black";
+            this.propXmlColors.SelectedObject = xmlColors1;
+            this.propXmlColors.Size = new System.Drawing.Size(218, 104);
+            this.propXmlColors.TabIndex = 7;
+            this.propXmlColors.ToolbarVisible = false;
+            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
+            // 
             // gbBehavior
             // 
             this.gbBehavior.Controls.Add(this.chkShowValidationInfo);
@@ -400,6 +455,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbLayout.TabStop = false;
             this.gbLayout.Text = "Layout";
             // 
+            // chkShowAllAttributes
+            // 
+            this.chkShowAllAttributes.AutoSize = true;
+            this.chkShowAllAttributes.Location = new System.Drawing.Point(16, 100);
+            this.chkShowAllAttributes.Name = "chkShowAllAttributes";
+            this.chkShowAllAttributes.Size = new System.Drawing.Size(169, 17);
+            this.chkShowAllAttributes.TabIndex = 5;
+            this.chkShowAllAttributes.Text = "Show \"all-attributes\" (bad use)";
+            this.chkShowAllAttributes.UseVisualStyleBackColor = true;
+            // 
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
@@ -413,67 +478,25 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.linkLabel1.UseCompatibleTextRendering = true;
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
-            // chkShowAllAttributes
+            // groupBox1
             // 
-            this.chkShowAllAttributes.AutoSize = true;
-            this.chkShowAllAttributes.Location = new System.Drawing.Point(16, 100);
-            this.chkShowAllAttributes.Name = "chkShowAllAttributes";
-            this.chkShowAllAttributes.Size = new System.Drawing.Size(169, 17);
-            this.chkShowAllAttributes.TabIndex = 5;
-            this.chkShowAllAttributes.Text = "Show \"all-attributes\" (bad use)";
-            this.chkShowAllAttributes.UseVisualStyleBackColor = true;
+            this.groupBox1.Controls.Add(this.chkTryMetadataCache);
+            this.groupBox1.Location = new System.Drawing.Point(248, 185);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(222, 45);
+            this.groupBox1.TabIndex = 103;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Metadata";
             // 
-            // cmbResult
+            // chkTryMetadataCache
             // 
-            this.cmbResult.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbResult.FormattingEnabled = true;
-            this.cmbResult.Items.AddRange(new object[] {
-            "View",
-            "XML (custom format)",
-            "JSON (custom format)",
-            "JSON (web api format)",
-            "Raw result"});
-            this.cmbResult.Location = new System.Drawing.Point(16, 20);
-            this.cmbResult.Name = "cmbResult";
-            this.cmbResult.Size = new System.Drawing.Size(192, 21);
-            this.cmbResult.TabIndex = 13;
-            // 
-            // chkClickableLinks
-            // 
-            this.chkClickableLinks.AutoSize = true;
-            this.chkClickableLinks.Location = new System.Drawing.Point(16, 100);
-            this.chkClickableLinks.Name = "chkClickableLinks";
-            this.chkClickableLinks.Size = new System.Drawing.Size(157, 17);
-            this.chkClickableLinks.TabIndex = 14;
-            this.chkClickableLinks.Text = "Double-click links on results";
-            this.chkClickableLinks.UseVisualStyleBackColor = true;
-            // 
-            // propXmlColors
-            // 
-            this.propXmlColors.CanShowVisualStyleGlyphs = false;
-            this.propXmlColors.HelpVisible = false;
-            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.Location = new System.Drawing.Point(1, 19);
-            this.propXmlColors.Name = "propXmlColors";
-            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            xmlColors1.AttributeKey = System.Drawing.Color.Red;
-            xmlColors1.AttributeKeyColor = "Red";
-            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
-            xmlColors1.AttributeValueColor = "Blue";
-            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            xmlColors1.CommentColor = "0";
-            xmlColors1.Element = System.Drawing.Color.DarkRed;
-            xmlColors1.ElementColor = "DarkRed";
-            xmlColors1.Tag = System.Drawing.Color.Blue;
-            xmlColors1.TagColor = "Blue";
-            xmlColors1.Value = System.Drawing.Color.Black;
-            xmlColors1.ValueColor = "Black";
-            this.propXmlColors.SelectedObject = xmlColors1;
-            this.propXmlColors.Size = new System.Drawing.Size(218, 104);
-            this.propXmlColors.TabIndex = 7;
-            this.propXmlColors.ToolbarVisible = false;
-            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
+            this.chkTryMetadataCache.AutoSize = true;
+            this.chkTryMetadataCache.Location = new System.Drawing.Point(16, 20);
+            this.chkTryMetadataCache.Name = "chkTryMetadataCache";
+            this.chkTryMetadataCache.Size = new System.Drawing.Size(202, 17);
+            this.chkTryMetadataCache.TabIndex = 0;
+            this.chkTryMetadataCache.Text = "Use cached metadata in XrmToolBox";
+            this.chkTryMetadataCache.UseVisualStyleBackColor = true;
             // 
             // Settings
             // 
@@ -483,6 +506,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(717, 432);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.gbLayout);
             this.Controls.Add(this.gbBehavior);
@@ -509,6 +533,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbBehavior.PerformLayout();
             this.gbLayout.ResumeLayout(false);
             this.gbLayout.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -550,5 +576,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private System.Windows.Forms.CheckBox chkClickableLinks;
         private System.Windows.Forms.ComboBox cmbResult;
         private System.Windows.Forms.CheckBox chkShowAllAttributes;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox chkTryMetadataCache;
     }
 }
