@@ -14,8 +14,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FXBTests", "FXBTests\FXBTes
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MarkMpn.FetchXmlToWebAPI", "MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.shproj", "{543E6D79-2913-4B00-AAAC-5661F6ADB1A5}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rappen.XTB.Helpers", "Rappen.XTB.Helper\Rappen.XTB.Helpers.shproj", "{0B88B381-EE9D-41E8-A62C-90152C42DE90}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "FXBEditorUtils", "FXBEditorUtils\FXBEditorUtils.shproj", "{FAF35E13-1A84-45B3-A315-C62D15AC888A}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MarkMpn.XmlSchemaAutocomplete", "MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutocomplete.shproj", "{CE3B0F1B-1668-4AC3-A7AD-FE1872C6BCC3}"
@@ -24,12 +22,14 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MarkMpn.XmlSchemaAutocomple
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MsCrmTools.MetadataBrowser.Shared", "MsCrmTools.MetadataBrowser\MsCrmTools.MetadataBrowser\MsCrmTools.MetadataBrowser.Shared.shproj", "{9C6AADAA-CF44-4BCE-90C7-79E6C6EF6DEC}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rappen.XRM.Helpers", "Rappen.XTB.Helper\Rappen.XRM.Helpers.shproj", "{2EBF1257-150F-46C8-8BBD-2A9235C0EB45}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rappen.XRM.Helpers", "Rappen.XTB.Helper\Rappen.XRM.Helpers\Rappen.XRM.Helpers.shproj", "{2EBF1257-150F-46C8-8BBD-2A9235C0EB45}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rappen.XTB.Helpers", "Rappen.XTB.Helper\Rappen.XTB.Helpers\Rappen.XTB.Helpers.shproj", "{0B88B381-EE9D-41E8-A62C-90152C42DE90}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Rappen.XTB.Helper\Rappen.XTB.Helpers.projitems*{0b88b381-ee9d-41e8-a62c-90152c42de90}*SharedItemsImports = 13
-		Rappen.XTB.Helper\Rappen.XRM.Helpers.projitems*{2ebf1257-150f-46c8-8bbd-2a9235c0eb45}*SharedItemsImports = 13
+		Rappen.XTB.Helper\Rappen.XTB.Helpers\Rappen.XTB.Helpers.projitems*{0b88b381-ee9d-41e8-a62c-90152c42de90}*SharedItemsImports = 13
+		Rappen.XTB.Helper\Rappen.XRM.Helpers\Rappen.XRM.Helpers.projitems*{2ebf1257-150f-46c8-8bbd-2a9235c0eb45}*SharedItemsImports = 13
 		MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutocomplete.Scintilla\MarkMpn.XmlSchemaAutocomplete.Scintilla.projitems*{4c497b9c-b9dd-4b3d-8ecc-c504afcadd65}*SharedItemsImports = 13
 		MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems*{543e6d79-2913-4b00-aaac-5661f6adb1a5}*SharedItemsImports = 13
 		MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutoComplete.projitems*{8f32ef58-ac53-49de-957b-102d78368377}*SharedItemsImports = 4
@@ -40,8 +40,8 @@ Global
 		MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutocomplete.Scintilla\MarkMpn.XmlSchemaAutocomplete.Scintilla.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
 		MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutoComplete.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
 		MsCrmTools.MetadataBrowser\MsCrmTools.MetadataBrowser\MsCrmTools.MetadataBrowser.Shared.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
-		Rappen.XTB.Helper\Rappen.XRM.Helpers.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
-		Rappen.XTB.Helper\Rappen.XTB.Helpers.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
+		Rappen.XTB.Helper\Rappen.XRM.Helpers\Rappen.XRM.Helpers.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
+		Rappen.XTB.Helper\Rappen.XTB.Helpers\Rappen.XTB.Helpers.projitems*{d746cbe7-7787-47fc-b773-f089a44df8c9}*SharedItemsImports = 4
 		FXBEditorUtils\FXBEditorUtils.projitems*{faf35e13-1a84-45b3-a315-c62d15ac888a}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2,7 +2,7 @@
 using Cinteros.Xrm.XmlEditorUtils;
 using MarkMpn.XmlSchemaAutocomplete.Scintilla;
 using Microsoft.Xrm.Sdk.Metadata;
-using Rappen.XTB.Helpers.Extensions;
+using Rappen.XRM.Helpers.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
