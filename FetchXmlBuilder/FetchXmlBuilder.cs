@@ -966,6 +966,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
         }
 
+        internal void OpenURLProfile(string url, bool addparameters)
+        {
+            if (addparameters)
+            {
+                url = Utils.ProcessURL(url);
+            }
+            ConnectionDetail.OpenUrlWithBrowserProfile(new Uri(url));
+        }
+
         internal static void OpenURL(string url)
         {
             url = Utils.ProcessURL(url);

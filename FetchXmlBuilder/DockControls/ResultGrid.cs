@@ -95,12 +95,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             if (e.Value is EntityReference entref && form.ConnectionDetail.GetEntityReferenceUrl(entref) is string urlref && !string.IsNullOrEmpty(urlref))
             {
                 form.LogUse("OpenParentRecord");
-                Process.Start(urlref);
+                form.OpenURLProfile(urlref, false);
             }
             else if (e.Entity != null && form.ConnectionDetail.GetEntityUrl(e.Entity) is string urlentity && !string.IsNullOrEmpty(urlentity))
             {
                 form.LogUse("OpenRecord");
-                Process.Start(urlentity);
+                form.OpenURLProfile(urlentity, false);
             }
         }
 
@@ -200,7 +200,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             if (sender is ToolStripItem tool && tool.Tag is string url && !string.IsNullOrWhiteSpace(url))
             {
-                Process.Start(url);
+                form.LogUse("OpenRecord");
+                form.OpenURLProfile(url, false);
             }
         }
 
@@ -208,6 +209,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             if (sender is ToolStripItem tool && tool.Tag is string url && !string.IsNullOrWhiteSpace(url))
             {
+                form.LogUse("CopyRecord");
                 Clipboard.SetText(url);
             }
         }
