@@ -1276,8 +1276,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         {   // Already cached
                             eventargs.Result = connectionDetail.MetadataCache;
                         }
+                        else if (settings.WaitUntilMetadataLoaded)
+                        {   // Load the cache until done
+                            eventargs.Result = connectionDetail.MetadataCacheLoader.ConfigureAwait(false).GetAwaiter().GetResult()?.EntityMetadata;
+                        }
                         else
-                        {   // Load to cache
+                        {   // Load the cache in background
                             connectionDetail.MetadataCacheLoader.ContinueWith(task =>
                             {   // Waiting for loaded
                                 SetAfterEntitiesLoaded(task.Result?.EntityMetadata);
