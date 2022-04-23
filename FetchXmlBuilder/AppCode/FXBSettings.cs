@@ -40,6 +40,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool ShowValidationInfo { get; set; } = true;
         public bool ShowRepository { get; set; } = false;
         public bool TryMetadataCache { get; set; } = true;
+        public bool WaitUntilMetadataLoaded { get; set; } = false;
     }
 
     public class QueryOptions

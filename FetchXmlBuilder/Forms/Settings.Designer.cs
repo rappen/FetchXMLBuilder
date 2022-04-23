@@ -69,6 +69,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.chkTryMetadataCache = new System.Windows.Forms.CheckBox();
+            this.chkWaitUntilMetadataLoaded = new System.Windows.Forms.CheckBox();
             this.gbResult.SuspendLayout();
             this.gbAppearance.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -480,10 +481,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chkWaitUntilMetadataLoaded);
             this.groupBox1.Controls.Add(this.chkTryMetadataCache);
-            this.groupBox1.Location = new System.Drawing.Point(248, 185);
+            this.groupBox1.Location = new System.Drawing.Point(248, 165);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(222, 45);
+            this.groupBox1.Size = new System.Drawing.Size(222, 65);
             this.groupBox1.TabIndex = 103;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Metadata";
@@ -497,6 +499,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.chkTryMetadataCache.TabIndex = 0;
             this.chkTryMetadataCache.Text = "Use cached metadata in XrmToolBox";
             this.chkTryMetadataCache.UseVisualStyleBackColor = true;
+            this.chkTryMetadataCache.CheckedChanged += new System.EventHandler(this.chkTryMetadataCache_CheckedChanged);
+            // 
+            // chkWaitUntilMetadataLoaded
+            // 
+            this.chkWaitUntilMetadataLoaded.AutoSize = true;
+            this.chkWaitUntilMetadataLoaded.Location = new System.Drawing.Point(16, 40);
+            this.chkWaitUntilMetadataLoaded.Name = "chkWaitUntilMetadataLoaded";
+            this.chkWaitUntilMetadataLoaded.Size = new System.Drawing.Size(172, 17);
+            this.chkWaitUntilMetadataLoaded.TabIndex = 1;
+            this.chkWaitUntilMetadataLoaded.Text = "Wait until all entities are loaded";
+            this.chkWaitUntilMetadataLoaded.UseVisualStyleBackColor = true;
             // 
             // Settings
             // 
@@ -578,5 +591,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private System.Windows.Forms.CheckBox chkShowAllAttributes;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox chkTryMetadataCache;
+        private System.Windows.Forms.CheckBox chkWaitUntilMetadataLoaded;
     }
 }

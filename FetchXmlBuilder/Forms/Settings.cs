@@ -44,6 +44,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             txtFetch.ConfigureForXml(settings);
             txtFetch.FormatXML(settings.QueryOptions.NewQueryTemplate, settings);
             chkTryMetadataCache.Checked = settings.TryMetadataCache;
+            if (chkTryMetadataCache.Checked)
+            {
+                chkWaitUntilMetadataLoaded.Enabled = true;
+                chkWaitUntilMetadataLoaded.Checked = settings.WaitUntilMetadataLoaded;
+            }
+            else
+            {
+                chkWaitUntilMetadataLoaded.Enabled = false;
+                chkWaitUntilMetadataLoaded.Checked = false;
+            }
         }
 
         private int SettingResultToComboBoxItem(ResultOutput resultOutput)
@@ -82,6 +92,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             settings.QueryOptions.ShowAllAttributes = chkShowAllAttributes.Checked;
             settings.XmlColors = propXmlColors.SelectedObject as XmlColors;
             settings.TryMetadataCache = chkTryMetadataCache.Checked;
+            settings.WaitUntilMetadataLoaded = chkWaitUntilMetadataLoaded.Checked;
             return settings;
         }
 
@@ -175,6 +186,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 chkShowValidationInfo.Checked = false;
             }
             chkShowValidationInfo.Enabled = chkShowValidation.Checked;
+        }
+
+        private void chkTryMetadataCache_CheckedChanged(object sender, EventArgs e)
+        {
+            chkWaitUntilMetadataLoaded.Enabled = chkTryMetadataCache.Checked;
+            if (!chkTryMetadataCache.Checked)
+            {
+                chkWaitUntilMetadataLoaded.Checked = false;
+            }
         }
     }
 }
