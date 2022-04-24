@@ -30,50 +30,27 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder : PluginControlBase
     {
+        #region AI to log
         private const string aiEndpoint = "https://dc.services.visualstudio.com/v2/track";
         private const string aiKey = "eed73022-2444-45fd-928b-5eebd8fa46a6";    // jonas@rappen.net tenant, XrmToolBox
         //private const string aiKey = "b6a4ec7c-ab43-4780-97cd-021e99506337";   // jonas@jonasr.app, XrmToolBoxInsights
+        private readonly AppInsights ai;
+        #endregion AI
 
         #region Internal Fields
 
-        internal Dictionary<string, EntityMetadata> entities;
-        internal static bool friendlyNames = false;
         internal Dictionary<string, List<Entity>> views;
         internal FXBSettings settings;
-        internal TreeBuilderControl dockControlBuilder;
         internal bool working = false;
         internal Version CDSVersion = new Version();
-        internal HistoryManager historyMgr = new HistoryManager();
-        internal bool historyisavailable = true;
 
         #endregion Internal Fields
 
         #region Private Fields
 
-        private static List<string> entityShitList = new List<string>();
-        private string attributesChecksum = "";
         private bool buttonsEnabled = true;
-        private MessageBusEventArgs callerArgs = null;
-        private string cwpfeed;
-        private XmlContentControl dockControlFetchResult;
-        private XmlContentControl dockControlFetchXml;
-        private XmlContentControl dockControlFetchXmlCs;
-        private XmlContentControl dockControlFetchXmlJs;
-        private ResultGrid dockControlGrid;
-        private ODataControl dockControlOData2;
-        private ODataControl dockControlOData4;
-        private FlowListControl dockControlFlowList;
-        private XmlContentControl dockControlQExp;
-        private XmlContentControl dockControlSQL;
-        private MetadataControl dockControlMeta;
-        private Entity dynml;
-        private string fileName;
         private int resultpanecount = 0;
         private Entity view;
-        private readonly AppInsights ai;
-        private QueryRepository repository = new QueryRepository();
-        private bool inSql4Cds;
-        private bool bduexists;
 
         #endregion Private Fields
 

@@ -19,6 +19,28 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder : PluginControlBase
     {
+        internal static bool friendlyNames = false;
+        internal TreeBuilderControl dockControlBuilder;
+        internal HistoryManager historyMgr = new HistoryManager();
+        internal bool historyisavailable = true;
+        private string cwpfeed;
+        private XmlContentControl dockControlFetchResult;
+        private XmlContentControl dockControlFetchXml;
+        private XmlContentControl dockControlFetchXmlCs;
+        private XmlContentControl dockControlFetchXmlJs;
+        private ResultGrid dockControlGrid;
+        private ODataControl dockControlOData2;
+        private ODataControl dockControlOData4;
+        private FlowListControl dockControlFlowList;
+        private XmlContentControl dockControlQExp;
+        private XmlContentControl dockControlSQL;
+        private MetadataControl dockControlMeta;
+        private Entity dynml;
+        private string fileName;
+        private QueryRepository repository = new QueryRepository();
+        private bool inSql4Cds;
+        private bool bduexists;
+
         internal void EnableControls()
         {
             EnableControls(buttonsEnabled);

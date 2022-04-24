@@ -15,6 +15,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder
     {
+        private string attributesChecksum = "";
+
         internal void FetchResults(string fetch = "")
         {
             if (!tsbExecute.Enabled)

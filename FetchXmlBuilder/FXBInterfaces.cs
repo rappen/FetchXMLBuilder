@@ -10,6 +10,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder : IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin, IDuplicatableTool, ISettingsPlugin
     {
+        private MessageBusEventArgs callerArgs = null;
+
         #region Public Events
 
         public event EventHandler<MessageBusEventArgs> OnOutgoingMessage;

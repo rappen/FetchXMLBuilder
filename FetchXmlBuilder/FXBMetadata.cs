@@ -14,6 +14,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder
     {
+        internal Dictionary<string, EntityMetadata> entities;
+        private static List<string> entityShitList = new List<string>();
+
         #region Internal Methods
 
         internal AttributeMetadata GetAttribute(string entityName, string attributeName)
