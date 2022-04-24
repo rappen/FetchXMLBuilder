@@ -230,6 +230,15 @@
     <Compile Include="AppCode\ConnectionExtensions.cs" />
     <Compile Include="AppCode\EntityNameItem.cs" />
     <Compile Include="AppCode\Extensions.cs" />
+    <Compile Include="FXBGui.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FXBMetadata.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FXBInterfaces.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="AppCode\ServiceExtensions.cs" />
     <Compile Include="AppCode\AttributeItem.cs" />
     <Compile Include="AppCode\GroupBoxExpanderExtensions.cs" />
@@ -394,6 +403,9 @@
     </Compile>
     <Compile Include="Forms\Welcome.Designer.cs">
       <DependentUpon>Welcome.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FXBQueries.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HistoryManager.cs" />
