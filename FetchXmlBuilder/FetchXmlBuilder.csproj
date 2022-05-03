@@ -230,6 +230,7 @@
     <Compile Include="AppCode\ConnectionExtensions.cs" />
     <Compile Include="AppCode\EntityNameItem.cs" />
     <Compile Include="AppCode\Extensions.cs" />
+    <Compile Include="AppCode\FXBConnectionSettings.cs" />
     <Compile Include="FXBGui.cs">
       <SubType>UserControl</SubType>
     </Compile>
