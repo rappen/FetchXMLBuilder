@@ -580,26 +580,26 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             // tsmiSettings
             // 
             this.tsmiSettings.Name = "tsmiSettings";
-            this.tsmiSettings.Size = new System.Drawing.Size(212, 22);
+            this.tsmiSettings.Size = new System.Drawing.Size(253, 22);
             this.tsmiSettings.Text = "Settings...";
             this.tsmiSettings.Click += new System.EventHandler(this.tsbOptions_Click);
             // 
             // tsmiSelect
             // 
             this.tsmiSelect.Name = "tsmiSelect";
-            this.tsmiSelect.Size = new System.Drawing.Size(212, 22);
-            this.tsmiSelect.Text = "Select Entities/Attributes...";
+            this.tsmiSelect.Size = new System.Drawing.Size(253, 22);
+            this.tsmiSelect.Text = "Filter by Solutions and Metadata...";
             this.tsmiSelect.Click += new System.EventHandler(this.tsmiSelect_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(209, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(250, 6);
             // 
             // tmsiShowReleaseNotes
             // 
             this.tmsiShowReleaseNotes.Name = "tmsiShowReleaseNotes";
-            this.tmsiShowReleaseNotes.Size = new System.Drawing.Size(212, 22);
+            this.tmsiShowReleaseNotes.Size = new System.Drawing.Size(253, 22);
             this.tmsiShowReleaseNotes.Text = "Open Release Notes";
             this.tmsiShowReleaseNotes.Click += new System.EventHandler(this.tmsiShowReleaseNotes_Click);
             // 
