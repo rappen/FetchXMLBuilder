@@ -1,28 +1,55 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
-using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using XrmToolBox.Extensibility;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 {
     public partial class ShowMetadataOptions : Form
     {
         private FetchXmlBuilder fxb;
+        private Guid selectedsolution;
+        private List<Entity> solutions;
 
-        public static bool Show(FetchXmlBuilder fxb)
+        public static bool Show(FetchXmlBuilder fxb, Action<bool> applysetting)
         {
-            var form = new ShowMetadataOptions();
-            form.fxb = fxb;
-            form.btnPreview.Enabled = fxb.Service != null;
-            form.PopulateEntitiesSettings(fxb.settings.ShowEntities);
-            form.PopulateAttributesSettings(fxb.settings.ShowAttributes);
-            if (form.ShowDialog() == DialogResult.OK)
+            fxb.WorkAsync(new WorkAsyncInfo
             {
-                fxb.settings.ShowEntities = form.GetEntitiesSettings();
-                fxb.settings.ShowAttributes = form.GetAttributesSettings();
-                return true;
-            }
+                Message = "Loading dialog",
+                Work = (worker, args) =>
+                {
+                    var form = new ShowMetadataOptions();
+                    form.fxb = fxb;
+                    form.btnPreview.Enabled = fxb.Service != null;
+                    form.PopulateSolutionsSettings(fxb.connectionsettings.FilterSetting);
+                    form.PopulateEntitiesSettings(fxb.connectionsettings.ShowEntities);
+                    form.PopulateAttributesSettings(fxb.connectionsettings.ShowAttributes);
+                    form.LoadSolutions();
+                    args.Result = form;
+                },
+                PostWorkCallBack = (args) =>
+                {
+                    if (args.Error != null)
+                    {
+                        fxb.ShowErrorDialog(args.Error);
+                    }
+                    else if (args.Result is ShowMetadataOptions form)
+                    {
+                        var result = form.ShowDialog() == DialogResult.OK;
+                        if (result)
+                        {
+                            fxb.connectionsettings.FilterSetting = form.GetFilterSetting();
+                            fxb.connectionsettings.ShowEntities = form.GetEntitiesSettings();
+                            fxb.connectionsettings.ShowAttributes = form.GetAttributesSettings();
+                        }
+                        applysetting?.Invoke(result);
+                    }
+                }
+            });
             return false;
         }
 
@@ -30,6 +57,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             InitializeComponent();
             Preview(false);
+        }
+
+        private void PopulateSolutionsSettings(FilterSetting setting)
+        {
+            rbAllSolutions.Checked = setting.ShowAllSolutions;
+            rbUnmanagedSolution.Checked = setting.ShowUnmanagedSolutions;
+            rbSpecificSolution.Checked = !setting.ShowSolution.Equals(Guid.Empty);
+            selectedsolution = setting.ShowSolution;
+            chkFilterMetadata.Checked = setting.FilterByMetadata;
+            chkAShowPrimary.Checked = setting.AlwaysPrimary;
+            chkAShowAddress.Checked = setting.AlwaysAddresses;
         }
 
         private void PopulateEntitiesSettings(ShowMetaTypesEntity setting)
@@ -60,8 +98,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             chkARead.CheckState = setting.IsValidForRead;
             chkARetrievable.CheckState = setting.IsRetrievable;
             chkAAttributeOf.CheckState = setting.AttributeOf;
-            chkAShowPrimary.Checked = setting.AlwaysPrimary;
-            chkAShowAddress.Checked = setting.AlwaysAddresses;
+        }
+
+        private FilterSetting GetFilterSetting()
+        {
+            return new FilterSetting
+            {
+                ShowAllSolutions = rbAllSolutions.Checked,
+                ShowUnmanagedSolutions = rbUnmanagedSolution.Checked,
+                ShowSolution = rbSpecificSolution.Checked && xrmSolution.SelectedRecord != null ? xrmSolution.SelectedRecord.Id : Guid.Empty,
+                FilterByMetadata = chkFilterMetadata.Checked,
+                AlwaysPrimary = chkAShowPrimary.Checked,
+                AlwaysAddresses = chkAShowAddress.Checked
+            };
         }
 
         private ShowMetaTypesEntity GetEntitiesSettings()
@@ -97,8 +146,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 IsFiltered = chkAFiltered.CheckState,
                 IsRetrievable = chkARetrievable.CheckState,
                 AttributeOf = chkAAttributeOf.CheckState,
-                AlwaysPrimary=chkAShowPrimary.Checked,
-                AlwaysAddresses=chkAShowAddress.Checked
             };
         }
 
@@ -113,6 +160,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void UpdateSelections(object sender = null, EventArgs e = null)
         {
+            var settingsfilter = GetFilterSetting();
             var settingsentities = GetEntitiesSettings();
             var selentities = gbEntities.Controls
                    .OfType<CheckBox>()
@@ -141,7 +189,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             {
                 return;
             }
-            var entities = fxb.GetDisplayEntities(settingsentities);
+            var entities = fxb.GetDisplayEntities(settingsfilter, settingsentities);
             gbPreviewEntities.Text = $"Preview Entities selected: {entities.Count}";
             lbPreviewEntities.Items.Clear();
             lbPreviewEntities.Items.AddRange(entities.Keys.ToArray());
@@ -194,6 +242,82 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private void chkAShowAlways_CheckedChanged(object sender, EventArgs e)
         {
             UpdateSelections();
+        }
+
+        private void rbAllSolutions_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbSpecificSolution.Checked)
+            {
+                panSelectSolution.Enabled = true;
+                PopulateSolutions();
+            }
+            else
+            {
+                panSelectSolution.Enabled = false;
+                xrmSolution.SelectedIndex = -1;
+            }
+            UpdateSelections();
+        }
+
+        private void PopulateSolutions()
+        {
+            if (!Visible)
+            {
+                return;
+            }
+            xrmSolution.Service = fxb.Service;
+            xrmSolution.DataSource = solutions.Where(s => chkShowAllSolutions.Checked || s.GetAttributeValue<bool>("isvisible") == true);
+            xrmSolution.SetSelected(selectedsolution);
+            Enabled = true;
+        }
+
+        private void chkShowAllSolutions_CheckedChanged(object sender, EventArgs e)
+        {
+            PopulateSolutions();
+            UpdateSelections();
+        }
+
+        private void ShowMetadataOptions_Load(object sender, EventArgs e)
+        {
+            PopulateSolutions();
+            UpdateSelections();
+        }
+
+        private void xrmSolution_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fxb.solutionentities = null;
+            fxb.solutionattributes = null;
+            UpdateSelections();
+        }
+
+        private void chkFilterMetadata_CheckedChanged(object sender, EventArgs e)
+        {
+            gbEntities.Enabled = chkFilterMetadata.Checked;
+            gbAttributes.Enabled = chkFilterMetadata.Checked;
+        }
+
+        internal void LoadSolutions()
+        {
+            if (fxb.Service == null)
+            {
+                solutions = new List<Entity>();
+                return;
+            }
+            var query = new QueryExpression("solution");
+            query.ColumnSet.AddColumns("friendlyname", "uniquename", "ismanaged", "isvisible", "version");
+            query.AddOrder("ismanaged", OrderType.Descending);
+            query.AddOrder("friendlyname", OrderType.Ascending);
+            var publisher = query.AddLink("publisher", "publisherid", "publisherid");
+            publisher.EntityAlias = "P";
+            publisher.Columns.AddColumns("customizationprefix", "uniquename", "friendlyname");
+            try
+            {
+                solutions = fxb.Service.RetrieveMultiple(query).Entities.ToList();
+            }
+            catch (Exception ex)
+            {
+                fxb.ShowErrorDialog(ex, "Loading Solutions");
+            }
         }
     }
 }
