@@ -5,13 +5,8 @@ using Cinteros.Xrm.FetchXmlBuilder.Forms;
 using Cinteros.Xrm.XmlEditorUtils;
 using MarkMpn.FetchXmlToWebAPI;
 using McTools.Xrm.Connection;
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Messages;
-using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Sdk.Query;
 using Rappen.XRM.Helpers.Extensions;
-using Rappen.XRM.Helpers.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,10 +16,8 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 using WeifenLuo.WinFormsUI.Docking;
-using XrmToolBox;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
-using XrmToolBox.Extensibility.Interfaces;
 
 namespace Cinteros.Xrm.FetchXmlBuilder
 {
@@ -41,6 +34,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         internal Dictionary<string, List<Entity>> views;
         internal FXBSettings settings;
+        internal FXBConnectionSettings connectionsettings;
         internal bool working = false;
         internal Version CDSVersion = new Version();
 
@@ -349,12 +343,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void ApplySettings(bool reloadquery)
         {
-            var connsett = GetConnectionSetting();
             toolStripMain.Items.OfType<ToolStripItem>().ToList().ForEach(i => i.DisplayStyle = settings.ShowButtonTexts ? ToolStripItemDisplayStyle.ImageAndText : ToolStripItemDisplayStyle.Image);
             tsbRepo.Visible = settings.ShowRepository;
-            if (reloadquery && connsett != null && !string.IsNullOrWhiteSpace(connsett.FetchXML))
+            if (reloadquery && connectionsettings != null && !string.IsNullOrWhiteSpace(connectionsettings.FetchXML))
             {
-                dockControlBuilder.Init(connsett.FetchXML, "loaded from last session", false);
+                dockControlBuilder.Init(connectionsettings.FetchXML, "loaded from last session", false);
             }
             dockControlBuilder.lblQAExpander.GroupBoxSetState(null, settings.QueryOptions.ShowQuickActions);
             var ass = Assembly.GetExecutingAssembly().GetName();
@@ -479,30 +472,33 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 repository = new QueryRepository();
             }
             repository.SortQueries();
+            LoadSettingConnection();
         }
 
-        private FXBConnectionSettings GetConnectionSetting()
+        private void LoadSettingConnection()
         {
+            connectionsettings = null;
             try
             {
-                if (SettingsManager.Instance.TryLoad(typeof(FetchXmlBuilder), out FXBConnectionSettings connsett, ConnectionDetail?.ConnectionName))
-                {
-                    return connsett;
-                }
+                SettingsManager.Instance.TryLoad(typeof(FetchXmlBuilder), out connectionsettings, ConnectionDetail?.ConnectionName);
             }
             catch (InvalidOperationException) { }
-            return new FXBConnectionSettings();
+            if (connectionsettings == null)
+            {
+                connectionsettings = new FXBConnectionSettings();
+            }
         }
 
         /// <summary>Saves various configurations to file for next session</summary>
         private void SaveSetting()
         {
             SettingsManager.Instance.Save(typeof(FetchXmlBuilder), settings, "[Common]");
-            var connsett = new FXBConnectionSettings
+            if (connectionsettings == null)
             {
-                FetchXML = dockControlBuilder.GetFetchString(false, false)
-            };
-            SettingsManager.Instance.Save(typeof(FetchXmlBuilder), connsett, ConnectionDetail?.ConnectionName);
+                connectionsettings = new FXBConnectionSettings();
+            }
+            connectionsettings.FetchXML = dockControlBuilder.GetFetchString(false, false);
+            SettingsManager.Instance.Save(typeof(FetchXmlBuilder), connectionsettings, ConnectionDetail?.ConnectionName);
         }
 
         #endregion Private Methods
@@ -515,8 +511,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             entityShitList.Clear();
             View = null;
             views = null;
+            LoadSettingConnection();
             CDSVersion = new Version(e.ConnectionDetail.OrganizationVersion);
-            LogInfo("Connected CRM version: {0} (Major: {1} Minor: {2})",
+            LogInfo("Connected database version: {0} (Major: {1} Minor: {2})",
                 CDSVersion, e.ConnectionDetail.OrganizationMajorVersion, e.ConnectionDetail.OrganizationMinorVersion);
             // Verifying version where MetadataChanges request exists https://msdn.microsoft.com/en-us/library/jj863599(v=crm.5).aspx
             // According to TechNet 2011 UR12 is 05.00.9690.3218 https://social.technet.microsoft.com/wiki/contents/articles/8062.crm-2011-build-and-version-numbers-for-update-rollups.aspx
