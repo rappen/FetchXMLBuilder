@@ -3,6 +3,7 @@ using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Query;
 using Rappen.XRM.Helpers.Extensions;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
     {
         internal Dictionary<string, EntityMetadata> entities;
         private static List<string> entityShitList = new List<string>();
+        internal List<Entity> solutionentities;
+        internal List<Guid> solutionattributes;
 
         #region Internal Methods
 
@@ -94,35 +97,51 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return entities?.ContainsKey(entityName) == true ? entities[entityName].Attributes : new AttributeMetadata[0];
         }
 
-        internal AttributeMetadata[] GetDisplayAttributes(string entityName) => GetDisplayAttributes(entityName, settings.ShowAttributes);
+        internal AttributeMetadata[] GetDisplayAttributes(string entityName) => GetDisplayAttributes(entityName, connectionsettings.FilterSetting, connectionsettings.ShowAttributes);
 
-        internal AttributeMetadata[] GetDisplayAttributes(string entityName, ShowMetaTypesAttribute selectattributes)
+        internal AttributeMetadata[] GetDisplayAttributes(string entityName, FilterSetting selectedfilter, ShowMetaTypesAttribute selectattributes)
         {
+            if (solutionentities == null)
+            {
+                LoadSolutionsComponents(selectedfilter);
+            }
             var result = new List<AttributeMetadata>();
+            var entity = entities.FirstOrDefault(e => e.Key == entityName);
+            var includeall = solutionentities
+                .Where(se => se.GetAttributeValue<Guid>("objectid").Equals(entity.Value.MetadataId))
+                .Any(se => se.GetAttributeValue<OptionSetValue>("rootcomponentbehavior").Value == 0);
             var attributes = GetAllAttribues(entityName);
             foreach (var attribute in attributes)
             {
-                if (selectattributes.AlwaysPrimary && attribute.IsLogical != true && (attribute.IsPrimaryId == true || attribute.IsPrimaryName == true))
+                if (selectedfilter.AlwaysPrimary && attribute.IsLogical != true && (attribute.IsPrimaryId == true || attribute.IsPrimaryName == true))
                 {
                     result.Add(attribute);
                     continue;
                 }
-                if (selectattributes.AlwaysAddresses && attribute.IsLogical == true && attribute.AttributeType != AttributeTypeCode.Virtual && attribute.LogicalName.StartsWith("address"))
+                if (selectedfilter.AlwaysAddresses && attribute.IsLogical == true && attribute.AttributeType != AttributeTypeCode.Virtual && attribute.LogicalName.StartsWith("address"))
                 {
                     result.Add(attribute);
                     continue;
                 }
-                if (!CheckMetadata(selectattributes.IsManaged, attribute.IsManaged)) { continue; }
-                if (!CheckMetadata(selectattributes.IsCustom, attribute.IsCustomAttribute)) { continue; }
-                if (!CheckMetadata(selectattributes.IsCustomizable, attribute.IsCustomizable)) { continue; }
-                if (!CheckMetadata(selectattributes.IsValidForAdvancedFind, attribute.IsValidForAdvancedFind)) { continue; }
-                if (!CheckMetadata(selectattributes.IsAuditEnabled, attribute.IsAuditEnabled)) { continue; }
-                if (!CheckMetadata(selectattributes.IsLogical, attribute.IsLogical)) { continue; }
-                if (!CheckMetadata(selectattributes.IsValidForRead, attribute.IsValidForRead)) { continue; }
-                if (!CheckMetadata(selectattributes.IsValidForGrid, attribute.IsValidForGrid)) { continue; }
-                if (!CheckMetadata(selectattributes.IsFiltered, attribute.IsFilterable)) { continue; }
-                if (!CheckMetadata(selectattributes.IsRetrievable, attribute.IsRetrievable)) { continue; }
-                if (!CheckMetadata(selectattributes.AttributeOf, !string.IsNullOrEmpty(attribute.AttributeOf))) { continue; }
+                if (!selectedfilter.ShowAllSolutions && !includeall &&
+                    !solutionattributes.Contains((Guid)attribute.MetadataId))
+                {
+                    continue;
+                }
+                if (selectedfilter.FilterByMetadata)
+                {
+                    if (!CheckMetadata(selectattributes.IsManaged, attribute.IsManaged)) { continue; }
+                    if (!CheckMetadata(selectattributes.IsCustom, attribute.IsCustomAttribute)) { continue; }
+                    if (!CheckMetadata(selectattributes.IsCustomizable, attribute.IsCustomizable)) { continue; }
+                    if (!CheckMetadata(selectattributes.IsValidForAdvancedFind, attribute.IsValidForAdvancedFind)) { continue; }
+                    if (!CheckMetadata(selectattributes.IsAuditEnabled, attribute.IsAuditEnabled)) { continue; }
+                    if (!CheckMetadata(selectattributes.IsLogical, attribute.IsLogical)) { continue; }
+                    if (!CheckMetadata(selectattributes.IsValidForRead, attribute.IsValidForRead)) { continue; }
+                    if (!CheckMetadata(selectattributes.IsValidForGrid, attribute.IsValidForGrid)) { continue; }
+                    if (!CheckMetadata(selectattributes.IsFiltered, attribute.IsFilterable)) { continue; }
+                    if (!CheckMetadata(selectattributes.IsRetrievable, attribute.IsRetrievable)) { continue; }
+                    if (!CheckMetadata(selectattributes.AttributeOf, !string.IsNullOrEmpty(attribute.AttributeOf))) { continue; }
+                }
                 result.Add(attribute);
             }
             return result.ToArray();
@@ -138,26 +157,33 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return null;
         }
 
-        internal Dictionary<string, EntityMetadata> GetDisplayEntities() => GetDisplayEntities(settings.ShowEntities);
+        internal Dictionary<string, EntityMetadata> GetDisplayEntities() => GetDisplayEntities(connectionsettings.FilterSetting, connectionsettings.ShowEntities);
 
-        internal Dictionary<string, EntityMetadata> GetDisplayEntities(ShowMetaTypesEntity selectentities)
+        internal Dictionary<string, EntityMetadata> GetDisplayEntities(FilterSetting selectedfilter, ShowMetaTypesEntity selectentities)
         {
             var result = new Dictionary<string, EntityMetadata>();
             if (entities != null)
             {
-                foreach (var entity in entities)
+                if (solutionentities == null)
                 {
-                    if (!CheckMetadata(selectentities.IsManaged, entity.Value.IsManaged)) { continue; }
-                    if (!CheckMetadata(selectentities.IsCustom, entity.Value.IsCustomEntity)) { continue; }
-                    if (!CheckMetadata(selectentities.IsCustomizable, entity.Value.IsCustomizable)) { continue; }
-                    if (!CheckMetadata(selectentities.IsValidForAdvancedFind, entity.Value.IsValidForAdvancedFind)) { continue; }
-                    if (!CheckMetadata(selectentities.IsAuditEnabled, entity.Value.IsAuditEnabled)) { continue; }
-                    if (!CheckMetadata(selectentities.IsLogical, entity.Value.IsLogicalEntity)) { continue; }
-                    if (!CheckMetadata(selectentities.IsIntersect, entity.Value.IsIntersect)) { continue; }
-                    if (!CheckMetadata(selectentities.IsActivity, entity.Value.IsActivity)) { continue; }
-                    if (!CheckMetadata(selectentities.IsActivityParty, entity.Value.IsActivityParty)) { continue; }
-                    if (!CheckMetadata(selectentities.Virtual, entity.Value.DataProviderId.HasValue)) { continue; }
-                    if (!CheckMetadata(selectentities.Ownerships, entity.Value.OwnershipType)) { continue; }
+                    LoadSolutionsComponents(selectedfilter);
+                }
+                foreach (var entity in entities.Where(e => selectedfilter.ShowAllSolutions || solutionentities.Select(se => se["objectid"]).Contains((Guid)e.Value.MetadataId)))
+                {
+                    if (selectedfilter.FilterByMetadata)
+                    {
+                        if (!CheckMetadata(selectentities.IsManaged, entity.Value.IsManaged)) { continue; }
+                        if (!CheckMetadata(selectentities.IsCustom, entity.Value.IsCustomEntity)) { continue; }
+                        if (!CheckMetadata(selectentities.IsCustomizable, entity.Value.IsCustomizable)) { continue; }
+                        if (!CheckMetadata(selectentities.IsValidForAdvancedFind, entity.Value.IsValidForAdvancedFind)) { continue; }
+                        if (!CheckMetadata(selectentities.IsAuditEnabled, entity.Value.IsAuditEnabled)) { continue; }
+                        if (!CheckMetadata(selectentities.IsLogical, entity.Value.IsLogicalEntity)) { continue; }
+                        if (!CheckMetadata(selectentities.IsIntersect, entity.Value.IsIntersect)) { continue; }
+                        if (!CheckMetadata(selectentities.IsActivity, entity.Value.IsActivity)) { continue; }
+                        if (!CheckMetadata(selectentities.IsActivityParty, entity.Value.IsActivityParty)) { continue; }
+                        if (!CheckMetadata(selectentities.Virtual, entity.Value.DataProviderId.HasValue)) { continue; }
+                        if (!CheckMetadata(selectentities.Ownerships, entity.Value.OwnershipType)) { continue; }
+                    }
                     result.Add(entity.Key, entity.Value);
                 }
             }
@@ -360,6 +386,56 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 }
             }
             working = false;
+        }
+
+        private void LoadSolutionsComponents(FilterSetting selectedfilter)
+        {
+            if (Service == null)
+            {
+                solutionentities = new List<Entity>();
+                solutionattributes = new List<Guid>();
+                return;
+            }
+            solutionentities = null;
+            solutionattributes = null;
+            if (selectedfilter.ShowAllSolutions)
+            {
+                solutionentities = new List<Entity>();
+                return;
+            }
+            var query = new QueryExpression("solutioncomponent");
+            query.ColumnSet.AddColumns("objectid", "solutioncomponentid", "rootcomponentbehavior", "rootsolutioncomponentid", "ismetadata", "componenttype");
+            if (!selectedfilter.ShowSolution.Equals(Guid.Empty))
+            {
+                query.Criteria.AddCondition("solutionid", ConditionOperator.Equal, selectedfilter.ShowSolution);
+            }
+            else if (selectedfilter.ShowUnmanagedSolutions)
+            {
+                var query_solution = query.AddLink("solution", "solutionid", "solutionid");
+                query_solution.LinkCriteria.AddCondition("ismanaged", ConditionOperator.Equal, false);
+                query_solution.LinkCriteria.AddCondition("uniquename", ConditionOperator.NotEqual, "Default");
+                query_solution.LinkCriteria.AddCondition("isvisible", ConditionOperator.Equal, true);
+            }
+            var filtertype = new FilterExpression();
+            query.Criteria.AddFilter(filtertype);
+            filtertype.FilterOperator = LogicalOperator.Or;
+            filtertype.AddCondition("componenttype", ConditionOperator.Equal, 1);
+            filtertype.AddCondition("componenttype", ConditionOperator.Equal, 2);
+            try
+            {
+                var result = Service.RetrieveMultiple(query);
+                solutionentities = result.Entities
+                    .Where(c => c.GetAttributeValue<OptionSetValue>("componenttype").Value == 1).ToList();
+                solutionattributes = result.Entities
+                    .Where(c => c.GetAttributeValue<OptionSetValue>("componenttype").Value == 2)
+                    .Select(c => c.GetAttributeValue<Guid>("objectid")).ToList();
+            }
+            catch (Exception ex)
+            {
+                solutionentities = null;
+                solutionattributes = null;
+                ShowErrorDialog(ex, "Loading Solutions Components");
+            }
         }
 
         #endregion Private Methods

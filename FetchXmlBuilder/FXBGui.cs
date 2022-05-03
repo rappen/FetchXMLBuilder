@@ -719,7 +719,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         internal void ShowSelectSettings()
         {
-            if (ShowMetadataOptions.Show(this))
+            var result = ShowMetadataOptions.Show(this, ApplyFilteringSetting);
+        }
+
+        private void ApplyFilteringSetting(bool result)
+        {
+            solutionentities = null;
+            solutionattributes = null;
+            if (result)
             {
                 LogUse("SaveSelect");
                 SaveSetting();
