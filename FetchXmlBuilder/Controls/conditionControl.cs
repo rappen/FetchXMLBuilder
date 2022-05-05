@@ -104,6 +104,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return new ControlValidationResult(ControlValidationLevel.Error, "Operator", ControlValidationMessage.InValid);
                 }
 
+                if (control == cmbOperator && cmbOperator.SelectedItem is OperatorItem opercon && (opercon.GetValue() == "contains" || opercon.GetValue() == "does-not-contain"))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Contains (and not) are available, but not supported for FetchXml.",
+                        "https://docs.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml-schema#:~:text=%3Cxs%3AsimpleType%20name%3D%22operator%22%3E");
+                }
+
                 if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem oper && (!oper.IsMultipleValuesType || Node.Nodes.Count > 0))
                 {
                     AttributeItem attribute = null;
