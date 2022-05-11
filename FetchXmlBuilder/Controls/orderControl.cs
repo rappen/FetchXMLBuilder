@@ -22,7 +22,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             InitializeComponent();
             friendly = FetchXmlBuilder.friendlyNames;
             this.attributes = attributes;
-            allattributes = fetchXmlBuilder.GetAllAttribues(node.LocalEntityName());
+            allattributes = fetchXmlBuilder.GetAllAttribues(node.LocalEntityName()).ToArray();
             InitializeFXB(null, fetchXmlBuilder, tree, node);
         }
 
@@ -101,7 +101,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 {
                     return new ControlValidationResult(ControlValidationLevel.Error, "Alias", ControlValidationMessage.IsRequired);
                 }
-                    
+
                 if (!cmbAlias.Items.OfType<string>().Any(i => i == cmbAlias.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "Alias", ControlValidationMessage.InValid);

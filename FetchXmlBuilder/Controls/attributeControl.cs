@@ -21,7 +21,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             InitializeComponent();
             this.attributes = attributes;
-            allattributes = fetchXmlBuilder.GetAllAttribues(node.LocalEntityName());
+            allattributes = fetchXmlBuilder.GetAllAttribues(node.LocalEntityName()).ToArray();
             InitializeFXB(null, fetchXmlBuilder, tree, node);
         }
 
@@ -56,7 +56,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 }
                 if (fxb.entities != null)
                 {
-                    if (!allattributes.Any(a=>a.LogicalName == cmbAttribute.Text))
+                    if (!allattributes.Any(a => a.LogicalName == cmbAttribute.Text))
                     {
                         return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute", ControlValidationMessage.NotInMetadata);
                     }

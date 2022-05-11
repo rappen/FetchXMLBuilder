@@ -320,12 +320,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 case XmlStyle.Formatted:
                     FormatAsXML();
                     break;
+
                 case XmlStyle.Html:
                     FormatAsHtml();
                     break;
+
                 case XmlStyle.Esc:
                     FormatAsEsc();
                     break;
+
                 case XmlStyle.Mini:
                     FormatAsMini();
                     break;
@@ -383,18 +386,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     case ContentType.Serialized_Result_XML:
                         fxb.settings.DockStates.FetchResult = DockState;
                         break;
+
                     case ContentType.FetchXML:
                         fxb.settings.DockStates.FetchXML = DockState;
                         break;
+
                     case ContentType.CSharp_Query:
                         fxb.settings.DockStates.FetchXMLCs = DockState;
                         break;
+
                     case ContentType.JavaScript_Query:
                         fxb.settings.DockStates.FetchXMLJs = DockState;
                         break;
+
                     case ContentType.QueryExpression:
                         fxb.settings.DockStates.QueryExpression = DockState;
                         break;
+
                     case ContentType.SQL_Query:
                         fxb.settings.DockStates.SQLQuery = DockState;
                         break;
@@ -554,14 +562,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             // Autocomplete entity names for <entity> and <link-entity> elements
             if ((e.Element.Name == "entity" || e.Element.Name == "link-entity") && e.Attribute.Name == "name")
             {
-                e.Suggestions.AddRange(fxb.GetDisplayEntities().Values.Select(entity => new EntityMetadataSuggestion(entity, fxb.settings.UseFriendlyNames)));
+                e.Suggestions.AddRange(fxb.GetDisplayEntities().Select(entity => new EntityMetadataSuggestion(entity, fxb.settings.UseFriendlyNames)));
             }
 
             // Autocomplete prefiltering parameter name
             if ((e.Element.Name == "entity" || e.Element.Name == "link-entity") && e.Attribute.Name == "prefilterparametername")
             {
-                if (fxb.entities.TryGetValue(e.Element.GetAttribute("name"), out var entity))
+                if (fxb.GetEntity(e.Element.GetAttribute("name")) is EntityMetadata entity)
+                {
                     e.Suggestions.Add(new MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion { Value = $"CRM_{entity.ReportViewName}" });
+                }
             }
 
             // Autocomplete attribute names for <attribute>, <condition> and <order> elements
@@ -658,9 +668,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             if (fxb.Service != null)
             {
-                if (fxb.entities != null && fxb.entities.TryGetValue(entityName, out entity) && entity.Attributes != null)
+                entity = fxb.GetEntity(entityName);
+                if (entity?.Attributes != null)
                 {
-                    attributes = fxb.GetDisplayAttributes(entityName);
+                    attributes = fxb.GetDisplayAttributes(entityName).ToArray();
                     return true;
                 }
 
@@ -678,9 +689,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                         {
                             if (fxb.entities == null)
                             {
-                                fxb.entities = new Dictionary<string, EntityMetadata>();
+                                fxb.entities = new List<EntityMetadata>();
                             }
-                            fxb.entities[entityName] = resp.EntityMetadata[0];
+                            else if (fxb.GetEntity(entityName) is EntityMetadata oldentity)
+                            {
+                                fxb.entities.Remove(oldentity);
+                            }
+                            fxb.entities.Add(resp.EntityMetadata[0]);
                         }
                     });
                 }
@@ -789,7 +804,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         Mini
     }
 
-    class AttributeMetadataSuggestion : MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion
+    internal class AttributeMetadataSuggestion : MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion
     {
         public AttributeMetadataSuggestion(AttributeMetadata attr, bool useDisplayName)
         {
@@ -800,7 +815,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         }
     }
 
-    class EntityMetadataSuggestion : MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion
+    internal class EntityMetadataSuggestion : MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion
     {
         public EntityMetadataSuggestion(EntityMetadata entity, bool useDisplayName)
         {

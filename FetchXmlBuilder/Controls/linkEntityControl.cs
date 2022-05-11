@@ -36,7 +36,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 foreach (var entity in entities)
                 {
-                    cmbEntity.Items.Add(entity.Value.LogicalName);
+                    cmbEntity.Items.Add(entity.LogicalName);
                 }
             }
 
@@ -294,8 +294,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         protected override ControlValidationResult ValidateControl(Control control)
         {
             var parententityname = Node.Parent.LocalEntityName();
-            var parententity = fxb.entities != null && fxb.entities.ContainsKey(parententityname) ? fxb.entities[parententityname] : null;
-            var currententity = fxb.entities != null && fxb.entities.ContainsKey(cmbEntity.Text) ? fxb.entities[cmbEntity.Text] : null;
+            var parententity = fxb.GetEntity(parententityname);
+            var currententity = fxb.GetEntity(cmbEntity.Text);
             if (control == cmbRelationship && string.IsNullOrWhiteSpace(cmbEntity.Text) && string.IsNullOrWhiteSpace(cmbFrom.Text) && string.IsNullOrWhiteSpace(cmbTo.Text))
             {
                 return new ControlValidationResult(ControlValidationLevel.Info, "Select a relationship to populate fields below");
@@ -400,7 +400,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 var parententity = Node.Parent.Value("name");
                 if (!string.IsNullOrWhiteSpace(cmbTo.Text) &&
-                    fxb.entities.TryGetValue(parententity, out EntityMetadata pmeta) &&
+                    fxb.GetEntity(parententity) is EntityMetadata pmeta &&
                     pmeta.Attributes.FirstOrDefault(a => a.LogicalName == cmbTo.Text) is AttributeMetadata pameta)
                 {
                     return pameta;
@@ -419,11 +419,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 return item.Meta;
             }
-            if (fxb.entities != null && fxb.entities.TryGetValue(cmbEntity.Text, out EntityMetadata meta))
-            {
-                return meta;
-            }
-            return null;
+            return fxb.GetEntity(cmbEntity.Text) ?? base.Metadata();
         }
 
         private void cmbEntity_Enter(object sender, EventArgs e)

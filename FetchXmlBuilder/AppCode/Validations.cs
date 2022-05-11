@@ -21,12 +21,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 case "fetch":
                     break;
+
                 case "entity":
                     if (string.IsNullOrWhiteSpace(name))
                     {
                         return new ControlValidationResult(ControlValidationLevel.Warning, "Entity Name must be included.");
                     }
                     break;
+
                 case "link-entity":
                     if (string.IsNullOrWhiteSpace(name) ||
                         string.IsNullOrWhiteSpace(node.Value("to")) ||
@@ -41,6 +43,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         return new ControlValidationResult(ControlValidationLevel.Info, "Links to records that aren't parents may cause paging issues.", "https://markcarrington.dev/2021/02/23/msdyn365-internals-paging-gotchas/#multiple_linked_entities");
                     }
                     break;
+
                 case "attribute":
                     if (string.IsNullOrWhiteSpace(name))
                     {
@@ -93,12 +96,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         }
                     }
                     break;
+
                 case "filter":
                     if (node.Nodes.Count == 0)
                     {
                         return new ControlValidationResult(ControlValidationLevel.Info, "Filter shound have at least one Condition.");
                     }
                     break;
+
                 case "condition":
                     if (string.IsNullOrWhiteSpace(attribute))
                     {
@@ -122,15 +127,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         {
                             return new ControlValidationResult(ControlValidationLevel.Warning, $"Attribute '{attribute}' is not in the table '{parententity}'.");
                         }
-
                     }
                     break;
+
                 case "value":
                     if (string.IsNullOrWhiteSpace(node.Value("#text")))
                     {
                         return new ControlValidationResult(ControlValidationLevel.Warning, "Value should be added.");
                     }
                     break;
+
                 case "order":
                     if (node.IsFetchAggregate())
                     {
@@ -193,7 +199,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             if (fxb == null || fxb.entities == null)
                 return true;
 
-            if (!fxb.entities.TryGetValue(entity, out var metadata))
+            if (!(fxb.GetEntity(entity) is EntityMetadata metadata))
                 return true;
 
             if (string.IsNullOrWhiteSpace(metadata.PrimaryIdAttribute))

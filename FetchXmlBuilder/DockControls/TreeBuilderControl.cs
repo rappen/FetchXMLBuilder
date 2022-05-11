@@ -429,7 +429,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             if (fxb.entities != null)
             {
                 var entitys = TreeNodeHelper.GetEntitysForFetch(fetchDoc);
-                entitys = entitys?.Where(e => !string.IsNullOrEmpty(e) && fxb.entities.ContainsKey(e) && fxb.entities[e].Attributes == null)?.ToList();
+                entitys = entitys?.Where(e => !string.IsNullOrEmpty(e) && fxb.GetEntity(e)?.Attributes == null)?.ToList();
                 entitys?.ForEach(e => fxb.LoadEntityDetails(e, null, false, false));
             }
             XmlNode definitionXmlNode = fetchDoc.DocumentElement;
@@ -600,7 +600,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                                     }
                                     break;
                                 }
-                                AttributeMetadata[] attributes = fxb.GetDisplayAttributes(entity);
+                                AttributeMetadata[] attributes = fxb.GetDisplayAttributes(entity).ToArray();
                                 if (node.Name == "attribute")
                                 {
                                     ctrl = new attributeControl(node, attributes, fxb, this);
@@ -769,9 +769,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     case ControlValidationLevel.Error:
                         lblWarning.ImageKey = "error";
                         break;
+
                     case ControlValidationLevel.Warning:
                         lblWarning.ImageKey = "warning";
                         break;
+
                     case ControlValidationLevel.Info:
                         lblWarning.ImageKey = "info";
                         break;

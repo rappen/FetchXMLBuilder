@@ -15,7 +15,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder
     {
-        internal Dictionary<string, EntityMetadata> entities;
+        internal List<EntityMetadata> entities;
         private static List<string> entityShitList = new List<string>();
         internal List<Entity> solutionentities;
         internal List<Guid> solutionattributes;
@@ -24,7 +24,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         internal AttributeMetadata GetAttribute(string entityName, string attributeName)
         {
-            if (entities != null && entities.ContainsKey(entityName) && entities[entityName].Attributes is AttributeMetadata[] attrs)
+            if (GetEntity(entityName)?.Attributes is AttributeMetadata[] attrs)
             {
                 return attrs.FirstOrDefault(a => a.LogicalName == attributeName);
             }
@@ -68,9 +68,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 return entityName;
             }
-            if (entities != null && entities.ContainsKey(entityName))
+            if (GetEntity(entityName) is EntityMetadata meta)
             {
-                entityName = GetEntityDisplayName(entities[entityName]);
+                entityName = GetEntityDisplayName(meta);
             }
             return entityName;
         }
@@ -92,23 +92,27 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             return result;
         }
 
-        internal AttributeMetadata[] GetAllAttribues(string entityName)
+        internal IEnumerable<AttributeMetadata> GetAllAttribues(string entityName)
         {
-            return entities?.ContainsKey(entityName) == true ? entities[entityName].Attributes : new AttributeMetadata[0];
+            return GetEntity(entityName)?.Attributes ?? new AttributeMetadata[0];
         }
 
-        internal AttributeMetadata[] GetDisplayAttributes(string entityName) => GetDisplayAttributes(entityName, connectionsettings.FilterSetting, connectionsettings.ShowAttributes);
+        internal IEnumerable<AttributeMetadata> GetDisplayAttributes(string entityName) => GetDisplayAttributes(entityName, connectionsettings.FilterSetting, connectionsettings.ShowAttributes);
 
-        internal AttributeMetadata[] GetDisplayAttributes(string entityName, FilterSetting selectedfilter, ShowMetaTypesAttribute selectattributes)
+        internal IEnumerable<AttributeMetadata> GetDisplayAttributes(string entityName, FilterSetting selectedfilter, ShowMetaTypesAttribute selectattributes)
         {
+            var result = new List<AttributeMetadata>();
+            var entity = GetEntity(entityName);
+            if (entity == null)
+            {
+                return result;
+            }
             if (solutionentities == null)
             {
                 LoadSolutionsComponents(selectedfilter);
             }
-            var result = new List<AttributeMetadata>();
-            var entity = entities.FirstOrDefault(e => e.Key == entityName);
             var includeall = solutionentities
-                .Where(se => se.GetAttributeValue<Guid>("objectid").Equals(entity.Value.MetadataId))
+                .Where(se => se.GetAttributeValue<Guid>("objectid").Equals(entity.MetadataId))
                 .Any(se => se.GetAttributeValue<OptionSetValue>("rootcomponentbehavior").Value == 0);
             var attributes = GetAllAttribues(entityName);
             foreach (var attribute in attributes)
@@ -144,48 +148,44 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 }
                 result.Add(attribute);
             }
-            return result.ToArray();
+            return result;
         }
 
         internal string GetPrimaryIdAttribute(string entityName)
         {
-            if (entities != null && entities.TryGetValue(entityName, out var entity))
-            {
-                return entity.PrimaryIdAttribute;
-            }
-
-            return null;
+            return GetEntity(entityName)?.PrimaryIdAttribute;
         }
 
-        internal Dictionary<string, EntityMetadata> GetDisplayEntities() => GetDisplayEntities(connectionsettings.FilterSetting, connectionsettings.ShowEntities);
+        internal List<EntityMetadata> GetDisplayEntities() => GetDisplayEntities(connectionsettings.FilterSetting, connectionsettings.ShowEntities);
 
-        internal Dictionary<string, EntityMetadata> GetDisplayEntities(FilterSetting selectedfilter, ShowMetaTypesEntity selectentities)
+        internal List<EntityMetadata> GetDisplayEntities(FilterSetting selectedfilter, ShowMetaTypesEntity selectentities)
         {
-            var result = new Dictionary<string, EntityMetadata>();
-            if (entities != null)
+            var result = new List<EntityMetadata>();
+            if (entities == null)
             {
-                if (solutionentities == null)
+                return result;
+            }
+            if (solutionentities == null)
+            {
+                LoadSolutionsComponents(selectedfilter);
+            }
+            foreach (var entity in entities.Where(e => selectedfilter.ShowAllSolutions || solutionentities.Select(se => se["objectid"]).Contains((Guid)e.MetadataId)))
+            {
+                if (selectedfilter.FilterByMetadata)
                 {
-                    LoadSolutionsComponents(selectedfilter);
+                    if (!CheckMetadata(selectentities.IsManaged, entity.IsManaged)) { continue; }
+                    if (!CheckMetadata(selectentities.IsCustom, entity.IsCustomEntity)) { continue; }
+                    if (!CheckMetadata(selectentities.IsCustomizable, entity.IsCustomizable)) { continue; }
+                    if (!CheckMetadata(selectentities.IsValidForAdvancedFind, entity.IsValidForAdvancedFind)) { continue; }
+                    if (!CheckMetadata(selectentities.IsAuditEnabled, entity.IsAuditEnabled)) { continue; }
+                    if (!CheckMetadata(selectentities.IsLogical, entity.IsLogicalEntity)) { continue; }
+                    if (!CheckMetadata(selectentities.IsIntersect, entity.IsIntersect)) { continue; }
+                    if (!CheckMetadata(selectentities.IsActivity, entity.IsActivity)) { continue; }
+                    if (!CheckMetadata(selectentities.IsActivityParty, entity.IsActivityParty)) { continue; }
+                    if (!CheckMetadata(selectentities.Virtual, entity.DataProviderId.HasValue)) { continue; }
+                    if (!CheckMetadata(selectentities.Ownerships, entity.OwnershipType)) { continue; }
                 }
-                foreach (var entity in entities.Where(e => selectedfilter.ShowAllSolutions || solutionentities.Select(se => se["objectid"]).Contains((Guid)e.Value.MetadataId)))
-                {
-                    if (selectedfilter.FilterByMetadata)
-                    {
-                        if (!CheckMetadata(selectentities.IsManaged, entity.Value.IsManaged)) { continue; }
-                        if (!CheckMetadata(selectentities.IsCustom, entity.Value.IsCustomEntity)) { continue; }
-                        if (!CheckMetadata(selectentities.IsCustomizable, entity.Value.IsCustomizable)) { continue; }
-                        if (!CheckMetadata(selectentities.IsValidForAdvancedFind, entity.Value.IsValidForAdvancedFind)) { continue; }
-                        if (!CheckMetadata(selectentities.IsAuditEnabled, entity.Value.IsAuditEnabled)) { continue; }
-                        if (!CheckMetadata(selectentities.IsLogical, entity.Value.IsLogicalEntity)) { continue; }
-                        if (!CheckMetadata(selectentities.IsIntersect, entity.Value.IsIntersect)) { continue; }
-                        if (!CheckMetadata(selectentities.IsActivity, entity.Value.IsActivity)) { continue; }
-                        if (!CheckMetadata(selectentities.IsActivityParty, entity.Value.IsActivityParty)) { continue; }
-                        if (!CheckMetadata(selectentities.Virtual, entity.Value.DataProviderId.HasValue)) { continue; }
-                        if (!CheckMetadata(selectentities.Ownerships, entity.Value.OwnershipType)) { continue; }
-                    }
-                    result.Add(entity.Key, entity.Value);
-                }
+                result.Add(entity);
             }
             return result;
         }
@@ -232,7 +232,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         internal EntityMetadata GetEntity(string entityname)
         {
-            return entities?.Select(e => e.Value)?.FirstOrDefault(e => e.LogicalName == entityname);
+            return entities?.FirstOrDefault(e => e.LogicalName.Equals(entityname));
+        }
+
+        internal bool NeedToLoadEntity(string entityName)
+        {
+            return
+                !string.IsNullOrEmpty(entityName) &&
+                !entityShitList.Contains(entityName) &&
+                Service != null &&
+                GetEntity(entityName)?.Attributes == null;
         }
 
         #endregion Internal Methods
@@ -247,6 +256,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     case CheckState.Checked:
                         return metafield.Value == true;
+
                     case CheckState.Unchecked:
                         return metafield.Value == false;
                 }
@@ -331,7 +341,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 if (newEntityMetadata != null)
                 {
-                    entities = newEntityMetadata?.ToDictionary(e => e.LogicalName);
+                    entities = newEntityMetadata.ToList();
                 }
                 UpdateLiveXML();
                 working = false;
@@ -361,16 +371,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     if (entities == null)
                     {
-                        entities = new Dictionary<string, EntityMetadata>();
+                        entities = new List<EntityMetadata>();
                     }
-                    if (entities.ContainsKey(entityName))
+                    if (GetEntity(entityName) is EntityMetadata entity)
                     {
-                        entities[entityName] = Result;
+                        entities.Remove(entity);
                     }
-                    else
-                    {
-                        entities.Add(entityName, Result);
-                    }
+                    entities.Add(Result);
                 }
                 else
                 {

@@ -25,7 +25,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             var entities = fxb.GetDisplayEntities();
             if (entities != null)
             {
-                cmbEntity.Items.AddRange(entities.Select(e => new EntityItem(e.Value)).ToArray());
+                cmbEntity.Items.AddRange(entities.Select(e => new EntityItem(e)).ToArray());
             }
         }
 
@@ -40,7 +40,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
                 if (!(cmbEntity.SelectedItem is EntityItem) && fxb.entities != null)
                 {
-                    if (!fxb.entities.Any(e => e.Key == cmbEntity.Text))
+                    if (!fxb.entities.Any(e => e.LogicalName == cmbEntity.Text))
                     {
                         return new ControlValidationResult(ControlValidationLevel.Warning, "Entity", ControlValidationMessage.NotInMetadata);
                     }
@@ -69,11 +69,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 return item.Meta;
             }
-            if (fxb.entities != null && fxb.entities.TryGetValue(cmbEntity.Text, out EntityMetadata meta))
-            {
-                return meta;
-            }
-            return base.Metadata();
+            return fxb.GetEntity(cmbEntity.Text) ?? base.Metadata();
         }
 
         public override void Focus()

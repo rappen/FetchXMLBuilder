@@ -80,7 +80,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     foreach (var view in sysviews.Entities)
                     {
                         var entityname = view["returnedtypecode"].ToString();
-                        if (!string.IsNullOrWhiteSpace(entityname) && entities != null && entities.ContainsKey(entityname))
+                        if (!string.IsNullOrWhiteSpace(entityname) && GetEntity(entityname) != null)
                         {
                             if (views == null)
                             {
@@ -101,7 +101,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     foreach (var view in userviews.Entities)
                     {
                         var entityname = view["returnedtypecode"].ToString();
-                        if (!string.IsNullOrWhiteSpace(entityname) && entities != null && entities.ContainsKey(entityname))
+                        if (!string.IsNullOrWhiteSpace(entityname) && GetEntity(entityname) != null)
                         {
                             if (views == null)
                             {
@@ -360,6 +360,5 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 }
             });
         }
-
     }
 }

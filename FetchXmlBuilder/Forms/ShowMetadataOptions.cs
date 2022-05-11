@@ -192,7 +192,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             var entities = fxb.GetDisplayEntities(settingsfilter, settingsentities);
             gbPreviewEntities.Text = $"Preview Entities selected: {entities.Count}";
             lbPreviewEntities.Items.Clear();
-            lbPreviewEntities.Items.AddRange(entities.Keys.ToArray());
+            lbPreviewEntities.Items.AddRange(entities.Select(en => en.LogicalName).ToArray());
         }
 
         private void btnEClear_Click(object sender, EventArgs e)

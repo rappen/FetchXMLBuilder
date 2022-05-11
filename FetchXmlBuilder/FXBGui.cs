@@ -58,8 +58,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsbOpen.Enabled = enabled;
                     tsmiOpenFile.Enabled = enabled;
                     tsmiOpenView.Enabled = enabled && Service != null;
-                    tsmiOpenML.Visible = enabled && Service != null && entities != null && entities.ContainsKey("list");
-                    tsmiOpenCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
+                    tsmiOpenML.Visible = enabled && Service != null && GetEntity("list") != null;
+                    tsmiOpenCWP.Visible = enabled && Service != null && GetEntity("cint_feed") != null;
                     tsbReturnToCaller.Visible = CallerWantsResults();
                     tsbSave.Enabled = enabled;
                     tsmiSaveFile.Enabled = enabled && dockControlBuilder?.FetchChanged == true && !string.IsNullOrEmpty(FileName);
@@ -67,7 +67,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     tsmiSaveView.Enabled = enabled && Service != null && View != null && View.IsCustomizable();
                     tsmiSaveViewAs.Enabled = tsmiSaveView.Enabled;
                     tsmiSaveML.Enabled = enabled && Service != null && DynML != null;
-                    tsmiSaveCWP.Visible = enabled && Service != null && entities != null && entities.ContainsKey("cint_feed");
+                    tsmiSaveCWP.Visible = enabled && Service != null && GetEntity("cint_feed") != null;
                     tsmiSaveCWP.Enabled = enabled && Service != null && dockControlBuilder?.FetchChanged == true && !string.IsNullOrEmpty(CWPFeed);
                     tsbView.Enabled = enabled;
                     tsbExecute.Enabled = enabled && Service != null;

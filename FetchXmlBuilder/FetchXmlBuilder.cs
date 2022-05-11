@@ -24,11 +24,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder
     public partial class FetchXmlBuilder : PluginControlBase
     {
         #region AI to log
+
         private const string aiEndpoint = "https://dc.services.visualstudio.com/v2/track";
         private const string aiKey = "eed73022-2444-45fd-928b-5eebd8fa46a6";    // jonas@rappen.net tenant, XrmToolBox
+
         //private const string aiKey = "b6a4ec7c-ab43-4780-97cd-021e99506337";   // jonas@jonasr.app, XrmToolBoxInsights
         private readonly AppInsights ai;
-        #endregion AI
+
+        #endregion AI to log
 
         #region Internal Fields
 
@@ -56,7 +59,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
             // Tips to handle all errors from
             // https://stackoverflow.com/questions/5762526/how-can-i-make-something-that-catches-all-unhandled-exceptions-in-a-winforms-a
-            // Add the event handler for handling non-UI thread exceptions to the event. 
+            // Add the event handler for handling non-UI thread exceptions to the event.
             //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Error_UnhandledException);
 
             ai = new AppInsights(aiEndpoint, aiKey, Assembly.GetExecutingAssembly(), "FetchXML Builder");
@@ -309,17 +312,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 LogError("Failed to write to Application Insights:\n{0}", result);
             }
-        }
-
-        internal bool NeedToLoadEntity(string entityName)
-        {
-            return
-                !string.IsNullOrEmpty(entityName) &&
-                !entityShitList.Contains(entityName) &&
-                Service != null &&
-                (entities == null ||
-                 !entities.ContainsKey(entityName) ||
-                 entities[entityName].Attributes == null);
         }
 
         internal void OpenURLProfile(string url, bool addparameters)

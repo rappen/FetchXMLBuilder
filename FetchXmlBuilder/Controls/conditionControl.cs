@@ -465,7 +465,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     var entities = fxb.GetDisplayEntities();
                     if (entities != null)
                     {
-                        cmbValue.Items.AddRange(entities.Select(e => new EntityNameItem(e.Value)).ToArray());
+                        cmbValue.Items.AddRange(entities.Select(e => new EntityNameItem(e)).ToArray());
                         var value = cmbValue.Text;
                         cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
                         cmbValue.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
