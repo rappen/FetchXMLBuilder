@@ -146,6 +146,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     if (!CheckMetadata(selectattributes.IsFiltered, attribute.IsFilterable)) { continue; }
                     if (!CheckMetadata(selectattributes.IsRetrievable, attribute.IsRetrievable)) { continue; }
                     if (!CheckMetadata(selectattributes.AttributeOf, !string.IsNullOrEmpty(attribute.AttributeOf))) { continue; }
+                    if (!CheckMetadata(selectattributes.CalculationOf, attribute is MoneyAttributeMetadata money ? !string.IsNullOrEmpty(money.CalculationOf) : false)) { continue; }
                 }
                 result.Add(attribute);
             }

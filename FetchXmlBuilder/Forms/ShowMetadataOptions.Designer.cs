@@ -93,15 +93,17 @@
             this.gbPreviewEntities = new System.Windows.Forms.GroupBox();
             this.lblAttributes = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.chkFilterMetadata = new System.Windows.Forms.CheckBox();
             this.panSelectSolution = new System.Windows.Forms.Panel();
             this.chkShowAllSolutions = new System.Windows.Forms.CheckBox();
-            this.xrmSolution = new Rappen.XTB.Helpers.Controls.XRMColumnLookup();
             this.panSolutions = new System.Windows.Forms.Panel();
             this.rbSpecificSolution = new System.Windows.Forms.RadioButton();
             this.rbUnmanagedSolution = new System.Windows.Forms.RadioButton();
             this.rbAllSolutions = new System.Windows.Forms.RadioButton();
+            this.chkFilterMetadata = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.pictureBox23 = new System.Windows.Forms.PictureBox();
+            this.chkACalculationOf = new System.Windows.Forms.CheckBox();
+            this.xrmSolution = new Rappen.XTB.Helpers.Controls.XRMColumnLookup();
             this.gbEntities.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
@@ -133,6 +135,7 @@
             this.panSelectSolution.SuspendLayout();
             this.panSolutions.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox23)).BeginInit();
             this.SuspendLayout();
             // 
             // gbEntities
@@ -586,6 +589,8 @@
             // 
             this.gbAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.gbAttributes.Controls.Add(this.pictureBox23);
+            this.gbAttributes.Controls.Add(this.chkACalculationOf);
             this.gbAttributes.Controls.Add(this.pictureBox22);
             this.gbAttributes.Controls.Add(this.chkAAttributeOf);
             this.gbAttributes.Controls.Add(this.linkLabel2);
@@ -813,7 +818,7 @@
             this.btnAClear.Location = new System.Drawing.Point(18, 313);
             this.btnAClear.Name = "btnAClear";
             this.btnAClear.Size = new System.Drawing.Size(130, 23);
-            this.btnAClear.TabIndex = 12;
+            this.btnAClear.TabIndex = 13;
             this.btnAClear.Text = "Reset to default";
             this.btnAClear.UseVisualStyleBackColor = true;
             this.btnAClear.Click += new System.EventHandler(this.btnAClear_Click);
@@ -1047,17 +1052,6 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Filter by Solution";
             // 
-            // chkFilterMetadata
-            // 
-            this.chkFilterMetadata.AutoSize = true;
-            this.chkFilterMetadata.Location = new System.Drawing.Point(18, 29);
-            this.chkFilterMetadata.Name = "chkFilterMetadata";
-            this.chkFilterMetadata.Size = new System.Drawing.Size(132, 17);
-            this.chkFilterMetadata.TabIndex = 0;
-            this.chkFilterMetadata.Text = "Add Filter by Metadata";
-            this.chkFilterMetadata.UseVisualStyleBackColor = true;
-            this.chkFilterMetadata.CheckedChanged += new System.EventHandler(this.chkFilterMetadata_CheckedChanged);
-            // 
             // panSelectSolution
             // 
             this.panSelectSolution.Controls.Add(this.chkShowAllSolutions);
@@ -1078,23 +1072,6 @@
             this.chkShowAllSolutions.Text = "Show all";
             this.chkShowAllSolutions.UseVisualStyleBackColor = true;
             this.chkShowAllSolutions.CheckedChanged += new System.EventHandler(this.chkShowAllSolutions_CheckedChanged);
-            // 
-            // xrmSolution
-            // 
-            this.xrmSolution.AddNullRecord = true;
-            this.xrmSolution.Column = null;
-            this.xrmSolution.DisplayFormat = "{friendlyname}   ({P.friendlyname})";
-            this.xrmSolution.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.xrmSolution.Filter = null;
-            this.xrmSolution.FormattingEnabled = true;
-            this.xrmSolution.Location = new System.Drawing.Point(12, 4);
-            this.xrmSolution.Name = "xrmSolution";
-            this.xrmSolution.OnlyActiveRecords = false;
-            this.xrmSolution.RecordHost = null;
-            this.xrmSolution.Service = null;
-            this.xrmSolution.Size = new System.Drawing.Size(357, 21);
-            this.xrmSolution.TabIndex = 1;
-            this.xrmSolution.SelectedIndexChanged += new System.EventHandler(this.xrmSolution_SelectedIndexChanged);
             // 
             // panSolutions
             // 
@@ -1141,6 +1118,17 @@
             this.rbAllSolutions.UseVisualStyleBackColor = true;
             this.rbAllSolutions.CheckedChanged += new System.EventHandler(this.rbAllSolutions_CheckedChanged);
             // 
+            // chkFilterMetadata
+            // 
+            this.chkFilterMetadata.AutoSize = true;
+            this.chkFilterMetadata.Location = new System.Drawing.Point(18, 29);
+            this.chkFilterMetadata.Name = "chkFilterMetadata";
+            this.chkFilterMetadata.Size = new System.Drawing.Size(132, 17);
+            this.chkFilterMetadata.TabIndex = 0;
+            this.chkFilterMetadata.Text = "Add Filter by Metadata";
+            this.chkFilterMetadata.UseVisualStyleBackColor = true;
+            this.chkFilterMetadata.CheckedChanged += new System.EventHandler(this.chkFilterMetadata_CheckedChanged);
+            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.chkFilterMetadata);
@@ -1151,6 +1139,52 @@
             this.groupBox3.TabIndex = 20;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Filter by Metadata";
+            // 
+            // pictureBox23
+            // 
+            this.pictureBox23.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox23.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox23.Image")));
+            this.pictureBox23.Location = new System.Drawing.Point(207, 287);
+            this.pictureBox23.Name = "pictureBox23";
+            this.pictureBox23.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox23.TabIndex = 64;
+            this.pictureBox23.TabStop = false;
+            this.pictureBox23.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.moneyattri" +
+    "butemetadata.calculationof";
+            this.pictureBox23.Click += new System.EventHandler(this.helpIcon_Click);
+            // 
+            // chkACalculationOf
+            // 
+            this.chkACalculationOf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkACalculationOf.Checked = true;
+            this.chkACalculationOf.CheckState = System.Windows.Forms.CheckState.Indeterminate;
+            this.chkACalculationOf.Location = new System.Drawing.Point(18, 284);
+            this.chkACalculationOf.Name = "chkACalculationOf";
+            this.chkACalculationOf.Size = new System.Drawing.Size(180, 17);
+            this.chkACalculationOf.TabIndex = 12;
+            this.chkACalculationOf.Tag = "Not Calculation Money;Is Calculation Money;All Attributes (Calculation Money)";
+            this.chkACalculationOf.Text = "All Attributes (Calculation Money)";
+            this.chkACalculationOf.ThreeState = true;
+            this.chkACalculationOf.UseVisualStyleBackColor = true;
+            this.chkACalculationOf.CheckStateChanged += new System.EventHandler(this.checkBox_CheckStateChanged);
+            // 
+            // xrmSolution
+            // 
+            this.xrmSolution.AddNullRecord = true;
+            this.xrmSolution.Column = null;
+            this.xrmSolution.DisplayFormat = "{friendlyname}   ({P.friendlyname})";
+            this.xrmSolution.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.xrmSolution.Filter = null;
+            this.xrmSolution.FormattingEnabled = true;
+            this.xrmSolution.Location = new System.Drawing.Point(12, 4);
+            this.xrmSolution.Name = "xrmSolution";
+            this.xrmSolution.OnlyActiveRecords = false;
+            this.xrmSolution.RecordHost = null;
+            this.xrmSolution.Service = null;
+            this.xrmSolution.Size = new System.Drawing.Size(357, 21);
+            this.xrmSolution.TabIndex = 1;
+            this.xrmSolution.SelectedIndexChanged += new System.EventHandler(this.xrmSolution_SelectedIndexChanged);
             // 
             // ShowMetadataOptions
             // 
@@ -1213,6 +1247,7 @@
             this.panSolutions.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox23)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1292,5 +1327,7 @@
         private System.Windows.Forms.CheckBox chkShowAllSolutions;
         private System.Windows.Forms.CheckBox chkFilterMetadata;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.PictureBox pictureBox23;
+        internal System.Windows.Forms.CheckBox chkACalculationOf;
     }
 }

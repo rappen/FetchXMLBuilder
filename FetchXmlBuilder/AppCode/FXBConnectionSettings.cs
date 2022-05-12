@@ -48,6 +48,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public CheckState IsActivityParty { get; set; } = CheckState.Indeterminate; //E
         public CheckState Virtual { get; set; } = CheckState.Indeterminate;  //E
         public int OwnershipType { get; set; } = 0;   //E
+
         public OwnershipTypes[] Ownerships
         {
             get
@@ -56,10 +57,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 {
                     case 1:
                         return new OwnershipTypes[] { OwnershipTypes.OrganizationOwned };
+
                     case 2:
                         return new OwnershipTypes[] { OwnershipTypes.UserOwned, OwnershipTypes.TeamOwned };
+
                     case 3:
                         return new OwnershipTypes[] { OwnershipTypes.BusinessOwned, OwnershipTypes.BusinessParented };
+
                     case 4:
                         return new OwnershipTypes[] { OwnershipTypes.None };
                 }
@@ -75,5 +79,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public CheckState IsRetrievable { get; set; } = CheckState.Indeterminate;   //A
         public CheckState IsValidForGrid { get; set; } = CheckState.Indeterminate;  //A
         public CheckState AttributeOf { get; set; } = CheckState.Unchecked; //A
+        public CheckState CalculationOf { get; set; } = CheckState.Unchecked;
     }
 }

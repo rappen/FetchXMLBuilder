@@ -98,6 +98,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             chkARead.CheckState = setting.IsValidForRead;
             chkARetrievable.CheckState = setting.IsRetrievable;
             chkAAttributeOf.CheckState = setting.AttributeOf;
+            chkACalculationOf.CheckState = setting.CalculationOf;
         }
 
         private FilterSetting GetFilterSetting()
@@ -146,6 +147,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 IsFiltered = chkAFiltered.CheckState,
                 IsRetrievable = chkARetrievable.CheckState,
                 AttributeOf = chkAAttributeOf.CheckState,
+                CalculationOf = chkACalculationOf.CheckState
             };
         }
 
