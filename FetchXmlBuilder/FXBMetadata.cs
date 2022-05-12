@@ -8,6 +8,7 @@ using Rappen.XRM.Helpers.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
@@ -362,8 +363,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             if (Error != null)
             {
-                entityShitList.Add(entityName);
-                ShowErrorDialog(Error, "Load attribute metadata");
+                if (!entityShitList.Contains(entityName))
+                {
+                    entityShitList.Add(entityName);
+                }
+                if (Error is FaultException<OrganizationServiceFault> srcexc &&
+                    srcexc.Detail is OrganizationServiceFault orgerr &&
+                    orgerr.ErrorCode == -2147220969)
+                {
+                    SendMessageToStatusBar(this, new XrmToolBox.Extensibility.Args.StatusBarMessageEventArgs($"Entity {entityName} not found in the database."));
+                }
+                else
+                {
+                    ShowErrorDialog(Error, "Load attribute metadata");
+                }
             }
             else
             {
@@ -381,7 +394,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 }
                 else
                 {
-                    entityShitList.Add(entityName);
+                    if (!entityShitList.Contains(entityName))
+                    {
+                        entityShitList.Add(entityName);
+                    }
                     MessageBox.Show("Metadata not found for entity " + entityName, "Load attribute metadata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 working = false;
