@@ -344,6 +344,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 if (newEntityMetadata != null)
                 {
                     entities = newEntityMetadata.ToList();
+                    SendMessageToStatusBar(this, new XrmToolBox.Extensibility.Args.StatusBarMessageEventArgs($"All entities are now loaded."));
                 }
                 UpdateLiveXML();
                 working = false;
@@ -392,6 +393,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         entities.Remove(entity);
                     }
                     entities.Add(Result);
+                    SendMessageToStatusBar(this, new XrmToolBox.Extensibility.Args.StatusBarMessageEventArgs($"Entity {entityName} is now loaded."));
                 }
                 else
                 {
