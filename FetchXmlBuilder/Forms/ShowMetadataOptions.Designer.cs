@@ -56,11 +56,12 @@
             this.chkECustom = new System.Windows.Forms.CheckBox();
             this.chkEManaged = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnPreview = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.gbAttributes = new System.Windows.Forms.GroupBox();
+            this.pictureBox23 = new System.Windows.Forms.PictureBox();
+            this.chkACalculationOf = new System.Windows.Forms.CheckBox();
             this.pictureBox22 = new System.Windows.Forms.PictureBox();
             this.chkAAttributeOf = new System.Windows.Forms.CheckBox();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
@@ -85,25 +86,33 @@
             this.chkACustomizable = new System.Windows.Forms.CheckBox();
             this.chkACustom = new System.Windows.Forms.CheckBox();
             this.chkAManaged = new System.Windows.Forms.CheckBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.gbAlwaysAttributes = new System.Windows.Forms.GroupBox();
             this.chkAShowAddress = new System.Windows.Forms.CheckBox();
             this.chkAShowPrimary = new System.Windows.Forms.CheckBox();
             this.lblEntities = new System.Windows.Forms.Label();
             this.lbPreviewEntities = new System.Windows.Forms.ListBox();
-            this.gbPreviewEntities = new System.Windows.Forms.GroupBox();
+            this.gbPreviews = new System.Windows.Forms.GroupBox();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.lblPreviewEntities = new System.Windows.Forms.Label();
+            this.lbPreviewAttributes = new System.Windows.Forms.ListBox();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.lblPreviewAttributes = new System.Windows.Forms.Label();
             this.lblAttributes = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.panSelectSolution = new System.Windows.Forms.Panel();
             this.chkShowAllSolutions = new System.Windows.Forms.CheckBox();
+            this.xrmSolution = new Rappen.XTB.Helpers.Controls.XRMColumnLookup();
             this.panSolutions = new System.Windows.Forms.Panel();
             this.rbSpecificSolution = new System.Windows.Forms.RadioButton();
             this.rbUnmanagedSolution = new System.Windows.Forms.RadioButton();
             this.rbAllSolutions = new System.Windows.Forms.RadioButton();
             this.chkFilterMetadata = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.pictureBox23 = new System.Windows.Forms.PictureBox();
-            this.chkACalculationOf = new System.Windows.Forms.CheckBox();
-            this.xrmSolution = new Rappen.XTB.Helpers.Controls.XRMColumnLookup();
             this.gbEntities.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
@@ -118,6 +127,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.gbAttributes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox23)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox22)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox12)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox13)).BeginInit();
@@ -129,13 +139,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox19)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox20)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox21)).BeginInit();
-            this.groupBox1.SuspendLayout();
-            this.gbPreviewEntities.SuspendLayout();
+            this.gbAlwaysAttributes.SuspendLayout();
+            this.gbPreviews.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            this.panel4.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.panel5.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.panSelectSolution.SuspendLayout();
             this.panSolutions.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox23)).BeginInit();
             this.SuspendLayout();
             // 
             // gbEntities
@@ -534,42 +551,30 @@
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.panel1.Controls.Add(this.btnPreview);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
             this.panel1.Location = new System.Drawing.Point(12, 610);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(477, 58);
+            this.panel1.Size = new System.Drawing.Size(1002, 58);
             this.panel1.TabIndex = 50;
-            // 
-            // btnPreview
-            // 
-            this.btnPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnPreview.Location = new System.Drawing.Point(407, 22);
-            this.btnPreview.Name = "btnPreview";
-            this.btnPreview.Size = new System.Drawing.Size(64, 23);
-            this.btnPreview.TabIndex = 105;
-            this.btnPreview.Text = "Preview";
-            this.btnPreview.UseVisualStyleBackColor = true;
-            this.btnPreview.Click += new System.EventHandler(this.btnPreview_Click);
             // 
             // label4
             // 
-            this.label4.Location = new System.Drawing.Point(3, 12);
+            this.label4.Location = new System.Drawing.Point(164, 23);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(183, 46);
+            this.label4.Size = new System.Drawing.Size(445, 34);
             this.label4.TabIndex = 104;
-            this.label4.Text = "These selections will never change the queries you have, just to make finding eas" +
-    "ier.";
+            this.label4.Text = "These selections will never change the queries you have - just to make finding ea" +
+    "sier.";
             // 
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(307, 22);
+            this.btnCancel.Location = new System.Drawing.Point(860, 12);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Size = new System.Drawing.Size(120, 34);
             this.btnCancel.TabIndex = 1;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -578,9 +583,9 @@
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(226, 22);
+            this.btnOK.Location = new System.Drawing.Point(723, 12);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.Size = new System.Drawing.Size(120, 34);
             this.btnOK.TabIndex = 0;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -622,6 +627,35 @@
             this.gbAttributes.TabIndex = 40;
             this.gbAttributes.TabStop = false;
             this.gbAttributes.Text = "Attributes";
+            // 
+            // pictureBox23
+            // 
+            this.pictureBox23.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox23.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox23.Image")));
+            this.pictureBox23.Location = new System.Drawing.Point(207, 287);
+            this.pictureBox23.Name = "pictureBox23";
+            this.pictureBox23.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox23.TabIndex = 64;
+            this.pictureBox23.TabStop = false;
+            this.pictureBox23.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.moneyattri" +
+    "butemetadata.calculationof";
+            this.pictureBox23.Click += new System.EventHandler(this.helpIcon_Click);
+            // 
+            // chkACalculationOf
+            // 
+            this.chkACalculationOf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkACalculationOf.Checked = true;
+            this.chkACalculationOf.CheckState = System.Windows.Forms.CheckState.Indeterminate;
+            this.chkACalculationOf.Location = new System.Drawing.Point(18, 284);
+            this.chkACalculationOf.Name = "chkACalculationOf";
+            this.chkACalculationOf.Size = new System.Drawing.Size(180, 17);
+            this.chkACalculationOf.TabIndex = 12;
+            this.chkACalculationOf.Tag = "Not Calculation Money;Is Calculation Money;All Attributes (Calculation Money)";
+            this.chkACalculationOf.Text = "All Attributes (Calculation Money)";
+            this.chkACalculationOf.ThreeState = true;
+            this.chkACalculationOf.UseVisualStyleBackColor = true;
+            this.chkACalculationOf.CheckStateChanged += new System.EventHandler(this.checkBox_CheckStateChanged);
             // 
             // pictureBox22
             // 
@@ -968,38 +1002,38 @@
             this.chkAManaged.UseVisualStyleBackColor = true;
             this.chkAManaged.CheckStateChanged += new System.EventHandler(this.checkBox_CheckStateChanged);
             // 
-            // groupBox1
+            // gbAlwaysAttributes
             // 
-            this.groupBox1.Controls.Add(this.chkAShowAddress);
-            this.groupBox1.Controls.Add(this.chkAShowPrimary);
-            this.groupBox1.Location = new System.Drawing.Point(258, 13);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(213, 43);
-            this.groupBox1.TabIndex = 12;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Always Show";
+            this.gbAlwaysAttributes.Controls.Add(this.chkAShowAddress);
+            this.gbAlwaysAttributes.Controls.Add(this.chkAShowPrimary);
+            this.gbAlwaysAttributes.Location = new System.Drawing.Point(250, 13);
+            this.gbAlwaysAttributes.Name = "gbAlwaysAttributes";
+            this.gbAlwaysAttributes.Size = new System.Drawing.Size(227, 43);
+            this.gbAlwaysAttributes.TabIndex = 12;
+            this.gbAlwaysAttributes.TabStop = false;
+            this.gbAlwaysAttributes.Text = "Always Show";
             // 
             // chkAShowAddress
             // 
             this.chkAShowAddress.AutoSize = true;
-            this.chkAShowAddress.Location = new System.Drawing.Point(132, 20);
+            this.chkAShowAddress.Location = new System.Drawing.Point(140, 20);
             this.chkAShowAddress.Name = "chkAShowAddress";
             this.chkAShowAddress.Size = new System.Drawing.Size(75, 17);
             this.chkAShowAddress.TabIndex = 64;
             this.chkAShowAddress.Text = "Addresses";
             this.chkAShowAddress.UseVisualStyleBackColor = true;
-            this.chkAShowAddress.CheckedChanged += new System.EventHandler(this.chkAShowAlways_CheckedChanged);
+            this.chkAShowAddress.CheckedChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkAShowPrimary
             // 
             this.chkAShowPrimary.AutoSize = true;
-            this.chkAShowPrimary.Location = new System.Drawing.Point(10, 20);
+            this.chkAShowPrimary.Location = new System.Drawing.Point(18, 20);
             this.chkAShowPrimary.Name = "chkAShowPrimary";
             this.chkAShowPrimary.Size = new System.Drawing.Size(107, 17);
             this.chkAShowPrimary.TabIndex = 63;
             this.chkAShowPrimary.Text = "Primary ID/Name";
             this.chkAShowPrimary.UseVisualStyleBackColor = true;
-            this.chkAShowPrimary.CheckedChanged += new System.EventHandler(this.chkAShowAlways_CheckedChanged);
+            this.chkAShowPrimary.CheckedChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // lblEntities
             // 
@@ -1012,25 +1046,136 @@
             // 
             // lbPreviewEntities
             // 
-            this.lbPreviewEntities.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.lbPreviewEntities.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbPreviewEntities.FormattingEnabled = true;
-            this.lbPreviewEntities.Location = new System.Drawing.Point(3, 16);
+            this.lbPreviewEntities.Location = new System.Drawing.Point(10, 24);
             this.lbPreviewEntities.Name = "lbPreviewEntities";
-            this.lbPreviewEntities.Size = new System.Drawing.Size(241, 627);
+            this.lbPreviewEntities.Size = new System.Drawing.Size(232, 509);
+            this.lbPreviewEntities.Sorted = true;
             this.lbPreviewEntities.TabIndex = 103;
+            this.lbPreviewEntities.SelectedIndexChanged += new System.EventHandler(this.UpdatePreviewAttributes);
             // 
-            // gbPreviewEntities
+            // gbPreviews
             // 
-            this.gbPreviewEntities.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.gbPreviews.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.gbPreviewEntities.Controls.Add(this.lbPreviewEntities);
-            this.gbPreviewEntities.Location = new System.Drawing.Point(514, 12);
-            this.gbPreviewEntities.Name = "gbPreviewEntities";
-            this.gbPreviewEntities.Size = new System.Drawing.Size(247, 646);
-            this.gbPreviewEntities.TabIndex = 60;
-            this.gbPreviewEntities.TabStop = false;
-            this.gbPreviewEntities.Text = "Preview Entities selected";
+            this.gbPreviews.Controls.Add(this.splitContainer1);
+            this.gbPreviews.Location = new System.Drawing.Point(514, 12);
+            this.gbPreviews.Name = "gbPreviews";
+            this.gbPreviews.Size = new System.Drawing.Size(500, 592);
+            this.gbPreviews.TabIndex = 60;
+            this.gbPreviews.TabStop = false;
+            this.gbPreviews.Text = "Previews";
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(3, 16);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.lbPreviewEntities);
+            this.splitContainer1.Panel1.Controls.Add(this.panel4);
+            this.splitContainer1.Panel1.Controls.Add(this.panel2);
+            this.splitContainer1.Panel1.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.lbPreviewAttributes);
+            this.splitContainer1.Panel2.Controls.Add(this.panel5);
+            this.splitContainer1.Panel2.Controls.Add(this.panel3);
+            this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.splitContainer1.Size = new System.Drawing.Size(494, 573);
+            this.splitContainer1.SplitterDistance = 242;
+            this.splitContainer1.SplitterWidth = 12;
+            this.splitContainer1.TabIndex = 104;
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.label2);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel4.Location = new System.Drawing.Point(10, 0);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(232, 24);
+            this.panel4.TabIndex = 105;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.Location = new System.Drawing.Point(0, 8);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(226, 21);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Entities";
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.lblPreviewEntities);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(10, 533);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(232, 40);
+            this.panel2.TabIndex = 104;
+            // 
+            // lblPreviewEntities
+            // 
+            this.lblPreviewEntities.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblPreviewEntities.Location = new System.Drawing.Point(0, 0);
+            this.lblPreviewEntities.Name = "lblPreviewEntities";
+            this.lblPreviewEntities.Size = new System.Drawing.Size(226, 40);
+            this.lblPreviewEntities.TabIndex = 0;
+            this.lblPreviewEntities.Text = "Entities";
+            // 
+            // lbPreviewAttributes
+            // 
+            this.lbPreviewAttributes.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbPreviewAttributes.FormattingEnabled = true;
+            this.lbPreviewAttributes.Location = new System.Drawing.Point(0, 24);
+            this.lbPreviewAttributes.Name = "lbPreviewAttributes";
+            this.lbPreviewAttributes.Size = new System.Drawing.Size(230, 509);
+            this.lbPreviewAttributes.Sorted = true;
+            this.lbPreviewAttributes.TabIndex = 103;
+            // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.label3);
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel5.Location = new System.Drawing.Point(0, 0);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(230, 24);
+            this.panel5.TabIndex = 106;
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.Location = new System.Drawing.Point(0, 8);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(224, 21);
+            this.label3.TabIndex = 1;
+            this.label3.Text = "Attributes";
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.lblPreviewAttributes);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel3.Location = new System.Drawing.Point(0, 533);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(230, 40);
+            this.panel3.TabIndex = 105;
+            // 
+            // lblPreviewAttributes
+            // 
+            this.lblPreviewAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblPreviewAttributes.Location = new System.Drawing.Point(0, 0);
+            this.lblPreviewAttributes.Name = "lblPreviewAttributes";
+            this.lblPreviewAttributes.Size = new System.Drawing.Size(224, 40);
+            this.lblPreviewAttributes.TabIndex = 1;
+            this.lblPreviewAttributes.Text = "Attributes";
             // 
             // lblAttributes
             // 
@@ -1072,6 +1217,23 @@
             this.chkShowAllSolutions.Text = "Show all";
             this.chkShowAllSolutions.UseVisualStyleBackColor = true;
             this.chkShowAllSolutions.CheckedChanged += new System.EventHandler(this.chkShowAllSolutions_CheckedChanged);
+            // 
+            // xrmSolution
+            // 
+            this.xrmSolution.AddNullRecord = true;
+            this.xrmSolution.Column = null;
+            this.xrmSolution.DisplayFormat = "{friendlyname}   ({P.friendlyname})";
+            this.xrmSolution.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.xrmSolution.Filter = null;
+            this.xrmSolution.FormattingEnabled = true;
+            this.xrmSolution.Location = new System.Drawing.Point(12, 4);
+            this.xrmSolution.Name = "xrmSolution";
+            this.xrmSolution.OnlyActiveRecords = false;
+            this.xrmSolution.RecordHost = null;
+            this.xrmSolution.Service = null;
+            this.xrmSolution.Size = new System.Drawing.Size(357, 21);
+            this.xrmSolution.TabIndex = 1;
+            this.xrmSolution.SelectedIndexChanged += new System.EventHandler(this.xrmSolution_SelectedIndexChanged);
             // 
             // panSolutions
             // 
@@ -1132,59 +1294,13 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.chkFilterMetadata);
-            this.groupBox3.Controls.Add(this.groupBox1);
+            this.groupBox3.Controls.Add(this.gbAlwaysAttributes);
             this.groupBox3.Location = new System.Drawing.Point(12, 103);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(477, 66);
             this.groupBox3.TabIndex = 20;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Filter by Metadata";
-            // 
-            // pictureBox23
-            // 
-            this.pictureBox23.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox23.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox23.Image")));
-            this.pictureBox23.Location = new System.Drawing.Point(207, 287);
-            this.pictureBox23.Name = "pictureBox23";
-            this.pictureBox23.Size = new System.Drawing.Size(14, 14);
-            this.pictureBox23.TabIndex = 64;
-            this.pictureBox23.TabStop = false;
-            this.pictureBox23.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.metadata.moneyattri" +
-    "butemetadata.calculationof";
-            this.pictureBox23.Click += new System.EventHandler(this.helpIcon_Click);
-            // 
-            // chkACalculationOf
-            // 
-            this.chkACalculationOf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkACalculationOf.Checked = true;
-            this.chkACalculationOf.CheckState = System.Windows.Forms.CheckState.Indeterminate;
-            this.chkACalculationOf.Location = new System.Drawing.Point(18, 284);
-            this.chkACalculationOf.Name = "chkACalculationOf";
-            this.chkACalculationOf.Size = new System.Drawing.Size(180, 17);
-            this.chkACalculationOf.TabIndex = 12;
-            this.chkACalculationOf.Tag = "Not Calculation Money;Is Calculation Money;All Attributes (Calculation Money)";
-            this.chkACalculationOf.Text = "All Attributes (Calculation Money)";
-            this.chkACalculationOf.ThreeState = true;
-            this.chkACalculationOf.UseVisualStyleBackColor = true;
-            this.chkACalculationOf.CheckStateChanged += new System.EventHandler(this.checkBox_CheckStateChanged);
-            // 
-            // xrmSolution
-            // 
-            this.xrmSolution.AddNullRecord = true;
-            this.xrmSolution.Column = null;
-            this.xrmSolution.DisplayFormat = "{friendlyname}   ({P.friendlyname})";
-            this.xrmSolution.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.xrmSolution.Filter = null;
-            this.xrmSolution.FormattingEnabled = true;
-            this.xrmSolution.Location = new System.Drawing.Point(12, 4);
-            this.xrmSolution.Name = "xrmSolution";
-            this.xrmSolution.OnlyActiveRecords = false;
-            this.xrmSolution.RecordHost = null;
-            this.xrmSolution.Service = null;
-            this.xrmSolution.Size = new System.Drawing.Size(357, 21);
-            this.xrmSolution.TabIndex = 1;
-            this.xrmSolution.SelectedIndexChanged += new System.EventHandler(this.xrmSolution_SelectedIndexChanged);
             // 
             // ShowMetadataOptions
             // 
@@ -1193,11 +1309,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(773, 668);
+            this.ClientSize = new System.Drawing.Size(1026, 668);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.lblAttributes);
-            this.Controls.Add(this.gbPreviewEntities);
+            this.Controls.Add(this.gbPreviews);
             this.Controls.Add(this.lblEntities);
             this.Controls.Add(this.gbAttributes);
             this.Controls.Add(this.panel1);
@@ -1226,6 +1342,7 @@
             this.panel1.ResumeLayout(false);
             this.gbAttributes.ResumeLayout(false);
             this.gbAttributes.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox23)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox22)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox12)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox13)).EndInit();
@@ -1237,9 +1354,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox19)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox20)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox21)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.gbPreviewEntities.ResumeLayout(false);
+            this.gbAlwaysAttributes.ResumeLayout(false);
+            this.gbAlwaysAttributes.PerformLayout();
+            this.gbPreviews.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.panel5.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.panSelectSolution.ResumeLayout(false);
             this.panSelectSolution.PerformLayout();
@@ -1247,7 +1372,6 @@
             this.panSolutions.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox23)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1311,10 +1435,9 @@
         internal System.Windows.Forms.CheckBox chkAAttributeOf;
         private System.Windows.Forms.Label lblEntities;
         private System.Windows.Forms.ListBox lbPreviewEntities;
-        private System.Windows.Forms.GroupBox gbPreviewEntities;
+        private System.Windows.Forms.GroupBox gbPreviews;
         private System.Windows.Forms.Label lblAttributes;
-        private System.Windows.Forms.Button btnPreview;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox gbAlwaysAttributes;
         private System.Windows.Forms.CheckBox chkAShowAddress;
         private System.Windows.Forms.CheckBox chkAShowPrimary;
         private System.Windows.Forms.GroupBox groupBox2;
@@ -1329,5 +1452,15 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.PictureBox pictureBox23;
         internal System.Windows.Forms.CheckBox chkACalculationOf;
+        private System.Windows.Forms.ListBox lbPreviewAttributes;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label lblPreviewEntities;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Label lblPreviewAttributes;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.Label label3;
     }
 }

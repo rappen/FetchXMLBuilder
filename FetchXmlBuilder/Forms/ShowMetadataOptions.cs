@@ -24,7 +24,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 {
                     var form = new ShowMetadataOptions();
                     form.fxb = fxb;
-                    form.btnPreview.Enabled = fxb.Service != null;
                     form.PopulateSolutionsSettings(fxb.connectionsettings.FilterSetting);
                     form.PopulateEntitiesSettings(fxb.connectionsettings.ShowEntities);
                     form.PopulateAttributesSettings(fxb.connectionsettings.ShowAttributes);
@@ -39,6 +38,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                     }
                     else if (args.Result is ShowMetadataOptions form)
                     {
+                        form.UpdateSelections();
                         var result = form.ShowDialog() == DialogResult.OK;
                         if (result)
                         {
@@ -56,7 +56,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private ShowMetadataOptions()
         {
             InitializeComponent();
-            Preview(false);
         }
 
         private void PopulateSolutionsSettings(FilterSetting setting)
@@ -162,7 +161,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void UpdateSelections(object sender = null, EventArgs e = null)
         {
-            var settingsfilter = GetFilterSetting();
             var settingsentities = GetEntitiesSettings();
             var selentities = gbEntities.Controls
                    .OfType<CheckBox>()
@@ -187,14 +185,39 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 selattributes.Add("Always Addresses");
             }
             lblAttributes.Text = string.Join(", ", selattributes.ToArray());
-            if (Width < 600)
-            {
-                return;
-            }
-            var entities = fxb.GetDisplayEntities(settingsfilter, settingsentities);
-            gbPreviewEntities.Text = $"Preview Entities selected: {entities.Count}";
+            UpdatePreviewEntities();
+        }
+
+        private void UpdatePreviewEntities()
+        {
+            var selected = lbPreviewEntities.SelectedItem?.ToString();
+            var entities = fxb.GetDisplayEntities(GetFilterSetting(), GetEntitiesSettings());
+            lblPreviewEntities.Text = $"Entities filtered: {entities.Count}";
             lbPreviewEntities.Items.Clear();
             lbPreviewEntities.Items.AddRange(entities.Select(en => en.LogicalName).ToArray());
+            lbPreviewEntities.SelectedItem = selected;
+            UpdatePreviewAttributes();
+        }
+
+        private void UpdatePreviewAttributes(object sender = null, EventArgs e = null)
+        {
+            lbPreviewAttributes.Items.Clear();
+            if (lbPreviewEntities.SelectedItem == null)
+            {
+                if (lbPreviewEntities.Items.Count == 0)
+                {
+                    lblPreviewAttributes.Text = "Select an entity to see attributes";
+                }
+                else
+                {
+                    lbPreviewEntities.SelectedIndex = 0;
+                }
+                return;
+            }
+            var entity = lbPreviewEntities.SelectedItem.ToString();
+            var attributes = fxb.GetDisplayAttributes(entity, GetFilterSetting(), GetAttributesSettings());
+            lblPreviewAttributes.Text = $"Attributes filtered for {entity}: {attributes.Count()}";
+            lbPreviewAttributes.Items.AddRange(attributes.Select(at => at.LogicalName).ToArray());
         }
 
         private void btnEClear_Click(object sender, EventArgs e)
@@ -221,29 +244,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             FetchXmlBuilder.HelpClick(sender);
-        }
-
-        private void btnPreview_Click(object sender, EventArgs e)
-        {
-            Preview(Width < 600);
-        }
-
-        private void Preview(bool preview)
-        {
-            if (preview)
-            {
-                Width = gbPreviewEntities.Left + gbPreviewEntities.Width + 30;
-                UpdateSelections();
-            }
-            else
-            {
-                Width = gbAttributes.Left + gbAttributes.Width + 30;
-            }
-        }
-
-        private void chkAShowAlways_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateSelections();
         }
 
         private void rbAllSolutions_CheckedChanged(object sender, EventArgs e)
@@ -296,6 +296,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             gbEntities.Enabled = chkFilterMetadata.Checked;
             gbAttributes.Enabled = chkFilterMetadata.Checked;
+            UpdateSelections();
         }
 
         internal void LoadSolutions()
