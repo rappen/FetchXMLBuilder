@@ -58,7 +58,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void cmbEntity_SelectedIndexChanged(object sender, EventArgs e)
         {
             ValidationSuspended = true;
-            var entity = cmbEntity.SelectedItem.ToString();
+            var entity = cmbEntity.Text ?? cmbEntity.SelectedItem.ToString();
             if (string.IsNullOrEmpty(entity))
             {
                 return;
@@ -142,9 +142,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
             cmbFrom.Items.Clear();
             cmbTo.Items.Clear();
-            if (cmbEntity.SelectedItem != null)
+            var linkentity = cmbEntity.Text ?? cmbEntity.SelectedItem.ToString();
+            if (!string.IsNullOrWhiteSpace(linkentity))
             {
-                var linkentity = cmbEntity.SelectedItem.ToString();
                 cmbFrom.Items.AddRange(GetRelevantLinkAttributes(linkentity));
             }
             var parententity = Node.Parent.Value("name");
@@ -264,12 +264,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return;
                 }
 
-                BeginInit();
+                ValidationSuspended = true;
                 cmbEntity.Text = entity;
                 cmbFrom.Text = from;
                 cmbTo.Text = to;
                 chkIntersect.Checked = intersect;
-                EndInit();
+                ValidationSuspended = false;
                 Save(false);
             }
         }
