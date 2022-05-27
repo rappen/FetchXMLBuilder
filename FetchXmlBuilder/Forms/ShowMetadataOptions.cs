@@ -13,7 +13,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
     {
         private FetchXmlBuilder fxb;
         private Guid selectedsolution;
+        private Guid selectedpublisher;
         private List<Entity> solutions;
+        private List<Entity> publishers;
 
         public static bool Show(FetchXmlBuilder fxb, Action<bool> applysetting)
         {
@@ -27,7 +29,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                     form.PopulateSolutionsSettings(fxb.connectionsettings.FilterSetting);
                     form.PopulateEntitiesSettings(fxb.connectionsettings.ShowEntities);
                     form.PopulateAttributesSettings(fxb.connectionsettings.ShowAttributes);
-                    form.LoadSolutions();
+                    //form.LoadSolutions();
+                    //form.LoadPublishers();
                     args.Result = form;
                 },
                 PostWorkCallBack = (args) =>
@@ -62,8 +65,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             rbAllSolutions.Checked = setting.ShowAllSolutions;
             rbUnmanagedSolution.Checked = setting.ShowUnmanagedSolutions;
-            rbSpecificSolution.Checked = !setting.ShowSolution.Equals(Guid.Empty);
-            selectedsolution = setting.ShowSolution;
+            rbSpecificSolution.Checked = setting.ShowSolution;
+            rbSpecificPublisher.Checked = setting.ShowPublisher;
+            selectedsolution = setting.SolutionId;
+            selectedpublisher = setting.PublisherId;
             chkFilterMetadata.Checked = setting.FilterByMetadata;
             chkAShowPrimary.Checked = setting.AlwaysPrimary;
             chkAShowAddress.Checked = setting.AlwaysAddresses;
@@ -106,7 +111,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             {
                 ShowAllSolutions = rbAllSolutions.Checked,
                 ShowUnmanagedSolutions = rbUnmanagedSolution.Checked,
-                ShowSolution = rbSpecificSolution.Checked && xrmSolution.SelectedRecord != null ? xrmSolution.SelectedRecord.Id : Guid.Empty,
+                ShowSolution = rbSpecificSolution.Checked && xrmSolution.SelectedRecord != null,
+                ShowPublisher = rbSpecificPublisher.Checked && xrmSolution.SelectedRecord != null,
+                SolutionId = selectedsolution,
+                PublisherId = selectedpublisher,
                 FilterByMetadata = chkFilterMetadata.Checked,
                 AlwaysPrimary = chkAShowPrimary.Checked,
                 AlwaysAddresses = chkAShowAddress.Checked
@@ -150,6 +158,31 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             };
         }
 
+        private Guid GetPublisherId(Entity entity)
+        {
+            return
+                entity != null &&
+                entity.Contains("Id") &&
+                entity["Id"] is AliasedValue value &&
+                value != null &&
+                value.Value is Guid id ? id : Guid.Empty;
+        }
+
+        private void SetPublisherId(Guid id)
+        {
+            foreach (var item in xrmSolution.Items)
+            {
+                if (item is Rappen.XTB.Helpers.ControlItems.EntityItem entityitem)
+                {
+                    if (GetPublisherId(entityitem.Entity).Equals(id))
+                    {
+                        xrmSolution.SelectedItem = item;
+                        break;
+                    }
+                }
+            }
+        }
+
         private void checkBox_CheckStateChanged(object sender, EventArgs e)
         {
             if (sender is CheckBox chk && chk.Tag is string tag)
@@ -161,6 +194,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void UpdateSelections(object sender = null, EventArgs e = null)
         {
+            if (!Visible)
+            {
+                return;
+            }
             var settingsentities = GetEntitiesSettings();
             var selentities = gbEntities.Controls
                    .OfType<CheckBox>()
@@ -253,6 +290,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 panSelectSolution.Enabled = true;
                 PopulateSolutions();
             }
+            else if (rbSpecificPublisher.Checked)
+            {
+                panSelectSolution.Enabled = true;
+                PopulatePublishers();
+            }
             else
             {
                 panSelectSolution.Enabled = false;
@@ -267,26 +309,70 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             {
                 return;
             }
+            if (solutions == null || solutions.Count == 0)
+            {
+                LoadSolutions();
+            }
+            xrmSolution.DisplayFormat = "{friendlyname} ({P.friendlyname})";
             xrmSolution.Service = fxb.Service;
             xrmSolution.DataSource = solutions.Where(s => chkShowAllSolutions.Checked || s.GetAttributeValue<bool>("isvisible") == true);
             xrmSolution.SetSelected(selectedsolution);
             Enabled = true;
         }
 
+        private void PopulatePublishers()
+        {
+            if (!Visible)
+            {
+                return;
+            }
+            LoadPublishers();
+            xrmSolution.DisplayFormat = "{Name} ({Solutions} solutions)";
+            xrmSolution.Service = fxb.Service;
+            xrmSolution.DataSource = publishers;
+            SetPublisherId(selectedpublisher);
+            Enabled = true;
+        }
+
         private void chkShowAllSolutions_CheckedChanged(object sender, EventArgs e)
         {
-            PopulateSolutions();
+            if (rbSpecificSolution.Checked)
+            {
+                PopulateSolutions();
+            }
+            else if (rbSpecificPublisher.Checked)
+            {
+                PopulatePublishers();
+            }
             UpdateSelections();
         }
 
         private void ShowMetadataOptions_Load(object sender, EventArgs e)
         {
-            PopulateSolutions();
+            if (rbSpecificSolution.Checked)
+            {
+                PopulateSolutions();
+            }
+            else if (rbSpecificPublisher.Checked)
+            {
+                PopulatePublishers();
+            }
             UpdateSelections();
         }
 
         private void xrmSolution_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (xrmSolution.Focused && xrmSolution.SelectedRecord is Entity selected)
+            {
+                if (rbSpecificSolution.Checked)
+                {
+                    selectedsolution = selected.Id;
+                }
+                else if (rbSpecificPublisher.Checked)
+                {
+                    selectedpublisher = GetPublisherId(selected);
+                }
+            }
             fxb.solutionentities = null;
             fxb.solutionattributes = null;
             UpdateSelections();
@@ -315,11 +401,46 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             publisher.Columns.AddColumns("customizationprefix", "uniquename", "friendlyname");
             try
             {
-                solutions = fxb.Service.RetrieveMultiple(query).Entities.ToList();
+                solutions = fxb.RetrieveMultiple(query).Entities.ToList();
             }
             catch (Exception ex)
             {
                 fxb.ShowErrorDialog(ex, "Loading Solutions");
+            }
+        }
+
+        private void LoadPublishers()
+        {
+            if (fxb.Service == null)
+            {
+                publishers = new List<Entity>();
+                return;
+            }
+            var fetch = @"<fetch aggregate='true'>
+  <entity name='publisher'>
+    <attribute name='friendlyname' alias='Name' groupby='true' />
+    <attribute name='publisherid' alias='Id' groupby='true' />
+    <order alias='Name' />
+    <link-entity name='solution' from='publisherid' to='publisherid' link-type='inner' alias='S'>
+      <attribute name='solutionid' alias='Solutions' aggregate='countcolumn' />
+      {0}
+    </link-entity>
+  </entity>
+</fetch>";
+            fetch = string.Format(fetch, chkShowAllSolutions.Checked ? "" : "<filter><condition attribute='isvisible' operator='eq' value='1'/></filter>");
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+                publishers = fxb.RetrieveMultiple(new FetchExpression(fetch)).Entities.ToList();
+            }
+            catch (Exception ex)
+            {
+                Cursor = Cursors.Default;
+                fxb.ShowErrorDialog(ex, "Loading Publishers");
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
             }
         }
     }

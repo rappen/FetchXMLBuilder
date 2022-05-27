@@ -25,10 +25,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     {
         public bool ShowAllSolutions { get; set; } = true;
         public bool ShowUnmanagedSolutions { get; set; } = false;
-        public Guid ShowSolution { get; set; } = Guid.Empty;
+        public bool ShowSolution { get; set; } = false;
+        public bool ShowPublisher { get; set; } = false;
+        public Guid SolutionId { get; set; } = Guid.Empty;
+        public Guid PublisherId { get; set; } = Guid.Empty;
         public bool FilterByMetadata { get; set; } = true;
         public bool AlwaysPrimary { get; set; } = true;
         public bool AlwaysAddresses { get; set; } = true;
+
+        public bool NoneEntitiesSelected =>
+                 !ShowAllSolutions &&
+                 !ShowUnmanagedSolutions &&
+                 (!ShowSolution || SolutionId.Equals(Guid.Empty)) &&
+                 (!ShowPublisher || PublisherId.Equals(Guid.Empty));
     }
 
     public abstract class ShowMetaTypes

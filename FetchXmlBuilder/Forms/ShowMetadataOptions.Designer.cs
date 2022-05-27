@@ -108,6 +108,7 @@
             this.chkShowAllSolutions = new System.Windows.Forms.CheckBox();
             this.xrmSolution = new Rappen.XTB.Helpers.Controls.XRMColumnLookup();
             this.panSolutions = new System.Windows.Forms.Panel();
+            this.rbSpecificPublisher = new System.Windows.Forms.RadioButton();
             this.rbSpecificSolution = new System.Windows.Forms.RadioButton();
             this.rbUnmanagedSolution = new System.Windows.Forms.RadioButton();
             this.rbAllSolutions = new System.Windows.Forms.RadioButton();
@@ -561,12 +562,12 @@
             // 
             // label4
             // 
-            this.label4.Location = new System.Drawing.Point(164, 23);
+            this.label4.Location = new System.Drawing.Point(106, 23);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(445, 34);
+            this.label4.Size = new System.Drawing.Size(503, 34);
             this.label4.TabIndex = 104;
-            this.label4.Text = "These selections will never change the queries you have - just to make finding ea" +
-    "sier.";
+            this.label4.Text = "These filters will never change the queries you already have - these just make th" +
+    "e finding easier.";
             // 
             // btnCancel
             // 
@@ -1237,6 +1238,7 @@
             // 
             // panSolutions
             // 
+            this.panSolutions.Controls.Add(this.rbSpecificPublisher);
             this.panSolutions.Controls.Add(this.rbSpecificSolution);
             this.panSolutions.Controls.Add(this.rbUnmanagedSolution);
             this.panSolutions.Controls.Add(this.rbAllSolutions);
@@ -1244,6 +1246,17 @@
             this.panSolutions.Name = "panSolutions";
             this.panSolutions.Size = new System.Drawing.Size(465, 26);
             this.panSolutions.TabIndex = 0;
+            // 
+            // rbSpecificPublisher
+            // 
+            this.rbSpecificPublisher.AutoSize = true;
+            this.rbSpecificPublisher.Location = new System.Drawing.Point(313, 3);
+            this.rbSpecificPublisher.Name = "rbSpecificPublisher";
+            this.rbSpecificPublisher.Size = new System.Drawing.Size(109, 17);
+            this.rbSpecificPublisher.TabIndex = 3;
+            this.rbSpecificPublisher.Text = "Specific Publisher";
+            this.rbSpecificPublisher.UseVisualStyleBackColor = true;
+            this.rbSpecificPublisher.CheckedChanged += new System.EventHandler(this.rbAllSolutions_CheckedChanged);
             // 
             // rbSpecificSolution
             // 
@@ -1462,5 +1475,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.RadioButton rbSpecificPublisher;
     }
 }

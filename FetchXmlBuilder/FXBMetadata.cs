@@ -108,7 +108,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             {
                 return result;
             }
-            if (solutionentities == null)
+            if (solutionentities == null || solutionentities.Count == 0)
             {
                 LoadSolutionsComponents(selectedfilter);
             }
@@ -163,11 +163,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal List<EntityMetadata> GetDisplayEntities(FilterSetting selectedfilter, ShowMetaTypesEntity selectentities)
         {
             var result = new List<EntityMetadata>();
-            if (entities == null)
+            if (entities == null || selectedfilter.NoneEntitiesSelected)
             {
                 return result;
             }
-            if (solutionentities == null)
+            if (solutionentities == null || solutionentities.Count == 0)
             {
                 LoadSolutionsComponents(selectedfilter);
             }
@@ -344,7 +344,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 if (newEntityMetadata != null)
                 {
                     entities = newEntityMetadata.ToList();
-                    SendMessageToStatusBar(this, new XrmToolBox.Extensibility.Args.StatusBarMessageEventArgs($"All entities are now loaded."));
+                    if (SendMessageToStatusBar != null)
+                    {
+                        SendMessageToStatusBar(this, new XrmToolBox.Extensibility.Args.StatusBarMessageEventArgs($"All entities are now loaded."));
+                    }
                 }
                 UpdateLiveXML();
                 working = false;
@@ -416,7 +419,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void LoadSolutionsComponents(FilterSetting selectedfilter)
         {
-            if (Service == null)
+            if (Service == null || selectedfilter.NoneEntitiesSelected || selectedfilter.ShowAllSolutions)
             {
                 solutionentities = new List<Entity>();
                 solutionattributes = new List<Guid>();
@@ -424,16 +427,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             solutionentities = null;
             solutionattributes = null;
-            if (selectedfilter.ShowAllSolutions)
-            {
-                solutionentities = new List<Entity>();
-                return;
-            }
             var query = new QueryExpression("solutioncomponent");
             query.ColumnSet.AddColumns("objectid", "solutioncomponentid", "rootcomponentbehavior", "rootsolutioncomponentid", "ismetadata", "componenttype");
-            if (!selectedfilter.ShowSolution.Equals(Guid.Empty))
+            if (selectedfilter.ShowSolution)
             {
-                query.Criteria.AddCondition("solutionid", ConditionOperator.Equal, selectedfilter.ShowSolution);
+                query.Criteria.AddCondition("solutionid", ConditionOperator.Equal, selectedfilter.SolutionId);
+            }
+            else if (selectedfilter.ShowPublisher)
+            {
+                var query_solution = query.AddLink("solution", "solutionid", "solutionid");
+                query_solution.LinkCriteria.AddCondition("publisherid", ConditionOperator.Equal, selectedfilter.PublisherId);
             }
             else if (selectedfilter.ShowUnmanagedSolutions)
             {
@@ -442,6 +445,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 query_solution.LinkCriteria.AddCondition("uniquename", ConditionOperator.NotEqual, "Default");
                 query_solution.LinkCriteria.AddCondition("isvisible", ConditionOperator.Equal, true);
             }
+            else
+            {
+                query.Criteria.AddCondition("solutionid", ConditionOperator.Null);
+            }
             var filtertype = new FilterExpression();
             query.Criteria.AddFilter(filtertype);
             filtertype.FilterOperator = LogicalOperator.Or;
@@ -449,7 +456,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             filtertype.AddCondition("componenttype", ConditionOperator.Equal, 2);
             try
             {
-                var result = Service.RetrieveMultiple(query);
+                var result = RetrieveMultiple(query);
                 solutionentities = result.Entities
                     .Where(c => c.GetAttributeValue<OptionSetValue>("componenttype").Value == 1).ToList();
                 solutionattributes = result.Entities
