@@ -638,7 +638,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         pubRequest.ParameterXml = string.Format(
                             @"<importexportxml><entities><entity>{0}</entity></entities><nodes/><securityroles/><settings/><workflows/></importexportxml>",
                             View["returnedtypecode"].ToString());
-                        Service.Execute(pubRequest);
+                        Execute(pubRequest);
                     }
                 })
             {

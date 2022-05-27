@@ -257,7 +257,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 throw new FetchIsAggregateException("QueryExpression does not support aggregate queries.");
             }
-            var convert = (FetchXmlToQueryExpressionResponse)fxb.Service.Execute(new FetchXmlToQueryExpressionRequest() { FetchXml = fetch });
+            var convert = (FetchXmlToQueryExpressionResponse)fxb.Execute(new FetchXmlToQueryExpressionRequest() { FetchXml = fetch });
             return convert.Query;
         }
 
