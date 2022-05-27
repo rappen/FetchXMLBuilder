@@ -17,6 +17,49 @@ namespace Cinteros.Xrm.FetchXmlBuilder
     {
         private string attributesChecksum = "";
 
+        internal EntityCollection RetrieveMultiple(QueryBase query)
+        {
+            EntityCollection result = null;
+            var start = DateTime.Now;
+            try
+            {
+                result = Service.RetrieveMultiple(query);
+            }
+            finally
+            {
+                var stop = DateTime.Now;
+                var duration = stop - start;
+                var qinfo = "";
+                if (query is QueryExpression qe)
+                {
+                    qinfo = qe.EntityName;
+                }
+                else if (query is FetchExpression fe)
+                {
+                    qinfo = "fetchxml";
+                }
+                LogInfo($"Retrieving {qinfo}: {duration}");
+            }
+            return result;
+        }
+
+        internal OrganizationResponse Execute(OrganizationRequest request)
+        {
+            OrganizationResponse result = null;
+            var start = DateTime.Now;
+            try
+            {
+                result = Service.Execute(request);
+            }
+            finally
+            {
+                var stop = DateTime.Now;
+                var duration = stop - start;
+                LogInfo($"Execute {request.ToString().Replace("Microsoft.Crm.Sdk.Messages.", "")}: {duration}");
+            }
+            return result;
+        }
+
         internal void FetchResults(string fetch = "")
         {
             if (!tsbExecute.Enabled)
@@ -76,7 +119,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                         qexs.Criteria.AddCondition("iscustomizable", ConditionOperator.Equal, true);
                     }
                     qexs.AddOrder("name", OrderType.Ascending);
-                    var sysviews = Service.RetrieveMultiple(qexs);
+                    var sysviews = RetrieveMultiple(qexs);
                     foreach (var view in sysviews.Entities)
                     {
                         var entityname = view["returnedtypecode"].ToString();
@@ -97,7 +140,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     qexu.ColumnSet = new ColumnSet("name", "returnedtypecode", "fetchxml", "layoutxml");
                     qexu.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
                     qexu.AddOrder("name", OrderType.Ascending);
-                    var userviews = Service.RetrieveMultiple(qexu);
+                    var userviews = RetrieveMultiple(qexu);
                     foreach (var view in userviews.Entities)
                     {
                         var entityname = view["returnedtypecode"].ToString();
@@ -174,7 +217,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 {
                     //var fetchxml = GetFetchDocument().OuterXml;
                     var start = DateTime.Now;
-                    var resp = (ExecuteFetchResponse)Service.Execute(new ExecuteFetchRequest() { FetchXml = fetch });
+                    var resp = (ExecuteFetchResponse)Execute(new ExecuteFetchRequest() { FetchXml = fetch });
                     var stop = DateTime.Now;
                     var duration = stop - start;
                     LogUse("ExecuteFetch", false, null, duration.TotalMilliseconds);
@@ -205,7 +248,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             qeFeed.ColumnSet.AddColumns("cint_id", "cint_fetchxml");
             qeFeed.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
             qeFeed.Criteria.AddCondition("cint_id", ConditionOperator.Equal, feedid);
-            var feeds = Service.RetrieveMultiple(qeFeed);
+            var feeds = RetrieveMultiple(qeFeed);
             Entity feed = feeds.Entities.Count > 0 ? feeds.Entities[0] : null;
             return feed;
         }
@@ -235,7 +278,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                             eventargs.Cancel = true;
                             break;
                         }
-                        tmpResult = Service.RetrieveMultiple(query);
+                        tmpResult = RetrieveMultiple(query);
                         if (resultCollection == null)
                         {
                             resultCollection = tmpResult;
