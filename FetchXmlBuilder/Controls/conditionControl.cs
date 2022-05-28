@@ -106,7 +106,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
                 if (control == cmbOperator && cmbOperator.SelectedItem is OperatorItem opercon && (opercon.GetValue() == "contains" || opercon.GetValue() == "does-not-contain"))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Error, "Contains (and not) are available, but not supported for FetchXml.",
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Contains (and not) are available, but not supported for FetchXml.",
                         "https://docs.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml-schema#:~:text=%3Cxs%3AsimpleType%20name%3D%22operator%22%3E");
                 }
 

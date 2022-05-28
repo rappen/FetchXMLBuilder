@@ -153,6 +153,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute must be included.");
             }
+            var oper = node.Value("operator");
+            if (oper == "contains" || oper == "does-not-contain")
+            {
+                return new ControlValidationResult(ControlValidationLevel.Error, $"Condition operator '{oper}' is not supported by FetchXml.", "https://docs.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml-schema");
+            }
             var entityname = node.Value("entityname");
             if (!string.IsNullOrWhiteSpace(entityname) && !node.LocalEntityIsRoot())
             {
