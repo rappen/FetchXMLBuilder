@@ -13,178 +13,228 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 return null;
             }
-            var name = node.Value("name");
-            var attribute = node.Value("attribute");
-            var alias = node.Value("alias");
-            var parententity = node.LocalEntityName();
             switch (node.Name)
             {
                 case "fetch":
-                    break;
+                    return ValidateFetch(node, fxb);
 
                 case "entity":
-                    if (string.IsNullOrWhiteSpace(name))
-                    {
-                        return new ControlValidationResult(ControlValidationLevel.Warning, "Entity Name must be included.");
-                    }
-                    break;
+                    return ValidateEntity(node, fxb);
 
                 case "link-entity":
-                    if (string.IsNullOrWhiteSpace(name) ||
-                        string.IsNullOrWhiteSpace(node.Value("to")) ||
-                        string.IsNullOrWhiteSpace(node.Value("from")))
-                    {
-                        return new ControlValidationResult(ControlValidationLevel.Warning, "Link-Entity must include Name, To, From.");
-                    }
-
-                    if (node.Value("intersect") != "true" &&
-                        fxb.GetAttribute(name, node.Value("from")) is AttributeMetadata fromAttr && fromAttr.IsPrimaryId == false)
-                    {
-                        return new ControlValidationResult(ControlValidationLevel.Info, "Links to records that aren't parents may cause paging issues.", "https://markcarrington.dev/2021/02/23/msdyn365-internals-paging-gotchas/#multiple_linked_entities");
-                    }
-                    break;
+                    return ValidateLinkEntity(node, fxb);
 
                 case "attribute":
-                    if (string.IsNullOrWhiteSpace(name))
-                    {
-                        return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute Name must be included.");
-                    }
-                    if (fxb.entities != null)
-                    {
-                        if (fxb.GetAttribute(parententity, name) is AttributeMetadata metaatt)
-                        {
-                            if (metaatt.IsValidForGrid.HasValue && metaatt.IsValidForGrid.Value == false && metaatt.IsPrimaryId.Value != true)
-                            {
-                                return new ControlValidationResult(ControlValidationLevel.Info, $"Attribute '{name}' has 'IsValidForGrid=false'.");
-                            }
-                        }
-                        else
-                        {
-                            return new ControlValidationResult(ControlValidationLevel.Warning, $"Attribute '{name}' is not in the table '{parententity}'.");
-                        }
-                    }
-                    if (node.IsFetchAggregate())
-                    {
-                        if (string.IsNullOrWhiteSpace(alias))
-                        {
-                            return new ControlValidationResult(ControlValidationLevel.Warning, "Aggregate should always have an Alias.", "https://docs.microsoft.com/en-us/powerapps/developer/data-platform/use-fetchxml-aggregation#about-aggregation");
-                        }
-
-                        if (node.Value("groupby") == "true")
-                        {
-                            if (!HasSortOnAttribute(node))
-                            {
-                                return new ControlValidationResult(ControlValidationLevel.Info, "Aggregate queries should be sorted by all grouped attributes for correct paging.", "https://markcarrington.dev/2022/01/13/fetchxml-aggregate-queries-lookup-fields-and-paging/");
-                            }
-
-                            if (fxb.GetAttribute(parententity, name) is LookupAttributeMetadata)
-                            {
-                                return new ControlValidationResult(ControlValidationLevel.Info, "Grouping by lookup columns can give inconsistent results across multiple pages.", "https://markcarrington.dev/2022/01/13/fetchxml-aggregate-queries-lookup-fields-and-paging/");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrWhiteSpace(alias))
-                        {
-                            return new ControlValidationResult(ControlValidationLevel.Info, "Alias is not recommended for not Aggregate queries.");
-                        }
-
-                        if (node.IsFetchDistinct() && !HasSortOnAttribute(node) && !HasPrimaryIdAttribute(node.Parent, fxb))
-                        {
-                            return new ControlValidationResult(ControlValidationLevel.Info, "Distinct queries should be sorted by all attributes for correct paging.", "https://markcarrington.dev/2020/12/08/dataverse-paging-with-distinct/");
-                        }
-                    }
-                    break;
+                    return ValidateAttribute(node, fxb);
 
                 case "filter":
-                    if (node.Nodes.Count == 0)
-                    {
-                        return new ControlValidationResult(ControlValidationLevel.Info, "Filter shound have at least one Condition.");
-                    }
-                    break;
+                    return ValidateFilter(node, fxb);
 
                 case "condition":
-                    if (string.IsNullOrWhiteSpace(attribute))
-                    {
-                        return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute must be included.");
-                    }
-                    var entityname = node.Value("entityname");
-                    if (!string.IsNullOrWhiteSpace(entityname) && !node.LocalEntityIsRoot())
-                    {
-                        return new ControlValidationResult(ControlValidationLevel.Error, "Cannot enter Entity for Link-Entity condition.");
-                    }
-                    if (string.IsNullOrWhiteSpace(entityname) && fxb.entities != null)
-                    {
-                        if (fxb.GetAttribute(parententity, attribute) is AttributeMetadata metaatt)
-                        {
-                            if (metaatt.IsValidForGrid.HasValue && metaatt.IsValidForGrid.Value == false)
-                            {
-                                //  return new ControlValidationResult(ControlValidationLevel.Error, $"Attribute '{attribute}' has 'IsValidForGrid=false'.");
-                            }
-                        }
-                        else
-                        {
-                            return new ControlValidationResult(ControlValidationLevel.Warning, $"Attribute '{attribute}' is not in the table '{parententity}'.");
-                        }
-                    }
-                    break;
+                    return ValidateCondition(node, fxb);
 
                 case "value":
-                    if (string.IsNullOrWhiteSpace(node.Value("#text")))
-                    {
-                        return new ControlValidationResult(ControlValidationLevel.Warning, "Value should be added.");
-                    }
-                    break;
+                    return ValidateValue(node, fxb);
 
                 case "order":
-                    if (node.IsFetchAggregate())
+                    return ValidateOrder(node, fxb);
+            }
+            return null;
+        }
+
+        private static ControlValidationResult ValidateFetch(TreeNode node, FetchXmlBuilder fxb)
+        {
+            if (!node.Nodes.OfType<TreeNode>().Any(n => n.Name == "entity"))
+            {
+                return new ControlValidationResult(ControlValidationLevel.Error, "Missing entity under the fetch.");
+            }
+            return null;
+        }
+
+        private static ControlValidationResult ValidateEntity(TreeNode node, FetchXmlBuilder fxb)
+        {
+            var name = node.Value("name");
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return new ControlValidationResult(ControlValidationLevel.Warning, "Entity Name must be included.");
+            }
+            return null;
+        }
+
+        private static ControlValidationResult ValidateLinkEntity(TreeNode node, FetchXmlBuilder fxb)
+        {
+            var name = node.Value("name");
+            if (string.IsNullOrWhiteSpace(name) ||
+                string.IsNullOrWhiteSpace(node.Value("to")) ||
+                string.IsNullOrWhiteSpace(node.Value("from")))
+            {
+                return new ControlValidationResult(ControlValidationLevel.Warning, "Link-Entity must include Name, To, From.");
+            }
+
+            if (node.Value("intersect") != "true" &&
+                fxb.GetAttribute(name, node.Value("from")) is AttributeMetadata fromAttr && fromAttr.IsPrimaryId == false)
+            {
+                return new ControlValidationResult(ControlValidationLevel.Info, "Links to records that aren't parents may cause paging issues.", "https://markcarrington.dev/2021/02/23/msdyn365-internals-paging-gotchas/#multiple_linked_entities");
+            }
+            return null;
+        }
+
+        private static ControlValidationResult ValidateAttribute(TreeNode node, FetchXmlBuilder fxb)
+        {
+            var name = node.Value("name");
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute Name must be included.");
+            }
+            var parententity = node.LocalEntityName();
+            if (fxb.entities != null)
+            {
+                if (fxb.GetAttribute(parententity, name) is AttributeMetadata metaatt)
+                {
+                    if (metaatt.IsValidForGrid.HasValue && metaatt.IsValidForGrid.Value == false && metaatt.IsPrimaryId.Value != true)
                     {
-                        if (string.IsNullOrWhiteSpace(alias))
-                        {
-                            return new ControlValidationResult(ControlValidationLevel.Warning, "Order Alias must be included in aggregate query.", "https://docs.microsoft.com/en-us/power-apps/developer/data-platform/use-fetchxml-aggregation#order-by");
-                        }
-                        if (!string.IsNullOrWhiteSpace(attribute))
-                        {
-                            return new ControlValidationResult(ControlValidationLevel.Warning, "Order Name must NOT be included in aggregate query.", "https://docs.microsoft.com/en-us/power-apps/developer/data-platform/use-fetchxml-aggregation#order-by");
-                        }
+                        return new ControlValidationResult(ControlValidationLevel.Info, $"Attribute '{name}' has 'IsValidForGrid=false'.");
                     }
-                    else
+                }
+                else
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, $"Attribute '{name}' is not in the table '{parententity}'.");
+                }
+            }
+            var alias = node.Value("alias");
+            if (node.IsFetchAggregate())
+            {
+                if (string.IsNullOrWhiteSpace(alias))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Aggregate should always have an Alias.", "https://docs.microsoft.com/en-us/powerapps/developer/data-platform/use-fetchxml-aggregation#about-aggregation");
+                }
+
+                if (node.Value("groupby") == "true")
+                {
+                    if (!HasSortOnAttribute(node))
                     {
-                        if (string.IsNullOrWhiteSpace(attribute))
-                        {
-                            return new ControlValidationResult(ControlValidationLevel.Warning, "Order Name must be included.");
-                        }
+                        return new ControlValidationResult(ControlValidationLevel.Info, "Aggregate queries should be sorted by all grouped attributes for correct paging.", "https://markcarrington.dev/2022/01/13/fetchxml-aggregate-queries-lookup-fields-and-paging/");
                     }
 
-                    if (node.Parent.Name == "link-entity")
+                    if (fxb.GetAttribute(parententity, name) is LookupAttributeMetadata)
                     {
-                        return new ControlValidationResult(ControlValidationLevel.Info, "Sorting on a link-entity triggers legacy paging.", "https://docs.microsoft.com/en-us/powerapps/developer/data-platform/org-service/paging-behaviors-and-ordering#ordering-and-multiple-table-queries");
+                        return new ControlValidationResult(ControlValidationLevel.Info, "Grouping by lookup columns can give inconsistent results across multiple pages.", "https://markcarrington.dev/2022/01/13/fetchxml-aggregate-queries-lookup-fields-and-paging/");
                     }
-                    if (fxb.entities != null && !string.IsNullOrWhiteSpace(attribute))
-                    {
-                        if (fxb.GetAttribute(parententity, attribute) is AttributeMetadata metaatt)
-                        {
-                        }
-                        else
-                        {
-                            return new ControlValidationResult(ControlValidationLevel.Warning, $"Order Attribute '{attribute}' is not in the table '{parententity}'.");
-                        }
-                    }
-                    if (node.IsFetchAggregate() && !string.IsNullOrWhiteSpace(alias))
-                    {
-                        var attr = node.Parent.Nodes.OfType<TreeNode>()
-                            .Where(n => n.Name == "attribute" && n.Value("alias") == alias)
-                            .FirstOrDefault();
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(alias))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Info, "Alias is not recommended for not Aggregate queries.");
+                }
 
-                        if (attr != null &&
-                            attr.Value("groupby") == "true" &&
-                            fxb.GetAttribute(parententity, attr.Value("name")) is LookupAttributeMetadata)
-                        {
-                            return new ControlValidationResult(ControlValidationLevel.Info, "Sorting on a grouped lookup column may cause paging problems.", "https://markcarrington.dev/2022/01/13/fetchxml-aggregate-queries-lookup-fields-and-paging/");
-                        }
+                if (node.IsFetchDistinct() && !HasSortOnAttribute(node) && !HasPrimaryIdAttribute(node.Parent, fxb))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Info, "Distinct queries should be sorted by all attributes for correct paging.", "https://markcarrington.dev/2020/12/08/dataverse-paging-with-distinct/");
+                }
+            }
+            return null;
+        }
+
+        private static ControlValidationResult ValidateFilter(TreeNode node, FetchXmlBuilder fxb)
+        {
+            if (node.Nodes.Count == 0)
+            {
+                return new ControlValidationResult(ControlValidationLevel.Info, "Filter shound have at least one Condition.");
+            }
+            return null;
+        }
+
+        private static ControlValidationResult ValidateCondition(TreeNode node, FetchXmlBuilder fxb)
+        {
+            var attribute = node.Value("attribute");
+            if (string.IsNullOrWhiteSpace(attribute))
+            {
+                return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute must be included.");
+            }
+            var entityname = node.Value("entityname");
+            if (!string.IsNullOrWhiteSpace(entityname) && !node.LocalEntityIsRoot())
+            {
+                return new ControlValidationResult(ControlValidationLevel.Error, "Cannot enter Entity for Link-Entity condition.");
+            }
+            if (string.IsNullOrWhiteSpace(entityname) && fxb.entities != null)
+            {
+                var parententity = node.LocalEntityName();
+                if (fxb.GetAttribute(parententity, attribute) is AttributeMetadata metaatt)
+                {
+                    if (metaatt.IsValidForGrid.HasValue && metaatt.IsValidForGrid.Value == false)
+                    {
+                        //  return new ControlValidationResult(ControlValidationLevel.Error, $"Attribute '{attribute}' has 'IsValidForGrid=false'.");
                     }
-                    break;
+                }
+                else
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, $"Attribute '{attribute}' is not in the table '{parententity}'.");
+                }
+            }
+            return null;
+        }
+
+        private static ControlValidationResult ValidateValue(TreeNode node, FetchXmlBuilder fxb)
+        {
+            if (string.IsNullOrWhiteSpace(node.Value("#text")))
+            {
+                return new ControlValidationResult(ControlValidationLevel.Warning, "Value should be added.");
+            }
+            return null;
+        }
+
+        private static ControlValidationResult ValidateOrder(TreeNode node, FetchXmlBuilder fxb)
+        {
+            var attribute = node.Value("attribute");
+            var alias = node.Value("alias");
+            if (node.IsFetchAggregate())
+            {
+                if (string.IsNullOrWhiteSpace(alias))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Order Alias must be included in aggregate query.", "https://docs.microsoft.com/en-us/power-apps/developer/data-platform/use-fetchxml-aggregation#order-by");
+                }
+                if (!string.IsNullOrWhiteSpace(attribute))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Order Name must NOT be included in aggregate query.", "https://docs.microsoft.com/en-us/power-apps/developer/data-platform/use-fetchxml-aggregation#order-by");
+                }
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(attribute))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Order Name must be included.");
+                }
+            }
+
+            if (node.Parent.Name == "link-entity")
+            {
+                return new ControlValidationResult(ControlValidationLevel.Info, "Sorting on a link-entity triggers legacy paging.", "https://docs.microsoft.com/en-us/powerapps/developer/data-platform/org-service/paging-behaviors-and-ordering#ordering-and-multiple-table-queries");
+            }
+            var parententity = node.LocalEntityName();
+            if (fxb.entities != null && !string.IsNullOrWhiteSpace(attribute))
+            {
+                if (fxb.GetAttribute(parententity, attribute) is AttributeMetadata metaatt)
+                {
+                }
+                else
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, $"Order Attribute '{attribute}' is not in the table '{parententity}'.");
+                }
+            }
+            if (node.IsFetchAggregate() && !string.IsNullOrWhiteSpace(alias))
+            {
+                var attr = node.Parent.Nodes.OfType<TreeNode>()
+                    .Where(n => n.Name == "attribute" && n.Value("alias") == alias)
+                    .FirstOrDefault();
+
+                if (attr != null &&
+                    attr.Value("groupby") == "true" &&
+                    fxb.GetAttribute(parententity, attr.Value("name")) is LookupAttributeMetadata)
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Info, "Sorting on a grouped lookup column may cause paging problems.", "https://markcarrington.dev/2022/01/13/fetchxml-aggregate-queries-lookup-fields-and-paging/");
+                }
             }
             return null;
         }
