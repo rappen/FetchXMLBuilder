@@ -36,18 +36,36 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             chkShowValidation.Checked = settings.ShowValidation;
             chkShowValidationInfo.Checked = settings.ShowValidationInfo;
             chkShowRepository.Checked = settings.ShowRepository;
-            switch (settings.Results.ResultOutput)
-            {
-                case ResultOutput.XML: rbResSerializedXML.Checked = true; break;
-                case ResultOutput.JSON: rbResSerializedJSON.Checked = true; break;
-                case ResultOutput.JSONWebAPI: rbResSerializedJSONWebAPI.Checked = true; break;
-                case ResultOutput.Raw: rbResRaw.Checked = true; break;
-                default: rbResGrid.Checked = true; break;
-            }
+            chkShowAllAttributes.Checked = settings.QueryOptions.ShowAllAttributes;
+            cmbResult.SelectedIndex = SettingResultToComboBoxItem(settings.Results.ResultOutput);
             chkResAllPages.Checked = settings.Results.RetrieveAllPages;
+            chkClickableLinks.Checked = settings.Results.ClickableLinks;
             propXmlColors.SelectedObject = settings.XmlColors;
             txtFetch.ConfigureForXml(settings);
             txtFetch.FormatXML(settings.QueryOptions.NewQueryTemplate, settings);
+            chkTryMetadataCache.Checked = settings.TryMetadataCache;
+            if (chkTryMetadataCache.Checked)
+            {
+                chkWaitUntilMetadataLoaded.Enabled = true;
+                chkWaitUntilMetadataLoaded.Checked = settings.WaitUntilMetadataLoaded;
+            }
+            else
+            {
+                chkWaitUntilMetadataLoaded.Enabled = false;
+                chkWaitUntilMetadataLoaded.Checked = false;
+            }
+        }
+
+        private int SettingResultToComboBoxItem(ResultOutput resultOutput)
+        {
+            switch (resultOutput)
+            {
+                case ResultOutput.XML: return 1;
+                case ResultOutput.JSON: return 2;
+                case ResultOutput.JSONWebAPI: return 3;
+                case ResultOutput.Raw: return 4;
+                default: return 0;
+            }
         }
 
         internal FXBSettings GetSettings()
@@ -58,8 +76,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             settings.QueryOptions.NewQueryTemplate = txtFetch.Text;
             settings.DoNotPromptToSave = chkAppNoSavePrompt.Checked;
             settings.Results.AlwaysNewWindow = chkAppResultsNewWindow.Checked;
-            settings.Results.ResultOutput = rbResSerializedXML.Checked ? ResultOutput.XML : rbResSerializedJSON.Checked ? ResultOutput.JSON : rbResRaw.Checked ? ResultOutput.Raw : rbResSerializedJSONWebAPI.Checked ? ResultOutput.JSONWebAPI : ResultOutput.Grid;
+            settings.Results.ResultOutput = ResultItemToSettingResult(cmbResult.SelectedIndex);
             settings.Results.RetrieveAllPages = chkResAllPages.Checked;
+            settings.Results.ClickableLinks = chkClickableLinks.Checked;
             settings.OpenUncustomizableViews = chkAppAllowUncustViews.Checked;
             settings.AddConditionToFilter = chkAddConditionToFilter.Checked;
             settings.UseSQL4CDS = chkUseSQL4CDS.Checked;
@@ -70,8 +89,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             settings.ShowValidation = chkShowValidation.Checked;
             settings.ShowValidationInfo = settings.ShowValidation && chkShowValidationInfo.Checked;
             settings.ShowRepository = chkShowRepository.Checked;
+            settings.QueryOptions.ShowAllAttributes = chkShowAllAttributes.Checked;
             settings.XmlColors = propXmlColors.SelectedObject as XmlColors;
+            settings.TryMetadataCache = chkTryMetadataCache.Checked;
+            settings.WaitUntilMetadataLoaded = chkWaitUntilMetadataLoaded.Checked;
             return settings;
+        }
+
+        private ResultOutput ResultItemToSettingResult(int selectedIndex)
+        {
+            switch (selectedIndex)
+            {
+                case 1: return ResultOutput.XML;
+                case 2: return ResultOutput.JSON;
+                case 3: return ResultOutput.JSONWebAPI;
+                case 4: return ResultOutput.Raw;
+                default: return ResultOutput.Grid;
+            }
         }
 
         private void llShowWelcome_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -152,6 +186,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 chkShowValidationInfo.Checked = false;
             }
             chkShowValidationInfo.Enabled = chkShowValidation.Checked;
+        }
+
+        private void chkTryMetadataCache_CheckedChanged(object sender, EventArgs e)
+        {
+            chkWaitUntilMetadataLoaded.Enabled = chkTryMetadataCache.Checked;
+            if (!chkTryMetadataCache.Checked)
+            {
+                chkWaitUntilMetadataLoaded.Checked = false;
+            }
         }
     }
 }

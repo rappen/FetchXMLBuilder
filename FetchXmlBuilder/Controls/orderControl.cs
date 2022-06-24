@@ -11,6 +11,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
     {
         private bool friendly;
         private AttributeMetadata[] attributes;
+        private readonly AttributeMetadata[] allattributes;
 
         public orderControl() : this(null, null, null, null)
         {
@@ -18,10 +19,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         public orderControl(TreeNode node, AttributeMetadata[] attributes, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree)
         {
+            InitializeComponent();
             friendly = FetchXmlBuilder.friendlyNames;
             this.attributes = attributes;
-
-            InitializeComponent();
+            allattributes = fetchXmlBuilder.GetAllAttribues(node.LocalEntityName()).ToArray();
             InitializeFXB(null, fetchXmlBuilder, tree, node);
         }
 
@@ -79,12 +80,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Error, "Attribute is required");
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Attribute", ControlValidationMessage.IsRequired);
                 }
-
-                if (fxb.Service != null && !cmbAttribute.Items.OfType<AttributeItem>().Any(i => i.ToString() == cmbAttribute.Text))
+                if (fxb.entities != null)
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute is not valid");
+                    if (!allattributes.Any(a => a.LogicalName == cmbAttribute.Text))
+                    {
+                        return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute", ControlValidationMessage.NotInMetadata);
+                    }
+                    if (!cmbAttribute.Items.OfType<AttributeItem>().Any(a => a.ToString() == cmbAttribute.Text))
+                    {
+                        return new ControlValidationResult(ControlValidationLevel.Info, "Attribute", ControlValidationMessage.NotShowingNow);
+                    }
                 }
             }
 
@@ -92,12 +99,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 if (string.IsNullOrWhiteSpace(cmbAlias.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Error, "Alias is required");
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Alias", ControlValidationMessage.IsRequired);
                 }
-                    
+
                 if (!cmbAlias.Items.OfType<string>().Any(i => i == cmbAlias.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "Alias is not valid");
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Alias", ControlValidationMessage.InValid);
                 }
             }
 

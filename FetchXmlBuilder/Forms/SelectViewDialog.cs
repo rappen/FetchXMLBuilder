@@ -28,11 +28,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 object selectedItem = null;
                 foreach (var entity in entities)
                 {
-                    if (entity.Value.IsIntersect != true && Caller.views.ContainsKey(entity.Value.LogicalName + "|S"))
+                    if (entity.IsIntersect != true && Caller.views.ContainsKey(entity.LogicalName + "|S"))
                     {
-                        var ei = new EntityItem(entity.Value);
+                        var ei = new EntityItem(entity);
                         cmbEntity.Items.Add(ei);
-                        if (entity.Value.LogicalName == Caller.settings.LastOpenedViewEntity)
+                        if (entity.LogicalName == Caller.settings.LastOpenedViewEntity)
                         {
                             selectedItem = ei;
                         }

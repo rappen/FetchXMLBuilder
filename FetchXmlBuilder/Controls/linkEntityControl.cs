@@ -36,7 +36,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 foreach (var entity in entities)
                 {
-                    cmbEntity.Items.Add(entity.Value.LogicalName);
+                    cmbEntity.Items.Add(entity.LogicalName);
                 }
             }
 
@@ -58,7 +58,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void cmbEntity_SelectedIndexChanged(object sender, EventArgs e)
         {
             ValidationSuspended = true;
-            var entity = cmbEntity.SelectedItem.ToString();
+            var entity = cmbEntity.Text ?? cmbEntity.SelectedItem.ToString();
             if (string.IsNullOrEmpty(entity))
             {
                 return;
@@ -80,10 +80,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             cmbRelationship.Items.Clear();
             var parententityname = Node.Parent.Value("name");
-            var entities = fxb.GetDisplayEntities();
-            if (entities != null && entities.ContainsKey(parententityname))
+            var parententity = fxb.GetEntity(parententityname);
+            if (parententity != null)
             {
-                var parententity = entities[parententityname];
                 var mo = parententity.ManyToOneRelationships;
                 var om = parententity.OneToManyRelationships;
                 var mm = parententity.ManyToManyRelationships;
@@ -143,9 +142,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
             cmbFrom.Items.Clear();
             cmbTo.Items.Clear();
-            if (cmbEntity.SelectedItem != null)
+            var linkentity = cmbEntity.Text ?? cmbEntity.SelectedItem.ToString();
+            if (!string.IsNullOrWhiteSpace(linkentity))
             {
-                var linkentity = cmbEntity.SelectedItem.ToString();
                 cmbFrom.Items.AddRange(GetRelevantLinkAttributes(linkentity));
             }
             var parententity = Node.Parent.Value("name");
@@ -265,12 +264,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     return;
                 }
 
-                BeginInit();
+                ValidationSuspended = true;
                 cmbEntity.Text = entity;
                 cmbFrom.Text = from;
                 cmbTo.Text = to;
                 chkIntersect.Checked = intersect;
-                EndInit();
+                ValidationSuspended = false;
                 Save(false);
             }
         }
@@ -294,6 +293,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
         protected override ControlValidationResult ValidateControl(Control control)
         {
+            var parententityname = Node.Parent.LocalEntityName();
+            var parententity = fxb.GetEntity(parententityname);
+            var currententity = fxb.GetEntity(cmbEntity.Text);
             if (control == cmbRelationship && string.IsNullOrWhiteSpace(cmbEntity.Text) && string.IsNullOrWhiteSpace(cmbFrom.Text) && string.IsNullOrWhiteSpace(cmbTo.Text))
             {
                 return new ControlValidationResult(ControlValidationLevel.Info, "Select a relationship to populate fields below");
@@ -302,12 +304,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 if (string.IsNullOrWhiteSpace(cmbEntity.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Error, "Entity is required");
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Entity", ControlValidationMessage.IsRequired);
                 }
 
-                if (fxb.Service != null && !cmbEntity.Items.OfType<string>().Any(i => i == cmbEntity.Text))
+                if (fxb.entities != null)
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "Entity is not valid");
+                    if (currententity == null)
+                    {
+                        return new ControlValidationResult(ControlValidationLevel.Warning, "Entity", ControlValidationMessage.NotInMetadata);
+                    }
+                    if (!cmbEntity.Items.OfType<string>().Any(i => i == cmbEntity.Text))
+                    {
+                        return new ControlValidationResult(ControlValidationLevel.Info, "Entity", ControlValidationMessage.NotShowingNow);
+                    }
                 }
             }
 
@@ -321,13 +330,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     }
                     else
                     {
-                        return new ControlValidationResult(ControlValidationLevel.Error, "From attribute is required");
+                        return new ControlValidationResult(ControlValidationLevel.Error, "From attribute", ControlValidationMessage.IsRequired);
                     }
                 }
 
-                if (fxb.Service != null && !cmbFrom.Items.OfType<string>().Any(i => i == cmbFrom.Text))
+                if (currententity != null && !currententity.Attributes.Any(a => a.LogicalName == cmbFrom.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "From attribute is not valid");
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "From attribute", ControlValidationMessage.NotInMetadata);
+                }
+                if (fxb.entities != null && !cmbFrom.Items.OfType<string>().Any(i => i == cmbFrom.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Info, "From attribute", ControlValidationMessage.NotShowingNow);
                 }
             }
 
@@ -341,13 +354,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     }
                     else
                     {
-                        return new ControlValidationResult(ControlValidationLevel.Error, "To attribute is required");
+                        return new ControlValidationResult(ControlValidationLevel.Error, "To attribute", ControlValidationMessage.IsRequired);
                     }
                 }
 
-                if (fxb.Service != null && !cmbTo.Items.OfType<string>().Any(i => i == cmbTo.Text))
+                if (parententity != null && !parententity.Attributes.Any(a => a.LogicalName == cmbTo.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "To attribute is not valid");
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "To attribute", ControlValidationMessage.NotInMetadata);
+                }
+                if (fxb.entities != null && !cmbTo.Items.OfType<string>().Any(i => i == cmbTo.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Info, "To attribute", ControlValidationMessage.NotShowingNow);
                 }
             }
 
@@ -383,7 +400,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 var parententity = Node.Parent.Value("name");
                 if (!string.IsNullOrWhiteSpace(cmbTo.Text) &&
-                    fxb.entities.TryGetValue(parententity, out EntityMetadata pmeta) &&
+                    fxb.GetEntity(parententity) is EntityMetadata pmeta &&
                     pmeta.Attributes.FirstOrDefault(a => a.LogicalName == cmbTo.Text) is AttributeMetadata pameta)
                 {
                     return pameta;
@@ -402,11 +419,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 return item.Meta;
             }
-            if (fxb.entities != null && fxb.entities.TryGetValue(cmbEntity.Text, out EntityMetadata meta))
-            {
-                return meta;
-            }
-            return null;
+            return fxb.GetEntity(cmbEntity.Text) ?? base.Metadata();
         }
 
         private void cmbEntity_Enter(object sender, EventArgs e)

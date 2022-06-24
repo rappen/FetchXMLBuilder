@@ -33,13 +33,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             Cinteros.Xrm.FetchXmlBuilder.AppCode.XmlColors xmlColors1 = new Cinteros.Xrm.FetchXmlBuilder.AppCode.XmlColors();
             this.gbResult = new System.Windows.Forms.GroupBox();
-            this.rbResSerializedJSONWebAPI = new System.Windows.Forms.RadioButton();
-            this.rbResSerializedJSON = new System.Windows.Forms.RadioButton();
+            this.chkClickableLinks = new System.Windows.Forms.CheckBox();
+            this.cmbResult = new System.Windows.Forms.ComboBox();
             this.chkResAllPages = new System.Windows.Forms.CheckBox();
-            this.rbResRaw = new System.Windows.Forms.RadioButton();
-            this.rbResSerializedXML = new System.Windows.Forms.RadioButton();
             this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
-            this.rbResGrid = new System.Windows.Forms.RadioButton();
             this.gbAppearance = new System.Windows.Forms.GroupBox();
             this.chkUseLookup = new System.Windows.Forms.CheckBox();
             this.chkAppSingle = new System.Windows.Forms.CheckBox();
@@ -68,7 +65,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.chkAddConditionToFilter = new System.Windows.Forms.CheckBox();
             this.chkShowRepository = new System.Windows.Forms.CheckBox();
             this.gbLayout = new System.Windows.Forms.GroupBox();
+            this.chkShowAllAttributes = new System.Windows.Forms.CheckBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkTryMetadataCache = new System.Windows.Forms.CheckBox();
+            this.chkWaitUntilMetadataLoaded = new System.Windows.Forms.CheckBox();
             this.gbResult.SuspendLayout();
             this.gbAppearance.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -77,95 +78,66 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbXml.SuspendLayout();
             this.gbBehavior.SuspendLayout();
             this.gbLayout.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbResult
             // 
-            this.gbResult.Controls.Add(this.rbResSerializedJSONWebAPI);
-            this.gbResult.Controls.Add(this.rbResSerializedJSON);
+            this.gbResult.Controls.Add(this.chkClickableLinks);
+            this.gbResult.Controls.Add(this.cmbResult);
             this.gbResult.Controls.Add(this.chkResAllPages);
-            this.gbResult.Controls.Add(this.rbResRaw);
-            this.gbResult.Controls.Add(this.rbResSerializedXML);
             this.gbResult.Controls.Add(this.chkAppResultsNewWindow);
-            this.gbResult.Controls.Add(this.rbResGrid);
             this.gbResult.Location = new System.Drawing.Point(484, 12);
             this.gbResult.Name = "gbResult";
-            this.gbResult.Size = new System.Drawing.Size(222, 200);
+            this.gbResult.Size = new System.Drawing.Size(222, 130);
             this.gbResult.TabIndex = 40;
             this.gbResult.TabStop = false;
-            this.gbResult.Text = "Result view";
+            this.gbResult.Text = "Result";
             // 
-            // rbResSerializedJSONWebAPI
+            // chkClickableLinks
             // 
-            this.rbResSerializedJSONWebAPI.AutoSize = true;
-            this.rbResSerializedJSONWebAPI.Location = new System.Drawing.Point(17, 80);
-            this.rbResSerializedJSONWebAPI.Name = "rbResSerializedJSONWebAPI";
-            this.rbResSerializedJSONWebAPI.Size = new System.Drawing.Size(140, 17);
-            this.rbResSerializedJSONWebAPI.TabIndex = 5;
-            this.rbResSerializedJSONWebAPI.Text = "JSON - Web API Format";
-            this.rbResSerializedJSONWebAPI.UseVisualStyleBackColor = true;
+            this.chkClickableLinks.AutoSize = true;
+            this.chkClickableLinks.Location = new System.Drawing.Point(16, 100);
+            this.chkClickableLinks.Name = "chkClickableLinks";
+            this.chkClickableLinks.Size = new System.Drawing.Size(157, 17);
+            this.chkClickableLinks.TabIndex = 14;
+            this.chkClickableLinks.Text = "Double-click links on results";
+            this.chkClickableLinks.UseVisualStyleBackColor = true;
             // 
-            // rbResSerializedJSON
+            // cmbResult
             // 
-            this.rbResSerializedJSON.AutoSize = true;
-            this.rbResSerializedJSON.Location = new System.Drawing.Point(17, 60);
-            this.rbResSerializedJSON.Name = "rbResSerializedJSON";
-            this.rbResSerializedJSON.Size = new System.Drawing.Size(157, 17);
-            this.rbResSerializedJSON.TabIndex = 3;
-            this.rbResSerializedJSON.Text = "JSON - Custom detail format";
-            this.rbResSerializedJSON.UseVisualStyleBackColor = true;
+            this.cmbResult.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbResult.FormattingEnabled = true;
+            this.cmbResult.Items.AddRange(new object[] {
+            "View",
+            "XML (custom format)",
+            "JSON (custom format)",
+            "JSON (web api format)",
+            "Raw result"});
+            this.cmbResult.Location = new System.Drawing.Point(16, 20);
+            this.cmbResult.Name = "cmbResult";
+            this.cmbResult.Size = new System.Drawing.Size(192, 21);
+            this.cmbResult.TabIndex = 13;
             // 
             // chkResAllPages
             // 
             this.chkResAllPages.AutoSize = true;
-            this.chkResAllPages.Location = new System.Drawing.Point(16, 133);
+            this.chkResAllPages.Location = new System.Drawing.Point(16, 60);
             this.chkResAllPages.Name = "chkResAllPages";
             this.chkResAllPages.Size = new System.Drawing.Size(111, 17);
             this.chkResAllPages.TabIndex = 10;
             this.chkResAllPages.Text = "Retrieve all pages";
             this.chkResAllPages.UseVisualStyleBackColor = true;
             // 
-            // rbResRaw
-            // 
-            this.rbResRaw.AutoSize = true;
-            this.rbResRaw.Location = new System.Drawing.Point(17, 100);
-            this.rbResRaw.Name = "rbResRaw";
-            this.rbResRaw.Size = new System.Drawing.Size(102, 17);
-            this.rbResRaw.TabIndex = 6;
-            this.rbResRaw.Text = "Raw fetch result";
-            this.rbResRaw.UseVisualStyleBackColor = true;
-            // 
-            // rbResSerializedXML
-            // 
-            this.rbResSerializedXML.AutoSize = true;
-            this.rbResSerializedXML.Location = new System.Drawing.Point(17, 40);
-            this.rbResSerializedXML.Name = "rbResSerializedXML";
-            this.rbResSerializedXML.Size = new System.Drawing.Size(151, 17);
-            this.rbResSerializedXML.TabIndex = 2;
-            this.rbResSerializedXML.Text = "XML - Custom detail format";
-            this.rbResSerializedXML.UseVisualStyleBackColor = true;
-            // 
             // chkAppResultsNewWindow
             // 
             this.chkAppResultsNewWindow.AutoSize = true;
-            this.chkAppResultsNewWindow.Location = new System.Drawing.Point(16, 153);
+            this.chkAppResultsNewWindow.Location = new System.Drawing.Point(16, 80);
             this.chkAppResultsNewWindow.Name = "chkAppResultsNewWindow";
             this.chkAppResultsNewWindow.Size = new System.Drawing.Size(192, 17);
             this.chkAppResultsNewWindow.TabIndex = 12;
             this.chkAppResultsNewWindow.Text = "Always open results in new window";
             this.chkAppResultsNewWindow.UseVisualStyleBackColor = true;
-            // 
-            // rbResGrid
-            // 
-            this.rbResGrid.AutoSize = true;
-            this.rbResGrid.Checked = true;
-            this.rbResGrid.Location = new System.Drawing.Point(17, 20);
-            this.rbResGrid.Name = "rbResGrid";
-            this.rbResGrid.Size = new System.Drawing.Size(48, 17);
-            this.rbResGrid.TabIndex = 1;
-            this.rbResGrid.TabStop = true;
-            this.rbResGrid.Text = "View";
-            this.rbResGrid.UseVisualStyleBackColor = true;
             // 
             // gbAppearance
             // 
@@ -276,7 +248,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.panel1.Controls.Add(this.llShowWelcome);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
-            this.panel1.Location = new System.Drawing.Point(12, 353);
+            this.panel1.Location = new System.Drawing.Point(12, 369);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(691, 53);
             this.panel1.TabIndex = 100;
@@ -320,7 +292,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbDefaultQuery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.gbDefaultQuery.Controls.Add(this.txtFetch);
             this.gbDefaultQuery.Controls.Add(this.panel2);
-            this.gbDefaultQuery.Location = new System.Drawing.Point(12, 218);
+            this.gbDefaultQuery.Location = new System.Drawing.Point(12, 234);
             this.gbDefaultQuery.Name = "gbDefaultQuery";
             this.gbDefaultQuery.Size = new System.Drawing.Size(458, 132);
             this.gbDefaultQuery.TabIndex = 80;
@@ -370,7 +342,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // 
             this.gbXml.Controls.Add(this.btnResetXmlColors);
             this.gbXml.Controls.Add(this.propXmlColors);
-            this.gbXml.Location = new System.Drawing.Point(484, 218);
+            this.gbXml.Location = new System.Drawing.Point(484, 148);
             this.gbXml.Name = "gbXml";
             this.gbXml.Size = new System.Drawing.Size(222, 132);
             this.gbXml.TabIndex = 50;
@@ -424,7 +396,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbBehavior.Controls.Add(this.chkAppAllowUncustViews);
             this.gbBehavior.Location = new System.Drawing.Point(248, 12);
             this.gbBehavior.Name = "gbBehavior";
-            this.gbBehavior.Size = new System.Drawing.Size(222, 141);
+            this.gbBehavior.Size = new System.Drawing.Size(222, 150);
             this.gbBehavior.TabIndex = 30;
             this.gbBehavior.TabStop = false;
             this.gbBehavior.Text = "Behavior";
@@ -472,22 +444,33 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             // 
             // gbLayout
             // 
+            this.gbLayout.Controls.Add(this.chkShowAllAttributes);
             this.gbLayout.Controls.Add(this.chkShowRepository);
             this.gbLayout.Controls.Add(this.chkShowButtonTexts);
             this.gbLayout.Controls.Add(this.chkShowNodeTypes);
             this.gbLayout.Controls.Add(this.chkShowHelp);
             this.gbLayout.Location = new System.Drawing.Point(12, 105);
             this.gbLayout.Name = "gbLayout";
-            this.gbLayout.Size = new System.Drawing.Size(222, 107);
+            this.gbLayout.Size = new System.Drawing.Size(222, 125);
             this.gbLayout.TabIndex = 20;
             this.gbLayout.TabStop = false;
             this.gbLayout.Text = "Layout";
+            // 
+            // chkShowAllAttributes
+            // 
+            this.chkShowAllAttributes.AutoSize = true;
+            this.chkShowAllAttributes.Location = new System.Drawing.Point(16, 100);
+            this.chkShowAllAttributes.Name = "chkShowAllAttributes";
+            this.chkShowAllAttributes.Size = new System.Drawing.Size(169, 17);
+            this.chkShowAllAttributes.TabIndex = 5;
+            this.chkShowAllAttributes.Text = "Show \"all-attributes\" (bad use)";
+            this.chkShowAllAttributes.UseVisualStyleBackColor = true;
             // 
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(50, 15);
-            this.linkLabel1.Location = new System.Drawing.Point(278, 167);
+            this.linkLabel1.Location = new System.Drawing.Point(500, 300);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(181, 42);
             this.linkLabel1.TabIndex = 102;
@@ -496,6 +479,38 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.linkLabel1.UseCompatibleTextRendering = true;
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.chkWaitUntilMetadataLoaded);
+            this.groupBox1.Controls.Add(this.chkTryMetadataCache);
+            this.groupBox1.Location = new System.Drawing.Point(248, 165);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(222, 65);
+            this.groupBox1.TabIndex = 103;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Metadata";
+            // 
+            // chkTryMetadataCache
+            // 
+            this.chkTryMetadataCache.AutoSize = true;
+            this.chkTryMetadataCache.Location = new System.Drawing.Point(16, 20);
+            this.chkTryMetadataCache.Name = "chkTryMetadataCache";
+            this.chkTryMetadataCache.Size = new System.Drawing.Size(202, 17);
+            this.chkTryMetadataCache.TabIndex = 0;
+            this.chkTryMetadataCache.Text = "Use cached metadata in XrmToolBox";
+            this.chkTryMetadataCache.UseVisualStyleBackColor = true;
+            this.chkTryMetadataCache.CheckedChanged += new System.EventHandler(this.chkTryMetadataCache_CheckedChanged);
+            // 
+            // chkWaitUntilMetadataLoaded
+            // 
+            this.chkWaitUntilMetadataLoaded.AutoSize = true;
+            this.chkWaitUntilMetadataLoaded.Location = new System.Drawing.Point(16, 40);
+            this.chkWaitUntilMetadataLoaded.Name = "chkWaitUntilMetadataLoaded";
+            this.chkWaitUntilMetadataLoaded.Size = new System.Drawing.Size(172, 17);
+            this.chkWaitUntilMetadataLoaded.TabIndex = 1;
+            this.chkWaitUntilMetadataLoaded.Text = "Wait until all entities are loaded";
+            this.chkWaitUntilMetadataLoaded.UseVisualStyleBackColor = true;
+            // 
             // Settings
             // 
             this.AcceptButton = this.btnOK;
@@ -503,7 +518,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(717, 416);
+            this.ClientSize = new System.Drawing.Size(717, 432);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.gbLayout);
             this.Controls.Add(this.gbBehavior);
@@ -530,6 +546,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.gbBehavior.PerformLayout();
             this.gbLayout.ResumeLayout(false);
             this.gbLayout.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -543,9 +561,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.RadioButton rbResGrid;
-        private System.Windows.Forms.RadioButton rbResRaw;
-        private System.Windows.Forms.RadioButton rbResSerializedXML;
         private System.Windows.Forms.CheckBox chkResAllPages;
         private System.Windows.Forms.CheckBox chkAppNoSavePrompt;
         private System.Windows.Forms.CheckBox chkAppResultsNewWindow;
@@ -561,17 +576,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private System.Windows.Forms.GroupBox gbXml;
         private System.Windows.Forms.GroupBox gbBehavior;
         private System.Windows.Forms.Button btnResetXmlColors;
-        private System.Windows.Forms.RadioButton rbResSerializedJSON;
         private System.Windows.Forms.CheckBox chkShowHelp;
         private System.Windows.Forms.CheckBox chkShowNodeTypes;
         private System.Windows.Forms.CheckBox chkAddConditionToFilter;
         private System.Windows.Forms.CheckBox chkShowButtonTexts;
-        private System.Windows.Forms.RadioButton rbResSerializedJSONWebAPI;
         private ScintillaNET.Scintilla txtFetch;
         private System.Windows.Forms.CheckBox chkShowValidation;
         private System.Windows.Forms.CheckBox chkShowRepository;
         private System.Windows.Forms.GroupBox gbLayout;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.CheckBox chkShowValidationInfo;
+        private System.Windows.Forms.CheckBox chkClickableLinks;
+        private System.Windows.Forms.ComboBox cmbResult;
+        private System.Windows.Forms.CheckBox chkShowAllAttributes;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox chkTryMetadataCache;
+        private System.Windows.Forms.CheckBox chkWaitUntilMetadataLoaded;
     }
 }

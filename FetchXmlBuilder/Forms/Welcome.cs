@@ -18,9 +18,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 showversion = "New version: " + showversion + $"\nOld version: {oldversion}";
             }
 
-            var verurl = $"{version.Major}-{version.Minor}-{version.Build}";
-            var releasenotes = $"https://jonasr.app/fxb/releases/{verurl}#content";
-            releasenotes = Utils.ProcessURL(releasenotes);
+            var releasenotes = GetReleaseNotesUrl(version);
             try
             {
                 new Welcome(showversion, releasenotes).ShowDialog(owner);
@@ -29,6 +27,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             {
                 FetchXmlBuilder.OpenURL(releasenotes);
             }
+        }
+
+        public static string GetReleaseNotesUrl(Version version)
+        {
+            var verurl = $"{version.Major}-{version.Minor}-{version.Build}";
+            var releasenotes = $"https://fetchxmlbuilder.com/releases/{verurl}#content";
+            releasenotes = Utils.ProcessURL(releasenotes);
+            return releasenotes;
         }
 
         private Welcome(string version, string releasenotes)

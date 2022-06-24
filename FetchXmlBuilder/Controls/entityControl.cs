@@ -25,7 +25,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             var entities = fxb.GetDisplayEntities();
             if (entities != null)
             {
-                cmbEntity.Items.AddRange(entities.Select(e => new EntityItem(e.Value)).ToArray());
+                cmbEntity.Items.AddRange(entities.Select(e => new EntityItem(e)).ToArray());
             }
         }
 
@@ -35,12 +35,23 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 if (string.IsNullOrWhiteSpace(cmbEntity.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Error, "Entity is required");
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Entity", ControlValidationMessage.IsRequired);
                 }
 
-                if (fxb.Service != null && !cmbEntity.Items.OfType<EntityItem>().Any(i => i.ToString() == cmbEntity.Text))
+                if (!(cmbEntity.SelectedItem is EntityItem) && fxb.entities != null)
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "Entity is not valid");
+                    if (!fxb.entities.Any(e => e.LogicalName == cmbEntity.Text))
+                    {
+                        return new ControlValidationResult(ControlValidationLevel.Warning, "Entity", ControlValidationMessage.NotInMetadata);
+                    }
+                    if (!cmbEntity.Items.OfType<string>().Any(i => i == cmbEntity.Text))
+                    {
+                        return new ControlValidationResult(ControlValidationLevel.Info, "Entity", ControlValidationMessage.NotShowingNow);
+                    }
+                }
+                if (fxb.entities != null && !cmbEntity.Items.OfType<EntityItem>().Any(i => i.ToString() == cmbEntity.Text))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Entity", ControlValidationMessage.IsRequired);
                 }
             }
 
@@ -58,11 +69,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             {
                 return item.Meta;
             }
-            if (fxb.entities != null && fxb.entities.TryGetValue(cmbEntity.Text, out EntityMetadata meta))
-            {
-                return meta;
-            }
-            return base.Metadata();
+            return fxb.GetEntity(cmbEntity.Text) ?? base.Metadata();
         }
 
         public override void Focus()

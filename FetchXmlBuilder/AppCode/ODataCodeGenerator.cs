@@ -220,6 +220,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     case AttributeTypeCode.Status:
                         result += "/Value";
                         break;
+
                     case AttributeTypeCode.Lookup:
                         result += "/Id";
                         break;
@@ -234,21 +235,27 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     case @operator.ge:
                         result += $" {condition.@operator} ";
                         break;
+
                     case @operator.neq:
                         result += " ne ";
                         break;
+
                     case @operator.@null:
                         result += " eq null";
                         break;
+
                     case @operator.notnull:
                         result += " ne null";
                         break;
+
                     case @operator.like:
                         result = $"substringof('{condition.value}', {attrMeta.SchemaName})";
                         break;
+
                     case @operator.notlike:
                         result = $"not substringof('{condition.value}', {attrMeta.SchemaName})";
                         break;
+
                     case @operator.@in:
                     case @operator.notin:
                         throw new Exception($"Condition operator '{condition.@operator}' is not yet supported by the OData generator");
@@ -270,12 +277,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         case AttributeTypeCode.Picklist:
                             result += condition.value;
                             break;
+
                         case AttributeTypeCode.Uniqueidentifier:
                         case AttributeTypeCode.Lookup:
                         case AttributeTypeCode.Customer:
                         case AttributeTypeCode.Owner:
                             result += $"(guid'{condition.value}')";
                             break;
+
                         case AttributeTypeCode.DateTime:
                             var date = DateTime.Parse(condition.value);
                             var datestr = string.Empty;
@@ -289,6 +298,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                             }
                             result += $"datetime'{datestr}'";
                             break;
+
                         default:
                             result += $"'{condition.value}'";
                             break;
@@ -320,7 +330,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         private static string LogicalToSchemaName(string entity, FetchXmlBuilder sender)
         {
             GetEntityMetadata(entity, sender);
-            var entityMeta = sender.entities[entity];
+            var entityMeta = sender.GetEntity(entity);
             return entityMeta.SchemaName;
         }
 
@@ -341,7 +351,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 sender.LoadEntityDetails(entity, null, false);
             }
-            if (!sender.entities.ContainsKey(entity))
+            if (sender.GetEntity(entity) == null)
             {
                 throw new Exception($"No metadata for entity: {entity}");
             }
@@ -350,7 +360,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         private static RelationshipMetadataBase LinkItemToRelation(string entityname, FetchLinkEntityType linkitem, FetchXmlBuilder sender)
         {
             GetEntityMetadata(entityname, sender);
-            var entity = sender.entities[entityname];
+            var entity = sender.GetEntity(entityname);
             foreach (var relation in entity.OneToManyRelationships)
             {
                 if (relation.ReferencedEntity == entityname &&

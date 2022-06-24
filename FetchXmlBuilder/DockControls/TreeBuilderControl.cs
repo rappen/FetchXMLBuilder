@@ -257,7 +257,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             {
                 throw new FetchIsAggregateException("QueryExpression does not support aggregate queries.");
             }
-            var convert = (FetchXmlToQueryExpressionResponse)fxb.Service.Execute(new FetchXmlToQueryExpressionRequest() { FetchXml = fetch });
+            var convert = (FetchXmlToQueryExpressionResponse)fxb.Execute(new FetchXmlToQueryExpressionRequest() { FetchXml = fetch });
             return convert.Query;
         }
 
@@ -429,7 +429,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             if (fxb.entities != null)
             {
                 var entitys = TreeNodeHelper.GetEntitysForFetch(fetchDoc);
-                entitys = entitys?.Where(e => !string.IsNullOrEmpty(e) && fxb.entities.ContainsKey(e) && fxb.entities[e].Attributes == null)?.ToList();
+                entitys = entitys?.Where(e => !string.IsNullOrEmpty(e) && fxb.GetEntity(e)?.Attributes == null)?.ToList();
                 entitys?.ForEach(e => fxb.LoadEntityDetails(e, null, false, false));
             }
             XmlNode definitionXmlNode = fetchDoc.DocumentElement;
@@ -553,7 +553,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 Control existingControl = panelContainer.Controls.Count > 0 ? panelContainer.Controls[0] : null;
                 if (node != null)
                 {
-                    TreeNodeHelper.AddContextMenu(node, this);
+                    TreeNodeHelper.AddContextMenu(node, this, fxb.settings.QueryOptions);
                     this.deleteToolStripMenuItem.Text = "Delete " + node.Name;
                     var collec = (Dictionary<string, string>)node.Tag;
 
@@ -568,23 +568,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                             break;
 
                         case "link-entity":
-                            if (node.Parent != null)
+                            if (node.Parent != null && node.Parent.LocalEntityName() is string parententity && fxb.NeedToLoadEntity(parententity))
                             {
-                                switch (node.Parent.Name)
+                                if (!fxb.working)
                                 {
-                                    case "entity":
-                                    case "link-entity":
-                                        var entityName = node.Parent.Value("name");
-                                        if (fxb.NeedToLoadEntity(entityName))
-                                        {
-                                            if (!fxb.working)
-                                            {
-                                                fxb.LoadEntityDetails(entityName, RefreshSelectedNode);
-                                            }
-                                            break;
-                                        }
-                                        break;
+                                    fxb.LoadEntityDetails(parententity, RefreshSelectedNode);
                                 }
+                                break;
                             }
                             var linkEntityName = node.Value("name");
                             if (fxb.NeedToLoadEntity(linkEntityName))
@@ -600,31 +590,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
                         case "attribute":
                         case "order":
-                            if (node.Parent != null)
+                            if (node.LocalEntityName() is string entity && !string.IsNullOrWhiteSpace(entity))
                             {
-                                switch (node.Parent.Name)
+                                if (fxb.NeedToLoadEntity(entity))
                                 {
-                                    case "entity":
-                                    case "link-entity":
-                                        var entityName = node.Parent.Value("name");
-                                        if (fxb.NeedToLoadEntity(entityName))
-                                        {
-                                            if (!fxb.working)
-                                            {
-                                                fxb.LoadEntityDetails(entityName, RefreshSelectedNode);
-                                            }
-                                            break;
-                                        }
-                                        AttributeMetadata[] attributes = fxb.GetDisplayAttributes(entityName);
-                                        if (node.Name == "attribute")
-                                        {
-                                            ctrl = new attributeControl(node, attributes, fxb, this);
-                                        }
-                                        else if (node.Name == "order")
-                                        {
-                                            ctrl = new orderControl(node, attributes, fxb, this);
-                                        }
-                                        break;
+                                    if (!fxb.working)
+                                    {
+                                        fxb.LoadEntityDetails(entity, RefreshSelectedNode);
+                                    }
+                                    break;
+                                }
+                                AttributeMetadata[] attributes = fxb.GetDisplayAttributes(entity).ToArray();
+                                if (node.Name == "attribute")
+                                {
+                                    ctrl = new attributeControl(node, attributes, fxb, this);
+                                }
+                                else if (node.Name == "order")
+                                {
+                                    ctrl = new orderControl(node, attributes, fxb, this);
                                 }
                             }
                             break;
@@ -786,9 +769,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                     case ControlValidationLevel.Error:
                         lblWarning.ImageKey = "error";
                         break;
+
                     case ControlValidationLevel.Warning:
                         lblWarning.ImageKey = "warning";
                         break;
+
                     case ControlValidationLevel.Info:
                         lblWarning.ImageKey = "info";
                         break;

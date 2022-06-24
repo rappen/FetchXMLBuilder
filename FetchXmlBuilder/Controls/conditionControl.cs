@@ -78,71 +78,36 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             base.SaveInternal(silent);
         }
 
-        protected override Dictionary<string, string> GetAttributesCollection()
-        {
-            var attr = base.GetAttributesCollection();
-
-            if (attr.TryGetValue("operator", out var op) && attr.TryGetValue("value", out var value))
-            {
-                if (op == "begins-with")
-                {
-                    attr["operator"] = "like";
-                    attr["value"] = EscapeLikeWildcards(value) + "%";
-                }
-                else if (op == "not-begin-with")
-                {
-                    attr["operator"] = "not-like";
-                    attr["value"] = EscapeLikeWildcards(value) + "%";
-                }
-                else if (op == "ends-with")
-                {
-                    attr["operator"] = "like";
-                    attr["value"] = "%" + EscapeLikeWildcards(value);
-                }
-                else if (op == "not-end-with")
-                {
-                    attr["operator"] = "not-like";
-                    attr["value"] = "%" + EscapeLikeWildcards(value);
-                }
-                else if (op == "contains")
-                {
-                    attr["operator"] = "like";
-                    attr["value"] = "%" + EscapeLikeWildcards(value) + "%";
-                }
-                else if (op == "does-not-contain")
-                {
-                    attr["operator"] = "not-like";
-                    attr["value"] = "%" + EscapeLikeWildcards(value) + "%";
-                }
-            }
-
-            return attr;
-        }
-
         protected override ControlValidationResult ValidateControl(Control control)
         {
             if (control == cmbAttribute)
             {
                 if (string.IsNullOrWhiteSpace(cmbAttribute.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Error, "Attribute is required");
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Attribute", ControlValidationMessage.IsRequired);
                 }
 
-                if (fxb.Service != null && !cmbAttribute.Items.OfType<AttributeItem>().Any(i => i.ToString() == cmbAttribute.Text))
+                if (fxb.entities != null && !cmbAttribute.Items.OfType<AttributeItem>().Any(i => i.ToString() == cmbAttribute.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute is not valid");
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute", ControlValidationMessage.InValid);
                 }
             }
             else if (control == cmbOperator || control == cmbValue)
             {
                 if (control == cmbOperator && string.IsNullOrWhiteSpace(cmbOperator.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Error, "Operator is required");
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Operator", ControlValidationMessage.IsRequired);
                 }
 
                 if (control == cmbOperator && !cmbOperator.Items.OfType<OperatorItem>().Any(i => i.ToString() == cmbOperator.Text))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Error, "Operator is not valid");
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Operator", ControlValidationMessage.InValid);
+                }
+
+                if (control == cmbOperator && cmbOperator.SelectedItem is OperatorItem opercon && (opercon.GetValue() == "contains" || opercon.GetValue() == "does-not-contain"))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Contains (and not) are available, but not supported for FetchXml.",
+                        "https://docs.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml-schema#:~:text=%3Cxs%3AsimpleType%20name%3D%22operator%22%3E");
                 }
 
                 if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem oper && (!oper.IsMultipleValuesType || Node.Nodes.Count > 0))
@@ -306,6 +271,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             return base.ValidateControl(control);
         }
 
+        protected override Dictionary<string, string> GetAttributesCollection()
+        {
+            var result = base.GetAttributesCollection();
+            if (!result.ContainsKey("value") && cmbValue.Enabled && cmbValue.DropDownStyle == ComboBoxStyle.Simple)
+            {
+                result.Add("value", "");
+            }
+            return result;
+        }
+
         #endregion Protected Methods
 
         #region Private Methods
@@ -388,131 +363,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             RefreshOperators();
             UpdateValueField();
             RefreshValueOf();
-            NormalizeLike();
-        }
-
-        private void NormalizeLike()
-        {
-            var op = cmbOperator.SelectedItem as OperatorItem;
-
-            if (op == null)
-            {
-                return;
-            }
-
-            var value = cmbValue.Text;
-
-            if (String.IsNullOrWhiteSpace(value))
-            {
-                return;
-            }
-
-            if (op.GetValue() == "like" || op.GetValue() == "not-like")
-            {
-                string newOp = null;
-
-                if (value.StartsWith("%") && value.EndsWith("%") && value.Length >= 2)
-                {
-                    newOp = "contains";
-                    value = value.Substring(1, value.Length - 2);
-                }
-                else if (value.StartsWith("%"))
-                {
-                    newOp = "ends-with";
-                    value = value.Substring(1);
-                }
-                else if (value.EndsWith("%"))
-                {
-                    newOp = "begins-with";
-                    value = value.Substring(0, value.Length - 1);
-                }
-
-                if (newOp != null && AreAllLikeWildcardsEscaped(value))
-                {
-                    value = UnescapeLikeWildcards(value);
-
-                    if (op.GetValue() == "not-like")
-                    {
-                        newOp = "not-" + newOp.Replace("s-", "-");
-
-                        if (newOp == "not-contains")
-                        {
-                            newOp = "does-not-contain";
-                        }
-                    }
-
-                    var newOpItem = cmbOperator.Items.OfType<OperatorItem>().FirstOrDefault(o => o.GetValue() == newOp);
-
-                    if (newOpItem != null)
-                    {
-                        cmbOperator.SelectedItem = newOpItem;
-                        cmbValue.Text = value;
-                    }
-                }
-            }
-        }
-
-        private string EscapeLikeWildcards(string value)
-        {
-            return value
-                .Replace("[", "[[]")
-                .Replace("%", "[%]")
-                .Replace("_", "[_]");
-        }
-
-        private bool AreAllLikeWildcardsEscaped(string value)
-        {
-            var bracketStart = -1;
-
-            for (var i = 0; i < value.Length; i++)
-            {
-                var ch = value[i];
-
-                if (ch != '%' && ch != '_' && ch != '[' && ch != ']')
-                {
-                    if (bracketStart != -1)
-                    {
-                        // We've got a non-wildcard character in brackets - it's not an escaped wildcard
-                        return false;
-                    }
-
-                    continue;
-                }
-
-                if (bracketStart == -1)
-                {
-                    if (ch == '[')
-                    {
-                        bracketStart = i;
-                    }
-                    else
-                    {
-                        // We've got a wildcard character outside of brackets - it's not escaped
-                        return false;
-                    }
-                }
-
-                if (ch == ']')
-                {
-                    if (i > bracketStart + 2)
-                    {
-                        // We've got more than a single character in the brackets - it's not a single escaped wildcard
-                        return false;
-                    }
-
-                    bracketStart = -1;
-                }
-            }
-
-            return true;
-        }
-
-        private string UnescapeLikeWildcards(string value)
-        {
-            return value
-                .Replace("[_]", "_")
-                .Replace("[%]", "%")
-                .Replace("[[]", "[");
         }
 
         private void RefreshOperators()
@@ -615,7 +465,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                     var entities = fxb.GetDisplayEntities();
                     if (entities != null)
                     {
-                        cmbValue.Items.AddRange(entities.Select(e => new EntityNameItem(e.Value)).ToArray());
+                        cmbValue.Items.AddRange(entities.Select(e => new EntityNameItem(e)).ToArray());
                         var value = cmbValue.Text;
                         cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
                         cmbValue.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
@@ -791,6 +641,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             }
             return base.Metadata();
         }
+
         public override void Focus()
         {
             cmbAttribute.Focus();

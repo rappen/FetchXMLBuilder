@@ -293,14 +293,49 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 
     public class ControlValidationResult
     {
+        private const string IsRequired = "{0} is required";
+        private const string InValid = "{0} is not valid";
+        private const string NotInMetadata = "{0} is not in the database.";
+        private const string NotShowingNow = "{0} is not currently shown.";
+
         public ControlValidationResult(ControlValidationLevel level, string message, string url = null)
         {
             Level = level;
             Message = message;
             Url = url;
         }
+
+        public ControlValidationResult(ControlValidationLevel level, string control, ControlValidationMessage message, string url = null)
+        {
+            Level = level;
+            switch (message)
+            {
+                case ControlValidationMessage.IsRequired:
+                    Message = string.Format(IsRequired, control);
+                    break;
+                case ControlValidationMessage.InValid:
+                    Message = string.Format(InValid, control);
+                    break;
+                case ControlValidationMessage.NotInMetadata:
+                    Message = string.Format(NotInMetadata, control);
+                    break;
+                case ControlValidationMessage.NotShowingNow:
+                    Message = string.Format(NotShowingNow, control);
+                    break;
+            }
+            Url = url;
+        }
+
         public ControlValidationLevel Level { get; }
         public string Message { get; }
         public string Url { get; }
+    }
+
+    public enum ControlValidationMessage
+    {
+        IsRequired,
+        InValid,
+        NotInMetadata,
+        NotShowingNow
     }
 }

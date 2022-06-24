@@ -346,7 +346,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         /// <summary>Adds a context menu to a TreeNode control</summary>
         /// <param name="node">TreeNode where to add the context menu</param>
         /// <param name="tree">Current application form</param>
-        public static void AddContextMenu(TreeNode node, TreeBuilderControl tree)
+        public static void AddContextMenu(TreeNode node, TreeBuilderControl tree, QueryOptions options)
         {
             tree.addMenu.Items.Clear();
             var tmplbl = tree.lblQAExpander;
@@ -372,6 +372,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 }
                 foreach (var childcapability in nodecapabilities.ChildTypes)
                 {
+                    if (childcapability.Name == "all-attributes" && !options.ShowAllAttributes)
+                    {
+                        continue;
+                    }
                     if (childcapability.Name == "-")
                     {
                         tree.addMenu.Items.Add(new ToolStripSeparator());

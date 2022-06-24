@@ -1,12 +1,10 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.DockControls;
-using Microsoft.Xrm.Sdk.Metadata;
 using ScintillaNET;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
 using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -18,8 +16,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         public bool UseFriendlyNames { get { return _useFriendlyNames; } set { _useFriendlyNames = value; FetchXmlBuilder.friendlyNames = value; } }
         public QueryOptions QueryOptions { get; set; } = new QueryOptions();
-        public ShowMetaTypesEntity ShowEntities { get; set; } = new ShowMetaTypesEntity();
-        public ShowMetaTypesAttribute ShowAttributes { get; set; } = new ShowMetaTypesAttribute();
         public ResultOptions Results { get; set; } = new ResultOptions();
         public string CurrentVersion { get; set; }
         public string LastOpenedViewEntity { get; set; }
@@ -39,63 +35,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool ShowValidation { get; set; } = true;
         public bool ShowValidationInfo { get; set; } = true;
         public bool ShowRepository { get; set; } = false;
+        public bool TryMetadataCache { get; set; } = true;
+        public bool WaitUntilMetadataLoaded { get; set; } = false;
     }
 
-    public class QueryOptions
-    {
-        internal static string DefaultNewQuery = "<fetch top=\"50\"><entity name=\"\"/></fetch>";
-        public bool ShowQuickActions { get; set; } = true;
-        public bool UseSingleQuotation { get; set; }
-        public string NewQueryTemplate { get; set; } = DefaultNewQuery;
-    }
-
-    public abstract class ShowMetaTypes
-    {
-        public CheckState IsManaged { get; set; } = CheckState.Indeterminate;
-        public CheckState IsCustom { get; set; } = CheckState.Indeterminate;
-        public CheckState IsCustomizable { get; set; } = CheckState.Indeterminate;
-        public CheckState IsValidForAdvancedFind { get; set; } = CheckState.Indeterminate;
-        public CheckState IsAuditEnabled { get; set; } = CheckState.Indeterminate;
-        public CheckState IsLogical { get; set; } = CheckState.Unchecked;
-    }
-
-    public class ShowMetaTypesEntity : ShowMetaTypes
-    {
-        public CheckState IsIntersect { get; set; } = CheckState.Indeterminate;  //E
-        public CheckState IsActivity { get; set; } = CheckState.Indeterminate;  //E
-        public CheckState IsActivityParty { get; set; } = CheckState.Indeterminate; //E
-        public CheckState Virtual { get; set; } = CheckState.Indeterminate;  //E
-        public int OwnershipType { get; set; } = 0;   //E
-        public OwnershipTypes[] Ownerships
-        {
-            get
-            {
-                switch (OwnershipType)
-                {
-                    case 1:
-                        return new OwnershipTypes[] { OwnershipTypes.OrganizationOwned };
-                    case 2:
-                        return new OwnershipTypes[] { OwnershipTypes.UserOwned, OwnershipTypes.TeamOwned };
-                    case 3:
-                        return new OwnershipTypes[] { OwnershipTypes.BusinessOwned, OwnershipTypes.BusinessParented };
-                    case 4:
-                        return new OwnershipTypes[] { OwnershipTypes.None };
-                }
-                return null;
-            }
-        }
-    }
-
-    public class ShowMetaTypesAttribute : ShowMetaTypes
-    {
-        public CheckState IsValidForRead { get; set; } = CheckState.Indeterminate;  //A
-        public CheckState IsFiltered { get; set; } = CheckState.Indeterminate;  //A
-        public CheckState IsRetrievable { get; set; } = CheckState.Indeterminate;   //A
-        public CheckState IsValidForGrid { get; set; } = CheckState.Indeterminate;  //A
-        public CheckState AttributeOf { get; set; } = CheckState.Unchecked; //A
-    }
-
-     public class ResultOptions
+    public class ResultOptions
     {
         public bool Friendly { get; set; }
         public bool Id { get; set; }
@@ -108,6 +52,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public bool RetrieveAllPages { get; set; } = false;
         public bool AlwaysNewWindow { get; set; } = false;
         public bool QuickFilter { get; set; } = false;
+        public bool ClickableLinks { get; set; } = true;
     }
 
     public class DockStates
@@ -190,11 +135,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     break;
             }
         }
-    }
-
-    public class FXBConnectionSettings
-    {
-        public string FetchXML { get; set; } = string.Empty;
     }
 
     public class QueryRepository

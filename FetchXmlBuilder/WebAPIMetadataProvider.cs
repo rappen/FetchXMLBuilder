@@ -22,7 +22,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 fetchXmlBuilder.LoadEntityDetails(logicalName, null, false);
             }
 
-            if (!fetchXmlBuilder.entities.TryGetValue(logicalName, out var metadata))
+            if (!(fetchXmlBuilder.GetEntity(logicalName) is EntityMetadata metadata))
             {
                 throw new Exception($"No metadata for entity: {logicalName}");
             }

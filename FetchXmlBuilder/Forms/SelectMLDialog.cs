@@ -45,7 +45,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
             try
             {
-                var lists = Caller.Service.RetrieveMultiple(QElist);
+                var lists = Caller.RetrieveMultiple(QElist);
                 foreach (var list in lists.Entities)
                 {
                     cmbML.Items.Add(new ViewItem(list));

@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
-<package >
-  <metadata>
-    <id>Cinteros.Xrm.FetchXMLBuilder</id>
-    <version>1.0.0</version>
-    <title>FetchXML Builder for XrmToolBox</title>
-    <authors>Jonas Rapp</authors>
-    <owners>rappen</owners>
-    <projectUrl>https://fetchxmlbuilder.com</projectUrl>
-    <iconUrl>https://fetchxmlbuilder.com/fxb150/</iconUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <summary>Build queries for Microsoft Dataverse and the Power Platform. Investigate data. Get code. Empower yourself to achieve more.</summary>
-    <description>
+<package>
+	<metadata>
+		<id>Cinteros.Xrm.FetchXMLBuilder</id>
+		<version>1.0.0</version>
+		<title>FetchXML Builder for XrmToolBox</title>
+		<authors>Jonas Rapp</authors>
+		<owners>rappen</owners>
+		<projectUrl>https://fetchxmlbuilder.com</projectUrl>
+		<iconUrl>https://fetchxmlbuilder.com/fxb150/</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<summary>Build queries for Microsoft Dataverse and the Power Platform. Investigate data. Get code. Empower yourself to achieve more.</summary>
+		<description>
 Build queries for Microsoft Dataverse and the Power Platform. Investigate data. Get code. Empower yourself to achieve more.
 
 FetchXML Builder is used to create and execute queries against Microsoft Dataverse / Power Apps / Dynamics 365.
@@ -22,7 +22,7 @@ The Power Platform includes technologies we know as:
 - Power Apps (Canvas connected to Dataverse)
 - PowerBI (connected to Dataverse)
 - Microsoft Teams for Dataverse
-      
+
 The tool will assist in three major areas:
 
 1. Constructing queries, including more advanced features like:
@@ -47,21 +47,21 @@ The tool will assist in three major areas:
 The tool reads metadata from Microsoft Dataverse and Dynamics 365 / CRM to assist with selecting entities, attributes, relations and to perform validation of condition values.
 
 To make it even more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.
-    </description>
-    <releaseNotes>
+		</description>
+		<releaseNotes>
 Full release notes:
 https://fetchxmlbuilder.com/releases/#$versionnumber$
-	  
+
 Released for manual download:
 https://github.com/rappen/FetchXMLBuilder/releases/tag/$buildnumber$
-    </releaseNotes>
-    <copyright>Copyright Jonas Rapp 2014-2022</copyright>
-    <tags>XrmToolBox Plugins FetchXML Builder</tags>
-    <dependencies>
-      <dependency id="XrmToolBox" version="1.2022.2.54" />
-    </dependencies>
-  </metadata>
-  <files>
-    <file src="FetchXMLBuilder\bin\Release\Rappen.XTB.FXB.dll" target="lib\net452\Plugins" />
-  </files>
+		</releaseNotes>
+		<copyright>Copyright Jonas Rapp 2014-2022</copyright>
+		<tags>XrmToolBox Plugins FetchXML Builder</tags>
+		<dependencies>
+			<dependency id="XrmToolBox" version="1.2022.4.55" />
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="FetchXMLBuilder\bin\Release\Rappen.XTB.FXB.dll" target="lib\net472\Plugins" />
+	</files>
 </package>

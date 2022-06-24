@@ -2,7 +2,6 @@
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -54,9 +53,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             cmbValue.AutoCompleteMode = AutoCompleteMode.None;
 
             var entities = fxb.GetDisplayEntities();
-            if (entities != null && entities.ContainsKey(_entityName))
+            if (entities?.FirstOrDefault(e => e.LogicalName.Equals(_entityName)) is EntityMetadata entity)
             {
-                var entity = entities[_entityName];
                 var attribute = entity.Attributes.SingleOrDefault(a => a.LogicalName == _attributeName);
 
                 if (attribute != null)

@@ -88,27 +88,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         private void crmGridView1_RecordDoubleClick(object sender, Rappen.XTB.Helpers.Controls.XRMRecordEventArgs e)
         {
-            if (e.Entity != null)
+            if (!form.settings.Results.ClickableLinks)
             {
-                var url = form.ConnectionDetail.GetEntityUrl(e.Entity);
-                if (!string.IsNullOrEmpty(url))
-                {
-                    form.LogUse("OpenRecord");
-                    Process.Start(url);
-                }
+                return;
             }
-        }
-
-        private void crmGridView1_RecordClick(object sender, Rappen.XTB.Helpers.Controls.XRMRecordEventArgs e)
-        {
-            if (e.Value is EntityReference)
+            if (e.Value is EntityReference entref && form.ConnectionDetail.GetEntityReferenceUrl(entref) is string urlref && !string.IsNullOrEmpty(urlref))
             {
-                string url = form.ConnectionDetail.GetEntityReferenceUrl(e.Value as EntityReference);
-                if (!string.IsNullOrEmpty(url))
-                {
-                    form.LogUse("OpenParentRecord");
-                    Process.Start(url);
-                }
+                form.LogUse("OpenParentRecord");
+                form.OpenURLProfile(urlref, false);
+            }
+            else if (e.Entity != null && form.ConnectionDetail.GetEntityUrl(e.Entity) is string urlentity && !string.IsNullOrEmpty(urlentity))
+            {
+                form.LogUse("OpenRecord");
+                form.OpenURLProfile(urlentity, false);
             }
         }
 
@@ -168,6 +160,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             }
         }
 
+        private void ctxmenuGrid_Opened(object sender, EventArgs e)
+        {
+            ctxRecord.Enabled = (ctxRecordOpen.Tag is string url1 && !string.IsNullOrWhiteSpace(url1));
+            ctxColumn.Enabled = (ctxColumnOpen.Tag is string url2 && !string.IsNullOrWhiteSpace(url2));
+        }
+
         private void mnuBehaviorColumns_DropDownOpening(object sender, EventArgs e)
         {
             var temp1 = new ToolStripItem[ctxBehavior.DropDownItems.Count];
@@ -188,6 +186,32 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             mnuQuickFilter.Checked = true;
             mnuQuickFilter_Click(sender, e);
+        }
+
+        private void crmGridView1_RecordEnter(object sender, Rappen.XTB.Helpers.Controls.XRMRecordEventArgs e)
+        {
+            ctxRecordOpen.Tag = form.ConnectionDetail.GetEntityUrl(e.Entity);
+            ctxRecordCopy.Tag = ctxRecordOpen.Tag;
+            ctxColumnOpen.Tag = form.ConnectionDetail.GetEntityReferenceUrl(e.Value as EntityReference);
+            ctxColumnCopy.Tag = ctxColumnOpen.Tag;
+        }
+
+        private void ctxOpen_Click(object sender, EventArgs e)
+        {
+            if (sender is ToolStripItem tool && tool.Tag is string url && !string.IsNullOrWhiteSpace(url))
+            {
+                form.LogUse("OpenRecord");
+                form.OpenURLProfile(url, false);
+            }
+        }
+
+        private void ctxCopy_Click(object sender, EventArgs e)
+        {
+            if (sender is ToolStripItem tool && tool.Tag is string url && !string.IsNullOrWhiteSpace(url))
+            {
+                form.LogUse("CopyRecord");
+                Clipboard.SetText(url);
+            }
         }
     }
 }
