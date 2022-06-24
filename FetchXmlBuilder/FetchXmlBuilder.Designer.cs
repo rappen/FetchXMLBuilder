@@ -770,5 +770,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiSelect;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem tmsiShowReleaseNotes;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowSimpler;
     }
-}
+};

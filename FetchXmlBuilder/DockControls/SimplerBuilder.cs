@@ -18,14 +18,14 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         {
             fxb = fetchXmlBuilder;
             InitializeComponent();
-            xrmTable.DataSource = fxb.GetDisplayEntities().Values;
+            xrmTable.DataSource = fxb.GetDisplayEntities();
             ParseXML();
         }
 
         internal void ParseXML()
         {
             var query = new Fetch(fxb.dockControlBuilder.GetFetchDocument());
-            var a = query.ToString();
+            //  var a = query.ToString();
             xrmTable.SelectedIndex = -1;
             gbColumns.Controls.Clear();
             gbFilters.Controls.Clear();
@@ -48,17 +48,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 case "fetch":
                     gbTable.Tag = node;
                     break;
+
                 case "entity":
                     _entity = node.Value("name");
                     xrmTable.SetSelected(_entity);
                     xrmTable.Tag = node;
                     break;
+
                 case "attribute":
                     pan = AddColumn(node);
                     break;
+
                 case "filter":
                     pan = AddFilter(node);
                     break;
+
                 case "condition":
                     pan = AddCondition(node);
                     break;
@@ -199,7 +203,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 
         internal void EnableControls(bool enabled)
         {
-
         }
     }
 }

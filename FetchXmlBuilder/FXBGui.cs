@@ -801,5 +801,20 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             resultControl.EnsureVisible(dockContainer, defaultstate);
             resultControl.UpdateXML(content);
         }
+
+        private void ShowSimplerControl(ref SimplerBuilder control, DockState defaultstate)
+        {
+            LogUse($"Show-Simpler");
+            if (control?.IsDisposed != false)
+            {
+                control = new SimplerBuilder(this);
+                control.Show(dockContainer, defaultstate);
+            }
+            else
+            {
+                control.EnsureVisible(dockContainer, defaultstate);
+            }
+            UpdateLiveXML();
+        }
     }
 }
