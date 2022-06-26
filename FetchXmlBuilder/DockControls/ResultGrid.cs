@@ -41,7 +41,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             RefreshData();
         }
 
-        private void ApplySettingsToGrid()
+        internal void ApplySettingsToGrid()
         {
             crmGridView1.ShowFriendlyNames = form.settings.Results.Friendly;
             crmGridView1.ShowIdColumn = form.settings.Results.Id;

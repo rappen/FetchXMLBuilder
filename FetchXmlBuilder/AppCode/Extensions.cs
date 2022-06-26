@@ -125,8 +125,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 case CheckState.Unchecked:
                     return uncheck;
+
                 case CheckState.Checked:
                     return check;
+
                 case CheckState.Indeterminate:
                     return indeterminate;
             }
@@ -140,6 +142,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 return text;
             }
             return text.Substring(0, text.Length - remove.Length);
+        }
+
+        internal static bool KeyDown(this KeyEventArgs keyevent, Keys key, bool shift, bool control, bool alt)
+        {
+            return keyevent.KeyCode == key && keyevent.Shift == shift && keyevent.Control == control && keyevent.Alt == alt;
         }
     }
 }

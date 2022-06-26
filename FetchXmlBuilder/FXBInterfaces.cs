@@ -1,4 +1,5 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.Forms;
+﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Cinteros.Xrm.FetchXmlBuilder.Forms;
 using System;
 using System.Reflection;
 using System.Windows.Forms;
@@ -71,42 +72,47 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         public void ReceiveKeyDownShortcut(KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.F5 && tsbExecute.Enabled)
+            if (e.KeyDown(Keys.F5, false, false, false) && tsbExecute.Enabled)
             {
                 tsbExecute_Click(null, null);
             }
-            else if (e.Control && e.KeyCode == Keys.E && tsmiShowFetchXML.Enabled)
+            else if (e.KeyDown(Keys.E, false, true, false) && tsmiShowFetchXML.Enabled)
             {
                 tsmiShowFetchXML_Click(null, null);
             }
-            else if (e.Control && e.KeyCode == Keys.N && tsbNew.Enabled)
+            else if (e.KeyDown(Keys.N, false, true, false) && tsbNew.Enabled)
             {
                 tsbNew_Click(null, null);
             }
-            else if (e.Control && e.KeyCode == Keys.O && tsmiOpenFile.Enabled)
+            else if (e.KeyDown(Keys.O, false, true, false) && tsmiOpenFile.Enabled)
             {
                 tsmiOpenFile_Click(null, null);
             }
-            else if (e.Control && e.KeyCode == Keys.S && tsmiSaveFile.Enabled)
+            else if (e.KeyDown(Keys.S, false, true, false) && tsmiSaveFile.Enabled)
             {
                 tsmiSaveFile_Click(null, null);
             }
-            else if (e.KeyCode == Keys.F12 && tsmiSaveFileAs.Enabled)
+            else if (e.KeyDown(Keys.F12, false, false, false) && tsmiSaveFileAs.Enabled)
             {
                 tsmiSaveFileAs_Click(null, null);
             }
-            else if (e.Control && e.KeyCode == Keys.Z && tsbUndo.Enabled)
+            else if (e.KeyDown(Keys.Z, false, true, false) && tsbUndo.Enabled)
             {
                 tsbUndo_Click(null, null);
             }
-            else if (e.Control && e.KeyCode == Keys.Y && tsbRedo.Enabled)
+            else if (e.KeyDown(Keys.Y, false, true, false) && tsbRedo.Enabled)
             {
                 tsbRedo_Click(null, null);
             }
-            else if (e.Control && e.KeyCode == Keys.F)
+            else if (e.KeyDown(Keys.F, false, true, false))
             {
                 settings.UseFriendlyNames = !settings.UseFriendlyNames;
                 dockControlBuilder.ApplyCurrentSettings();
+            }
+            else if (e.KeyDown(Keys.F, true, true, false))
+            {
+                settings.Results.Friendly = !settings.Results.Friendly;
+                dockControlGrid?.ApplySettingsToGrid();
             }
         }
 
@@ -212,6 +218,5 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             }
             OnOutgoingMessage(this, message);
         }
-
     }
 }

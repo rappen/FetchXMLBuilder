@@ -221,6 +221,8 @@
             // 
             this.mnuFriendly.CheckOnClick = true;
             this.mnuFriendly.Name = "mnuFriendly";
+            this.mnuFriendly.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+            | System.Windows.Forms.Keys.F)));
             this.mnuFriendly.Size = new System.Drawing.Size(264, 34);
             this.mnuFriendly.Text = "Friendly Names";
             this.mnuFriendly.Click += new System.EventHandler(this.chkGridOptions_Click);
