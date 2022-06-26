@@ -7,7 +7,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
     public partial class Settings : Form
     {
         private FetchXmlBuilder fxb;
-        bool validateinfo;
+        private bool validateinfo;
 
         public Settings(FetchXmlBuilder fxb)
         {
@@ -23,6 +23,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
                 settings = new FXBSettings();
             }
             chkAppFriendly.Checked = settings.UseFriendlyNames;
+            chkAppFriendlyResults.Checked = settings.Results.Friendly;
             chkAppSingle.Checked = settings.QueryOptions.UseSingleQuotation;
             chkAppNoSavePrompt.Checked = settings.DoNotPromptToSave;
             chkAppResultsNewWindow.Checked = settings.Results.AlwaysNewWindow;
@@ -72,6 +73,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         {
             var settings = fxb.settings;
             settings.UseFriendlyNames = chkAppFriendly.Checked;
+            settings.Results.Friendly = chkAppFriendlyResults.Checked;
             settings.QueryOptions.UseSingleQuotation = chkAppSingle.Checked;
             settings.QueryOptions.NewQueryTemplate = txtFetch.Text;
             settings.DoNotPromptToSave = chkAppNoSavePrompt.Checked;
