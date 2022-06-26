@@ -488,7 +488,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
             this.groupBox1.Location = new System.Drawing.Point(248, 165);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(222, 65);
-            this.groupBox1.TabIndex = 103;
+            this.groupBox1.TabIndex = 35;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Metadata";
             // 
