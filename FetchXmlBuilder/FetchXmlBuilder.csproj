@@ -227,7 +227,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builder\TreeNodeExtensions.cs" />
     <Compile Include="AppCode\Utils.cs" />
     <Compile Include="Extensions\ConnectionExtensions.cs" />
     <Compile Include="ControlsClasses\EntityNameItem.cs" />
