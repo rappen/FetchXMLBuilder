@@ -1,4 +1,6 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Cinteros.Xrm.FetchXmlBuilder.Converters;
+using Cinteros.Xrm.FetchXmlBuilder.Extensions;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics;

@@ -1,8 +1,6 @@
-﻿using Cinteros.Xrm.XmlEditorUtils;
-using System.Collections.Generic;
-using System.Windows.Forms;
+﻿using System.Collections.Generic;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Cinteros.Xrm.FetchXmlBuilder.Builder
 {
     public class FetchNodeCapabilities
     {
@@ -32,22 +30,27 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     Delete = false;
                     Comment = false;
                     break;
+
                 case "entity":
                     Multiple = false;
                     Attributes = true;
                     break;
+
                 case "link-entity":
                     Attributes = true;
                     break;
+
                 case "all-attributes":
                     Multiple = false;
                     break;
+
                 case "attribute":
                 case "order":
                 case "filter":
                 case "condition":
                 case "value":
                     break;
+
                 case "#comment":
                     Comment = false;
                     Uncomment = true;
@@ -65,6 +68,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     ChildTypes.Add(new FetchNodeCapabilities("-"));
                     ChildTypes.Add(new FetchNodeCapabilities("#comment"));
                     break;
+
                 case "entity":
                 case "link-entity":
                     ChildTypes.Add(new FetchNodeCapabilities("-"));
@@ -76,25 +80,30 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     ChildTypes.Add(new FetchNodeCapabilities("-"));
                     ChildTypes.Add(new FetchNodeCapabilities("#comment"));
                     break;
+
                 case "all-attributes":
                 case "attribute":
                 case "order":
                     ChildTypes.Add(new FetchNodeCapabilities("#comment"));
                     break;
+
                 case "filter":
                     ChildTypes.Add(new FetchNodeCapabilities("condition"));
                     ChildTypes.Add(new FetchNodeCapabilities("filter"));
                     ChildTypes.Add(new FetchNodeCapabilities("-"));
                     ChildTypes.Add(new FetchNodeCapabilities("#comment"));
                     break;
+
                 case "condition":
                     ChildTypes.Add(new FetchNodeCapabilities("value"));
                     ChildTypes.Add(new FetchNodeCapabilities("-"));
                     ChildTypes.Add(new FetchNodeCapabilities("#comment"));
                     break;
+
                 case "value":
                     ChildTypes.Add(new FetchNodeCapabilities("#comment"));
                     break;
+
                 case "#comment":
                     break;
             }

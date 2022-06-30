@@ -1,4 +1,6 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Cinteros.Xrm.FetchXmlBuilder.ControlsClasses;
+using Cinteros.Xrm.FetchXmlBuilder.Views;
 using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk;
 using System;

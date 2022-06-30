@@ -1,4 +1,5 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Cinteros.Xrm.FetchXmlBuilder.Settings;
 using System;
 using System.Windows.Forms;
 

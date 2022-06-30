@@ -1,4 +1,4 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Cinteros.Xrm.FetchXmlBuilder.Builder;
 using Cinteros.Xrm.FetchXmlBuilder.Controls;
 using Cinteros.Xrm.FetchXmlBuilder.Forms;
 using Cinteros.Xrm.XmlEditorUtils;
@@ -13,6 +13,8 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Cinteros.Xrm.FetchXmlBuilder.Extensions;
+using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
 {

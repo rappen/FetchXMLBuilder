@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Cinteros.Xrm.FetchXmlBuilder.Settings;
+using ScintillaNET;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using Cinteros.Xrm.FetchXmlBuilder.AppCode;
-using ScintillaNET;
 
-namespace Cinteros.Xrm.FetchXmlBuilder
+namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
-    static class ScintillaHelper
+    internal static class ScintillaHelper
     {
         public static void ConfigureForXml(this Scintilla scintilla, FXBSettings settings)
         {

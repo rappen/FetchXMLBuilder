@@ -2,7 +2,7 @@
 using MarkMpn.FetchXmlToWebAPI;
 using Microsoft.Xrm.Sdk.Metadata;
 
-namespace Cinteros.Xrm.FetchXmlBuilder
+namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
     internal class WebAPIMetadataProvider : IMetadataProvider
     {

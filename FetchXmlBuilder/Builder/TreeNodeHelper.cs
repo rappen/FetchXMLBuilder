@@ -1,13 +1,12 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.Controls;
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Linq;
+using Cinteros.Xrm.FetchXmlBuilder.Settings;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Cinteros.Xrm.FetchXmlBuilder.Builder
 {
     internal class TreeNodeHelper
     {
@@ -83,7 +82,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     if (node.Text != originalText ||
                         node.Name != originalName ||
                         originalAttributes == null ||
-                        String.Join(";", attributes.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Key + "=" + kvp.Value)) != String.Join(";", originalAttributes.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Key + "=" + kvp.Value)))
+                        string.Join(";", attributes.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Key + "=" + kvp.Value)) != string.Join(";", originalAttributes.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Key + "=" + kvp.Value)))
                     {
                         node.TreeView.SelectedNode = null;
                         node.TreeView.SelectedNode = node;
@@ -146,6 +145,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         text = "fetch";
                     }
                     break;
+
                 case "entity":
                 case "link-entity":
                     text += " " + fxb.GetEntityDisplayName(name);
@@ -158,6 +158,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         text += " M:M";
                     }
                     break;
+
                 case "attribute":
                     if (!string.IsNullOrEmpty(name))
                     {
@@ -190,6 +191,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         }
                     }
                     break;
+
                 case "filter":
                     var type = node.Value("type");
                     if (string.IsNullOrEmpty(type))
@@ -198,6 +200,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     }
                     text += " " + type;
                     break;
+
                 case "condition":
                     {
                         var ent = node.Value("entityname");
@@ -232,10 +235,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         text += (" " + attr + " " + oper + " " + val).TrimEnd();
                     }
                     break;
+
                 case "value":
                     var value = node.Value("#text");
                     text += " " + value;
                     break;
+
                 case "order":
                     {
                         var attr = node.Value("attribute");
@@ -261,6 +266,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                         }
                     }
                     break;
+
                 case "#comment":
                     text = node.Value("#comment")
                         .Trim()
@@ -313,9 +319,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     case ControlValidationLevel.Error:
                         node.ImageKey = "error";
                         break;
+
                     case ControlValidationLevel.Warning:
                         node.ImageKey = "warning";
                         break;
+
                     case ControlValidationLevel.Info:
                         node.ImageKey = "info";
                         break;

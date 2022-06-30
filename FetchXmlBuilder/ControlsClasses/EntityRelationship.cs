@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
-using System.Linq;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Cinteros.Xrm.FetchXmlBuilder.ControlsClasses
 {
     public class EntityRelationship : IComparable
     {

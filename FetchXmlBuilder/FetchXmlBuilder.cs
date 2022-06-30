@@ -1,4 +1,5 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Cinteros.Xrm.FetchXmlBuilder.Converters;
+using Cinteros.Xrm.FetchXmlBuilder.Builder;
 using Cinteros.Xrm.FetchXmlBuilder.Controls;
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Cinteros.Xrm.FetchXmlBuilder.Forms;
@@ -18,6 +19,9 @@ using System.Xml;
 using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
+using Cinteros.Xrm.FetchXmlBuilder.Extensions;
+using Cinteros.Xrm.FetchXmlBuilder.Settings;
+using Cinteros.Xrm.FetchXmlBuilder.AppCode;
 
 namespace Cinteros.Xrm.FetchXmlBuilder
 {

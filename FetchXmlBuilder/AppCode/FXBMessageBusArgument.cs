@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk.Query;
 
-namespace Cinteros.Xrm.FetchXmlBuilder
+namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 {
     public class FXBMessageBusArgument
     {

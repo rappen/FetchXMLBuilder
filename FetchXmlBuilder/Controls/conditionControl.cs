@@ -1,4 +1,5 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Cinteros.Xrm.FetchXmlBuilder.Builder;
+using Cinteros.Xrm.FetchXmlBuilder.ControlsClasses;
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk;
@@ -10,6 +11,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.Windows.Forms;
+using Cinteros.Xrm.FetchXmlBuilder.Extensions;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Controls
 {

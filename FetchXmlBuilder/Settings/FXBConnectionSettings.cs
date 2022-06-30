@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Cinteros.Xrm.FetchXmlBuilder.Settings
 {
     public class FXBConnectionSettings
     {

@@ -1,7 +1,7 @@
 ﻿using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Cinteros.Xrm.FetchXmlBuilder.Views
 {
     public class ViewItem : IComboBoxItem
     {
@@ -49,9 +49,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         {
             return entity != null
                 && (entity.LogicalName == "userquery"
-                || (entity.Contains("iscustomizable")
+                || entity.Contains("iscustomizable")
                     && entity["iscustomizable"] is BooleanManagedProperty iscust
-                    && iscust.Value));
+                    && iscust.Value);
         }
     }
 }

@@ -2,7 +2,7 @@
 using Microsoft.Xrm.Sdk.Metadata;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Cinteros.Xrm.FetchXmlBuilder.ControlsClasses
 {
     internal class AttributeItem : IComboBoxItem
     {

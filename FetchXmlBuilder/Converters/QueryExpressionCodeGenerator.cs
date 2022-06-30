@@ -1,15 +1,14 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿using Cinteros.Xrm.FetchXmlBuilder.Extensions;
+using Microsoft.CSharp;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.CSharp;
-using System.CodeDom.Compiler;
 using System.Text.RegularExpressions;
-using Microsoft.Crm.Sdk.Messages;
-using Rappen.Xrm.Extensions;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Cinteros.Xrm.FetchXmlBuilder.Converters
 {
     public class QueryExpressionCodeGenerator
     {
@@ -251,7 +250,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     using System;
                     using Microsoft.Xrm.Sdk;
                     using Microsoft.Xrm.Sdk.Query;
-                    
+
                     namespace DynamicContentGenerator
                     {{
                         public class Generator

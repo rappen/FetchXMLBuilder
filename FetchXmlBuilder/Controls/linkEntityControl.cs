@@ -1,4 +1,5 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Cinteros.Xrm.FetchXmlBuilder.Builder;
+using Cinteros.Xrm.FetchXmlBuilder.ControlsClasses;
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;

@@ -1,4 +1,7 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Cinteros.Xrm.FetchXmlBuilder.Converters;
+using Cinteros.Xrm.FetchXmlBuilder.Extensions;
+using Cinteros.Xrm.FetchXmlBuilder.Settings;
 using Cinteros.Xrm.XmlEditorUtils;
 using MarkMpn.XmlSchemaAutocomplete.Scintilla;
 using Microsoft.Xrm.Sdk.Metadata;

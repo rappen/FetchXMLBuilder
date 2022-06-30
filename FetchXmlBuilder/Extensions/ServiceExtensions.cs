@@ -3,7 +3,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System.Xml;
 
-namespace Rappen.Xrm.Extensions
+namespace Cinteros.Xrm.FetchXmlBuilder.Extensions
 {
     public static class ServiceExtensions
     {

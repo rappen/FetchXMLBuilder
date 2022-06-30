@@ -1,4 +1,4 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Cinteros.Xrm.FetchXmlBuilder.Settings;
 
 namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 {
@@ -31,7 +31,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
-            Cinteros.Xrm.FetchXmlBuilder.AppCode.XmlColors xmlColors1 = new Cinteros.Xrm.FetchXmlBuilder.AppCode.XmlColors();
+            XmlColors xmlColors1 = new Cinteros.Xrm.FetchXmlBuilder.Settings.XmlColors();
             this.gbResult = new System.Windows.Forms.GroupBox();
             this.chkClickableLinks = new System.Windows.Forms.CheckBox();
             this.cmbResult = new System.Windows.Forms.ComboBox();

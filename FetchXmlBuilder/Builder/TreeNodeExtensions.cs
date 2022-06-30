@@ -1,14 +1,9 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Cinteros.Xrm.FetchXmlBuilder.Builder
 {
     public static class TreeNodeExtensions
     {
@@ -26,17 +21,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                     return null;
                 }
             }
-            return (node.Name.Equals("entity") || node.Name.Equals("link-entity")) ? node : null;
+            return node.Name.Equals("entity") || node.Name.Equals("link-entity") ? node : null;
         }
 
         internal static bool LocalEntityIsRoot(this TreeNode node)
         {
-            return LocalEntityNode(node)?.Name == "entity";
+            return node.LocalEntityNode()?.Name == "entity";
         }
 
         internal static string LocalEntityName(this TreeNode node)
         {
-            return LocalEntityNode(node).Value("name");
+            return node.LocalEntityNode().Value("name");
         }
 
         internal static string Value(this TreeNode node, string key)

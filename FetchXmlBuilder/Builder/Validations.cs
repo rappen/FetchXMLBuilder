@@ -3,7 +3,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Cinteros.Xrm.FetchXmlBuilder.Builder
 {
     internal static class Validations
     {

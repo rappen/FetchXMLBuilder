@@ -1,6 +1,10 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Cinteros.Xrm.FetchXmlBuilder.Converters;
 using Cinteros.Xrm.FetchXmlBuilder.DockControls;
+using Cinteros.Xrm.FetchXmlBuilder.Extensions;
 using Cinteros.Xrm.FetchXmlBuilder.Forms;
+using Cinteros.Xrm.FetchXmlBuilder.Settings;
+using Cinteros.Xrm.FetchXmlBuilder.Views;
 using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;

@@ -228,9 +228,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builder\TreeNodeExtensions.cs" />
+    <Compile Include="AppCode\Utils.cs" />
     <Compile Include="Extensions\ConnectionExtensions.cs" />
     <Compile Include="ControlsClasses\EntityNameItem.cs" />
     <Compile Include="Extensions\Extensions.cs" />
+    <Compile Include="Extensions\GroupBoxExpanderExtensions.cs" />
     <Compile Include="Settings\FXBConnectionSettings.cs" />
     <Compile Include="FXBGui.cs">
       <SubType>UserControl</SubType>
@@ -243,7 +245,6 @@
     </Compile>
     <Compile Include="Extensions\ServiceExtensions.cs" />
     <Compile Include="ControlsClasses\AttributeItem.cs" />
-    <Compile Include="Extensions\GroupBoxExpanderExtensions.cs" />
     <Compile Include="Converters\CSharpCodeGenerator.cs" />
     <Compile Include="Extensions\DockExtensions.cs" />
     <Compile Include="Builder\FetchIsAggregateException.cs" />
@@ -253,7 +254,6 @@
     <Compile Include="ControlsClasses\OptionsetItem.cs" />
     <Compile Include="AppCode\QueryInfo.cs" />
     <Compile Include="Converters\QueryExpressionCodeGenerator.cs" />
-    <Compile Include="AppCode\Utils.cs" />
     <Compile Include="Builder\Validations.cs" />
     <Compile Include="Views\ViewItem.cs" />
     <Compile Include="ControlsClasses\EntityItem.cs" />

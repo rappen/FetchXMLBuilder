@@ -1,7 +1,7 @@
 ﻿using Cinteros.Xrm.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Cinteros.Xrm.FetchXmlBuilder.ControlsClasses
 {
     internal class OptionsetItem : IComboBoxItem
     {

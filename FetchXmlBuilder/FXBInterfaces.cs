@@ -1,4 +1,5 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Cinteros.Xrm.FetchXmlBuilder.Extensions;
 using Cinteros.Xrm.FetchXmlBuilder.Forms;
 using System;
 using System.Reflection;
@@ -142,7 +143,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         public void ShowSettings()
         {
-            var settingDlg = new Settings(this);
+            var settingDlg = new Forms.Settings(this);
             LogUse("OpenOptions");
             if (settingDlg.ShowDialog(this) == DialogResult.OK)
             {

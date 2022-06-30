@@ -1,6 +1,6 @@
 ﻿using WeifenLuo.WinFormsUI.Docking;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Cinteros.Xrm.FetchXmlBuilder.Extensions
 {
     public static class DockExtensions
     {
@@ -12,15 +12,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 case DockState.Hidden:
                     form.Show(parent, defaultState);
                     break;
+
                 case DockState.DockBottomAutoHide:
                     form.DockState = DockState.DockBottom;
                     break;
+
                 case DockState.DockTopAutoHide:
                     form.DockState = DockState.DockTop;
                     break;
+
                 case DockState.DockLeftAutoHide:
                     form.DockState = DockState.DockLeft;
                     break;
+
                 case DockState.DockRightAutoHide:
                     form.DockState = DockState.DockRight;
                     break;
