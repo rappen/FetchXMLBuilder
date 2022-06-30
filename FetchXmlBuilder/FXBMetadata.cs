@@ -1,10 +1,10 @@
-﻿using Rappen.XTB.FetchXmlBuilder.Settings;
-using McTools.Xrm.Connection;
+﻿using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XRM.Helpers.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;

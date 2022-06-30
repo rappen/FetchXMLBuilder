@@ -1,9 +1,7 @@
-﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
-using Rappen.XTB.FetchXmlBuilder.Converters;
+﻿using Microsoft.Xrm.Sdk;
+using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
-using Microsoft.Xrm.Sdk;
 using System;
-using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace Rappen.XTB.FetchXmlBuilder.DockControls

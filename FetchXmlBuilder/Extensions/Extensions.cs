@@ -1,8 +1,5 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
-using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Linq;
 
 namespace Rappen.XTB.FetchXmlBuilder.Extensions
 {

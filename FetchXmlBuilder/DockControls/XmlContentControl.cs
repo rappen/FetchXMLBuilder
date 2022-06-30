@@ -1,11 +1,10 @@
-﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
-using Rappen.XTB.FetchXmlBuilder.Converters;
+﻿using MarkMpn.XmlSchemaAutocomplete.Scintilla;
+using Microsoft.Xrm.Sdk.Metadata;
+using Rappen.XRM.Helpers.Extensions;
+using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using Rappen.XTB.XmlEditorUtils;
-using MarkMpn.XmlSchemaAutocomplete.Scintilla;
-using Microsoft.Xrm.Sdk.Metadata;
-using Rappen.XRM.Helpers.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;

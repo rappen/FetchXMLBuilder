@@ -1,10 +1,10 @@
-﻿using Rappen.XTB.XmlEditorUtils;
-using Microsoft.Xrm.Sdk.Metadata;
+﻿using Microsoft.Xrm.Sdk.Metadata;
+using Rappen.XTB.FetchXmlBuilder.Extensions;
+using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Linq;
-using Rappen.XTB.FetchXmlBuilder.Extensions;
+using System.Windows.Forms;
 
 namespace Rappen.XTB.FetchXmlBuilder.Forms
 {

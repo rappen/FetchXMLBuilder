@@ -1,5 +1,4 @@
 ﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
-using Microsoft.Web.WebView2.Core;
 using System;
 using System.Reflection;
 using System.Windows.Forms;

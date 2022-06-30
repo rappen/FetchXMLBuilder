@@ -1,11 +1,11 @@
-﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
-using Rappen.XTB.FetchXmlBuilder.Converters;
-using Rappen.XTB.FetchXmlBuilder.DockControls;
-using Rappen.XTB.FetchXmlBuilder.Settings;
-using Microsoft.Crm.Sdk.Messages;
+﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XRM.Helpers.Serialization;
+using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Converters;
+using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.FetchXmlBuilder.Settings;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;

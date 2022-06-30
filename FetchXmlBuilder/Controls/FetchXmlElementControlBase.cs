@@ -1,6 +1,6 @@
-﻿using Rappen.XTB.FetchXmlBuilder.DockControls;
+﻿using Microsoft.Xrm.Sdk.Metadata;
+using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.XmlEditorUtils;
-using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

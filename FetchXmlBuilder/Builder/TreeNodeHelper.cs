@@ -1,10 +1,10 @@
 ﻿using Rappen.XTB.FetchXmlBuilder.Controls;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.FetchXmlBuilder.Settings;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
-using Rappen.XTB.FetchXmlBuilder.Settings;
 
 namespace Rappen.XTB.FetchXmlBuilder.Builder
 {

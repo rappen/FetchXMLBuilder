@@ -1,7 +1,7 @@
-﻿using Rappen.XTB.FetchXmlBuilder.Extensions;
-using Rappen.XTB.FetchXmlBuilder.Settings;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
+using Rappen.XTB.FetchXmlBuilder.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Rappen.XTB.FetchXmlBuilder.AppCode;
 
 namespace FXBTests
 {
