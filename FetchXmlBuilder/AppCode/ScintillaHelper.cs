@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Rappen.XTB.FetchXmlBuilder.Settings;
+using ScintillaNET;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using Rappen.XTB.FetchXmlBuilder.Settings;
-using ScintillaNET;
 
 namespace Rappen.XTB.FetchXmlBuilder.AppCode
 {

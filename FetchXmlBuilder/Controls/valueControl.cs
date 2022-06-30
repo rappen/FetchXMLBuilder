@@ -1,7 +1,7 @@
-﻿using Rappen.XTB.FetchXmlBuilder.Builder;
+﻿using Microsoft.Xrm.Sdk.Metadata;
+using Rappen.XTB.FetchXmlBuilder.Builder;
 using Rappen.XTB.FetchXmlBuilder.ControlsClasses;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
-using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Linq;
 using System.Windows.Forms;

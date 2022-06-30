@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace Rappen.XTB.FetchXmlBuilder.Builder
 {
-    internal static class TreeNodeExtensions
+    public static class TreeNodeExtensions
     {
         internal static TreeNode LocalEntityNode(this TreeNode node)
         {
@@ -21,17 +21,17 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                     return null;
                 }
             }
-            return (node.Name.Equals("entity") || node.Name.Equals("link-entity")) ? node : null;
+            return node.Name.Equals("entity") || node.Name.Equals("link-entity") ? node : null;
         }
 
         internal static bool LocalEntityIsRoot(this TreeNode node)
         {
-            return LocalEntityNode(node)?.Name == "entity";
+            return node.LocalEntityNode()?.Name == "entity";
         }
 
         internal static string LocalEntityName(this TreeNode node)
         {
-            return LocalEntityNode(node).Value("name");
+            return node.LocalEntityNode().Value("name");
         }
 
         internal static string Value(this TreeNode node, string key)

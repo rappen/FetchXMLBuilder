@@ -1,6 +1,6 @@
-﻿using System;
-using MarkMpn.FetchXmlToWebAPI;
+﻿using MarkMpn.FetchXmlToWebAPI;
 using Microsoft.Xrm.Sdk.Metadata;
+using System;
 
 namespace Rappen.XTB.FetchXmlBuilder.AppCode
 {

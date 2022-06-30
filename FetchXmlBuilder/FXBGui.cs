@@ -1,4 +1,7 @@
-﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
+﻿using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
+using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Converters;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
@@ -6,9 +9,6 @@ using Rappen.XTB.FetchXmlBuilder.Forms;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using Rappen.XTB.FetchXmlBuilder.Views;
 using Rappen.XTB.XmlEditorUtils;
-using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -47,7 +47,6 @@ namespace Rappen.XTB.FetchXmlBuilder
         private bool bduexists;
 
         internal void EnableControls()
-
         {
             EnableControls(buttonsEnabled);
         }

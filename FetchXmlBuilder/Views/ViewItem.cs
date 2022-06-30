@@ -1,5 +1,5 @@
-﻿using Rappen.XTB.XmlEditorUtils;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
+using Rappen.XTB.XmlEditorUtils;
 
 namespace Rappen.XTB.FetchXmlBuilder.Views
 {

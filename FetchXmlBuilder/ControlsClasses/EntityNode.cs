@@ -1,5 +1,4 @@
-﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
-using Rappen.XTB.FetchXmlBuilder.Builder;
+﻿using Rappen.XTB.FetchXmlBuilder.Builder;
 using System.Windows.Forms;
 
 namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses

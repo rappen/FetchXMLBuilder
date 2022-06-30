@@ -1,6 +1,4 @@
-﻿using Rappen.XTB.XmlEditorUtils;
-using System.Collections.Generic;
-using System.Windows.Forms;
+﻿using System.Collections.Generic;
 
 namespace Rappen.XTB.FetchXmlBuilder.Builder
 {

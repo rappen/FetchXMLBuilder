@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
-using System.Linq;
 
 namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
 {

@@ -1,6 +1,6 @@
-﻿using Rappen.XTB.XmlEditorUtils;
-using Microsoft.Xrm.Sdk.Metadata;
+﻿using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using Rappen.XTB.XmlEditorUtils;
 using System.Collections.Generic;
 
 namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses

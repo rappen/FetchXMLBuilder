@@ -1,5 +1,5 @@
-﻿using System.Windows.Forms;
-using ScintillaNET;
+﻿using ScintillaNET;
+using System.Windows.Forms;
 
 namespace Rappen.XTB.XmlEditorUtils
 {

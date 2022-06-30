@@ -1,10 +1,10 @@
-﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
+﻿using MarkMpn.XmlSchemaAutocomplete.Scintilla;
+using Microsoft.Xrm.Sdk.Metadata;
+using Rappen.XRM.Helpers.Extensions;
+using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using Rappen.XTB.XmlEditorUtils;
-using MarkMpn.XmlSchemaAutocomplete.Scintilla;
-using Microsoft.Xrm.Sdk.Metadata;
-using Rappen.XRM.Helpers.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,7 +39,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             SetContentType(contentType);
             SetFormat(saveFormat);
             UpdateButtons();
-            if (contentType == ContentType.FetchXML || contentType == ContentType.LayoutXML)
+            if (contentType == ContentType.FetchXML)
             {
                 InitIntellisense();
             }
@@ -78,7 +78,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             switch (contentType)
             {
                 case ContentType.FetchXML:
-                case ContentType.LayoutXML:
                 case ContentType.FetchXML_Result:
                 case ContentType.Serialized_Result_XML:
                     txtXML.ConfigureForXml(fxb.settings);
@@ -782,14 +781,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
     public enum ContentType
     {
         FetchXML,
+        LayoutXML,
         FetchXML_Result,
         Serialized_Result_XML,
         Serialized_Result_JSON,
         QueryExpression,
         SQL_Query,
         JavaScript_Query,
-        CSharp_Query,
-        LayoutXML
+        CSharp_Query
     }
 
     internal enum SaveFormat
