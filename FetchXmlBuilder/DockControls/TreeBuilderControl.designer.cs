@@ -1,4 +1,4 @@
-﻿namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
+﻿namespace Rappen.XTB.FetchXmlBuilder.DockControls
 {
     partial class TreeBuilderControl
     {

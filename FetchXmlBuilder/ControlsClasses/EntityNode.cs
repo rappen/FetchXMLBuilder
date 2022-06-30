@@ -1,7 +1,7 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.Builder;
+﻿using Rappen.XTB.FetchXmlBuilder.Builder;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.ControlsClasses
+namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
 {
     public class EntityNode
     {

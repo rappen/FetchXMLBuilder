@@ -1,9 +1,9 @@
-﻿using Cinteros.Xrm.XmlEditorUtils;
+﻿using Rappen.XTB.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using System.Collections.Generic;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.ControlsClasses
+namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
 {
     public class OperatorItem : IComboBoxItem
     {

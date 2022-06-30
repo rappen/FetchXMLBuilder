@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Rappen.XTB.FetchXmlBuilder.AppCode
 {
     public class HistoryManager
     {

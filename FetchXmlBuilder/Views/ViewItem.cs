@@ -1,7 +1,7 @@
-﻿using Cinteros.Xrm.XmlEditorUtils;
+﻿using Rappen.XTB.XmlEditorUtils;
 using Microsoft.Xrm.Sdk;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Views
+namespace Rappen.XTB.FetchXmlBuilder.Views
 {
     public class ViewItem : IComboBoxItem
     {

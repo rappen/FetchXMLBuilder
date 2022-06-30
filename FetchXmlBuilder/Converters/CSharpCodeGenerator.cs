@@ -5,7 +5,7 @@ using System.Security;
 using System.Text;
 using System.Xml;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Converters
+namespace Rappen.XTB.FetchXmlBuilder.Converters
 {
     public class CSharpCodeGenerator
     {

@@ -1,4 +1,4 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.DockControls;
+﻿using Rappen.XTB.FetchXmlBuilder.DockControls;
 using ScintillaNET;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Settings
+namespace Rappen.XTB.FetchXmlBuilder.Settings
 {
     public class FXBSettings
     {
@@ -16,6 +16,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Settings
 
         public bool UseFriendlyNames
         { get { return _useFriendlyNames; } set { _useFriendlyNames = value; FetchXmlBuilder.friendlyNames = value; } }
+
         public QueryOptions QueryOptions { get; set; } = new QueryOptions();
         public ResultOptions Results { get; set; } = new ResultOptions();
         public string CurrentVersion { get; set; }

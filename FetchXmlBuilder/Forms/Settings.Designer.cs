@@ -1,6 +1,6 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.Settings;
+﻿using Rappen.XTB.FetchXmlBuilder.Settings;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Forms
+namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
     partial class Settings
     {
@@ -31,7 +31,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
-            XmlColors xmlColors1 = new Cinteros.Xrm.FetchXmlBuilder.Settings.XmlColors();
+            XmlColors xmlColors1 = new Rappen.XTB.FetchXmlBuilder.Settings.XmlColors();
             this.gbResult = new System.Windows.Forms.GroupBox();
             this.chkClickableLinks = new System.Windows.Forms.CheckBox();
             this.cmbResult = new System.Windows.Forms.ComboBox();

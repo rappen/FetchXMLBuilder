@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
+namespace Rappen.XTB.FetchXmlBuilder.DockControls
 {
     public partial class MetadataControl : WeifenLuo.WinFormsUI.Docking.DockContent
     {

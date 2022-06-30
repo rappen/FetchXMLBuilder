@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Builder
+namespace Rappen.XTB.FetchXmlBuilder.Builder
 {
     public class FetchNodeCapabilities
     {

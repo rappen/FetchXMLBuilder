@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace Cinteros.Xrm.XmlEditorUtils
+namespace Rappen.XTB.XmlEditorUtils
 {
     public static class Prompt
     {

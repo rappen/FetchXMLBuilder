@@ -1,7 +1,7 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.Builder;
-using Cinteros.Xrm.FetchXmlBuilder.Controls;
-using Cinteros.Xrm.FetchXmlBuilder.Forms;
-using Cinteros.Xrm.XmlEditorUtils;
+﻿using Rappen.XTB.FetchXmlBuilder.Builder;
+using Rappen.XTB.FetchXmlBuilder.Controls;
+using Rappen.XTB.FetchXmlBuilder.Forms;
+using Rappen.XTB.XmlEditorUtils;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
@@ -13,10 +13,10 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using Cinteros.Xrm.FetchXmlBuilder.Extensions;
-using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Extensions;
+using Rappen.XTB.FetchXmlBuilder.AppCode;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
+namespace Rappen.XTB.FetchXmlBuilder.DockControls
 {
     public partial class TreeBuilderControl : WeifenLuo.WinFormsUI.Docking.DockContent
     {
@@ -107,7 +107,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 var origin = "";
                 if (sender is IDefinitionSavable)
                 {
-                    origin = sender.ToString().Replace("Cinteros.Xrm.FetchXmlBuilder.Controls.", "").Replace("Control", "");
+                    origin = sender.ToString().Replace("Rappen.XTB.FetchXmlBuilder.Controls.", "").Replace("Control", "");
                     foreach (var attr in e.AttributeCollection)
                     {
                         origin += "\n  " + attr.Key + "=" + attr.Value;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Converters
+namespace Rappen.XTB.FetchXmlBuilder.Converters
 {
     internal class SQLQueryGenerator
     {
@@ -221,33 +221,42 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
                     case @operator.on:
                         result.Append(" = ");
                         break;
+
                     case @operator.ne:
                     case @operator.neq:
                         result.Append(" != ");
                         break;
+
                     case @operator.lt:
                         result.Append(" < ");
                         break;
+
                     case @operator.le:
                     case @operator.onorbefore:
                         result.Append(" <= ");
                         break;
+
                     case @operator.gt:
                         result.Append(" > ");
                         break;
+
                     case @operator.ge:
                     case @operator.onorafter:
                         result.Append(" >= ");
                         break;
+
                     case @operator.@null:
                         result.Append(" IS NULL");
                         break;
+
                     case @operator.notnull:
                         result.Append(" IS NOT NULL");
                         break;
+
                     case @operator.like:
                         result.Append(" LIKE ");
                         break;
+
                     case @operator.notlike:
                         result.Append(" NOT LIKE ");
                         break;
@@ -279,6 +288,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
                         case AttributeTypeCode.Picklist:
                             result.Append(condition.value);
                             break;
+
                         default:
                             result.Append($"'{condition.value}'");
                             break;

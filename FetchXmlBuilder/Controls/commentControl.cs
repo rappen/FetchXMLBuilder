@@ -1,7 +1,7 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.DockControls;
+﻿using Rappen.XTB.FetchXmlBuilder.DockControls;
 using System.Collections.Generic;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Controls
+namespace Rappen.XTB.FetchXmlBuilder.Controls
 {
     public partial class commentControl : FetchXmlElementControlBase
     {

@@ -1,6 +1,6 @@
 ﻿using WeifenLuo.WinFormsUI.Docking;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Extensions
+namespace Rappen.XTB.FetchXmlBuilder.Extensions
 {
     public static class DockExtensions
     {

@@ -1,9 +1,9 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.Converters;
-using Cinteros.Xrm.FetchXmlBuilder.Builder;
-using Cinteros.Xrm.FetchXmlBuilder.Controls;
-using Cinteros.Xrm.FetchXmlBuilder.DockControls;
-using Cinteros.Xrm.FetchXmlBuilder.Forms;
-using Cinteros.Xrm.XmlEditorUtils;
+﻿using Rappen.XTB.FetchXmlBuilder.Converters;
+using Rappen.XTB.FetchXmlBuilder.Builder;
+using Rappen.XTB.FetchXmlBuilder.Controls;
+using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.FetchXmlBuilder.Forms;
+using Rappen.XTB.XmlEditorUtils;
 using MarkMpn.FetchXmlToWebAPI;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
@@ -19,11 +19,11 @@ using System.Xml;
 using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
-using Cinteros.Xrm.FetchXmlBuilder.Extensions;
-using Cinteros.Xrm.FetchXmlBuilder.Settings;
-using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Settings;
+using Rappen.XTB.FetchXmlBuilder.AppCode;
 
-namespace Cinteros.Xrm.FetchXmlBuilder
+namespace Rappen.XTB.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder : PluginControlBase
     {

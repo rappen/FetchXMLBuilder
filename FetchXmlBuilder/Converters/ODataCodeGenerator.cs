@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Converters
+namespace Rappen.XTB.FetchXmlBuilder.Converters
 {
     public class ODataCodeGenerator
     {

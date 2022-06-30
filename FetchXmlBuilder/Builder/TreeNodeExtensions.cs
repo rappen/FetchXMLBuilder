@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Builder
+namespace Rappen.XTB.FetchXmlBuilder.Builder
 {
     public static class TreeNodeExtensions
     {

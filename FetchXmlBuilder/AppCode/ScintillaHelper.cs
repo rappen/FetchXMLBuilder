@@ -1,10 +1,10 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.Settings;
+﻿using Rappen.XTB.FetchXmlBuilder.Settings;
 using ScintillaNET;
 using System.Drawing;
 using System.IO;
 using System.Xml;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Rappen.XTB.FetchXmlBuilder.AppCode
 {
     internal static class ScintillaHelper
     {

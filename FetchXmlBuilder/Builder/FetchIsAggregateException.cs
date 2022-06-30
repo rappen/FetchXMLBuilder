@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Builder
+namespace Rappen.XTB.FetchXmlBuilder.Builder
 {
     internal class FetchIsAggregateException : Exception
     {

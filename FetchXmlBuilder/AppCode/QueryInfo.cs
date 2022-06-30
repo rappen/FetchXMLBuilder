@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Rappen.XTB.FetchXmlBuilder.AppCode
 {
     internal class QueryInfo
     {

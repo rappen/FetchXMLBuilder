@@ -1,7 +1,7 @@
-﻿using Cinteros.Xrm.XmlEditorUtils;
+﻿using Rappen.XTB.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.ControlsClasses
+namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
 {
     internal class OptionsetItem : IComboBoxItem
     {

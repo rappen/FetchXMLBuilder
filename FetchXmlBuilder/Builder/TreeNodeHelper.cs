@@ -1,12 +1,12 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.Controls;
-using Cinteros.Xrm.FetchXmlBuilder.DockControls;
+﻿using Rappen.XTB.FetchXmlBuilder.Controls;
+using Rappen.XTB.FetchXmlBuilder.DockControls;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
-using Cinteros.Xrm.FetchXmlBuilder.Settings;
+using Rappen.XTB.FetchXmlBuilder.Settings;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Builder
+namespace Rappen.XTB.FetchXmlBuilder.Builder
 {
     internal class TreeNodeHelper
     {

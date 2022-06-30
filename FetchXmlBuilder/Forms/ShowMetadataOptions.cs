@@ -1,5 +1,5 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.Extensions;
-using Cinteros.Xrm.FetchXmlBuilder.Settings;
+﻿using Rappen.XTB.FetchXmlBuilder.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Settings;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Forms
+namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
     public partial class ShowMetadataOptions : Form
     {

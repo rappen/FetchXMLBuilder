@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Extensions
+namespace Rappen.XTB.FetchXmlBuilder.Extensions
 {
     public static class GroupBoxExpanderExtensions
     {

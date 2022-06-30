@@ -3,7 +3,7 @@ using Microsoft.Xrm.Sdk;
 using System;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Extensions
+namespace Rappen.XTB.FetchXmlBuilder.Extensions
 {
     public static class ConnectionExtensions
     {

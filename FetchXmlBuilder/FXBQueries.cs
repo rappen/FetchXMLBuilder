@@ -1,7 +1,7 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
-using Cinteros.Xrm.FetchXmlBuilder.Converters;
-using Cinteros.Xrm.FetchXmlBuilder.DockControls;
-using Cinteros.Xrm.FetchXmlBuilder.Settings;
+﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Converters;
+using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.FetchXmlBuilder.Settings;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
@@ -13,7 +13,7 @@ using System.Xml;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 
-namespace Cinteros.Xrm.FetchXmlBuilder
+namespace Rappen.XTB.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder
     {

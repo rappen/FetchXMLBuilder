@@ -1,4 +1,4 @@
-﻿namespace Cinteros.Xrm.FetchXmlBuilder.Forms
+﻿namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
     partial class SelectAttributesDialog
     {
@@ -49,7 +49,7 @@
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.metadataControl1 = new Cinteros.Xrm.FetchXmlBuilder.Controls.XRMMetadataControl();
+            this.metadataControl1 = new Rappen.XTB.FetchXmlBuilder.Controls.XRMMetadataControl();
             this.panel2.SuspendLayout();
             this.panOk.SuspendLayout();
             this.panCancel.SuspendLayout();

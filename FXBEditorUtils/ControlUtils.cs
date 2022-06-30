@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.XmlEditorUtils
+namespace Rappen.XTB.XmlEditorUtils
 {
     public class ControlUtils
     {

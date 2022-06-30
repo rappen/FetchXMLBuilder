@@ -1,4 +1,4 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.Extensions;
+﻿using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Microsoft.CSharp;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Converters
+namespace Rappen.XTB.FetchXmlBuilder.Converters
 {
     public class QueryExpressionCodeGenerator
     {

@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Extensions
+namespace Rappen.XTB.FetchXmlBuilder.Extensions
 {
     public static class Extensions
     {

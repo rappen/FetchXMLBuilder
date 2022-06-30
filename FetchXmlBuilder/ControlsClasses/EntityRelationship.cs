@@ -2,7 +2,7 @@
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.ControlsClasses
+namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
 {
     public class EntityRelationship : IComparable
     {

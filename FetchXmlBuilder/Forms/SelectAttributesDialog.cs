@@ -1,12 +1,12 @@
-﻿using Cinteros.Xrm.XmlEditorUtils;
+﻿using Rappen.XTB.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
-using Cinteros.Xrm.FetchXmlBuilder.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Extensions;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Forms
+namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
     public partial class SelectAttributesDialog : Form
     {
