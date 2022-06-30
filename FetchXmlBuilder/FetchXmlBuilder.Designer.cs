@@ -1,4 +1,4 @@
-namespace Cinteros.Xrm.FetchXmlBuilder
+namespace Rappen.XTB.FetchXmlBuilder
 {
     partial class FetchXmlBuilder
     {

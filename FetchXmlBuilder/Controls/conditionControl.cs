@@ -1,6 +1,7 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
-using Cinteros.Xrm.FetchXmlBuilder.DockControls;
-using Cinteros.Xrm.XmlEditorUtils;
+﻿using Rappen.XTB.FetchXmlBuilder.Builder;
+using Rappen.XTB.FetchXmlBuilder.ControlsClasses;
+using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.XmlEditorUtils;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
@@ -10,8 +11,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.Windows.Forms;
+using Rappen.XTB.FetchXmlBuilder.Extensions;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Controls
+namespace Rappen.XTB.FetchXmlBuilder.Controls
 {
     public partial class conditionControl : FetchXmlElementControlBase
     {

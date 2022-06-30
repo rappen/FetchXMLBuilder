@@ -1,4 +1,4 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Rappen.XTB.FetchXmlBuilder.Settings;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
@@ -12,7 +12,7 @@ using System.ServiceModel;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
-namespace Cinteros.Xrm.FetchXmlBuilder
+namespace Rappen.XTB.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder
     {

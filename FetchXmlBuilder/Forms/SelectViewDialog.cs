@@ -1,10 +1,12 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
-using Cinteros.Xrm.XmlEditorUtils;
+﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.ControlsClasses;
+using Rappen.XTB.FetchXmlBuilder.Views;
+using Rappen.XTB.XmlEditorUtils;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Forms
+namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
     public partial class SelectViewDialog : Form
     {

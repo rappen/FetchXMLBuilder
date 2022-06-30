@@ -1,7 +1,11 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
-using Cinteros.Xrm.FetchXmlBuilder.DockControls;
-using Cinteros.Xrm.FetchXmlBuilder.Forms;
-using Cinteros.Xrm.XmlEditorUtils;
+﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Converters;
+using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.FetchXmlBuilder.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Forms;
+using Rappen.XTB.FetchXmlBuilder.Settings;
+using Rappen.XTB.FetchXmlBuilder.Views;
+using Rappen.XTB.XmlEditorUtils;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -15,7 +19,7 @@ using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox;
 using XrmToolBox.Extensibility;
 
-namespace Cinteros.Xrm.FetchXmlBuilder
+namespace Rappen.XTB.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder : PluginControlBase
     {

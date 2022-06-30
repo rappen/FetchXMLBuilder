@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 using ScintillaNET;
 
-namespace Cinteros.Xrm.XmlEditorUtils
+namespace Rappen.XTB.XmlEditorUtils
 {
     public class FindTextHandler
     {

@@ -1,5 +1,8 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
-using Cinteros.Xrm.XmlEditorUtils;
+﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Converters;
+using Rappen.XTB.FetchXmlBuilder.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Settings;
+using Rappen.XTB.XmlEditorUtils;
 using MarkMpn.XmlSchemaAutocomplete.Scintilla;
 using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XRM.Helpers.Extensions;
@@ -12,7 +15,7 @@ using System.Web;
 using System.Windows.Forms;
 using System.Xml;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
+namespace Rappen.XTB.FetchXmlBuilder.DockControls
 {
     public partial class XmlContentControl : WeifenLuo.WinFormsUI.Docking.DockContent
     {

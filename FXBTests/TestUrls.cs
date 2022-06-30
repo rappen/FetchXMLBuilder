@@ -1,5 +1,5 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Rappen.XTB.FetchXmlBuilder.AppCode;
 
 namespace FXBTests
 {

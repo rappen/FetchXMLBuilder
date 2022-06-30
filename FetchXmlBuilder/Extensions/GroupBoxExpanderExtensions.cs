@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Rappen.XTB.FetchXmlBuilder.Extensions
 {
     public static class GroupBoxExpanderExtensions
     {
@@ -48,7 +48,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         private static IEnumerable<Control> GetAll(this Control control, Type type)
         {
             var controls = control.Controls.Cast<Control>();
-            return controls.SelectMany(ctrl => GetAll(ctrl, type))
+            return controls.SelectMany(ctrl => ctrl.GetAll(type))
                                       .Concat(controls)
                                       .Where(c => c.GetType() == type);
         }

@@ -1,5 +1,5 @@
 ﻿
-namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
+namespace Rappen.XTB.FetchXmlBuilder.DockControls
 {
     partial class MetadataControl
     {
@@ -30,7 +30,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MetadataControl));
-            this.metadataControl1 = new Cinteros.Xrm.FetchXmlBuilder.Controls.XRMMetadataControl();
+            this.metadataControl1 = new Rappen.XTB.FetchXmlBuilder.Controls.XRMMetadataControl();
             this.SuspendLayout();
             // 
             // metadataControl1

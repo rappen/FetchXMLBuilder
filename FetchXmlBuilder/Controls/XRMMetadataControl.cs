@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Controls
+namespace Rappen.XTB.FetchXmlBuilder.Controls
 {
     public partial class XRMMetadataControl : UserControl
     {
@@ -15,8 +15,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         [Category("Dataverse Metadata")]
         [Description("Set any EntityMetadata or AttributeMetadata.")]
         [Browsable(true)]
-        public object SelectedObject { get => propMeta.SelectedObject;
-            set {
+        public object SelectedObject
+        {
+            get => propMeta.SelectedObject;
+            set
+            {
                 panInfo1.Visible = header;
                 panInfo2.Visible = header;
                 panel2.Visible = header;

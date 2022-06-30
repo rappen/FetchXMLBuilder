@@ -1,4 +1,4 @@
-﻿namespace Cinteros.Xrm.XmlEditorUtils
+﻿namespace Rappen.XTB.XmlEditorUtils
 {
     public interface IComboBoxItem
     {

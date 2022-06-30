@@ -5,7 +5,7 @@ using System.Security;
 using System.Text;
 using System.Xml;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Rappen.XTB.FetchXmlBuilder.Converters
 {
     public class CSharpCodeGenerator
     {
@@ -35,7 +35,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
             if (data.Count > 0)
             {
-                cs = "var fetchData = new {\r\n  " + String.Join(",\r\n  ", data.Select(kvp => $"{kvp.Key} = \"{kvp.Value.Replace("\\", "\\\\").Replace("\"", "\\\"")}\"")) + "\r\n};\r\n";
+                cs = "var fetchData = new {\r\n  " + string.Join(",\r\n  ", data.Select(kvp => $"{kvp.Key} = \"{kvp.Value.Replace("\\", "\\\\").Replace("\"", "\\\"")}\"")) + "\r\n};\r\n";
             }
 
             var sb = new StringBuilder();

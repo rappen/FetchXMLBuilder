@@ -1,10 +1,11 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Views;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Forms
+namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
     public partial class SelectMLDialog : Form
     {

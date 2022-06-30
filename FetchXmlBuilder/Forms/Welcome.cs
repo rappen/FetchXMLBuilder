@@ -1,10 +1,10 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Microsoft.Web.WebView2.Core;
 using System;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Forms
+namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
     public partial class Welcome : Form
     {

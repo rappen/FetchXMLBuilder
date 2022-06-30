@@ -1,4 +1,4 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.DockControls;
+﻿using Rappen.XTB.FetchXmlBuilder.DockControls;
 using ScintillaNET;
 using System;
 using System.Collections.Generic;
@@ -8,13 +8,15 @@ using System.Linq;
 using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Rappen.XTB.FetchXmlBuilder.Settings
 {
     public class FXBSettings
     {
         private bool _useFriendlyNames;
 
-        public bool UseFriendlyNames { get { return _useFriendlyNames; } set { _useFriendlyNames = value; FetchXmlBuilder.friendlyNames = value; } }
+        public bool UseFriendlyNames
+        { get { return _useFriendlyNames; } set { _useFriendlyNames = value; FetchXmlBuilder.friendlyNames = value; } }
+
         public QueryOptions QueryOptions { get; set; } = new QueryOptions();
         public ResultOptions Results { get; set; } = new ResultOptions();
         public string CurrentVersion { get; set; }
@@ -161,22 +163,28 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
     public class XmlColors
     {
         [Browsable(false)]
-        public string ElementColor { get { return Element.Name; } set { Element = Color.FromName(value); } }
+        public string ElementColor
+        { get { return Element.Name; } set { Element = Color.FromName(value); } }
 
         [Browsable(false)]
-        public string ValueColor { get { return Value.Name; } set { Value = Color.FromName(value); } }
+        public string ValueColor
+        { get { return Value.Name; } set { Value = Color.FromName(value); } }
 
         [Browsable(false)]
-        public string AttributeKeyColor { get { return AttributeKey.Name; } set { AttributeKey = Color.FromName(value); } }
+        public string AttributeKeyColor
+        { get { return AttributeKey.Name; } set { AttributeKey = Color.FromName(value); } }
 
         [Browsable(false)]
-        public string AttributeValueColor { get { return AttributeValue.Name; } set { AttributeValue = Color.FromName(value); } }
+        public string AttributeValueColor
+        { get { return AttributeValue.Name; } set { AttributeValue = Color.FromName(value); } }
 
         [Browsable(false)]
-        public string CommentColor { get { return Comment.Name; } set { Comment = Color.FromName(value); } }
+        public string CommentColor
+        { get { return Comment.Name; } set { Comment = Color.FromName(value); } }
 
         [Browsable(false)]
-        public string TagColor { get { return Tag.Name; } set { Tag = Color.FromName(value); } }
+        public string TagColor
+        { get { return Tag.Name; } set { Tag = Color.FromName(value); } }
 
         [XmlIgnore()]
         public Color Element { get; set; } = Color.DarkRed;

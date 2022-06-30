@@ -1,25 +1,29 @@
-﻿using Cinteros.Xrm.XmlEditorUtils;
+﻿using Rappen.XTB.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using System.Collections.Generic;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
 {
     public class OperatorItem : IComboBoxItem
     {
         private ConditionOperator oper = ConditionOperator.Equal;
 
         /// <summary>Property that indicates what type the value must have for the condition to be valid</summary>
-        public AttributeTypeCode? ValueType { get { return GetValueType(); } }
+        public AttributeTypeCode? ValueType
+        { get { return GetValueType(); } }
 
         /// <summary>Property that indicates if operator allows "values" collection</summary>
-        public bool IsMultipleValuesType { get { return GetIsMultipleValuesType(); } }
+        public bool IsMultipleValuesType
+        { get { return GetIsMultipleValuesType(); } }
 
         /// <summary>Property that indicates if operator allows column comparison</summary>
-        public bool SupportsColumnComparison { get { return GetSupportsColumnComparison(); } }
+        public bool SupportsColumnComparison
+        { get { return GetSupportsColumnComparison(); } }
 
         /// <summary>Property that indicates what type the attribute must be of for the condition to be valid</summary>
-        public AttributeTypeCode? AttributeType { get { return GetAttributeType(); } }
+        public AttributeTypeCode? AttributeType
+        { get { return GetAttributeType(); } }
 
         public OperatorItem(ConditionOperator Operator)
         {

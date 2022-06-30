@@ -4,7 +4,7 @@ using XrmToolBox.Constants;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
-namespace Cinteros.Xrm.FetchXmlBuilder
+namespace Rappen.XTB.FetchXmlBuilder
 {
     [Export(typeof(IXrmToolBoxPlugin)),
         ExportMetadata("Name", "FetchXML Builder"),

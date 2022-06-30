@@ -3,4 +3,4 @@
 // Project-level suppressions either have no target or are given
 // a specific target and scoped to a namespace, type, member, etc.
 
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "S100:Methods and properties should be named in camel case", Justification = "<Pending>", Scope = "member", Target = "~M:Cinteros.Xrm.FetchXmlBuilder.SQLQueryGenerator.GetSQLQuery(Cinteros.Xrm.FetchXmlBuilder.FetchType)~System.String")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "S100:Methods and properties should be named in camel case", Justification = "<Pending>", Scope = "member", Target = "~M:Rappen.XTB.FetchXmlBuilder.SQLQueryGenerator.GetSQLQuery(Rappen.XTB.FetchXmlBuilder.FetchType)~System.String")] 

@@ -1,4 +1,4 @@
-﻿namespace Cinteros.Xrm.FetchXmlBuilder.Forms
+﻿namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
     partial class Welcome
     {
