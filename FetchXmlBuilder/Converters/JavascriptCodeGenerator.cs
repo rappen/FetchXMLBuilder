@@ -5,7 +5,7 @@ using System.Security;
 using System.Xml;
 using Newtonsoft.Json;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Rappen.XTB.FetchXmlBuilder.Converters
 {
     public class JavascriptCodeGenerator
     {
@@ -25,7 +25,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 js = $"var fetchData = {JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented)};\r\n";
             }
 
-            js += $"var fetchXml = [\r\n{String.Join(",\r\n", lines)}\r\n].join(\"\");";
+            js += $"var fetchXml = [\r\n{string.Join(",\r\n", lines)}\r\n].join(\"\");";
 
             return js;
         }
@@ -55,7 +55,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             {
                 line += "/>";
                 lineComponents.Add(JsonConvert.SerializeObject(line));
-                lines.Add(String.Join(", ", lineComponents));
+                lines.Add(string.Join(", ", lineComponents));
             }
             else
             {
@@ -66,12 +66,12 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
                 {
                     AddData(parentElement.GetAttribute("attribute"), element.InnerText.Trim(), data, lineComponents);
                     lineComponents.Add("\"</value>\"");
-                    lines.Add(String.Join(", ", lineComponents));
+                    lines.Add(string.Join(", ", lineComponents));
                 }
                 else
                 {
-                    lines.Add(String.Join(", ", lineComponents));
-                    
+                    lines.Add(string.Join(", ", lineComponents));
+
                     foreach (var child in element.ChildNodes.OfType<XmlElement>())
                     {
                         Convert(child, depth + 1, lines, data);

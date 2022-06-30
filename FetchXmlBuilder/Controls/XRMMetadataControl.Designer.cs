@@ -1,5 +1,5 @@
 ﻿
-namespace Cinteros.Xrm.FetchXmlBuilder.Controls
+namespace Rappen.XTB.FetchXmlBuilder.Controls
 {
     partial class XRMMetadataControl
     {

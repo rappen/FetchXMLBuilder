@@ -1,7 +1,10 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
-using Cinteros.Xrm.FetchXmlBuilder.Controls;
-using Cinteros.Xrm.FetchXmlBuilder.Forms;
-using Cinteros.Xrm.XmlEditorUtils;
+﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Builder;
+using Rappen.XTB.FetchXmlBuilder.Controls;
+using Rappen.XTB.FetchXmlBuilder.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Forms;
+using Rappen.XTB.FetchXmlBuilder.Views;
+using Rappen.XTB.XmlEditorUtils;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
@@ -14,7 +17,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
+namespace Rappen.XTB.FetchXmlBuilder.DockControls
 {
     public partial class TreeBuilderControl : WeifenLuo.WinFormsUI.Docking.DockContent
     {
@@ -24,6 +27,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         private FetchXmlBuilder fxb;
         private string treeChecksum = "";
         private FetchXmlElementControlBase ctrl;
+        private LayoutXML layoutxml;
+        private string layoutxmlstr;
 
         #endregion Private Fields
 
@@ -61,6 +66,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 {
                     splitContainer1.SplitterDistance = value;
                 }
+            }
+        }
+
+        internal LayoutXML LayoutXML
+        {
+            get
+            {
+                if (layoutxml == null)
+                {
+                    layoutxml = new LayoutXML(layoutxmlstr, GetRootEntity(), fxb);
+                    if (layoutxml?.EntityMeta == null)
+                    {
+                        layoutxml = null;
+                    }
+                }
+                return layoutxml;
             }
         }
 
@@ -105,7 +126,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
                 var origin = "";
                 if (sender is IDefinitionSavable)
                 {
-                    origin = sender.ToString().Replace("Cinteros.Xrm.FetchXmlBuilder.Controls.", "").Replace("Control", "");
+                    origin = sender.ToString().Replace("Rappen.XTB.FetchXmlBuilder.Controls.", "").Replace("Control", "");
                     foreach (var attr in e.AttributeCollection)
                     {
                         origin += "\n  " + attr.Key + "=" + attr.Value;
@@ -124,54 +145,52 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             gbProperties.Enabled = enabled;
         }
 
-        internal string GetAttributesSignature(XmlNode entity)
+        internal IEnumerable<TreeNode> GetAllLayoutValidAttributes(TreeNode entity = null)
         {
-            var result = "";
+            var result = new List<TreeNode>();
             if (entity == null)
             {
-                var xml = GetFetchDocument();
-                entity = xml.SelectSingleNode("fetch/entity");
+                entity = GetRootEntity();
             }
             if (entity != null)
             {
-                var alias = "";
-
-                if (entity.LocalName == "link-entity")
+                var entityalias = entity.Name == "link-entity" ? entity.Value("alias") : string.Empty;
+                result.AddRange(entity.Nodes.Cast<TreeNode>().Where(a => a.IsAttributeValidForView()));
+                var linkEntities = entity.Nodes.Cast<TreeNode>().Where(e => e.Name == "link-entity");
+                foreach (var link in linkEntities)
                 {
-                    alias = entity.Attributes["alias"]?.Value;
-
-                    if (alias == null)
-                    {
-                        // No explicit alias, so calculate what alias the server will give it
-                        alias = entity.Attributes["name"].Value + GetUniqueLinkEntitySuffix(entity).ToString();
-                    }
-
-                    alias += ".";
-                }
-                var entityAttributes = entity.SelectNodes("attribute");
-                foreach (XmlNode attr in entityAttributes)
-                {
-                    if (attr.Attributes["alias"] != null)
-                    {
-                        result += attr.Attributes["alias"].Value + "\n";
-                    }
-                    else if (attr.Attributes["name"] != null)
-                    {
-                        result += alias + attr.Attributes["name"].Value + "\n";
-                    }
-                }
-                var linkEntities = entity.SelectNodes("link-entity");
-                foreach (XmlNode link in linkEntities)
-                {
-                    result += GetAttributesSignature(link);
+                    result.AddRange(GetAllLayoutValidAttributes(link));
                 }
             }
             return result;
         }
 
-        private int GetUniqueLinkEntitySuffix(XmlNode entity)
+        internal string GetAttributesSignature()
         {
-            var root = entity.OwnerDocument.DocumentElement;
+            return string.Join("\n", GetAllLayoutValidAttributes().Select(a => a.GetAttributeLayoutName()));
+        }
+
+        internal TreeNode GetRootEntity()
+        {
+            return tvFetch.Nodes.Cast<TreeNode>()?
+                .FirstOrDefault(n => n.Name == "fetch")?
+                .Nodes.Cast<TreeNode>()?
+                .FirstOrDefault(n => n.Name == "entity");
+        }
+
+        internal EntityMetadata GetRootEntityMetadata()
+        {
+            return fxb.GetEntity(GetRootEntityName());
+        }
+
+        internal string GetRootEntityName()
+        {
+            return GetRootEntity()?.Value("name");
+        }
+
+        private int GetUniqueLinkEntitySuffix(TreeNode entity)
+        {
+            var root = tvFetch.Nodes.Cast<TreeNode>().FirstOrDefault(n => n.Name == "fetch");
             var links = 0;
 
             FindLinkElement(root, ref links, entity);
@@ -179,19 +198,19 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             return links;
         }
 
-        private bool FindLinkElement(XmlNode root, ref int links, XmlNode find)
+        private bool FindLinkElement(TreeNode node, ref int links, TreeNode find)
         {
-            if (root is XmlElement element && element.LocalName == "link-entity" && !element.HasAttribute("alias"))
+            if (node != null && node.Name == "link-entity" && string.IsNullOrWhiteSpace(node.Value("alias")))
             {
                 links++;
             }
 
-            if (root == find)
+            if (node == find)
             {
                 return true;
             }
 
-            foreach (XmlNode child in root.ChildNodes)
+            foreach (TreeNode child in node.Nodes)
             {
                 if (FindLinkElement(child, ref links, find))
                 {
@@ -261,9 +280,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             return convert.Query;
         }
 
-        internal void Init(string fetchStr, string action, bool validate)
+        internal void Init(string fetchStr, string layoutStr, string action, bool validate)
         {
             ParseXML(fetchStr, validate);
+            layoutxmlstr = layoutStr;
             fxb.UpdateLiveXML();
             ClearChanged();
             fxb.EnableControls(true);

@@ -1,7 +1,11 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
-using Cinteros.Xrm.FetchXmlBuilder.DockControls;
-using Cinteros.Xrm.FetchXmlBuilder.Forms;
-using Cinteros.Xrm.XmlEditorUtils;
+﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Converters;
+using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.FetchXmlBuilder.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Forms;
+using Rappen.XTB.FetchXmlBuilder.Settings;
+using Rappen.XTB.FetchXmlBuilder.Views;
+using Rappen.XTB.XmlEditorUtils;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -15,12 +19,13 @@ using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox;
 using XrmToolBox.Extensibility;
 
-namespace Cinteros.Xrm.FetchXmlBuilder
+namespace Rappen.XTB.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder : PluginControlBase
     {
         internal static bool friendlyNames = false;
         internal TreeBuilderControl dockControlBuilder;
+        internal XmlContentControl dockControlLayoutXml;
         internal HistoryManager historyMgr = new HistoryManager();
         internal bool historyisavailable = true;
         private string cwpfeed;
@@ -42,6 +47,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         private bool bduexists;
 
         internal void EnableControls()
+
         {
             EnableControls(buttonsEnabled);
         }
@@ -121,6 +127,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (!preventxmlupdate && dockControlFetchXml?.Visible == true)
             {
                 dockControlFetchXml.UpdateXML(GetFetch());
+            }
+            if (!preventxmlupdate && dockControlLayoutXml?.Visible == true)
+            {
+                dockControlLayoutXml.UpdateXML(dockControlBuilder.LayoutXML?.ToXML());
             }
             if (dockControlOData2?.Visible == true && entities != null)
             {
@@ -293,7 +303,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             if (feed.Contains("cint_fetchxml"))
             {
                 CWPFeed = feed.Contains("cint_id") ? feed["cint_id"].ToString() : feedid;
-                dockControlBuilder.Init(feed["cint_fetchxml"].ToString(), "open CWP feed", false);
+                dockControlBuilder.Init(feed["cint_fetchxml"].ToString(), null, "open CWP feed", false);
                 LogUse("OpenCWP");
             }
             EnableControls(true);
@@ -317,7 +327,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 FileName = ofd.FileName;
                 var fetchDoc = new XmlDocument();
                 fetchDoc.Load(ofd.FileName);
-                dockControlBuilder.Init(fetchDoc.OuterXml, "open file", true);
+                dockControlBuilder.Init(fetchDoc.OuterXml, null, "open file", true);
                 LogUse("OpenFile");
             }
             EnableControls(true);
@@ -336,7 +346,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 if (mlselector.View.Contains("query") && !string.IsNullOrEmpty(mlselector.View["query"].ToString()))
                 {
                     DynML = mlselector.View;
-                    dockControlBuilder.Init(DynML["query"].ToString(), "open marketing list", false);
+                    dockControlBuilder.Init(DynML["query"].ToString(), null, "open marketing list", false);
                     LogUse("OpenML");
                 }
                 else
@@ -370,8 +380,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     if (viewselector.View.Contains("fetchxml") && !string.IsNullOrEmpty(viewselector.View["fetchxml"].ToString()))
                     {
                         View = viewselector.View;
-                        dockControlBuilder.Init(View["fetchxml"].ToString(), "open view", false);
-                        attributesChecksum = dockControlBuilder.GetAttributesSignature(null);
+                        dockControlBuilder.Init(View["fetchxml"].ToString(), View["layoutxml"].ToString(), "open view", false);
+                        attributesChecksum = dockControlBuilder.GetAttributesSignature();
                         LogUse("OpenView");
                     }
                     else
@@ -570,7 +580,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         private void SaveView(bool saveas)
         {
-            var currentAttributes = dockControlBuilder.GetAttributesSignature(null);
+            var currentAttributes = dockControlBuilder.GetAttributesSignature();
             if (currentAttributes != attributesChecksum)
             {
                 MessageBox.Show("Cannot save view, returned attributes must not be changed.\n\nExpected attributes:\n  " +

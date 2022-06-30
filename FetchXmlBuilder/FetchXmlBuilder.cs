@@ -1,8 +1,12 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
-using Cinteros.Xrm.FetchXmlBuilder.Controls;
-using Cinteros.Xrm.FetchXmlBuilder.DockControls;
-using Cinteros.Xrm.FetchXmlBuilder.Forms;
-using Cinteros.Xrm.XmlEditorUtils;
+﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Builder;
+using Rappen.XTB.FetchXmlBuilder.Controls;
+using Rappen.XTB.FetchXmlBuilder.Converters;
+using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.FetchXmlBuilder.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Forms;
+using Rappen.XTB.FetchXmlBuilder.Settings;
+using Rappen.XTB.XmlEditorUtils;
 using MarkMpn.FetchXmlToWebAPI;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
@@ -19,7 +23,7 @@ using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 
-namespace Cinteros.Xrm.FetchXmlBuilder
+namespace Rappen.XTB.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder : PluginControlBase
     {
@@ -241,7 +245,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             if (state is string fetch && fetch.ToLowerInvariant().StartsWith("<fetch"))
             {
-                dockControlBuilder.Init(fetch, null, false);
+                dockControlBuilder.Init(fetch, null, null, false);
             }
         }
 
@@ -339,7 +343,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             tsbRepo.Visible = settings.ShowRepository;
             if (reloadquery && connectionsettings != null && !string.IsNullOrWhiteSpace(connectionsettings.FetchXML))
             {
-                dockControlBuilder.Init(connectionsettings.FetchXML, "loaded from last session", false);
+                dockControlBuilder.Init(connectionsettings.FetchXML, connectionsettings.LayoutXML, "loaded from last session", false);
             }
             dockControlBuilder.lblQAExpander.GroupBoxSetState(null, settings.QueryOptions.ShowQuickActions);
             var ass = Assembly.GetExecutingAssembly().GetName();
@@ -490,6 +494,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 connectionsettings = new FXBConnectionSettings();
             }
             connectionsettings.FetchXML = dockControlBuilder.GetFetchString(false, false);
+            connectionsettings.LayoutXML = dockControlBuilder.LayoutXML?.ToXML();
             SettingsManager.Instance.Save(typeof(FetchXmlBuilder), connectionsettings, ConnectionDetail?.ConnectionName);
         }
 
@@ -576,7 +581,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     return;
                 }
                 LogUse("New");
-                dockControlBuilder.Init(null, "new", false);
+                dockControlBuilder.Init(null, null, "new", false);
                 return;
             }
             var newconnection = sender == tsmiNewNewConnection;
@@ -675,6 +680,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
             ShowContentControl(ref dockControlFetchXmlJs, ContentType.JavaScript_Query, SaveFormat.None, settings.DockStates.FetchXMLJs);
         }
 
+        private void tsmiShowLayoutXML_Click(object sender, EventArgs e)
+        {
+            ShowContentControl(ref dockControlLayoutXml, ContentType.LayoutXML, SaveFormat.None, settings.DockStates.FetchXML);
+        }
+
         private void tsmiShowOData_Click(object sender, EventArgs e)
         {
             ShowODataControl(ref dockControlOData2, 2);
@@ -728,7 +738,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         {
             if (sender is ToolStripMenuItem menu && menu.Tag is QueryDefinition query)
             {
-                dockControlBuilder.Init(query.Fetch, $"open repo {query.Name}", false);
+                dockControlBuilder.Init(query.Fetch, null, $"open repo {query.Name}", false);
                 tsbRepo.Tag = query;
                 dockControlBuilder.SetFetchName($"Repo: {query.Name}");
             }

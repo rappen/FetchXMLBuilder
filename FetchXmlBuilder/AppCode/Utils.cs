@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Rappen.XTB.FetchXmlBuilder.AppCode
 {
     public static class Utils
     {

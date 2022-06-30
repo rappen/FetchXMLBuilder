@@ -2,7 +2,7 @@
 using System.Web;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
+namespace Rappen.XTB.FetchXmlBuilder.DockControls
 {
     public partial class FlowListControl : WeifenLuo.WinFormsUI.Docking.DockContent
     {

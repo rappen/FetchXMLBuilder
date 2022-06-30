@@ -6,12 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Settings;
 using ScintillaNET;
 
-namespace Cinteros.Xrm.FetchXmlBuilder
+namespace Rappen.XTB.FetchXmlBuilder.AppCode
 {
-    static class ScintillaHelper
+    internal static class ScintillaHelper
     {
         public static void ConfigureForXml(this Scintilla scintilla, FXBSettings settings)
         {

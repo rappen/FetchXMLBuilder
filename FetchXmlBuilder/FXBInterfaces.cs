@@ -1,5 +1,6 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
-using Cinteros.Xrm.FetchXmlBuilder.Forms;
+﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Forms;
 using System;
 using System.Reflection;
 using System.Windows.Forms;
@@ -7,7 +8,7 @@ using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
 
-namespace Cinteros.Xrm.FetchXmlBuilder
+namespace Rappen.XTB.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder : IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin, IDuplicatableTool, ISettingsPlugin
     {
@@ -142,7 +143,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
 
         public void ShowSettings()
         {
-            var settingDlg = new Settings(this);
+            var settingDlg = new Forms.Settings(this);
             LogUse("OpenOptions");
             if (settingDlg.ShowDialog(this) == DialogResult.OK)
             {

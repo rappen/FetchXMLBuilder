@@ -1,5 +1,7 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
-using Cinteros.Xrm.XmlEditorUtils;
+﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Settings;
+using Rappen.XTB.XmlEditorUtils;
 using MarkMpn.XmlSchemaAutocomplete.Scintilla;
 using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XRM.Helpers.Extensions;
@@ -12,7 +14,7 @@ using System.Web;
 using System.Windows.Forms;
 using System.Xml;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
+namespace Rappen.XTB.FetchXmlBuilder.DockControls
 {
     public partial class XmlContentControl : WeifenLuo.WinFormsUI.Docking.DockContent
     {
@@ -37,7 +39,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             SetContentType(contentType);
             SetFormat(saveFormat);
             UpdateButtons();
-            if (contentType == ContentType.FetchXML)
+            if (contentType == ContentType.FetchXML || contentType == ContentType.LayoutXML)
             {
                 InitIntellisense();
             }
@@ -76,6 +78,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
             switch (contentType)
             {
                 case ContentType.FetchXML:
+                case ContentType.LayoutXML:
                 case ContentType.FetchXML_Result:
                 case ContentType.Serialized_Result_XML:
                     txtXML.ConfigureForXml(fxb.settings);
@@ -785,7 +788,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
         QueryExpression,
         SQL_Query,
         JavaScript_Query,
-        CSharp_Query
+        CSharp_Query,
+        LayoutXML
     }
 
     internal enum SaveFormat

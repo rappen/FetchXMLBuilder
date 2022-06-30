@@ -7,7 +7,7 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.XmlEditorUtils
+namespace Rappen.XTB.XmlEditorUtils
 {
     /// <summary>
     /// Compares two listview items for sorting

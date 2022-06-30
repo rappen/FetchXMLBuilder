@@ -2,7 +2,7 @@
 // This project was developed by Tanguy Touzard
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
-namespace Cinteros.Xrm.XmlEditorUtils
+namespace Rappen.XTB.XmlEditorUtils
 {
     public interface IDefinitionSavable
     {

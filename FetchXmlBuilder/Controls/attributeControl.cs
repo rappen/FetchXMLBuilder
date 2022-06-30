@@ -1,17 +1,21 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
-using Cinteros.Xrm.FetchXmlBuilder.DockControls;
+﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Builder;
+using Rappen.XTB.FetchXmlBuilder.ControlsClasses;
+using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.FetchXmlBuilder.Views;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Controls
+namespace Rappen.XTB.FetchXmlBuilder.Controls
 {
     public partial class attributeControl : FetchXmlElementControlBase
     {
         private readonly AttributeMetadata[] attributes;
         private readonly AttributeMetadata[] allattributes;
         private bool aggregate;
+        private Cell cell;
 
         public attributeControl() : this(null, null, null, null)
         {
@@ -29,6 +33,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         {
             cmbAttribute.Items.Clear();
             aggregate = Node.IsFetchAggregate();
+            panAggregate.Visible = aggregate;
+            panLayout.Visible = !aggregate;
             cmbAggregate.Enabled = aggregate;
             chkGroupBy.Enabled = aggregate;
             if (!aggregate)
@@ -43,6 +49,21 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 {
                     AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, false, FetchXmlBuilder.friendlyNames);
                 }
+            }
+
+            cell = fxb.dockControlBuilder.LayoutXML.GetCell(Node);
+            if (cell == null)
+            {
+                cell = fxb.dockControlBuilder.LayoutXML.AddCell(Node);
+            }
+            if (cell != null)
+            {
+                chkLayoutVisible.Checked = cell.Width > 0;
+                trkLayoutWidth.Value = cell.Width;
+            }
+            else
+            {
+                panLayout.Visible = false;
             }
         }
 
@@ -111,6 +132,24 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         private void cmbAttribute_SelectedIndexChanged(object sender, EventArgs e)
         {
             fxb.ShowMetadata(Metadata());
+            UpdateCell();
+        }
+
+        private void UpdateCell()
+        {
+            trkLayoutWidth.Enabled = chkLayoutVisible.Checked;
+            lblWidth.Text = $"Width: {trkLayoutWidth.Value}";
+            if (cell == null)
+            {
+                cell = fxb.dockControlBuilder.LayoutXML.AddCell(Node);
+            }
+            if (cell != null)
+            {
+                cell.Name = Node.GetAttributeLayoutName();
+                cell.Width = chkLayoutVisible.Checked ? trkLayoutWidth.Value : 0;
+                fxb.dockControlLayoutXml?.UpdateXML(cell.Parent?.ToXML());
+            }
+            panLayout.Visible = cell != null;
         }
 
         public override MetadataBase Metadata()
@@ -125,6 +164,17 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
         public override void Focus()
         {
             cmbAttribute.Focus();
+        }
+
+        private void trkLayoutWidth_Scroll(object sender, EventArgs e)
+        {
+            UpdateCell();
+        }
+
+        private void chkLayoutVisible_CheckedChanged(object sender, EventArgs e)
+        {
+            trkLayoutWidth.Value = chkLayoutVisible.Checked ? 100 : 0;
+            UpdateCell();
         }
     }
 }

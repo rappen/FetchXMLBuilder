@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Cinteros.Xrm.XmlEditorUtils
+namespace Rappen.XTB.XmlEditorUtils
 {
     public class SaveEventArgs : EventArgs
     {

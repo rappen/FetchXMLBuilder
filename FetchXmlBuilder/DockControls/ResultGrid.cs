@@ -1,10 +1,11 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.DockControls
+namespace Rappen.XTB.FetchXmlBuilder.DockControls
 {
     public partial class ResultGrid : WeifenLuo.WinFormsUI.Docking.DockContent
     {

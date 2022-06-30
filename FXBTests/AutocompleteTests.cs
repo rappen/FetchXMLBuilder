@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cinteros.Xrm.FetchXmlBuilder;
-using MarkMpn.XmlSchemaAutocomplete;
+﻿using MarkMpn.XmlSchemaAutocomplete;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Rappen.XTB.FetchXmlBuilder;
+using System.Linq;
 
 namespace FXBTests
 {

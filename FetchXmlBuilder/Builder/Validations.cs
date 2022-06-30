@@ -1,9 +1,10 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.Controls;
+﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Controls;
 using Microsoft.Xrm.Sdk.Metadata;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Rappen.XTB.FetchXmlBuilder.Builder
 {
     internal static class Validations
     {

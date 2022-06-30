@@ -1,13 +1,15 @@
-﻿using Cinteros.Xrm.XmlEditorUtils;
+﻿using Rappen.XTB.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
 {
-    public class EntityNameItem : IComboBoxItem
+    public class EntityItem : IComboBoxItem
     {
         private EntityMetadata meta = null;
 
-        public EntityNameItem(EntityMetadata Entity)
+        public EntityMetadata Meta { get => meta; }
+
+        public EntityItem(EntityMetadata Entity)
         {
             meta = Entity;
         }
@@ -19,7 +21,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
 
         public string GetValue()
         {
-            return meta.ObjectTypeCode.Value.ToString();
+            return meta.LogicalName;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
+﻿using Rappen.XTB.FetchXmlBuilder.Settings;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
@@ -12,7 +12,7 @@ using System.ServiceModel;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
-namespace Cinteros.Xrm.FetchXmlBuilder
+namespace Rappen.XTB.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder
     {
@@ -235,6 +235,11 @@ namespace Cinteros.Xrm.FetchXmlBuilder
         internal EntityMetadata GetEntity(string entityname)
         {
             return entities?.FirstOrDefault(e => e.LogicalName.Equals(entityname));
+        }
+
+        internal EntityMetadata GetEntity(int objecttypecode)
+        {
+            return entities?.FirstOrDefault(e => e.ObjectTypeCode.Equals(objecttypecode));
         }
 
         internal bool NeedToLoadEntity(string entityName)

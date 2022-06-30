@@ -227,10 +227,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppCode\ConnectionExtensions.cs" />
-    <Compile Include="AppCode\EntityNameItem.cs" />
-    <Compile Include="AppCode\Extensions.cs" />
-    <Compile Include="AppCode\FXBConnectionSettings.cs" />
+    <Compile Include="Builder\TreeNodeExtensions.cs" />
+    <Compile Include="ControlsClasses\EntityNameItem.cs" />
+    <Compile Include="Views\Cell.cs" />
+    <Compile Include="Extensions\ConnectionExtensions.cs" />
+    <Compile Include="Extensions\Extensions.cs" />
+    <Compile Include="Settings\FXBConnectionSettings.cs" />
+    <Compile Include="Views\LayoutXML.cs" />
     <Compile Include="FXBGui.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -240,33 +243,33 @@
     <Compile Include="FXBInterfaces.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="AppCode\ServiceExtensions.cs" />
-    <Compile Include="AppCode\AttributeItem.cs" />
-    <Compile Include="AppCode\GroupBoxExpanderExtensions.cs" />
-    <Compile Include="AppCode\CSharpCodeGenerator.cs" />
-    <Compile Include="AppCode\DockExtensions.cs" />
-    <Compile Include="AppCode\FetchIsAggregateException.cs" />
-    <Compile Include="AppCode\FXBSettings.cs" />
-    <Compile Include="AppCode\JavascriptCodeGenerator.cs" />
-    <Compile Include="AppCode\ODataCodeGenerator.cs" />
-    <Compile Include="AppCode\OptionsetItem.cs" />
+    <Compile Include="Extensions\ServiceExtensions.cs" />
+    <Compile Include="ControlsClasses\AttributeItem.cs" />
+    <Compile Include="Extensions\GroupBoxExpanderExtensions.cs" />
+    <Compile Include="Converters\CSharpCodeGenerator.cs" />
+    <Compile Include="Extensions\DockExtensions.cs" />
+    <Compile Include="Builder\FetchIsAggregateException.cs" />
+    <Compile Include="Settings\FXBSettings.cs" />
+    <Compile Include="Converters\JavascriptCodeGenerator.cs" />
+    <Compile Include="Converters\ODataCodeGenerator.cs" />
+    <Compile Include="ControlsClasses\OptionsetItem.cs" />
     <Compile Include="AppCode\QueryInfo.cs" />
-    <Compile Include="AppCode\QueryExpressionCodeGenerator.cs" />
+    <Compile Include="Converters\QueryExpressionCodeGenerator.cs" />
     <Compile Include="AppCode\Utils.cs" />
-    <Compile Include="AppCode\Validations.cs" />
-    <Compile Include="AppCode\ViewItem.cs" />
-    <Compile Include="AppCode\EntityItem.cs" />
-    <Compile Include="AppCode\FetchNodeCapabilities.cs" />
-    <Compile Include="AppCode\EntityRelationship.cs" />
-    <Compile Include="AppCode\OperatorItem.cs" />
-    <Compile Include="AppCode\TreeNodeHelper.cs" />
+    <Compile Include="Builder\Validations.cs" />
+    <Compile Include="Views\ViewItem.cs" />
+    <Compile Include="ControlsClasses\EntityItem.cs" />
+    <Compile Include="Builder\FetchNodeCapabilities.cs" />
+    <Compile Include="ControlsClasses\EntityRelationship.cs" />
+    <Compile Include="ControlsClasses\OperatorItem.cs" />
+    <Compile Include="Builder\TreeNodeHelper.cs" />
     <Compile Include="Controls\commentControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\commentControl.Designer.cs">
       <DependentUpon>commentControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppCode\EntityNode.cs" />
+    <Compile Include="ControlsClasses\EntityNode.cs" />
     <Compile Include="Controls\FetchXmlElementControlBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -409,7 +412,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="HistoryManager.cs" />
+    <Compile Include="AppCode\HistoryManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FetchXMLBuilder.cs">
       <SubType>UserControl</SubType>
@@ -420,9 +423,9 @@
     <Compile Include="Resources\fetch.cs">
       <DependentUpon>fetch.xsd</DependentUpon>
     </Compile>
-    <Compile Include="AppCode\SQLQueryGenerator.cs" />
-    <Compile Include="ScintillaHelper.cs" />
-    <Compile Include="WebAPIMetadataProvider.cs" />
+    <Compile Include="Converters\SQLQueryGenerator.cs" />
+    <Compile Include="AppCode\ScintillaHelper.cs" />
+    <Compile Include="AppCode\WebAPIMetadataProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\commentControl.resx">
@@ -516,6 +519,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />
   <Import Project="..\MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutoComplete.projitems" Label="Shared" />

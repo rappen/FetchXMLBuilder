@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Rappen.XTB.FetchXmlBuilder.Settings
 {
     public class FXBConnectionSettings
     {
@@ -10,6 +10,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
         public ShowMetaTypesEntity ShowEntities { get; set; } = new ShowMetaTypesEntity();
         public ShowMetaTypesAttribute ShowAttributes { get; set; } = new ShowMetaTypesAttribute();
         public string FetchXML { get; set; } = QueryOptions.DefaultNewQuery;
+        public string LayoutXML { get; set; }
     }
 
     public class QueryOptions

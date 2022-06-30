@@ -1,5 +1,7 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.AppCode;
-using Cinteros.Xrm.FetchXmlBuilder.DockControls;
+﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Converters;
+using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.FetchXmlBuilder.Settings;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
@@ -11,7 +13,7 @@ using System.Xml;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 
-namespace Cinteros.Xrm.FetchXmlBuilder
+namespace Rappen.XTB.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder
     {
@@ -201,7 +203,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                     {
                         XmlDocument doc = new XmlDocument();
                         doc.LoadXml(completedargs.Result.ToString());
-                        dockControlBuilder.Init(doc.OuterXml, "parse QueryExpression", true);
+                        dockControlBuilder.Init(doc.OuterXml, null, "parse QueryExpression", true);
                     }
                     working = false;
                 }
@@ -266,7 +268,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder
                 Work = (worker, eventargs) =>
                 {
                     QueryBase query = new FetchExpression(fetch);
-                    var attributessignature = dockControlBuilder.GetAttributesSignature(null);
+                    var attributessignature = dockControlBuilder.GetAttributesSignature();
                     var start = DateTime.Now;
                     EntityCollection resultCollection = null;
                     EntityCollection tmpResult = null;

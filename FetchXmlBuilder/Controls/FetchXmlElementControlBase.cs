@@ -1,5 +1,5 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.DockControls;
-using Cinteros.Xrm.XmlEditorUtils;
+﻿using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.XmlEditorUtils;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.Controls
+namespace Rappen.XTB.FetchXmlBuilder.Controls
 {
     public class FetchXmlElementControlBase : UserControl, IDefinitionSavable, ISupportInitializeNotification
     {
@@ -119,7 +119,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             });
         }
 
-        protected virtual void PopulateControls() { }
+        protected virtual void PopulateControls()
+        { }
 
         protected override void OnValidating(CancelEventArgs e)
         {
@@ -277,7 +278,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
             return null;
         }
 
-        public new virtual void Focus()
+        public virtual new void Focus()
         {
             return;
         }
@@ -313,12 +314,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Controls
                 case ControlValidationMessage.IsRequired:
                     Message = string.Format(IsRequired, control);
                     break;
+
                 case ControlValidationMessage.InValid:
                     Message = string.Format(InValid, control);
                     break;
+
                 case ControlValidationMessage.NotInMetadata:
                     Message = string.Format(NotInMetadata, control);
                     break;
+
                 case ControlValidationMessage.NotShowingNow:
                     Message = string.Format(NotShowingNow, control);
                     break;

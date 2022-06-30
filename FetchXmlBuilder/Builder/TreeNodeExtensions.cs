@@ -1,12 +1,11 @@
-﻿using Microsoft.Xrm.Sdk.Metadata;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
+namespace Rappen.XTB.FetchXmlBuilder.Builder
 {
-    public static class Extensions
+    internal static class TreeNodeExtensions
     {
         internal static TreeNode LocalEntityNode(this TreeNode node)
         {
@@ -44,6 +43,22 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return string.Empty;
         }
 
+        internal static void SetValue(this TreeNode node, string key, object value)
+        {
+            if (node == null)
+            {
+                return;
+            }
+            if (node.Tag == null)
+            {
+                node.Tag = new Dictionary<string, string>();
+            }
+            if (node.Tag is Dictionary<string, string> tag)
+            {
+                tag[key] = value.ToString();
+            }
+        }
+
         internal static bool IsFetchAggregate(this TreeNode node)
         {
             var aggregate = false;
@@ -72,6 +87,33 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             return distinct;
         }
 
+        internal static bool IsAttributeValidForView(this TreeNode node)
+        {
+            var entity = node.Parent;
+            return node.Name == "attribute" && (entity?.Name == "entity" || (entity?.Name == "link-entity" && !string.IsNullOrWhiteSpace(entity.Value("alias"))));
+        }
+
+        internal static string GetAttributeLayoutName(this TreeNode node)
+        {
+            var entity = node.LocalEntityNode();
+            var entityalias = entity.Name == "link-entity" ? entity.Value("alias") : string.Empty;
+            var attribute = node.Value("name");
+            var alias = node.Value("alias");
+            if (!string.IsNullOrWhiteSpace(alias))
+            {
+                attribute = alias;
+            }
+            else if (!string.IsNullOrWhiteSpace(entityalias))
+            {
+                attribute = entityalias + "." + attribute;
+            }
+            if (!string.IsNullOrWhiteSpace(attribute))
+            {
+                return attribute;
+            }
+            return null;
+        }
+
         internal static string GetTooltip(this TreeNode node)
         {
             if (node == null)
@@ -94,59 +136,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.AppCode
             }
 
             return tooltip;
-        }
-
-        internal static string ToTypeString(this AttributeMetadata attribute)
-        {
-            if (attribute == null)
-            {
-                return string.Empty;
-            }
-            if (attribute.AttributeTypeName != null)
-            {
-                return attribute.AttributeTypeName.Value.RemoveEnd("Type");
-            }
-            return attribute.AttributeType.ToString();
-        }
-
-        internal static string TriToString(this CheckState state, string uncheck_check_indterminate)
-        {
-            var splits = uncheck_check_indterminate.Split(';');
-            if (splits.Length == 3)
-            {
-                return state.TriToString(splits[0], splits[1], splits[2]);
-            }
-            return string.Empty;
-        }
-
-        internal static string TriToString(this CheckState state, string uncheck, string check, string indeterminate)
-        {
-            switch (state)
-            {
-                case CheckState.Unchecked:
-                    return uncheck;
-
-                case CheckState.Checked:
-                    return check;
-
-                case CheckState.Indeterminate:
-                    return indeterminate;
-            }
-            return string.Empty;
-        }
-
-        internal static string RemoveEnd(this string text, string remove)
-        {
-            if (text == null || string.IsNullOrEmpty(remove) || !text.EndsWith(remove))
-            {
-                return text;
-            }
-            return text.Substring(0, text.Length - remove.Length);
-        }
-
-        internal static bool KeyDown(this KeyEventArgs keyevent, Keys key, bool shift, bool control, bool alt)
-        {
-            return keyevent.KeyCode == key && keyevent.Shift == shift && keyevent.Control == control && keyevent.Alt == alt;
         }
     }
 }
