@@ -31,13 +31,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
-            XmlColors xmlColors1 = new Rappen.XTB.FetchXmlBuilder.Settings.XmlColors();
+            Rappen.XTB.FetchXmlBuilder.Settings.XmlColors xmlColors1 = new Rappen.XTB.FetchXmlBuilder.Settings.XmlColors();
             this.gbResult = new System.Windows.Forms.GroupBox();
             this.chkClickableLinks = new System.Windows.Forms.CheckBox();
             this.cmbResult = new System.Windows.Forms.ComboBox();
             this.chkResAllPages = new System.Windows.Forms.CheckBox();
             this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
             this.gbAppearance = new System.Windows.Forms.GroupBox();
+            this.chkAppFriendlyResults = new System.Windows.Forms.CheckBox();
             this.chkUseLookup = new System.Windows.Forms.CheckBox();
             this.chkAppSingle = new System.Windows.Forms.CheckBox();
             this.chkAppFriendly = new System.Windows.Forms.CheckBox();
@@ -58,7 +59,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.btnFormatQuery = new System.Windows.Forms.Button();
             this.gbXml = new System.Windows.Forms.GroupBox();
             this.btnResetXmlColors = new System.Windows.Forms.Button();
-            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.gbBehavior = new System.Windows.Forms.GroupBox();
             this.chkShowValidationInfo = new System.Windows.Forms.CheckBox();
             this.chkShowValidation = new System.Windows.Forms.CheckBox();
@@ -68,9 +68,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkShowAllAttributes = new System.Windows.Forms.CheckBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.chkTryMetadataCache = new System.Windows.Forms.CheckBox();
             this.chkWaitUntilMetadataLoaded = new System.Windows.Forms.CheckBox();
-            this.chkAppFriendlyResults = new System.Windows.Forms.CheckBox();
+            this.chkTryMetadataCache = new System.Windows.Forms.CheckBox();
+            this.numMaxColumnWidth = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.gbResult.SuspendLayout();
             this.gbAppearance.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -80,17 +82,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.gbBehavior.SuspendLayout();
             this.gbLayout.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.SuspendLayout();
             // 
             // gbResult
             // 
+            this.gbResult.Controls.Add(this.label1);
+            this.gbResult.Controls.Add(this.numMaxColumnWidth);
             this.gbResult.Controls.Add(this.chkClickableLinks);
             this.gbResult.Controls.Add(this.cmbResult);
             this.gbResult.Controls.Add(this.chkResAllPages);
             this.gbResult.Controls.Add(this.chkAppResultsNewWindow);
             this.gbResult.Location = new System.Drawing.Point(484, 12);
             this.gbResult.Name = "gbResult";
-            this.gbResult.Size = new System.Drawing.Size(222, 130);
+            this.gbResult.Size = new System.Drawing.Size(222, 150);
             this.gbResult.TabIndex = 40;
             this.gbResult.TabStop = false;
             this.gbResult.Text = "Result";
@@ -118,7 +123,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.cmbResult.Location = new System.Drawing.Point(16, 20);
             this.cmbResult.Name = "cmbResult";
             this.cmbResult.Size = new System.Drawing.Size(192, 21);
-            this.cmbResult.TabIndex = 13;
+            this.cmbResult.TabIndex = 1;
             // 
             // chkResAllPages
             // 
@@ -152,6 +157,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.gbAppearance.TabIndex = 10;
             this.gbAppearance.TabStop = false;
             this.gbAppearance.Text = "Appearance";
+            // 
+            // chkAppFriendlyResults
+            // 
+            this.chkAppFriendlyResults.AutoSize = true;
+            this.chkAppFriendlyResults.Location = new System.Drawing.Point(16, 40);
+            this.chkAppFriendlyResults.Name = "chkAppFriendlyResults";
+            this.chkAppFriendlyResults.Size = new System.Drawing.Size(181, 17);
+            this.chkAppFriendlyResults.TabIndex = 2;
+            this.chkAppFriendlyResults.Text = "Friendly results (CTRL+SHIFT+F)";
+            this.chkAppFriendlyResults.UseVisualStyleBackColor = true;
             // 
             // chkUseLookup
             // 
@@ -344,7 +359,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             this.gbXml.Controls.Add(this.btnResetXmlColors);
             this.gbXml.Controls.Add(this.propXmlColors);
-            this.gbXml.Location = new System.Drawing.Point(484, 148);
+            this.gbXml.Location = new System.Drawing.Point(484, 168);
             this.gbXml.Name = "gbXml";
             this.gbXml.Size = new System.Drawing.Size(222, 132);
             this.gbXml.TabIndex = 50;
@@ -360,33 +375,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.btnResetXmlColors.TabIndex = 8;
             this.btnResetXmlColors.UseVisualStyleBackColor = true;
             this.btnResetXmlColors.Click += new System.EventHandler(this.btnResetXmlColors_Click);
-            // 
-            // propXmlColors
-            // 
-            this.propXmlColors.CanShowVisualStyleGlyphs = false;
-            this.propXmlColors.HelpVisible = false;
-            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.Location = new System.Drawing.Point(1, 19);
-            this.propXmlColors.Name = "propXmlColors";
-            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            xmlColors1.AttributeKey = System.Drawing.Color.Red;
-            xmlColors1.AttributeKeyColor = "Red";
-            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
-            xmlColors1.AttributeValueColor = "Blue";
-            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            xmlColors1.CommentColor = "0";
-            xmlColors1.Element = System.Drawing.Color.DarkRed;
-            xmlColors1.ElementColor = "DarkRed";
-            xmlColors1.Tag = System.Drawing.Color.Blue;
-            xmlColors1.TagColor = "Blue";
-            xmlColors1.Value = System.Drawing.Color.Black;
-            xmlColors1.ValueColor = "Black";
-            this.propXmlColors.SelectedObject = xmlColors1;
-            this.propXmlColors.Size = new System.Drawing.Size(218, 104);
-            this.propXmlColors.TabIndex = 7;
-            this.propXmlColors.ToolbarVisible = false;
-            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
             // 
             // gbBehavior
             // 
@@ -472,7 +460,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(50, 15);
-            this.linkLabel1.Location = new System.Drawing.Point(500, 300);
+            this.linkLabel1.Location = new System.Drawing.Point(500, 338);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(181, 42);
             this.linkLabel1.TabIndex = 102;
@@ -485,12 +473,22 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             this.groupBox1.Controls.Add(this.chkWaitUntilMetadataLoaded);
             this.groupBox1.Controls.Add(this.chkTryMetadataCache);
-            this.groupBox1.Location = new System.Drawing.Point(248, 165);
+            this.groupBox1.Location = new System.Drawing.Point(248, 168);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(222, 65);
             this.groupBox1.TabIndex = 35;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Metadata";
+            // 
+            // chkWaitUntilMetadataLoaded
+            // 
+            this.chkWaitUntilMetadataLoaded.AutoSize = true;
+            this.chkWaitUntilMetadataLoaded.Location = new System.Drawing.Point(16, 40);
+            this.chkWaitUntilMetadataLoaded.Name = "chkWaitUntilMetadataLoaded";
+            this.chkWaitUntilMetadataLoaded.Size = new System.Drawing.Size(172, 17);
+            this.chkWaitUntilMetadataLoaded.TabIndex = 1;
+            this.chkWaitUntilMetadataLoaded.Text = "Wait until all entities are loaded";
+            this.chkWaitUntilMetadataLoaded.UseVisualStyleBackColor = true;
             // 
             // chkTryMetadataCache
             // 
@@ -503,25 +501,70 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkTryMetadataCache.UseVisualStyleBackColor = true;
             this.chkTryMetadataCache.CheckedChanged += new System.EventHandler(this.chkTryMetadataCache_CheckedChanged);
             // 
-            // chkWaitUntilMetadataLoaded
+            // numMaxColumnWidth
             // 
-            this.chkWaitUntilMetadataLoaded.AutoSize = true;
-            this.chkWaitUntilMetadataLoaded.Location = new System.Drawing.Point(16, 40);
-            this.chkWaitUntilMetadataLoaded.Name = "chkWaitUntilMetadataLoaded";
-            this.chkWaitUntilMetadataLoaded.Size = new System.Drawing.Size(172, 17);
-            this.chkWaitUntilMetadataLoaded.TabIndex = 1;
-            this.chkWaitUntilMetadataLoaded.Text = "Wait until all entities are loaded";
-            this.chkWaitUntilMetadataLoaded.UseVisualStyleBackColor = true;
+            this.numMaxColumnWidth.Increment = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.numMaxColumnWidth.Location = new System.Drawing.Point(133, 118);
+            this.numMaxColumnWidth.Maximum = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            this.numMaxColumnWidth.Minimum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.numMaxColumnWidth.Name = "numMaxColumnWidth";
+            this.numMaxColumnWidth.Size = new System.Drawing.Size(75, 20);
+            this.numMaxColumnWidth.TabIndex = 15;
+            this.numMaxColumnWidth.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.numMaxColumnWidth.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
+            this.numMaxColumnWidth.Value = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
             // 
-            // chkAppFriendlyResults
+            // label1
             // 
-            this.chkAppFriendlyResults.AutoSize = true;
-            this.chkAppFriendlyResults.Location = new System.Drawing.Point(16, 40);
-            this.chkAppFriendlyResults.Name = "chkAppFriendlyResults";
-            this.chkAppFriendlyResults.Size = new System.Drawing.Size(181, 17);
-            this.chkAppFriendlyResults.TabIndex = 2;
-            this.chkAppFriendlyResults.Text = "Friendly results (CTRL+SHIFT+F)";
-            this.chkAppFriendlyResults.UseVisualStyleBackColor = true;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(16, 120);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(97, 13);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "Max columns width";
+            // 
+            // propXmlColors
+            // 
+            this.propXmlColors.CanShowVisualStyleGlyphs = false;
+            this.propXmlColors.HelpVisible = false;
+            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.Location = new System.Drawing.Point(1, 19);
+            this.propXmlColors.Name = "propXmlColors";
+            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            xmlColors1.AttributeKey = System.Drawing.Color.Red;
+            xmlColors1.AttributeKeyColor = "Red";
+            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
+            xmlColors1.AttributeValueColor = "Blue";
+            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            xmlColors1.CommentColor = "0";
+            xmlColors1.Element = System.Drawing.Color.DarkRed;
+            xmlColors1.ElementColor = "DarkRed";
+            xmlColors1.Tag = System.Drawing.Color.Blue;
+            xmlColors1.TagColor = "Blue";
+            xmlColors1.Value = System.Drawing.Color.Black;
+            xmlColors1.ValueColor = "Black";
+            this.propXmlColors.SelectedObject = xmlColors1;
+            this.propXmlColors.Size = new System.Drawing.Size(218, 104);
+            this.propXmlColors.TabIndex = 7;
+            this.propXmlColors.ToolbarVisible = false;
+            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
             // 
             // Settings
             // 
@@ -560,6 +603,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.gbLayout.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -605,5 +649,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.CheckBox chkTryMetadataCache;
         private System.Windows.Forms.CheckBox chkWaitUntilMetadataLoaded;
         private System.Windows.Forms.CheckBox chkAppFriendlyResults;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown numMaxColumnWidth;
     }
 }

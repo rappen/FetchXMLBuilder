@@ -2,6 +2,7 @@
 using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Rappen.XTB.FetchXmlBuilder.DockControls
@@ -83,6 +84,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             crmGridView1.SuspendLayout();
             crmGridView1.Refresh();
             crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
+            crmGridView1.Columns.Cast<DataGridViewColumn>()
+                .Where(c => c.Width > form.settings.Results.MaxColumnWidth)
+                .ToList()
+                .ForEach(c => c.Width = form.settings.Results.MaxColumnWidth);
             crmGridView1.ResumeLayout();
         }
 
