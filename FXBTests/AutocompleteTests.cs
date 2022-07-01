@@ -1,5 +1,6 @@
 ﻿using MarkMpn.XmlSchemaAutocomplete;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Rappen.XTB.FetchXmlBuilder;
 using System.Linq;
 
 namespace FXBTests
