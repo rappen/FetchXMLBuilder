@@ -81,6 +81,10 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 tsmiShowFetchXML_Click(null, null);
             }
+            else if (e.KeyDown(Keys.L, false, true, false) && tsmiShowFetchXML.Enabled)
+            {
+                tsmiShowLayoutXML_Click(null, null);
+            }
             else if (e.KeyDown(Keys.N, false, true, false) && tsbNew.Enabled)
             {
                 tsbNew_Click(null, null);

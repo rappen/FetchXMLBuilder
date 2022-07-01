@@ -63,6 +63,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public DockState ResultView { get; set; } = DockState.Document;
         public DockState FetchResult { get; set; } = DockState.Document;
         public DockState FetchXML { get; set; } = DockState.Document;
+        public DockState LayoutXML { get; set; } = DockState.DockRight;
         public DockState FetchXMLCs { get; set; } = DockState.DockRight;
         public DockState FetchXMLJs { get; set; } = DockState.DockRight;
         public DockState QueryExpression { get; set; } = DockState.DockRight;

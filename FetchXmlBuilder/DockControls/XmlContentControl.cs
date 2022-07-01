@@ -39,7 +39,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             SetContentType(contentType);
             SetFormat(saveFormat);
             UpdateButtons();
-            if (contentType == ContentType.FetchXML)
+            if (contentType == ContentType.FetchXML || contentType == ContentType.LayoutXML)
             {
                 InitIntellisense();
             }
@@ -78,6 +78,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             switch (contentType)
             {
                 case ContentType.FetchXML:
+                case ContentType.LayoutXML:
                 case ContentType.FetchXML_Result:
                 case ContentType.Serialized_Result_XML:
                     txtXML.ConfigureForXml(fxb.settings);
@@ -390,6 +391,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                         break;
 
                     case ContentType.FetchXML:
+                    case ContentType.LayoutXML:
                         fxb.settings.DockStates.FetchXML = DockState;
                         break;
 
