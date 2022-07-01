@@ -55,6 +55,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool AlwaysNewWindow { get; set; } = false;
         public bool QuickFilter { get; set; } = false;
         public bool ClickableLinks { get; set; } = true;
+        public int MaxColumnWidth { get; set; } = 500;
     }
 
     public class DockStates
