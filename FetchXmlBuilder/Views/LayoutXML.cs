@@ -14,7 +14,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
         public string EntityName;
         public EntityMetadata EntityMeta;
         public List<Cell> Cells;
-        private int cellindex = 0;
+
+        public LayoutXML()
+        { }
 
         public LayoutXML(string layoutxml, TreeNode entity, FetchXmlBuilder fxb)
         {
@@ -30,7 +32,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
                     Cells = grid.SelectSingleNode("row")?
                         .ChildNodes.Cast<XmlNode>()
                         .Where(n => n.Name == "cell")
-                        .Select(c => new Cell(this, c, cellindex++)).ToList();
+                        .Select(c => new Cell(this, c)).ToList();
                 }
             }
             EntityName = EntityMeta?.LogicalName ?? entity.Value("name");
@@ -57,7 +59,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
         {
             var result = $@"<grid name='resultset' object='{EntityMeta.ObjectTypeCode}' jump='{EntityMeta.PrimaryNameAttribute}' select='1' icon='1' preview='1'>
   <row name='result' id='{EntityMeta.PrimaryIdAttribute}'>
-    {string.Join("\n    ", Cells?.Where(c => c.Width > 0).OrderBy(c => c.Index).Select(c => c.ToXML()))}
+    {string.Join("\n    ", Cells?.Where(c => c.Width > 0).Select(c => c.ToXML()))}
   </row>
 </grid>";
             return result;
@@ -83,7 +85,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             {
                 return null;
             }
-            var cell = new Cell(this, attribute, cellindex++);
+            var cell = new Cell(this, attribute);
             Cells.Add(cell);
             return cell;
         }

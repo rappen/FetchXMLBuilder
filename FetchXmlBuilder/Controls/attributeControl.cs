@@ -33,7 +33,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             cmbAttribute.Items.Clear();
             aggregate = Node.IsFetchAggregate();
             panAggregate.Visible = aggregate;
-            panLayout.Visible = !aggregate;
+            grpLayout.Visible = !aggregate;
             cmbAggregate.Enabled = aggregate;
             chkGroupBy.Enabled = aggregate;
             if (!aggregate)
@@ -50,20 +50,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 }
             }
 
-            cell = fxb.dockControlBuilder.LayoutXML.GetCell(Node);
-            if (cell == null)
-            {
-                cell = fxb.dockControlBuilder.LayoutXML.AddCell(Node);
-            }
-            if (cell != null)
-            {
-                chkLayoutVisible.Checked = cell.Width > 0;
-                trkLayoutWidth.Value = cell.Width;
-            }
-            else
-            {
-                panLayout.Visible = false;
-            }
+            UpdateUIFromCell(fxb.dockControlBuilder?.LayoutXML?.GetCell(Node));
         }
 
         protected override ControlValidationResult ValidateControl(Control control)
@@ -131,13 +118,38 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private void cmbAttribute_SelectedIndexChanged(object sender, EventArgs e)
         {
             fxb.ShowMetadata(Metadata());
-            UpdateCell();
+            if (IsInitialized)
+            {
+                UpdateCellFromUI();
+            }
         }
 
-        private void UpdateCell()
+        internal void UpdateUIFromCell(Cell updatecell)
         {
-            trkLayoutWidth.Enabled = chkLayoutVisible.Checked;
-            lblWidth.Text = $"Width: {trkLayoutWidth.Value}";
+            if (updatecell?.Attribute != Node)
+            {
+                return;
+            }
+            cell = updatecell;
+            if (cell == null)
+            {
+                cell = fxb.dockControlBuilder?.LayoutXML?.AddCell(Node);
+            }
+            if (cell != null)
+            {
+                chkLayoutVisible.Checked = cell.Width > 0;
+                trkLayoutWidth.Enabled = chkLayoutVisible.Checked;
+                trkLayoutWidth.Value = cell.Width;
+            }
+            else
+            {
+                grpLayout.Visible = false;
+            }
+            UpdateCellUI();
+        }
+
+        private void UpdateCellFromUI()
+        {
             if (cell == null)
             {
                 cell = fxb.dockControlBuilder.LayoutXML.AddCell(Node);
@@ -148,7 +160,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 cell.Width = chkLayoutVisible.Checked ? trkLayoutWidth.Value : 0;
                 fxb.dockControlLayoutXml?.UpdateXML(cell.Parent?.ToXML());
             }
-            panLayout.Visible = cell != null;
+            grpLayout.Visible = cell != null;
+            trkLayoutWidth.Enabled = chkLayoutVisible.Checked;
+            UpdateCellUI();
+        }
+
+        private void UpdateCellUI()
+        {
+            lblWidth.Text = $"Width: {cell?.Width}";
+            lblIndex.Text = $"Display Index: {cell?.DisplayIndex}";
         }
 
         public override MetadataBase Metadata()
@@ -167,13 +187,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private void trkLayoutWidth_Scroll(object sender, EventArgs e)
         {
-            UpdateCell();
+            if (IsInitialized)
+            {
+                UpdateCellFromUI();
+            }
         }
 
         private void chkLayoutVisible_CheckedChanged(object sender, EventArgs e)
         {
-            trkLayoutWidth.Value = chkLayoutVisible.Checked ? 100 : 0;
-            UpdateCell();
+            if (IsInitialized)
+            {
+                UpdateCellFromUI();
+            }
         }
     }
 }

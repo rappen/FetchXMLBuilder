@@ -7,6 +7,7 @@ using Rappen.XTB.FetchXmlBuilder.Controls;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Forms;
 using Rappen.XTB.FetchXmlBuilder.Views;
+using Rappen.XTB.Helpers.Controls;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
@@ -82,6 +83,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     }
                 }
                 return layoutxml;
+            }
+            set
+            {
+                layoutxml = value;
+                fxb.dockControlLayoutXml?.UpdateXML(layoutxml.ToXML());
+                layoutxml?.Cells?.ToList()?.ForEach(c => (GetCurrentControl() as attributeControl)?.UpdateUIFromCell(c));
             }
         }
 
@@ -165,9 +172,19 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             return result;
         }
 
+        internal TreeNode GetAttributeNodeFromLayoutName(string attributelayoutname)
+        {
+            return GetAllLayoutValidAttributes().FirstOrDefault(a => a.GetAttributeLayoutName().Equals(attributelayoutname));
+        }
+
         internal string GetAttributesSignature()
         {
             return string.Join("\n", GetAllLayoutValidAttributes().Select(a => a.GetAttributeLayoutName()));
+        }
+
+        internal FetchXmlElementControlBase GetCurrentControl()
+        {
+            return panelContainer.Controls.Cast<FetchXmlElementControlBase>().FirstOrDefault();
         }
 
         internal TreeNode GetRootEntity()

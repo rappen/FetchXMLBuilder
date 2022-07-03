@@ -46,18 +46,19 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panAggregate = new System.Windows.Forms.Panel();
-            this.panLayout = new System.Windows.Forms.Panel();
             this.lblWidth = new System.Windows.Forms.Label();
             this.trkLayoutWidth = new System.Windows.Forms.TrackBar();
             this.chkLayoutVisible = new System.Windows.Forms.CheckBox();
+            this.grpLayout = new System.Windows.Forms.GroupBox();
+            this.lblIndex = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.panel1.SuspendLayout();
             this.panAggregate.SuspendLayout();
-            this.panLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trkLayoutWidth)).BeginInit();
+            this.grpLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -290,21 +291,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panAggregate.Size = new System.Drawing.Size(293, 133);
             this.panAggregate.TabIndex = 46;
             // 
-            // panLayout
-            // 
-            this.panLayout.Controls.Add(this.lblWidth);
-            this.panLayout.Controls.Add(this.trkLayoutWidth);
-            this.panLayout.Controls.Add(this.chkLayoutVisible);
-            this.panLayout.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panLayout.Location = new System.Drawing.Point(0, 216);
-            this.panLayout.Name = "panLayout";
-            this.panLayout.Size = new System.Drawing.Size(293, 90);
-            this.panLayout.TabIndex = 47;
-            // 
             // lblWidth
             // 
             this.lblWidth.AutoSize = true;
-            this.lblWidth.Location = new System.Drawing.Point(10, 55);
+            this.lblWidth.Location = new System.Drawing.Point(10, 66);
             this.lblWidth.Name = "lblWidth";
             this.lblWidth.Size = new System.Drawing.Size(35, 13);
             this.lblWidth.TabIndex = 3;
@@ -316,7 +306,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.trkLayoutWidth.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.trkLayoutWidth.LargeChange = 25;
-            this.trkLayoutWidth.Location = new System.Drawing.Point(7, 25);
+            this.trkLayoutWidth.Location = new System.Drawing.Point(7, 36);
             this.trkLayoutWidth.Maximum = 500;
             this.trkLayoutWidth.Name = "trkLayoutWidth";
             this.trkLayoutWidth.Size = new System.Drawing.Size(263, 45);
@@ -330,7 +320,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // chkLayoutVisible
             // 
             this.chkLayoutVisible.AutoSize = true;
-            this.chkLayoutVisible.Location = new System.Drawing.Point(7, 2);
+            this.chkLayoutVisible.Location = new System.Drawing.Point(7, 19);
             this.chkLayoutVisible.Name = "chkLayoutVisible";
             this.chkLayoutVisible.Size = new System.Drawing.Size(150, 17);
             this.chkLayoutVisible.TabIndex = 1;
@@ -338,15 +328,39 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.chkLayoutVisible.UseVisualStyleBackColor = true;
             this.chkLayoutVisible.CheckedChanged += new System.EventHandler(this.chkLayoutVisible_CheckedChanged);
             // 
+            // grpLayout
+            // 
+            this.grpLayout.Controls.Add(this.lblIndex);
+            this.grpLayout.Controls.Add(this.lblWidth);
+            this.grpLayout.Controls.Add(this.chkLayoutVisible);
+            this.grpLayout.Controls.Add(this.trkLayoutWidth);
+            this.grpLayout.Dock = System.Windows.Forms.DockStyle.Top;
+            this.grpLayout.Location = new System.Drawing.Point(0, 216);
+            this.grpLayout.Name = "grpLayout";
+            this.grpLayout.Size = new System.Drawing.Size(293, 86);
+            this.grpLayout.TabIndex = 48;
+            this.grpLayout.TabStop = false;
+            this.grpLayout.Text = "View Layout";
+            // 
+            // lblIndex
+            // 
+            this.lblIndex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblIndex.AutoSize = true;
+            this.lblIndex.Location = new System.Drawing.Point(181, 66);
+            this.lblIndex.Name = "lblIndex";
+            this.lblIndex.Size = new System.Drawing.Size(70, 13);
+            this.lblIndex.TabIndex = 4;
+            this.lblIndex.Text = "Display Index";
+            // 
             // attributeControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panLayout);
+            this.Controls.Add(this.grpLayout);
             this.Controls.Add(this.panAggregate);
             this.Controls.Add(this.panel1);
             this.Name = "attributeControl";
-            this.Size = new System.Drawing.Size(293, 338);
+            this.Size = new System.Drawing.Size(293, 326);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
@@ -355,9 +369,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panel1.PerformLayout();
             this.panAggregate.ResumeLayout(false);
             this.panAggregate.PerformLayout();
-            this.panLayout.ResumeLayout(false);
-            this.panLayout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trkLayoutWidth)).EndInit();
+            this.grpLayout.ResumeLayout(false);
+            this.grpLayout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 
@@ -381,9 +395,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panAggregate;
-        private System.Windows.Forms.Panel panLayout;
         private System.Windows.Forms.TrackBar trkLayoutWidth;
         private System.Windows.Forms.CheckBox chkLayoutVisible;
         private System.Windows.Forms.Label lblWidth;
+        private System.Windows.Forms.GroupBox grpLayout;
+        private System.Windows.Forms.Label lblIndex;
     }
 }

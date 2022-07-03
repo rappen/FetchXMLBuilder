@@ -127,7 +127,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 dockControlFetchXml.UpdateXML(GetFetch());
             }
-            if (!preventxmlupdate && dockControlLayoutXml?.Visible == true)
+            if (dockControlLayoutXml?.Visible == true)
             {
                 dockControlLayoutXml.UpdateXML(dockControlBuilder.LayoutXML?.ToXML());
             }

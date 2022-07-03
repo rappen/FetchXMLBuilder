@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Views;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -88,7 +91,35 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 .Where(c => c.Width > form.settings.Results.MaxColumnWidth)
                 .ToList()
                 .ForEach(c => c.Width = form.settings.Results.MaxColumnWidth);
+            GetLayoutFromGrid();
             crmGridView1.ResumeLayout();
+        }
+
+        private void GetLayoutFromGrid()
+        {
+            if (!(form.dockControlBuilder.GetRootEntityMetadata() is EntityMetadata entity))
+            {
+                return;
+            }
+            var layoutxml = new LayoutXML
+            {
+                EntityMeta = entity,
+                EntityName = entity.LogicalName,
+                Cells = new List<Cell>()
+            };
+            foreach (var col in crmGridView1.Columns.Cast<DataGridViewColumn>()
+                .Where(c => !c.Name.StartsWith("#") && c.Visible && c.Width > 5)
+                .OrderBy(c => c.DisplayIndex))
+            {
+                layoutxml.Cells.Add(new Cell
+                {
+                    Parent = layoutxml,
+                    Attribute = form.dockControlBuilder.GetAttributeNodeFromLayoutName(col.Name),
+                    Name = col.Name,
+                    Width = col.Width
+                });
+            }
+            form.dockControlBuilder.LayoutXML = layoutxml;
         }
 
         private void crmGridView1_RecordDoubleClick(object sender, Rappen.XTB.Helpers.Controls.XRMRecordEventArgs e)
@@ -217,6 +248,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 form.LogUse("CopyRecord");
                 Clipboard.SetText(url);
             }
+        }
+
+        private void crmGridView1_LayoutChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            GetLayoutFromGrid();
         }
     }
 }

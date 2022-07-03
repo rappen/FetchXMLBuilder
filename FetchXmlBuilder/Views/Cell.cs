@@ -9,20 +9,21 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
     {
         public string Name;
         public int Width;
-        public int Index;
         public TreeNode Attribute;
         public LayoutXML Parent;
 
-        internal Cell(LayoutXML layoutxml, TreeNode attribute, int index)
+        internal Cell()
+        { }
+
+        internal Cell(LayoutXML layoutxml, TreeNode attribute)
         {
             Parent = layoutxml;
             Attribute = attribute;
-            Index = index;
             Name = attribute.GetAttributeLayoutName();
             Width = attribute.Value("name") == Parent.EntityMeta?.PrimaryIdAttribute ? 0 : 100;
         }
 
-        internal Cell(LayoutXML layoutxml, XmlNode cell, int index)
+        internal Cell(LayoutXML layoutxml, XmlNode cell)
         {
             Parent = layoutxml;
             Name = cell.AttributeValue("name");
@@ -34,12 +35,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             {
                 Width = 100;
             }
-            Index = index;
         }
 
         public string ToXML()
         {
             return $"<cell name='{Name}' width='{Width}' />";
         }
+
+        public int DisplayIndex => (Parent?.Cells.IndexOf(this) ?? 0) + 1;
     }
 }
