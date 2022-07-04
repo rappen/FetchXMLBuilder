@@ -70,5 +70,22 @@ namespace Rappen.XTB.FetchXmlBuilder.Extensions
             }
             return string.Empty;
         }
+
+        public static void Move<T>(this List<T> list, T item, int newIndex)
+        {   // From this tip: https://stackoverflow.com/a/450250/2866704
+            if (item != null)
+            {
+                var oldIndex = list.IndexOf(item);
+                if (oldIndex > -1 && oldIndex != newIndex)
+                {
+                    list.RemoveAt(oldIndex);
+
+                    if (newIndex > oldIndex) newIndex--;
+                    // the actual index could have shifted due to the removal
+
+                    list.Insert(newIndex, item);
+                }
+            }
+        }
     }
 }

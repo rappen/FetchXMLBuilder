@@ -37,6 +37,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             }
         }
 
+        public override string ToString() => Name;
+
         public string ToXML()
         {
             return $"<cell name='{Name}' width='{Width}' />";

@@ -14,12 +14,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
         public string EntityName;
         public EntityMetadata EntityMeta;
         public List<Cell> Cells;
+        private FetchXmlBuilder fxb;
 
         public LayoutXML()
         { }
 
         public LayoutXML(string layoutxml, TreeNode entity, FetchXmlBuilder fxb)
         {
+            this.fxb = fxb;
             if (!string.IsNullOrEmpty(layoutxml))
             {
                 var doc = new XmlDocument();
@@ -44,15 +46,48 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             AdjustAllCells(attributes);
         }
 
+        public override string ToString() => $"{EntityName} {Cells.Where(c => c.Width > 0).Count()}/{Cells.Count} cells";
+
         public void AdjustAllCells(IEnumerable<TreeNode> attributes)
         {
             if (Cells == null)
             {
                 Cells = new List<Cell>();
             }
+            // Add missing Cells
             attributes.Where(a => GetCell(a) == null).ToList().ForEach(a => AddCell(a));
+            // Update Cells that missing the Attribute
             Cells.Where(c => c.Attribute == null).ToList().ForEach(c => c.Attribute = attributes.FirstOrDefault(a => c.Name == a.GetAttributeLayoutName()));
+            // Remove unused Cells
             Cells.Where(c => c.Attribute == null).ToList().ForEach(c => Cells.Remove(c));
+        }
+
+        internal void AdjustAllCells(Dictionary<string, int> namewidths)
+        {
+            if (Cells == null)
+            {
+                Cells = new List<Cell>();
+            }
+            // Add these missing
+            namewidths.Where(n => Cells
+                .FirstOrDefault(c => c.Name == n.Key) == null)
+                .ToList().ForEach(nw => Cells.Add(new Cell
+                {
+                    Parent = this,
+                    Name = nw.Key,
+                    Width = nw.Value,
+                    Attribute = fxb.dockControlBuilder.GetAttributeNodeFromLayoutName(nw.Key)
+                }));
+            // Remove not using cells
+            //   Cells.Where(c => !namewidths.Any(nw => nw.Key == c.Name)).ToList().ForEach(c => Cells.Remove(c));
+            // Update the Widths
+            Cells.ToList().ForEach(c => c.Width = namewidths.ContainsKey(c.Name) ? namewidths[c.Name] : 0);
+            int index = 0;
+            foreach (var nw in namewidths)
+            {
+                var cell = Cells.FirstOrDefault(c => c.Name == nw.Key);
+                Cells.Move(cell, index++);
+            }
         }
 
         public string ToXML()

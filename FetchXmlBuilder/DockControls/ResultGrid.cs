@@ -14,6 +14,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
     {
         private FetchXmlBuilder form;
         private QueryInfo queryinfo;
+        private bool reloaded;
 
         public ResultGrid(FetchXmlBuilder fetchXmlBuilder)
         {
@@ -84,6 +85,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 crmGridView1.FilterText = string.Empty;
             }
+            reloaded = true;
             crmGridView1.SuspendLayout();
             crmGridView1.Refresh();
             crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
@@ -93,6 +95,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 .ForEach(c => c.Width = form.settings.Results.MaxColumnWidth);
             GetLayoutFromGrid();
             crmGridView1.ResumeLayout();
+            reloaded = false;
         }
 
         private void GetLayoutFromGrid()
@@ -101,25 +104,21 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 return;
             }
-            var layoutxml = new LayoutXML
+            if (form.dockControlBuilder.LayoutXML == null || form.dockControlBuilder.LayoutXML.EntityMeta != entity)
             {
-                EntityMeta = entity,
-                EntityName = entity.LogicalName,
-                Cells = new List<Cell>()
-            };
-            foreach (var col in crmGridView1.Columns.Cast<DataGridViewColumn>()
-                .Where(c => !c.Name.StartsWith("#") && c.Visible && c.Width > 5)
-                .OrderBy(c => c.DisplayIndex))
-            {
-                layoutxml.Cells.Add(new Cell
+                form.dockControlBuilder.LayoutXML = new LayoutXML
                 {
-                    Parent = layoutxml,
-                    Attribute = form.dockControlBuilder.GetAttributeNodeFromLayoutName(col.Name),
-                    Name = col.Name,
-                    Width = col.Width
-                });
+                    EntityMeta = entity,
+                    EntityName = entity.LogicalName,
+                    Cells = new List<Cell>()
+                };
             }
-            form.dockControlBuilder.LayoutXML = layoutxml;
+            var columns = crmGridView1.Columns.Cast<DataGridViewColumn>()
+                .Where(c => !c.Name.StartsWith("#") && c.Visible && c.Width > 5)
+                .OrderBy(c => c.DisplayIndex)
+                .ToDictionary(c => c.Name, c => c.Width);
+            form.dockControlBuilder.LayoutXML.AdjustAllCells(columns);
+            form.dockControlBuilder.UpdateLayoutXML();
         }
 
         private void crmGridView1_RecordDoubleClick(object sender, Rappen.XTB.Helpers.Controls.XRMRecordEventArgs e)
@@ -252,7 +251,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void crmGridView1_LayoutChanged(object sender, DataGridViewColumnEventArgs e)
         {
-            GetLayoutFromGrid();
+            if (!reloaded)
+            {
+                GetLayoutFromGrid();
+            }
         }
     }
 }

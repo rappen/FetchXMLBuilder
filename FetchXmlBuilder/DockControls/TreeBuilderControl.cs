@@ -87,8 +87,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             set
             {
                 layoutxml = value;
-                fxb.dockControlLayoutXml?.UpdateXML(layoutxml.ToXML());
-                layoutxml?.Cells?.ToList()?.ForEach(c => (GetCurrentControl() as attributeControl)?.UpdateUIFromCell(c));
             }
         }
 
@@ -390,6 +388,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         internal void UpdateAllNode()
         {
             tvFetch.Nodes.OfType<TreeNode>().ToList().ForEach(n => UpdateChildNode(n));
+        }
+
+        internal void UpdateLayoutXML()
+        {
+            fxb.dockControlLayoutXml?.UpdateXML(LayoutXML.ToXML());
+            LayoutXML?.Cells?.ToList()?.ForEach(c => (GetCurrentControl() as attributeControl)?.UpdateUIFromCell(c));
         }
 
         #endregion Internal Methods
