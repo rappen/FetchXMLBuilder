@@ -88,7 +88,19 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             reloaded = true;
             crmGridView1.SuspendLayout();
             crmGridView1.Refresh();
-            crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
+            if (form.dockControlBuilder.LayoutXML == null)
+            {
+                crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
+            }
+            else
+            {
+                foreach (var cell in form.dockControlBuilder.LayoutXML.Cells)
+                {
+                    var col = crmGridView1.Columns[cell.Name];
+                    col.DisplayIndex = cell.DisplayIndex;
+                    col.Width = cell.Width;
+                }
+            }
             crmGridView1.Columns.Cast<DataGridViewColumn>()
                 .Where(c => c.Width > form.settings.Results.MaxColumnWidth)
                 .ToList()
