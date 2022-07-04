@@ -391,8 +391,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                         break;
 
                     case ContentType.FetchXML:
-                    case ContentType.LayoutXML:
                         fxb.settings.DockStates.FetchXML = DockState;
+                        break;
+
+                    case ContentType.LayoutXML:
+                        fxb.settings.DockStates.LayoutXML = DockState;
                         break;
 
                     case ContentType.CSharp_Query:

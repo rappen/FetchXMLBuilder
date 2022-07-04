@@ -97,8 +97,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 foreach (var cell in form.dockControlBuilder.LayoutXML.Cells)
                 {
                     var col = crmGridView1.Columns[cell.Name];
-                    col.DisplayIndex = cell.DisplayIndex;
-                    col.Width = cell.Width;
+                    if (col != null)
+                    {
+                        col.DisplayIndex = cell.DisplayIndex;
+                        col.Width = cell.Width;
+                    }
                 }
             }
             crmGridView1.Columns.Cast<DataGridViewColumn>()

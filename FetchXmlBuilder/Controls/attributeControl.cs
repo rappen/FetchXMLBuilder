@@ -139,7 +139,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             {
                 chkLayoutVisible.Checked = cell.Width > 0;
                 trkLayoutWidth.Enabled = chkLayoutVisible.Checked;
-                trkLayoutWidth.Value = cell.Width;
+                try
+                {
+                    trkLayoutWidth.Value = cell.Width;
+                }
+                catch
+                {
+                    trkLayoutWidth.Value = trkLayoutWidth.Maximum;
+                }
             }
             else
             {
@@ -167,8 +174,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private void UpdateCellUI()
         {
-            lblWidth.Text = $"Width: {cell?.Width}";
-            lblIndex.Text = $"Display Index: {cell?.DisplayIndex}";
+            if (cell?.Width > 0)
+            {
+                lblWidth.Text = $"Width: {Math.Min(cell.Width, trkLayoutWidth.Maximum)}";
+                lblIndex.Text = $"Display Index: {cell?.DisplayIndex}";
+            }
+            else
+            {
+                lblWidth.Text = "Width";
+                lblIndex.Text = "Display Index";
+            }
         }
 
         public override MetadataBase Metadata()
