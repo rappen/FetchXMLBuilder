@@ -80,6 +80,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     tsbAbort.Visible = settings.Results.RetrieveAllPages;
                     tsbBDU.Visible = bduexists && callerArgs?.SourcePlugin != "Bulk Data Updater";
                     tsbBDU.Enabled = enabled && (dockControlBuilder?.IsFetchAggregate() == false);
+                    tsmiShowLayoutXML.Enabled = enabled && Service != null && (dockControlBuilder?.IsFetchAggregate() == false) && settings.Results.WorkWithLayout;
                     dockControlBuilder?.EnableControls(enabled);
                     buttonsEnabled = enabled;
                 }

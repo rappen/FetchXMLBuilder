@@ -128,6 +128,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         {
             if (updatecell?.Attribute != Node)
             {
+                grpLayout.Visible = false;
                 return;
             }
             cell = updatecell;
@@ -148,10 +149,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                     trkLayoutWidth.Value = trkLayoutWidth.Maximum;
                 }
             }
-            else
-            {
-                grpLayout.Visible = false;
-            }
+            grpLayout.Visible = cell != null;
             UpdateCellUI();
         }
 

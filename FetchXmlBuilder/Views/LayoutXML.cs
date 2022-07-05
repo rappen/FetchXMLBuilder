@@ -62,7 +62,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             Cells.Where(c => c.Attribute == null).ToList().ForEach(c => Cells.Remove(c));
         }
 
-        internal void AdjustAllCells(Dictionary<string, int> namewidths)
+        public void AdjustAllCells(Dictionary<string, int> namewidths)
         {
             if (Cells == null)
             {

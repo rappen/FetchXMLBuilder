@@ -74,6 +74,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             get
             {
+                if (!fxb.settings.Results.WorkWithLayout)
+                {
+                    return null;
+                }
                 if (layoutxml == null)
                 {
                     layoutxml = new LayoutXML(layoutxmlstr, GetRootEntity(), fxb);
@@ -86,7 +90,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             set
             {
-                layoutxml = value;
+                if (fxb.settings.Results.WorkWithLayout)
+                {
+                    layoutxml = value;
+                }
             }
         }
 

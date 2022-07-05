@@ -33,10 +33,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             Rappen.XTB.FetchXmlBuilder.Settings.XmlColors xmlColors1 = new Rappen.XTB.FetchXmlBuilder.Settings.XmlColors();
             this.gbResult = new System.Windows.Forms.GroupBox();
-            this.chkClickableLinks = new System.Windows.Forms.CheckBox();
             this.cmbResult = new System.Windows.Forms.ComboBox();
             this.chkResAllPages = new System.Windows.Forms.CheckBox();
             this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.numMaxColumnWidth = new System.Windows.Forms.NumericUpDown();
+            this.chkClickableLinks = new System.Windows.Forms.CheckBox();
             this.gbAppearance = new System.Windows.Forms.GroupBox();
             this.chkAppFriendlyResults = new System.Windows.Forms.CheckBox();
             this.chkUseLookup = new System.Windows.Forms.CheckBox();
@@ -70,10 +72,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.chkWaitUntilMetadataLoaded = new System.Windows.Forms.CheckBox();
             this.chkTryMetadataCache = new System.Windows.Forms.CheckBox();
-            this.numMaxColumnWidth = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
+            this.gbResultView = new System.Windows.Forms.GroupBox();
+            this.chkWorkWithLayout = new System.Windows.Forms.CheckBox();
             this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.gbResult.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.gbAppearance.SuspendLayout();
             this.panel1.SuspendLayout();
             this.gbDefaultQuery.SuspendLayout();
@@ -82,33 +85,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.gbBehavior.SuspendLayout();
             this.gbLayout.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
+            this.gbResultView.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbResult
             // 
-            this.gbResult.Controls.Add(this.label1);
-            this.gbResult.Controls.Add(this.numMaxColumnWidth);
-            this.gbResult.Controls.Add(this.chkClickableLinks);
             this.gbResult.Controls.Add(this.cmbResult);
             this.gbResult.Controls.Add(this.chkResAllPages);
             this.gbResult.Controls.Add(this.chkAppResultsNewWindow);
             this.gbResult.Location = new System.Drawing.Point(484, 12);
             this.gbResult.Name = "gbResult";
-            this.gbResult.Size = new System.Drawing.Size(222, 150);
+            this.gbResult.Size = new System.Drawing.Size(222, 92);
             this.gbResult.TabIndex = 40;
             this.gbResult.TabStop = false;
             this.gbResult.Text = "Result";
-            // 
-            // chkClickableLinks
-            // 
-            this.chkClickableLinks.AutoSize = true;
-            this.chkClickableLinks.Location = new System.Drawing.Point(16, 100);
-            this.chkClickableLinks.Name = "chkClickableLinks";
-            this.chkClickableLinks.Size = new System.Drawing.Size(157, 17);
-            this.chkClickableLinks.TabIndex = 14;
-            this.chkClickableLinks.Text = "Double-click links on results";
-            this.chkClickableLinks.UseVisualStyleBackColor = true;
             // 
             // cmbResult
             // 
@@ -124,11 +114,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.cmbResult.Name = "cmbResult";
             this.cmbResult.Size = new System.Drawing.Size(192, 21);
             this.cmbResult.TabIndex = 1;
+            this.cmbResult.SelectedIndexChanged += new System.EventHandler(this.cmbResult_SelectedIndexChanged);
             // 
             // chkResAllPages
             // 
             this.chkResAllPages.AutoSize = true;
-            this.chkResAllPages.Location = new System.Drawing.Point(16, 60);
+            this.chkResAllPages.Location = new System.Drawing.Point(16, 47);
             this.chkResAllPages.Name = "chkResAllPages";
             this.chkResAllPages.Size = new System.Drawing.Size(111, 17);
             this.chkResAllPages.TabIndex = 10;
@@ -138,12 +129,60 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // chkAppResultsNewWindow
             // 
             this.chkAppResultsNewWindow.AutoSize = true;
-            this.chkAppResultsNewWindow.Location = new System.Drawing.Point(16, 80);
+            this.chkAppResultsNewWindow.Location = new System.Drawing.Point(16, 67);
             this.chkAppResultsNewWindow.Name = "chkAppResultsNewWindow";
             this.chkAppResultsNewWindow.Size = new System.Drawing.Size(192, 17);
             this.chkAppResultsNewWindow.TabIndex = 12;
             this.chkAppResultsNewWindow.Text = "Always open results in new window";
             this.chkAppResultsNewWindow.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(16, 42);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(97, 13);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "Max columns width";
+            // 
+            // numMaxColumnWidth
+            // 
+            this.numMaxColumnWidth.Increment = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.numMaxColumnWidth.Location = new System.Drawing.Point(133, 40);
+            this.numMaxColumnWidth.Maximum = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            this.numMaxColumnWidth.Minimum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.numMaxColumnWidth.Name = "numMaxColumnWidth";
+            this.numMaxColumnWidth.Size = new System.Drawing.Size(75, 20);
+            this.numMaxColumnWidth.TabIndex = 15;
+            this.numMaxColumnWidth.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.numMaxColumnWidth.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
+            this.numMaxColumnWidth.Value = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+            // 
+            // chkClickableLinks
+            // 
+            this.chkClickableLinks.AutoSize = true;
+            this.chkClickableLinks.Location = new System.Drawing.Point(16, 20);
+            this.chkClickableLinks.Name = "chkClickableLinks";
+            this.chkClickableLinks.Size = new System.Drawing.Size(157, 17);
+            this.chkClickableLinks.TabIndex = 14;
+            this.chkClickableLinks.Text = "Double-click links on results";
+            this.chkClickableLinks.UseVisualStyleBackColor = true;
             // 
             // gbAppearance
             // 
@@ -359,7 +398,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             this.gbXml.Controls.Add(this.btnResetXmlColors);
             this.gbXml.Controls.Add(this.propXmlColors);
-            this.gbXml.Location = new System.Drawing.Point(484, 168);
+            this.gbXml.Location = new System.Drawing.Point(484, 203);
             this.gbXml.Name = "gbXml";
             this.gbXml.Size = new System.Drawing.Size(222, 132);
             this.gbXml.TabIndex = 50;
@@ -501,43 +540,28 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkTryMetadataCache.UseVisualStyleBackColor = true;
             this.chkTryMetadataCache.CheckedChanged += new System.EventHandler(this.chkTryMetadataCache_CheckedChanged);
             // 
-            // numMaxColumnWidth
+            // gbResultView
             // 
-            this.numMaxColumnWidth.Increment = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.numMaxColumnWidth.Location = new System.Drawing.Point(133, 118);
-            this.numMaxColumnWidth.Maximum = new decimal(new int[] {
-            2000,
-            0,
-            0,
-            0});
-            this.numMaxColumnWidth.Minimum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.numMaxColumnWidth.Name = "numMaxColumnWidth";
-            this.numMaxColumnWidth.Size = new System.Drawing.Size(75, 20);
-            this.numMaxColumnWidth.TabIndex = 15;
-            this.numMaxColumnWidth.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.numMaxColumnWidth.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
-            this.numMaxColumnWidth.Value = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
+            this.gbResultView.Controls.Add(this.chkWorkWithLayout);
+            this.gbResultView.Controls.Add(this.label1);
+            this.gbResultView.Controls.Add(this.chkClickableLinks);
+            this.gbResultView.Controls.Add(this.numMaxColumnWidth);
+            this.gbResultView.Location = new System.Drawing.Point(484, 110);
+            this.gbResultView.Name = "gbResultView";
+            this.gbResultView.Size = new System.Drawing.Size(222, 87);
+            this.gbResultView.TabIndex = 45;
+            this.gbResultView.TabStop = false;
+            this.gbResultView.Text = "Result View Options";
             // 
-            // label1
+            // chkWorkWithLayout
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 120);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(97, 13);
-            this.label1.TabIndex = 16;
-            this.label1.Text = "Max columns width";
+            this.chkWorkWithLayout.AutoSize = true;
+            this.chkWorkWithLayout.Location = new System.Drawing.Point(16, 62);
+            this.chkWorkWithLayout.Name = "chkWorkWithLayout";
+            this.chkWorkWithLayout.Size = new System.Drawing.Size(135, 17);
+            this.chkWorkWithLayout.TabIndex = 17;
+            this.chkWorkWithLayout.Text = "Work with View Layout";
+            this.chkWorkWithLayout.UseVisualStyleBackColor = true;
             // 
             // propXmlColors
             // 
@@ -574,6 +598,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(717, 452);
+            this.Controls.Add(this.gbResultView);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.gbLayout);
@@ -590,6 +615,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.Text = "FetchXML Builder - Settings";
             this.gbResult.ResumeLayout(false);
             this.gbResult.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).EndInit();
             this.gbAppearance.ResumeLayout(false);
             this.gbAppearance.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -603,7 +629,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.gbLayout.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).EndInit();
+            this.gbResultView.ResumeLayout(false);
+            this.gbResultView.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -651,5 +678,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.CheckBox chkAppFriendlyResults;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numMaxColumnWidth;
+        private System.Windows.Forms.GroupBox gbResultView;
+        private System.Windows.Forms.CheckBox chkWorkWithLayout;
     }
 }

@@ -43,6 +43,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             chkResAllPages.Checked = settings.Results.RetrieveAllPages;
             chkClickableLinks.Checked = settings.Results.ClickableLinks;
             numMaxColumnWidth.Value = settings.Results.MaxColumnWidth;
+            chkWorkWithLayout.Checked = settings.Results.WorkWithLayout;
             propXmlColors.SelectedObject = settings.XmlColors;
             txtFetch.ConfigureForXml(settings);
             txtFetch.FormatXML(settings.QueryOptions.NewQueryTemplate, settings);
@@ -84,6 +85,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.Results.RetrieveAllPages = chkResAllPages.Checked;
             settings.Results.ClickableLinks = chkClickableLinks.Checked;
             settings.Results.MaxColumnWidth = (int)numMaxColumnWidth.Value;
+            settings.Results.WorkWithLayout = chkWorkWithLayout.Checked;
             settings.OpenUncustomizableViews = chkAppAllowUncustViews.Checked;
             settings.AddConditionToFilter = chkAddConditionToFilter.Checked;
             settings.UseSQL4CDS = chkUseSQL4CDS.Checked;
@@ -200,6 +202,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             {
                 chkWaitUntilMetadataLoaded.Checked = false;
             }
+        }
+
+        private void cmbResult_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            gbResultView.Enabled = ResultItemToSettingResult(cmbResult.SelectedIndex) == ResultOutput.Grid;
         }
     }
 }
