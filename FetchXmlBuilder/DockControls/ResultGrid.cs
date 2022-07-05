@@ -58,6 +58,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             crmGridView1.Service = form.Service;
             panQuickFilter.Visible = form.settings.Results.QuickFilter;
+            mnuResetLayout.Visible = form.settings.Results.WorkWithLayout;
             RefreshData();
         }
 
@@ -270,6 +271,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 GetLayoutFromGrid();
             }
+        }
+
+        private void mnuResetLayout_Click(object sender, EventArgs e)
+        {
+            form.dockControlBuilder.LayoutXML = null;
+            RefreshData();
         }
     }
 }

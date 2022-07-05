@@ -89,7 +89,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         protected FetchXmlBuilder fxb { get; set; }
 
-        protected TreeNode Node { get; set; }
+        internal TreeNode Node { get; set; }
 
         protected TreeBuilderControl Tree { get; set; }
 

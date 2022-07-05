@@ -399,8 +399,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal void UpdateLayoutXML()
         {
+            if (LayoutXML == null)
+            {
+                return;
+            }
             fxb.dockControlLayoutXml?.UpdateXML(LayoutXML.ToXML());
-            LayoutXML?.Cells?.ToList()?.ForEach(c => (GetCurrentControl() as attributeControl)?.UpdateUIFromCell(c));
+            if (GetCurrentControl() is attributeControl attrcontrol &&
+                LayoutXML.Cells?.FirstOrDefault(c => c.Attribute == attrcontrol.Node) is Cell cell)
+            {
+                attrcontrol.UpdateUIFromCell(cell);
+            }
         }
 
         #endregion Internal Methods
