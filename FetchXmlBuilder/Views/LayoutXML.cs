@@ -12,44 +12,52 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
     public class LayoutXML
     {
         public string EntityName;
-        public EntityMetadata EntityMeta;
+        public EntityMetadata EntityMeta => fxb.GetEntity(EntityName);
         public List<Cell> Cells;
+        public bool CreatedFromAView = false;
         private FetchXmlBuilder fxb;
 
-        public LayoutXML()
-        { }
-
-        public LayoutXML(string layoutxml, TreeNode entity, FetchXmlBuilder fxb)
+        public LayoutXML(FetchXmlBuilder fxb)
         {
             this.fxb = fxb;
-            if (!string.IsNullOrEmpty(layoutxml))
+        }
+
+        public LayoutXML(string layoutxmlstr, TreeNode entity, FetchXmlBuilder fxb)
+        {
+            this.fxb = fxb;
+            if (!string.IsNullOrEmpty(layoutxmlstr))
             {
+                CreatedFromAView = true;
                 var doc = new XmlDocument();
-                doc.LoadXml(layoutxml);
-                if (doc.SelectSingleNode("grid") is XmlElement grid &&
-                    int.TryParse(grid.AttributeValue("object"), out int entityid) &&
-                    fxb.GetEntity(entityid) is EntityMetadata entitymeta)
+                doc.LoadXml(layoutxmlstr);
+                if (doc.SelectSingleNode("grid") is XmlElement grid)
                 {
-                    EntityMeta = entitymeta;
+                    if (int.TryParse(grid.AttributeValue("object"), out int entityid))
+                    {
+                        EntityName = fxb.GetEntity(entityid)?.LogicalName;
+                    }
                     Cells = grid.SelectSingleNode("row")?
                         .ChildNodes.Cast<XmlNode>()
                         .Where(n => n.Name == "cell")
                         .Select(c => new Cell(this, c)).ToList();
                 }
             }
-            EntityName = EntityMeta?.LogicalName ?? entity.Value("name");
-            if (EntityMeta == null)
+            if (string.IsNullOrEmpty(EntityName))
             {
-                EntityMeta = fxb.GetEntity(EntityName);
+                EntityName = entity.Value("name");
             }
-            var attributes = fxb.dockControlBuilder.GetAllLayoutValidAttributes();
-            AdjustAllCells(attributes);
+            if (fxb.NeedToLoadEntity(EntityName))
+            {
+                fxb.LoadEntityDetails(EntityName, null, false, false);
+            }
+            MakeSureAllCellsExistForAttributes();
         }
 
-        public override string ToString() => $"{EntityName} {Cells.Where(c => c.Width > 0).Count()}/{Cells.Count} cells";
+        public override string ToString() => $"{EntityName} {Cells?.Where(c => c.Width > 0).Count()}/{Cells?.Count} cells";
 
-        public void AdjustAllCells(IEnumerable<TreeNode> attributes)
+        internal void MakeSureAllCellsExistForAttributes()
         {
+            var attributes = fxb.dockControlBuilder.GetAllLayoutValidAttributes();
             if (Cells == null)
             {
                 Cells = new List<Cell>();
@@ -59,10 +67,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             // Update Cells that missing the Attribute
             Cells.Where(c => c.Attribute == null).ToList().ForEach(c => c.Attribute = attributes.FirstOrDefault(a => c.Name == a.GetAttributeLayoutName()));
             // Remove unused Cells
-            Cells.Where(c => c.Attribute == null).ToList().ForEach(c => Cells.Remove(c));
+            Cells.Where(c => c.Attribute?.TreeView == null).ToList().ForEach(c => Cells.Remove(c));
         }
 
-        public void AdjustAllCells(Dictionary<string, int> namewidths)
+        internal void MakeSureAllCellsExistForColumns(Dictionary<string, int> namewidths)
         {
             if (Cells == null)
             {
@@ -71,16 +79,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             // Add these missing
             namewidths.Where(n => Cells
                 .FirstOrDefault(c => c.Name == n.Key) == null)
-                .ToList().ForEach(nw => Cells.Add(new Cell
+                .ToList().ForEach(nw => Cells.Add(new Cell(this)
                 {
-                    Parent = this,
                     Name = nw.Key,
                     Width = nw.Value,
                     Attribute = fxb.dockControlBuilder.GetAttributeNodeFromLayoutName(nw.Key)
                 }));
-            // Remove not using cells
-            //   Cells.Where(c => !namewidths.Any(nw => nw.Key == c.Name)).ToList().ForEach(c => Cells.Remove(c));
-            // Update the Widths
             Cells.ToList().ForEach(c => c.Width = namewidths.ContainsKey(c.Name) ? namewidths[c.Name] : 0);
             int index = 0;
             foreach (var nw in namewidths)
@@ -92,8 +96,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
 
         public string ToXML()
         {
-            var result = $@"<grid name='resultset' object='{EntityMeta.ObjectTypeCode}' jump='{EntityMeta.PrimaryNameAttribute}' select='1' icon='1' preview='1'>
-  <row name='result' id='{EntityMeta.PrimaryIdAttribute}'>
+            var result = $@"<grid name='resultset' object='{EntityMeta?.ObjectTypeCode}' jump='{EntityMeta?.PrimaryNameAttribute}' select='1' icon='1' preview='1'>
+  <row name='result' id='{EntityMeta?.PrimaryIdAttribute}'>
     {string.Join("\n    ", Cells?.Where(c => c.Width > 0).Select(c => c.ToXML()))}
   </row>
 </grid>";
@@ -102,25 +106,34 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
 
         public Cell GetCell(TreeNode node)
         {
-            var result = Cells.FirstOrDefault(c => c.Attribute == node);
-            if (result == null)
+            var cell = Cells.FirstOrDefault(c => c.Attribute == node);
+            if (cell == null)
             {
-                result = Cells.FirstOrDefault(c => c.Name == node.GetAttributeLayoutName());
-                if (result != null)
+                cell = Cells.FirstOrDefault(c => c.Name == node.GetAttributeLayoutName());
+                if (cell != null)
                 {
-                    result.Attribute = node;
+                    cell.Attribute = node;
                 }
             }
-            return result;
+            if (cell == null)
+            {
+                cell = AddCell(node);
+            }
+            return cell;
         }
 
-        public Cell AddCell(TreeNode attribute)
+        private Cell AddCell(TreeNode attribute)
         {
             if (EntityMeta?.Attributes?.Any(a => a.LogicalName.Equals(attribute.Value("name"))) != true)
             {
                 return null;
             }
-            var cell = new Cell(this, attribute);
+            var cell = new Cell(this)
+            {
+                Attribute = attribute,
+                Name = attribute.GetAttributeLayoutName(),
+                Width = CreatedFromAView ? 0 : 100
+            };
             Cells.Add(cell);
             return cell;
         }

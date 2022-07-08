@@ -102,6 +102,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     {
                         col.DisplayIndex = cell.DisplayIndex;
                         col.Width = cell.Width;
+                        col.Visible = cell.Width > 0;
                     }
                 }
             }
@@ -122,9 +123,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             if (form.dockControlBuilder.LayoutXML == null || form.dockControlBuilder.LayoutXML.EntityMeta != entity)
             {
-                form.dockControlBuilder.LayoutXML = new LayoutXML
+                form.dockControlBuilder.LayoutXML = new LayoutXML(form)
                 {
-                    EntityMeta = entity,
                     EntityName = entity.LogicalName,
                     Cells = new List<Cell>()
                 };
@@ -133,7 +133,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 .Where(c => !c.Name.StartsWith("#") && c.Visible && c.Width > 5)
                 .OrderBy(c => c.DisplayIndex)
                 .ToDictionary(c => c.Name, c => c.Width);
-            form.dockControlBuilder.LayoutXML.AdjustAllCells(columns);
+            form.dockControlBuilder.LayoutXML.MakeSureAllCellsExistForColumns(columns);
             form.dockControlBuilder.UpdateLayoutXML();
         }
 
@@ -275,7 +275,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void mnuResetLayout_Click(object sender, EventArgs e)
         {
-            form.dockControlBuilder.LayoutXML = null;
+            form.dockControlBuilder.ResetLayout();
             RefreshData();
         }
     }

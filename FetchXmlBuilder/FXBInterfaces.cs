@@ -174,6 +174,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 ApplySettings(false);
                 dockControlBuilder.ApplyCurrentSettings();
                 dockControlFetchXml?.ApplyCurrentSettings();
+                dockControlGrid?.ApplySettingsToGrid();
                 EnableControls();
             }
         }

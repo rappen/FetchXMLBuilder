@@ -29,7 +29,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private string treeChecksum = "";
         private FetchXmlElementControlBase ctrl;
         private LayoutXML layoutxml;
-        private string layoutxmlstr;
+        private string layoutxmloriginal;
 
         #endregion Private Fields
 
@@ -74,26 +74,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             get
             {
-                if (!fxb.settings.Results.WorkWithLayout)
-                {
-                    return null;
-                }
-                if (layoutxml == null)
-                {
-                    layoutxml = new LayoutXML(layoutxmlstr, GetRootEntity(), fxb);
-                    if (layoutxml?.EntityMeta == null)
-                    {
-                        layoutxml = null;
-                    }
-                }
-                return layoutxml;
+                return fxb.settings.Results.WorkWithLayout ? layoutxml : null;
             }
             set
             {
-                if (fxb.settings.Results.WorkWithLayout)
-                {
-                    layoutxml = value;
-                }
+                layoutxml = fxb.settings.Results.WorkWithLayout ? value : null;
             }
         }
 
@@ -305,7 +290,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         internal void Init(string fetchStr, string layoutStr, string action, bool validate)
         {
             ParseXML(fetchStr, validate);
-            layoutxmlstr = layoutStr;
+            layoutxmloriginal = layoutStr;
+            ResetLayout();
             fxb.UpdateLiveXML();
             ClearChanged();
             fxb.EnableControls(true);
@@ -346,6 +332,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 fxb.EnableControls(true);
                 BuildAndValidateXml(validate);
             }
+        }
+
+        internal void ResetLayout()
+        {
+            LayoutXML = fxb.settings.Results.WorkWithLayout && !string.IsNullOrWhiteSpace(layoutxmloriginal)
+                ? new LayoutXML(layoutxmloriginal, GetRootEntity(), fxb) : null;
         }
 
         internal void RecordHistory(string action)
@@ -404,10 +396,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 return;
             }
             fxb.dockControlLayoutXml?.UpdateXML(LayoutXML.ToXML());
-            if (GetCurrentControl() is attributeControl attrcontrol &&
-                LayoutXML.Cells?.FirstOrDefault(c => c.Attribute == attrcontrol.Node) is Cell cell)
+            if (GetCurrentControl() is attributeControl attrcontrol)
             {
-                attrcontrol.UpdateUIFromCell(cell);
+                attrcontrol.UpdateUIFromCell();
             }
         }
 

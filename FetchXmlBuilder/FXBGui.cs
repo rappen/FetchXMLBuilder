@@ -130,6 +130,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             if (dockControlLayoutXml?.Visible == true)
             {
+                dockControlBuilder.LayoutXML?.MakeSureAllCellsExistForAttributes();
                 dockControlLayoutXml.UpdateXML(dockControlBuilder.LayoutXML?.ToXML());
             }
             if (dockControlOData2?.Visible == true && entities != null)

@@ -50,7 +50,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 }
             }
 
-            UpdateUIFromCell(fxb.dockControlBuilder?.LayoutXML?.GetCell(Node));
+            UpdateUIFromCell();
         }
 
         protected override ControlValidationResult ValidateControl(Control control)
@@ -124,18 +124,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             }
         }
 
-        internal void UpdateUIFromCell(Cell updatecell)
+        internal void UpdateUIFromCell()
         {
-            if (updatecell?.Attribute != Node)
-            {
-                grpLayout.Visible = false;
-                return;
-            }
-            cell = updatecell;
-            if (cell == null)
-            {
-                cell = fxb.dockControlBuilder?.LayoutXML?.AddCell(Node);
-            }
+            cell = fxb.dockControlBuilder.LayoutXML?.GetCell(Node);
             if (cell != null)
             {
                 chkLayoutVisible.Checked = cell.Width > 0;
@@ -155,10 +146,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private void UpdateCellFromUI()
         {
-            if (cell == null)
-            {
-                cell = fxb.dockControlBuilder.LayoutXML.AddCell(Node);
-            }
+            cell = fxb.dockControlBuilder.LayoutXML?.GetCell(Node);
             if (cell != null)
             {
                 cell.Name = Node.GetAttributeLayoutName();
@@ -210,6 +198,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         {
             if (IsInitialized)
             {
+                if (!chkLayoutVisible.Checked)
+                {
+                    trkLayoutWidth.Value = 0;
+                }
+                else if (trkLayoutWidth.Value == 0)
+                {
+                    trkLayoutWidth.Value = 100;
+                }
                 UpdateCellFromUI();
             }
         }

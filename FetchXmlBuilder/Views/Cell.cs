@@ -12,15 +12,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
         public TreeNode Attribute;
         public LayoutXML Parent;
 
-        internal Cell()
-        { }
-
-        internal Cell(LayoutXML layoutxml, TreeNode attribute)
+        internal Cell(LayoutXML layoutxml)
         {
             Parent = layoutxml;
-            Attribute = attribute;
-            Name = attribute.GetAttributeLayoutName();
-            Width = attribute.Value("name") == Parent.EntityMeta?.PrimaryIdAttribute ? 0 : 100;
         }
 
         internal Cell(LayoutXML layoutxml, XmlNode cell)
@@ -37,7 +31,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             }
         }
 
-        public override string ToString() => Name;
+        public override string ToString() => $"{Name} ({Width})";
 
         public string ToXML()
         {
