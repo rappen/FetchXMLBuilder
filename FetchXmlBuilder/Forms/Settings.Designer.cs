@@ -61,6 +61,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.btnFormatQuery = new System.Windows.Forms.Button();
             this.gbXml = new System.Windows.Forms.GroupBox();
             this.btnResetXmlColors = new System.Windows.Forms.Button();
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.gbBehavior = new System.Windows.Forms.GroupBox();
             this.chkShowValidationInfo = new System.Windows.Forms.CheckBox();
             this.chkShowValidation = new System.Windows.Forms.CheckBox();
@@ -73,8 +74,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkWaitUntilMetadataLoaded = new System.Windows.Forms.CheckBox();
             this.chkTryMetadataCache = new System.Windows.Forms.CheckBox();
             this.gbResultView = new System.Windows.Forms.GroupBox();
+            this.linkLayout = new System.Windows.Forms.LinkLabel();
             this.chkWorkWithLayout = new System.Windows.Forms.CheckBox();
-            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.gbResult.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.gbAppearance.SuspendLayout();
@@ -415,6 +416,33 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.btnResetXmlColors.UseVisualStyleBackColor = true;
             this.btnResetXmlColors.Click += new System.EventHandler(this.btnResetXmlColors_Click);
             // 
+            // propXmlColors
+            // 
+            this.propXmlColors.CanShowVisualStyleGlyphs = false;
+            this.propXmlColors.HelpVisible = false;
+            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.Location = new System.Drawing.Point(1, 19);
+            this.propXmlColors.Name = "propXmlColors";
+            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            xmlColors1.AttributeKey = System.Drawing.Color.Red;
+            xmlColors1.AttributeKeyColor = "Red";
+            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
+            xmlColors1.AttributeValueColor = "Blue";
+            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            xmlColors1.CommentColor = "0";
+            xmlColors1.Element = System.Drawing.Color.DarkRed;
+            xmlColors1.ElementColor = "DarkRed";
+            xmlColors1.Tag = System.Drawing.Color.Blue;
+            xmlColors1.TagColor = "Blue";
+            xmlColors1.Value = System.Drawing.Color.Black;
+            xmlColors1.ValueColor = "Black";
+            this.propXmlColors.SelectedObject = xmlColors1;
+            this.propXmlColors.Size = new System.Drawing.Size(218, 104);
+            this.propXmlColors.TabIndex = 7;
+            this.propXmlColors.ToolbarVisible = false;
+            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
+            // 
             // gbBehavior
             // 
             this.gbBehavior.Controls.Add(this.chkShowValidationInfo);
@@ -504,7 +532,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.linkLabel1.Size = new System.Drawing.Size(181, 42);
             this.linkLabel1.TabIndex = 102;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Missing the Entities and Attributes\r\nselections?\r\nClick here! -->";
+            this.linkLabel1.Text = "Missing the Entities and Attributes\r\nselections?\r\nClick here -->";
             this.linkLabel1.UseCompatibleTextRendering = true;
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
@@ -542,6 +570,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             // gbResultView
             // 
+            this.gbResultView.Controls.Add(this.linkLayout);
             this.gbResultView.Controls.Add(this.chkWorkWithLayout);
             this.gbResultView.Controls.Add(this.label1);
             this.gbResultView.Controls.Add(this.chkClickableLinks);
@@ -553,6 +582,17 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.gbResultView.TabStop = false;
             this.gbResultView.Text = "Result View Options";
             // 
+            // linkLayout
+            // 
+            this.linkLayout.AutoSize = true;
+            this.linkLayout.Location = new System.Drawing.Point(152, 63);
+            this.linkLayout.Name = "linkLayout";
+            this.linkLayout.Size = new System.Drawing.Size(62, 13);
+            this.linkLayout.TabIndex = 18;
+            this.linkLayout.TabStop = true;
+            this.linkLayout.Text = "Read more!";
+            this.linkLayout.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLayout_LinkClicked);
+            // 
             // chkWorkWithLayout
             // 
             this.chkWorkWithLayout.AutoSize = true;
@@ -562,33 +602,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkWorkWithLayout.TabIndex = 17;
             this.chkWorkWithLayout.Text = "Work with View Layout";
             this.chkWorkWithLayout.UseVisualStyleBackColor = true;
-            // 
-            // propXmlColors
-            // 
-            this.propXmlColors.CanShowVisualStyleGlyphs = false;
-            this.propXmlColors.HelpVisible = false;
-            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.Location = new System.Drawing.Point(1, 19);
-            this.propXmlColors.Name = "propXmlColors";
-            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            xmlColors1.AttributeKey = System.Drawing.Color.Red;
-            xmlColors1.AttributeKeyColor = "Red";
-            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
-            xmlColors1.AttributeValueColor = "Blue";
-            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            xmlColors1.CommentColor = "0";
-            xmlColors1.Element = System.Drawing.Color.DarkRed;
-            xmlColors1.ElementColor = "DarkRed";
-            xmlColors1.Tag = System.Drawing.Color.Blue;
-            xmlColors1.TagColor = "Blue";
-            xmlColors1.Value = System.Drawing.Color.Black;
-            xmlColors1.ValueColor = "Black";
-            this.propXmlColors.SelectedObject = xmlColors1;
-            this.propXmlColors.Size = new System.Drawing.Size(218, 104);
-            this.propXmlColors.TabIndex = 7;
-            this.propXmlColors.ToolbarVisible = false;
-            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
             // 
             // Settings
             // 
@@ -680,5 +693,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.NumericUpDown numMaxColumnWidth;
         private System.Windows.Forms.GroupBox gbResultView;
         private System.Windows.Forms.CheckBox chkWorkWithLayout;
+        private System.Windows.Forms.LinkLabel linkLayout;
     }
 }

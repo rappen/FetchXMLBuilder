@@ -208,5 +208,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         {
             gbResultView.Enabled = ResultItemToSettingResult(cmbResult.SelectedIndex) == ResultOutput.Grid;
         }
+
+        private void linkLayout_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FetchXmlBuilder.OpenURL("https://docs.microsoft.com/en-us/power-apps/maker/model-driven-apps/create-edit-views-app-designer#edit-public-views-through-tables");
+        }
     }
 }
