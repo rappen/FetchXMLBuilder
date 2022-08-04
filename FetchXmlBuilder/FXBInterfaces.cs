@@ -162,7 +162,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     }
                     else
                     {
-                        LoadEntities(ConnectionDetail);
+                        LoadEntities();
                     }
                 }
                 SaveSetting();

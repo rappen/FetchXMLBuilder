@@ -518,7 +518,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 if (!working)
                 {
-                    LoadEntities(e.ConnectionDetail);
+                    LoadEntities();
                 }
             }
             else
