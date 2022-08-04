@@ -1,10 +1,9 @@
-﻿using McTools.Xrm.Connection;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Messages;
+﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Settings;
+using Rappen.XTB.Helpers.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -205,7 +204,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 WorkAsync(new WorkAsyncInfo($"Loading {name}...",
                     (eventargs) =>
                     {
-                        eventargs.Result = MetadataExtensions.LoadEntityDetails(Service, entityName);
+                        eventargs.Result = XRM.Helpers.Extensions.MetadataExtensions.LoadEntityDetails(Service, entityName);
                     })
                 {
                     PostWorkCallBack = (completedargs) =>
@@ -222,7 +221,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 try
                 {
-                    var resp = MetadataExtensions.LoadEntityDetails(Service, entityName);
+                    var resp = XRM.Helpers.Extensions.MetadataExtensions.LoadEntityDetails(Service, entityName);
                     LoadEntityDetailsCompleted(entityName, resp, null, update);
                 }
                 catch (Exception e)
@@ -285,61 +284,12 @@ namespace Rappen.XTB.FetchXmlBuilder
             return true;
         }
 
-        private void LoadEntities(ConnectionDetail connectionDetail)
+        private void LoadEntities()
         {
             working = true;
             entities = null;
             entityShitList = new List<string>();
-            WorkAsync(new WorkAsyncInfo
-            {
-                Message = "Loading entities...",
-                Work = (worker, eventargs) =>
-                {
-                    EnableControls(false);
-
-                    if (settings.TryMetadataCache && connectionDetail.MetadataCacheLoader != null)
-                    {   // Try cache metadata
-                        if (connectionDetail.MetadataCache != null)
-                        {   // Already cached
-                            eventargs.Result = connectionDetail.MetadataCache;
-                        }
-                        else if (settings.WaitUntilMetadataLoaded)
-                        {   // Load the cache until done
-                            eventargs.Result = connectionDetail.MetadataCacheLoader.ConfigureAwait(false).GetAwaiter().GetResult()?.EntityMetadata;
-                        }
-                        else
-                        {   // Load the cache in background
-                            connectionDetail.MetadataCacheLoader.ContinueWith(task =>
-                            {   // Waiting for loaded
-                                SetAfterEntitiesLoaded(task.Result?.EntityMetadata);
-                            });
-                        }
-                    }
-                    else
-                    {   // Load as usual, the old way
-                        eventargs.Result = Service.LoadEntities(connectionDetail.OrganizationMajorVersion, connectionDetail.OrganizationMinorVersion);
-                    }
-                },
-                PostWorkCallBack = (completedargs) =>
-                {
-                    if (completedargs.Error != null)
-                    {
-                        ShowErrorDialog(completedargs.Error, "Load Entities");
-                    }
-                    else
-                    {
-                        if (completedargs.Result is RetrieveMetadataChangesResponse meta)
-                        {
-                            SetAfterEntitiesLoaded(meta.EntityMetadata);
-                        }
-                        else if (completedargs.Result is IEnumerable<EntityMetadata> entitiesmeta)
-                        {
-                            SetAfterEntitiesLoaded(entitiesmeta);
-                        }
-                    }
-                    SetAfterEntitiesLoaded(null);
-                }
-            });
+            this.GetAllEntityMetadatas(SetAfterEntitiesLoaded, settings.TryMetadataCache, settings.WaitUntilMetadataLoaded);
         }
 
         private void SetAfterEntitiesLoaded(IEnumerable<EntityMetadata> newEntityMetadata)

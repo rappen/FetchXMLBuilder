@@ -1,6 +1,7 @@
 ﻿using MarkMpn.FetchXmlToWebAPI;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
+using System.Linq;
 
 namespace Rappen.XTB.FetchXmlBuilder.AppCode
 {
@@ -28,6 +29,23 @@ namespace Rappen.XTB.FetchXmlBuilder.AppCode
             }
 
             return metadata;
+        }
+
+        public EntityMetadata GetEntity(int otc)
+        {
+            if (fetchXmlBuilder.entities == null)
+            {
+                throw new Exception("Metadata not loaded");
+            }
+
+            var entity = fetchXmlBuilder.entities.SingleOrDefault(e => e.ObjectTypeCode == otc);
+
+            if (entity == null)
+            {
+                throw new Exception($"No metadata for entity: {otc}");
+            }
+
+            return GetEntity(entity.LogicalName);
         }
     }
 }
