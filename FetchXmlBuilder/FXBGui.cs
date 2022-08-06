@@ -572,18 +572,54 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void SaveView(bool saveas)
         {
-            var currentAttributes = dockControlBuilder.GetAttributesSignature();
-            if (currentAttributes != attributesChecksum)
+            var includelayout = saveas;
+            if (!includelayout && settings.Results.WorkWithLayout)
             {
-                MessageBox.Show("Cannot save view, returned attributes must not be changed.\n\nExpected attributes:\n  " +
-                    attributesChecksum.Replace("\n", "\n  ") + "\nCurrent attributes:\n  " + currentAttributes.Replace("\n", "\n  "),
-                    "Cannot save view", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                var inclresult = MessageBox.Show("Include the layout of the view?", "Save View", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                switch (inclresult)
+                {
+                    case DialogResult.Yes:
+                        includelayout = true;
+                        break;
+
+                    case DialogResult.No:
+                        includelayout = false;
+                        break;
+
+                    default:
+                        return;
+                }
+            }
+            if (!includelayout)
+            {
+                var currentAttributes = dockControlBuilder.GetAttributesSignature();
+                if (currentAttributes != attributesChecksum)
+                {
+                    MessageBox.Show("Cannot save view, returned attributes must not be changed.\n\nExpected attributes:\n  " +
+                        attributesChecksum.Replace("\n", "\n  ") + "\nCurrent attributes:\n  " + currentAttributes.Replace("\n", "\n  "),
+                        "Cannot save view", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
             var viewname = View["name"].ToString();
+            var viewtype = View.LogicalName;
             if (saveas)
             {
-                var newviewname = Prompt.ShowDialog("Enter name for the new personal view", "Save View As", viewname);
+                var typeresult = MessageBox.Show("Save the view as which type?\n\nSay Yes for System view\nSay No for Personal", "Save View As", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                switch (typeresult)
+                {
+                    case DialogResult.Yes:
+                        viewtype = "savedquery";
+                        break;
+
+                    case DialogResult.No:
+                        viewtype = "userquery";
+                        break;
+
+                    default:
+                        return;
+                }
+                var newviewname = Prompt.ShowDialog("Enter name for the new view", "Save View As", viewname);
                 if (string.IsNullOrEmpty(newviewname))
                 {
                     MessageBox.Show("No name for new view.", "Save View As", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -596,22 +632,26 @@ namespace Rappen.XTB.FetchXmlBuilder
                 }
                 viewname = newviewname;
             }
-            else if (View.LogicalName == "savedquery")
+            if (viewtype == "savedquery")
             {
-                if (MessageBox.Show("This will update and publish the saved query in CRM.\n\nConfirm!", "Confirm",
+                if (MessageBox.Show("This will update and publish the saved query in Dataverse.\n\nConfirm!", "Confirm",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.Cancel)
                 {
                     return;
                 }
             }
-            var xml = dockControlBuilder.GetFetchString(false, false);
+            var fetch = dockControlBuilder.GetFetchString(false, false);
+            var layout = includelayout ? dockControlBuilder.LayoutXML.ToXML() : View["layoutxml"].ToString();
             var entityname = View["returnedtypecode"].ToString();
-            var newView = new Entity(saveas ? "userquery" : View.LogicalName);
-            newView["fetchxml"] = xml;
+            var newView = new Entity(viewtype);
+            newView["fetchxml"] = fetch;
+            if (includelayout)
+            {
+                newView["layoutxml"] = layout;
+            }
             if (saveas)
             {
                 newView["name"] = viewname;
-                newView["layoutxml"] = View["layoutxml"];
                 newView["returnedtypecode"] = View["returnedtypecode"];
                 newView["querytype"] = 0;
             }
@@ -655,11 +695,12 @@ namespace Rappen.XTB.FetchXmlBuilder
                         if (completedargs.Result is Entity newview)
                         {
                             entityname = newview["returnedtypecode"].ToString();
-                            if (!views.ContainsKey(entityname + "|U"))
+                            var viewsuffix = viewtype == "savedquery" ? "S" : "U";
+                            if (!views.ContainsKey(entityname + "|" + viewsuffix))
                             {
-                                views.Add(entityname + "|U", new List<Entity>());
+                                views.Add(entityname + "|" + viewsuffix, new List<Entity>());
                             }
-                            views[entityname + "|U"].Add(newView);
+                            views[entityname + "|" + viewsuffix].Add(newView);
                             View = newview;
                         }
                         dockControlBuilder.ClearChanged();
