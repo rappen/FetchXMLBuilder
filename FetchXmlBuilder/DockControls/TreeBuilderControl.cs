@@ -340,6 +340,15 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 ? new LayoutXML(layoutxmloriginal, GetRootEntity(), fxb) : null;
         }
 
+        internal void SetLayoutFromXML(string layoutxml)
+        {
+            LayoutXML = new LayoutXML(layoutxml, GetRootEntity(), fxb);
+            if (GetCurrentControl() is attributeControl attrcontrol)
+            {
+                attrcontrol.UpdateUIFromCell();
+            }
+        }
+
         internal void RecordHistory(string action)
         {
             var fetch = GetFetchString(false, false);

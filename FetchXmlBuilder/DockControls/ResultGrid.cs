@@ -95,16 +95,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             else
             {
-                foreach (var cell in form.dockControlBuilder.LayoutXML.Cells)
-                {
-                    var col = crmGridView1.Columns[cell.Name];
-                    if (col != null)
-                    {
-                        col.DisplayIndex = cell.DisplayIndex;
-                        col.Width = cell.Width;
-                        col.Visible = cell.Width > 0;
-                    }
-                }
+                SetLayoutToGrid();
             }
             crmGridView1.Columns.Cast<DataGridViewColumn>()
                 .Where(c => c.Width > form.settings.Results.MaxColumnWidth)
@@ -112,6 +103,22 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 .ForEach(c => c.Width = form.settings.Results.MaxColumnWidth);
             GetLayoutFromGrid();
             crmGridView1.ResumeLayout();
+            reloaded = false;
+        }
+
+        internal void SetLayoutToGrid()
+        {
+            reloaded = true;
+            foreach (var cell in form.dockControlBuilder.LayoutXML.Cells)
+            {
+                var col = crmGridView1.Columns[cell.Name];
+                if (col != null)
+                {
+                    col.DisplayIndex = cell.DisplayIndex;
+                    col.Width = cell.Width;
+                    col.Visible = cell.Width > 0;
+                }
+            }
             reloaded = false;
         }
 

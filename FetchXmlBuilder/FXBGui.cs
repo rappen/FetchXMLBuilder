@@ -26,6 +26,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         internal static bool friendlyNames = false;
         internal TreeBuilderControl dockControlBuilder;
         internal XmlContentControl dockControlLayoutXml;
+        internal ResultGrid dockControlGrid;
         internal HistoryManager historyMgr = new HistoryManager();
         internal bool historyisavailable = true;
         private string cwpfeed;
@@ -33,7 +34,6 @@ namespace Rappen.XTB.FetchXmlBuilder
         private XmlContentControl dockControlFetchXml;
         private XmlContentControl dockControlFetchXmlCs;
         private XmlContentControl dockControlFetchXmlJs;
-        private ResultGrid dockControlGrid;
         private ODataControl dockControlOData2;
         private ODataControl dockControlOData4;
         private FlowListControl dockControlFlowList;
@@ -115,20 +115,11 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         internal void UpdateLiveXML(bool preventxmlupdate = false)
         {
-            var fetch = string.Empty;
-            string GetFetch()
-            {
-                if (string.IsNullOrWhiteSpace(fetch))
-                {
-                    fetch = dockControlBuilder.GetFetchString(true, false);
-                }
-                return fetch;
-            }
             if (!preventxmlupdate && dockControlFetchXml?.Visible == true)
             {
-                dockControlFetchXml.UpdateXML(GetFetch());
+                dockControlFetchXml.UpdateXML(dockControlBuilder.GetFetchString(true, false));
             }
-            if (dockControlLayoutXml?.Visible == true)
+            if (!preventxmlupdate && dockControlLayoutXml?.Visible == true)
             {
                 dockControlBuilder.LayoutXML?.MakeSureAllCellsExistForAttributes();
                 dockControlLayoutXml.UpdateXML(dockControlBuilder.LayoutXML?.ToXML());

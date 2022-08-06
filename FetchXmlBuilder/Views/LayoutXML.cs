@@ -42,7 +42,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
                         .Select(c => new Cell(this, c)).ToList();
                 }
             }
-            if (string.IsNullOrEmpty(EntityName))
+            if (string.IsNullOrEmpty(EntityName) && entity != null)
             {
                 EntityName = entity.Value("name");
             }

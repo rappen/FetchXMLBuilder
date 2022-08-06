@@ -772,9 +772,19 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 doc.LoadXml(txtXML.Text);
                 if (doc.OuterXml != liveUpdateXml)
                 {
-                    fxb.dockControlBuilder.ParseXML(txtXML.Text, false);
+                    switch (contenttype)
+                    {
+                        case ContentType.FetchXML:
+                            fxb.dockControlBuilder.ParseXML(txtXML.Text, false);
+                            fxb.historyMgr.RecordHistory(action, txtXML.Text);
+                            break;
+
+                        case ContentType.LayoutXML:
+                            fxb.dockControlBuilder.SetLayoutFromXML(txtXML.Text);
+                            fxb.dockControlGrid?.SetLayoutToGrid();
+                            break;
+                    }
                     fxb.UpdateLiveXML(live);
-                    fxb.historyMgr.RecordHistory(action, txtXML.Text);
                 }
                 liveUpdateXml = doc.OuterXml;
             }

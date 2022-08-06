@@ -156,6 +156,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             grpLayout.Visible = cell != null;
             trkLayoutWidth.Enabled = chkLayoutVisible.Checked;
             UpdateCellUI();
+            fxb.dockControlGrid?.SetLayoutToGrid();
         }
 
         private void UpdateCellUI()
