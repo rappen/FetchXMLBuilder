@@ -191,7 +191,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal TreeNode PrimaryIdNode =>
             tvFetch.Nodes.Cast<TreeNode>()?
-                .FirstOrDefault(n => n.Name == "attribute" && n.Parent?.Name == "entity" && n.Value("name") == PrimaryIdName);
+               .FirstOrDefault(n => n.Name == "fetch")?
+                .Nodes.Cast<TreeNode>()?
+                .FirstOrDefault(n => n.Name == "entity")?
+                .Nodes.Cast<TreeNode>()?
+                .FirstOrDefault(n => n.Name == "attribute" && n.Value("name") == PrimaryIdName);
 
         private int GetUniqueLinkEntitySuffix(TreeNode entity)
         {
