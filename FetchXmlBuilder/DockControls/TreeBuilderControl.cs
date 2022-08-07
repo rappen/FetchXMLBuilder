@@ -147,7 +147,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var result = new List<TreeNode>();
             if (entity == null)
             {
-                entity = GetRootEntity();
+                entity = RootEntityNode;
             }
             if (entity != null)
             {
@@ -177,23 +177,21 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             return panelContainer.Controls.Cast<FetchXmlElementControlBase>().FirstOrDefault();
         }
 
-        internal TreeNode GetRootEntity()
-        {
-            return tvFetch.Nodes.Cast<TreeNode>()?
+        internal TreeNode RootEntityNode =>
+            tvFetch.Nodes.Cast<TreeNode>()?
                 .FirstOrDefault(n => n.Name == "fetch")?
                 .Nodes.Cast<TreeNode>()?
                 .FirstOrDefault(n => n.Name == "entity");
-        }
 
-        internal EntityMetadata GetRootEntityMetadata()
-        {
-            return fxb.GetEntity(GetRootEntityName());
-        }
+        internal EntityMetadata RootEntityMetadata => fxb.GetEntity(RootEntityName);
 
-        internal string GetRootEntityName()
-        {
-            return GetRootEntity()?.Value("name");
-        }
+        internal string RootEntityName => RootEntityNode?.Value("name");
+
+        internal string PrimaryIdName => RootEntityMetadata?.PrimaryIdAttribute;
+
+        internal TreeNode PrimaryIdNode =>
+            tvFetch.Nodes.Cast<TreeNode>()?
+                .FirstOrDefault(n => n.Name == "attribute" && n.Parent?.Name == "entity" && n.Value("name") == PrimaryIdName);
 
         private int GetUniqueLinkEntitySuffix(TreeNode entity)
         {
@@ -337,12 +335,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         internal void ResetLayout()
         {
             LayoutXML = fxb.settings.Results.WorkWithLayout && !string.IsNullOrWhiteSpace(layoutxmloriginal)
-                ? new LayoutXML(layoutxmloriginal, GetRootEntity(), fxb) : null;
+                ? new LayoutXML(layoutxmloriginal, RootEntityNode, fxb) : null;
         }
 
         internal void SetLayoutFromXML(string layoutxml)
         {
-            LayoutXML = new LayoutXML(layoutxml, GetRootEntity(), fxb);
+            LayoutXML = new LayoutXML(layoutxml, RootEntityNode, fxb);
             if (GetCurrentControl() is attributeControl attrcontrol)
             {
                 attrcontrol.UpdateUIFromCell();

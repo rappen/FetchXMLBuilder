@@ -124,7 +124,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void GetLayoutFromGrid()
         {
-            if (!form.settings.Results.WorkWithLayout || !(form.dockControlBuilder.GetRootEntityMetadata() is EntityMetadata entity))
+            if (!form.settings.Results.WorkWithLayout || !(form.dockControlBuilder.RootEntityMetadata is EntityMetadata entity))
             {
                 return;
             }
