@@ -70,7 +70,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     tsmiSaveFile.Enabled = enabled && dockControlBuilder?.FetchChanged == true && !string.IsNullOrEmpty(FileName);
                     tsmiSaveFileAs.Enabled = enabled;
                     tsmiSaveView.Enabled = enabled && Service != null && View != null && View.IsCustomizable();
-                    tsmiSaveViewAs.Enabled = tsmiSaveView.Enabled;
+                    tsmiSaveViewAs.Enabled = enabled && Service != null && (tsmiSaveView.Enabled || settings.Results.WorkWithLayout);
                     tsmiSaveML.Enabled = enabled && Service != null && DynML != null;
                     tsmiSaveCWP.Visible = enabled && Service != null && GetEntity("cint_feed") != null;
                     tsmiSaveCWP.Enabled = enabled && Service != null && dockControlBuilder?.FetchChanged == true && !string.IsNullOrEmpty(CWPFeed);
@@ -572,6 +572,14 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void SaveView(bool saveas)
         {
+            if (dockControlBuilder.PrimaryIdNode == null)
+            {
+                if (MessageBox.Show($"Views should really include the primary id.\nYou should add attribute {dockControlBuilder.PrimaryIdName}.\n\nYes - I will fix it\nNo - I don't care.",
+                                    "Save View", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.No)
+                {
+                    return;
+                }
+            }
             var includelayout = saveas;
             if (!includelayout && settings.Results.WorkWithLayout)
             {
@@ -601,11 +609,11 @@ namespace Rappen.XTB.FetchXmlBuilder
                     return;
                 }
             }
-            var viewname = View["name"].ToString();
-            var viewtype = View.LogicalName;
+            var viewname = View?.GetAttributeValue<string>("name");
+            var viewtype = View?.LogicalName;
             if (saveas)
             {
-                var typeresult = MessageBox.Show("Save the view as which type?\n\nSay Yes for System view\nSay No for Personal", "Save View As", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                var typeresult = MessageBox.Show("Save the view as type:\n\nYes - System view\nNo - Personal view", "Save View As", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                 switch (typeresult)
                 {
                     case DialogResult.Yes:
@@ -625,7 +633,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     MessageBox.Show("No name for new view.", "Save View As", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                if (newviewname.ToLowerInvariant() == viewname.ToLowerInvariant())
+                if (newviewname.ToLowerInvariant() == viewname?.ToLowerInvariant())
                 {
                     MessageBox.Show("Enter a new name for this view.", "Save View As", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
@@ -641,23 +649,28 @@ namespace Rappen.XTB.FetchXmlBuilder
                 }
             }
             var fetch = dockControlBuilder.GetFetchString(false, false);
-            var layout = includelayout ? dockControlBuilder.LayoutXML.ToXML() : View["layoutxml"].ToString();
-            var entityname = View["returnedtypecode"].ToString();
+            var entityname = View?["returnedtypecode"].ToString() ?? dockControlBuilder.RootEntityName;
+            var layout = includelayout ? dockControlBuilder.LayoutXML.ToXML() : View?["layoutxml"].ToString();
             var newView = new Entity(viewtype);
             newView["fetchxml"] = fetch;
-            if (includelayout)
+            newView["returnedtypecode"] = entityname;
+            if (includelayout && !string.IsNullOrWhiteSpace(layout))
             {
                 newView["layoutxml"] = layout;
             }
             if (saveas)
             {
                 newView["name"] = viewname;
-                newView["returnedtypecode"] = View["returnedtypecode"];
                 newView["querytype"] = 0;
             }
             else
             {
-                newView.Id = View.Id;
+                newView.Id = View?.Id ?? Guid.Empty;
+                if (newView.Id.Equals(Guid.Empty))
+                {
+                    MessageBox.Show("Somehow missing the Id for the existing view.\nSorry. Try again, or reboot, or anything else...", "Oops", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
 
             var msg = newView.LogicalName == "savedquery" ? "Saving and publishing {0}..." : "Saving {0}...";
@@ -679,7 +692,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                         var pubRequest = new PublishXmlRequest();
                         pubRequest.ParameterXml = string.Format(
                             @"<importexportxml><entities><entity>{0}</entity></entities><nodes/><securityroles/><settings/><workflows/></importexportxml>",
-                            View["returnedtypecode"].ToString());
+                            newView["returnedtypecode"].ToString());
                         Execute(pubRequest);
                     }
                 })
@@ -692,16 +705,24 @@ namespace Rappen.XTB.FetchXmlBuilder
                     }
                     else
                     {
-                        if (completedargs.Result is Entity newview)
+                        if (completedargs.Result is Entity newview && saveas)
                         {
-                            entityname = newview["returnedtypecode"].ToString();
-                            var viewsuffix = viewtype == "savedquery" ? "S" : "U";
-                            if (!views.ContainsKey(entityname + "|" + viewsuffix))
+                            if (views != null)
                             {
-                                views.Add(entityname + "|" + viewsuffix, new List<Entity>());
+                                entityname = newview["returnedtypecode"].ToString();
+                                var viewsuffix = newview.LogicalName == "savedquery" ? "S" : "U";
+                                if (!views.ContainsKey(entityname + "|" + viewsuffix))
+                                {
+                                    views.Add(entityname + "|" + viewsuffix, new List<Entity>());
+                                }
+                                views[entityname + "|" + viewsuffix].Add(newView);
                             }
-                            views[entityname + "|" + viewsuffix].Add(newView);
                             View = newview;
+                            if (newView.LogicalName == "savedquery")
+                            {
+                                MessageBox.Show($"{viewname} is created in the system.\n\nNote that it is now only in the Default solution!\nMake sure you go and add it to your own solutions.",
+                                    "New View", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            }
                         }
                         dockControlBuilder.ClearChanged();
                     }
