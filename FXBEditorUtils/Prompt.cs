@@ -15,7 +15,7 @@ namespace Rappen.XTB.XmlEditorUtils
             Label textLabel = new Label() { Left = 50, Top = 20, Width = 430, Text = text };
             TextBox textBox = new TextBox() { Left = 50, Top = 45, Width = 400, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right, Text = startvalue };
             Button cancellation = new Button() { Text = "Cancel", Left = 220, Width = 100, Top = 80, DialogResult = DialogResult.Cancel };
-            Button confirmation = new Button() { Text = "Ok", Left = 350, Width = 100, Top = 80, DialogResult = DialogResult.OK };
+            Button confirmation = new Button() { Text = "OK", Left = 350, Width = 100, Top = 80, DialogResult = DialogResult.OK };
             //confirmation.Click += (sender, e) => { prompt.Close(); };
             prompt.Controls.Add(textBox);
             prompt.Controls.Add(cancellation);
