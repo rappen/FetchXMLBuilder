@@ -203,7 +203,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     {
                         XmlDocument doc = new XmlDocument();
                         doc.LoadXml(completedargs.Result.ToString());
-                        dockControlBuilder.Init(doc.OuterXml, "parse QueryExpression", true);
+                        dockControlBuilder.Init(doc.OuterXml, null, "parse QueryExpression", true);
                     }
                     working = false;
                 }
@@ -268,7 +268,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 Work = (worker, eventargs) =>
                 {
                     QueryBase query = new FetchExpression(fetch);
-                    var attributessignature = dockControlBuilder.GetAttributesSignature(null);
+                    var attributessignature = dockControlBuilder.GetAttributesSignature();
                     var start = DateTime.Now;
                     EntityCollection resultCollection = null;
                     EntityCollection tmpResult = null;

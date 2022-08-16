@@ -227,13 +227,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builder\TreeNodeExtensions.cs" />
     <Compile Include="AppCode\Utils.cs" />
     <Compile Include="Extensions\ConnectionExtensions.cs" />
     <Compile Include="ControlsClasses\EntityNameItem.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\GroupBoxExpanderExtensions.cs" />
     <Compile Include="Settings\FXBConnectionSettings.cs" />
+    <Compile Include="Builder\TreeNodeExtensions.cs" />
+    <Compile Include="Views\Cell.cs" />
+    <Compile Include="Views\LayoutXML.cs" />
     <Compile Include="FXBGui.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -492,6 +494,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DockControls\XmlContentControl.resx">
       <DependentUpon>XmlContentControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ShowMetadataOptions.resx">
       <DependentUpon>ShowMetadataOptions.cs</DependentUpon>

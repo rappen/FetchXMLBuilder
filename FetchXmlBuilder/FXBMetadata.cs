@@ -236,6 +236,11 @@ namespace Rappen.XTB.FetchXmlBuilder
             return entities?.FirstOrDefault(e => e.LogicalName.Equals(entityname));
         }
 
+        internal EntityMetadata GetEntity(int objecttypecode)
+        {
+            return entities?.FirstOrDefault(e => e.ObjectTypeCode.Equals(objecttypecode));
+        }
+
         internal bool NeedToLoadEntity(string entityName)
         {
             return

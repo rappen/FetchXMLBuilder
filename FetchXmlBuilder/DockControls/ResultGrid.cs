@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Views;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -11,6 +14,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
     {
         private FetchXmlBuilder form;
         private QueryInfo queryinfo;
+        private bool reloaded;
 
         public ResultGrid(FetchXmlBuilder fetchXmlBuilder)
         {
@@ -54,6 +58,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             crmGridView1.Service = form.Service;
             panQuickFilter.Visible = form.settings.Results.QuickFilter;
+            mnuResetLayout.Visible = form.settings.Results.WorkWithLayout;
             RefreshData();
         }
 
@@ -81,14 +86,62 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 crmGridView1.FilterText = string.Empty;
             }
+            reloaded = true;
             crmGridView1.SuspendLayout();
             crmGridView1.Refresh();
-            crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
+            if (form.dockControlBuilder.LayoutXML == null)
+            {
+                crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
+            }
+            else
+            {
+                SetLayoutToGrid();
+            }
             crmGridView1.Columns.Cast<DataGridViewColumn>()
                 .Where(c => c.Width > form.settings.Results.MaxColumnWidth)
                 .ToList()
                 .ForEach(c => c.Width = form.settings.Results.MaxColumnWidth);
+            GetLayoutFromGrid();
             crmGridView1.ResumeLayout();
+            reloaded = false;
+        }
+
+        internal void SetLayoutToGrid()
+        {
+            reloaded = true;
+            foreach (var cell in form.dockControlBuilder.LayoutXML.Cells)
+            {
+                var col = crmGridView1.Columns[cell.Name];
+                if (col != null)
+                {
+                    col.DisplayIndex = cell.DisplayIndex;
+                    col.Width = cell.Width;
+                    col.Visible = cell.Width > 0;
+                }
+            }
+            reloaded = false;
+        }
+
+        private void GetLayoutFromGrid()
+        {
+            if (!form.settings.Results.WorkWithLayout || !(form.dockControlBuilder.RootEntityMetadata is EntityMetadata entity))
+            {
+                return;
+            }
+            if (form.dockControlBuilder.LayoutXML == null || form.dockControlBuilder.LayoutXML.EntityMeta != entity)
+            {
+                form.dockControlBuilder.LayoutXML = new LayoutXML(form)
+                {
+                    EntityName = entity.LogicalName,
+                    Cells = new List<Cell>()
+                };
+            }
+            var columns = crmGridView1.Columns.Cast<DataGridViewColumn>()
+                .Where(c => !c.Name.StartsWith("#") && c.Visible && c.Width > 5)
+                .OrderBy(c => c.DisplayIndex)
+                .ToDictionary(c => c.Name, c => c.Width);
+            form.dockControlBuilder.LayoutXML.MakeSureAllCellsExistForColumns(columns);
+            form.dockControlBuilder.UpdateLayoutXML();
         }
 
         private void crmGridView1_RecordDoubleClick(object sender, Rappen.XTB.Helpers.Controls.XRMRecordEventArgs e)
@@ -217,6 +270,20 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 form.LogUse("CopyRecord");
                 Clipboard.SetText(url);
             }
+        }
+
+        private void crmGridView1_LayoutChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            if (!reloaded)
+            {
+                GetLayoutFromGrid();
+            }
+        }
+
+        private void mnuResetLayout_Click(object sender, EventArgs e)
+        {
+            form.dockControlBuilder.ResetLayout();
+            RefreshData();
         }
     }
 }

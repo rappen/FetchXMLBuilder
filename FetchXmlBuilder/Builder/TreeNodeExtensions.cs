@@ -43,6 +43,22 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
             return string.Empty;
         }
 
+        internal static void SetValue(this TreeNode node, string key, object value)
+        {
+            if (node == null)
+            {
+                return;
+            }
+            if (node.Tag == null)
+            {
+                node.Tag = new Dictionary<string, string>();
+            }
+            if (node.Tag is Dictionary<string, string> tag)
+            {
+                tag[key] = value.ToString();
+            }
+        }
+
         internal static bool IsFetchAggregate(this TreeNode node)
         {
             var aggregate = false;
@@ -69,6 +85,33 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                 distinct = node.Value("distinct") == "true";
             }
             return distinct;
+        }
+
+        internal static bool IsAttributeValidForView(this TreeNode node)
+        {
+            var entity = node.Parent;
+            return node.Name == "attribute" && (entity?.Name == "entity" || (entity?.Name == "link-entity" && !string.IsNullOrWhiteSpace(entity.Value("alias"))));
+        }
+
+        internal static string GetAttributeLayoutName(this TreeNode node)
+        {
+            var entity = node.LocalEntityNode();
+            var entityalias = entity.Name == "link-entity" ? entity.Value("alias") : string.Empty;
+            var attribute = node.Value("name");
+            var alias = node.Value("alias");
+            if (!string.IsNullOrWhiteSpace(alias))
+            {
+                attribute = alias;
+            }
+            else if (!string.IsNullOrWhiteSpace(entityalias))
+            {
+                attribute = entityalias + "." + attribute;
+            }
+            if (!string.IsNullOrWhiteSpace(attribute))
+            {
+                return attribute;
+            }
+            return null;
         }
 
         internal static string GetTooltip(this TreeNode node)

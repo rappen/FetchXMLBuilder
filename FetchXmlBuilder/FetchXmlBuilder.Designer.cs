@@ -67,6 +67,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbExecute = new System.Windows.Forms.ToolStripButton();
             this.tsbView = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiShowFetchXML = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowLayoutXML = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowMetadata = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiShowSQL = new System.Windows.Forms.ToolStripMenuItem();
@@ -448,6 +449,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsbView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiShowFetchXML,
+            this.tsmiShowLayoutXML,
             this.tsmiShowMetadata,
             this.toolStripSeparator9,
             this.tsmiShowSQL,
@@ -470,9 +472,18 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowFetchXML.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowFetchXML.Image")));
             this.tsmiShowFetchXML.Name = "tsmiShowFetchXML";
             this.tsmiShowFetchXML.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-            this.tsmiShowFetchXML.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowFetchXML.Size = new System.Drawing.Size(297, 30);
             this.tsmiShowFetchXML.Text = "FetchXML";
             this.tsmiShowFetchXML.Click += new System.EventHandler(this.tsmiShowFetchXML_Click);
+            // 
+            // tsmiShowLayoutXML
+            // 
+            this.tsmiShowLayoutXML.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowLayoutXML.Image")));
+            this.tsmiShowLayoutXML.Name = "tsmiShowLayoutXML";
+            this.tsmiShowLayoutXML.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+            this.tsmiShowLayoutXML.Size = new System.Drawing.Size(297, 30);
+            this.tsmiShowLayoutXML.Text = "LayoutXML";
+            this.tsmiShowLayoutXML.Click += new System.EventHandler(this.tsmiShowLayoutXML_Click);
             // 
             // tsmiShowMetadata
             // 
@@ -480,14 +491,14 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowMetadata.Name = "tsmiShowMetadata";
             this.tsmiShowMetadata.ShortcutKeyDisplayString = "";
             this.tsmiShowMetadata.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
-            this.tsmiShowMetadata.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowMetadata.Size = new System.Drawing.Size(297, 30);
             this.tsmiShowMetadata.Text = "Metadata";
             this.tsmiShowMetadata.Click += new System.EventHandler(this.tsmiShowMetadata_Click);
             // 
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(286, 6);
+            this.toolStripSeparator9.Size = new System.Drawing.Size(294, 6);
             // 
             // tsmiShowSQL
             // 
@@ -495,7 +506,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowSQL.Name = "tsmiShowSQL";
             this.tsmiShowSQL.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.S)));
-            this.tsmiShowSQL.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowSQL.Size = new System.Drawing.Size(297, 30);
             this.tsmiShowSQL.Text = "SQL Query";
             this.tsmiShowSQL.Click += new System.EventHandler(this.tsmiShowSQL_Click);
             // 
@@ -505,7 +516,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowFlow.Name = "tsmiShowFlow";
             this.tsmiShowFlow.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.P)));
-            this.tsmiShowFlow.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowFlow.Size = new System.Drawing.Size(297, 30);
             this.tsmiShowFlow.Text = "Power Automate Parameters";
             this.tsmiShowFlow.Click += new System.EventHandler(this.tsmiShowFlow_Click);
             // 
@@ -515,7 +526,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowOData4.Name = "tsmiShowOData4";
             this.tsmiShowOData4.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.O)));
-            this.tsmiShowOData4.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowOData4.Size = new System.Drawing.Size(297, 30);
             this.tsmiShowOData4.Text = "OData 4.0 (WebAPI)";
             this.tsmiShowOData4.Click += new System.EventHandler(this.tsmiShowOData4_Click);
             // 
@@ -523,7 +534,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsmiShowOData.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowOData.Image")));
             this.tsmiShowOData.Name = "tsmiShowOData";
-            this.tsmiShowOData.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowOData.Size = new System.Drawing.Size(297, 30);
             this.tsmiShowOData.Text = "OData 2.0";
             this.tsmiShowOData.Click += new System.EventHandler(this.tsmiShowOData_Click);
             // 
@@ -531,7 +542,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsmiShowQueryExpression.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowQueryExpression.Image")));
             this.tsmiShowQueryExpression.Name = "tsmiShowQueryExpression";
-            this.tsmiShowQueryExpression.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowQueryExpression.Size = new System.Drawing.Size(297, 30);
             this.tsmiShowQueryExpression.Text = "QueryExpression";
             this.tsmiShowQueryExpression.Click += new System.EventHandler(this.tsmiShowQueryExpression_Click);
             // 
@@ -539,7 +550,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsmiShowFetchXMLcs.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowFetchXMLcs.Image")));
             this.tsmiShowFetchXMLcs.Name = "tsmiShowFetchXMLcs";
-            this.tsmiShowFetchXMLcs.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowFetchXMLcs.Size = new System.Drawing.Size(297, 30);
             this.tsmiShowFetchXMLcs.Text = "FetchXML C# code";
             this.tsmiShowFetchXMLcs.Click += new System.EventHandler(this.tsmiShowFetchXMLcs_Click);
             // 
@@ -547,20 +558,20 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsmiShowFetchXMLjs.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowFetchXMLjs.Image")));
             this.tsmiShowFetchXMLjs.Name = "tsmiShowFetchXMLjs";
-            this.tsmiShowFetchXMLjs.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowFetchXMLjs.Size = new System.Drawing.Size(297, 30);
             this.tsmiShowFetchXMLjs.Text = "FetchXML JavaScript code";
             this.tsmiShowFetchXMLjs.Click += new System.EventHandler(this.tsmiShowFetchXMLjs_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(286, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(294, 6);
             // 
             // tsmiResetWindowLayout
             // 
             this.tsmiResetWindowLayout.Image = ((System.Drawing.Image)(resources.GetObject("tsmiResetWindowLayout.Image")));
             this.tsmiResetWindowLayout.Name = "tsmiResetWindowLayout";
-            this.tsmiResetWindowLayout.Size = new System.Drawing.Size(289, 22);
+            this.tsmiResetWindowLayout.Size = new System.Drawing.Size(297, 30);
             this.tsmiResetWindowLayout.Text = "Reset window layout";
             this.tsmiResetWindowLayout.Click += new System.EventHandler(this.tsmiResetWindowLayout_Click);
             // 
@@ -761,5 +772,6 @@ namespace Rappen.XTB.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiSelect;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem tmsiShowReleaseNotes;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowLayoutXML;
     }
 }

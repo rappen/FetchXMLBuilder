@@ -1,5 +1,9 @@
-﻿using Microsoft.Xrm.Sdk.Metadata;
+﻿using Rappen.XTB.FetchXmlBuilder.Builder;
+using Microsoft.Xrm.Sdk.Metadata;
+using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace Rappen.XTB.FetchXmlBuilder.Extensions
 {
@@ -56,6 +60,32 @@ namespace Rappen.XTB.FetchXmlBuilder.Extensions
         internal static bool KeyDown(this KeyEventArgs keyevent, Keys key, bool shift, bool control, bool alt)
         {
             return keyevent.KeyCode == key && keyevent.Shift == shift && keyevent.Control == control && keyevent.Alt == alt;
+        }
+
+        internal static string AttributeValue(this XmlNode node, string key)
+        {
+            if (node != null && node.Attributes != null && node.Attributes[key] is XmlAttribute attr)
+            {
+                return attr.Value;
+            }
+            return string.Empty;
+        }
+
+        public static void Move<T>(this List<T> list, T item, int newIndex)
+        {   // From this tip: https://stackoverflow.com/a/450250/2866704
+            if (item != null)
+            {
+                var oldIndex = list.IndexOf(item);
+                if (oldIndex > -1 && oldIndex != newIndex)
+                {
+                    list.RemoveAt(oldIndex);
+
+                    if (newIndex > oldIndex) newIndex--;
+                    // the actual index could have shifted due to the removal
+
+                    list.Insert(newIndex, item);
+                }
+            }
         }
     }
 }

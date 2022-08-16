@@ -245,7 +245,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             if (state is string fetch && fetch.ToLowerInvariant().StartsWith("<fetch"))
             {
-                dockControlBuilder.Init(fetch, null, false);
+                dockControlBuilder.Init(fetch, null, null, false);
             }
         }
 
@@ -343,7 +343,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             tsbRepo.Visible = settings.ShowRepository;
             if (reloadquery && connectionsettings != null && !string.IsNullOrWhiteSpace(connectionsettings.FetchXML))
             {
-                dockControlBuilder.Init(connectionsettings.FetchXML, "loaded from last session", false);
+                dockControlBuilder.Init(connectionsettings.FetchXML, connectionsettings.LayoutXML, "loaded from last session", false);
             }
             dockControlBuilder.lblQAExpander.GroupBoxSetState(null, settings.QueryOptions.ShowQuickActions);
             var ass = Assembly.GetExecutingAssembly().GetName();
@@ -494,6 +494,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 connectionsettings = new FXBConnectionSettings();
             }
             connectionsettings.FetchXML = dockControlBuilder.GetFetchString(false, false);
+            connectionsettings.LayoutXML = dockControlBuilder.LayoutXML?.ToXML();
             SettingsManager.Instance.Save(typeof(FetchXmlBuilder), connectionsettings, ConnectionDetail?.ConnectionName);
         }
 
@@ -580,7 +581,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     return;
                 }
                 LogUse("New");
-                dockControlBuilder.Init(null, "new", false);
+                dockControlBuilder.Init(null, null, "new", false);
                 return;
             }
             var newconnection = sender == tsmiNewNewConnection;
@@ -679,6 +680,11 @@ namespace Rappen.XTB.FetchXmlBuilder
             ShowContentControl(ref dockControlFetchXmlJs, ContentType.JavaScript_Query, SaveFormat.None, settings.DockStates.FetchXMLJs);
         }
 
+        private void tsmiShowLayoutXML_Click(object sender, EventArgs e)
+        {
+            ShowContentControl(ref dockControlLayoutXml, ContentType.LayoutXML, SaveFormat.None, settings.DockStates.LayoutXML);
+        }
+
         private void tsmiShowOData_Click(object sender, EventArgs e)
         {
             ShowODataControl(ref dockControlOData2, 2);
@@ -732,7 +738,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             if (sender is ToolStripMenuItem menu && menu.Tag is QueryDefinition query)
             {
-                dockControlBuilder.Init(query.Fetch, $"open repo {query.Name}", false);
+                dockControlBuilder.Init(query.Fetch, null, $"open repo {query.Name}", false);
                 tsbRepo.Tag = query;
                 dockControlBuilder.SetFetchName($"Repo: {query.Name}");
             }

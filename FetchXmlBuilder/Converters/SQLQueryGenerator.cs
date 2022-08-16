@@ -76,7 +76,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
 
         private static List<string> GetJoin(List<object> linkentities, string entityalias, FetchXmlBuilder fxb)
         {
-            var joinList = new List<String>();
+            var joinList = new List<string>();
             foreach (FetchLinkEntityType linkitem in linkentities)
             {
                 var join = new StringBuilder();

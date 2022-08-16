@@ -10,6 +10,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public ShowMetaTypesEntity ShowEntities { get; set; } = new ShowMetaTypesEntity();
         public ShowMetaTypesAttribute ShowAttributes { get; set; } = new ShowMetaTypesAttribute();
         public string FetchXML { get; set; } = QueryOptions.DefaultNewQuery;
+        public string LayoutXML { get; set; }
     }
 
     public class QueryOptions

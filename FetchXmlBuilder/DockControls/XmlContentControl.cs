@@ -39,7 +39,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             SetContentType(contentType);
             SetFormat(saveFormat);
             UpdateButtons();
-            if (contentType == ContentType.FetchXML)
+            if (contentType == ContentType.FetchXML || contentType == ContentType.LayoutXML)
             {
                 InitIntellisense();
             }
@@ -61,7 +61,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             Text = contenttype.ToString().Replace("_", " ").Replace("CSharp", "C#");
             TabText = Text;
             var windowSettings = fxb.settings.ContentWindows.GetContentWindow(contenttype);
-            var allowedit = contenttype == ContentType.FetchXML;
+            var allowedit = contenttype == ContentType.FetchXML || contenttype == ContentType.LayoutXML;
             var allowparse = contenttype == ContentType.QueryExpression;
             var allowsql = contenttype == ContentType.SQL_Query;
             chkLiveUpdate.Checked = allowedit && windowSettings.LiveUpdate;
@@ -70,7 +70,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             panLiveUpdate.Visible = allowedit;
             panOk.Visible = allowedit;
             panFormatting.Visible = allowedit;
-            panExecute.Visible = allowedit;
+            panExecute.Visible = allowedit && contenttype == ContentType.FetchXML;
             panParseQE.Visible = allowparse;
             panSQL4CDS.Visible = allowsql;
             panSQL4CDSInfo.Visible = allowsql;
@@ -78,6 +78,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             switch (contentType)
             {
                 case ContentType.FetchXML:
+                case ContentType.LayoutXML:
                 case ContentType.FetchXML_Result:
                 case ContentType.Serialized_Result_XML:
                     txtXML.ConfigureForXml(fxb.settings);
@@ -201,13 +202,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 return;
             }
-            if (!FetchIsPlain() && !FetchIsMini())
+            if (!XMLIsPlain() && !XMLIsMini())
             {
-                if (FetchIsHtml())
+                if (XMLIsHtml())
                 {
                     txtXML.Text = HttpUtility.HtmlDecode(txtXML.Text.Trim());
                 }
-                else if (FetchIsEscaped())
+                else if (XMLIsEscaped())
                 {
                     txtXML.Text = Uri.UnescapeDataString(txtXML.Text.Trim());
                 }
@@ -216,7 +217,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     if (MessageBox.Show("Unrecognized encoding, unsure what to do with it.\n" +
                         "Currently FXB can handle htmlencoded and urlescaped strings.\n\n" +
                         "Would you like to submit an issue to FetchXML Builder to be able to handle this?",
-                        "Decode FetchXML", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                        "Decode " + Text, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
                     {
                         FetchXmlBuilder.OpenURL("https://github.com/rappen/FetchXMLBuilder/issues/new");
                     }
@@ -234,7 +235,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 UpdateButtons();
                 return;
             }
-            if (!FetchIsPlain())
+            if (!XMLIsPlain())
             {
                 FormatAsXML();
             }
@@ -244,7 +245,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void FormatAsEsc()
         {
-            if (!FetchIsPlain())
+            if (!XMLIsPlain())
             {
                 FormatAsXML();
             }
@@ -253,7 +254,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void FormatAsMini()
         {
-            if (!FetchIsPlain() && !FetchIsMini())
+            if (!XMLIsPlain() && !XMLIsMini())
             {
                 FormatAsXML();
             }
@@ -283,7 +284,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private string GetCompactXml()
         {
-            if (!FetchIsPlain())
+            if (!XMLIsPlain())
             {
                 FormatAsXML();
             }
@@ -300,15 +301,15 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private XmlStyle GetStyle()
         {
-            if (FetchIsMini())
+            if (XMLIsMini())
             {
                 return XmlStyle.Mini;
             }
-            if (FetchIsHtml())
+            if (XMLIsHtml())
             {
                 return XmlStyle.Html;
             }
-            if (FetchIsEscaped())
+            if (XMLIsEscaped())
             {
                 return XmlStyle.Esc;
             }
@@ -337,26 +338,36 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        private bool FetchIsPlain()
+        private bool XMLIsPlain()
         {
             var lines = txtXML.Text.Trim().Split('\n').Select(l => l.Trim()).ToList();
-            return lines.Count > 1 && lines[0].StartsWith("<fetch");
+            return lines.Count > 1 && lines[0].StartsWith("<" + ContentTypeStart(contenttype));
         }
 
-        private bool FetchIsMini()
+        private bool XMLIsMini()
         {
             var lines = txtXML.Text.Trim().Split('\n').Select(l => l.Trim()).ToList();
-            return lines.Count == 1 && lines[0].StartsWith("<fetch");
+            return lines.Count == 1 && lines[0].StartsWith("<" + ContentTypeStart(contenttype));
         }
 
-        private bool FetchIsHtml()
+        private bool XMLIsHtml()
         {
-            return txtXML.Text.Trim().ToLowerInvariant().StartsWith("&lt;fetch");
+            return txtXML.Text.Trim().ToLowerInvariant().StartsWith("&lt;" + ContentTypeStart(contenttype));
         }
 
-        private bool FetchIsEscaped()
+        private bool XMLIsEscaped()
         {
-            return txtXML.Text.Trim().ToLowerInvariant().StartsWith("%3cfetch");
+            return txtXML.Text.Trim().ToLowerInvariant().StartsWith("%3c" + ContentTypeStart(contenttype));
+        }
+
+        private string ContentTypeStart(ContentType type)
+        {
+            switch (type)
+            {
+                case ContentType.FetchXML: return "fetch";
+                case ContentType.LayoutXML: return "grid";
+                default: return "dscxdsfdcvgfgwesdxdzsfdcbgf454";
+            }
         }
 
         private void txtXML_TextChanged(object sender, EventArgs e)
@@ -366,10 +377,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void UpdateButtons()
         {
-            var plain = FetchIsPlain();
-            rbFormatEsc.Checked = FetchIsEscaped();
-            rbFormatHTML.Checked = FetchIsHtml();
-            rbFormatMini.Checked = FetchIsMini();
+            var plain = XMLIsPlain();
+            rbFormatEsc.Checked = XMLIsEscaped();
+            rbFormatHTML.Checked = XMLIsHtml();
+            rbFormatMini.Checked = XMLIsMini();
             rbFormatXML.Checked = plain;
             btnFormat.Enabled = plain;
             btnExecute.Enabled = plain && !chkLiveUpdate.Checked;
@@ -391,6 +402,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
                     case ContentType.FetchXML:
                         fxb.settings.DockStates.FetchXML = DockState;
+                        break;
+
+                    case ContentType.LayoutXML:
+                        fxb.settings.DockStates.LayoutXML = DockState;
                         break;
 
                     case ContentType.CSharp_Query:
@@ -757,9 +772,19 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 doc.LoadXml(txtXML.Text);
                 if (doc.OuterXml != liveUpdateXml)
                 {
-                    fxb.dockControlBuilder.ParseXML(txtXML.Text, false);
+                    switch (contenttype)
+                    {
+                        case ContentType.FetchXML:
+                            fxb.dockControlBuilder.ParseXML(txtXML.Text, false);
+                            fxb.historyMgr.RecordHistory(action, txtXML.Text);
+                            break;
+
+                        case ContentType.LayoutXML:
+                            fxb.dockControlBuilder.SetLayoutFromXML(txtXML.Text);
+                            fxb.dockControlGrid?.SetLayoutToGrid();
+                            break;
+                    }
                     fxb.UpdateLiveXML(live);
-                    fxb.historyMgr.RecordHistory(action, txtXML.Text);
                 }
                 liveUpdateXml = doc.OuterXml;
             }
@@ -781,6 +806,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
     public enum ContentType
     {
         FetchXML,
+        LayoutXML,
         FetchXML_Result,
         Serialized_Result_XML,
         Serialized_Result_JSON,

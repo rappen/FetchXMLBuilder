@@ -81,6 +81,10 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 tsmiShowFetchXML_Click(null, null);
             }
+            else if (e.KeyDown(Keys.L, false, true, false) && tsmiShowLayoutXML.Enabled)
+            {
+                tsmiShowLayoutXML_Click(null, null);
+            }
             else if (e.KeyDown(Keys.N, false, true, false) && tsbNew.Enabled)
             {
                 tsbNew_Click(null, null);
@@ -170,6 +174,11 @@ namespace Rappen.XTB.FetchXmlBuilder
                 ApplySettings(false);
                 dockControlBuilder.ApplyCurrentSettings();
                 dockControlFetchXml?.ApplyCurrentSettings();
+                dockControlGrid?.ApplySettingsToGrid();
+                if (dockControlLayoutXml?.Visible == true && !settings.Results.WorkWithLayout)
+                {
+                    dockControlLayoutXml.PanelPane?.CloseActiveContent();
+                }
                 EnableControls();
             }
         }
