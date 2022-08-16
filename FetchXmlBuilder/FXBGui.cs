@@ -583,7 +583,9 @@ namespace Rappen.XTB.FetchXmlBuilder
             var includelayout = saveas;
             if (!includelayout && settings.Results.WorkWithLayout)
             {
-                var inclresult = MessageBox.Show("Include the layout of the view?", "Save View", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                var inclresult = MessageBox.Show("Include the layout of the view?", "Save View",
+                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, 0,
+                    "https://jonasr.app/fxb-layout/#howto");
                 switch (inclresult)
                 {
                     case DialogResult.Yes:
@@ -613,7 +615,9 @@ namespace Rappen.XTB.FetchXmlBuilder
             var viewtype = View?.LogicalName;
             if (saveas)
             {
-                var typeresult = MessageBox.Show("Save the view as type:\n\nYes - System view\nNo - Personal view", "Save View As", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                var typeresult = MessageBox.Show("Save as a System View?\n\nYes - saving a System View\nNo - will save a Personal View", "Save View As",
+                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, 0,
+                    "https://docs.microsoft.com/en-us/power-apps/maker/model-driven-apps/create-edit-views?WT.mc_id=BA-MVP-5002475#types-of-views");
                 switch (typeresult)
                 {
                     case DialogResult.Yes:
