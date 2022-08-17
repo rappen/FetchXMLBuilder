@@ -108,6 +108,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal void SetLayoutToGrid()
         {
+            if (form.dockControlBuilder?.LayoutXML?.Cells == null)
+            {
+                return;
+            }
             reloaded = true;
             foreach (var cell in form.dockControlBuilder.LayoutXML.Cells)
             {
