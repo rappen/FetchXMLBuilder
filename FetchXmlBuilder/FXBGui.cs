@@ -572,6 +572,14 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void SaveView(bool saveas)
         {
+            var entityname = View?["returnedtypecode"].ToString() ?? dockControlBuilder.RootEntityName;
+            if (GetEntity(entityname) == null)
+            {
+                MessageBox.Show($"Can't set the correct ReturnedTypeCode from the metadata: {entityname}", "Save View",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0,
+                    "https://docs.microsoft.com/power-apps/developer/model-driven-apps/customize-entity-views?WT.mc_id=BA-MVP-5002475#create-views");
+                return;
+            }
             if (dockControlBuilder.PrimaryIdNode == null)
             {
                 if (MessageBox.Show($"Views should really include the primary id.\nYou should add attribute {dockControlBuilder.PrimaryIdName}.\n\nYes - I will fix it\nNo - I don't care.",
@@ -617,7 +625,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 var typeresult = MessageBox.Show("Save as a System View?\n\nYes - creating a new System View\nNo - creating a new Personal View", "Save View As",
                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, 0,
-                    "https://docs.microsoft.com/en-us/power-apps/maker/model-driven-apps/create-edit-views?WT.mc_id=BA-MVP-5002475#types-of-views");
+                    "https://docs.microsoft.com/power-apps/maker/model-driven-apps/create-edit-views?WT.mc_id=BA-MVP-5002475#types-of-views");
                 switch (typeresult)
                 {
                     case DialogResult.Yes:
@@ -653,7 +661,6 @@ namespace Rappen.XTB.FetchXmlBuilder
                 }
             }
             var fetch = dockControlBuilder.GetFetchString(false, false);
-            var entityname = View?["returnedtypecode"].ToString() ?? dockControlBuilder.RootEntityName;
             var layout = includelayout ? dockControlBuilder.LayoutXML.ToXML() : View?["layoutxml"].ToString();
             var newView = new Entity(viewtype);
             newView["fetchxml"] = fetch;
