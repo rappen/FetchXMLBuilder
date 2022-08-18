@@ -339,12 +339,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         internal void ResetLayout()
         {
             LayoutXML = fxb.settings.Results.WorkWithLayout && !string.IsNullOrWhiteSpace(layoutxmloriginal)
-                ? new LayoutXML(layoutxmloriginal, RootEntityNode, fxb) : null;
+                ? new LayoutXML(layoutxmloriginal, fxb) : null;
         }
 
         internal void SetLayoutFromXML(string layoutxml)
         {
-            LayoutXML = new LayoutXML(layoutxml, RootEntityNode, fxb);
+            LayoutXML = new LayoutXML(layoutxml, fxb);
             if (GetCurrentControl() is attributeControl attrcontrol)
             {
                 attrcontrol.UpdateUIFromCell();
