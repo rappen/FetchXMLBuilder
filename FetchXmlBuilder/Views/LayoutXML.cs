@@ -11,30 +11,60 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
 {
     public class LayoutXML
     {
-        public string EntityName;
-        public EntityMetadata EntityMeta => fxb.GetEntity(EntityName);
-        public List<Cell> Cells;
-        public bool CreatedFromAView = false;
         private FetchXmlBuilder fxb;
+        private EntityMetadata entitymeta;
+        private string entityname;
+        private int entityotc;
+        private bool createdfromaview = false;
+
+        public EntityMetadata EntityMeta
+        {
+            get
+            {
+                if (entitymeta == null)
+                {
+                    if (entityotc > 0)
+                    {
+                        entitymeta = fxb.GetEntity(entityotc);
+                    }
+                    else if (!string.IsNullOrEmpty(entityname))
+                    {
+                        entitymeta = fxb.GetEntity(entityname);
+                    }
+                }
+                return entitymeta;
+            }
+        }
+
+        public List<Cell> Cells;
 
         public LayoutXML(FetchXmlBuilder fxb)
         {
             this.fxb = fxb;
         }
 
-        public LayoutXML(string layoutxmlstr, TreeNode entity, FetchXmlBuilder fxb)
+        public LayoutXML(EntityMetadata entity, FetchXmlBuilder fxb)
         {
             this.fxb = fxb;
+            entitymeta = entity;
+            Cells = new List<Cell>();
+            MakeSureAllCellsExistForAttributes();
+        }
+
+        public LayoutXML(string layoutxmlstr, FetchXmlBuilder fxb)
+        {
+            this.fxb = fxb;
+            var entity = string.Empty;
             if (!string.IsNullOrEmpty(layoutxmlstr))
             {
-                CreatedFromAView = true;
+                createdfromaview = fxb.View != null;
                 var doc = new XmlDocument();
                 doc.LoadXml(layoutxmlstr);
                 if (doc.SelectSingleNode("grid") is XmlElement grid)
                 {
                     if (int.TryParse(grid.AttributeValue("object"), out int entityid))
                     {
-                        EntityName = fxb.GetEntity(entityid)?.LogicalName;
+                        entityotc = entityid;
                     }
                     Cells = grid.SelectSingleNode("row")?
                         .ChildNodes.Cast<XmlNode>()
@@ -42,18 +72,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
                         .Select(c => new Cell(this, c)).ToList();
                 }
             }
-            if (string.IsNullOrEmpty(EntityName) && entity != null)
+            if (EntityMeta == null)
             {
-                EntityName = entity.Value("name");
+                entityname = fxb.dockControlBuilder.RootEntityName;
             }
-            if (fxb.NeedToLoadEntity(EntityName))
+            if (Cells == null)
             {
-                fxb.LoadEntityDetails(EntityName, null, false, false);
+                Cells = new List<Cell>();
             }
             MakeSureAllCellsExistForAttributes();
         }
 
-        public override string ToString() => $"{EntityName} {Cells?.Where(c => c.Width > 0).Count()}/{Cells?.Count} cells";
+        public override string ToString() => $"{EntityMeta?.LogicalName} {Cells?.Where(c => c.Width > 0).Count()}/{Cells?.Count} cells";
 
         internal void MakeSureAllCellsExistForAttributes()
         {
@@ -79,6 +109,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             // Add these missing
             namewidths.Where(n => Cells
                 .FirstOrDefault(c => c.Name == n.Key) == null)
+                .Where(nw => fxb.dockControlBuilder.GetAttributeNodeFromLayoutName(nw.Key) != null)
                 .ToList().ForEach(nw => Cells.Add(new Cell(this)
                 {
                     Name = nw.Key,
@@ -132,7 +163,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             {
                 Attribute = attribute,
                 Name = attribute.GetAttributeLayoutName(),
-                Width = CreatedFromAView ? 0 : 100
+                Width = createdfromaview ? 0 : 100
             };
             Cells.Add(cell);
             return cell;

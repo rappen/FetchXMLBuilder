@@ -186,7 +186,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
         }
 
-        private Entity View
+        internal Entity View
         {
             get { return view; }
             set
