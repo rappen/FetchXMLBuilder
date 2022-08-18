@@ -784,13 +784,18 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                             fxb.dockControlGrid?.SetLayoutToGrid();
                             break;
                     }
-                    fxb.UpdateLiveXML(live);
                 }
                 liveUpdateXml = doc.OuterXml;
             }
             catch (Exception)
             {
+                if (contenttype == ContentType.LayoutXML && !live)
+                {
+                    fxb.dockControlBuilder.SetLayoutFromXML(null);
+                    fxb.dockControlGrid?.SetLayoutToGrid();
+                }
             }
+            fxb.UpdateLiveXML(live);
         }
 
         private void txtXML_KeyUp(object sender, KeyEventArgs e)
