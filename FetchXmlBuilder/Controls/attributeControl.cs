@@ -84,6 +84,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             return base.ValidateControl(control);
         }
 
+        protected override void SaveInternal(bool keyPress)
+        {
+            base.SaveInternal(keyPress);
+            if (IsInitialized)
+            {
+                UpdateCellFromUI();
+            }
+        }
+
         private void chkGroupBy_CheckedChanged(object sender, EventArgs e)
         {
             EnableAggregateControls();
@@ -118,10 +127,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private void cmbAttribute_SelectedIndexChanged(object sender, EventArgs e)
         {
             fxb.ShowMetadata(Metadata());
-            if (IsInitialized)
-            {
-                UpdateCellFromUI();
-            }
         }
 
         internal void UpdateUIFromCell()
