@@ -21,14 +21,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             InitializeComponent();
             this.PrepareGroupBoxExpanders();
             form = fetchXmlBuilder;
-            mnuFriendly.Checked = form.settings.Results.Friendly;
-            mnuIdCol.Checked = form.settings.Results.Id;
-            mnuIndexCol.Checked = form.settings.Results.Index;
-            mnuNullCol.Checked = form.settings.Results.NullColumns;
-            mnuSysCol.Checked = form.settings.Results.SysColumns;
-            mnuLocalTime.Checked = form.settings.Results.LocalTime;
-            mnuCopyHeaders.Checked = form.settings.Results.CopyHeaders;
-            mnuQuickFilter.Checked = form.settings.Results.QuickFilter;
             ApplySettingsToGrid();
         }
 
@@ -40,24 +32,37 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 this.EnsureVisible(form.dockContainer, form.settings.DockStates.ResultView);
             }
-
             crmGridView1.DataSource = queryinfo.Results;
             crmGridView1.ColumnOrder = queryinfo.AttributesSignature.Trim().Replace('\n', ',');
-            RefreshData();
+            ApplySettingsToGrid();
         }
 
         internal void ApplySettingsToGrid()
         {
-            crmGridView1.ShowFriendlyNames = form.settings.Results.Friendly;
-            crmGridView1.ShowIdColumn = form.settings.Results.Id;
-            crmGridView1.ShowIndexColumn = form.settings.Results.Index;
-            crmGridView1.ShowAllColumnsInColumnOrder = form.settings.Results.NullColumns;
-            crmGridView1.ShowColumnsNotInColumnOrder = form.settings.Results.SysColumns;
-            crmGridView1.ShowLocalTimes = form.settings.Results.LocalTime;
-            crmGridView1.ClipboardCopyMode = form.settings.Results.CopyHeaders ?
+            mnuFriendly.Checked = form.settings.Results.Friendly;
+            mnuIdCol.Checked = form.settings.Results.WorkWithLayout ? false : form.settings.Results.Id;
+            mnuIndexCol.Checked = form.settings.Results.WorkWithLayout ? false : form.settings.Results.Index;
+            mnuNullCol.Checked = form.settings.Results.WorkWithLayout ? true : form.settings.Results.NullColumns;
+            mnuSysCol.Checked = form.settings.Results.WorkWithLayout ? false : form.settings.Results.SysColumns;
+            mnuLocalTime.Checked = form.settings.Results.LocalTime;
+            mnuCopyHeaders.Checked = form.settings.Results.CopyHeaders;
+            mnuQuickFilter.Checked = form.settings.Results.QuickFilter;
+
+            mnuIdCol.Enabled = !form.settings.Results.WorkWithLayout;
+            mnuIndexCol.Enabled = !form.settings.Results.WorkWithLayout;
+            mnuNullCol.Enabled = !form.settings.Results.WorkWithLayout;
+            mnuSysCol.Enabled = !form.settings.Results.WorkWithLayout;
+
+            crmGridView1.ShowFriendlyNames = mnuFriendly.Checked;
+            crmGridView1.ShowIdColumn = mnuIdCol.Checked;
+            crmGridView1.ShowIndexColumn = mnuIndexCol.Checked;
+            crmGridView1.ShowAllColumnsInColumnOrder = mnuNullCol.Checked;
+            crmGridView1.ShowColumnsNotInColumnOrder = mnuSysCol.Checked;
+            crmGridView1.ShowLocalTimes = mnuLocalTime.Checked;
+            crmGridView1.ClipboardCopyMode = mnuCopyHeaders.Checked ?
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             crmGridView1.Service = form.Service;
-            panQuickFilter.Visible = form.settings.Results.QuickFilter;
+            panQuickFilter.Visible = mnuQuickFilter.Checked;
             mnuResetLayout.Visible = form.settings.Results.WorkWithLayout;
             RefreshData();
         }
@@ -118,7 +123,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 var col = crmGridView1.Columns[cell.Name];
                 if (col != null)
                 {
-                    col.DisplayIndex = cell.DisplayIndex;
+                    col.DisplayIndex = Math.Min(cell.DisplayIndex, crmGridView1.Columns.Count - 1);
                     col.Width = cell.Width;
                     col.Visible = cell.Width > 0;
                 }
@@ -134,11 +139,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             if (form.dockControlBuilder.LayoutXML == null || form.dockControlBuilder.LayoutXML.EntityMeta != entity)
             {
-                form.dockControlBuilder.LayoutXML = new LayoutXML(form)
-                {
-                    EntityName = entity.LogicalName,
-                    Cells = new List<Cell>()
-                };
+                form.dockControlBuilder.LayoutXML = new LayoutXML(entity, form);
             }
             var columns = crmGridView1.Columns.Cast<DataGridViewColumn>()
                 .Where(c => !c.Name.StartsWith("#") && c.Visible && c.Width > 5)
