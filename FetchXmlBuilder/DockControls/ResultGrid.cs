@@ -111,6 +111,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             reloaded = false;
         }
 
+        internal void SetQueryIfChangesDesign()
+        {
+            Text = "Result View" + (form.dockControlBuilder?.FetchChanged == true ? " *" : "");
+        }
+
         internal void SetLayoutToGrid()
         {
             if (form.dockControlBuilder?.LayoutXML?.Cells == null)

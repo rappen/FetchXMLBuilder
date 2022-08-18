@@ -82,6 +82,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     tsbBDU.Enabled = enabled && (dockControlBuilder?.IsFetchAggregate() == false);
                     tsmiShowLayoutXML.Enabled = enabled && Service != null && (dockControlBuilder?.IsFetchAggregate() == false) && settings.Results.WorkWithLayout;
                     dockControlBuilder?.EnableControls(enabled);
+                    dockControlGrid?.SetQueryIfChangesDesign();
                     buttonsEnabled = enabled;
                 }
                 catch
