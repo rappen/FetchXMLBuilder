@@ -15,7 +15,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         private bool _useFriendlyNames;
 
         public bool UseFriendlyNames
-        { get { return _useFriendlyNames; } set { _useFriendlyNames = value; FetchXmlBuilder.friendlyNames = value; } }
+        {
+            get { return _useFriendlyNames; }
+            set
+            {
+                _useFriendlyNames = value;
+                FetchXmlBuilder.friendlyNames = value;
+            }
+        }
 
         public QueryOptions QueryOptions { get; set; } = new QueryOptions();
         public ResultOptions Results { get; set; } = new ResultOptions();
@@ -64,7 +71,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public DockState ResultView { get; set; } = DockState.Document;
         public DockState FetchResult { get; set; } = DockState.Document;
         public DockState FetchXML { get; set; } = DockState.Document;
-        public DockState LayoutXML { get; set; } = DockState.DockRight;
+        public DockState LayoutXML { get; set; } = DockState.Document;
         public DockState FetchXMLCs { get; set; } = DockState.DockRight;
         public DockState FetchXMLJs { get; set; } = DockState.DockRight;
         public DockState QueryExpression { get; set; } = DockState.DockRight;
@@ -83,6 +90,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
     {
         public ContentWindow FetchResult { get; set; } = new ContentWindow();
         public ContentWindow FetchXmlWindow { get; set; } = new ContentWindow();
+        public ContentWindow LayoutXmlWindow { get; set; } = new ContentWindow();
         public ContentWindow SQLWindow { get; set; } = new ContentWindow();
         public ContentWindow FetchXmlCsWindow { get; set; } = new ContentWindow();
         public ContentWindow FetchXmlJsWindow { get; set; } = new ContentWindow();
@@ -99,6 +107,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
 
                 case ContentType.FetchXML:
                     return FetchXmlWindow;
+
+                case ContentType.LayoutXML:
+                    return LayoutXmlWindow;
 
                 case ContentType.SQL_Query:
                     return SQLWindow;
@@ -121,6 +132,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
             {
                 case ContentType.FetchXML:
                     FetchXmlWindow = windowSettings;
+                    break;
+
+                case ContentType.LayoutXML:
+                    LayoutXmlWindow = windowSettings;
                     break;
 
                 case ContentType.SQL_Query:

@@ -242,6 +242,11 @@ namespace Rappen.XTB.FetchXmlBuilder
                 dockControlFetchXml = new XmlContentControl(this);
                 return dockControlFetchXml;
             }
+            else if (persistString == XmlContentControl.GetPersistString(ContentType.LayoutXML) && dockControlLayoutXml?.IsDisposed != false)
+            {
+                dockControlLayoutXml = new XmlContentControl(ContentType.LayoutXML, SaveFormat.None, this);
+                return dockControlLayoutXml;
+            }
             return null;
         }
 
