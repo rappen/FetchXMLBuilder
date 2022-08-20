@@ -145,6 +145,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                     trkLayoutWidth.Value = trkLayoutWidth.Maximum;
                 }
             }
+            else
+            {
+                chkLayoutVisible.Checked = true;
+            }
             grpLayout.Visible = cell != null;
             UpdateCellUI();
         }
