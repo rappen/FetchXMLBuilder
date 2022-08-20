@@ -268,6 +268,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 Work = (worker, eventargs) =>
                 {
                     QueryBase query = new FetchExpression(fetch);
+                    var querysignature = dockControlBuilder.GetTreeChecksum(null);
                     var attributessignature = dockControlBuilder.GetAttributesSignature();
                     var start = DateTime.Now;
                     EntityCollection resultCollection = null;
@@ -345,6 +346,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                         eventargs.Result = new QueryInfo
                         {
                             Query = query,
+                            QuerySignature = querysignature,
                             AttributesSignature = attributessignature,
                             Results = resultCollection
                         };

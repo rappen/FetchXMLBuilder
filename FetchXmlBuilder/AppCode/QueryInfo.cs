@@ -6,6 +6,7 @@ namespace Rappen.XTB.FetchXmlBuilder.AppCode
     internal class QueryInfo
     {
         public QueryBase Query;
+        public string QuerySignature;
         public string AttributesSignature;
         public EntityCollection Results;
     }

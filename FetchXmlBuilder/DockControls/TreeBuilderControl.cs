@@ -519,7 +519,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             return doc;
         }
 
-        private string GetTreeChecksum(TreeNode node)
+        internal string GetTreeChecksum(TreeNode node)
         {
             if (node == null)
             {

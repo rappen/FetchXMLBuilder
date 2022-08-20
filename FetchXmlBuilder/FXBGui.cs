@@ -82,7 +82,6 @@ namespace Rappen.XTB.FetchXmlBuilder
                     tsbBDU.Enabled = enabled && (dockControlBuilder?.IsFetchAggregate() == false);
                     tsmiShowLayoutXML.Enabled = enabled && Service != null && (dockControlBuilder?.IsFetchAggregate() == false) && settings.Results.WorkWithLayout;
                     dockControlBuilder?.EnableControls(enabled);
-                    dockControlGrid?.SetQueryIfChangesDesign();
                     buttonsEnabled = enabled;
                 }
                 catch
@@ -124,6 +123,10 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 dockControlBuilder.LayoutXML?.MakeSureAllCellsExistForAttributes();
                 dockControlLayoutXml.UpdateXML(dockControlBuilder.LayoutXML?.ToXML());
+            }
+            if (dockControlGrid?.Visible == true)
+            {
+                dockControlGrid.SetQueryIfChangesDesign();
             }
             if (dockControlOData2?.Visible == true && entities != null)
             {

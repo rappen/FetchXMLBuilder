@@ -35,6 +35,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             crmGridView1.DataSource = queryinfo.Results;
             crmGridView1.ColumnOrder = queryinfo.AttributesSignature.Trim().Replace('\n', ',');
             ApplySettingsToGrid();
+            SetQueryIfChangesDesign();
         }
 
         internal void ApplySettingsToGrid()
@@ -113,7 +114,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal void SetQueryIfChangesDesign()
         {
-            Text = "Result View" + (form.dockControlBuilder?.FetchChanged == true ? " *" : "");
+            var changed = queryinfo?.QuerySignature != form.dockControlBuilder?.GetTreeChecksum(null);
+            Text = "Result View" + (changed ? " *" : "");
+            crmGridView1.DefaultCellStyle.BackColor = changed ? System.Drawing.Color.LightGray : System.Drawing.Color.White;
+            crmGridView1.DefaultCellStyle.ForeColor = changed ? System.Drawing.Color.Gray : System.Drawing.SystemColors.ControlText;
         }
 
         internal void SetLayoutToGrid()
