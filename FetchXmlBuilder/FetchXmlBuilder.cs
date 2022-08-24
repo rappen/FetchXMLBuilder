@@ -562,7 +562,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             var query = dockControlBuilder.GetFetchString(false, false);
             var newconnection = sender == tsmiCloneNewConnection;
-            LogUse(newconnection ? "Clone-Connect" : "Clone");
+            LogUse(newconnection ? "Clone-Connection" : "Clone");
             DuplicateRequested?.Invoke(this, new DuplicateToolArgs(query, newconnection));
         }
 
@@ -585,7 +585,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 return;
             }
             var newconnection = sender == tsmiNewNewConnection;
-            LogUse(newconnection ? "New-NewConnection" : "New-New");
+            LogUse(newconnection ? "New-New-Connection" : "New-New");
             DuplicateRequested?.Invoke(this, new DuplicateToolArgs(settings.QueryOptions.NewQueryTemplate, newconnection));
         }
 

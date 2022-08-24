@@ -383,7 +383,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                         View = viewselector.View;
                         dockControlBuilder.Init(View["fetchxml"].ToString(), View["layoutxml"].ToString(), "open view", false);
                         attributesChecksum = dockControlBuilder.GetAttributesSignature();
-                        LogUse("OpenView");
+                        LogUse($"OpenView-{(View.LogicalName == "savedquery" ? "S" : "P")}");
                     }
                     else
                     {
@@ -706,7 +706,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     {
                         Service.Update(newView);
                     }
-                    LogUse("SaveView");
+                    LogUse($"SaveView{(newView.Contains("layoutxml") ? "Layout" : "")}-{(newView.LogicalName == "savedquery" ? "S" : "P")}");
                     if (newView.LogicalName == "savedquery")
                     {
                         var pubRequest = new PublishXmlRequest();

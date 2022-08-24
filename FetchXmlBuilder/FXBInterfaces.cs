@@ -68,6 +68,15 @@ namespace Rappen.XTB.FetchXmlBuilder
             tsbReturnToCaller.ToolTipText = "Return " + requestedType + " to " + callerArgs.SourcePlugin;
             dockControlBuilder.RecordHistory("called from " + message.SourcePlugin);
             LogUse("CalledBy." + callerArgs.SourcePlugin);
+            if (callerArgs.SourcePlugin == "View Designer" && !connectionsettings.TipsAgainstOrViewDesignerToolShown)
+            {
+                if (MessageBox.Show("Did you know you can work with the layouts too in the FetchXML Builder?\nClick the Help button to see how!\n\nDon't show again.",
+                    "Called from View Designer", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2, 0,
+                    Utils.ProcessURL("https://jonasr.app/fxb-layout/")) == DialogResult.OK)
+                {
+                    connectionsettings.TipsAgainstOrViewDesignerToolShown = true;
+                }
+            }
             EnableControls(true);
         }
 
@@ -138,7 +147,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         public void ShowAboutDialog()
         {
-            LogUse("OpenAbout");
+            LogUse("ShowAbout");
             var about = new About();
             about.StartPosition = FormStartPosition.CenterParent;
             about.lblVersion.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -148,7 +157,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         public void ShowSettings()
         {
             var settingDlg = new Forms.Settings(this);
-            LogUse("OpenOptions");
+            LogUse("ShowOptions");
             if (settingDlg.ShowDialog(this) == DialogResult.OK)
             {
                 LogUse("SaveOptions");

@@ -180,7 +180,6 @@ namespace Rappen.XTB.FetchXmlBuilder
         internal void QueryExpressionToFetchXml(string query)
         {
             working = true;
-            LogUse("QueryExpressionToFetchXml");
             WorkAsync(new WorkAsyncInfo("Translating QueryExpression to FetchXML...",
                 (eventargs) =>
                 {
@@ -258,7 +257,6 @@ namespace Rappen.XTB.FetchXmlBuilder
         private void RetrieveMultiple(string fetch)
         {
             working = true;
-            LogUse("RetrieveMultiple-" + settings.Results.ResultOutput.ToString());
             SendMessageToStatusBar(this, new StatusBarMessageEventArgs("Retrieving..."));
             tsbAbort.Enabled = true;
             WorkAsync(new WorkAsyncInfo
@@ -330,7 +328,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                         SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Retrieved {resultCollection.Entities.Count} records on {pageinfo} in {duration.TotalSeconds:F2} seconds"));
                     }
                     while (!eventargs.Cancel && settings.Results.RetrieveAllPages && (query is QueryExpression || query is FetchExpression) && tmpResult.MoreRecords);
-                    LogUse("RetrieveMultiple", false, resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds);
+                    LogUse($"RetrieveMultiple-{settings.Results.ResultOutput}", false, resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds);
                     if (settings.Results.ResultOutput == ResultOutput.JSON)
                     {
                         var json = EntityCollectionSerializer.ToJSONComplex(resultCollection, Formatting.Indented);
