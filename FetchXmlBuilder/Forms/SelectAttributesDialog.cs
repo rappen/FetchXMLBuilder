@@ -27,15 +27,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             allItems = new List<ListViewItem>();
             foreach (var attribute in attributes)
             {
-                var name = attribute.DisplayName.UserLocalizedLabel != null ? attribute.DisplayName.UserLocalizedLabel.Label : attribute.LogicalName;
+                var name = attribute.DisplayName?.UserLocalizedLabel?.Label ?? attribute.LogicalName;
                 var item = new ListViewItem(new string[] {
                     name,
                     attribute.LogicalName,
                     attribute.ToTypeString(),
-                    attribute.IsValidForRead.Value.ToString(),
+                    attribute.IsValidForRead.HasValue ? attribute.IsValidForRead.Value.ToString() : "",
                     attribute.IsValidForGrid.HasValue ? attribute.IsValidForGrid.Value.ToString() : "",
                     attribute.IsValidForAdvancedFind.Value.ToString(),
-                    attribute.IsRetrievable.Value.ToString()
+                    attribute.IsRetrievable.HasValue ? attribute.IsRetrievable.Value.ToString() : ""
                 });
                 item.Name = attribute.LogicalName;
                 item.Text = name;

@@ -15,11 +15,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Extensions
             {
                 return string.Empty;
             }
-            if (attribute.AttributeTypeName != null)
+            if (attribute.AttributeTypeName?.Value != null)
             {
                 return attribute.AttributeTypeName.Value.RemoveEnd("Type");
             }
-            return attribute.AttributeType.ToString();
+            if (attribute.AttributeType != null)
+            {
+                return attribute.AttributeType.ToString();
+            }
+            return string.Empty;
         }
 
         internal static string TriToString(this CheckState state, string uncheck_check_indterminate)
