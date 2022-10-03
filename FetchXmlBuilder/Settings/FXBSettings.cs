@@ -46,6 +46,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool ShowRepository { get; set; } = false;
         public bool TryMetadataCache { get; set; } = true;
         public bool WaitUntilMetadataLoaded { get; set; } = false;
+        public bool HideAggregationFieldsWhenAggregating { get; set; } = true;
     }
 
     public class ResultOptions
