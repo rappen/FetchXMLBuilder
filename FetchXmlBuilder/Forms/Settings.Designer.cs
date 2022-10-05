@@ -207,7 +207,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkHideFieldsOnAggregate.Name = "chkHideFieldsOnAggregate";
             this.chkHideFieldsOnAggregate.Size = new System.Drawing.Size(163, 17);
             this.chkHideFieldsOnAggregate.TabIndex = 9;
-            this.chkHideFieldsOnAggregate.Text = "Hide fields when aggregating";
+            this.chkHideFieldsOnAggregate.Text = "Hide fields when not aggregating";
             this.chkHideFieldsOnAggregate.UseVisualStyleBackColor = true;
             // 
             // chkAppFriendlyResults
