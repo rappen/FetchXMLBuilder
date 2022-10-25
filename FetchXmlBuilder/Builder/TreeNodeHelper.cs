@@ -1,4 +1,4 @@
-﻿using Rappen.XTB.FetchXmlBuilder.Controls;
+﻿using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using System.Collections.Generic;

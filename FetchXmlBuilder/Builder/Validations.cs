@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
-using Rappen.XTB.FetchXmlBuilder.Controls;
+using Rappen.XRM.Helpers.FetchXML;
 using System.Linq;
 using System.Windows.Forms;
 
