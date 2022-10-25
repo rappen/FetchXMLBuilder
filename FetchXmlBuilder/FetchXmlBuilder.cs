@@ -390,7 +390,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             var code = string.Empty;
             try
             {
-                var QEx = dockControlBuilder.GetQueryExpression(null, false);
+                var QEx = dockControlBuilder.GetQueryExpression(false);
                 code = QueryExpressionCodeGenerator.GetCSharpQueryExpression(QEx);
             }
             catch (FetchIsAggregateException ex)
