@@ -74,6 +74,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             panParseQE.Visible = allowparse;
             panSQL4CDS.Visible = allowsql;
             panSQL4CDSInfo.Visible = allowsql;
+            panQExOptions.Visible = allowparse;
+            chkQExComments.Checked = fxb.settings.CodeGenerators.IncludeComments;
+            rbQExLate.Checked = !fxb.settings.CodeGenerators.EarlyBound;
+            rbQExEarly.Checked = fxb.settings.CodeGenerators.EarlyBound;
 
             switch (contentType)
             {
@@ -805,6 +809,18 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 tmLiveUpdate.Stop();
                 tmLiveUpdate.Start();
             }
+        }
+
+        private void rbQExEarly_Click(object sender, EventArgs e)
+        {
+            fxb.settings.CodeGenerators.EarlyBound = rbQExEarly.Checked;
+            fxb.UpdateLiveXML();
+        }
+
+        private void chkQExComments_CheckedChanged(object sender, EventArgs e)
+        {
+            fxb.settings.CodeGenerators.IncludeComments = chkQExComments.Checked;
+            fxb.UpdateLiveXML();
         }
     }
 

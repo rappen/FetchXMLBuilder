@@ -391,7 +391,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             try
             {
                 var QEx = dockControlBuilder.GetQueryExpression(false);
-                code = QueryExpressionCodeGenerator.GetCSharpQueryExpression(QEx, entities, false);
+                code = QueryExpressionCodeGenerator.GetCSharpQueryExpression(QEx, entities, settings);
             }
             catch (FetchIsAggregateException ex)
             {
