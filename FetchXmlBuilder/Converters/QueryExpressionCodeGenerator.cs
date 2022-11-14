@@ -1,10 +1,12 @@
 ﻿using Microsoft.CSharp;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -12,42 +14,93 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
 {
     public class QueryExpressionCodeGenerator
     {
-        private static List<string> varList = new List<string>();
+        private List<string> varList;
+        private QueryExpression qex;
+        private List<EntityMetadata> metas;
+        private Dictionary<string, string> entityaliases;
+        private bool early;
 
-        public static string GetCSharpQueryExpression(QueryExpression QEx)
+        private delegate QueryExpression queryExpressionCompiler();
+
+        private const string EarlyBoundEntityLogicalName = "EntityLogicalName";
+        private const string EarlyBoundAttributeExtraName = ".Fields.";
+
+        public static string GetCSharpQueryExpression(QueryExpression QEx, List<EntityMetadata> entities, bool earlyboundish)
         {
-            varList.Clear();
+            return new QueryExpressionCodeGenerator
+            {
+                metas = entities,
+                early = earlyboundish,
+                qex = QEx
+            }.CreateCSharpQueryExpression();
+        }
+
+        public static string GetFetchXmlFromCSharpQueryExpression(string query, IOrganizationService organizationService)
+        {
+            CSharpCodeProvider provider = new CSharpCodeProvider();
+            CompilerParameters parameters = new CompilerParameters();
+
+            parameters.ReferencedAssemblies.Add("Microsoft.Xrm.Sdk.dll");
+            parameters.ReferencedAssemblies.Add("System.Runtime.Serialization.dll");
+            parameters.GenerateInMemory = true;
+            parameters.GenerateExecutable = false;
+
+            CompilerResults compilerResults = provider.CompileAssemblyFromSource(parameters, GetQueryExpressionFromScript(query));
+
+            if (compilerResults.Errors.HasErrors)
+            {
+                StringBuilder sbuilder = new StringBuilder();
+                foreach (CompilerError compilerError in compilerResults.Errors)
+                {
+                    sbuilder.AppendLine($"Error ({compilerError.ErrorNumber}): {compilerError.ErrorText}");
+                }
+                throw new InvalidOperationException(sbuilder.ToString());
+            }
+
+            QueryExpression queryExpression =
+                ((queryExpressionCompiler)Delegate.CreateDelegate(typeof(queryExpressionCompiler),
+                    compilerResults.CompiledAssembly.GetType("DynamicContentGenerator.Generator"), "Generate"))();
+
+            return organizationService.QueryExpressionToFetchXml(queryExpression);
+        }
+
+        private string CreateCSharpQueryExpression()
+        {
+            varList = new List<string>();
+            entityaliases = new Dictionary<string, string>();
             var code = new StringBuilder();
             var qename = GetVarName("query");
             code.AppendLine("// Instantiate QueryExpression " + qename);
-            code.AppendLine("var " + qename + " = new QueryExpression(\"" + QEx.EntityName + "\");");
-            if (QEx.NoLock)
+            code.AppendLine("var " + qename + " = new QueryExpression(" + GetCodeEntity(qex.EntityName) + ");");
+            if (qex.NoLock)
             {
                 code.AppendLine(qename + ".NoLock = true;");
             }
-            if (QEx.Distinct)
+            if (qex.Distinct)
             {
                 code.AppendLine(qename + ".Distinct = true;");
             }
-            if (QEx.TopCount != null)
+            if (qex.TopCount != null)
             {
-                code.AppendLine(qename + ".TopCount = " + QEx.TopCount.ToString() + ";");
+                code.AppendLine(qename + ".TopCount = " + qex.TopCount.ToString() + ";");
             }
-            code.Append(GetColumns(QEx.ColumnSet, qename + ".ColumnSet"));
-            foreach (var order in QEx.Orders)
+            code.Append(GetColumns(qex.EntityName, qex.ColumnSet, qename + ".ColumnSet"));
+            var links = new StringBuilder();
+            foreach (var link in qex.LinkEntities)
             {
-                code.AppendLine(qename + ".AddOrder(\"" + order.AttributeName + "\", OrderType." + order.OrderType.ToString() + ");");
+                links.Append(GetLinkEntity(link, qename));
             }
-            code.Append(GetFilter(QEx.Criteria, qename, "Criteria"));
-            foreach (var link in QEx.LinkEntities)
+            code.Append(GetFilter(qex.EntityName, qex.Criteria, qename, "Criteria"));
+            code.Append(links);
+            foreach (var order in qex.Orders)
             {
-                code.Append(GetLinkEntity(link, qename));
+                code.AppendLine(qename + ".AddOrder(" + GetCodeAttribute(qex.EntityName, order.AttributeName) + ", OrderType." + order.OrderType.ToString() + ");");
             }
             var codestr = ReplaceValueTokens(code.ToString());
             return codestr;
         }
 
-        private static string GetVarName(string requestedname)
+        private string GetVarName(string requestedname)
         {
             var result = requestedname;
             if (varList.Contains(result))
@@ -63,7 +116,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             return result;
         }
 
-        private static string GetColumns(ColumnSet columns, string LineStart)
+        private string GetColumns(string entity, ColumnSet columns, string LineStart)
         {
             var code = new StringBuilder();
             if (columns.AllColumns)
@@ -74,28 +127,31 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             }
             else if (columns.Columns.Count > 0)
             {
+                var firstsep = early && columns.Columns.Count > 1 ? "\n    " : "";
+                var separator = early ? "\n    " : ", ";
                 code.AppendLine();
                 code.AppendLine("// Add columns to " + LineStart);
-                var cols = "\"" + string.Join("\", \"", columns.Columns) + "\"";
+                var cols = firstsep + string.Join(separator, columns.Columns.Select(c => GetCodeAttribute(entity, c)));
                 code.AppendLine(LineStart + ".AddColumns(" + cols + ");");
             }
             return code.ToString();
         }
 
-        private static string GetLinkEntity(LinkEntity link, string LineStart)
+        private string GetLinkEntity(LinkEntity link, string LineStart)
         {
             var code = new StringBuilder();
             var linkname = GetVarName(string.IsNullOrEmpty(link.EntityAlias) ? LineStart + "_" + link.LinkToEntityName : link.EntityAlias);
             code.AppendLine();
             code.AppendLine("// Add link-entity " + linkname);
             var join = link.JoinOperator == JoinOperator.Inner ? "" : ", JoinOperator." + link.JoinOperator.ToString();
-            code.AppendLine($"var {linkname} = {LineStart}.AddLink(\"{link.LinkToEntityName}\", \"{link.LinkFromAttributeName}\", \"{link.LinkToAttributeName}\"{join});");
+            code.AppendLine($"var {linkname} = {LineStart}.AddLink({GetCodeEntity(link.LinkToEntityName)}, {GetCodeAttribute(link.LinkFromEntityName, link.LinkFromAttributeName)}, {GetCodeAttribute(link.LinkToEntityName, link.LinkToAttributeName)}{join});");
             if (!string.IsNullOrWhiteSpace(link.EntityAlias))
             {
+                entityaliases.Add(link.EntityAlias, link.LinkToEntityName);
                 code.AppendLine(linkname + ".EntityAlias = \"" + link.EntityAlias + "\";");
             }
-            code.Append(GetColumns(link.Columns, linkname + ".Columns"));
-            code.Append(GetFilter(link.LinkCriteria, linkname, "LinkCriteria"));
+            code.Append(GetColumns(link.LinkToEntityName, link.Columns, linkname + ".Columns"));
+            code.Append(GetFilter(link.LinkToEntityName, link.LinkCriteria, linkname, "LinkCriteria"));
             foreach (var sublink in link.LinkEntities)
             {
                 code.Append(GetLinkEntity(sublink, linkname));
@@ -103,7 +159,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             return code.ToString();
         }
 
-        private static string GetFilter(FilterExpression filterExpression, string parentName, string property)
+        private string GetFilter(string entity, FilterExpression filterExpression, string parentName, string property)
         {
             var LineStart = parentName + (!string.IsNullOrEmpty(property) ? "." + property : "");
             var code = new StringBuilder();
@@ -117,12 +173,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 }
                 foreach (var cond in filterExpression.Conditions)
                 {
-                    var entity = "";
+                    var filterentity = entity;
+                    var entityalias = "";
                     var values = "";
                     var token = LineStart.Replace(".", "_").Replace("_Criteria", "").Replace("_LinkCriteria", "");
                     if (!string.IsNullOrWhiteSpace(cond.EntityName))
                     {
-                        entity = "\"" + cond.EntityName + "\", ";
+                        filterentity = entityaliases.FirstOrDefault(a => a.Key.Equals(cond.EntityName)).Value ?? cond.EntityName;
+                        entityalias = "\"" + cond.EntityName + "\", ";
                         token += "_" + cond.EntityName;
                     }
                     token += "_" + cond.AttributeName;
@@ -135,7 +193,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                             values = ", true" + values;
                         }
                     }
-                    code.AppendLine($"{LineStart}.AddCondition({entity}\"{cond.AttributeName}\", ConditionOperator.{cond.Operator.ToString()}{values});");
+                    code.AppendLine($"{LineStart}.AddCondition({entityalias}{GetCodeAttribute(filterentity, cond.AttributeName)}, ConditionOperator.{cond.Operator}{values});");
                 }
                 var i = 0;
                 foreach (var subfilter in filterExpression.Filters)
@@ -143,11 +201,59 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     var filtername = GetVarName(LineStart.Replace(".", "_") + "_" + i.ToString());
                     code.AppendLine($"var {filtername} = new FilterExpression();");
                     code.AppendLine($"{LineStart}.AddFilter({filtername});");
-                    code.Append(GetFilter(subfilter, filtername, null));
+                    code.Append(GetFilter(entity, subfilter, filtername, null));
                     i++;
                 }
             }
             return code.ToString();
+        }
+
+        private string ReplaceValueTokens(string code)
+        {
+            if (!code.Contains("<<<"))
+            {
+                return code;
+            }
+            var variables = new StringBuilder();
+            variables.AppendLine("// Define Condition Values");
+            while (code.Contains("<<<"))
+            {
+                var tokenvalue = code.Substring(code.IndexOf("<<<") + 3);
+                if (!tokenvalue.Contains("|") || !tokenvalue.Contains(">>>") || tokenvalue.IndexOf("|") > tokenvalue.IndexOf(">>>"))
+                {
+                    throw new Exception($"Unexpected value token: {tokenvalue}");
+                }
+                tokenvalue = tokenvalue.Substring(0, tokenvalue.IndexOf(">>>"));
+                var token = tokenvalue.Split('|')[0];
+                token = GetVarName(token);
+                var value = tokenvalue.Split('|')[1];
+                variables.AppendLine($"var {token} = {value};");
+                code = code.Replace("<<<" + tokenvalue + ">>>", token);
+            }
+            variables.AppendLine();
+            code = variables.ToString() + code;
+            return code;
+        }
+
+        private string GetCodeEntity(string entityname)
+        {
+            if (early &&
+                metas.FirstOrDefault(e => e.LogicalName.Equals(entityname)) is EntityMetadata entity)
+            {
+                return entity.SchemaName + "." + EarlyBoundEntityLogicalName;
+            }
+            return "\"" + entityname + "\"";
+        }
+
+        private string GetCodeAttribute(string entityname, string attributename)
+        {
+            if (early &&
+                metas.FirstOrDefault(e => e.LogicalName.Equals(entityname)) is EntityMetadata entity &&
+                entity.Attributes.FirstOrDefault(a => a.LogicalName.Equals(attributename)) is AttributeMetadata attribute)
+            {
+                return entity.SchemaName + EarlyBoundAttributeExtraName + attribute.SchemaName;
+            }
+            return "\"" + attributename + "\"";
         }
 
         private static string GetConditionValues(DataCollection<object> values, string token)
@@ -180,64 +286,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             }
             return string.Join(", ", strings);
         }
-
-        private static string ReplaceValueTokens(string code)
-        {
-            if (!code.Contains("<<<"))
-            {
-                return code;
-            }
-            var variables = new StringBuilder();
-            variables.AppendLine("// Define Condition Values");
-            while (code.Contains("<<<"))
-            {
-                var tokenvalue = code.Substring(code.IndexOf("<<<") + 3);
-                if (!tokenvalue.Contains("|") || !tokenvalue.Contains(">>>") || tokenvalue.IndexOf("|") > tokenvalue.IndexOf(">>>"))
-                {
-                    throw new Exception($"Unexpected value token: {tokenvalue}");
-                }
-                tokenvalue = tokenvalue.Substring(0, tokenvalue.IndexOf(">>>"));
-                var token = tokenvalue.Split('|')[0];
-                token = GetVarName(token);
-                var value = tokenvalue.Split('|')[1];
-                variables.AppendLine($"var {token} = {value};");
-                code = code.Replace("<<<" + tokenvalue + ">>>", token);
-            }
-            variables.AppendLine();
-            code = variables.ToString() + code;
-            return code;
-        }
-
-        public static string GetFetchXmlFromCSharpQueryExpression(string query, IOrganizationService organizationService)
-        {
-            CSharpCodeProvider provider = new CSharpCodeProvider();
-            CompilerParameters parameters = new CompilerParameters();
-
-            parameters.ReferencedAssemblies.Add("Microsoft.Xrm.Sdk.dll");
-            parameters.ReferencedAssemblies.Add("System.Runtime.Serialization.dll");
-            parameters.GenerateInMemory = true;
-            parameters.GenerateExecutable = false;
-
-            CompilerResults compilerResults = provider.CompileAssemblyFromSource(parameters, GetQueryExpressionFromScript(query));
-
-            if (compilerResults.Errors.HasErrors)
-            {
-                StringBuilder sbuilder = new StringBuilder();
-                foreach (CompilerError compilerError in compilerResults.Errors)
-                {
-                    sbuilder.AppendLine($"Error ({compilerError.ErrorNumber}): {compilerError.ErrorText}");
-                }
-                throw new InvalidOperationException(sbuilder.ToString());
-            }
-
-            QueryExpression queryExpression =
-                ((queryExpressionCompiler)Delegate.CreateDelegate(typeof(queryExpressionCompiler),
-                    compilerResults.CompiledAssembly.GetType("DynamicContentGenerator.Generator"), "Generate"))();
-
-            return organizationService.QueryExpressionToFetchXml(queryExpression);
-        }
-
-        private delegate QueryExpression queryExpressionCompiler();
 
         private static string GetQueryExpressionFromScript(string query)
         {
