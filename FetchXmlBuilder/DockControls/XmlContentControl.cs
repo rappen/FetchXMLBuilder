@@ -76,8 +76,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             panSQL4CDSInfo.Visible = allowsql;
             panQExOptions.Visible = allowparse;
             chkQExComments.Checked = fxb.settings.CodeGenerators.IncludeComments;
-            rbQExLate.Checked = !fxb.settings.CodeGenerators.EarlyBound;
-            rbQExEarly.Checked = fxb.settings.CodeGenerators.EarlyBound;
+            rbQExLate.Checked = fxb.settings.CodeGenerators.Style == CodeGenerationStyle.LateBound;
+            rbQExEarly.Checked = fxb.settings.CodeGenerators.Style == CodeGenerationStyle.EarlyBoundEBG;
+            rbQExQExFactory.Checked = fxb.settings.CodeGenerators.Style == CodeGenerationStyle.QueryExpressionFactory;
 
             switch (contentType)
             {
@@ -811,9 +812,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        private void rbQExEarly_Click(object sender, EventArgs e)
+        private void rbQExStyle_Click(object sender, EventArgs e)
         {
-            fxb.settings.CodeGenerators.EarlyBound = rbQExEarly.Checked;
+            fxb.settings.CodeGenerators.Style = rbQExEarly.Checked ? CodeGenerationStyle.EarlyBoundEBG : rbQExQExFactory.Checked ? CodeGenerationStyle.QueryExpressionFactory : CodeGenerationStyle.LateBound;
             fxb.UpdateLiveXML();
         }
 
@@ -821,6 +822,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             fxb.settings.CodeGenerators.IncludeComments = chkQExComments.Checked;
             fxb.UpdateLiveXML();
+        }
+
+        private void linkEBG_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FetchXmlBuilder.OpenURL("https://www.xrmtoolbox.com/plugins/DLaB.Xrm.EarlyBoundGenerator/");
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FetchXmlBuilder.OpenURL("https://github.com/rappen/FetchXMLBuilder/issues/822");
         }
     }
 
