@@ -249,8 +249,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
     public class CodeGenerators
     {
         public bool IncludeComments { get; set; } = true;
-        public bool EarlyBound { get; set; }
+        public CodeGenerationStyle Style { get; set; } = CodeGenerationStyle.LateBound;
         public string EBG_EntityLogicalNames { get; set; } = "EntityLogicalName";
         public string EBG_AttributeLogicalNameClass { get; set; } = "Fields.";
+    }
+
+    public enum CodeGenerationStyle
+    {
+        LateBound,
+        EarlyBoundEBG,
+        QueryExpressionFactory
     }
 }

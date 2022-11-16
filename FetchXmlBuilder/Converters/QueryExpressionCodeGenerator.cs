@@ -15,6 +15,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
 {
     public class QueryExpressionCodeGenerator
     {
+        private const string CRLF = "\r\n";
         private List<string> varList;
         private QueryExpression qex;
         private List<EntityMetadata> metas;
@@ -68,23 +69,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             entityaliases = new Dictionary<string, string>();
             var code = new StringBuilder();
             var qename = GetVarName("query");
-            if (settings.CodeGenerators.IncludeComments)
-            {
-                code.AppendLine("// Instantiate QueryExpression " + qename);
-            }
-            code.AppendLine("var " + qename + " = new QueryExpression(" + GetCodeEntity(qex.EntityName) + ");");
-            if (qex.NoLock)
-            {
-                code.AppendLine(qename + ".NoLock = true;");
-            }
-            if (qex.Distinct)
-            {
-                code.AppendLine(qename + ".Distinct = true;");
-            }
-            if (qex.TopCount != null)
-            {
-                code.AppendLine(qename + ".TopCount = " + qex.TopCount.ToString() + ";");
-            }
+            code.Append(GetQueryCodeStart(qename));
+            code.Append(GetQueryOptions());
+            code.Append(GetQueryCodeEnd());
             code.Append(GetColumns(qex.EntityName, qex.ColumnSet, qename + ".ColumnSet"));
             var links = new StringBuilder();
             foreach (var link in qex.LinkEntities)
@@ -99,6 +86,60 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             }
             var codestr = ReplaceValueTokens(code.ToString());
             return codestr;
+        }
+
+        private string GetQueryCodeStart(string qename)
+        {
+            var querycode = string.Empty;
+            if (settings.CodeGenerators.IncludeComments)
+            {
+                querycode += "// Instantiate QueryExpression " + qename + CRLF;
+            }
+            switch (settings.CodeGenerators.Style)
+            {
+                case CodeGenerationStyle.QueryExpressionFactory:
+                    querycode += "var " + qename + " = QueryExpressionFactory.Create<" + GetCodeEntity(qex.EntityName) + ">(";
+                    break;
+
+                default:
+                    querycode += "var " + qename + " = new QueryExpression(" + GetCodeEntity(qex.EntityName) + ")";
+                    break;
+            }
+
+            return querycode;
+        }
+
+        private string GetQueryCodeEnd()
+        {
+            switch (settings.CodeGenerators.Style)
+            {
+                case CodeGenerationStyle.QueryExpressionFactory:
+                    return ");" + CRLF;
+                default:
+                    return ";" + CRLF;
+            }
+        }
+
+        private string GetQueryOptions()
+        {
+            var queryoptions = new List<string>();
+            if (qex.NoLock)
+            {
+                queryoptions.Add("NoLock = true");
+            }
+            if (qex.Distinct)
+            {
+                queryoptions.Add("Distinct = true");
+            }
+            if (qex.TopCount != null)
+            {
+                queryoptions.Add("TopCount = " + qex.TopCount.ToString());
+            }
+            if (queryoptions.Count > 0)
+            {
+                return CRLF + "{" + CRLF + string.Join("," + CRLF, queryoptions.Select(o => "    " + o)) + CRLF + "}";
+            }
+            return string.Empty;
         }
 
         private string GetVarName(string requestedname)
@@ -131,15 +172,27 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             }
             else if (columns.Columns.Count > 0)
             {
-                var firstsep = settings.CodeGenerators.EarlyBound && columns.Columns.Count > 1 ? "\n    " : "";
-                var separator = settings.CodeGenerators.EarlyBound ? "\n    " : ", ";
                 if (settings.CodeGenerators.IncludeComments)
                 {
                     code.AppendLine();
                     code.AppendLine("// Add columns to " + LineStart);
                 }
-                var cols = firstsep + string.Join(separator, columns.Columns.Select(c => GetCodeAttribute(entity, c)));
-                code.AppendLine(LineStart + ".AddColumns(" + cols + ");");
+                var cols = string.Join(", ", columns.Columns.Select(c => GetCodeAttribute(entity, c))).Trim(' ');
+                if (cols.Length > 100)
+                {
+                    cols = CRLF + "    " + cols.Replace(", ", $",{CRLF}    ") + CRLF;
+                }
+                if (settings.CodeGenerators.Style == CodeGenerationStyle.QueryExpressionFactory)
+                {
+                    code.AppendLine(GetCodeEntityPrefix(entity) + " => new {");
+                    code.AppendLine(cols);
+                    code.AppendLine("}");
+                }
+                else
+                {
+                    var method = ".AddColumn" + (columns.Columns.Count > 1 ? "s" : "");
+                    code.AppendLine($"{LineStart}{method}({cols});");
+                }
             }
             return code.ToString();
         }
@@ -253,21 +306,47 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
 
         private string GetCodeEntity(string entityname)
         {
-            if (settings.CodeGenerators.EarlyBound &&
-                metas.FirstOrDefault(e => e.LogicalName.Equals(entityname)) is EntityMetadata entity)
+            if (metas.FirstOrDefault(e => e.LogicalName.Equals(entityname)) is EntityMetadata entity)
             {
-                return entity.SchemaName + "." + settings.CodeGenerators.EBG_EntityLogicalNames;
+                switch (settings.CodeGenerators.Style)
+                {
+                    case CodeGenerationStyle.EarlyBoundEBG:
+                        return entity.SchemaName + "." + settings.CodeGenerators.EBG_EntityLogicalNames;
+
+                    case CodeGenerationStyle.QueryExpressionFactory:
+                        return entity.SchemaName;
+                }
             }
             return "\"" + entityname + "\"";
         }
 
+        private string GetCodeEntityPrefix(string entityname)
+        {
+            if (metas.FirstOrDefault(e => e.LogicalName.Equals(entityname)) is EntityMetadata entity)
+            {
+                switch (settings.CodeGenerators.Style)
+                {
+                    case CodeGenerationStyle.EarlyBoundEBG:
+                    case CodeGenerationStyle.QueryExpressionFactory:
+                        return entity.DisplayName.UserLocalizedLabel.Label.Substring(0, 1).ToLowerInvariant();
+                }
+            }
+            return entityname.Substring(0, 1).ToLowerInvariant();
+        }
+
         private string GetCodeAttribute(string entityname, string attributename)
         {
-            if (settings.CodeGenerators.EarlyBound &&
-                metas.FirstOrDefault(e => e.LogicalName.Equals(entityname)) is EntityMetadata entity &&
+            if (metas.FirstOrDefault(e => e.LogicalName.Equals(entityname)) is EntityMetadata entity &&
                 entity.Attributes.FirstOrDefault(a => a.LogicalName.Equals(attributename)) is AttributeMetadata attribute)
             {
-                return entity.SchemaName + "." + settings.CodeGenerators.EBG_AttributeLogicalNameClass + attribute.SchemaName;
+                switch (settings.CodeGenerators.Style)
+                {
+                    case CodeGenerationStyle.EarlyBoundEBG:
+                        return entity.SchemaName + "." + settings.CodeGenerators.EBG_AttributeLogicalNameClass + attribute.SchemaName;
+
+                    case CodeGenerationStyle.QueryExpressionFactory:
+                        return GetCodeEntityPrefix(entityname) + "." + attribute.SchemaName;
+                }
             }
             return "\"" + attributename + "\"";
         }
