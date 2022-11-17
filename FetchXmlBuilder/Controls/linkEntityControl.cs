@@ -370,6 +370,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 }
             }
 
+            if (control == txtAlias)
+            {
+                if (string.IsNullOrWhiteSpace(txtAlias.Text) && fxb.settings.Results.WorkWithLayout)
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Using Layout: Alias is needed to show these attributes");
+                }
+            }
+
             return base.ValidateControl(control);
         }
 

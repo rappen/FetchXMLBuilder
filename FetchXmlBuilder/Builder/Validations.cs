@@ -27,6 +27,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                 case "attribute":
                     return ValidateAttribute(node, fxb);
 
+                case "all-attributes":
+                    return ValidateAllAttribute(node, fxb);
+
                 case "filter":
                     return ValidateFilter(node, fxb);
 
@@ -69,6 +72,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                 string.IsNullOrWhiteSpace(node.Value("from")))
             {
                 return new ControlValidationResult(ControlValidationLevel.Warning, "Link-Entity must include Name, To, From.");
+            }
+            if (fxb.settings.Results.WorkWithLayout &&
+                string.IsNullOrWhiteSpace(node.Value("alias")) &&
+                node.Nodes.OfType<TreeNode>().Any(n => n.Name == "attribute"))
+            {
+                return new ControlValidationResult(ControlValidationLevel.Warning, "Using Layout: Alias is needed to show these attributes");
             }
 
             if (node.Value("intersect") != "true" &&
@@ -133,6 +142,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                 {
                     return new ControlValidationResult(ControlValidationLevel.Info, "Distinct queries should be sorted by all attributes for correct paging.", "https://markcarrington.dev/2020/12/08/dataverse-paging-with-distinct/");
                 }
+            }
+            return null;
+        }
+
+        private static ControlValidationResult ValidateAllAttribute(TreeNode node, FetchXmlBuilder fxb)
+        {
+            if (fxb.settings.Results.WorkWithLayout)
+            {
+                return new ControlValidationResult(ControlValidationLevel.Warning, "Using Layout: All-Attributes is not possible to show");
             }
             return null;
         }
