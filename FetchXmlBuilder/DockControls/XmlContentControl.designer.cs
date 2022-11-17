@@ -197,23 +197,23 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(340, 5);
+            this.linkLabel1.Location = new System.Drawing.Point(457, 5);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(151, 13);
+            this.linkLabel1.Size = new System.Drawing.Size(34, 13);
             this.linkLabel1.TabIndex = 5;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "QueryExpressionFactory DLaB";
+            this.linkLabel1.Text = "DLaB";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // rbQExQExFactory
             // 
             this.rbQExQExFactory.AutoSize = true;
-            this.rbQExQExFactory.Enabled = false;
-            this.rbQExQExFactory.Location = new System.Drawing.Point(324, 5);
+            this.rbQExQExFactory.Location = new System.Drawing.Point(324, 3);
             this.rbQExQExFactory.Name = "rbQExQExFactory";
-            this.rbQExQExFactory.Size = new System.Drawing.Size(14, 13);
+            this.rbQExQExFactory.Size = new System.Drawing.Size(139, 17);
             this.rbQExQExFactory.TabIndex = 4;
             this.rbQExQExFactory.TabStop = true;
+            this.rbQExQExFactory.Text = "QueryExpressionFactory";
             this.rbQExQExFactory.UseVisualStyleBackColor = true;
             this.rbQExQExFactory.Click += new System.EventHandler(this.rbQExStyle_Click);
             // 

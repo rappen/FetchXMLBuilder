@@ -814,6 +814,26 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void rbQExStyle_Click(object sender, EventArgs e)
         {
+            if (rbQExQExFactory.Checked)
+            {
+                MessageBox.Show(@"This feature is not yet implemented... #sorry
+
+Do you like that idea?
+Click the ""Help"" button to vote on this Issue #822 and it will be implemented, one day...!
+
+More votes == released sooner.", "QueryExpressionFactory",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0,
+                    "https://github.com/rappen/FetchXMLBuilder/issues/822");
+                if (fxb.settings.CodeGenerators.Style == CodeGenerationStyle.EarlyBoundEBG)
+                {
+                    rbQExEarly.Checked = true;
+                }
+                else
+                {
+                    rbQExLate.Checked = true;
+                }
+                return;
+            }
             fxb.settings.CodeGenerators.Style = rbQExEarly.Checked ? CodeGenerationStyle.EarlyBoundEBG : rbQExQExFactory.Checked ? CodeGenerationStyle.QueryExpressionFactory : CodeGenerationStyle.LateBound;
             fxb.UpdateLiveXML();
         }
