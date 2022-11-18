@@ -164,7 +164,6 @@
             // 
             this.gbActions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbActions.Controls.Add(this.panQExOptions);
             this.gbActions.Controls.Add(this.panSQL4CDS);
             this.gbActions.Controls.Add(this.lblActionsExpander);
             this.gbActions.Controls.Add(this.panExecute);
@@ -172,6 +171,7 @@
             this.gbActions.Controls.Add(this.panSave);
             this.gbActions.Controls.Add(this.panOk);
             this.gbActions.Controls.Add(this.panCancel);
+            this.gbActions.Controls.Add(this.panQExOptions);
             this.gbActions.Controls.Add(this.panLiveUpdate);
             this.gbActions.Location = new System.Drawing.Point(-1, 4);
             this.gbActions.Name = "gbActions";
@@ -191,7 +191,7 @@
             this.panQExOptions.Dock = System.Windows.Forms.DockStyle.Left;
             this.panQExOptions.Location = new System.Drawing.Point(134, 16);
             this.panQExOptions.Name = "panQExOptions";
-            this.panQExOptions.Size = new System.Drawing.Size(539, 28);
+            this.panQExOptions.Size = new System.Drawing.Size(502, 28);
             this.panQExOptions.TabIndex = 9;
             // 
             // linkLabel1
