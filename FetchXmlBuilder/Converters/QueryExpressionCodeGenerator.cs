@@ -16,6 +16,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
     public class QueryExpressionCodeGenerator
     {
         private const string CRLF = "\r\n";
+        private const string Indent = "    ";
         private List<string> varList;
         private QueryExpression qex;
         private List<EntityMetadata> metas;
@@ -73,17 +74,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             code.Append(GetQueryOptions());
             code.Append(GetQueryCodeEnd());
             code.Append(GetColumns(qex.EntityName, qex.ColumnSet, qename + ".ColumnSet"));
-            var links = new StringBuilder();
-            foreach (var link in qex.LinkEntities)
-            {
-                links.Append(GetLinkEntity(link, qename));
-            }
             code.Append(GetFilter(qex.EntityName, qex.Criteria, qename, "Criteria"));
-            code.Append(links);
-            foreach (var order in qex.Orders)
-            {
-                code.AppendLine(qename + ".AddOrder(" + GetCodeAttribute(qex.EntityName, order.AttributeName) + ", OrderType." + order.OrderType.ToString() + ");");
-            }
+            code.Append(GetOrders(qex.EntityName, qex.Orders, qename, true));
+            code.Append(GetLinkEntities(qex.LinkEntities, qename));
             var codestr = ReplaceValueTokens(code.ToString());
             return codestr;
         }
@@ -135,9 +128,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             {
                 queryoptions.Add("TopCount = " + qex.TopCount.ToString());
             }
+            if (!string.IsNullOrWhiteSpace(qex.PageInfo?.PagingCookie))
+            {
+                queryoptions.Add($"PageInfo = new PagingInfo{CRLF}{Indent}{{{CRLF}{Indent}{Indent}PageNumber = {qex.PageInfo.PageNumber},{CRLF}{Indent}{Indent}PagingCookie = \"{qex.PageInfo.PagingCookie}\"{CRLF}{Indent}}}");
+            }
             if (queryoptions.Count > 0)
             {
-                return CRLF + "{" + CRLF + string.Join("," + CRLF, queryoptions.Select(o => "    " + o)) + CRLF + "}";
+                return CRLF + "{" + GetCodeParametersMaxWidth(0, queryoptions.ToArray()) + "}";
             }
             return string.Empty;
         }
@@ -177,47 +174,54 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     code.AppendLine();
                     code.AppendLine("// Add columns to " + LineStart);
                 }
-                var cols = string.Join(", ", columns.Columns.Select(c => GetCodeAttribute(entity, c))).Trim(' ');
-                if (cols.Length > 100)
-                {
-                    cols = CRLF + "    " + cols.Replace(", ", $",{CRLF}    ") + CRLF;
-                }
-                if (settings.CodeGenerators.Style == CodeGenerationStyle.QueryExpressionFactory)
-                {
-                    code.AppendLine(GetCodeEntityPrefix(entity) + " => new {");
-                    code.AppendLine(cols);
-                    code.AppendLine("}");
-                }
-                else
-                {
-                    var method = ".AddColumn" + (columns.Columns.Count > 1 ? "s" : "");
-                    code.AppendLine($"{LineStart}{method}({cols});");
-                }
+                LineStart =
+                    settings.CodeGenerators.Style == CodeGenerationStyle.QueryExpressionFactory ?
+                        GetCodeEntityPrefix(entity) + " => new { " :
+                        LineStart + ".AddColumn" + (columns.Columns.Count > 1 ? "s" : "") + "(";
+                var LineEnd = settings.CodeGenerators.Style == CodeGenerationStyle.QueryExpressionFactory ? " }" : ");";
+                var cols = GetCodeParametersMaxWidth(120 - LineStart.Length, columns.Columns.Select(c => GetCodeAttribute(entity, c)).ToArray());
+                code.AppendLine(LineStart + cols + LineEnd);
             }
             return code.ToString();
         }
 
-        private string GetLinkEntity(LinkEntity link, string LineStart)
+        private string GetLinkEntities(DataCollection<LinkEntity> linkEntities, string LineStart)
         {
+            if (linkEntities?.Count == 0)
+            {
+                return string.Empty;
+            }
             var code = new StringBuilder();
-            var linkname = GetVarName(string.IsNullOrEmpty(link.EntityAlias) ? LineStart + "_" + link.LinkToEntityName : link.EntityAlias);
-            code.AppendLine();
-            if (settings.CodeGenerators.IncludeComments)
+            foreach (var link in linkEntities)
             {
-                code.AppendLine("// Add link-entity " + linkname);
-            }
-            var join = link.JoinOperator == JoinOperator.Inner ? "" : ", JoinOperator." + link.JoinOperator.ToString();
-            code.AppendLine($"var {linkname} = {LineStart}.AddLink({GetCodeEntity(link.LinkToEntityName)}, {GetCodeAttribute(link.LinkFromEntityName, link.LinkFromAttributeName)}, {GetCodeAttribute(link.LinkToEntityName, link.LinkToAttributeName)}{join});");
-            if (!string.IsNullOrWhiteSpace(link.EntityAlias))
-            {
-                entityaliases.Add(link.EntityAlias, link.LinkToEntityName);
-                code.AppendLine(linkname + ".EntityAlias = \"" + link.EntityAlias + "\";");
-            }
-            code.Append(GetColumns(link.LinkToEntityName, link.Columns, linkname + ".Columns"));
-            code.Append(GetFilter(link.LinkToEntityName, link.LinkCriteria, linkname, "LinkCriteria"));
-            foreach (var sublink in link.LinkEntities)
-            {
-                code.Append(GetLinkEntity(sublink, linkname));
+                var linkname = GetVarName(string.IsNullOrEmpty(link.EntityAlias) ? LineStart + "_" + link.LinkToEntityName : link.EntityAlias);
+                code.AppendLine();
+                if (settings.CodeGenerators.IncludeComments)
+                {
+                    code.AppendLine("// Add link-entity " + linkname);
+                }
+                var join = link.JoinOperator == JoinOperator.Inner ? "" : "JoinOperator." + link.JoinOperator.ToString();
+                var varstart =
+                    link.LinkEntities.Count > 0 ||
+                    link.Columns.Columns.Count > 0 ||
+                    link.LinkCriteria.Conditions.Count > 0 ||
+                    link.Orders.Count > 0 ? $"var {linkname} = " : String.Empty;
+                var parms = GetCodeParametersMaxWidth(120 - varstart.Length - LineStart.Length,
+                        GetCodeEntity(link.LinkToEntityName),
+                        GetCodeAttribute(link.LinkFromEntityName,
+                        link.LinkFromAttributeName),
+                        GetCodeAttribute(link.LinkToEntityName, link.LinkToAttributeName),
+                        join);
+                code.AppendLine($"{varstart}{LineStart}.AddLink({parms});");
+                if (!string.IsNullOrWhiteSpace(link.EntityAlias))
+                {
+                    entityaliases.Add(link.EntityAlias, link.LinkToEntityName);
+                    code.AppendLine(linkname + ".EntityAlias = \"" + link.EntityAlias + "\";");
+                }
+                code.Append(GetColumns(link.LinkToEntityName, link.Columns, linkname + ".Columns"));
+                code.Append(GetFilter(link.LinkToEntityName, link.LinkCriteria, linkname, "LinkCriteria"));
+                code.Append(GetOrders(link.LinkToEntityName, link.Orders, linkname));
+                code.Append(GetLinkEntities(link.LinkEntities, linkname));
             }
             return code.ToString();
         }
@@ -231,7 +235,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 if (settings.CodeGenerators.IncludeComments)
                 {
                     code.AppendLine();
-                    code.AppendLine("// Define filter " + LineStart);
+                    code.AppendLine("// Add filter " + LineStart);
                 }
                 if (filterExpression.FilterOperator == LogicalOperator.Or)
                 {
@@ -274,6 +278,27 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             return code.ToString();
         }
 
+        private string GetOrders(string entityname, DataCollection<OrderExpression> orders, string LineStart, bool root = false)
+        {
+            if (orders.Count == 0)
+            {
+                return string.Empty;
+            }
+            var code = new StringBuilder();
+            if (settings.CodeGenerators.IncludeComments)
+            {
+                code.AppendLine();
+                code.AppendLine("// Add orders");
+            }
+            LineStart += root ? ".AddOrder(" : ".Orders.Add(new OrderExpression(";
+            var LineEnd = root ? ");" : "));";
+            foreach (var order in orders)
+            {
+                code.AppendLine(LineStart + GetCodeAttribute(entityname, order.AttributeName) + ", OrderType." + order.OrderType.ToString() + LineEnd);
+            }
+            return code.ToString();
+        }
+
         private string ReplaceValueTokens(string code)
         {
             if (!code.Contains("<<<"))
@@ -283,7 +308,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             var variables = new StringBuilder();
             if (settings.CodeGenerators.IncludeComments)
             {
-                variables.AppendLine("// Define Condition Values");
+                variables.AppendLine("// Set Condition Values");
             }
             while (code.Contains("<<<"))
             {
@@ -349,6 +374,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 }
             }
             return "\"" + attributename + "\"";
+        }
+
+        private static string GetCodeParametersMaxWidth(int maxwidth, params string[] parameters)
+        {
+            var result = string.Join("`´", parameters.Where(p => !string.IsNullOrWhiteSpace(p)));
+            if (result.Length > maxwidth)
+            {
+                result = CRLF + Indent + result.Replace("`´", $",{CRLF}{Indent}") + CRLF;
+            }
+            else
+            {
+                result = result.Replace("`´", ", ");
+            }
+            return result;
         }
 
         private static string GetConditionValues(DataCollection<object> values, string token)
