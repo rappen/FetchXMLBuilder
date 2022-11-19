@@ -213,7 +213,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void linkLayout_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FetchXmlBuilder.OpenURL("https://docs.microsoft.com/power-apps/developer/model-driven-apps/customize-entity-views");
+            FetchXmlBuilder.OpenURL("https://fetchxmlbuilder.com/features/layouts");
         }
     }
 }

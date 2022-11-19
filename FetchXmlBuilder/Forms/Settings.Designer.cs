@@ -602,7 +602,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.linkLayout.Size = new System.Drawing.Size(62, 13);
             this.linkLayout.TabIndex = 18;
             this.linkLayout.TabStop = true;
-            this.linkLayout.Text = "Read more!";
+            this.linkLayout.Text = "Read docs!";
             this.linkLayout.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLayout_LinkClicked);
             // 
             // chkWorkWithLayout
