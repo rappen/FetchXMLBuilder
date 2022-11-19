@@ -1,4 +1,5 @@
-﻿using Rappen.XTB.FetchXmlBuilder.DockControls;
+﻿using Rappen.XRM.Helpers.FetchXML;
+using Rappen.XTB.FetchXmlBuilder.DockControls;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;

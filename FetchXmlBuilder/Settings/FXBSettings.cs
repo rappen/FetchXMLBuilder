@@ -1,4 +1,4 @@
-﻿using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.FetchXmlBuilder.DockControls;
 using ScintillaNET;
 using System;
 using System.Collections.Generic;
@@ -47,6 +47,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool TryMetadataCache { get; set; } = true;
         public bool WaitUntilMetadataLoaded { get; set; } = false;
         public bool HideAggregationFieldsWhenNotAggregating { get; set; } = true;
+        public CodeGenerators CodeGenerators { get; set; } = new CodeGenerators();
     }
 
     public class ResultOptions
@@ -244,5 +245,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         JSON = 2,
         Raw = 3,
         JSONWebAPI = 4
+    }
+
+    public class CodeGenerators
+    {
+        public bool IncludeComments { get; set; } = true;
+        public CodeGenerationStyle Style { get; set; } = CodeGenerationStyle.LateBound;
+        public string EBG_EntityLogicalNames { get; set; } = "EntityLogicalName";
+        public string EBG_AttributeLogicalNameClass { get; set; } = "Fields.";
+    }
+
+    public enum CodeGenerationStyle
+    {
+        LateBound,
+        EarlyBoundEBG,
+        QueryExpressionFactory
     }
 }

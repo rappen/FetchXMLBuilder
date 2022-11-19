@@ -2,9 +2,9 @@
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using Rappen.XRM.Helpers.Extensions;
+using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Builder;
-using Rappen.XTB.FetchXmlBuilder.Controls;
 using Rappen.XTB.FetchXmlBuilder.Converters;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
@@ -22,6 +22,7 @@ using System.Xml;
 using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
+using Entity = Microsoft.Xrm.Sdk.Entity;
 
 namespace Rappen.XTB.FetchXmlBuilder
 {
@@ -389,8 +390,8 @@ namespace Rappen.XTB.FetchXmlBuilder
             var code = string.Empty;
             try
             {
-                var QEx = dockControlBuilder.GetQueryExpression(null, false);
-                code = QueryExpressionCodeGenerator.GetCSharpQueryExpression(QEx);
+                var QEx = dockControlBuilder.GetQueryExpression(false);
+                code = QueryExpressionCodeGenerator.GetCSharpQueryExpression(QEx, entities, settings);
             }
             catch (FetchIsAggregateException ex)
             {

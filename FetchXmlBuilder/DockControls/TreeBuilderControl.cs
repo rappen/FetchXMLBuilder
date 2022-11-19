@@ -1,6 +1,7 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Builder;
 using Rappen.XTB.FetchXmlBuilder.Controls;
@@ -247,8 +248,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
                 if (format)
                 {
-                    XDocument doc = XDocument.Parse(xml);
-                    xml = doc.ToString();
+                    xml = XDocument.Parse(xml).ToString();
                 }
             }
             return xml;
@@ -271,22 +271,24 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             return ctrl?.Metadata();
         }
 
-        internal QueryExpression GetQueryExpression(string fetch = null, bool validate = true)
+        internal QueryExpression GetQueryExpression(bool validate = true)
         {
             if (fxb.Service == null)
             {
-                throw new Exception("Must be connected to CRM to convert to QueryExpression.");
+                throw new Exception("Must be connected to Dataverse to convert to QueryExpression.");
             }
-            if (string.IsNullOrWhiteSpace(fetch))
-            {
-                fetch = GetFetchString(false, validate);
-            }
+            var fetchdoc = GetFetchDocument();
+            var fetch = fetchdoc.OuterXml;
             if (TreeNodeHelper.IsFetchAggregate(fetch))
             {
                 throw new FetchIsAggregateException("QueryExpression does not support aggregate queries.");
             }
-            var convert = (FetchXmlToQueryExpressionResponse)fxb.Execute(new FetchXmlToQueryExpressionRequest() { FetchXml = fetch });
-            return convert.Query;
+            var query = ((FetchXmlToQueryExpressionResponse)fxb.Execute(new FetchXmlToQueryExpressionRequest() { FetchXml = fetch })).Query;
+            if (fetchdoc.SelectSingleNode("fetch").AttributeBool("no-lock") == true && !query.NoLock)
+            {
+                query.NoLock = true;
+            }
+            return query;
         }
 
         internal void Init(string fetchStr, string layoutStr, string action, bool validate)

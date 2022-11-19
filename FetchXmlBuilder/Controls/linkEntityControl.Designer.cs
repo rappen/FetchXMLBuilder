@@ -38,7 +38,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtAlias = new System.Windows.Forms.TextBox();
             this.chkIntersect = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -163,15 +163,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.label7.Tag = "alias";
             this.label7.Text = "Alias";
             // 
-            // textBox1
+            // txtAlias
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtAlias.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(7, 216);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(214, 20);
-            this.textBox1.TabIndex = 6;
-            this.textBox1.Tag = "alias";
+            this.txtAlias.Location = new System.Drawing.Point(7, 216);
+            this.txtAlias.Name = "txtAlias";
+            this.txtAlias.Size = new System.Drawing.Size(214, 20);
+            this.txtAlias.TabIndex = 6;
+            this.txtAlias.Tag = "alias";
             // 
             // chkIntersect
             // 
@@ -278,7 +278,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.chkIntersect);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtAlias);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.label5);
@@ -307,7 +307,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtAlias;
         private System.Windows.Forms.CheckBox chkIntersect;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.Label label10;
