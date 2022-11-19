@@ -32,7 +32,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         protected override void PopulateControls()
         {
             cmbAttribute.Items.Clear();
-            aggregate = !fxb.settings.HideAggregationFieldsWhenNotAggregating || Node.IsFetchAggregate();
+            aggregate = fxb.settings.AlwaysShowAggregationProperties || Node.IsFetchAggregate();
             panAggregate.Visible = aggregate;
             grpLayout.Visible = !aggregate;
             cmbAggregate.Enabled = aggregate;
