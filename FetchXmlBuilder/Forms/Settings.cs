@@ -48,6 +48,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             txtFetch.ConfigureForXml(settings);
             txtFetch.FormatXML(settings.QueryOptions.NewQueryTemplate, settings);
             chkTryMetadataCache.Checked = settings.TryMetadataCache;
+            chkHideFieldsOnAggregate.Checked = settings.HideAggregationFieldsWhenNotAggregating;
             if (chkTryMetadataCache.Checked)
             {
                 chkWaitUntilMetadataLoaded.Enabled = true;
@@ -100,6 +101,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.XmlColors = propXmlColors.SelectedObject as XmlColors;
             settings.TryMetadataCache = chkTryMetadataCache.Checked;
             settings.WaitUntilMetadataLoaded = chkWaitUntilMetadataLoaded.Checked;
+            settings.HideAggregationFieldsWhenNotAggregating = chkHideFieldsOnAggregate.Checked;
             return settings;
         }
 

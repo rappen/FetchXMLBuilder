@@ -40,6 +40,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.numMaxColumnWidth = new System.Windows.Forms.NumericUpDown();
             this.chkClickableLinks = new System.Windows.Forms.CheckBox();
             this.gbAppearance = new System.Windows.Forms.GroupBox();
+            this.chkHideFieldsOnAggregate = new System.Windows.Forms.CheckBox();
             this.chkAppFriendlyResults = new System.Windows.Forms.CheckBox();
             this.chkUseLookup = new System.Windows.Forms.CheckBox();
             this.chkAppSingle = new System.Windows.Forms.CheckBox();
@@ -187,16 +188,27 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             // gbAppearance
             // 
+            this.gbAppearance.Controls.Add(this.chkHideFieldsOnAggregate);
             this.gbAppearance.Controls.Add(this.chkAppFriendlyResults);
             this.gbAppearance.Controls.Add(this.chkUseLookup);
             this.gbAppearance.Controls.Add(this.chkAppSingle);
             this.gbAppearance.Controls.Add(this.chkAppFriendly);
             this.gbAppearance.Location = new System.Drawing.Point(12, 12);
             this.gbAppearance.Name = "gbAppearance";
-            this.gbAppearance.Size = new System.Drawing.Size(222, 107);
+            this.gbAppearance.Size = new System.Drawing.Size(222, 132);
             this.gbAppearance.TabIndex = 10;
             this.gbAppearance.TabStop = false;
             this.gbAppearance.Text = "Appearance";
+            // 
+            // chkHideFieldsOnAggregate
+            // 
+            this.chkHideFieldsOnAggregate.AutoSize = true;
+            this.chkHideFieldsOnAggregate.Location = new System.Drawing.Point(16, 100);
+            this.chkHideFieldsOnAggregate.Name = "chkHideFieldsOnAggregate";
+            this.chkHideFieldsOnAggregate.Size = new System.Drawing.Size(163, 17);
+            this.chkHideFieldsOnAggregate.TabIndex = 9;
+            this.chkHideFieldsOnAggregate.Text = "Hide fields when not aggregating";
+            this.chkHideFieldsOnAggregate.UseVisualStyleBackColor = true;
             // 
             // chkAppFriendlyResults
             // 
@@ -300,12 +312,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.llShowWelcome);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
-            this.panel1.Location = new System.Drawing.Point(12, 389);
+            this.panel1.Location = new System.Drawing.Point(12, 427);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(691, 53);
             this.panel1.TabIndex = 100;
@@ -349,7 +361,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.gbDefaultQuery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.gbDefaultQuery.Controls.Add(this.txtFetch);
             this.gbDefaultQuery.Controls.Add(this.panel2);
-            this.gbDefaultQuery.Location = new System.Drawing.Point(12, 254);
+            this.gbDefaultQuery.Location = new System.Drawing.Point(12, 284);
             this.gbDefaultQuery.Name = "gbDefaultQuery";
             this.gbDefaultQuery.Size = new System.Drawing.Size(458, 132);
             this.gbDefaultQuery.TabIndex = 80;
@@ -506,7 +518,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.gbLayout.Controls.Add(this.chkShowButtonTexts);
             this.gbLayout.Controls.Add(this.chkShowNodeTypes);
             this.gbLayout.Controls.Add(this.chkShowHelp);
-            this.gbLayout.Location = new System.Drawing.Point(12, 125);
+            this.gbLayout.Location = new System.Drawing.Point(12, 150);
             this.gbLayout.Name = "gbLayout";
             this.gbLayout.Size = new System.Drawing.Size(222, 125);
             this.gbLayout.TabIndex = 20;
@@ -610,7 +622,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(717, 452);
+            this.ClientSize = new System.Drawing.Size(717, 492);
             this.Controls.Add(this.gbResultView);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.linkLabel1);
@@ -694,5 +706,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.GroupBox gbResultView;
         private System.Windows.Forms.CheckBox chkWorkWithLayout;
         private System.Windows.Forms.LinkLabel linkLayout;
+        private System.Windows.Forms.CheckBox chkHideFieldsOnAggregate;
     }
 }

@@ -1,4 +1,4 @@
-﻿using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.FetchXmlBuilder.DockControls;
 using ScintillaNET;
 using System;
 using System.Collections.Generic;
@@ -46,6 +46,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool ShowRepository { get; set; } = false;
         public bool TryMetadataCache { get; set; } = true;
         public bool WaitUntilMetadataLoaded { get; set; } = false;
+        public bool HideAggregationFieldsWhenNotAggregating { get; set; } = true;
         public CodeGenerators CodeGenerators { get; set; } = new CodeGenerators();
     }
 
