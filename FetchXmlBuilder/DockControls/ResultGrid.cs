@@ -36,6 +36,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             crmGridView1.ColumnOrder = queryinfo.AttributesSignature.Trim().Replace('\n', ',');
             ApplySettingsToGrid();
             SetQueryIfChangesDesign();
+            txtPagingCookie.Text = queryinfo.Results.PagingCookie;
         }
 
         internal void ApplySettingsToGrid()
@@ -48,6 +49,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             mnuLocalTime.Checked = form.settings.Results.LocalTime;
             mnuCopyHeaders.Checked = form.settings.Results.CopyHeaders;
             mnuQuickFilter.Checked = form.settings.Results.QuickFilter;
+            mnuPagingCookie.Checked = form.settings.Results.PagingCookie;
 
             mnuIdCol.Enabled = !form.settings.Results.WorkWithLayout;
             mnuIndexCol.Enabled = !form.settings.Results.WorkWithLayout;
@@ -64,6 +66,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             crmGridView1.Service = form.Service;
             panQuickFilter.Visible = mnuQuickFilter.Checked;
+            gbPagingCookie.Visible = mnuPagingCookie.Checked;
             mnuResetLayout.Visible = form.settings.Results.WorkWithLayout;
             RefreshData();
         }
@@ -78,6 +81,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             form.settings.Results.LocalTime = mnuLocalTime.Checked;
             form.settings.Results.CopyHeaders = mnuCopyHeaders.Checked;
             form.settings.Results.QuickFilter = mnuQuickFilter.Checked;
+            form.settings.Results.PagingCookie = mnuPagingCookie.Checked;
             ApplySettingsToGrid();
         }
 
@@ -298,6 +302,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             form.dockControlBuilder.ResetLayout();
             RefreshData();
+        }
+
+        private void txtPagingCookie_Click(object sender, EventArgs e)
+        {
+            txtPagingCookie.SelectAll();
+        }
+
+        private void mnuPagingCookie_Click(object sender, EventArgs e)
+        {
+            gbPagingCookie.Visible = mnuPagingCookie.Checked;
         }
     }
 }

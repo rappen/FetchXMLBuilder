@@ -50,24 +50,31 @@
             this.mnuLocalTime = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuCopyHeaders = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuQuickFilter = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuPagingCookie = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuColumns = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuIndexCol = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuIdCol = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuNullCol = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuSysCol = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuResetLayout = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
             this.panQuickFilter = new System.Windows.Forms.Panel();
             this.txtQuickFilter = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tmFilter = new System.Windows.Forms.Timer(this.components);
+            this.txtPagingCookie = new System.Windows.Forms.TextBox();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.gbPagingCookie = new System.Windows.Forms.GroupBox();
             this.crmGridView1 = new Rappen.XTB.Helpers.Controls.XRMDataGridView();
-            this.mnuResetLayout = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxmenuGrid.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.mnuOptions.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panQuickFilter.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.gbPagingCookie.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -210,7 +217,8 @@
             this.mnuFriendly,
             this.mnuLocalTime,
             this.mnuCopyHeaders,
-            this.mnuQuickFilter});
+            this.mnuQuickFilter,
+            this.mnuPagingCookie});
             this.mnuBehavior.Name = "mnuBehavior";
             this.mnuBehavior.Size = new System.Drawing.Size(82, 22);
             this.mnuBehavior.Text = "Appearance";
@@ -247,8 +255,16 @@
             this.mnuQuickFilter.CheckOnClick = true;
             this.mnuQuickFilter.Name = "mnuQuickFilter";
             this.mnuQuickFilter.Size = new System.Drawing.Size(228, 22);
-            this.mnuQuickFilter.Text = "Quick Filter";
+            this.mnuQuickFilter.Text = "Show Quick Filter";
             this.mnuQuickFilter.Click += new System.EventHandler(this.mnuQuickFilter_Click);
+            // 
+            // mnuPagingCookie
+            // 
+            this.mnuPagingCookie.CheckOnClick = true;
+            this.mnuPagingCookie.Name = "mnuPagingCookie";
+            this.mnuPagingCookie.Size = new System.Drawing.Size(228, 22);
+            this.mnuPagingCookie.Text = "Show Result Paging Cookie";
+            this.mnuPagingCookie.Click += new System.EventHandler(this.mnuPagingCookie_Click);
             // 
             // mnuColumns
             // 
@@ -266,7 +282,7 @@
             // 
             this.mnuIndexCol.CheckOnClick = true;
             this.mnuIndexCol.Name = "mnuIndexCol";
-            this.mnuIndexCol.Size = new System.Drawing.Size(180, 22);
+            this.mnuIndexCol.Size = new System.Drawing.Size(148, 22);
             this.mnuIndexCol.Text = "Index";
             this.mnuIndexCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
@@ -274,7 +290,7 @@
             // 
             this.mnuIdCol.CheckOnClick = true;
             this.mnuIdCol.Name = "mnuIdCol";
-            this.mnuIdCol.Size = new System.Drawing.Size(180, 22);
+            this.mnuIdCol.Size = new System.Drawing.Size(148, 22);
             this.mnuIdCol.Text = "Primary Key";
             this.mnuIdCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
@@ -282,7 +298,7 @@
             // 
             this.mnuNullCol.CheckOnClick = true;
             this.mnuNullCol.Name = "mnuNullCol";
-            this.mnuNullCol.Size = new System.Drawing.Size(180, 22);
+            this.mnuNullCol.Size = new System.Drawing.Size(148, 22);
             this.mnuNullCol.Text = "Without value";
             this.mnuNullCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
@@ -290,9 +306,16 @@
             // 
             this.mnuSysCol.CheckOnClick = true;
             this.mnuSysCol.Name = "mnuSysCol";
-            this.mnuSysCol.Size = new System.Drawing.Size(180, 22);
+            this.mnuSysCol.Size = new System.Drawing.Size(148, 22);
             this.mnuSysCol.Text = "System added";
             this.mnuSysCol.Click += new System.EventHandler(this.chkGridOptions_Click);
+            // 
+            // mnuResetLayout
+            // 
+            this.mnuResetLayout.Name = "mnuResetLayout";
+            this.mnuResetLayout.Size = new System.Drawing.Size(86, 22);
+            this.mnuResetLayout.Text = "Reset Layout";
+            this.mnuResetLayout.Click += new System.EventHandler(this.mnuResetLayout_Click);
             // 
             // panel1
             // 
@@ -337,6 +360,52 @@
             this.tmFilter.Interval = 300;
             this.tmFilter.Tick += new System.EventHandler(this.tmFilter_Tick);
             // 
+            // txtPagingCookie
+            // 
+            this.txtPagingCookie.BackColor = System.Drawing.SystemColors.Window;
+            this.txtPagingCookie.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtPagingCookie.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtPagingCookie.Location = new System.Drawing.Point(15, 19);
+            this.txtPagingCookie.Name = "txtPagingCookie";
+            this.txtPagingCookie.ReadOnly = true;
+            this.txtPagingCookie.Size = new System.Drawing.Size(546, 13);
+            this.txtPagingCookie.TabIndex = 0;
+            this.txtPagingCookie.Click += new System.EventHandler(this.txtPagingCookie_Click);
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.linkLabel1);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel3.Location = new System.Drawing.Point(561, 19);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(86, 19);
+            this.panel3.TabIndex = 1;
+            this.panel3.Visible = false;
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(6, 0);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(74, 13);
+            this.linkLabel1.TabIndex = 0;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "Copy to Query";
+            // 
+            // gbPagingCookie
+            // 
+            this.gbPagingCookie.Controls.Add(this.txtPagingCookie);
+            this.gbPagingCookie.Controls.Add(this.panel3);
+            this.gbPagingCookie.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.gbPagingCookie.Location = new System.Drawing.Point(0, 189);
+            this.gbPagingCookie.Name = "gbPagingCookie";
+            this.gbPagingCookie.Padding = new System.Windows.Forms.Padding(15, 6, 3, 3);
+            this.gbPagingCookie.Size = new System.Drawing.Size(650, 41);
+            this.gbPagingCookie.TabIndex = 8;
+            this.gbPagingCookie.TabStop = false;
+            this.gbPagingCookie.Text = "Paging Cookie";
+            this.gbPagingCookie.Visible = false;
+            // 
             // crmGridView1
             // 
             this.crmGridView1.AllowUserToAddRows = false;
@@ -357,25 +426,19 @@
             this.crmGridView1.EnableHeadersVisualStyles = false;
             this.crmGridView1.EntityReferenceClickable = true;
             this.crmGridView1.FilterColumns = "";
+            this.crmGridView1.LayoutXML = null;
             this.crmGridView1.Location = new System.Drawing.Point(0, 31);
             this.crmGridView1.Name = "crmGridView1";
             this.crmGridView1.ReadOnly = true;
             this.crmGridView1.RowHeadersWidth = 24;
             this.crmGridView1.Service = null;
             this.crmGridView1.ShowEditingIcon = false;
-            this.crmGridView1.Size = new System.Drawing.Size(650, 199);
+            this.crmGridView1.Size = new System.Drawing.Size(650, 158);
             this.crmGridView1.TabIndex = 1;
             this.crmGridView1.RecordDoubleClick += new Rappen.XTB.Helpers.Controls.XRMRecordEventHandler(this.crmGridView1_RecordDoubleClick);
             this.crmGridView1.RecordEnter += new Rappen.XTB.Helpers.Controls.XRMRecordEventHandler(this.crmGridView1_RecordEnter);
             this.crmGridView1.ColumnDisplayIndexChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.crmGridView1_LayoutChanged);
             this.crmGridView1.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.crmGridView1_LayoutChanged);
-            // 
-            // mnuResetLayout
-            // 
-            this.mnuResetLayout.Name = "mnuResetLayout";
-            this.mnuResetLayout.Size = new System.Drawing.Size(86, 22);
-            this.mnuResetLayout.Text = "Reset Layout";
-            this.mnuResetLayout.Click += new System.EventHandler(this.mnuResetLayout_Click);
             // 
             // ResultGrid
             // 
@@ -384,6 +447,7 @@
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(650, 273);
             this.Controls.Add(this.crmGridView1);
+            this.Controls.Add(this.gbPagingCookie);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panQuickFilter);
             this.HideOnClose = true;
@@ -399,6 +463,10 @@
             this.panel1.ResumeLayout(false);
             this.panQuickFilter.ResumeLayout(false);
             this.panQuickFilter.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            this.gbPagingCookie.ResumeLayout(false);
+            this.gbPagingCookie.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).EndInit();
             this.ResumeLayout(false);
 
@@ -438,5 +506,10 @@
         private System.Windows.Forms.ToolStripMenuItem ctxColumnCopy;
         private System.Windows.Forms.ToolStripMenuItem ctxRecordCopy;
         private System.Windows.Forms.ToolStripMenuItem mnuResetLayout;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.TextBox txtPagingCookie;
+        private System.Windows.Forms.ToolStripMenuItem mnuPagingCookie;
+        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.GroupBox gbPagingCookie;
     }
 }
