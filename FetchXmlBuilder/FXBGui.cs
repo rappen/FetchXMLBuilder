@@ -59,29 +59,43 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 try
                 {
-                    tsbNew.Enabled = enabled;
-                    tsbOpen.Enabled = enabled;
-                    tsmiOpenFile.Enabled = enabled;
+                    // Menus
+                    toolStripMain.Enabled = enabled;
+
+                    // Main menu items
+                    tsbExecute.Enabled = enabled && Service != null;
+                    tsbAbort.Visible = settings.Results.RetrieveAllPages;
+                    tsbBDU.Visible = bduexists && callerArgs?.SourcePlugin != "Bulk Data Updater";
+                    tsbBDU.Enabled = enabled && (dockControlBuilder?.IsFetchAggregate() == false);
+                    tsbReturnToCaller.Visible = CallerWantsResults();
+
+                    // Sub menu Open items
                     tsmiOpenView.Enabled = enabled && Service != null;
                     tsmiOpenML.Visible = enabled && Service != null && GetEntity("list") != null;
                     tsmiOpenCWP.Visible = enabled && Service != null && GetEntity("cint_feed") != null;
-                    tsbReturnToCaller.Visible = CallerWantsResults();
-                    tsbSave.Enabled = enabled;
+
+                    // Sub menu Save items
                     tsmiSaveFile.Enabled = enabled && dockControlBuilder?.FetchChanged == true && !string.IsNullOrEmpty(FileName);
-                    tsmiSaveFileAs.Enabled = enabled;
                     tsmiSaveView.Enabled = enabled && Service != null && View != null && View.IsCustomizable();
                     tsmiSaveViewAs.Enabled = enabled && Service != null && (tsmiSaveView.Enabled || settings.Results.WorkWithLayout);
                     tsmiSaveML.Enabled = enabled && Service != null && DynML != null;
                     tsmiSaveCWP.Visible = enabled && Service != null && GetEntity("cint_feed") != null;
                     tsmiSaveCWP.Enabled = enabled && Service != null && dockControlBuilder?.FetchChanged == true && !string.IsNullOrEmpty(CWPFeed);
-                    tsbView.Enabled = enabled;
-                    tsbExecute.Enabled = enabled && Service != null;
+
+                    // Sub menu Options items
                     tsmiSelect.Enabled = enabled && Service != null;
-                    tsbAbort.Visible = settings.Results.RetrieveAllPages;
-                    tsbBDU.Visible = bduexists && callerArgs?.SourcePlugin != "Bulk Data Updater";
-                    tsbBDU.Enabled = enabled && (dockControlBuilder?.IsFetchAggregate() == false);
+
+                    // Sub menu Convert items
                     tsmiShowLayoutXML.Enabled = enabled && Service != null && (dockControlBuilder?.IsFetchAggregate() == false) && settings.Results.WorkWithLayout;
+                    tsmiShowMetadata.Enabled = enabled && Service != null;
+                    tsmiShowFlow.Enabled = enabled && Service != null;
+                    tsmiShowOData.Enabled = enabled && Service != null;
+                    tsmiShowOData4.Enabled = enabled && Service != null;
+                    tsmiShowQueryExpression.Enabled = enabled && Service != null && (dockControlBuilder?.IsFetchAggregate() == false);
+
+                    // Enable local menus/buttons/etc
                     dockControlBuilder?.EnableControls(enabled);
+
                     buttonsEnabled = enabled;
                 }
                 catch
@@ -144,7 +158,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 dockControlQExp.UpdateXML(GetQueryExpressionCode());
             }
-            if (dockControlSQL?.Visible == true && entities != null)
+            if (dockControlSQL?.Visible == true)
             {
                 var sql = GetSQLQuery(out var sql4cds);
                 dockControlSQL.UpdateSQL(sql, sql4cds);
