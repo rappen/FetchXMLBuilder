@@ -232,6 +232,11 @@
     <Compile Include="ControlsClasses\EntityNameItem.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\GroupBoxExpanderExtensions.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Settings\FXBConnectionSettings.cs" />
     <Compile Include="Builder\TreeNodeExtensions.cs" />
     <Compile Include="Views\Cell.cs" />
@@ -504,6 +509,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\fetch.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -521,7 +530,81 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\icons8-create-order-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-gear-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-opened-folder-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-play-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-redo-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-save-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-save-as-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-undo-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-view-headline-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-warehouse-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-stop-sign-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-up-left-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BDU-2019-032-tsp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FXB-2019-2-032-tsp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Dataverse_scalable_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Dataverse_scalable gray bg 32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PowerAutomate_scalable gray bg 32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-placeholder-thumbnail-xml-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-select-left-column-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-sql-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-available-updates-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-javascript-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-c-sharp-logo-2-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-odata-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-translate-text-32.png" />
+  </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />
   <Import Project="..\MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutoComplete.projitems" Label="Shared" />
