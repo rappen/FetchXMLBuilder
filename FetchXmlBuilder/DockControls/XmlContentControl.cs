@@ -146,13 +146,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         public void UpdateXML(string xmlString)
         {
-            if (txtXML.Lexer == ScintillaNET.Lexer.Xml)
+            if (Visible)
             {
-                FormatXML(xmlString, true);
-            }
-            else
-            {
-                txtXML.Text = xmlString;
+                if (txtXML.Lexer == ScintillaNET.Lexer.Xml)
+                {
+                    FormatXML(xmlString, true);
+                }
+                else
+                {
+                    txtXML.Text = xmlString;
+                }
             }
             liveUpdateXml = xmlString;
         }

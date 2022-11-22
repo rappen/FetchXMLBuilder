@@ -4,7 +4,6 @@ using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Views;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -146,7 +145,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void GetLayoutFromGrid()
         {
-            if (!form.settings.Results.WorkWithLayout || !(form.dockControlBuilder.RootEntityMetadata is EntityMetadata entity))
+            if (!form.settings.Results.WorkWithLayout ||
+                !(form.dockControlBuilder.RootEntityMetadata is EntityMetadata entity) ||
+                crmGridView1.DataSource == null)
             {
                 return;
             }
