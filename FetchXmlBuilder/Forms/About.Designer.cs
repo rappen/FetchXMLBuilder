@@ -43,6 +43,8 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.llShowWelcome = new System.Windows.Forms.LinkLabel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.linkLabel3 = new System.Windows.Forms.LinkLabel();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -181,11 +183,31 @@
             this.llShowWelcome.AutoSize = true;
             this.llShowWelcome.Location = new System.Drawing.Point(585, 240);
             this.llShowWelcome.Name = "llShowWelcome";
-            this.llShowWelcome.Size = new System.Drawing.Size(114, 13);
+            this.llShowWelcome.Size = new System.Drawing.Size(107, 13);
             this.llShowWelcome.TabIndex = 17;
             this.llShowWelcome.TabStop = true;
             this.llShowWelcome.Text = "Show Release Notes";
             this.llShowWelcome.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llShowWelcome_LinkClicked);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(514, 134);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(59, 13);
+            this.label1.TabIndex = 18;
+            this.label1.Text = "Icons from:";
+            // 
+            // linkLabel3
+            // 
+            this.linkLabel3.AutoSize = true;
+            this.linkLabel3.Location = new System.Drawing.Point(611, 134);
+            this.linkLabel3.Name = "linkLabel3";
+            this.linkLabel3.Size = new System.Drawing.Size(61, 13);
+            this.linkLabel3.TabIndex = 19;
+            this.linkLabel3.TabStop = true;
+            this.linkLabel3.Text = "icons8.com";
+            this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel3_LinkClicked);
             // 
             // About
             // 
@@ -194,6 +216,8 @@
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.button1;
             this.ClientSize = new System.Drawing.Size(857, 524);
+            this.Controls.Add(this.linkLabel3);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.llShowWelcome);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.pictureBox1);
@@ -233,5 +257,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.LinkLabel llShowWelcome;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.LinkLabel linkLabel3;
     }
 }

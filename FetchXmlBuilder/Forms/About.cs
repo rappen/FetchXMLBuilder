@@ -75,5 +75,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             Welcome.ShowWelcome(this);
             Close();
         }
+
+        private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FetchXmlBuilder.OpenURL("https://icons8.com");
+        }
     }
 }
