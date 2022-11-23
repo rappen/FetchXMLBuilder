@@ -413,7 +413,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbUndo.Name = "tsbUndo";
             this.tsbUndo.Size = new System.Drawing.Size(36, 36);
-            this.tsbUndo.Text = "Undo";
             this.tsbUndo.ToolTipText = "Undo (Ctrl+Z)";
             this.tsbUndo.Click += new System.EventHandler(this.tsbUndo_Click);
             // 
@@ -425,7 +424,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbRedo.Name = "tsbRedo";
             this.tsbRedo.Size = new System.Drawing.Size(36, 36);
-            this.tsbRedo.Text = "Redo";
             this.tsbRedo.ToolTipText = "Redo (Ctrl+Y)";
             this.tsbRedo.Click += new System.EventHandler(this.tsbRedo_Click);
             // 
