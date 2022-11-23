@@ -65,6 +65,8 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbRedo = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbExecute = new System.Windows.Forms.ToolStripButton();
+            this.tsbAbort = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbView = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiShowFetchXML = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowLayoutXML = new System.Windows.Forms.ToolStripMenuItem();
@@ -84,7 +86,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiSelect = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.tmsiShowReleaseNotes = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsbAbort = new System.Windows.Forms.ToolStripButton();
             this.tsbReturnToCaller = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbBDU = new System.Windows.Forms.ToolStripButton();
@@ -92,7 +93,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.dockContainer = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -445,6 +445,21 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbExecute.ToolTipText = "Execute FetchXML (F5)";
             this.tsbExecute.Click += new System.EventHandler(this.tsbExecute_Click);
             // 
+            // tsbAbort
+            // 
+            this.tsbAbort.Enabled = false;
+            this.tsbAbort.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_stop;
+            this.tsbAbort.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbAbort.Name = "tsbAbort";
+            this.tsbAbort.Size = new System.Drawing.Size(73, 36);
+            this.tsbAbort.Text = "Abort";
+            this.tsbAbort.Click += new System.EventHandler(this.tsbAbort_Click);
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 39);
+            // 
             // tsbView
             // 
             this.tsbView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -585,7 +600,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiSelect,
             this.toolStripMenuItem3,
             this.tmsiShowReleaseNotes});
-            this.tsbOptions.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_settings;
+            this.tsbOptions.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_options;
             this.tsbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbOptions.Name = "tsbOptions";
             this.tsbOptions.Size = new System.Drawing.Size(94, 36);
@@ -593,39 +608,32 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             // tsmiSettings
             // 
+            this.tsmiSettings.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_settings;
             this.tsmiSettings.Name = "tsmiSettings";
-            this.tsmiSettings.Size = new System.Drawing.Size(253, 22);
+            this.tsmiSettings.Size = new System.Drawing.Size(269, 38);
             this.tsmiSettings.Text = "Settings...";
             this.tsmiSettings.Click += new System.EventHandler(this.tsbOptions_Click);
             // 
             // tsmiSelect
             // 
+            this.tsmiSelect.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_powerplatform;
             this.tsmiSelect.Name = "tsmiSelect";
-            this.tsmiSelect.Size = new System.Drawing.Size(253, 22);
+            this.tsmiSelect.Size = new System.Drawing.Size(269, 38);
             this.tsmiSelect.Text = "Filter by Solutions and Metadata...";
             this.tsmiSelect.Click += new System.EventHandler(this.tsmiSelect_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(250, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(266, 6);
             // 
             // tmsiShowReleaseNotes
             // 
+            this.tmsiShowReleaseNotes.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_releasenotes;
             this.tmsiShowReleaseNotes.Name = "tmsiShowReleaseNotes";
-            this.tmsiShowReleaseNotes.Size = new System.Drawing.Size(253, 22);
+            this.tmsiShowReleaseNotes.Size = new System.Drawing.Size(269, 38);
             this.tmsiShowReleaseNotes.Text = "Open Release Notes";
             this.tmsiShowReleaseNotes.Click += new System.EventHandler(this.tmsiShowReleaseNotes_Click);
-            // 
-            // tsbAbort
-            // 
-            this.tsbAbort.Enabled = false;
-            this.tsbAbort.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_stop;
-            this.tsbAbort.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbAbort.Name = "tsbAbort";
-            this.tsbAbort.Size = new System.Drawing.Size(73, 36);
-            this.tsbAbort.Text = "Abort";
-            this.tsbAbort.Click += new System.EventHandler(this.tsbAbort_Click);
             // 
             // tsbReturnToCaller
             // 
@@ -689,11 +697,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.dockContainer.Name = "dockContainer";
             this.dockContainer.Size = new System.Drawing.Size(1437, 360);
             this.dockContainer.TabIndex = 33;
-            // 
-            // toolStripSeparator7
-            // 
-            this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 39);
             // 
             // FetchXmlBuilder
             // 

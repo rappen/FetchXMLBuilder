@@ -605,6 +605,15 @@
   <ItemGroup>
     <None Include="Resources\icons8-translate-text-32.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PowerApps_scalable trs 32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-announcement-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-options-32.png" />
+  </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />
   <Import Project="..\MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutoComplete.projitems" Label="Shared" />
