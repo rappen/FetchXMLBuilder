@@ -65,6 +65,9 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             dockControlBuilder.ParseXML(fetchXml, false);
             UpdateLiveXML();
+            tsbReturnToCaller.Image = callerArgs.SourcePlugin == "Bulk Data Updater" ?
+                Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.BDU_2019_032_tsp :
+                Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_return;
             tsbReturnToCaller.ToolTipText = "Return " + requestedType + " to " + callerArgs.SourcePlugin;
             dockControlBuilder.RecordHistory("called from " + message.SourcePlugin);
             LogUse("CalledBy." + callerArgs.SourcePlugin);
