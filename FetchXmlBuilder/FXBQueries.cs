@@ -1,6 +1,7 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
+using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.Serialization;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Converters;
@@ -121,7 +122,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                         qexs.Criteria.AddCondition("iscustomizable", ConditionOperator.Equal, true);
                     }
                     qexs.AddOrder("name", OrderType.Ascending);
-                    var sysviews = RetrieveMultiple(qexs);
+                    var sysviews = Service.RetrieveMultipleAll(qexs);
                     foreach (var view in sysviews.Entities)
                     {
                         var entityname = view["returnedtypecode"].ToString();
@@ -142,7 +143,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     qexu.ColumnSet = new ColumnSet("name", "returnedtypecode", "fetchxml", "layoutxml");
                     qexu.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
                     qexu.AddOrder("name", OrderType.Ascending);
-                    var userviews = RetrieveMultiple(qexu);
+                    var userviews = Service.RetrieveMultipleAll(qexu);
                     foreach (var view in userviews.Entities)
                     {
                         var entityname = view["returnedtypecode"].ToString();
