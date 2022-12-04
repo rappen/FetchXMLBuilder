@@ -1,6 +1,7 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
+using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.Serialization;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Converters;
@@ -19,13 +20,13 @@ namespace Rappen.XTB.FetchXmlBuilder
     {
         private string attributesChecksum = "";
 
-        internal EntityCollection RetrieveMultiple(QueryBase query)
+        internal EntityCollection RetrieveMultiple(QueryBase query, bool allrecords = true)
         {
             EntityCollection result = null;
             var start = DateTime.Now;
             try
             {
-                result = Service.RetrieveMultiple(query);
+                result = allrecords ? Service.RetrieveMultipleAll(query) : Service.RetrieveMultiple(query);
             }
             finally
             {
@@ -279,7 +280,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                             eventargs.Cancel = true;
                             break;
                         }
-                        tmpResult = RetrieveMultiple(query);
+                        tmpResult = RetrieveMultiple(query, false);
                         if (resultCollection == null)
                         {
                             resultCollection = tmpResult;
