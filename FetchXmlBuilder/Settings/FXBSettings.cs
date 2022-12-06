@@ -1,3 +1,4 @@
+using Rappen.XTB.FetchXmlBuilder.Converters;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using ScintillaNET;
 using System;
@@ -251,15 +252,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
     public class CodeGenerators
     {
         public bool IncludeComments { get; set; } = true;
-        public CodeGenerationStyle Style { get; set; } = CodeGenerationStyle.LateBound;
+        public bool FilterVariables { get; set; } = true;
+        public QExStyleEnum QExStyle { get; set; } = QExStyleEnum.QueryExpression;
+        public QExFlavorEnum QExFlavor { get; set; } = QExFlavorEnum.LateBound;
         public string EBG_EntityLogicalNames { get; set; } = "EntityLogicalName";
         public string EBG_AttributeLogicalNameClass { get; set; } = "Fields.";
-    }
-
-    public enum CodeGenerationStyle
-    {
-        LateBound,
-        EarlyBoundEBG,
-        QueryExpressionFactory
+        public bool ObjectInitializer { get; set; } = false;
     }
 }

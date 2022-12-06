@@ -38,22 +38,16 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.panActions = new System.Windows.Forms.Panel();
             this.gbActions = new System.Windows.Forms.GroupBox();
-            this.panQExOptions = new System.Windows.Forms.Panel();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.rbQExQExFactory = new System.Windows.Forms.RadioButton();
-            this.linkEBG = new System.Windows.Forms.LinkLabel();
-            this.chkQExComments = new System.Windows.Forms.CheckBox();
-            this.rbQExEarly = new System.Windows.Forms.RadioButton();
-            this.rbQExLate = new System.Windows.Forms.RadioButton();
             this.panSQL4CDS = new System.Windows.Forms.Panel();
             this.btnSQL4CDS = new System.Windows.Forms.Button();
             this.lblActionsExpander = new System.Windows.Forms.Label();
             this.panExecute = new System.Windows.Forms.Panel();
-            this.panParseQE = new System.Windows.Forms.Panel();
             this.panSave = new System.Windows.Forms.Panel();
             this.panOk = new System.Windows.Forms.Panel();
             this.panLiveUpdate = new System.Windows.Forms.Panel();
             this.chkLiveUpdate = new System.Windows.Forms.CheckBox();
+            this.panParseQE = new System.Windows.Forms.Panel();
+            this.chkQExComments = new System.Windows.Forms.CheckBox();
             this.panFormatting = new System.Windows.Forms.Panel();
             this.gbFormatting = new System.Windows.Forms.GroupBox();
             this.lblFormatExpander = new System.Windows.Forms.Label();
@@ -68,19 +62,27 @@
             this.txtXML = new ScintillaNET.Scintilla();
             this.autocompleteImageList = new System.Windows.Forms.ImageList(this.components);
             this.tmLiveUpdate = new System.Windows.Forms.Timer(this.components);
+            this.panQExOptions = new System.Windows.Forms.Panel();
+            this.rbQExObjectinitializer = new System.Windows.Forms.RadioButton();
+            this.rbQExLineByLine = new System.Windows.Forms.RadioButton();
+            this.chkQExFilterVariables = new System.Windows.Forms.CheckBox();
+            this.cmbQExFlavor = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cmbQExStyle = new System.Windows.Forms.ComboBox();
             this.panCancel.SuspendLayout();
             this.panActions.SuspendLayout();
             this.gbActions.SuspendLayout();
-            this.panQExOptions.SuspendLayout();
             this.panSQL4CDS.SuspendLayout();
             this.panExecute.SuspendLayout();
-            this.panParseQE.SuspendLayout();
             this.panSave.SuspendLayout();
             this.panOk.SuspendLayout();
             this.panLiveUpdate.SuspendLayout();
+            this.panParseQE.SuspendLayout();
             this.panFormatting.SuspendLayout();
             this.gbFormatting.SuspendLayout();
             this.panSQL4CDSInfo.SuspendLayout();
+            this.panQExOptions.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSave
@@ -111,7 +113,7 @@
             // btnParseQE
             // 
             this.btnParseQE.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnParseQE.Location = new System.Drawing.Point(6, 0);
+            this.btnParseQE.Location = new System.Drawing.Point(4, 10);
             this.btnParseQE.Name = "btnParseQE";
             this.btnParseQE.Size = new System.Drawing.Size(75, 23);
             this.btnParseQE.TabIndex = 3;
@@ -134,7 +136,7 @@
             // 
             this.panCancel.Controls.Add(this.btnCancel);
             this.panCancel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panCancel.Location = new System.Drawing.Point(1194, 16);
+            this.panCancel.Location = new System.Drawing.Point(1001, 16);
             this.panCancel.Name = "panCancel";
             this.panCancel.Size = new System.Drawing.Size(91, 28);
             this.panCancel.TabIndex = 4;
@@ -157,7 +159,7 @@
             this.panActions.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panActions.Location = new System.Drawing.Point(0, 309);
             this.panActions.Name = "panActions";
-            this.panActions.Size = new System.Drawing.Size(1286, 50);
+            this.panActions.Size = new System.Drawing.Size(1093, 50);
             this.panActions.TabIndex = 10;
             // 
             // gbActions
@@ -167,107 +169,22 @@
             this.gbActions.Controls.Add(this.panSQL4CDS);
             this.gbActions.Controls.Add(this.lblActionsExpander);
             this.gbActions.Controls.Add(this.panExecute);
-            this.gbActions.Controls.Add(this.panParseQE);
             this.gbActions.Controls.Add(this.panSave);
             this.gbActions.Controls.Add(this.panOk);
             this.gbActions.Controls.Add(this.panCancel);
-            this.gbActions.Controls.Add(this.panQExOptions);
             this.gbActions.Controls.Add(this.panLiveUpdate);
             this.gbActions.Location = new System.Drawing.Point(-1, 4);
             this.gbActions.Name = "gbActions";
-            this.gbActions.Size = new System.Drawing.Size(1288, 47);
+            this.gbActions.Size = new System.Drawing.Size(1095, 47);
             this.gbActions.TabIndex = 4;
             this.gbActions.TabStop = false;
             this.gbActions.Text = "Actions";
-            // 
-            // panQExOptions
-            // 
-            this.panQExOptions.Controls.Add(this.linkLabel1);
-            this.panQExOptions.Controls.Add(this.rbQExQExFactory);
-            this.panQExOptions.Controls.Add(this.linkEBG);
-            this.panQExOptions.Controls.Add(this.chkQExComments);
-            this.panQExOptions.Controls.Add(this.rbQExEarly);
-            this.panQExOptions.Controls.Add(this.rbQExLate);
-            this.panQExOptions.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panQExOptions.Location = new System.Drawing.Point(134, 16);
-            this.panQExOptions.Name = "panQExOptions";
-            this.panQExOptions.Size = new System.Drawing.Size(502, 28);
-            this.panQExOptions.TabIndex = 9;
-            // 
-            // linkLabel1
-            // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(457, 5);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(34, 13);
-            this.linkLabel1.TabIndex = 5;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "DLaB";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
-            // 
-            // rbQExQExFactory
-            // 
-            this.rbQExQExFactory.AutoSize = true;
-            this.rbQExQExFactory.Location = new System.Drawing.Point(324, 3);
-            this.rbQExQExFactory.Name = "rbQExQExFactory";
-            this.rbQExQExFactory.Size = new System.Drawing.Size(139, 17);
-            this.rbQExQExFactory.TabIndex = 4;
-            this.rbQExQExFactory.TabStop = true;
-            this.rbQExQExFactory.Text = "QueryExpressionFactory";
-            this.rbQExQExFactory.UseVisualStyleBackColor = true;
-            this.rbQExQExFactory.Click += new System.EventHandler(this.rbQExStyle_Click);
-            // 
-            // linkEBG
-            // 
-            this.linkEBG.AutoSize = true;
-            this.linkEBG.Location = new System.Drawing.Point(289, 5);
-            this.linkEBG.Name = "linkEBG";
-            this.linkEBG.Size = new System.Drawing.Size(29, 13);
-            this.linkEBG.TabIndex = 3;
-            this.linkEBG.TabStop = true;
-            this.linkEBG.Text = "EBG";
-            this.linkEBG.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkEBG_LinkClicked);
-            // 
-            // chkQExComments
-            // 
-            this.chkQExComments.AutoSize = true;
-            this.chkQExComments.Location = new System.Drawing.Point(13, 4);
-            this.chkQExComments.Name = "chkQExComments";
-            this.chkQExComments.Size = new System.Drawing.Size(113, 17);
-            this.chkQExComments.TabIndex = 2;
-            this.chkQExComments.Text = "Include Comments";
-            this.chkQExComments.UseVisualStyleBackColor = true;
-            this.chkQExComments.CheckedChanged += new System.EventHandler(this.chkQExComments_CheckedChanged);
-            // 
-            // rbQExEarly
-            // 
-            this.rbQExEarly.AutoSize = true;
-            this.rbQExEarly.Location = new System.Drawing.Point(214, 3);
-            this.rbQExEarly.Name = "rbQExEarly";
-            this.rbQExEarly.Size = new System.Drawing.Size(82, 17);
-            this.rbQExEarly.TabIndex = 1;
-            this.rbQExEarly.TabStop = true;
-            this.rbQExEarly.Text = "Early Bound";
-            this.rbQExEarly.UseVisualStyleBackColor = true;
-            this.rbQExEarly.Click += new System.EventHandler(this.rbQExStyle_Click);
-            // 
-            // rbQExLate
-            // 
-            this.rbQExLate.AutoSize = true;
-            this.rbQExLate.Location = new System.Drawing.Point(128, 3);
-            this.rbQExLate.Name = "rbQExLate";
-            this.rbQExLate.Size = new System.Drawing.Size(80, 17);
-            this.rbQExLate.TabIndex = 0;
-            this.rbQExLate.TabStop = true;
-            this.rbQExLate.Text = "Late Bound";
-            this.rbQExLate.UseVisualStyleBackColor = true;
-            this.rbQExLate.Click += new System.EventHandler(this.rbQExStyle_Click);
             // 
             // panSQL4CDS
             // 
             this.panSQL4CDS.Controls.Add(this.btnSQL4CDS);
             this.panSQL4CDS.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panSQL4CDS.Location = new System.Drawing.Point(689, 16);
+            this.panSQL4CDS.Location = new System.Drawing.Point(587, 16);
             this.panSQL4CDS.Name = "panSQL4CDS";
             this.panSQL4CDS.Size = new System.Drawing.Size(118, 28);
             this.panSQL4CDS.TabIndex = 8;
@@ -289,7 +206,7 @@
             this.lblActionsExpander.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblActionsExpander.AutoSize = true;
             this.lblActionsExpander.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblActionsExpander.Location = new System.Drawing.Point(1266, 0);
+            this.lblActionsExpander.Location = new System.Drawing.Point(1073, 0);
             this.lblActionsExpander.Name = "lblActionsExpander";
             this.lblActionsExpander.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.lblActionsExpander.Size = new System.Drawing.Size(14, 13);
@@ -301,25 +218,16 @@
             // 
             this.panExecute.Controls.Add(this.btnExecute);
             this.panExecute.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panExecute.Location = new System.Drawing.Point(807, 16);
+            this.panExecute.Location = new System.Drawing.Point(705, 16);
             this.panExecute.Name = "panExecute";
             this.panExecute.Size = new System.Drawing.Size(114, 28);
             this.panExecute.TabIndex = 1;
-            // 
-            // panParseQE
-            // 
-            this.panParseQE.Controls.Add(this.btnParseQE);
-            this.panParseQE.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panParseQE.Location = new System.Drawing.Point(921, 16);
-            this.panParseQE.Name = "panParseQE";
-            this.panParseQE.Size = new System.Drawing.Size(91, 28);
-            this.panParseQE.TabIndex = 1;
             // 
             // panSave
             // 
             this.panSave.Controls.Add(this.btnSave);
             this.panSave.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panSave.Location = new System.Drawing.Point(1012, 16);
+            this.panSave.Location = new System.Drawing.Point(819, 16);
             this.panSave.Name = "panSave";
             this.panSave.Size = new System.Drawing.Size(91, 28);
             this.panSave.TabIndex = 2;
@@ -328,7 +236,7 @@
             // 
             this.panOk.Controls.Add(this.btnOk);
             this.panOk.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panOk.Location = new System.Drawing.Point(1103, 16);
+            this.panOk.Location = new System.Drawing.Point(910, 16);
             this.panOk.Name = "panOk";
             this.panOk.Size = new System.Drawing.Size(91, 28);
             this.panOk.TabIndex = 3;
@@ -353,6 +261,26 @@
             this.chkLiveUpdate.UseVisualStyleBackColor = true;
             this.chkLiveUpdate.CheckedChanged += new System.EventHandler(this.chkLiveUpdate_CheckedChanged);
             // 
+            // panParseQE
+            // 
+            this.panParseQE.Controls.Add(this.btnParseQE);
+            this.panParseQE.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panParseQE.Location = new System.Drawing.Point(1002, 0);
+            this.panParseQE.Name = "panParseQE";
+            this.panParseQE.Size = new System.Drawing.Size(91, 59);
+            this.panParseQE.TabIndex = 10;
+            // 
+            // chkQExComments
+            // 
+            this.chkQExComments.AutoSize = true;
+            this.chkQExComments.Location = new System.Drawing.Point(334, 39);
+            this.chkQExComments.Name = "chkQExComments";
+            this.chkQExComments.Size = new System.Drawing.Size(75, 17);
+            this.chkQExComments.TabIndex = 4;
+            this.chkQExComments.Text = "Comments";
+            this.chkQExComments.UseVisualStyleBackColor = true;
+            this.chkQExComments.CheckedChanged += new System.EventHandler(this.chkQExComments_CheckedChanged);
+            // 
             // panFormatting
             // 
             this.panFormatting.Controls.Add(this.gbFormatting);
@@ -360,7 +288,7 @@
             this.panFormatting.Location = new System.Drawing.Point(0, 265);
             this.panFormatting.MaximumSize = new System.Drawing.Size(10000, 44);
             this.panFormatting.Name = "panFormatting";
-            this.panFormatting.Size = new System.Drawing.Size(1286, 44);
+            this.panFormatting.Size = new System.Drawing.Size(1093, 44);
             this.panFormatting.TabIndex = 7;
             // 
             // gbFormatting
@@ -375,7 +303,7 @@
             this.gbFormatting.Controls.Add(this.btnFormat);
             this.gbFormatting.Location = new System.Drawing.Point(-1, 3);
             this.gbFormatting.Name = "gbFormatting";
-            this.gbFormatting.Size = new System.Drawing.Size(1288, 43);
+            this.gbFormatting.Size = new System.Drawing.Size(1095, 43);
             this.gbFormatting.TabIndex = 4;
             this.gbFormatting.TabStop = false;
             this.gbFormatting.Text = "Formatting";
@@ -385,7 +313,7 @@
             this.lblFormatExpander.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblFormatExpander.AutoSize = true;
             this.lblFormatExpander.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblFormatExpander.Location = new System.Drawing.Point(1266, 0);
+            this.lblFormatExpander.Location = new System.Drawing.Point(1073, 0);
             this.lblFormatExpander.Name = "lblFormatExpander";
             this.lblFormatExpander.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.lblFormatExpander.Size = new System.Drawing.Size(14, 13);
@@ -460,7 +388,7 @@
             this.panSQL4CDSInfo.Location = new System.Drawing.Point(0, 229);
             this.panSQL4CDSInfo.Name = "panSQL4CDSInfo";
             this.panSQL4CDSInfo.Padding = new System.Windows.Forms.Padding(4);
-            this.panSQL4CDSInfo.Size = new System.Drawing.Size(1286, 36);
+            this.panSQL4CDSInfo.Size = new System.Drawing.Size(1093, 36);
             this.panSQL4CDSInfo.TabIndex = 11;
             // 
             // lblSQL4CDSInfo
@@ -468,7 +396,7 @@
             this.lblSQL4CDSInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblSQL4CDSInfo.Location = new System.Drawing.Point(4, 4);
             this.lblSQL4CDSInfo.Name = "lblSQL4CDSInfo";
-            this.lblSQL4CDSInfo.Size = new System.Drawing.Size(1276, 26);
+            this.lblSQL4CDSInfo.Size = new System.Drawing.Size(1083, 26);
             this.lblSQL4CDSInfo.TabIndex = 0;
             this.lblSQL4CDSInfo.Text = "FetchXML to SQL conversion can also be performed with when the SQL 4 CDS tool. Ge" +
     "t it from the Tool Library and enable SQL 4 CDS in FetchXML Builder Options to g" +
@@ -477,10 +405,10 @@
             // txtXML
             // 
             this.txtXML.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtXML.Location = new System.Drawing.Point(0, 0);
+            this.txtXML.Location = new System.Drawing.Point(0, 59);
             this.txtXML.Name = "txtXML";
-            this.txtXML.Size = new System.Drawing.Size(1286, 229);
-            this.txtXML.TabIndex = 12;
+            this.txtXML.Size = new System.Drawing.Size(1093, 170);
+            this.txtXML.TabIndex = 1;
             this.txtXML.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtXML_KeyPress);
             this.txtXML.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtXML_KeyUp);
             // 
@@ -499,14 +427,106 @@
             this.tmLiveUpdate.Interval = 1000;
             this.tmLiveUpdate.Tick += new System.EventHandler(this.tmLiveUpdate_Tick);
             // 
+            // panQExOptions
+            // 
+            this.panQExOptions.BackColor = System.Drawing.SystemColors.Window;
+            this.panQExOptions.Controls.Add(this.rbQExObjectinitializer);
+            this.panQExOptions.Controls.Add(this.rbQExLineByLine);
+            this.panQExOptions.Controls.Add(this.chkQExFilterVariables);
+            this.panQExOptions.Controls.Add(this.cmbQExFlavor);
+            this.panQExOptions.Controls.Add(this.label2);
+            this.panQExOptions.Controls.Add(this.label1);
+            this.panQExOptions.Controls.Add(this.chkQExComments);
+            this.panQExOptions.Controls.Add(this.panParseQE);
+            this.panQExOptions.Controls.Add(this.cmbQExStyle);
+            this.panQExOptions.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panQExOptions.Location = new System.Drawing.Point(0, 0);
+            this.panQExOptions.Name = "panQExOptions";
+            this.panQExOptions.Size = new System.Drawing.Size(1093, 59);
+            this.panQExOptions.TabIndex = 0;
+            this.panQExOptions.Text = "Type of generated code";
+            // 
+            // rbQExObjectinitializer
+            // 
+            this.rbQExObjectinitializer.AutoSize = true;
+            this.rbQExObjectinitializer.Location = new System.Drawing.Point(129, 38);
+            this.rbQExObjectinitializer.Name = "rbQExObjectinitializer";
+            this.rbQExObjectinitializer.Size = new System.Drawing.Size(98, 17);
+            this.rbQExObjectinitializer.TabIndex = 3;
+            this.rbQExObjectinitializer.Text = "Object initializer";
+            this.rbQExObjectinitializer.UseVisualStyleBackColor = true;
+            this.rbQExObjectinitializer.CheckedChanged += new System.EventHandler(this.rbQExObjectInitializer_CheckedChanged);
+            // 
+            // rbQExLineByLine
+            // 
+            this.rbQExLineByLine.AutoSize = true;
+            this.rbQExLineByLine.Checked = true;
+            this.rbQExLineByLine.Location = new System.Drawing.Point(48, 38);
+            this.rbQExLineByLine.Name = "rbQExLineByLine";
+            this.rbQExLineByLine.Size = new System.Drawing.Size(78, 17);
+            this.rbQExLineByLine.TabIndex = 2;
+            this.rbQExLineByLine.TabStop = true;
+            this.rbQExLineByLine.Text = "Line-by-line";
+            this.rbQExLineByLine.UseVisualStyleBackColor = true;
+            // 
+            // chkQExFilterVariables
+            // 
+            this.chkQExFilterVariables.AutoSize = true;
+            this.chkQExFilterVariables.Location = new System.Drawing.Point(415, 39);
+            this.chkQExFilterVariables.Name = "chkQExFilterVariables";
+            this.chkQExFilterVariables.Size = new System.Drawing.Size(94, 17);
+            this.chkQExFilterVariables.TabIndex = 5;
+            this.chkQExFilterVariables.Text = "Filter Variables";
+            this.chkQExFilterVariables.UseVisualStyleBackColor = true;
+            this.chkQExFilterVariables.CheckedChanged += new System.EventHandler(this.chkQExFilterVariables_CheckedChanged);
+            // 
+            // cmbQExFlavor
+            // 
+            this.cmbQExFlavor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbQExFlavor.FormattingEnabled = true;
+            this.cmbQExFlavor.Location = new System.Drawing.Point(334, 12);
+            this.cmbQExFlavor.Name = "cmbQExFlavor";
+            this.cmbQExFlavor.Size = new System.Drawing.Size(186, 21);
+            this.cmbQExFlavor.TabIndex = 1;
+            this.cmbQExFlavor.SelectedIndexChanged += new System.EventHandler(this.cmbQExFlavor_SelectedIndexChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(292, 15);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(36, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Flavor";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(30, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Style";
+            // 
+            // cmbQExStyle
+            // 
+            this.cmbQExStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbQExStyle.FormattingEnabled = true;
+            this.cmbQExStyle.Location = new System.Drawing.Point(48, 12);
+            this.cmbQExStyle.Name = "cmbQExStyle";
+            this.cmbQExStyle.Size = new System.Drawing.Size(228, 21);
+            this.cmbQExStyle.TabIndex = 0;
+            this.cmbQExStyle.SelectedIndexChanged += new System.EventHandler(this.cmbQExStyle_SelectedIndexChanged);
+            // 
             // XmlContentControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(1286, 359);
+            this.ClientSize = new System.Drawing.Size(1093, 359);
             this.Controls.Add(this.txtXML);
+            this.Controls.Add(this.panQExOptions);
             this.Controls.Add(this.panSQL4CDSInfo);
             this.Controls.Add(this.panFormatting);
             this.Controls.Add(this.panActions);
@@ -526,19 +546,19 @@
             this.panActions.ResumeLayout(false);
             this.gbActions.ResumeLayout(false);
             this.gbActions.PerformLayout();
-            this.panQExOptions.ResumeLayout(false);
-            this.panQExOptions.PerformLayout();
             this.panSQL4CDS.ResumeLayout(false);
             this.panExecute.ResumeLayout(false);
-            this.panParseQE.ResumeLayout(false);
             this.panSave.ResumeLayout(false);
             this.panOk.ResumeLayout(false);
             this.panLiveUpdate.ResumeLayout(false);
             this.panLiveUpdate.PerformLayout();
+            this.panParseQE.ResumeLayout(false);
             this.panFormatting.ResumeLayout(false);
             this.gbFormatting.ResumeLayout(false);
             this.gbFormatting.PerformLayout();
             this.panSQL4CDSInfo.ResumeLayout(false);
+            this.panQExOptions.ResumeLayout(false);
+            this.panQExOptions.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -575,12 +595,14 @@
         internal ScintillaNET.Scintilla txtXML;
         private System.Windows.Forms.ImageList autocompleteImageList;
         private System.Windows.Forms.Timer tmLiveUpdate;
-        private System.Windows.Forms.Panel panQExOptions;
-        private System.Windows.Forms.RadioButton rbQExEarly;
-        private System.Windows.Forms.RadioButton rbQExLate;
         private System.Windows.Forms.CheckBox chkQExComments;
-        private System.Windows.Forms.LinkLabel linkEBG;
-        private System.Windows.Forms.RadioButton rbQExQExFactory;
-        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.Panel panQExOptions;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cmbQExStyle;
+        private System.Windows.Forms.ComboBox cmbQExFlavor;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox chkQExFilterVariables;
+        private System.Windows.Forms.RadioButton rbQExObjectinitializer;
+        private System.Windows.Forms.RadioButton rbQExLineByLine;
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Converters;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using Rappen.XTB.XmlEditorUtils;
@@ -36,6 +37,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             InitializeComponent();
             this.PrepareGroupBoxExpanders();
             fxb = caller;
+            cmbQExStyle.Items.AddRange(QExStyle.GetComboBoxItems());
+            cmbQExFlavor.Items.AddRange(QExFlavor.GetComboBoxItems());
             SetContentType(contentType);
             SetFormat(saveFormat);
             UpdateButtons();
@@ -62,23 +65,24 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             TabText = Text;
             var windowSettings = fxb.settings.ContentWindows.GetContentWindow(contenttype);
             var allowedit = contenttype == ContentType.FetchXML || contenttype == ContentType.LayoutXML;
-            var allowparse = contenttype == ContentType.QueryExpression;
             var allowsql = contenttype == ContentType.SQL_Query;
             chkLiveUpdate.Checked = allowedit && windowSettings.LiveUpdate;
             lblFormatExpander.GroupBoxSetState(tt, windowSettings.FormatExpanded);
             lblActionsExpander.GroupBoxSetState(tt, windowSettings.ActionExpanded);
+            panActions.Visible = contenttype != ContentType.QueryExpression;
             panLiveUpdate.Visible = allowedit;
             panOk.Visible = allowedit;
             panFormatting.Visible = allowedit;
             panExecute.Visible = allowedit && contenttype == ContentType.FetchXML;
-            panParseQE.Visible = allowparse;
+            panQExOptions.Visible = contenttype == ContentType.QueryExpression;
             panSQL4CDS.Visible = allowsql;
             panSQL4CDSInfo.Visible = allowsql;
-            panQExOptions.Visible = allowparse;
+            cmbQExStyle.SelectedItem = cmbQExStyle.Items.Cast<QExStyle>().FirstOrDefault(s => s.Tag == fxb.settings.CodeGenerators.QExStyle);
+            cmbQExFlavor.SelectedItem = cmbQExFlavor.Items.Cast<QExFlavor>().FirstOrDefault(f => f.Tag == fxb.settings.CodeGenerators.QExFlavor);
+            rbQExLineByLine.Checked = !fxb.settings.CodeGenerators.ObjectInitializer;
+            rbQExObjectinitializer.Checked = fxb.settings.CodeGenerators.ObjectInitializer;
             chkQExComments.Checked = fxb.settings.CodeGenerators.IncludeComments;
-            rbQExLate.Checked = fxb.settings.CodeGenerators.Style == CodeGenerationStyle.LateBound;
-            rbQExEarly.Checked = fxb.settings.CodeGenerators.Style == CodeGenerationStyle.EarlyBoundEBG;
-            rbQExQExFactory.Checked = fxb.settings.CodeGenerators.Style == CodeGenerationStyle.QueryExpressionFactory;
+            chkQExFilterVariables.Checked = fxb.settings.CodeGenerators.FilterVariables;
 
             switch (contentType)
             {
@@ -817,28 +821,28 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void rbQExStyle_Click(object sender, EventArgs e)
         {
-            if (rbQExQExFactory.Checked)
-            {
-                MessageBox.Show(@"This feature is not yet implemented... #sorry
+            //            if (rbQExQExFactory.Checked)
+            //            {
+            //                MessageBox.Show(@"This feature is not yet implemented... #sorry
 
-Do you like that idea?
-Click the ""Help"" button to vote on this Issue #822 and it will be implemented, one day...!
+            //Do you like that idea?
+            //Click the ""Help"" button to vote on this Issue #822 and it will be implemented, one day...!
 
-More votes == released sooner.", "QueryExpressionFactory",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0,
-                    "https://github.com/rappen/FetchXMLBuilder/issues/822");
-                if (fxb.settings.CodeGenerators.Style == CodeGenerationStyle.EarlyBoundEBG)
-                {
-                    rbQExEarly.Checked = true;
-                }
-                else
-                {
-                    rbQExLate.Checked = true;
-                }
-                return;
-            }
-            fxb.settings.CodeGenerators.Style = rbQExEarly.Checked ? CodeGenerationStyle.EarlyBoundEBG : rbQExQExFactory.Checked ? CodeGenerationStyle.QueryExpressionFactory : CodeGenerationStyle.LateBound;
-            fxb.UpdateLiveXML();
+            //More votes == released sooner.", "QueryExpressionFactory",
+            //                    MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0,
+            //                    "https://github.com/rappen/FetchXMLBuilder/issues/822");
+            //                if (fxb.settings.CodeGenerators.Style == CodeGenerationStyle.EarlyBoundEBG)
+            //                {
+            //                    rbQExEarly.Checked = true;
+            //                }
+            //                else
+            //                {
+            //                    rbQExLate.Checked = true;
+            //                }
+            //                return;
+            //            }
+            //            fxb.settings.CodeGenerators.Style = rbQExEarly.Checked ? CodeGenerationStyle.EarlyBoundEBG : rbQExQExFactory.Checked ? CodeGenerationStyle.QueryExpressionFactory : CodeGenerationStyle.LateBound;
+            //            fxb.UpdateLiveXML();
         }
 
         private void chkQExComments_CheckedChanged(object sender, EventArgs e)
@@ -855,6 +859,44 @@ More votes == released sooner.", "QueryExpressionFactory",
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             FetchXmlBuilder.OpenURL("https://github.com/rappen/FetchXMLBuilder/issues/822");
+        }
+
+        private void cmbQExStyle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fxb.settings.CodeGenerators.QExStyle = (cmbQExStyle.SelectedItem is QExStyle style) ? style.Tag : QExStyleEnum.QueryExpression;
+            fxb.UpdateLiveXML();
+        }
+
+        private void cmbQExFlavor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fxb.settings.CodeGenerators.QExFlavor = (cmbQExFlavor.SelectedItem is QExFlavor flavor) ? flavor.Tag : QExFlavorEnum.LateBound;
+            fxb.UpdateLiveXML();
+        }
+
+        private void chkQExFilterVariables_CheckedChanged(object sender, EventArgs e)
+        {
+            fxb.settings.CodeGenerators.FilterVariables = chkQExFilterVariables.Checked;
+            fxb.UpdateLiveXML();
+        }
+
+        private void rbQExObjectInitializer_CheckedChanged(object sender, EventArgs e)
+        {
+            fxb.settings.CodeGenerators.ObjectInitializer = rbQExObjectinitializer.Checked;
+            fxb.UpdateLiveXML();
+            return;
+            if (rbQExObjectinitializer.Checked)
+            {
+                MessageBox.Show(@"Oooh I know you wich that option... but it is not yet implemented... #sorry
+
+Do you like that idea?
+Click the ""Help"" button to vote on this Issue #830 and it will be implemented, one day...!
+
+More votes == released sooner.", "QueryExpressionFactory",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0,
+                    "https://github.com/rappen/FetchXMLBuilder/issues/830");
+
+                rbQExLineByLine.Checked = true;
+            }
         }
     }
 
