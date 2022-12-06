@@ -68,7 +68,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Error_UnhandledException);
 
             tslAbout.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString() + " by Jonas Rapp";
-      
+
             ai = new AppInsights(aiEndpoint, aiKey, Assembly.GetExecutingAssembly(), "FetchXML Builder");
             var theme = new VS2015LightTheme();
             dockContainer.Theme = theme;
@@ -397,11 +397,11 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             catch (FetchIsAggregateException ex)
             {
-                code = "This FetchXML is not possible to convert to QueryExpression in the current version of the SDK.\n\n" + ex.Message;
+                code = $"/*\nThis FetchXML is not possible to convert to QueryExpression in the current version of the SDK.\n\n{ex.Message}+n*/";
             }
             catch (Exception ex)
             {
-                code = "Failed to generate C# QueryExpression code.\n\n" + ex.Message;
+                code = $"/*\nFailed to generate C# {settings.CodeGenerators.QExStyle} with {settings.CodeGenerators.QExFlavor} code.\n\n{ex.Message}\n*/";
             }
             return code;
         }

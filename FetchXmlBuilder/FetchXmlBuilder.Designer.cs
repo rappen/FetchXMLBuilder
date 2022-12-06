@@ -574,6 +574,8 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowQueryExpression.Size = new System.Drawing.Size(289, 22);
             this.tsmiShowQueryExpression.Text = "QueryExpression";
             this.tsmiShowQueryExpression.Click += new System.EventHandler(this.tsmiShowQueryExpression_Click);
+            this.tsmiShowQueryExpression.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt)
+            | System.Windows.Forms.Keys.C)));
             // 
             // tsmiShowFetchXMLcs
             // 
