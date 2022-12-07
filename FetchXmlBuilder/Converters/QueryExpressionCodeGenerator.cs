@@ -5,11 +5,8 @@ using Microsoft.Xrm.Sdk.Query;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Text;
-using System.Xml.Linq;
 
 namespace Rappen.XTB.FetchXmlBuilder.Converters
 {
@@ -17,7 +14,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
     {
         private List<string> varList;
         internal static string CRLF = "\r\n";
-        internal static string Indent = "    ";
         internal QueryExpression qex;
         internal List<EntityMetadata> metas;
         internal CodeGenerators settings;
@@ -67,7 +63,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
 
         internal string GetVarName(string requestedname)
         {
-            var result = requestedname;
+            var result = requestedname.Replace(".", "_");
             if (varList.Contains(result))
             {
                 var i = 1;
@@ -79,6 +75,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             }
             varList.Add(result);
             return result;
+        }
+
+        internal string Indent(int indents = 1)
+        {
+            return string.Concat(Enumerable.Repeat("    ", indents));
         }
 
         internal string ReplaceValueTokens(string code)
@@ -111,7 +112,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             return code;
         }
 
-        internal static string GetQueryOptions(QueryExpression qex)
+        internal string GetQueryOptions(QueryExpression qex, string objectname)
         {
             var queryoptions = new List<string>();
             if (qex.NoLock)
@@ -128,25 +129,220 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             }
             if (!string.IsNullOrWhiteSpace(qex.PageInfo?.PagingCookie))
             {
-                queryoptions.Add($"PageInfo = new PagingInfo{CRLF}{Indent}{{{CRLF}{Indent}{Indent}PageNumber = {qex.PageInfo.PageNumber},{CRLF}{Indent}{Indent}PagingCookie = \"{qex.PageInfo.PagingCookie}\"{CRLF}{Indent}}}");
+                queryoptions.Add($"PageInfo = new PagingInfo{CRLF}{Indent()}{{{CRLF}{Indent(2)}PageNumber = {qex.PageInfo.PageNumber},{CRLF}{Indent(2)}PagingCookie = \"{qex.PageInfo.PagingCookie}\"{CRLF}{Indent()}}}");
             }
-            var options = queryoptions.Count > 0 ? CRLF + "{" + QueryExpressionCodeGenerator.GetCodeParametersMaxWidth(0, 1, queryoptions.ToArray()) + "}" : "";
-            return options;
+            if (!queryoptions.Any())
+            {
+                return string.Empty;
+            }
+            if (settings.ObjectInitializer)
+            {
+                return GetCodeParametersMaxWidth(0, 1, false, queryoptions.ToArray());
+            }
+            return string.Join(CRLF, queryoptions.Select(o => $"{objectname}.{o};"));
         }
 
-        internal static string GetCodeParametersMaxWidth(int maxwidth, int indents, params string[] parameters)
+        internal string GetCodeParametersMaxWidth(int maxwidth, int indents, bool withnewline, params string[] parameters)
         {
-            var currentindent = string.Concat(Enumerable.Repeat(Indent, indents));
             var result = string.Join("`´", parameters.Where(p => !string.IsNullOrWhiteSpace(p)));
             if (result.Length > maxwidth)
             {
-                result = CRLF + currentindent + result.Replace("`´", $",{CRLF}{currentindent}") + CRLF;
+                result = CRLF + Indent(indents) + result.Replace("`´", $",{CRLF}{Indent(indents)}") + (withnewline ? CRLF : "");
             }
             else
             {
                 result = result.Replace("`´", ", ");
             }
             return result;
+        }
+
+        internal string GetColumns(string entity, ColumnSet columns, string LineStart, int indents = 1)
+        {
+            var code = new StringBuilder();
+            if (columns.AllColumns)
+            {
+                if (settings.IncludeComments)
+                {
+                    code.AppendLine("// Add all columns to " + LineStart);
+                }
+                if (settings.ObjectInitializer)
+                {
+                    switch (settings.QExFlavor)
+                    {
+                        case QExFlavorEnum.EarlyBound:
+                            code.Append("new ColumnSet(true)");
+                            break;
+
+                        default:
+                            code.Append("ColumnSet = new ColumnSet(true)");
+                            break;
+                    }
+                }
+                else
+                {
+                    code.AppendLine(LineStart + ".AllColumns = true;");
+                }
+            }
+            else if (columns.Columns.Count > 0)
+            {
+                if (settings.IncludeComments)
+                {
+                    code.AppendLine("// Add columns to " + LineStart);
+                }
+                if (settings.ObjectInitializer)
+                {
+                    switch (settings.QExStyle)
+                    {
+                        case QExStyleEnum.QueryExpressionFactory:
+                            switch (settings.QExFlavor)
+                            {
+                                case QExFlavorEnum.EarlyBound:
+                                    LineStart = GetCodeEntityPrefix(entity) + " => new { ";
+                                    break;
+
+                                default:
+                                    LineStart = $"{Indent(indents)}new ColumnSet(";
+                                    break;
+                            }
+                            break;
+
+                        default:
+                            LineStart = "ColumnSet = new ColumnSet(";
+                            break;
+                    }
+                }
+                else
+                {
+                    LineStart += ".AddColumn" + (columns.Columns.Count > 1 ? "s" : "") + "(";
+                }
+                var colsEB = GetCodeParametersMaxWidth(120 - LineStart.Length, indents, true, columns.Columns.Select(c => GetCodeAttribute(entity, c)).ToArray());
+                var muliplerows = colsEB.Contains(CRLF);
+                code.Append(LineStart + colsEB);
+                if (settings.ObjectInitializer)
+                {
+                    switch (settings.QExFlavor)
+                    {
+                        case QExFlavorEnum.EarlyBound:
+                            code.Append(" }");
+                            break;
+
+                        default:
+                            code.Append(")");
+                            break;
+                    }
+                }
+                else
+                {
+                    code.Append(");");
+                }
+            }
+            return code.ToString();
+        }
+
+        private string GetFilters(string entity, IEnumerable<FilterExpression> filters, string parentName)
+        {
+            if (filters?.Any() != true)
+            {
+                return string.Empty;
+            }
+
+            var filterscode = new List<string>();
+            var i = 0;
+            foreach (var filter in filters.Where(f => f.Conditions.Any() || f.Filters.Any()))
+            {
+                filterscode.Add(GetFilter(entity, filter, parentName, ParentFilterType.Filter));
+            }
+            var separators = settings.ObjectInitializer ? "," : string.Empty;
+            return string.Join($"{separators}{CRLF}", filterscode.Where(f => !string.IsNullOrWhiteSpace(f)));
+        }
+
+        internal string GetFilter(string entity, FilterExpression filter, string parentName, ParentFilterType parentType)
+        {
+            if (filter == null || (!filter.Conditions.Any() && !filter.Filters.Any()))
+            {
+                return string.Empty;
+            }
+            var code = new StringBuilder();
+            var filtername = $"{parentName}.{parentType}";
+            if (parentType == ParentFilterType.Filter)
+            {
+                filtername = GetVarName(filtername);
+                if (settings.IncludeComments)
+                {
+                    code.AppendLine();
+                    code.AppendLine($"// Add filter {filtername} to {parentName}");
+                }
+                if (!settings.ObjectInitializer)
+                {
+                    code.AppendLine($"var {filtername} = new FilterExpression({(filter.FilterOperator == LogicalOperator.Or ? "LogicalOperator.Or" : "")});");
+                    code.AppendLine($"{parentName}.{parentType}.AddFilter({filtername});");
+                }
+            }
+            if (filter.Conditions.Any())
+            {
+                code.AppendLine(GetConditions(entity, filter.Conditions, filtername));
+            }
+            if (filter.Filters.Any())
+            {
+                code.Append(GetFilters(entity, filter.Filters, parentName));
+            }
+            return code.ToString();
+        }
+
+        private string GetConditions(string entity, IEnumerable<ConditionExpression> conditions, string LineStart)
+        {
+            if (conditions?.Any() != true)
+            {
+                return string.Empty;
+            }
+            var code = new StringBuilder();
+            if (settings.IncludeComments)
+            {
+                code.AppendLine();
+                code.AppendLine("// Add conditions " + LineStart);
+            }
+            var conditionscode = new List<string>();
+            foreach (var cond in conditions)
+            {
+                var filterentity = entity;
+                var entityalias = "";
+                var values = "";
+                var token = LineStart.Replace(".", "_").Replace("_Criteria", "").Replace("_LinkCriteria", "");
+                if (!string.IsNullOrWhiteSpace(cond.EntityName))
+                {
+                    filterentity = entityaliases.FirstOrDefault(a => a.Key.Equals(cond.EntityName)).Value ?? cond.EntityName;
+                    entityalias = "\"" + cond.EntityName + "\", ";
+                    token += "_" + cond.EntityName;
+                }
+                token += "_" + cond.AttributeName;
+                if (cond.Values.Count > 0)
+                {
+                    values = ", " + GetConditionValues(cond.Values, token, settings.FilterVariables);
+                    if (cond.CompareColumns)
+                    {
+                        values = ", true" + values;
+                    }
+                }
+                var attributename = GetCodeAttribute(filterentity, cond.AttributeName);
+                if (settings.ObjectInitializer && settings.QExStyle == QExStyleEnum.QueryExpressionFactory &&
+                    string.IsNullOrWhiteSpace(entityalias) &&
+                    cond.Operator == ConditionOperator.Equal && cond.Values?.Count == 1)
+                {
+                    conditionscode.Add($"{attributename}{values}");
+                }
+                else if (settings.ObjectInitializer)
+                {
+                    conditionscode.Add($"new ConditionExpression({entityalias}{attributename}, ConditionOperator.{cond.Operator}{values});");
+                }
+                else
+                {
+                    conditionscode.Add($"{LineStart}.AddCondition({entityalias}{attributename}, ConditionOperator.{cond.Operator}{values});");
+                }
+            }
+            var separators = settings.ObjectInitializer ? "," : string.Empty;
+            var indentcounts = settings.ObjectInitializer ? 1 : 0;
+            code.Append(Indent(indentcounts) + string.Join($"{separators}{CRLF}{Indent(indentcounts)}", conditionscode));
+            return code.ToString();
         }
 
         internal static string GetConditionValues(DataCollection<object> values, string token, bool createvariables)
@@ -243,9 +439,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
         {
             return new object[]
             {
-                new QExStyle { Tag = QExStyleEnum.QueryExpression, Creator = "Microsoft SDK" },
+                new QExStyle { Tag = QExStyleEnum.QueryExpression, Creator = "Microsoft.CrmSdk.CoreAssemblies" },
+                new QExStyle { Tag = QExStyleEnum.OrganizationServiceContext, Creator = "Microsoft.Xrm.Sdk.Client" },
+                new QExStyle { Tag = QExStyleEnum.QueryExpressionFactory, Creator = "daryllabar/DLaB.Xrm" },
                 new QExStyle { Tag = QExStyleEnum.FluentQueryExpression, Creator = "MscrmTools" },
-                new QExStyle { Tag = QExStyleEnum.QueryExpressionFactory, Creator = "DLaB" }
             };
         }
     }
@@ -273,8 +470,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
     public enum QExStyleEnum
     {
         QueryExpression,
-        FluentQueryExpression,
-        QueryExpressionFactory
+        OrganizationServiceContext,
+        QueryExpressionFactory,
+        FluentQueryExpression
     }
 
     public enum QExFlavorEnum
@@ -283,5 +481,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
         EBGconstants,
         LCGconstants,
         EarlyBound
+    }
+
+    internal enum ParentFilterType
+    {
+        Criteria,
+        LinkCriteria,
+        Filter
     }
 }
