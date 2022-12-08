@@ -61,10 +61,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             }
         }
 
-        internal string GetVarName(string requestedname)
+        internal string GetVarName(string requestedname, bool numberit = false)
         {
             var result = requestedname.Replace(".", "_");
-            if (varList.Contains(result))
+            if (varList.Contains(result) || numberit)
             {
                 var i = 1;
                 while (varList.Contains(result + i.ToString()))
@@ -239,59 +239,60 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             return code.ToString();
         }
 
-        private string GetFilters(string entity, IEnumerable<FilterExpression> filters, string parentName)
+        private string GetFilters(string entity, FilterExpression filter, string ownerName)
         {
-            if (filters?.Any() != true)
+            if (filter?.Filters?.Any() != true)
             {
                 return string.Empty;
             }
-
+            var filters = filter.Filters.Where(f => f.Conditions.Any() || f.Filters.Any());
+            var several = filters.Count() > 1;
             var filterscode = new List<string>();
-            var i = 0;
-            foreach (var filter in filters.Where(f => f.Conditions.Any() || f.Filters.Any()))
+            foreach (var filteritem in filters)
             {
-                filterscode.Add(GetFilter(entity, filter, parentName, ParentFilterType.Filter));
+                filterscode.Add(GetFilter(entity, filteritem, filter.FilterHint ?? ownerName, ParentFilterType.Filter, several));
             }
             var separators = settings.ObjectInitializer ? "," : string.Empty;
             return string.Join($"{separators}{CRLF}", filterscode.Where(f => !string.IsNullOrWhiteSpace(f)));
         }
 
-        internal string GetFilter(string entity, FilterExpression filter, string parentName, ParentFilterType parentType)
+        internal string GetFilter(string entity, FilterExpression filter, string ownerName, ParentFilterType ownerType, bool several = false)
         {
             if (filter == null || (!filter.Conditions.Any() && !filter.Filters.Any()))
             {
                 return string.Empty;
             }
             var code = new StringBuilder();
-            var filtername = $"{parentName}.{parentType}";
-            if (parentType == ParentFilterType.Filter)
+            filter.FilterHint = $"{ownerName}.{ownerType}";
+            if (ownerType == ParentFilterType.Filter)
             {
-                filtername = GetVarName(filtername);
+                filter.FilterHint = GetVarName($"{ownerName}.{(filter.FilterOperator == LogicalOperator.Or ? "Or" : "And")}".Replace(".Criteria", "").Replace(".LinkCriteria", ""), several);
+
                 if (settings.IncludeComments)
                 {
                     code.AppendLine();
-                    code.AppendLine($"// Add filter {filtername} to {parentName}");
+                    code.AppendLine($"// Add filter {filter.FilterHint} to {ownerName}");
                 }
                 if (!settings.ObjectInitializer)
                 {
-                    code.AppendLine($"var {filtername} = new FilterExpression({(filter.FilterOperator == LogicalOperator.Or ? "LogicalOperator.Or" : "")});");
-                    code.AppendLine($"{parentName}.{parentType}.AddFilter({filtername});");
+                    code.AppendLine($"var {filter.FilterHint} = new FilterExpression({(filter.FilterOperator == LogicalOperator.Or ? "LogicalOperator.Or" : "")});");
+                    code.AppendLine($"{ownerName}.AddFilter({filter.FilterHint});");
                 }
             }
             if (filter.Conditions.Any())
             {
-                code.AppendLine(GetConditions(entity, filter.Conditions, filtername));
+                code.AppendLine(GetConditions(entity, filter));
             }
             if (filter.Filters.Any())
             {
-                code.Append(GetFilters(entity, filter.Filters, parentName));
+                code.Append(GetFilters(entity, filter, ownerName));
             }
             return code.ToString();
         }
 
-        private string GetConditions(string entity, IEnumerable<ConditionExpression> conditions, string LineStart)
+        private string GetConditions(string entity, FilterExpression filter)
         {
-            if (conditions?.Any() != true)
+            if (filter?.Conditions?.Any() != true)
             {
                 return string.Empty;
             }
@@ -299,15 +300,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             if (settings.IncludeComments)
             {
                 code.AppendLine();
-                code.AppendLine("// Add conditions " + LineStart);
+                code.AppendLine("// Add conditions " + filter.FilterHint);
             }
             var conditionscode = new List<string>();
-            foreach (var cond in conditions)
+            foreach (var cond in filter.Conditions)
             {
                 var filterentity = entity;
                 var entityalias = "";
                 var values = "";
-                var token = LineStart.Replace(".", "_").Replace("_Criteria", "").Replace("_LinkCriteria", "");
+                var token = filter.FilterHint.Replace(".", "_").Replace("_Criteria", "").Replace("_LinkCriteria", "");
                 if (!string.IsNullOrWhiteSpace(cond.EntityName))
                 {
                     filterentity = entityaliases.FirstOrDefault(a => a.Key.Equals(cond.EntityName)).Value ?? cond.EntityName;
@@ -336,7 +337,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 }
                 else
                 {
-                    conditionscode.Add($"{LineStart}.AddCondition({entityalias}{attributename}, ConditionOperator.{cond.Operator}{values});");
+                    conditionscode.Add($"{filter.FilterHint}.AddCondition({entityalias}{attributename}, ConditionOperator.{cond.Operator}{values});");
                 }
             }
             var separators = settings.ObjectInitializer ? "," : string.Empty;
