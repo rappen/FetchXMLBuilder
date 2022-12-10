@@ -1,4 +1,3 @@
-using Rappen.XTB.FetchXmlBuilder.Converters;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using ScintillaNET;
 using System;
@@ -76,9 +75,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public DockState FetchResult { get; set; } = DockState.Document;
         public DockState FetchXML { get; set; } = DockState.Document;
         public DockState LayoutXML { get; set; } = DockState.Document;
-        public DockState FetchXMLCs { get; set; } = DockState.DockRight;
         public DockState FetchXMLJs { get; set; } = DockState.DockRight;
-        public DockState QueryExpression { get; set; } = DockState.DockRight;
+        public DockState CSharp { get; set; } = DockState.DockRight;
         public DockState SQLQuery { get; set; } = DockState.DockRight;
         public DockState FlowList { get; set; } = DockState.Float;
     }
@@ -98,7 +96,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public ContentWindow SQLWindow { get; set; } = new ContentWindow();
         public ContentWindow FetchXmlCsWindow { get; set; } = new ContentWindow();
         public ContentWindow FetchXmlJsWindow { get; set; } = new ContentWindow();
-        public ContentWindow QueryExpressionWindow { get; set; } = new ContentWindow();
+        public ContentWindow CSharpWindow { get; set; } = new ContentWindow();
 
         internal ContentWindow GetContentWindow(ContentType type)
         {
@@ -118,11 +116,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
                 case ContentType.SQL_Query:
                     return SQLWindow;
 
-                case ContentType.QueryExpression:
-                    return QueryExpressionWindow;
-
-                case ContentType.CSharp_Query:
-                    return FetchXmlCsWindow;
+                case ContentType.CSharp_Code:
+                    return CSharpWindow;
 
                 case ContentType.JavaScript_Query:
                     return FetchXmlJsWindow;
@@ -146,12 +141,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
                     SQLWindow = windowSettings;
                     break;
 
-                case ContentType.QueryExpression:
-                    QueryExpressionWindow = windowSettings;
-                    break;
-
-                case ContentType.CSharp_Query:
-                    FetchXmlCsWindow = windowSettings;
+                case ContentType.CSharp_Code:
+                    CSharpWindow = windowSettings;
                     break;
 
                 case ContentType.JavaScript_Query:
@@ -258,5 +249,22 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public string EBG_EntityLogicalNames { get; set; } = "EntityLogicalName";
         public string EBG_AttributeLogicalNameClass { get; set; } = "Fields.";
         public bool ObjectInitializer { get; set; } = false;
+    }
+
+    public enum QExStyleEnum
+    {
+        QueryExpression,
+        OrganizationServiceContext,
+        QueryExpressionFactory,
+        FluentQueryExpression,
+        FetchXML
+    }
+
+    public enum QExFlavorEnum
+    {
+        LateBound,
+        EBGconstants,
+        LCGconstants,
+        EarlyBound
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XTB.FetchXmlBuilder.Converters;
+using Rappen.XTB.FetchXmlBuilder.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,18 +11,18 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
 {
     internal class QExFactory
     {
-        private readonly QueryExpressionCodeGenerator gen;
+        private readonly CSharpCodeGenerator gen;
         private readonly bool objectini;
         private readonly bool comments;
         private readonly string CRLF;
         private Dictionary<string, string> entityaliases;
 
-        internal QExFactory(QueryExpressionCodeGenerator generator)
+        internal QExFactory(CSharpCodeGenerator generator)
         {
             gen = generator ?? throw new ArgumentNullException(nameof(generator));
             objectini = gen.settings.ObjectInitializer;
             comments = gen.settings.IncludeComments;
-            CRLF = QueryExpressionCodeGenerator.CRLF;
+            CRLF = CSharpCodeGenerator.CRLF;
         }
 
         internal string Generated => CreateCode(gen.qex);

@@ -256,7 +256,7 @@
     </Compile>
     <Compile Include="Extensions\ServiceExtensions.cs" />
     <Compile Include="ControlsClasses\AttributeItem.cs" />
-    <Compile Include="Converters\CSharpCodeGenerator.cs" />
+    <Compile Include="Converters\CSharpCodeGeneratorFetchXML.cs" />
     <Compile Include="Extensions\DockExtensions.cs" />
     <Compile Include="Builder\FetchIsAggregateException.cs" />
     <Compile Include="Settings\FXBSettings.cs" />
@@ -264,7 +264,7 @@
     <Compile Include="Converters\ODataCodeGenerator.cs" />
     <Compile Include="ControlsClasses\OptionsetItem.cs" />
     <Compile Include="AppCode\QueryInfo.cs" />
-    <Compile Include="Converters\QueryExpressionCodeGenerator.cs" />
+    <Compile Include="Converters\CSharpCodeGenerator.cs" />
     <Compile Include="Builder\Validations.cs" />
     <Compile Include="Views\ViewItem.cs" />
     <Compile Include="ControlsClasses\EntityItem.cs" />

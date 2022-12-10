@@ -69,12 +69,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             chkLiveUpdate.Checked = allowedit && windowSettings.LiveUpdate;
             lblFormatExpander.GroupBoxSetState(tt, windowSettings.FormatExpanded);
             lblActionsExpander.GroupBoxSetState(tt, windowSettings.ActionExpanded);
-            panActions.Visible = contenttype != ContentType.QueryExpression;
+            panActions.Visible = contenttype != ContentType.CSharp_Code;
             panLiveUpdate.Visible = allowedit;
             panOk.Visible = allowedit;
             panFormatting.Visible = allowedit;
             panExecute.Visible = allowedit && contenttype == ContentType.FetchXML;
-            panQExOptions.Visible = contenttype == ContentType.QueryExpression;
+            panQExOptions.Visible = contenttype == ContentType.CSharp_Code;
             panSQL4CDS.Visible = allowsql;
             panSQL4CDSInfo.Visible = allowsql;
             cmbQExStyle.SelectedItem = cmbQExStyle.Items.Cast<QExStyle>().FirstOrDefault(s => s.Tag == fxb.settings.CodeGenerators.QExStyle);
@@ -97,8 +97,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     txtXML.ConfigureForSQL();
                     break;
 
-                case ContentType.CSharp_Query:
-                case ContentType.QueryExpression:
+                case ContentType.CSharp_Code:
                     txtXML.ConfigureForCSharp();
                     break;
 
@@ -420,16 +419,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                         fxb.settings.DockStates.LayoutXML = DockState;
                         break;
 
-                    case ContentType.CSharp_Query:
-                        fxb.settings.DockStates.FetchXMLCs = DockState;
-                        break;
-
                     case ContentType.JavaScript_Query:
                         fxb.settings.DockStates.FetchXMLJs = DockState;
                         break;
 
-                    case ContentType.QueryExpression:
-                        fxb.settings.DockStates.QueryExpression = DockState;
+                    case ContentType.CSharp_Code:
+                        fxb.settings.DockStates.CSharp = DockState;
                         break;
 
                     case ContentType.SQL_Query:
@@ -907,10 +902,9 @@ More votes == released sooner.", "QueryExpressionFactory",
         FetchXML_Result,
         Serialized_Result_XML,
         Serialized_Result_JSON,
-        QueryExpression,
+        CSharp_Code,
         SQL_Query,
-        JavaScript_Query,
-        CSharp_Query
+        JavaScript_Query
     }
 
     internal enum SaveFormat

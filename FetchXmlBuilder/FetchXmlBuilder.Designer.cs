@@ -78,8 +78,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowFlow = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowOData4 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowOData = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiShowQueryExpression = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiShowFetchXMLcs = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowCSharpCode = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowFetchXMLjs = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbOptions = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiSettings = new System.Windows.Forms.ToolStripMenuItem();
@@ -520,8 +519,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowFlow,
             this.tsmiShowOData4,
             this.tsmiShowOData,
-            this.tsmiShowQueryExpression,
-            this.tsmiShowFetchXMLcs,
+            this.tsmiShowCSharpCode,
             this.tsmiShowFetchXMLjs});
             this.tsbConvert.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_convert;
             this.tsbConvert.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -567,23 +565,15 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowOData.Text = "OData 2.0 (Deprecated)";
             this.tsmiShowOData.Click += new System.EventHandler(this.tsmiShowOData_Click);
             // 
-            // tsmiShowQueryExpression
+            // tsmiShowCSharpCode
             // 
-            this.tsmiShowQueryExpression.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_csharp;
-            this.tsmiShowQueryExpression.Name = "tsmiShowQueryExpression";
-            this.tsmiShowQueryExpression.Size = new System.Drawing.Size(289, 22);
-            this.tsmiShowQueryExpression.Text = "QueryExpression";
-            this.tsmiShowQueryExpression.Click += new System.EventHandler(this.tsmiShowQueryExpression_Click);
-            this.tsmiShowQueryExpression.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt)
+            this.tsmiShowCSharpCode.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_csharp;
+            this.tsmiShowCSharpCode.Name = "tsmiShowCSharpCode";
+            this.tsmiShowCSharpCode.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowCSharpCode.Text = "C# code";
+            this.tsmiShowCSharpCode.Click += new System.EventHandler(this.tsmiShowCSharpCode_Click);
+            this.tsmiShowCSharpCode.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt)
             | System.Windows.Forms.Keys.C)));
-            // 
-            // tsmiShowFetchXMLcs
-            // 
-            this.tsmiShowFetchXMLcs.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_csharp;
-            this.tsmiShowFetchXMLcs.Name = "tsmiShowFetchXMLcs";
-            this.tsmiShowFetchXMLcs.Size = new System.Drawing.Size(289, 22);
-            this.tsmiShowFetchXMLcs.Text = "FetchXML C# code";
-            this.tsmiShowFetchXMLcs.Click += new System.EventHandler(this.tsmiShowFetchXMLcs_Click);
             // 
             // tsmiShowFetchXMLjs
             // 
@@ -749,10 +739,9 @@ namespace Rappen.XTB.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiResetWindowLayout;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         internal WeifenLuo.WinFormsUI.Docking.DockPanel dockContainer;
-        private System.Windows.Forms.ToolStripMenuItem tsmiShowQueryExpression;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowCSharpCode;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowSQL;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowFetchXML;
-        private System.Windows.Forms.ToolStripMenuItem tsmiShowFetchXMLcs;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowFetchXMLjs;
         private System.Windows.Forms.ToolStripLabel tslAbout;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveViewAs;

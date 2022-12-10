@@ -32,12 +32,11 @@ namespace Rappen.XTB.FetchXmlBuilder
         private string cwpfeed;
         private XmlContentControl dockControlFetchResult;
         private XmlContentControl dockControlFetchXml;
-        private XmlContentControl dockControlFetchXmlCs;
         private XmlContentControl dockControlFetchXmlJs;
         private ODataControl dockControlOData2;
         private ODataControl dockControlOData4;
         private FlowListControl dockControlFlowList;
-        private XmlContentControl dockControlQExp;
+        private XmlContentControl dockControlCSharp;
         private XmlContentControl dockControlSQL;
         private MetadataControl dockControlMeta;
         private Entity dynml;
@@ -91,7 +90,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     tsmiShowFlow.Enabled = enabled && Service != null;
                     tsmiShowOData.Enabled = enabled && Service != null;
                     tsmiShowOData4.Enabled = enabled && Service != null;
-                    tsmiShowQueryExpression.Enabled = enabled && Service != null && (dockControlBuilder?.IsFetchAggregate() == false);
+                    tsmiShowCSharpCode.Enabled = enabled && Service != null && (dockControlBuilder?.IsFetchAggregate() == false);
 
                     // Enable local menus/buttons/etc
                     dockControlBuilder?.EnableControls(enabled);
@@ -154,18 +153,14 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 dockControlFlowList.DisplayFlowList(GetOData(4));
             }
-            if (dockControlQExp?.Visible == true && entities != null)
+            if (dockControlCSharp?.Visible == true && entities != null)
             {
-                dockControlQExp.UpdateXML(GetQueryExpressionCode());
+                dockControlCSharp.UpdateXML(GetQueryExpressionCode());
             }
             if (dockControlSQL?.Visible == true)
             {
                 var sql = GetSQLQuery(out var sql4cds);
                 dockControlSQL.UpdateSQL(sql, sql4cds);
-            }
-            if (dockControlFetchXmlCs?.Visible == true)
-            {
-                dockControlFetchXmlCs.UpdateXML(GetCSharpCode());
             }
             if (dockControlFetchXmlJs?.Visible == true)
             {
@@ -266,21 +261,6 @@ namespace Rappen.XTB.FetchXmlBuilder
                 return dockControlLayoutXml;
             }
             return null;
-        }
-
-        private string GetCSharpCode()
-        {
-            var cs = string.Empty;
-            var fetch = dockControlBuilder.GetFetchString(true, false);
-            try
-            {
-                cs = CSharpCodeGenerator.GetCSharpCode(fetch);
-            }
-            catch (Exception ex)
-            {
-                cs = "Failed to generate C# code.\n\n" + ex.Message;
-            }
-            return cs;
         }
 
         private string GetJavaScriptCode()
