@@ -296,7 +296,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     default:
                         if (ownerType == ParentFilterType.Filters)
                         {
-                            code.Append($"{Indent(indentslevel++)}new FilterExpression({(filter.FilterOperator == LogicalOperator.Or ? "LogicalOperator.Or" : "")}) // Filter new{CRLF}{Indent(indentslevel)}{{{CRLF}");
+                            code.Append($"{Indent(++indentslevel)}new FilterExpression({(filter.FilterOperator == LogicalOperator.Or ? "LogicalOperator.Or" : "")}) // Filter new{CRLF}{Indent(indentslevel)}{{{CRLF}");
                         }
                         else
                         {
@@ -304,18 +304,23 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                         }
                         if (filter.Conditions.Any())
                         {
-                            code.Append($"{Indent(indentslevel++)}Conditions = // Filter conds{CRLF}{Indent(indentslevel)}{{{CRLF}");
+                            code.Append($"{Indent(++indentslevel)}Conditions = // Filter conds{CRLF}{Indent(indentslevel)}{{{CRLF}");
                         }
                         break;
                 }
             }
-            code.Append(GetConditions(entity, filter, indentslevel + 1));
+            code.Append(GetConditions(entity, filter, indentslevel));
             if (settings.ObjectInitializer)
             {
                 switch (settings.QExStyle)
                 {
                     default:
-                        code.Append($"{CRLF}{Indent(indentslevel--)}}}, // Filter conds");
+                        code.Append($"{CRLF}{Indent(indentslevel--)}}}");
+                        if (filter.Filters.Any())
+                        {
+                            code.Append(",");
+                        }
+                        code.Append("  // Filter conds");
                         break;
                 }
             }
