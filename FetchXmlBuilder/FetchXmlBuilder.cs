@@ -391,7 +391,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 case QExStyleEnum.FetchXML:
                     var fetch = dockControlBuilder.GetFetchString(true, false);
-                    return CSharpCodeGeneratorFetchXML.GetCSharpFetchXMLCode(fetch);
+                    return CSharpCodeGeneratorFetchXML.GetCSharpFetchXMLCode(fetch, settings.CodeGenerators);
 
                 case QExStyleEnum.QueryExpression:
                 case QExStyleEnum.OrganizationServiceContext:

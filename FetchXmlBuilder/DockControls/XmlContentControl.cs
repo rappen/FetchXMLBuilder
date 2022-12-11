@@ -859,6 +859,15 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void cmbQExStyle_SelectedIndexChanged(object sender, EventArgs e)
         {
             fxb.settings.CodeGenerators.QExStyle = (cmbQExStyle.SelectedItem is QExStyle style) ? style.Tag : QExStyleEnum.QueryExpression;
+            rbQExObjectinitializer.Enabled = fxb.settings.CodeGenerators.QExStyle != QExStyleEnum.FetchXML;
+            cmbQExFlavor.Enabled = fxb.settings.CodeGenerators.QExStyle != QExStyleEnum.FetchXML;
+            chkQExComments.Enabled = fxb.settings.CodeGenerators.QExStyle != QExStyleEnum.FetchXML;
+            if (fxb.settings.CodeGenerators.QExStyle == QExStyleEnum.FetchXML)
+            {
+                rbQExLineByLine.Checked = true;
+                cmbQExFlavor.SelectedIndex = -1;
+                chkQExComments.Checked = false;
+            }
             fxb.UpdateLiveXML();
         }
 

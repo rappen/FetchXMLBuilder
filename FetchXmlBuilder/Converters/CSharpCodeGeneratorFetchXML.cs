@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Rappen.XTB.FetchXmlBuilder.Settings;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security;
 using System.Text;
@@ -8,28 +9,30 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
 {
     public class CSharpCodeGeneratorFetchXML
     {
-        public static string GetCSharpFetchXMLCode(string fetchXml)
+        public static string GetCSharpFetchXMLCode(string fetchXml, CodeGenerators codesettings)
         {
             var data = new Dictionary<string, string>();
             var xml = new XmlDocument();
             xml.LoadXml(fetchXml);
 
-            var conditionAttributes = xml.SelectNodes("//condition/@value");
-
-            foreach (XmlAttribute attribute in conditionAttributes)
+            if (codesettings.FilterVariables)
             {
-                var value = AddData(attribute.OwnerElement.GetAttribute("attribute"), attribute.Value, data);
-                attribute.Value = $"{{{value}}}";
+                var conditionAttributes = xml.SelectNodes("//condition/@value");
+
+                foreach (XmlAttribute attribute in conditionAttributes)
+                {
+                    var value = AddData(attribute.OwnerElement.GetAttribute("attribute"), attribute.Value, data);
+                    attribute.Value = $"{{{value}}}";
+                }
+
+                var conditionValues = xml.SelectNodes("//condition/value");
+
+                foreach (XmlElement val in conditionValues)
+                {
+                    var value = AddData(((XmlElement)val.ParentNode).GetAttribute("attribute"), val.InnerText.Trim(), data);
+                    val.InnerText = $"{{{value}}}";
+                }
             }
-
-            var conditionValues = xml.SelectNodes("//condition/value");
-
-            foreach (XmlElement val in conditionValues)
-            {
-                var value = AddData(((XmlElement)val.ParentNode).GetAttribute("attribute"), val.InnerText.Trim(), data);
-                val.InnerText = $"{{{value}}}";
-            }
-
             var cs = "";
 
             if (data.Count > 0)
