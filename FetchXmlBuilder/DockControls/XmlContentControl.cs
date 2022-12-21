@@ -859,14 +859,25 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void cmbQExStyle_SelectedIndexChanged(object sender, EventArgs e)
         {
             fxb.settings.CodeGenerators.QExStyle = (cmbQExStyle.SelectedItem is QExStyle style) ? style.Tag : QExStyleEnum.QueryExpression;
-            rbQExObjectinitializer.Enabled = fxb.settings.CodeGenerators.QExStyle != QExStyleEnum.FetchXML;
-            cmbQExFlavor.Enabled = fxb.settings.CodeGenerators.QExStyle != QExStyleEnum.FetchXML;
-            chkQExComments.Enabled = fxb.settings.CodeGenerators.QExStyle != QExStyleEnum.FetchXML;
-            if (fxb.settings.CodeGenerators.QExStyle == QExStyleEnum.FetchXML)
+            rbQExLineByLine.Enabled = true;
+            rbQExObjectinitializer.Enabled = true;
+            cmbQExFlavor.Enabled = true;
+            chkQExComments.Enabled = true;
+            switch (fxb.settings.CodeGenerators.QExStyle)
             {
-                rbQExLineByLine.Checked = true;
-                cmbQExFlavor.SelectedIndex = -1;
-                chkQExComments.Checked = false;
+                case QExStyleEnum.QueryExpressionFactory:
+                    rbQExLineByLine.Enabled = false;
+                    rbQExObjectinitializer.Checked = true;
+                    break;
+
+                case QExStyleEnum.FetchXML:
+                    rbQExObjectinitializer.Enabled = false;
+                    cmbQExFlavor.Enabled = false;
+                    chkQExComments.Enabled = false;
+                    rbQExLineByLine.Checked = true;
+                    cmbQExFlavor.SelectedIndex = -1;
+                    chkQExComments.Checked = false;
+                    break;
             }
             fxb.UpdateLiveXML();
         }
