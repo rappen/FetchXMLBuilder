@@ -5,8 +5,10 @@ using Microsoft.Xrm.Sdk.Query;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 
 namespace Rappen.XTB.FetchXmlBuilder.Converters
 {
@@ -17,6 +19,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
         internal QueryExpression qex;
         internal List<EntityMetadata> metas;
         internal CodeGenerators settings;
+        private readonly string separators;
         internal Dictionary<string, string> entityaliases;
 
         public static string GetCSharpQueryExpression(QueryExpression QEx, List<EntityMetadata> entities, FXBSettings settings)
@@ -46,6 +49,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             metas = entities;
             qex = QEx;
             settings = fxbsettings.CodeGenerators;
+            separators = settings.ObjectInitializer ? $",{CRLF}" : $"{CRLF}";
             StoreLinkEntityAliases(qex.LinkEntities);
         }
 
@@ -156,7 +160,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             return result;
         }
 
-        internal string GetColumns(string entity, ColumnSet columns, string LineStart, int indents = 1)
+        internal string GetColumns(string entity, ColumnSet columns, string LineStart, int indents)
         {
             var code = new StringBuilder();
             if (columns.AllColumns)
@@ -201,13 +205,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                                     break;
 
                                 default:
-                                    LineStart = $"{Indent(indents)}new ColumnSet(";
+                                    LineStart = $"new ColumnSet(";
                                     break;
                             }
                             break;
 
                         default:
-                            LineStart = "ColumnSet = new ColumnSet(";
+                            LineStart += " = new ColumnSet(";
                             break;
                     }
                 }
@@ -215,19 +219,19 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 {
                     LineStart += ".AddColumn" + (columns.Columns.Count > 1 ? "s" : "") + "(";
                 }
-                var colsEB = GetCodeParametersMaxWidth(120 - LineStart.Length, indents, true, columns.Columns.Select(c => GetCodeAttribute(entity, c)).ToArray());
+                var colsEB = GetCodeParametersMaxWidth(120 - LineStart.Length, indents + 1, false, columns.Columns.Select(c => GetCodeAttribute(entity, c)).ToArray());
                 var muliplerows = colsEB.Contains(CRLF);
-                code.Append(LineStart + colsEB);
+                code.Append(Indent(indents) + LineStart + colsEB);
                 if (settings.ObjectInitializer)
                 {
                     switch (settings.QExFlavor)
                     {
                         case QExFlavorEnum.EarlyBound:
-                            code.Append(" }");
+                            code.Append(muliplerows ? $"{CRLF}{Indent(indents)}}}" : " }");
                             break;
 
                         default:
-                            code.Append(")");
+                            code.Append(muliplerows ? $"{CRLF}{Indent(indents)})" : ")");
                             break;
                     }
                 }
@@ -251,22 +255,21 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             var filterscode = "";
             if (settings.ObjectInitializer)
             {
-                filterscode = $"{CRLF}{Indent(indentslevel)}Filters = // Filters{CRLF}{Indent(indentslevel)}{{{CRLF}";
+                filterscode = $"{Indent(indentslevel)}Filters = // Filters{CRLF}{Indent(indentslevel++)}{{{CRLF}";
             }
             foreach (var filteritem in filters)
             {
                 filtercodes.Add(GetFilter(entity, filteritem, filter.FilterHint ?? ownerName, ParentFilterType.Filters, indentslevel, several));
             }
-            var separators = settings.ObjectInitializer ? "," : string.Empty;
-            filterscode += string.Join($"{separators}{CRLF}", filtercodes.Where(f => !string.IsNullOrWhiteSpace(f)));
+            filterscode += string.Join(separators, filtercodes.Where(f => !string.IsNullOrWhiteSpace(f)));
             if (settings.ObjectInitializer)
             {
-                filterscode += $"{CRLF}{Indent(indentslevel)}}} // Filters";
+                filterscode += $"{CRLF}{Indent(--indentslevel)}}} // Filters";
             }
             return filterscode;
         }
 
-        internal string GetFilter(string entity, FilterExpression filter, string ownerName, ParentFilterType ownerType, int indentslevel = 0, bool several = false)
+        internal string GetFilter(string entity, FilterExpression filter, string ownerName, ParentFilterType ownerType, int indentslevel, bool several = false)
         {
             if (filter == null || (!filter.Conditions.Any() && !filter.Filters.Any()))
             {
@@ -296,41 +299,27 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     default:
                         if (ownerType == ParentFilterType.Filters)
                         {
-                            code.Append($"{Indent(++indentslevel)}new FilterExpression({(filter.FilterOperator == LogicalOperator.Or ? "LogicalOperator.Or" : "")}) // Filter new{CRLF}{Indent(indentslevel)}{{{CRLF}");
+                            code.Append($"{Indent(indentslevel)}new FilterExpression({(filter.FilterOperator == LogicalOperator.Or ? "LogicalOperator.Or" : "")}) // Filter new{CRLF}{Indent(indentslevel++)}{{{CRLF}");
                         }
                         else
                         {
-                            code.Append($"{Indent(indentslevel++)}{ownerType} = // Filter type{CRLF}{Indent(indentslevel)}{{{CRLF}");
-                        }
-                        if (filter.Conditions.Any())
-                        {
-                            code.Append($"{Indent(++indentslevel)}Conditions = // Filter conds{CRLF}{Indent(indentslevel)}{{{CRLF}");
+                            code.Append($"{Indent(indentslevel)}{ownerType} = // Filter type{CRLF}{Indent(indentslevel++)}{{{CRLF}");
                         }
                         break;
                 }
             }
-            code.Append(GetConditions(entity, filter, indentslevel));
+            var filtercode = new List<string>
+            {
+                GetConditions(entity, filter, indentslevel),
+                GetFilters(entity, filter, ownerName, ownerType, indentslevel)
+            };
+            code.Append(string.Join(separators, filtercode.Where(f => !string.IsNullOrEmpty(f))));
             if (settings.ObjectInitializer)
             {
                 switch (settings.QExStyle)
                 {
                     default:
-                        code.Append($"{CRLF}{Indent(indentslevel--)}}}");
-                        if (filter.Filters.Any())
-                        {
-                            code.Append(",");
-                        }
-                        code.Append("  // Filter conds");
-                        break;
-                }
-            }
-            code.Append(GetFilters(entity, filter, ownerName, ownerType, indentslevel + 1));
-            if (settings.ObjectInitializer)
-            {
-                switch (settings.QExStyle)
-                {
-                    default:
-                        code.Append($"{CRLF}{Indent(indentslevel--)}}}, // Filter new");
+                        code.Append($"{CRLF}{Indent(--indentslevel)}}} /* Filter new */");
                         break;
                 }
             }
@@ -348,6 +337,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             {
                 code.AppendLine();
                 code.AppendLine("// Add conditions " + filter.FilterHint);
+            }
+            if (settings.ObjectInitializer)
+            {
+                switch (settings.QExStyle)
+                {
+                    default:
+                        code.Append($"{Indent(indentslevel)}Conditions = // Filter conds{CRLF}{Indent(indentslevel++)}{{{CRLF}");
+                        break;
+                }
             }
             var conditionscode = new List<string>();
             foreach (var cond in filter.Conditions)
@@ -372,24 +370,55 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     }
                 }
                 var attributename = GetCodeAttribute(filterentity, cond.AttributeName);
-                if (settings.ObjectInitializer && settings.QExStyle == QExStyleEnum.QueryExpressionFactory &&
-                    string.IsNullOrWhiteSpace(entityalias) &&
-                    cond.Operator == ConditionOperator.Equal && cond.Values?.Count == 1)
+                if (settings.ObjectInitializer)
                 {
-                    conditionscode.Add($"{Indent(indentslevel)}{attributename}{values}");
-                }
-                else if (settings.ObjectInitializer)
-                {
-                    conditionscode.Add($"{Indent(indentslevel)}new ConditionExpression({entityalias}{attributename}, ConditionOperator.{cond.Operator}{values})");
+                    if (settings.QExStyle == QExStyleEnum.QueryExpressionFactory &&
+                        string.IsNullOrWhiteSpace(entityalias) &&
+                        cond.Operator == ConditionOperator.Equal && cond.Values?.Count == 1)
+                    {
+                        conditionscode.Add($"{Indent(indentslevel)}{attributename}{values}");
+                    }
+                    else
+                    {
+                        conditionscode.Add($"{Indent(indentslevel)}new ConditionExpression({entityalias}{attributename}, ConditionOperator.{cond.Operator}{values})");
+                    }
                 }
                 else
                 {
                     conditionscode.Add($"{filter.FilterHint}.AddCondition({entityalias}{attributename}, ConditionOperator.{cond.Operator}{values});");
                 }
             }
-            var separators = settings.ObjectInitializer ? "," : string.Empty;
-            var indentcounts = settings.ObjectInitializer ? 1 : 0;
-            code.Append(Indent(indentcounts) + string.Join($"{separators}{CRLF}{Indent(indentcounts)}", conditionscode));
+            code.Append(string.Join(separators, conditionscode));
+            if (settings.ObjectInitializer)
+            {
+                switch (settings.QExStyle)
+                {
+                    default:
+                        code.Append($"{CRLF}{Indent(--indentslevel)}}}  /* Filter conds */");
+                        break;
+                }
+            }
+            return code.ToString();
+        }
+
+        internal string GetOrders(string entityname, DataCollection<OrderExpression> orders, string ownerName, int indentslevel, bool root = false)
+        {
+            if (orders.Count == 0)
+            {
+                return string.Empty;
+            }
+            var code = new StringBuilder();
+            if (settings.IncludeComments)
+            {
+                code.AppendLine();
+                code.AppendLine("// Add orders");
+            }
+            ownerName += root ? ".AddOrder(" : ".Orders.Add(new OrderExpression(";
+            var LineEnd = root ? ");" : "));";
+            foreach (var order in orders)
+            {
+                code.AppendLine(ownerName + GetCodeAttribute(entityname, order.AttributeName) + ", OrderType." + order.OrderType.ToString() + LineEnd);
+            }
             return code.ToString();
         }
 

@@ -35,9 +35,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
             code.Append(GetQueryCodeStart(qename, qex));
             if (!gen.settings.ObjectInitializer)
             {
-                code.AppendLine(gen.GetColumns(qex.EntityName, qex.ColumnSet, qename + ".ColumnSet"));
-                code.AppendLine(gen.GetFilter(qex.EntityName, qex.Criteria, qename, ParentFilterType.Criteria));
-                code.AppendLine(GetOrders(qex.EntityName, qex.Orders, qename, true));
+                code.AppendLine(gen.GetColumns(qex.EntityName, qex.ColumnSet, qename + ".ColumnSet", 0));
+                code.AppendLine(gen.GetFilter(qex.EntityName, qex.Criteria, qename, ParentFilterType.Criteria, 0));
+                code.AppendLine(gen.GetOrders(qex.EntityName, qex.Orders, qename, 0, true));
                 code.AppendLine(GetLinkEntities(qex.LinkEntities, qename));
             }
             var codestr = gen.ReplaceValueTokens(code.ToString());
@@ -61,12 +61,13 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
             }
             if (gen.settings.ObjectInitializer)
             {
-                var objinicode = new List<string>();
-                objinicode.Add(gen.GetColumns(qex.EntityName, qex.ColumnSet, "ColumnSet", 2));
-                objinicode.Add(gen.GetFilter(qex.EntityName, qex.Criteria, qename, ParentFilterType.Criteria));
-                objinicode.Add(GetOrders(qex.EntityName, qex.Orders, qename, true));
-                objinicode.Add(GetLinkEntities(qex.LinkEntities, qename));
-                objinicode = objinicode.Where(o => !string.IsNullOrWhiteSpace(o)).ToList();
+                var objinicode = new List<string>
+                {
+                    gen.GetColumns(qex.EntityName, qex.ColumnSet, "ColumnSet", 1),
+                    gen.GetFilter(qex.EntityName, qex.Criteria, qename, ParentFilterType.Criteria, 1),
+           //         gen.GetOrders(qex.EntityName, qex.Orders, qename, 1, true),
+           //         GetLinkEntities(qex.LinkEntities, qename)
+                }.Where(o => !string.IsNullOrWhiteSpace(o)).ToList();
                 if (objinicode.Any())
                 {
                     if (!intocurly)
@@ -77,16 +78,15 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
                     {
                         querycode += $",{CRLF}";
                     }
-                    querycode += $"{gen.Indent()}" + string.Join($",{CRLF}{gen.Indent()}", objinicode) + $"{CRLF}}}{CRLF}";
-                    intocurly = true;
+                    querycode += string.Join($",{CRLF}", objinicode) + $"{CRLF}}};{CRLF}";
                 }
             }
             else
             {
-                querycode += ";";
+                querycode += $";{CRLF}";
                 if (!string.IsNullOrWhiteSpace(options))
                 {
-                    querycode += $"{CRLF}{options}{CRLF}";
+                    querycode += $"{options}{CRLF}";
                 }
             }
             return querycode;
@@ -123,83 +123,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
                 {
                     code.AppendLine(linkname + ".EntityAlias = \"" + link.EntityAlias + "\";");
                 }
-                code.Append(gen.GetColumns(link.LinkToEntityName, link.Columns, linkname + ".Columns"));
-                code.Append(gen.GetFilter(link.LinkToEntityName, link.LinkCriteria, linkname, ParentFilterType.LinkCriteria));
-                code.Append(GetOrders(link.LinkToEntityName, link.Orders, linkname));
+                code.Append(gen.GetColumns(link.LinkToEntityName, link.Columns, linkname + ".Columns", 1));
+                code.Append(gen.GetFilter(link.LinkToEntityName, link.LinkCriteria, linkname, ParentFilterType.LinkCriteria, 1));
+                code.Append(gen.GetOrders(link.LinkToEntityName, link.Orders, linkname, 1));
                 code.Append(GetLinkEntities(link.LinkEntities, linkname));
-            }
-            return code.ToString();
-        }
-
-        //private string GetFilter(string entity, FilterExpression filterExpression, string parentName, string property)
-        //{
-        //    var LineStart = parentName + (!string.IsNullOrEmpty(property) ? "." + property : "");
-        //    var code = new StringBuilder();
-        //    if (filterExpression.FilterOperator == LogicalOperator.Or || filterExpression.Conditions.Count > 0 || filterExpression.Filters.Count > 0)
-        //    {
-        //        if (comments)
-        //        {
-        //            code.AppendLine();
-        //            code.AppendLine("// Add filter " + LineStart);
-        //        }
-        //        if (filterExpression.FilterOperator == LogicalOperator.Or)
-        //        {
-        //            code.AppendLine(LineStart + ".FilterOperator = LogicalOperator.Or;");
-        //        }
-        //        foreach (var cond in filterExpression.Conditions)
-        //        {
-        //            var filterentity = entity;
-        //            var entityalias = "";
-        //            var values = "";
-        //            var token = LineStart.Replace(".", "_").Replace("_Criteria", "").Replace("_LinkCriteria", "");
-        //            if (!string.IsNullOrWhiteSpace(cond.EntityName))
-        //            {
-        //                filterentity = gen.entityaliases.FirstOrDefault(a => a.Key.Equals(cond.EntityName)).Value ?? cond.EntityName;
-        //                entityalias = "\"" + cond.EntityName + "\", ";
-        //                token += "_" + cond.EntityName;
-        //            }
-        //            token += "_" + cond.AttributeName;
-        //            if (cond.Values.Count > 0)
-        //            {
-        //                values = ", " + QueryExpressionCodeGenerator.GetConditionValues(cond.Values, token, gen.settings.FilterVariables);
-
-        //                if (cond.CompareColumns)
-        //                {
-        //                    values = ", true" + values;
-        //                }
-        //            }
-        //            code.AppendLine($"{LineStart}.AddCondition({entityalias}{gen.GetCodeAttribute(filterentity, cond.AttributeName)}, ConditionOperator.{cond.Operator}{values});");
-        //        }
-        //        var i = 0;
-        //        foreach (var subfilter in filterExpression.Filters)
-        //        {
-        //            var filtername = gen.GetVarName(LineStart.Replace(".", "_") + "_" + i.ToString());
-        //            code.AppendLine($"var {filtername} = new FilterExpression();");
-        //            code.AppendLine($"{LineStart}.AddFilter({filtername});");
-        //            code.Append(GetFilter(entity, subfilter, filtername, null));
-        //            i++;
-        //        }
-        //    }
-        //    return code.ToString();
-        //}
-
-        private string GetOrders(string entityname, DataCollection<OrderExpression> orders, string LineStart, bool root = false)
-        {
-            if (orders.Count == 0)
-            {
-                return string.Empty;
-            }
-            var code = new StringBuilder();
-            if (comments)
-            {
-                code.AppendLine();
-                code.AppendLine("// Add orders");
-            }
-            LineStart += root ? ".AddOrder(" : ".Orders.Add(new OrderExpression(";
-            var LineEnd = root ? ");" : "));";
-            foreach (var order in orders)
-            {
-                code.AppendLine(LineStart + gen.GetCodeAttribute(entityname, order.AttributeName) + ", OrderType." + order.OrderType.ToString() + LineEnd);
             }
             return code.ToString();
         }

@@ -12,7 +12,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
     internal class QExFactory
     {
         private readonly CSharpCodeGenerator gen;
-        private readonly bool objectini;
         private readonly bool comments;
         private readonly string CRLF;
         private Dictionary<string, string> entityaliases;
@@ -20,7 +19,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
         internal QExFactory(CSharpCodeGenerator generator)
         {
             gen = generator ?? throw new ArgumentNullException(nameof(generator));
-            objectini = gen.settings.ObjectInitializer;
             comments = gen.settings.IncludeComments;
             CRLF = CSharpCodeGenerator.CRLF;
         }
@@ -33,13 +31,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
             var code = new StringBuilder();
             var qename = gen.GetVarName("qefactory");
             code.Append(GetQueryCodeStart(qename, qex));
-            if (!objectini)
-            {
-                code.Append(gen.GetColumns(qex.EntityName, qex.ColumnSet, qename));
-                code.Append(gen.GetFilter(qex.EntityName, qex.Criteria, qename, ParentFilterType.Criteria));
-                code.Append(GetOrders(qex.EntityName, qex.Orders, qename, true));
-                code.Append(GetLinkEntities(qex.LinkEntities, qename));
-            }
             var codestr = gen.ReplaceValueTokens(code.ToString());
             return codestr;
         }
@@ -51,27 +42,25 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
             {
                 querycode += "// Instantiate QueryExpressionFactory " + qename + CRLF;
             }
+            var objinicode = new List<string>
+            {
+                gen.GetColumns(qex.EntityName, qex.ColumnSet, "ColumnSet", 1),
+                gen.GetFilter(qex.EntityName, qex.Criteria, qename, ParentFilterType.Criteria, 1),
+                //gen.GetOrders(qex.EntityName, qex.Orders, qename, 1, true),
+                //GetLinkEntities(qex.LinkEntities, qename)
+            }.Where(o => !string.IsNullOrWhiteSpace(o)).ToList();
+
+            var insidecode = string.Join($",{CRLF}", objinicode);
             switch (gen.settings.QExFlavor)
             {
                 case QExFlavorEnum.EarlyBound:
-                    querycode += $"var {qename} = QueryExpressionFactory.Create<{gen.GetCodeEntity(qex.EntityName)}>(";
+                    querycode += $"var {qename} = QueryExpressionFactory.Create<{gen.GetCodeEntity(qex.EntityName)}>({CRLF}{insidecode});";
                     break;
 
                 default:
-                    querycode += $"var {qename} = QueryExpressionFactory.Create({gen.GetCodeEntity(qex.EntityName)}";
+                    querycode += $"var {qename} = QueryExpressionFactory.Create({gen.GetCodeEntity(qex.EntityName)},{CRLF}{insidecode});";
                     break;
             }
-
-            if (objectini)
-            {
-                var objinicode = new List<string>();
-                objinicode.Add(gen.GetColumns(qex.EntityName, qex.ColumnSet, "ColumnSet", 2));
-                objinicode.Add(gen.GetFilter(qex.EntityName, qex.Criteria, qename, ParentFilterType.Criteria));
-                objinicode.Add(GetOrders(qex.EntityName, qex.Orders, qename, true));
-                objinicode.Add(GetLinkEntities(qex.LinkEntities, qename));
-                querycode += $",{CRLF}" + string.Join($",{CRLF}", objinicode.Where(o => !string.IsNullOrWhiteSpace(o)));
-            }
-            querycode += $"){gen.GetQueryOptions(qex, qename)};{CRLF}";
             return querycode;
         }
 
@@ -108,31 +97,10 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
                     entityaliases.Add(link.EntityAlias, link.LinkToEntityName);
                     code.AppendLine(linkname + ".EntityAlias = \"" + link.EntityAlias + "\";");
                 }
-                code.Append(gen.GetColumns(link.LinkToEntityName, link.Columns, linkname + ".Columns"));
-                code.Append(gen.GetFilter(link.LinkToEntityName, link.LinkCriteria, linkname, ParentFilterType.LinkCriteria));
-                code.Append(GetOrders(link.LinkToEntityName, link.Orders, linkname));
+                code.Append(gen.GetColumns(link.LinkToEntityName, link.Columns, linkname + ".Columns", 1));
+                code.Append(gen.GetFilter(link.LinkToEntityName, link.LinkCriteria, linkname, ParentFilterType.LinkCriteria, 1));
+                code.Append(gen.GetOrders(link.LinkToEntityName, link.Orders, linkname, 1));
                 code.Append(GetLinkEntities(link.LinkEntities, linkname));
-            }
-            return code.ToString();
-        }
-
-        private string GetOrders(string entityname, DataCollection<OrderExpression> orders, string LineStart, bool root = false)
-        {
-            if (orders.Count == 0)
-            {
-                return string.Empty;
-            }
-            var code = new StringBuilder();
-            if (comments)
-            {
-                code.AppendLine();
-                code.AppendLine("// Add orders");
-            }
-            LineStart += root ? ".AddOrder(" : ".Orders.Add(new OrderExpression(";
-            var LineEnd = root ? ");" : "));";
-            foreach (var order in orders)
-            {
-                code.AppendLine(LineStart + gen.GetCodeAttribute(entityname, order.AttributeName) + ", OrderType." + order.OrderType.ToString() + LineEnd);
             }
             return code.ToString();
         }
