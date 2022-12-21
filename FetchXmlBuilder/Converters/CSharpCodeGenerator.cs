@@ -253,9 +253,22 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             var several = filters.Count() > 1;
             var filtercodes = new List<string>();
             var filterscode = "";
+            var rootfilters = filter.FilterHint.EndsWith("Criteria") || filter.FilterHint.EndsWith("Criteria.Filters");
             if (settings.ObjectInitializer)
             {
-                filterscode = $"{Indent(indentslevel)}Filters = // Filters{CRLF}{Indent(indentslevel++)}{{{CRLF}";
+                switch (settings.QExStyle)
+                {
+                    case QExStyleEnum.QueryExpressionFactory:
+                        if (!rootfilters)
+                        {
+                            filterscode = $"{Indent(indentslevel)}Filters = // Filters{CRLF}{Indent(indentslevel++)}{{{CRLF}";
+                        }
+                        break;
+
+                    default:
+                        filterscode = $"{Indent(indentslevel)}Filters = // Filters{CRLF}{Indent(indentslevel++)}{{{CRLF}";
+                        break;
+                }
             }
             foreach (var filteritem in filters)
             {
@@ -264,7 +277,19 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             filterscode += string.Join(separators, filtercodes.Where(f => !string.IsNullOrWhiteSpace(f)));
             if (settings.ObjectInitializer)
             {
-                filterscode += $"{CRLF}{Indent(--indentslevel)}}} // Filters";
+                switch (settings.QExStyle)
+                {
+                    case QExStyleEnum.QueryExpressionFactory:
+                        if (!rootfilters)
+                        {
+                            filterscode += $"{CRLF}{Indent(--indentslevel)}}} // Filters";
+                        }
+                        break;
+
+                    default:
+                        filterscode += $"{CRLF}{Indent(--indentslevel)}}} // Filters";
+                        break;
+                }
             }
             return filterscode;
         }
@@ -277,6 +302,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             }
             var code = new StringBuilder();
             filter.FilterHint = $"{ownerName}.{ownerType}";
+            var rootfilters = filter.FilterHint.EndsWith("Criteria") || filter.FilterHint.EndsWith("Criteria.Filters");
             if (!settings.ObjectInitializer)
             {
                 if (ownerType == ParentFilterType.Filters)
@@ -292,10 +318,17 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     code.AppendLine($"{ownerName}.AddFilter({filter.FilterHint});");
                 }
             }
-            else
+            else    // Object Initializer
             {
                 switch (settings.QExStyle)
                 {
+                    case QExStyleEnum.QueryExpressionFactory:
+                        if (!rootfilters)
+                        {
+                            code.Append($"{Indent(indentslevel)}new FilterExpression({(filter.FilterOperator == LogicalOperator.Or ? "LogicalOperator.Or" : "")}) // Filter new{CRLF}{Indent(indentslevel++)}{{{CRLF}");
+                        }
+                        break;
+
                     default:
                         if (ownerType == ParentFilterType.Filters)
                         {
@@ -318,6 +351,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             {
                 switch (settings.QExStyle)
                 {
+                    case QExStyleEnum.QueryExpressionFactory:
+                        if (!rootfilters)
+                        {
+                            code.Append($"{CRLF}{Indent(--indentslevel)}}} /* Filter new */");
+                        }
+                        break;
+
                     default:
                         code.Append($"{CRLF}{Indent(--indentslevel)}}} /* Filter new */");
                         break;
@@ -338,10 +378,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 code.AppendLine();
                 code.AppendLine("// Add conditions " + filter.FilterHint);
             }
+            var rootfilters = filter.FilterHint.EndsWith("Criteria") || filter.FilterHint.EndsWith("Criteria.Filters");
             if (settings.ObjectInitializer)
             {
                 switch (settings.QExStyle)
                 {
+                    case QExStyleEnum.QueryExpressionFactory:
+                        if (!rootfilters)
+                        {
+                            code.Append($"{Indent(indentslevel)}Conditions = // Filter conds{CRLF}{Indent(indentslevel++)}{{{CRLF}");
+                        }
+                        break;
+
                     default:
                         code.Append($"{Indent(indentslevel)}Conditions = // Filter conds{CRLF}{Indent(indentslevel++)}{{{CRLF}");
                         break;
@@ -393,6 +441,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             {
                 switch (settings.QExStyle)
                 {
+                    case QExStyleEnum.QueryExpressionFactory:
+                        if (!rootfilters)
+                        {
+                            code.Append($"{CRLF}{Indent(--indentslevel)}}}  /* Filter conds */");
+                        }
+                        break;
+
                     default:
                         code.Append($"{CRLF}{Indent(--indentslevel)}}}  /* Filter conds */");
                         break;
