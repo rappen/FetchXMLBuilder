@@ -879,6 +879,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     chkQExComments.Checked = false;
                     break;
             }
+            if (cmbQExFlavor.Enabled && cmbQExFlavor.SelectedItem == null && cmbQExFlavor.Items.Count > 0)
+            {
+                cmbQExFlavor.SelectedIndex = 0;
+            }
             fxb.UpdateLiveXML();
         }
 
