@@ -242,13 +242,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
 
     public class CodeGenerators
     {
-        public bool IncludeComments { get; set; } = true;
-        public bool FilterVariables { get; set; } = true;
         public QExStyleEnum QExStyle { get; set; } = QExStyleEnum.QueryExpression;
         public QExFlavorEnum QExFlavor { get; set; } = QExFlavorEnum.LateBound;
+        public bool ObjectInitializer { get; set; } = false;
+        public int Indents { get; set; } = 0;
+        public bool IncludeComments { get; set; } = true;
+        public bool FilterVariables { get; set; } = true;
         public string EBG_EntityLogicalNames { get; set; } = "EntityLogicalName";
         public string EBG_AttributeLogicalNameClass { get; set; } = "Fields.";
-        public bool ObjectInitializer { get; set; } = false;
     }
 
     public enum QExStyleEnum

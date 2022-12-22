@@ -81,6 +81,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             cmbQExFlavor.SelectedItem = cmbQExFlavor.Items.Cast<QExFlavor>().FirstOrDefault(f => f.Tag == fxb.settings.CodeGenerators.QExFlavor);
             rbQExLineByLine.Checked = !fxb.settings.CodeGenerators.ObjectInitializer;
             rbQExObjectinitializer.Checked = fxb.settings.CodeGenerators.ObjectInitializer;
+            numQExIndent.Value = fxb.settings.CodeGenerators.Indents;
             chkQExComments.Checked = fxb.settings.CodeGenerators.IncludeComments;
             chkQExFilterVariables.Checked = fxb.settings.CodeGenerators.FilterVariables;
 
@@ -919,6 +920,12 @@ More votes == released sooner.", "QueryExpressionFactory",
 
                 rbQExLineByLine.Checked = true;
             }
+        }
+
+        private void numQExIndent_ValueChanged(object sender, EventArgs e)
+        {
+            fxb.settings.CodeGenerators.Indents = (int)numQExIndent.Value;
+            fxb.UpdateLiveXML();
         }
     }
 

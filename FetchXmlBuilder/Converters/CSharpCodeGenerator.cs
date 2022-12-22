@@ -5,10 +5,8 @@ using Microsoft.Xrm.Sdk.Query;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Xml.Linq;
 
 namespace Rappen.XTB.FetchXmlBuilder.Converters
 {
@@ -27,18 +25,22 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             {
                 throw new ArgumentOutOfRangeException("Flavor", "LCG is not yet implemented.");
             }
-
+            var result = string.Empty;
             switch (settings.CodeGenerators.QExStyle)
             {
                 case QExStyleEnum.QueryExpression:
-                    return new QExVanilla(new CSharpCodeGenerator(QEx, entities, settings)).Generated;
+                    result = new QExVanilla(new CSharpCodeGenerator(QEx, entities, settings)).Generated;
+                    break;
 
                 case QExStyleEnum.QueryExpressionFactory:
-                    return new QExFactory(new CSharpCodeGenerator(QEx, entities, settings)).Generated;
+                    result = new QExFactory(new CSharpCodeGenerator(QEx, entities, settings)).Generated;
+                    break;
 
                 default:
                     throw new NotImplementedException();
             }
+            result = string.Join("\n", result.Split('\n').Select(l => Indent(settings.CodeGenerators.Indents) + l));
+            return result;
         }
 
         private CSharpCodeGenerator(QueryExpression QEx, List<EntityMetadata> entities, FXBSettings fxbsettings)
@@ -79,7 +81,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             return result;
         }
 
-        internal string Indent(int indents = 1)
+        internal static string Indent(int indents = 1)
         {
             return string.Concat(Enumerable.Repeat("    ", indents));
         }
