@@ -44,8 +44,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
             }
             var objinicode = new List<string>
             {
-                gen.GetColumns(qex.EntityName, qex.ColumnSet, "ColumnSet", 1),
-                gen.GetFilter(qex.EntityName, qex.Criteria, qename, ParentFilterType.Criteria, 1),
+                gen.GetColumnsOI(qex.EntityName, qex.ColumnSet, "ColumnSet", 1),
+                gen.GetFilterOI(qex.EntityName, qex.Criteria, qename, ParentFilterType.Criteria, 1),
                 //gen.GetOrders(qex.EntityName, qex.Orders, qename, 1, true),
                 //GetLinkEntities(qex.LinkEntities, qename)
             }.Where(o => !string.IsNullOrWhiteSpace(o)).ToList();
@@ -97,9 +97,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
                     entityaliases.Add(link.EntityAlias, link.LinkToEntityName);
                     code.AppendLine(linkname + ".EntityAlias = \"" + link.EntityAlias + "\";");
                 }
-                code.Append(gen.GetColumns(link.LinkToEntityName, link.Columns, linkname + ".Columns", 1));
-                code.Append(gen.GetFilter(link.LinkToEntityName, link.LinkCriteria, linkname, ParentFilterType.LinkCriteria, 1));
-                code.Append(gen.GetOrders(link.LinkToEntityName, link.Orders, linkname, 1));
+                code.Append(gen.GetColumnsOI(link.LinkToEntityName, link.Columns, linkname + ".Columns", 1));
+                code.Append(gen.GetFilterOI(link.LinkToEntityName, link.LinkCriteria, linkname, ParentFilterType.LinkCriteria, 1));
+                code.Append(gen.GetOrdersOI(link.LinkToEntityName, link.Orders, linkname, 1));
                 code.Append(GetLinkEntities(link.LinkEntities, linkname));
             }
             return code.ToString();

@@ -865,6 +865,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             chkQExComments.Enabled = true;
             switch (fxb.settings.CodeGenerators.QExStyle)
             {
+                case QExStyleEnum.QueryExpression:
+                    if (fxb.settings.CodeGenerators.QExFlavor == QExFlavorEnum.EarlyBound)
+                    {
+                        cmbQExFlavor.SelectedIndex = 0;
+                    }
+                    break;
+
                 case QExStyleEnum.QueryExpressionFactory:
                     rbQExLineByLine.Enabled = false;
                     rbQExObjectinitializer.Checked = true;
@@ -878,10 +885,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     cmbQExFlavor.SelectedIndex = -1;
                     chkQExComments.Checked = false;
                     break;
-            }
-            if (cmbQExFlavor.Enabled && cmbQExFlavor.SelectedItem == null && cmbQExFlavor.Items.Count > 0)
-            {
-                cmbQExFlavor.SelectedIndex = 0;
             }
             fxb.UpdateLiveXML();
         }
