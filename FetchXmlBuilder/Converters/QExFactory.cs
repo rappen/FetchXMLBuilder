@@ -46,7 +46,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
             {
                 gen.GetColumnsOI(qex.EntityName, qex.ColumnSet, "ColumnSet", 1),
                 gen.GetFilterOI(qex.EntityName, qex.Criteria, qename, ParentFilterType.Criteria, 1),
-                //gen.GetOrders(qex.EntityName, qex.Orders, qename, 1, true),
                 //GetLinkEntities(qex.LinkEntities, qename)
             }.Where(o => !string.IsNullOrWhiteSpace(o)).ToList();
 
@@ -61,6 +60,7 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
                     querycode += $"var {qename} = QueryExpressionFactory.Create({gen.GetCodeEntity(qex.EntityName)},{CRLF}{insidecode});";
                     break;
             }
+            querycode += CRLF + gen.GetOrdersLbL(qex.EntityName, qex.Orders, qename, true);
             return querycode;
         }
 
