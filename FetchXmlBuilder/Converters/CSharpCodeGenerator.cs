@@ -419,12 +419,17 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 code.AppendLine($"{Indent(indentslevel)}// Add filter {filter.FilterHint}");
             }
             var rootfilters = filter.FilterHint.EndsWith("Criteria") || filter.FilterHint.EndsWith("Criteria.Filters");
+            var addfilterexpression = true;
             switch (settings.QExStyle)
             {
                 case QExStyleEnum.QueryExpressionFactory:
-                    if (!rootfilters)
+                    if (!rootfilters || filter.FilterOperator == LogicalOperator.Or || !filter.Conditions.Any())
                     {
                         code.Append($"{Indent(indentslevel)}new FilterExpression({(filter.FilterOperator == LogicalOperator.Or ? "LogicalOperator.Or" : "")}){CRLF}{Indent(indentslevel++)}{{{CRLF}");
+                    }
+                    else
+                    {
+                        addfilterexpression = false;
                     }
                     break;
 
@@ -447,15 +452,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             code.Append(string.Join($",{CRLF}", filtercode.Where(f => !string.IsNullOrEmpty(f))));
             switch (settings.QExStyle)
             {
-                case QExStyleEnum.QueryExpressionFactory:
-                    if (!rootfilters)
+                default:
+                    if (addfilterexpression)
                     {
                         code.Append($"{CRLF}{Indent(--indentslevel)}}}");
                     }
-                    break;
-
-                default:
-                    code.Append($"{CRLF}{Indent(--indentslevel)}}}");
                     break;
             }
             return code.ToString();
