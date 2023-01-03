@@ -26,14 +26,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 throw new ArgumentOutOfRangeException("Flavor", "LCG is not yet implemented.");
             }
             var result = string.Empty;
+            var coder = new CSharpCodeGenerator(QEx, entities, settings);
             switch (settings.CodeGenerators.QExStyle)
             {
                 case QExStyleEnum.QueryExpression:
-                    result = new QExVanilla(new CSharpCodeGenerator(QEx, entities, settings)).Generated;
+                    result = new QExVanilla(coder).Generated;
                     break;
 
                 case QExStyleEnum.QueryExpressionFactory:
-                    result = new QExFactory(new CSharpCodeGenerator(QEx, entities, settings)).Generated;
+                    result = new QExFactory(coder).Generated;
                     break;
 
                 default:
@@ -653,20 +654,68 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
     {
         public QExStyleEnum Tag;
         public string Creator;
+        public string ClassName;
         public string HelpUrl;
         public List<QExFlavor> Flavors;
 
-        public override string ToString() => $"{Tag} ({Creator})";
+        public override string ToString() => Tag.ToString();
+
+        internal string LinkName
+        {
+            get
+            {
+                var name = Creator;
+                if (!string.IsNullOrEmpty(ClassName))
+                {
+                    if (string.IsNullOrEmpty(name) || ClassName.ToLowerInvariant().Contains(name.ToLowerInvariant()))
+                    {
+                        return ClassName;
+                    }
+                    return name + ": " + ClassName;
+                }
+                return null;
+            }
+        }
 
         internal static object[] GetComboBoxItems()
         {
             return new object[]
             {
-                new QExStyle { Tag = QExStyleEnum.QueryExpression, Creator = "Microsoft.CrmSdk.CoreAssemblies" },
-                new QExStyle { Tag = QExStyleEnum.OrganizationServiceContext, Creator = "Microsoft.Xrm.Sdk.Client" },
-                new QExStyle { Tag = QExStyleEnum.QueryExpressionFactory, Creator = "daryllabar/DLaB.Xrm" },
-                new QExStyle { Tag = QExStyleEnum.FluentQueryExpression, Creator = "MscrmTools" },
-                new QExStyle { Tag = QExStyleEnum.FetchXML, Creator="common" }
+                new QExStyle
+                {
+                    Tag = QExStyleEnum.QueryExpression,
+                    Creator = "Microsoft",
+                    ClassName = "Microsoft.CrmSdk.CoreAssemblies",
+                    HelpUrl="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/samples/retrieve-multiple-queryexpression-class"
+                },
+                new QExStyle
+                {
+                    Tag = QExStyleEnum.OrganizationServiceContext,
+                    Creator = "Microsoft",
+                    ClassName = "Microsoft.Xrm.Sdk.Client",
+                    HelpUrl="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/organizationservicecontext"
+                },
+                new QExStyle
+                {
+                    Tag = QExStyleEnum.QueryExpressionFactory,
+                    Creator = "Daryl LaBar",
+                    ClassName = "daryllabar/DLaB.Xrm",
+                    HelpUrl="https://github.com/daryllabar/DLaB.Xrm"
+                },
+                new QExStyle
+                {
+                    Tag = QExStyleEnum.FluentQueryExpression,
+                    Creator = "Tanguy Touzard",
+                    ClassName = "MscrmTools.FluentQueryExpressions",
+                    HelpUrl="https://github.com/MscrmTools/MscrmTools.FluentQueryExpressions"
+                },
+                new QExStyle
+                {
+                    Tag = QExStyleEnum.FetchXML,
+                    Creator = "Microsoft",
+                    ClassName = "<plain fetchxml>",
+                    HelpUrl="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/use-fetchxml-construct-query"
+                }
             };
         }
     }
@@ -675,18 +724,41 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
     {
         public string Name;
         public QExFlavorEnum Tag;
+        public string Creator;
         public string HelpUrl;
 
-        public override string ToString() => $"{Name}";
+        public override string ToString() => Name;
 
         internal static object[] GetComboBoxItems()
         {
             return new object[]
             {
-                new QExFlavor { Name = "Late Bound strings", Tag = QExFlavorEnum.LateBound },
-                new QExFlavor { Name = "Late Bound EBG constants", Tag = QExFlavorEnum.EBGconstants },
-                new QExFlavor { Name = "Late Bound LCG constants", Tag = QExFlavorEnum.LCGconstants },
-                new QExFlavor { Name = "Early Bound", Tag = QExFlavorEnum.EarlyBound }
+                new QExFlavor
+                {
+                    Name = "Late Bound strings",
+                    Tag = QExFlavorEnum.LateBound
+                },
+                new QExFlavor
+                {
+                    Name = "Late Bound EBG constants",
+                    Creator = "Daryl LaBar",
+                    HelpUrl = "https://github.com/daryllabar/DLaB.Xrm.XrmToolBoxTools/wiki/Early-Bound-Generator",
+                    Tag = QExFlavorEnum.EBGconstants
+                },
+                new QExFlavor
+                {
+                    Name = "Late Bound LCG constants",
+                    Creator = "Jonas Rapp",
+                    HelpUrl = "https://github.com/rappen/LCG-UDG",
+                    Tag = QExFlavorEnum.LCGconstants
+                },
+                new QExFlavor
+                {
+                    Name = "Early Bound",
+                    Creator = "Microsoft",
+                    HelpUrl = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/generate-early-bound-classes",
+                    Tag = QExFlavorEnum.EarlyBound
+                }
             };
         }
     }

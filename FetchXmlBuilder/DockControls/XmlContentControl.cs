@@ -859,41 +859,57 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void cmbQExStyle_SelectedIndexChanged(object sender, EventArgs e)
         {
-            fxb.settings.CodeGenerators.QExStyle = (cmbQExStyle.SelectedItem is QExStyle style) ? style.Tag : QExStyleEnum.QueryExpression;
-            rbQExLineByLine.Enabled = true;
-            rbQExObjectinitializer.Enabled = true;
-            cmbQExFlavor.Enabled = true;
-            chkQExComments.Enabled = true;
-            switch (fxb.settings.CodeGenerators.QExStyle)
+            if (cmbQExStyle.SelectedItem is QExStyle style)
             {
-                case QExStyleEnum.QueryExpression:
-                    if (fxb.settings.CodeGenerators.QExFlavor == QExFlavorEnum.EarlyBound)
-                    {
-                        cmbQExFlavor.SelectedIndex = 0;
-                    }
-                    break;
+                fxb.settings.CodeGenerators.QExStyle = style.Tag;
+                linkStyleHelp.Text = style.LinkName;
+                rbQExLineByLine.Enabled = true;
+                rbQExObjectinitializer.Enabled = true;
+                cmbQExFlavor.Enabled = true;
+                chkQExComments.Enabled = true;
+                switch (fxb.settings.CodeGenerators.QExStyle)
+                {
+                    case QExStyleEnum.QueryExpression:
+                        if (fxb.settings.CodeGenerators.QExFlavor == QExFlavorEnum.EarlyBound)
+                        {
+                            cmbQExFlavor.SelectedIndex = 0;
+                        }
+                        break;
 
-                case QExStyleEnum.QueryExpressionFactory:
-                    rbQExLineByLine.Enabled = false;
-                    rbQExObjectinitializer.Checked = true;
-                    break;
+                    case QExStyleEnum.QueryExpressionFactory:
+                        rbQExLineByLine.Enabled = false;
+                        rbQExObjectinitializer.Checked = true;
+                        break;
 
-                case QExStyleEnum.FetchXML:
-                    rbQExObjectinitializer.Enabled = false;
-                    cmbQExFlavor.Enabled = false;
-                    chkQExComments.Enabled = false;
-                    rbQExLineByLine.Checked = true;
-                    cmbQExFlavor.SelectedIndex = -1;
-                    chkQExComments.Checked = false;
-                    break;
+                    case QExStyleEnum.FetchXML:
+                        rbQExObjectinitializer.Enabled = false;
+                        cmbQExFlavor.Enabled = false;
+                        chkQExComments.Enabled = false;
+                        rbQExLineByLine.Checked = true;
+                        cmbQExFlavor.SelectedIndex = -1;
+                        chkQExComments.Checked = false;
+                        break;
+                }
+                fxb.UpdateLiveXML();
             }
-            fxb.UpdateLiveXML();
+            else
+            {
+                linkStyleHelp.Text = string.Empty;
+            }
         }
 
         private void cmbQExFlavor_SelectedIndexChanged(object sender, EventArgs e)
         {
-            fxb.settings.CodeGenerators.QExFlavor = (cmbQExFlavor.SelectedItem is QExFlavor flavor) ? flavor.Tag : QExFlavorEnum.LateBound;
-            fxb.UpdateLiveXML();
+            if (cmbQExFlavor.SelectedItem is QExFlavor flavor)
+            {
+                fxb.settings.CodeGenerators.QExFlavor = flavor.Tag;
+                linkFlavorHelp.Text = flavor.Creator;
+                fxb.UpdateLiveXML();
+            }
+            else
+            {
+                linkFlavorHelp.Text = string.Empty;
+            }
         }
 
         private void chkQExFilterVariables_CheckedChanged(object sender, EventArgs e)
@@ -926,6 +942,24 @@ More votes == released sooner.", "QueryExpressionFactory",
         {
             fxb.settings.CodeGenerators.Indents = (int)numQExIndent.Value;
             fxb.UpdateLiveXML();
+        }
+
+        private void linkFlavorHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var url = (cmbQExFlavor.SelectedItem is QExFlavor flavor) ? flavor.HelpUrl : string.Empty;
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                FetchXmlBuilder.OpenURL(url);
+            }
+        }
+
+        private void linkStyleHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var url = (cmbQExStyle.SelectedItem is QExStyle style) ? style.HelpUrl : string.Empty;
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                FetchXmlBuilder.OpenURL(url);
+            }
         }
     }
 

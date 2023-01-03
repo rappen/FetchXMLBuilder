@@ -63,6 +63,9 @@
             this.autocompleteImageList = new System.Windows.Forms.ImageList(this.components);
             this.tmLiveUpdate = new System.Windows.Forms.Timer(this.components);
             this.panQExOptions = new System.Windows.Forms.Panel();
+            this.linkFlavorHelp = new System.Windows.Forms.LinkLabel();
+            this.linkStyleHelp = new System.Windows.Forms.LinkLabel();
+            this.label3 = new System.Windows.Forms.Label();
             this.numQExIndent = new System.Windows.Forms.NumericUpDown();
             this.rbQExObjectinitializer = new System.Windows.Forms.RadioButton();
             this.rbQExLineByLine = new System.Windows.Forms.RadioButton();
@@ -71,7 +74,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cmbQExStyle = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.panCancel.SuspendLayout();
             this.panActions.SuspendLayout();
             this.gbActions.SuspendLayout();
@@ -270,13 +272,13 @@
             this.panParseQE.Dock = System.Windows.Forms.DockStyle.Right;
             this.panParseQE.Location = new System.Drawing.Point(1002, 0);
             this.panParseQE.Name = "panParseQE";
-            this.panParseQE.Size = new System.Drawing.Size(91, 59);
+            this.panParseQE.Size = new System.Drawing.Size(91, 63);
             this.panParseQE.TabIndex = 10;
             // 
             // chkQExComments
             // 
             this.chkQExComments.AutoSize = true;
-            this.chkQExComments.Location = new System.Drawing.Point(434, 37);
+            this.chkQExComments.Location = new System.Drawing.Point(492, 36);
             this.chkQExComments.Name = "chkQExComments";
             this.chkQExComments.Size = new System.Drawing.Size(75, 17);
             this.chkQExComments.TabIndex = 4;
@@ -408,9 +410,9 @@
             // txtXML
             // 
             this.txtXML.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtXML.Location = new System.Drawing.Point(0, 59);
+            this.txtXML.Location = new System.Drawing.Point(0, 63);
             this.txtXML.Name = "txtXML";
-            this.txtXML.Size = new System.Drawing.Size(1093, 170);
+            this.txtXML.Size = new System.Drawing.Size(1093, 166);
             this.txtXML.TabIndex = 1;
             this.txtXML.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtXML_KeyPress);
             this.txtXML.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtXML_KeyUp);
@@ -433,6 +435,8 @@
             // panQExOptions
             // 
             this.panQExOptions.BackColor = System.Drawing.SystemColors.Window;
+            this.panQExOptions.Controls.Add(this.linkFlavorHelp);
+            this.panQExOptions.Controls.Add(this.linkStyleHelp);
             this.panQExOptions.Controls.Add(this.label3);
             this.panQExOptions.Controls.Add(this.numQExIndent);
             this.panQExOptions.Controls.Add(this.rbQExObjectinitializer);
@@ -447,13 +451,44 @@
             this.panQExOptions.Dock = System.Windows.Forms.DockStyle.Top;
             this.panQExOptions.Location = new System.Drawing.Point(0, 0);
             this.panQExOptions.Name = "panQExOptions";
-            this.panQExOptions.Size = new System.Drawing.Size(1093, 59);
+            this.panQExOptions.Size = new System.Drawing.Size(1093, 63);
             this.panQExOptions.TabIndex = 0;
             this.panQExOptions.Text = "Type of generated code";
             // 
+            // linkFlavorHelp
+            // 
+            this.linkFlavorHelp.AutoSize = true;
+            this.linkFlavorHelp.Location = new System.Drawing.Point(246, 40);
+            this.linkFlavorHelp.Name = "linkFlavorHelp";
+            this.linkFlavorHelp.Size = new System.Drawing.Size(55, 13);
+            this.linkFlavorHelp.TabIndex = 15;
+            this.linkFlavorHelp.TabStop = true;
+            this.linkFlavorHelp.Text = "linkLabel2";
+            this.linkFlavorHelp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkFlavorHelp_LinkClicked);
+            // 
+            // linkStyleHelp
+            // 
+            this.linkStyleHelp.AutoSize = true;
+            this.linkStyleHelp.Location = new System.Drawing.Point(246, 13);
+            this.linkStyleHelp.Name = "linkStyleHelp";
+            this.linkStyleHelp.Size = new System.Drawing.Size(55, 13);
+            this.linkStyleHelp.TabIndex = 14;
+            this.linkStyleHelp.TabStop = true;
+            this.linkStyleHelp.Text = "linkLabel1";
+            this.linkStyleHelp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkStyleHelp_LinkClicked);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(707, 11);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(60, 13);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "Indentation";
+            // 
             // numQExIndent
             // 
-            this.numQExIndent.Location = new System.Drawing.Point(328, 36);
+            this.numQExIndent.Location = new System.Drawing.Point(772, 9);
             this.numQExIndent.Maximum = new decimal(new int[] {
             20,
             0,
@@ -473,7 +508,7 @@
             // rbQExObjectinitializer
             // 
             this.rbQExObjectinitializer.AutoSize = true;
-            this.rbQExObjectinitializer.Location = new System.Drawing.Point(129, 36);
+            this.rbQExObjectinitializer.Location = new System.Drawing.Point(573, 9);
             this.rbQExObjectinitializer.Name = "rbQExObjectinitializer";
             this.rbQExObjectinitializer.Size = new System.Drawing.Size(98, 17);
             this.rbQExObjectinitializer.TabIndex = 3;
@@ -485,7 +520,7 @@
             // 
             this.rbQExLineByLine.AutoSize = true;
             this.rbQExLineByLine.Checked = true;
-            this.rbQExLineByLine.Location = new System.Drawing.Point(48, 36);
+            this.rbQExLineByLine.Location = new System.Drawing.Point(492, 9);
             this.rbQExLineByLine.Name = "rbQExLineByLine";
             this.rbQExLineByLine.Size = new System.Drawing.Size(78, 17);
             this.rbQExLineByLine.TabIndex = 2;
@@ -496,7 +531,7 @@
             // chkQExFilterVariables
             // 
             this.chkQExFilterVariables.AutoSize = true;
-            this.chkQExFilterVariables.Location = new System.Drawing.Point(515, 37);
+            this.chkQExFilterVariables.Location = new System.Drawing.Point(573, 36);
             this.chkQExFilterVariables.Name = "chkQExFilterVariables";
             this.chkQExFilterVariables.Size = new System.Drawing.Size(94, 17);
             this.chkQExFilterVariables.TabIndex = 5;
@@ -508,7 +543,7 @@
             // 
             this.cmbQExFlavor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbQExFlavor.FormattingEnabled = true;
-            this.cmbQExFlavor.Location = new System.Drawing.Point(434, 10);
+            this.cmbQExFlavor.Location = new System.Drawing.Point(54, 37);
             this.cmbQExFlavor.Name = "cmbQExFlavor";
             this.cmbQExFlavor.Size = new System.Drawing.Size(186, 21);
             this.cmbQExFlavor.TabIndex = 1;
@@ -517,7 +552,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(392, 13);
+            this.label2.Location = new System.Drawing.Point(12, 40);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(36, 13);
             this.label2.TabIndex = 2;
@@ -536,20 +571,11 @@
             // 
             this.cmbQExStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbQExStyle.FormattingEnabled = true;
-            this.cmbQExStyle.Location = new System.Drawing.Point(48, 10);
+            this.cmbQExStyle.Location = new System.Drawing.Point(54, 10);
             this.cmbQExStyle.Name = "cmbQExStyle";
-            this.cmbQExStyle.Size = new System.Drawing.Size(326, 21);
+            this.cmbQExStyle.Size = new System.Drawing.Size(186, 21);
             this.cmbQExStyle.TabIndex = 0;
             this.cmbQExStyle.SelectedIndexChanged += new System.EventHandler(this.cmbQExStyle_SelectedIndexChanged);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(263, 38);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(60, 13);
-            this.label3.TabIndex = 13;
-            this.label3.Text = "Indentation";
             // 
             // XmlContentControl
             // 
@@ -640,5 +666,7 @@
         private System.Windows.Forms.RadioButton rbQExLineByLine;
         private System.Windows.Forms.NumericUpDown numQExIndent;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.LinkLabel linkFlavorHelp;
+        private System.Windows.Forms.LinkLabel linkStyleHelp;
     }
 }
