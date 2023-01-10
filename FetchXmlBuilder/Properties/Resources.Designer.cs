@@ -323,6 +323,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icon_web {
+            get {
+                object obj = ResourceManager.GetObject("icon-web", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icon_xml {
             get {
                 object obj = ResourceManager.GetObject("icon-xml", resourceCulture);

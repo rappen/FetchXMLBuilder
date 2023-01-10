@@ -13,6 +13,7 @@ namespace Rappen.XTB.FetchXmlBuilder
     public partial class FetchXmlBuilder : IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin, IDuplicatableTool, ISettingsPlugin
     {
         private MessageBusEventArgs callerArgs = null;
+        private const string URLcaller = "URL Protocol";
 
         #region Public Events
 
@@ -65,8 +66,10 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             dockControlBuilder.ParseXML(fetchXml, false);
             UpdateLiveXML();
-            tsbReturnToCaller.Image = callerArgs.SourcePlugin == "Bulk Data Updater" ?
-                Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.BDU_2019_032_tsp :
+            tsbReturnToCaller.Text = callerArgs.SourcePlugin == URLcaller ? "FetchXML from an URL" : "Return FetchXML";
+            tsbReturnToCaller.Image =
+                callerArgs.SourcePlugin == "Bulk Data Updater" ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.BDU_2019_032_tsp :
+                callerArgs.SourcePlugin == URLcaller ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_web :
                 Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_return;
             tsbReturnToCaller.ToolTipText = "Return " + requestedType + " to " + callerArgs.SourcePlugin;
             dockControlBuilder.RecordHistory("called from " + message.SourcePlugin);
@@ -209,6 +212,11 @@ namespace Rappen.XTB.FetchXmlBuilder
                 return;
             }
             LogUse("ReturnTo." + callerArgs.SourcePlugin);
+            if (callerArgs.SourcePlugin == URLcaller)
+            {
+                OpenURL("https://fetchxmlbuilder.com/sharing-queries/");
+                return;
+            }
             var fetch = dockControlBuilder.GetFetchString(true, true);
             if (string.IsNullOrWhiteSpace(fetch))
             {
