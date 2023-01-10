@@ -512,6 +512,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\fetch.xsd">
       <SubType>Designer</SubType>
@@ -613,6 +614,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8-options-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-internet-32.png" />
   </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />
