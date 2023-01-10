@@ -228,10 +228,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppCode\Utils.cs" />
-    <Compile Include="Converters\QExFactory.cs" />
-    <Compile Include="Converters\QExFluent.cs" />
     <Compile Include="Converters\QExParse.cs" />
-    <Compile Include="Converters\QExVanilla.cs" />
     <Compile Include="Extensions\ConnectionExtensions.cs" />
     <Compile Include="ControlsClasses\EntityNameItem.cs" />
     <Compile Include="Extensions\Extensions.cs" />

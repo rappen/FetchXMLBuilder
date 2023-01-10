@@ -876,6 +876,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                         }
                         break;
 
+                    case QExStyleEnum.FluentQueryExpression:
+                        rbQExLineByLine.Enabled = false;
+                        rbQExObjectinitializer.Checked = true;
+                        break;
+
                     case QExStyleEnum.QueryExpressionFactory:
                         rbQExLineByLine.Enabled = false;
                         rbQExObjectinitializer.Checked = true;
