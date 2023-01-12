@@ -233,6 +233,12 @@
     <Compile Include="ControlsClasses\EntityNameItem.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\GroupBoxExpanderExtensions.cs" />
+    <Compile Include="Forms\ShareLink.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ShareLink.Designer.cs">
+      <DependentUpon>ShareLink.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -502,6 +508,9 @@
       <DependentUpon>XmlContentControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ShareLink.resx">
+      <DependentUpon>ShareLink.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ShowMetadataOptions.resx">
       <DependentUpon>ShowMetadataOptions.cs</DependentUpon>
     </EmbeddedResource>
@@ -618,6 +627,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8-internet-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-share-32.png" />
   </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />

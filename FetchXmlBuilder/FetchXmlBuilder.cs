@@ -864,6 +864,11 @@ namespace Rappen.XTB.FetchXmlBuilder
             OpenURL(Welcome.GetReleaseNotesUrl(version));
         }
 
+        private void tsbShare_Click(object sender, EventArgs e)
+        {
+            ShareLink.Open(dockControlBuilder.GetFetchString(false, false), ConnectionDetail.ConnectionName);
+        }
+
         #endregion Private Event Handlers
     }
 }
