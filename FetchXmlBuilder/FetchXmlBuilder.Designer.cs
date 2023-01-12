@@ -67,6 +67,8 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbExecute = new System.Windows.Forms.ToolStripButton();
             this.tsbAbort = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbShare = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbView = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiShowFetchXML = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowLayoutXML = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,8 +88,8 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiSelect = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.tmsiShowReleaseNotes = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsbReturnToCaller = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbReturnToCaller = new System.Windows.Forms.ToolStripButton();
             this.tsbBDU = new System.Windows.Forms.ToolStripButton();
             this.tslAbout = new System.Windows.Forms.ToolStripLabel();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -112,6 +114,8 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbExecute,
             this.tsbAbort,
             this.toolStripSeparator7,
+            this.tsbShare,
+            this.toolStripSeparator10,
             this.tsbView,
             this.tsbConvert,
             this.tsbOptions,
@@ -458,6 +462,20 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.toolStripSeparator7.Name = "toolStripSeparator7";
             this.toolStripSeparator7.Size = new System.Drawing.Size(6, 39);
             // 
+            // tsbShare
+            // 
+            this.tsbShare.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_share;
+            this.tsbShare.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbShare.Name = "tsbShare";
+            this.tsbShare.Size = new System.Drawing.Size(72, 36);
+            this.tsbShare.Text = "Share";
+            this.tsbShare.Click += new System.EventHandler(this.tsbShare_Click);
+            // 
+            // toolStripSeparator10
+            // 
+            this.toolStripSeparator10.Name = "toolStripSeparator10";
+            this.toolStripSeparator10.Size = new System.Drawing.Size(6, 39);
+            // 
             // tsbView
             // 
             this.tsbView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -608,7 +626,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsmiSettings.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_settings;
             this.tsmiSettings.Name = "tsmiSettings";
-            this.tsmiSettings.Size = new System.Drawing.Size(269, 38);
+            this.tsmiSettings.Size = new System.Drawing.Size(253, 22);
             this.tsmiSettings.Text = "Settings...";
             this.tsmiSettings.Click += new System.EventHandler(this.tsbOptions_Click);
             // 
@@ -616,22 +634,27 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsmiSelect.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_powerplatform;
             this.tsmiSelect.Name = "tsmiSelect";
-            this.tsmiSelect.Size = new System.Drawing.Size(269, 38);
+            this.tsmiSelect.Size = new System.Drawing.Size(253, 22);
             this.tsmiSelect.Text = "Filter by Solutions and Metadata...";
             this.tsmiSelect.Click += new System.EventHandler(this.tsmiSelect_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(266, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(250, 6);
             // 
             // tmsiShowReleaseNotes
             // 
             this.tmsiShowReleaseNotes.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_releasenotes;
             this.tmsiShowReleaseNotes.Name = "tmsiShowReleaseNotes";
-            this.tmsiShowReleaseNotes.Size = new System.Drawing.Size(269, 38);
+            this.tmsiShowReleaseNotes.Size = new System.Drawing.Size(253, 22);
             this.tmsiShowReleaseNotes.Text = "Open Release Notes";
             this.tmsiShowReleaseNotes.Click += new System.EventHandler(this.tmsiShowReleaseNotes_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 39);
             // 
             // tsbReturnToCaller
             // 
@@ -642,11 +665,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbReturnToCaller.Text = "Return FetchXML";
             this.tsbReturnToCaller.Visible = false;
             this.tsbReturnToCaller.Click += new System.EventHandler(this.tsbReturnToCaller_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 39);
             // 
             // tsbBDU
             // 
@@ -784,5 +802,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiShowLayoutXML;
         private System.Windows.Forms.ToolStripDropDownButton tsbConvert;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+        private System.Windows.Forms.ToolStripButton tsbShare;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
     }
 }

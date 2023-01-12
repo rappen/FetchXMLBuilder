@@ -1,6 +1,5 @@
 ﻿using MarkMpn.FetchXmlToWebAPI;
 using McTools.Xrm.Connection;
-using Microsoft.Xrm.Sdk;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
@@ -68,7 +67,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Error_UnhandledException);
 
             tslAbout.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString() + " by Jonas Rapp";
-      
+
             ai = new AppInsights(aiEndpoint, aiKey, Assembly.GetExecutingAssembly(), "FetchXML Builder");
             var theme = new VS2015LightTheme();
             dockContainer.Theme = theme;
@@ -858,6 +857,11 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
             OpenURL(Welcome.GetReleaseNotesUrl(version));
+        }
+
+        private void tsbShare_Click(object sender, EventArgs e)
+        {
+            ShareLink.Open(dockControlBuilder.GetFetchString(false, false), ConnectionDetail.ConnectionName);
         }
 
         #endregion Private Event Handlers
