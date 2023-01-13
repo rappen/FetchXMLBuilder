@@ -343,6 +343,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             toolStripMain.Items.OfType<ToolStripItem>().ToList().ForEach(i => i.DisplayStyle = settings.ShowButtonTexts ? ToolStripItemDisplayStyle.ImageAndText : ToolStripItemDisplayStyle.Image);
             tsbRepo.Visible = settings.ShowRepository;
+            tsmiShowOData.Visible = settings.ShowOData2;
             if (reloadquery && connectionsettings != null && !string.IsNullOrWhiteSpace(connectionsettings.FetchXML))
             {
                 dockControlBuilder.Init(connectionsettings.FetchXML, connectionsettings.LayoutXML, "loaded from last session", false);
