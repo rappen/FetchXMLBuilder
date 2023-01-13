@@ -327,14 +327,23 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 {
                     code.AppendLine($"{Indent(indentslevel)}// Add all columns to " + objectName);
                 }
-                switch (settings.QExFlavor)
+                switch (settings.QExStyle)
                 {
-                    case QExFlavorEnum.EarlyBound:
-                        code.Append("new ColumnSet(true)");
+                    case QExStyleEnum.FluentQueryExpression:
+                        code.Append($"{Indent(indentslevel)}.Select(true)");
                         break;
 
                     default:
-                        code.Append("ColumnSet = new ColumnSet(true)");
+                        switch (settings.QExFlavor)
+                        {
+                            case QExFlavorEnum.EarlyBound:
+                                code.Append($"{Indent(indentslevel)}new ColumnSet(true)");
+                                break;
+
+                            default:
+                                code.Append($"{Indent(indentslevel)}ColumnSet = new ColumnSet(true)");
+                                break;
+                        }
                         break;
                 }
             }
@@ -702,21 +711,21 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                             var linkshortname = GetVarName("l", false, namestree = namestree ?? new List<string>());
                             var fromprefix = GetCodeEntityPrefix(link.LinkFromEntityName);
                             var toprefix = GetCodeEntityPrefix(link.LinkFromEntityName);
-                            linkcode += $"{Indent(indentslevel++)}.AddLink<{GetCodeEntity(link.LinkToEntityName)}>({fromprefix} => {fromprefix}.{GetCodeAttribute(link.LinkFromEntityName, link.LinkFromAttributeName)}, {toprefix} => {toprefix}.{GetCodeAttribute(link.LinkToEntityName, link.LinkToAttributeName)}, {linkshortname} => {linkshortname}";
+                            linkcode += $"{Indent(indentslevel)}.AddLink<{GetCodeEntity(link.LinkToEntityName)}>({fromprefix} => {fromprefix}.{GetCodeAttribute(link.LinkFromEntityName, link.LinkFromAttributeName)}, {toprefix} => {toprefix}.{GetCodeAttribute(link.LinkToEntityName, link.LinkToAttributeName)}, {linkshortname} => {linkshortname}";
                         }
                         else
                         {
-                            linkcode += $"{Indent(indentslevel++)}.AddLink(new Link({GetCodeEntity(link.LinkToEntityName)}, {GetCodeAttribute(link.LinkToEntityName, link.LinkToAttributeName)}, {GetCodeAttribute(link.LinkFromEntityName, link.LinkFromAttributeName)}, JoinOperator.{link.JoinOperator})";
+                            linkcode += $"{Indent(indentslevel)}.AddLink(new Link({GetCodeEntity(link.LinkToEntityName)}, {GetCodeAttribute(link.LinkToEntityName, link.LinkToAttributeName)}, {GetCodeAttribute(link.LinkFromEntityName, link.LinkFromAttributeName)}, JoinOperator.{link.JoinOperator})";
                         }
                         linkcode += CRLF;
                         if (!string.IsNullOrWhiteSpace(link.EntityAlias))
                         {
-                            aliascode = $"{Indent(indentslevel)}.SetAlias(\"{link.EntityAlias}\")";
+                            aliascode = $"{Indent(indentslevel + 1)}.SetAlias(\"{link.EntityAlias}\")";
                         }
                         break;
 
                     default:
-                        var varstart = $"{Indent(indentslevel++)}new LinkEntity(";
+                        var varstart = $"{Indent(indentslevel)}new LinkEntity(";
                         linkcode += varstart +
                             GetCodeParametersMaxWidth(120 - varstart.Length, indentslevel, false,
                                 GetCodeEntity(link.LinkFromEntityName),
@@ -729,10 +738,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 var objinicode = new List<string>
                 {
                     aliascode,
-                    GetColumnsOI(link.LinkToEntityName, link.Columns, OwnersType.Link, indentslevel),
-                    GetFilterOI(link.LinkToEntityName, link.LinkCriteria, linkname, OwnersType.Link, indentslevel),
-                    GetOrdersOI(link.LinkToEntityName, link.Orders, linkname, indentslevel),
-                    GetLinkEntitiesOI(link.LinkEntities, linkname, indentslevel, namestree)
+                    GetColumnsOI(link.LinkToEntityName, link.Columns, OwnersType.Link, indentslevel + 1),
+                    GetFilterOI(link.LinkToEntityName, link.LinkCriteria, linkname, OwnersType.Link, indentslevel + 1),
+                    GetOrdersOI(link.LinkToEntityName, link.Orders, linkname, indentslevel + 1),
+                    GetLinkEntitiesOI(link.LinkEntities, linkname, indentslevel + 1, namestree)
                 }.Where(o => !string.IsNullOrWhiteSpace(o)).ToList();
                 if (objinicode.Any())
                 {
@@ -743,7 +752,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     linkcode += string.Join($"{betweenchar}{CRLF}", objinicode);
                     if (settings.QExStyle == QExStyleEnum.FluentQueryExpression)
                     {
-                        linkcode += $"{CRLF}{Indent(--indentslevel)})";
+                        linkcode += $"{CRLF}{Indent(indentslevel)})";
                     }
                     else
                     {
