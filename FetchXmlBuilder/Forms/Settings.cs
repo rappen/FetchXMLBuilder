@@ -39,6 +39,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             chkShowValidationInfo.Checked = settings.ShowValidationInfo;
             chkShowRepository.Checked = settings.ShowRepository;
             chkShowAllAttributes.Checked = settings.QueryOptions.ShowAllAttributes;
+            chkShowOData2.Checked = settings.ShowOData2;
             cmbResult.SelectedIndex = SettingResultToComboBoxItem(settings.Results.ResultOutput);
             chkResAllPages.Checked = settings.Results.RetrieveAllPages;
             chkClickableLinks.Checked = settings.Results.ClickableLinks;
@@ -98,6 +99,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.ShowValidationInfo = settings.ShowValidation && chkShowValidationInfo.Checked;
             settings.ShowRepository = chkShowRepository.Checked;
             settings.QueryOptions.ShowAllAttributes = chkShowAllAttributes.Checked;
+            settings.ShowOData2 = chkShowOData2.Checked;
             settings.XmlColors = propXmlColors.SelectedObject as XmlColors;
             settings.TryMetadataCache = chkTryMetadataCache.Checked;
             settings.WaitUntilMetadataLoaded = chkWaitUntilMetadataLoaded.Checked;

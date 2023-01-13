@@ -77,9 +77,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabDefaultQuery = new System.Windows.Forms.TabPage();
             this.tabXmlScheme = new System.Windows.Forms.TabPage();
             this.panResultView = new System.Windows.Forms.Panel();
-            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
+            this.chkShowOData2 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -563,6 +564,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // tabAdvanced
             // 
             this.tabAdvanced.BackColor = System.Drawing.SystemColors.Window;
+            this.tabAdvanced.Controls.Add(this.chkShowOData2);
             this.tabAdvanced.Controls.Add(this.chkShowAllAttributes);
             this.tabAdvanced.Controls.Add(this.chkAlwaysShowAggregateProperties);
             this.tabAdvanced.Controls.Add(this.chkWaitUntilMetadataLoaded);
@@ -609,6 +611,24 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.panResultView.Size = new System.Drawing.Size(224, 100);
             this.panResultView.TabIndex = 19;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(20, 20);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(64, 13);
+            this.label2.TabIndex = 20;
+            this.label2.Text = "Result Type";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(20, 20);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(124, 13);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Default Query FetchXML";
+            // 
             // propXmlColors
             // 
             this.propXmlColors.CanShowVisualStyleGlyphs = false;
@@ -636,23 +656,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
             this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
             // 
-            // label2
+            // chkShowOData2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(20, 20);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(64, 13);
-            this.label2.TabIndex = 20;
-            this.label2.Text = "Result Type";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(20, 20);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(124, 13);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "Default Query FetchXML";
+            this.chkShowOData2.AutoSize = true;
+            this.chkShowOData2.Location = new System.Drawing.Point(20, 89);
+            this.chkShowOData2.Name = "chkShowOData2";
+            this.chkShowOData2.Size = new System.Drawing.Size(172, 17);
+            this.chkShowOData2.TabIndex = 10;
+            this.chkShowOData2.Text = "Show deprecated \"OData 2.0\"";
+            this.chkShowOData2.UseVisualStyleBackColor = true;
             // 
             // Settings
             // 
@@ -744,5 +756,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.Panel panResultView;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.CheckBox chkShowOData2;
     }
 }
