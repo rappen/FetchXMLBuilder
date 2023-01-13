@@ -208,7 +208,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void cmbResult_SelectedIndexChanged(object sender, EventArgs e)
         {
-            gbResultView.Enabled = ResultItemToSettingResult(cmbResult.SelectedIndex) == ResultOutput.Grid;
+            panResultView.Enabled = ResultItemToSettingResult(cmbResult.SelectedIndex) == ResultOutput.Grid;
         }
 
         private void linkLayout_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
