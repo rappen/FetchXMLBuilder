@@ -901,7 +901,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                         numQExIndent.Enabled = false;
                         break;
                 }
-                fxb.UpdateLiveXML();
+                UpdateXML(fxb.GetQueryExpressionCode());
             }
             else
             {
@@ -915,7 +915,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 fxb.settings.CodeGenerators.QExFlavor = flavor.Tag;
                 linkFlavorHelp.Text = flavor.Creator;
-                fxb.UpdateLiveXML();
+                UpdateXML(fxb.GetQueryExpressionCode());
             }
             else
             {
@@ -926,33 +926,19 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void chkQExFilterVariables_CheckedChanged(object sender, EventArgs e)
         {
             fxb.settings.CodeGenerators.FilterVariables = chkQExFilterVariables.Checked;
-            fxb.UpdateLiveXML();
+            UpdateXML(fxb.GetQueryExpressionCode());
         }
 
         private void rbQExObjectInitializer_CheckedChanged(object sender, EventArgs e)
         {
             fxb.settings.CodeGenerators.ObjectInitializer = rbQExObjectinitializer.Checked;
-            fxb.UpdateLiveXML();
-            return;
-            if (rbQExObjectinitializer.Checked)
-            {
-                MessageBox.Show(@"Oooh I know you wich that option... but it is not yet implemented... #sorry
-
-Do you like that idea?
-Click the ""Help"" button to vote on this Issue #830 and it will be implemented, one day...!
-
-More votes == released sooner.", "QueryExpressionFactory",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0,
-                    "https://github.com/rappen/FetchXMLBuilder/issues/830");
-
-                rbQExLineByLine.Checked = true;
-            }
+            UpdateXML(fxb.GetQueryExpressionCode());
         }
 
         private void numQExIndent_ValueChanged(object sender, EventArgs e)
         {
             fxb.settings.CodeGenerators.Indents = (int)numQExIndent.Value;
-            fxb.UpdateLiveXML();
+            UpdateXML(fxb.GetQueryExpressionCode());
         }
 
         private void linkFlavorHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

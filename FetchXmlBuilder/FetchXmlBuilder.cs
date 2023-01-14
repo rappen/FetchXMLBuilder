@@ -334,6 +334,36 @@ namespace Rappen.XTB.FetchXmlBuilder
             Process.Start(url);
         }
 
+        internal string GetQueryExpressionCode()
+        {
+            switch (settings.CodeGenerators.QExStyle)
+            {
+                case QExStyleEnum.FetchXML:
+                    var fetch = dockControlBuilder.GetFetchString(true, false);
+                    return CSharpCodeGeneratorFetchXML.GetCSharpFetchXMLCode(fetch, settings.CodeGenerators);
+
+                case QExStyleEnum.QueryExpression:
+                case QExStyleEnum.OrganizationServiceContext:
+                case QExStyleEnum.QueryExpressionFactory:
+                case QExStyleEnum.FluentQueryExpression:
+                    try
+                    {
+                        var QEx = dockControlBuilder.GetQueryExpression(false);
+                        return CSharpCodeGenerator.GetCSharpQueryExpression(QEx, entities, settings);
+                    }
+                    catch (FetchIsAggregateException ex)
+                    {
+                        return $"/*\nThis FetchXML is not possible to convert to QueryExpression in the current version of the SDK.\n\n{ex.Message}\n*/";
+                    }
+                    catch (Exception ex)
+                    {
+                        return $"/*\nFailed to generate C# {settings.CodeGenerators.QExStyle} with {settings.CodeGenerators.QExFlavor} code.\n\n{ex.Message}\n*/";
+                    }
+                default:
+                    return "/*\nSelect Style of code to generate.\n*/";
+            }
+        }
+
         #endregion Internal Methods
 
         #region Private Methods
@@ -384,36 +414,6 @@ namespace Rappen.XTB.FetchXmlBuilder
                 }
             }
             return result;
-        }
-
-        private string GetQueryExpressionCode()
-        {
-            switch (settings.CodeGenerators.QExStyle)
-            {
-                case QExStyleEnum.FetchXML:
-                    var fetch = dockControlBuilder.GetFetchString(true, false);
-                    return CSharpCodeGeneratorFetchXML.GetCSharpFetchXMLCode(fetch, settings.CodeGenerators);
-
-                case QExStyleEnum.QueryExpression:
-                case QExStyleEnum.OrganizationServiceContext:
-                case QExStyleEnum.QueryExpressionFactory:
-                case QExStyleEnum.FluentQueryExpression:
-                    try
-                    {
-                        var QEx = dockControlBuilder.GetQueryExpression(false);
-                        return CSharpCodeGenerator.GetCSharpQueryExpression(QEx, entities, settings);
-                    }
-                    catch (FetchIsAggregateException ex)
-                    {
-                        return $"/*\nThis FetchXML is not possible to convert to QueryExpression in the current version of the SDK.\n\n{ex.Message}\n*/";
-                    }
-                    catch (Exception ex)
-                    {
-                        return $"/*\nFailed to generate C# {settings.CodeGenerators.QExStyle} with {settings.CodeGenerators.QExFlavor} code.\n\n{ex.Message}\n*/";
-                    }
-                default:
-                    return "/*\nSelect Style of code to generate.\n*/";
-            }
         }
 
         private string GetSQLQuery(out bool sql4cds)
