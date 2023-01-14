@@ -1125,7 +1125,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 {
                     Tag = QExStyleEnum.FetchXML,
                     Creator = "Microsoft",
-                    ClassName = "<plain fetchxml>",
+                    ClassName = "plain fetchxml",
                     HelpUrl = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/use-fetchxml-construct-query",
                 }
             };

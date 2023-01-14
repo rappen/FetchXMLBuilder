@@ -867,6 +867,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 rbQExObjectinitializer.Enabled = true;
                 cmbQExFlavor.Enabled = true;
                 chkQExComments.Enabled = true;
+                numQExIndent.Enabled = true;
                 switch (fxb.settings.CodeGenerators.QExStyle)
                 {
                     case QExStyleEnum.QueryExpression:
@@ -890,9 +891,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                         rbQExObjectinitializer.Enabled = false;
                         cmbQExFlavor.Enabled = false;
                         chkQExComments.Enabled = false;
-                        rbQExLineByLine.Checked = true;
-                        cmbQExFlavor.SelectedIndex = -1;
                         chkQExComments.Checked = false;
+                        rbQExLineByLine.Checked = true;
+                        if (fxb.settings.CodeGenerators.QExFlavor != QExFlavorEnum.LateBound)
+                        {
+                            cmbQExFlavor.SelectedIndex = 0;
+                        }
+                        numQExIndent.Value = 0;
+                        numQExIndent.Enabled = false;
                         break;
                 }
                 fxb.UpdateLiveXML();
