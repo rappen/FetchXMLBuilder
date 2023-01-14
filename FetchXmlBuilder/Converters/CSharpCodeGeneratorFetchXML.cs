@@ -55,7 +55,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
 
             cs += "var fetchXml = $@\"" + sb.Replace("\"", "\"\"").ToString() + "\";";
 
+            cs = string.Join("\n", cs.Split('\n').Select(l => Indent(codesettings.Indents) + l));
             return cs;
+        }
+
+        private static string Indent(int indents = 1)
+        {
+            return string.Concat(Enumerable.Repeat("    ", indents));
         }
 
         private static string AddData(string attribute, string value, Dictionary<string, string> data)
