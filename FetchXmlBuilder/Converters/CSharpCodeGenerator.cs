@@ -1100,13 +1100,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     ClassName = "Microsoft.CrmSdk.CoreAssemblies",
                     HelpUrl = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/samples/retrieve-multiple-queryexpression-class",
                 },
-                new QExStyle
-                {
-                    Tag = QExStyleEnum.OrganizationServiceContext,
-                    Creator = "Microsoft",
-                    ClassName = "Microsoft.Xrm.Sdk.Client",
-                    HelpUrl = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/build-queries-with-linq-net-language-integrated-query",
-                },
+                //new QExStyle
+                //{
+                //    Tag = QExStyleEnum.OrganizationServiceContext,
+                //    Creator = "Microsoft",
+                //    ClassName = "Microsoft.Xrm.Sdk.Client",
+                //    HelpUrl = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/build-queries-with-linq-net-language-integrated-query",
+                //},
                 new QExStyle
                 {
                     Tag = QExStyleEnum.QueryExpressionFactory,
@@ -1169,13 +1169,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     HelpUrl = "https://github.com/daryllabar/DLaB.Xrm.XrmToolBoxTools/wiki/Early-Bound-Generator",
                     Tag = QExFlavorEnum.EBGconstants
                 },
-                new QExFlavor
-                {
-                    Name = "Late Bound LCG constants",
-                    Creator = "Jonas Rapp",
-                    HelpUrl = "https://github.com/rappen/LCG-UDG",
-                    Tag = QExFlavorEnum.LCGconstants
-                },
+                //new QExFlavor
+                //{
+                //    Name = "Late Bound LCG constants",
+                //    Creator = "Jonas Rapp",
+                //    HelpUrl = "https://github.com/rappen/LCG-UDG",
+                //    Tag = QExFlavorEnum.LCGconstants
+                //},
                 new QExFlavor
                 {
                     Name = "Early Bound",
