@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlContentControl));
             this.btnSave = new System.Windows.Forms.Button();
-            this.btnExecute = new System.Windows.Forms.Button();
             this.btnParseQE = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.panCancel = new System.Windows.Forms.Panel();
@@ -42,6 +41,7 @@
             this.btnSQL4CDS = new System.Windows.Forms.Button();
             this.lblActionsExpander = new System.Windows.Forms.Label();
             this.panExecute = new System.Windows.Forms.Panel();
+            this.btnExecute = new System.Windows.Forms.Button();
             this.panSave = new System.Windows.Forms.Panel();
             this.panOk = new System.Windows.Forms.Panel();
             this.panLiveUpdate = new System.Windows.Forms.Panel();
@@ -63,6 +63,7 @@
             this.autocompleteImageList = new System.Windows.Forms.ImageList(this.components);
             this.tmLiveUpdate = new System.Windows.Forms.Timer(this.components);
             this.panQExOptions = new System.Windows.Forms.Panel();
+            this.btnQExFlavorSettings = new System.Windows.Forms.Button();
             this.linkFlavorHelp = new System.Windows.Forms.LinkLabel();
             this.linkStyleHelp = new System.Windows.Forms.LinkLabel();
             this.label3 = new System.Windows.Forms.Label();
@@ -100,20 +101,6 @@
             this.btnSave.Text = "Save...";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // btnExecute
-            // 
-            this.btnExecute.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnExecute.Image = ((System.Drawing.Image)(resources.GetObject("btnExecute.Image")));
-            this.btnExecute.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnExecute.Location = new System.Drawing.Point(6, 0);
-            this.btnExecute.Name = "btnExecute";
-            this.btnExecute.Size = new System.Drawing.Size(99, 23);
-            this.btnExecute.TabIndex = 5;
-            this.btnExecute.Text = "Execute";
-            this.btnExecute.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnExecute.UseVisualStyleBackColor = true;
-            this.btnExecute.Click += new System.EventHandler(this.btnExecute_Click);
             // 
             // btnParseQE
             // 
@@ -227,6 +214,20 @@
             this.panExecute.Name = "panExecute";
             this.panExecute.Size = new System.Drawing.Size(114, 28);
             this.panExecute.TabIndex = 1;
+            // 
+            // btnExecute
+            // 
+            this.btnExecute.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnExecute.Image = ((System.Drawing.Image)(resources.GetObject("btnExecute.Image")));
+            this.btnExecute.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnExecute.Location = new System.Drawing.Point(6, 0);
+            this.btnExecute.Name = "btnExecute";
+            this.btnExecute.Size = new System.Drawing.Size(99, 23);
+            this.btnExecute.TabIndex = 5;
+            this.btnExecute.Text = "Execute";
+            this.btnExecute.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnExecute.UseVisualStyleBackColor = true;
+            this.btnExecute.Click += new System.EventHandler(this.btnExecute_Click);
             // 
             // panSave
             // 
@@ -435,6 +436,7 @@
             // panQExOptions
             // 
             this.panQExOptions.BackColor = System.Drawing.SystemColors.Window;
+            this.panQExOptions.Controls.Add(this.btnQExFlavorSettings);
             this.panQExOptions.Controls.Add(this.linkFlavorHelp);
             this.panQExOptions.Controls.Add(this.linkStyleHelp);
             this.panQExOptions.Controls.Add(this.label3);
@@ -454,6 +456,16 @@
             this.panQExOptions.Size = new System.Drawing.Size(1093, 63);
             this.panQExOptions.TabIndex = 0;
             this.panQExOptions.Text = "Type of generated code";
+            // 
+            // btnQExFlavorSettings
+            // 
+            this.btnQExFlavorSettings.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_settings_16;
+            this.btnQExFlavorSettings.Location = new System.Drawing.Point(217, 36);
+            this.btnQExFlavorSettings.Name = "btnQExFlavorSettings";
+            this.btnQExFlavorSettings.Size = new System.Drawing.Size(23, 23);
+            this.btnQExFlavorSettings.TabIndex = 16;
+            this.btnQExFlavorSettings.UseVisualStyleBackColor = true;
+            this.btnQExFlavorSettings.Click += new System.EventHandler(this.btnQExFlavorSettings_Click);
             // 
             // linkFlavorHelp
             // 
@@ -545,7 +557,7 @@
             this.cmbQExFlavor.FormattingEnabled = true;
             this.cmbQExFlavor.Location = new System.Drawing.Point(54, 37);
             this.cmbQExFlavor.Name = "cmbQExFlavor";
-            this.cmbQExFlavor.Size = new System.Drawing.Size(186, 21);
+            this.cmbQExFlavor.Size = new System.Drawing.Size(157, 21);
             this.cmbQExFlavor.TabIndex = 1;
             this.cmbQExFlavor.SelectedIndexChanged += new System.EventHandler(this.cmbQExFlavor_SelectedIndexChanged);
             // 
@@ -668,5 +680,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.LinkLabel linkFlavorHelp;
         private System.Windows.Forms.LinkLabel linkStyleHelp;
+        private System.Windows.Forms.Button btnQExFlavorSettings;
     }
 }

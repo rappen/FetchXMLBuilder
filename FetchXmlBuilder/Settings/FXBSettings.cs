@@ -251,6 +251,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool FilterVariables { get; set; } = true;
         public string EBG_EntityLogicalNames { get; set; } = "EntityLogicalName";
         public string EBG_AttributeLogicalNameClass { get; set; } = "Fields.";
+        public LCG.Settings LCG_Settings { get; set; }
     }
 
     public enum QExStyleEnum

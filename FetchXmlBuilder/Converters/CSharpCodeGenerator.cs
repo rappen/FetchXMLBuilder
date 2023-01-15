@@ -21,10 +21,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
 
         public static string GetCSharpQueryExpression(QueryExpression QEx, List<EntityMetadata> entities, FXBSettings settings)
         {
-            if (settings.CodeGenerators.QExFlavor == QExFlavorEnum.LCGconstants)
-            {
-                throw new ArgumentOutOfRangeException("Flavor", "LCG is not yet implemented.");
-            }
             if (settings.CodeGenerators.QExStyle == QExStyleEnum.QueryExpression &&
                 settings.CodeGenerators.QExFlavor == QExFlavorEnum.EarlyBound)
             {
@@ -112,7 +108,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             else
             {
                 querycode += $";{CRLF}";
-                querycode += string.Join(CRLF, queryproperties.Select(p => p + $";")) + CRLF;
+                querycode += string.Join(CRLF, queryproperties.Select(p => $"{qename}.{p};")) + CRLF;
                 querycode += GetColumnsLbL(qex.EntityName, qex.ColumnSet, qename, OwnersType.Root);
                 querycode += GetFilterLbL(qex.EntityName, qex.Criteria, qename, OwnersType.Root);
                 querycode += GetOrdersLbL(qex.EntityName, qex.Orders, qename, true);
@@ -127,12 +123,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
         private List<string> GetObjectInitializer(string qename, QueryExpression qex, int indentslevel)
         {
             return new List<string>
-                {
-                    GetColumnsOI(qex.EntityName, qex.ColumnSet, OwnersType.Root, indentslevel),
-                    GetFilterOI(qex.EntityName, qex.Criteria, qename, OwnersType.Root, indentslevel),
-                    GetOrdersOI(qex.EntityName, qex.Orders, qename, indentslevel),
-                    GetLinkEntitiesOI(qex.LinkEntities, qename, indentslevel)
-                }.Where(o => !string.IsNullOrWhiteSpace(o)).ToList();
+            {
+                GetColumnsOI(qex.EntityName, qex.ColumnSet, OwnersType.Root, indentslevel),
+                GetFilterOI(qex.EntityName, qex.Criteria, qename, OwnersType.Root, indentslevel),
+                GetOrdersOI(qex.EntityName, qex.Orders, qename, indentslevel),
+                GetLinkEntitiesOI(qex.LinkEntities, qename, indentslevel)
+            }.Where(o => !string.IsNullOrWhiteSpace(o)).ToList();
         }
 
         #endregion General
@@ -993,16 +989,37 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
         {
             if (metas.FirstOrDefault(e => e.LogicalName.Equals(entityname)) is EntityMetadata entity)
             {
-                if (settings.QExFlavor == QExFlavorEnum.EBGconstants)
+                switch (settings.QExFlavor)
                 {
-                    return entity.SchemaName + "." + settings.EBG_EntityLogicalNames;
-                }
-                else if (settings.QExFlavor == QExFlavorEnum.EarlyBound)
-                {
-                    return entity.SchemaName;
+                    case QExFlavorEnum.EBGconstants:
+                        return entity.SchemaName + "." + settings.EBG_EntityLogicalNames;
+
+                    case QExFlavorEnum.LCGconstants:
+                        return GetCodeEntityLCGClassName(entity) + ".EntityName";
+
+                    case QExFlavorEnum.EarlyBound:
+                        return entity.SchemaName;
                 }
             }
             return "\"" + entityname + "\"";
+        }
+
+        private string GetCodeEntityLCGClassName(EntityMetadata entity)
+        {
+            var result = entity.LogicalName;
+            switch (settings.LCG_Settings.ConstantName)
+            {
+                case LCG.NameType.DisplayName:
+                    result = LCG.Extensions.StringToCSharpIdentifier(entity.DisplayName?.UserLocalizedLabel?.Label ?? entity.LogicalName);
+                    break;
+
+                case LCG.NameType.SchemaName:
+                    result = entity.SchemaName;
+                    break;
+            }
+            result = LCG.Extensions.StripPrefix(result, settings.LCG_Settings);
+            result = LCG.Extensions.CamelCaseIt(result, settings.LCG_Settings);
+            return result;
         }
 
         private string GetCodeEntityPrefix(string entityname)
@@ -1028,6 +1045,28 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                             return GetCodeEntityPrefix(entityname) + "." + attribute.SchemaName;
                         }
                         return attribute.SchemaName;
+
+                    case QExFlavorEnum.LCGconstants:
+                        var entityclassname = GetCodeEntityLCGClassName(entity);
+                        if (attribute.IsPrimaryId == true)
+                        {
+                            return entityclassname + ".PrimaryKey";
+                        }
+                        if (attribute.IsPrimaryName == true)
+                        {
+                            return entityclassname + ".PrimaryName";
+                        }
+                        switch (settings.LCG_Settings.ConstantName)
+                        {
+                            case LCG.NameType.DisplayName:
+                                return entityclassname + "." + LCG.Extensions.StringToCSharpIdentifier(attribute.DisplayName?.UserLocalizedLabel?.Label ?? attribute.LogicalName);
+
+                            case LCG.NameType.SchemaName:
+                                return entityclassname + "." + LCG.Extensions.CamelCaseIt(LCG.Extensions.StripPrefix(attribute.SchemaName, settings.LCG_Settings), settings.LCG_Settings);
+
+                            default:
+                                return entityclassname + "." + LCG.Extensions.CamelCaseIt(LCG.Extensions.StripPrefix(attribute.LogicalName, settings.LCG_Settings), settings.LCG_Settings);
+                        }
 
                     default:
                         return entity.SchemaName + "." + settings.EBG_AttributeLogicalNameClass + attribute.SchemaName;
@@ -1111,7 +1150,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 {
                     Tag = QExStyleEnum.QueryExpressionFactory,
                     Creator = "Daryl LaBar",
-                    ClassName = "daryllabar/DLaB.Xrm",
+                    ClassName = "DLaB.Xrm",
                     HelpUrl = "https://github.com/daryllabar/DLaB.Xrm/wiki/Query-Helpers",
                 },
                 new QExStyle
@@ -1165,21 +1204,21 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 new QExFlavor
                 {
                     Name = "Late Bound EBG constants",
-                    Creator = "Daryl LaBar",
+                    Creator = "Daryl LaBar's tool EBG",
                     HelpUrl = "https://github.com/daryllabar/DLaB.Xrm.XrmToolBoxTools/wiki/Early-Bound-Generator",
                     Tag = QExFlavorEnum.EBGconstants
                 },
-                //new QExFlavor
-                //{
-                //    Name = "Late Bound LCG constants",
-                //    Creator = "Jonas Rapp",
-                //    HelpUrl = "https://github.com/rappen/LCG-UDG",
-                //    Tag = QExFlavorEnum.LCGconstants
-                //},
+                new QExFlavor
+                {
+                    Name = "Late Bound LCG constants",
+                    Creator = "Jonas Rapp's tool LCG",
+                    HelpUrl = "https://github.com/rappen/LCG-UDG",
+                    Tag = QExFlavorEnum.LCGconstants
+                },
                 new QExFlavor
                 {
                     Name = "Early Bound",
-                    Creator = "Microsoft",
+                    Creator = "Microsoft's classes",
                     HelpUrl = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/generate-early-bound-classes",
                     Tag = QExFlavorEnum.EarlyBound
                 }

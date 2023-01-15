@@ -5,6 +5,7 @@ using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Converters;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Settings;
+using Rappen.XTB.Helper;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
@@ -915,6 +916,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 fxb.settings.CodeGenerators.QExFlavor = flavor.Tag;
                 linkFlavorHelp.Text = flavor.Creator;
+                btnQExFlavorSettings.Visible = flavor.Tag == QExFlavorEnum.LCGconstants;
+                cmbQExFlavor.Width = cmbQExStyle.Width - (btnQExFlavorSettings.Visible ? btnQExFlavorSettings.Width + 6 : 0);
                 UpdateXML(fxb.GetQueryExpressionCode());
             }
             else
@@ -956,6 +959,40 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             if (!string.IsNullOrWhiteSpace(url))
             {
                 FetchXmlBuilder.OpenURL(url);
+            }
+        }
+
+        private void btnQExFlavorSettings_Click(object sender, EventArgs e)
+        {
+            var ofd = new OpenFileDialog
+            {
+                Title = $"Load generated C# or config file",
+                Filter = $"C# file (*.cs)|*.cs|XML file (*.xml)|*.xml"
+            };
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                var type = Path.GetExtension(ofd.FileName).ToLowerInvariant();
+                try
+                {
+                    var lcgsettings = new LCG.Settings();
+                    if (type == ".cs")
+                    {
+                        lcgsettings = ConfigurationUtils.GetEmbeddedConfiguration<LCG.Settings>(ofd.FileName, lcgsettings.commonsettings.InlineConfigBegin, lcgsettings.commonsettings.InlineConfigEnd);
+                    }
+                    else if (type == ".xml")
+                    {
+                        var document = new XmlDocument();
+                        document.Load(ofd.FileName);
+                        lcgsettings = (LCG.Settings)XrmToolBox.PluginsStore.XmlSerializerHelper.Deserialize(document.OuterXml, typeof(LCG.Settings));
+                    }
+                    fxb.settings.CodeGenerators.LCG_Settings = lcgsettings;
+                }
+                catch (Exception ex)
+                {
+                    fxb.settings.CodeGenerators.LCG_Settings = new LCG.Settings();
+                    MessageBox.Show($"Failed to parse configuration.\n\n{ex.Message}", "Open file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                UpdateXML(fxb.GetQueryExpressionCode());
             }
         }
     }

@@ -228,6 +228,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppCode\Utils.cs" />
+    <Compile Include="Converters\LCG\CommonSettings.cs" />
+    <Compile Include="Converters\LCG\ConfigurationUtils.cs" />
+    <Compile Include="Converters\LCG\Extensions.cs" />
+    <Compile Include="Converters\LCG\FabienDehopreIdentifier.cs" />
+    <Compile Include="Converters\LCG\LCG.cs" />
+    <Compile Include="Converters\LCG\Settings.cs" />
+    <Compile Include="Converters\LCG\UnicodeCharacterUtilities.cs" />
     <Compile Include="Converters\QExParse.cs" />
     <Compile Include="Extensions\ConnectionExtensions.cs" />
     <Compile Include="ControlsClasses\EntityNameItem.cs" />
@@ -630,6 +637,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8-share-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-settings-16.png" />
   </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />
