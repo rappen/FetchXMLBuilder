@@ -1,12 +1,7 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk.Metadata;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Windows.Forms;
-using McTools.Xrm.Connection;
-using Microsoft.Xrm.Sdk.Metadata;
 
 namespace Rappen.XTB.LCG
 {
@@ -98,7 +93,7 @@ namespace Rappen.XTB.LCG
 
         public static string CamelCaseIt(this string name, Settings settings)
         {
-            if (!settings.ConstantCamelCased)
+            if (!settings.ConstantCamelCased || settings.ConstantName == NameType.DisplayName)
             {
                 return name;
             }
@@ -184,7 +179,7 @@ namespace Rappen.XTB.LCG
 
         public static string StripPrefix(this string name, Settings settings)
         {
-            if (!settings.DoStripPrefix || string.IsNullOrEmpty(settings.StripPrefix))
+            if (!settings.DoStripPrefix || string.IsNullOrEmpty(settings.StripPrefix) || settings.ConstantName == NameType.DisplayName)
             {
                 return name;
             }
@@ -221,6 +216,50 @@ namespace Rappen.XTB.LCG
                 .Replace("[", "_")
                 .Replace("]", "_");
             return UnicodeCharacterUtilities.MakeValidIdentifier(name, false);
+        }
+
+        internal static string GetEntityClass(this EntityMetadata entity, Settings lcgsettings)
+        {
+            var result = entity.LogicalName;
+            switch (lcgsettings.ConstantName)
+            {
+                case NameType.DisplayName:
+                    result = StringToCSharpIdentifier(entity.DisplayName?.UserLocalizedLabel?.Label ?? entity.LogicalName);
+                    break;
+
+                case NameType.SchemaName:
+                    result = entity.SchemaName;
+                    break;
+            }
+            result = StripPrefix(result, lcgsettings);
+            result = CamelCaseIt(result, lcgsettings);
+            return result;
+        }
+
+        internal static string GetAttributeProperty(this AttributeMetadata attribute, Settings lcgsettings)
+        {
+            if (attribute.IsPrimaryId == true)
+            {
+                return "PrimaryKey";
+            }
+            if (attribute.IsPrimaryName == true)
+            {
+                return "PrimaryName";
+            }
+            var result = attribute.LogicalName;
+            switch (lcgsettings.ConstantName)
+            {
+                case NameType.DisplayName:
+                    result = StringToCSharpIdentifier(attribute.DisplayName?.UserLocalizedLabel?.Label ?? attribute.LogicalName);
+                    break;
+
+                case NameType.SchemaName:
+                    result = attribute.SchemaName;
+                    break;
+            }
+            result = StripPrefix(result, lcgsettings);
+            result = CamelCaseIt(result, lcgsettings);
+            return result;
         }
     }
 }
