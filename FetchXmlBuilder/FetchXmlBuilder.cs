@@ -343,6 +343,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     return CSharpCodeGeneratorFetchXML.GetCSharpFetchXMLCode(fetch, settings.CodeGenerators);
 
                 case QExStyleEnum.QueryExpression:
+                case QExStyleEnum.QueryByAttribute:
                 case QExStyleEnum.OrganizationServiceContext:
                 case QExStyleEnum.QueryExpressionFactory:
                 case QExStyleEnum.FluentQueryExpression:

@@ -26,6 +26,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             {
                 throw new ArgumentOutOfRangeException("Style & Flavor", $"Combo is not possible.");
             }
+            if (settings.CodeGenerators.QExStyle == QExStyleEnum.QueryByAttribute)
+            {
+                throw new ArgumentException("Sorry, not yet implemented", "Style");
+            }
 
             var coder = new CSharpCodeGenerator(QEx, entities, settings);
             var result = coder.GetQueryCode();
@@ -1128,6 +1132,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     Creator = "Microsoft",
                     ClassName = "Microsoft.CrmSdk.CoreAssemblies",
                     HelpUrl = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/samples/retrieve-multiple-queryexpression-class",
+                },
+                new QExStyle
+                {
+                    Tag = QExStyleEnum.QueryByAttribute,
+                    Creator = "Microsoft",
+                    ClassName = "Microsoft.CrmSdk.CoreAssemblies",
+                    HelpUrl = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/samples/retrieve-multiple-querybyattribute-class",
                 },
                 //new QExStyle
                 //{
