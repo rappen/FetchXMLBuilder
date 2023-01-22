@@ -342,11 +342,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     var fetch = dockControlBuilder.GetFetchString(true, false);
                     return CSharpCodeGeneratorFetchXML.GetCSharpFetchXMLCode(fetch, settings.CodeGenerators);
 
-                case QExStyleEnum.QueryExpression:
-                case QExStyleEnum.QueryByAttribute:
-                case QExStyleEnum.OrganizationServiceContext:
-                case QExStyleEnum.QueryExpressionFactory:
-                case QExStyleEnum.FluentQueryExpression:
+                default:
                     try
                     {
                         var QEx = dockControlBuilder.GetQueryExpression(false);
@@ -360,8 +356,6 @@ namespace Rappen.XTB.FetchXmlBuilder
                     {
                         return $"/*\nFailed to generate C# {settings.CodeGenerators.QExStyle} with {settings.CodeGenerators.QExFlavor} code.\n\n{ex.Message}\n*/";
                     }
-                default:
-                    return "/*\nSelect Style of code to generate.\n*/";
             }
         }
 
