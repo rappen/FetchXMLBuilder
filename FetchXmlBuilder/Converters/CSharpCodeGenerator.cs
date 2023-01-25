@@ -77,7 +77,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             switch (settings.QExStyle)
             {
                 case QExStyleEnum.QueryExpressionFactory:
-                    querycode += $"{queryclass}.Create{(earlybound ? "<" : "(")}{entityname}{(earlybound ? ">(" : ",")}";
+                    querycode += $"{queryclass}.Create{(earlybound ? "<" : "(")}{entityname}{(earlybound ? ">(" : "")}";
                     break;
 
                 case QExStyleEnum.FluentQueryExpression:
@@ -108,6 +108,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     case QExStyleEnum.QueryExpressionFactory:
                         querycode += $");{CRLF}";
                         querycode += string.Join(CRLF, GetQueryOptions(qex, qename, 0).Select(p => $"{qename}.{p};")) + CRLF;
+                        var linkentities = GetLinkEntitiesLbL(qex.LinkEntities, qename);
+                        if (!string.IsNullOrWhiteSpace(linkentities))
+                        {
+                            querycode += $"{linkentities}";
+                        }
                         querycode += GetOrdersLbL(qex.EntityName, qex.Orders, qename, true);
                         break;
 
@@ -118,6 +123,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             }
             else
             {
+                if (settings.QExStyle == QExStyleEnum.QueryExpressionFactory)
+                {
+                    var columnscode = GetColumnsOI(entityname, qex.ColumnSet, OwnersType.Root, 1);
+                    if (!string.IsNullOrWhiteSpace(columnscode))
+                    {
+                        querycode += $",{CRLF}{columnscode}";
+                    }
+                    var filterscode = GetFilterOI(entityname, qex.Criteria, qename, OwnersType.Root, 1);
+                    if (!string.IsNullOrWhiteSpace(filterscode))
+                    {
+                        querycode += $",{CRLF}{filterscode}";
+                    }
+                    querycode += ")";
+                }
                 querycode += $";{CRLF}";
                 querycode += string.Join(CRLF, GetQueryOptions(qex, qename, 0).Select(p => $"{qename}.{p};"));
                 if (settings.QExStyle != QExStyleEnum.QueryExpressionFactory)
@@ -140,10 +159,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             {
                 GetColumnsOI(qex.EntityName, qex.ColumnSet, OwnersType.Root, indentslevel),
                 GetFilterOI(qex.EntityName, qex.Criteria, qename, OwnersType.Root, indentslevel),
-                GetOrdersOI(qex.EntityName, qex.Orders, qename, OwnersType.Root, indentslevel),
-                GetLinkEntitiesOI(qex.LinkEntities, qename, indentslevel)
+                settings.QExStyle == QExStyleEnum.QueryExpressionFactory ? "" : GetOrdersOI(qex.EntityName, qex.Orders, qename, OwnersType.Root, indentslevel),
+                settings.QExStyle == QExStyleEnum.QueryExpressionFactory ? "" : GetLinkEntitiesOI(qex.LinkEntities, qename, indentslevel)
             }.Where(o => !string.IsNullOrWhiteSpace(o)).ToList();
         }
+
+        private string GetColumns(string entity, ColumnSet columns, string ownerName, OwnersType ownerType, int indentslevel) => settings.ObjectInitializer ? GetColumnsOI(entity, columns, ownerType, indentslevel) : GetColumnsLbL(entity, columns, ownerName, ownerType);
+
+        private string GetFilter(string entity, FilterExpression filter, string ownerName, OwnersType ownerType, int indentslevel = 1, List<string> namestree = null) => settings.ObjectInitializer ? GetFilterOI(entity, filter, ownerName, ownerType, indentslevel, namestree) : GetFilterLbL(entity, filter, ownerName, ownerType);
+
+        private string GetOrders(string entityname, DataCollection<OrderExpression> orders, string ownerName, OwnersType ownerType, int indentslevel = 1) => settings.ObjectInitializer ? GetOrdersOI(entityname, orders, ownerName, ownerType, indentslevel) : GetOrdersLbL(entityname, orders, ownerName);
+
+        private string GetLinkEntities(DataCollection<LinkEntity> linkEntities, string ownerName, int indentslevel = 1, List<string> namestree = null) => settings.ObjectInitializer ? GetLinkEntitiesOI(linkEntities, ownerName, indentslevel, namestree) : GetLinkEntitiesLbL(linkEntities, ownerName);
 
         #endregion General
 
@@ -312,10 +339,21 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     link.Columns.Columns.Count > 0 ||
                     link.LinkCriteria.Conditions.Count > 0 ||
                     link.Orders.Count > 0 ? $"var {linkname} = " : String.Empty;
+                var fromattribute = GetCodeAttribute(link.LinkFromEntityName, link.LinkFromAttributeName);
+                var toattribute = GetCodeAttribute(link.LinkToEntityName, link.LinkToAttributeName);
+                switch (settings.QExStyle)
+                {
+                    case QExStyleEnum.QueryExpressionFactory:
+                        if (fromattribute == toattribute)
+                        {
+                            toattribute = null;
+                        }
+                        break;
+                }
                 var parms = GetCodeParametersMaxWidth(CODE_WIDTH_LIMIT - varstart.Length - LineStart.Length, 0, AroundBy.Parentheses,
                     GetCodeEntity(link.LinkToEntityName),
-                    GetCodeAttribute(link.LinkFromEntityName, link.LinkFromAttributeName),
-                    GetCodeAttribute(link.LinkToEntityName, link.LinkToAttributeName),
+                    fromattribute,
+                    toattribute,
                     join);
                 linkcode += $"{varstart}{LineStart}.AddLink{parms};{CRLF}";
                 if (!string.IsNullOrWhiteSpace(link.EntityAlias))
@@ -323,9 +361,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     linkcode += $"{linkname}.EntityAlias = \"{link.EntityAlias}\";{CRLF}";
                 }
                 linkcode += GetColumnsLbL(link.LinkToEntityName, link.Columns, linkname, OwnersType.Link);
-                linkcode += GetFilterLbL(link.LinkToEntityName, link.LinkCriteria, linkname, OwnersType.Link);
-                linkcode += GetOrdersLbL(link.LinkToEntityName, link.Orders, linkname);
-                linkcode += GetLinkEntitiesLbL(link.LinkEntities, linkname);
+                linkcode += GetFilter(link.LinkToEntityName, link.LinkCriteria, linkname, OwnersType.Link);
+                linkcode += GetOrders(link.LinkToEntityName, link.Orders, linkname, OwnersType.Link);
+                linkcode += GetLinkEntities(link.LinkEntities, linkname);
                 linkcodec.Add(linkcode);
             }
             return string.Join(CRLF, linkcodec.Select(f => f.Trim())).TrimEnd() + CRLF;
@@ -398,22 +436,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 {
                     code.AppendLine($"{Indent(indentslevel)}// Add {columns.Columns.Count} columns to {entity}");
                 }
-                var ini = string.Empty;
+                var columnsstart = string.Empty;
                 var aroundby = AroundBy.Parentheses;
-                var useprefix = settings.QExFlavor == QExFlavorEnum.EarlyBound;
-                var columnscode = columns.Columns.Select(c => GetCodeAttribute(entity, c, useprefix)).ToArray();
                 switch (settings.QExStyle)
                 {
                     case QExStyleEnum.QueryExpressionFactory:
                         switch (settings.QExFlavor)
                         {
                             case QExFlavorEnum.EarlyBound:
-                                ini = $"{GetCodeEntityPrefix(entity)} => new ";
+                                columnsstart = $"{GetCodeEntityPrefix(entity)} => new ";
                                 aroundby = AroundBy.Braces;
                                 break;
 
                             default:
-                                ini = $"new ColumnSet";
+                                columnsstart = $"new ColumnSet";
                                 break;
                         }
                         break;
@@ -422,23 +458,24 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                         switch (settings.QExFlavor)
                         {
                             case QExFlavorEnum.EarlyBound:
-                                ini = $".Select({GetCodeEntityPrefix(entity)} => new ";
+                                columnsstart = $".Select({GetCodeEntityPrefix(entity)} => new ";
                                 aroundby = AroundBy.Braces;
                                 break;
 
                             default:
-                                ini = $".Select";
+                                columnsstart = $".Select";
                                 break;
                         }
                         break;
 
                     default:
-                        ini = $"{objectName} = new ColumnSet";
+                        columnsstart = $"{objectName} = new ColumnSet";
                         break;
                 }
-                var colsEB = GetCodeParametersMaxWidth(CODE_WIDTH_LIMIT - ini.Length, indentslevel, aroundby, columnscode);
-                var muliplerows = colsEB.Contains(CRLF);
-                code.Append(Indent(indentslevel) + ini + colsEB);
+                var columnscode = columns.Columns.Select(c => GetCodeAttribute(entity, c, settings.QExFlavor == QExFlavorEnum.EarlyBound)).ToArray();
+                var colsEB = GetCodeParametersMaxWidth(CODE_WIDTH_LIMIT - columnsstart.Length, indentslevel, aroundby, columnscode);
+                //var muliplerows = colsEB.Contains(CRLF);
+                code.Append(Indent(indentslevel) + columnsstart + colsEB);
                 //switch (settings.QExStyle)
                 //{
                 //    case QExStyleEnum.FluentQueryExpression:
@@ -544,12 +581,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             var commentconds = filter.Conditions.Count > 0 ? $" {filter.Conditions.Count} conditions" : "";
             var commentfilts = filter.Filters.Count > 0 ? $" {filter.Filters.Count} filters" : "";
             var comment = $"{Indent(indentslevel)}// Add filter to {entity} with{commentconds}{commentfilts}{CRLF}";
-            var rootfilters = settings.QExFlavor == QExFlavorEnum.EarlyBound && (filter.FilterHint.EndsWith("Criteria") || filter.FilterHint.EndsWith("Criteria.Filters"));
+            var dlabrootfilters = /*settings.QExFlavor == QExFlavorEnum.EarlyBound &&*/ (filter.FilterHint.EndsWith("Criteria") || filter.FilterHint.EndsWith("Criteria.Filters"));
             var addfilterexpression = true;
             switch (settings.QExStyle)
             {
                 case QExStyleEnum.QueryExpressionFactory:
-                    if (!rootfilters || filter.FilterOperator == LogicalOperator.Or || !filter.Conditions.Any())
+                    if (!dlabrootfilters || filter.FilterOperator == LogicalOperator.Or || !filter.Conditions.Any())
                     {
                         code.Append($"{Indent(indentslevel)}new FilterExpression({(filter.FilterOperator == LogicalOperator.Or ? "LogicalOperator.Or" : "")}){CRLF}{Indent(indentslevel++)}{{{CRLF}");
                     }
@@ -641,9 +678,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             {
                 code.AppendLine($"{Indent(indentslevel)}// Add {filter.Conditions.Count} conditions to {entity}");
             }
-            var rootfiltersinline =
+            var dlabrootfiltersinline =
                 settings.QExStyle == QExStyleEnum.QueryExpressionFactory &&
-                settings.QExFlavor == QExFlavorEnum.EarlyBound &&
+                // settings.QExFlavor == QExFlavorEnum.EarlyBound &&
                 (filter.FilterHint.EndsWith("Criteria") || filter.FilterHint.EndsWith("Criteria.Filters"));
             switch (settings.QExStyle)
             {
@@ -652,7 +689,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     break;
 
                 default:
-                    if (!rootfiltersinline)
+                    if (!dlabrootfiltersinline)
                     {
                         code.Append($"{Indent(indentslevel)}Conditions ={CRLF}{Indent(indentslevel++)}{{{CRLF}");
                     }
@@ -661,7 +698,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             var conditionscode = new List<string>();
             foreach (var cond in filter.Conditions)
             {
-                conditionscode.Add(GetConditionOI(entity, cond, filter.FilterHint, indentslevel, rootfiltersinline));
+                conditionscode.Add(GetConditionOI(entity, cond, filter.FilterHint, indentslevel, dlabrootfiltersinline));
             }
             if (settings.QExStyle == QExStyleEnum.QueryByAttribute)
             {
@@ -682,7 +719,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     break;
 
                 default:
-                    if (!rootfiltersinline)
+                    if (!dlabrootfiltersinline)
                     {
                         code.Append($"{CRLF}{Indent(--indentslevel)}}}");
                     }
@@ -691,7 +728,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             return code.ToString();
         }
 
-        private string GetConditionOI(string entity, ConditionExpression cond, string filtername, int indentslevel, bool rootfiltersinline)
+        private string GetConditionOI(string entity, ConditionExpression cond, string filtername, int indentslevel, bool dlabrootfiltersinline)
         {
             if (settings.QExStyle == QExStyleEnum.QueryByAttribute && cond.Operator != ConditionOperator.Equal)
             {
@@ -746,7 +783,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     }
 
                 default:
-                    if (rootfiltersinline &&
+                    if (dlabrootfiltersinline &&
                         settings.QExStyle == QExStyleEnum.QueryExpressionFactory &&
                         string.IsNullOrWhiteSpace(entityalias) &&
                         cond.Operator == ConditionOperator.Equal && cond.Values?.Count == 1)
@@ -848,10 +885,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             var objinicode = new List<string>
                 {
                     aliascode,
-                    GetColumnsOI(link.LinkToEntityName, link.Columns, OwnersType.Link, indentslevel + 1),
-                    GetFilterOI(link.LinkToEntityName, link.LinkCriteria, linkname, OwnersType.Link, indentslevel + 1),
-                    GetOrdersOI(link.LinkToEntityName, link.Orders, linkname, OwnersType.Link, indentslevel + 1),
-                    GetLinkEntitiesOI(link.LinkEntities, linkname, indentslevel + 1, namestree)
+                    GetColumns(link.LinkToEntityName, link.Columns, linkname, OwnersType.Link, indentslevel + 1),
+                    GetFilter(link.LinkToEntityName, link.LinkCriteria, linkname, OwnersType.Link, indentslevel + 1),
+                    GetOrders(link.LinkToEntityName, link.Orders, linkname, OwnersType.Link, indentslevel + 1),
+                    GetLinkEntities(link.LinkEntities, linkname, indentslevel + 1, namestree)
                 }.Where(o => !string.IsNullOrWhiteSpace(o)).ToList();
             if (objinicode.Any())
             {

@@ -883,11 +883,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                         rbQExObjectinitializer.Checked = true;
                         break;
 
-                    case QExStyleEnum.QueryExpressionFactory:
-                        rbQExLineByLine.Enabled = false;
-                        rbQExObjectinitializer.Checked = true;
-                        break;
-
                     case QExStyleEnum.FetchXML:
                         rbQExObjectinitializer.Enabled = false;
                         cmbQExFlavor.Enabled = false;
