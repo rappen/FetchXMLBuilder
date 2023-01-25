@@ -229,14 +229,13 @@ namespace Rappen.XTB.FetchXmlBuilder
             SaveDockPanels();
             dockControlBuilder?.Close();
             dockControlFetchXml?.Close();
-            dockControlFetchXmlCs?.Close();
             dockControlFetchXmlJs?.Close();
             dockControlFetchResult?.Close();
             dockControlGrid?.Close();
             dockControlOData2?.Close();
             dockControlOData4?.Close();
             dockControlFlowList?.Close();
-            dockControlQExp?.Close();
+            dockControlCSharp?.Close();
             dockControlSQL?.Close();
             dockControlMeta?.Close();
             SaveSetting();
@@ -335,6 +334,31 @@ namespace Rappen.XTB.FetchXmlBuilder
             Process.Start(url);
         }
 
+        internal string GetQueryExpressionCode()
+        {
+            switch (settings.CodeGenerators.QExStyle)
+            {
+                case QExStyleEnum.FetchXML:
+                    var fetch = dockControlBuilder.GetFetchString(true, false);
+                    return CSharpCodeGeneratorFetchXML.GetCSharpFetchXMLCode(fetch, settings.CodeGenerators);
+
+                default:
+                    try
+                    {
+                        var QEx = dockControlBuilder.GetQueryExpression(false);
+                        return CSharpCodeGenerator.GetCSharpQueryExpression(QEx, entities, settings);
+                    }
+                    catch (FetchIsAggregateException ex)
+                    {
+                        return $"/*\nThis FetchXML is not possible to convert to QueryExpression in the current version of the SDK.\n\n{ex.Message}\n*/";
+                    }
+                    catch (Exception ex)
+                    {
+                        return $"/*\nFailed to generate C# {settings.CodeGenerators.QExStyle} with {settings.CodeGenerators.QExFlavor} code.\n\n{ex.Message}\n*/";
+                    }
+            }
+        }
+
         #endregion Internal Methods
 
         #region Private Methods
@@ -385,25 +409,6 @@ namespace Rappen.XTB.FetchXmlBuilder
                 }
             }
             return result;
-        }
-
-        private string GetQueryExpressionCode()
-        {
-            var code = string.Empty;
-            try
-            {
-                var QEx = dockControlBuilder.GetQueryExpression(false);
-                code = QueryExpressionCodeGenerator.GetCSharpQueryExpression(QEx, entities, settings);
-            }
-            catch (FetchIsAggregateException ex)
-            {
-                code = "This FetchXML is not possible to convert to QueryExpression in the current version of the SDK.\n\n" + ex.Message;
-            }
-            catch (Exception ex)
-            {
-                code = "Failed to generate C# QueryExpression code.\n\n" + ex.Message;
-            }
-            return code;
         }
 
         private string GetSQLQuery(out bool sql4cds)
@@ -673,11 +678,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             ShowMetadataControl(ref dockControlMeta, DockState.DockRight);
         }
 
-        private void tsmiShowFetchXMLcs_Click(object sender, EventArgs e)
-        {
-            ShowContentControl(ref dockControlFetchXmlCs, ContentType.CSharp_Query, SaveFormat.None, settings.DockStates.FetchXMLCs);
-        }
-
         private void tsmiShowFetchXMLjs_Click(object sender, EventArgs e)
         {
             ShowContentControl(ref dockControlFetchXmlJs, ContentType.JavaScript_Query, SaveFormat.None, settings.DockStates.FetchXMLJs);
@@ -703,9 +703,9 @@ namespace Rappen.XTB.FetchXmlBuilder
             ShowFlowListControl(ref dockControlFlowList, settings.DockStates.FlowList);
         }
 
-        private void tsmiShowQueryExpression_Click(object sender, EventArgs e)
+        private void tsmiShowCSharpCode_Click(object sender, EventArgs e)
         {
-            ShowContentControl(ref dockControlQExp, ContentType.QueryExpression, SaveFormat.None, settings.DockStates.QueryExpression);
+            ShowContentControl(ref dockControlCSharp, ContentType.CSharp_Code, SaveFormat.None, settings.DockStates.CSharp);
         }
 
         private void tsmiShowSQL_Click(object sender, EventArgs e)

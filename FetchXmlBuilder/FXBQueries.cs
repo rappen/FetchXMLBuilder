@@ -1,4 +1,5 @@
-﻿using Microsoft.Crm.Sdk.Messages;
+﻿using Cinteros.Xrm.FetchXmlBuilder.Converters;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XRM.Helpers.Extensions;
@@ -185,7 +186,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 (eventargs) =>
                 {
                     var start = DateTime.Now;
-                    string fetchXml = QueryExpressionCodeGenerator.GetFetchXmlFromCSharpQueryExpression(query, Service);
+                    string fetchXml = QExParse.GetFetchXmlFromCSharpQueryExpression(query, Service);
                     var stop = DateTime.Now;
                     var duration = stop - start;
                     LogUse("QueryExpressionToFetchXml", false, null, duration.TotalMilliseconds);

@@ -15,7 +15,7 @@ namespace FXBTests
             qe.ColumnSet = new ColumnSet("fullname", "lastname");
             qe.Criteria.AddCondition("modifiedon", ConditionOperator.GreaterThan, "2020-01-01");
 
-            var converted = QueryExpressionCodeGenerator.GetCSharpQueryExpression(qe, null, new FXBSettings());
+            var converted = CSharpCodeGenerator.GetCSharpQueryExpression(qe, null, new FXBSettings());
 
             var expected = @"// Define Condition Values
 var query_modifiedon = ""2020-01-01"";
@@ -40,7 +40,7 @@ query.Criteria.AddCondition(""modifiedon"", ConditionOperator.GreaterThan, query
             qe.ColumnSet = new ColumnSet("fullname", "lastname");
             qe.Criteria.AddCondition(new ConditionExpression("modifiedon", ConditionOperator.GreaterThan, true, "createdon"));
 
-            var converted = QueryExpressionCodeGenerator.GetCSharpQueryExpression(qe, null, new FXBSettings());
+            var converted = CSharpCodeGenerator.GetCSharpQueryExpression(qe, null, new FXBSettings());
 
             var expected = @"// Define Condition Values
 var query_modifiedon = ""createdon"";
@@ -66,7 +66,7 @@ query.Criteria.AddCondition(""modifiedon"", ConditionOperator.GreaterThan, true,
             qe.Criteria.AddCondition("modifiedon", ConditionOperator.GreaterThan, "2020-01-01");
             qe.Criteria.AddCondition(new ConditionExpression("modifiedon", ConditionOperator.GreaterThan, true, "createdon"));
 
-            var converted = QueryExpressionCodeGenerator.GetCSharpQueryExpression(qe, null, new FXBSettings());
+            var converted = CSharpCodeGenerator.GetCSharpQueryExpression(qe, null, new FXBSettings());
 
             var expected = @"// Define Condition Values
 var query_modifiedon = ""2020-01-01"";

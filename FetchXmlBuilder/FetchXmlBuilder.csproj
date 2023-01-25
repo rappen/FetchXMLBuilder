@@ -228,10 +228,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppCode\Utils.cs" />
+    <Compile Include="Converters\LCG\CommonSettings.cs" />
+    <Compile Include="Converters\LCG\ConfigurationUtils.cs" />
+    <Compile Include="Converters\LCG\Extensions.cs" />
+    <Compile Include="Converters\LCG\FabienDehopreIdentifier.cs" />
+    <Compile Include="Converters\LCG\LCG.cs" />
+    <Compile Include="Converters\LCG\Settings.cs" />
+    <Compile Include="Converters\LCG\UnicodeCharacterUtilities.cs" />
+    <Compile Include="Converters\QExParse.cs" />
     <Compile Include="Extensions\ConnectionExtensions.cs" />
     <Compile Include="ControlsClasses\EntityNameItem.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\GroupBoxExpanderExtensions.cs" />
+    <Compile Include="Forms\CSharpCodeGeneratedLCGSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CSharpCodeGeneratedLCGSettings.Designer.cs">
+      <DependentUpon>CSharpCodeGeneratedLCGSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ShareLink.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -258,7 +272,7 @@
     </Compile>
     <Compile Include="Extensions\ServiceExtensions.cs" />
     <Compile Include="ControlsClasses\AttributeItem.cs" />
-    <Compile Include="Converters\CSharpCodeGenerator.cs" />
+    <Compile Include="Converters\CSharpCodeGeneratorFetchXML.cs" />
     <Compile Include="Extensions\DockExtensions.cs" />
     <Compile Include="Builder\FetchIsAggregateException.cs" />
     <Compile Include="Settings\FXBSettings.cs" />
@@ -266,7 +280,7 @@
     <Compile Include="Converters\ODataCodeGenerator.cs" />
     <Compile Include="ControlsClasses\OptionsetItem.cs" />
     <Compile Include="AppCode\QueryInfo.cs" />
-    <Compile Include="Converters\QueryExpressionCodeGenerator.cs" />
+    <Compile Include="Converters\CSharpCodeGenerator.cs" />
     <Compile Include="Builder\Validations.cs" />
     <Compile Include="Views\ViewItem.cs" />
     <Compile Include="ControlsClasses\EntityItem.cs" />
@@ -491,6 +505,9 @@
     <EmbeddedResource Include="DockControls\ResultGrid.resx">
       <DependentUpon>ResultGrid.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CSharpCodeGeneratedLCGSettings.resx">
+      <DependentUpon>CSharpCodeGeneratedLCGSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SelectAttributesDialog.resx">
       <DependentUpon>SelectAttributesDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -629,6 +646,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8-share-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-settings-16.png" />
   </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />
