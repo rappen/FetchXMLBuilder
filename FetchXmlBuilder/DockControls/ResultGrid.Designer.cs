@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.ctxmenuGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctxRecord = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxRecordOpen = new System.Windows.Forms.ToolStripMenuItem();
@@ -90,7 +90,7 @@
             this.toolStripSeparator1,
             this.ctxFind});
             this.ctxmenuGrid.Name = "ctxmenuGrid";
-            this.ctxmenuGrid.Size = new System.Drawing.Size(163, 126);
+            this.ctxmenuGrid.Size = new System.Drawing.Size(181, 148);
             this.ctxmenuGrid.Opening += new System.ComponentModel.CancelEventHandler(this.ctxmenuGrid_Opening);
             this.ctxmenuGrid.Opened += new System.EventHandler(this.ctxmenuGrid_Opened);
             // 
@@ -100,21 +100,22 @@
             this.ctxRecordOpen,
             this.ctxRecordCopy});
             this.ctxRecord.Name = "ctxRecord";
-            this.ctxRecord.Size = new System.Drawing.Size(162, 22);
+            this.ctxRecord.Size = new System.Drawing.Size(180, 22);
             this.ctxRecord.Text = "Selected record";
             // 
             // ctxRecordOpen
             // 
             this.ctxRecordOpen.Name = "ctxRecordOpen";
-            this.ctxRecordOpen.Size = new System.Drawing.Size(126, 22);
+            this.ctxRecordOpen.Size = new System.Drawing.Size(180, 22);
             this.ctxRecordOpen.Text = "Open...";
             this.ctxRecordOpen.Click += new System.EventHandler(this.ctxOpen_Click);
             // 
             // ctxRecordCopy
             // 
             this.ctxRecordCopy.Name = "ctxRecordCopy";
-            this.ctxRecordCopy.Size = new System.Drawing.Size(126, 22);
+            this.ctxRecordCopy.Size = new System.Drawing.Size(180, 22);
             this.ctxRecordCopy.Text = "Copy URL";
+            this.ctxRecordCopy.Click += new System.EventHandler(this.ctxCopy_Click);
             // 
             // ctxColumn
             // 
@@ -122,49 +123,49 @@
             this.ctxColumnOpen,
             this.ctxColumnCopy});
             this.ctxColumn.Name = "ctxColumn";
-            this.ctxColumn.Size = new System.Drawing.Size(162, 22);
+            this.ctxColumn.Size = new System.Drawing.Size(180, 22);
             this.ctxColumn.Text = "Selected column";
             // 
             // ctxColumnOpen
             // 
             this.ctxColumnOpen.Name = "ctxColumnOpen";
-            this.ctxColumnOpen.Size = new System.Drawing.Size(126, 22);
+            this.ctxColumnOpen.Size = new System.Drawing.Size(180, 22);
             this.ctxColumnOpen.Text = "Open...";
             this.ctxColumnOpen.Click += new System.EventHandler(this.ctxOpen_Click);
             // 
             // ctxColumnCopy
             // 
             this.ctxColumnCopy.Name = "ctxColumnCopy";
-            this.ctxColumnCopy.Size = new System.Drawing.Size(126, 22);
+            this.ctxColumnCopy.Size = new System.Drawing.Size(180, 22);
             this.ctxColumnCopy.Text = "Copy URL";
             this.ctxColumnCopy.Click += new System.EventHandler(this.ctxCopy_Click);
             // 
             // ctxRecordSeparator
             // 
             this.ctxRecordSeparator.Name = "ctxRecordSeparator";
-            this.ctxRecordSeparator.Size = new System.Drawing.Size(159, 6);
+            this.ctxRecordSeparator.Size = new System.Drawing.Size(177, 6);
             // 
             // ctxBehavior
             // 
             this.ctxBehavior.Name = "ctxBehavior";
-            this.ctxBehavior.Size = new System.Drawing.Size(162, 22);
+            this.ctxBehavior.Size = new System.Drawing.Size(180, 22);
             this.ctxBehavior.Text = "Appearance";
             // 
             // ctxColumns
             // 
             this.ctxColumns.Name = "ctxColumns";
-            this.ctxColumns.Size = new System.Drawing.Size(162, 22);
+            this.ctxColumns.Size = new System.Drawing.Size(180, 22);
             this.ctxColumns.Text = "Columns";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(159, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // ctxFind
             // 
             this.ctxFind.Name = "ctxFind";
-            this.ctxFind.Size = new System.Drawing.Size(162, 22);
+            this.ctxFind.Size = new System.Drawing.Size(180, 22);
             this.ctxFind.Text = "Find...";
             this.ctxFind.Click += new System.EventHandler(this.ctxFind_Click);
             // 
@@ -282,7 +283,7 @@
             // 
             this.mnuIndexCol.CheckOnClick = true;
             this.mnuIndexCol.Name = "mnuIndexCol";
-            this.mnuIndexCol.Size = new System.Drawing.Size(148, 22);
+            this.mnuIndexCol.Size = new System.Drawing.Size(180, 22);
             this.mnuIndexCol.Text = "Index";
             this.mnuIndexCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
@@ -290,7 +291,7 @@
             // 
             this.mnuIdCol.CheckOnClick = true;
             this.mnuIdCol.Name = "mnuIdCol";
-            this.mnuIdCol.Size = new System.Drawing.Size(148, 22);
+            this.mnuIdCol.Size = new System.Drawing.Size(180, 22);
             this.mnuIdCol.Text = "Primary Key";
             this.mnuIdCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
@@ -298,7 +299,7 @@
             // 
             this.mnuNullCol.CheckOnClick = true;
             this.mnuNullCol.Name = "mnuNullCol";
-            this.mnuNullCol.Size = new System.Drawing.Size(148, 22);
+            this.mnuNullCol.Size = new System.Drawing.Size(180, 22);
             this.mnuNullCol.Text = "Without value";
             this.mnuNullCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
@@ -306,7 +307,7 @@
             // 
             this.mnuSysCol.CheckOnClick = true;
             this.mnuSysCol.Name = "mnuSysCol";
-            this.mnuSysCol.Size = new System.Drawing.Size(148, 22);
+            this.mnuSysCol.Size = new System.Drawing.Size(180, 22);
             this.mnuSysCol.Text = "System added";
             this.mnuSysCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
@@ -412,8 +413,8 @@
             this.crmGridView1.AllowUserToDeleteRows = false;
             this.crmGridView1.AllowUserToOrderColumns = true;
             this.crmGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.crmGridView1.AutoRefresh = false;
             this.crmGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
             this.crmGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
