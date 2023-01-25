@@ -14,6 +14,7 @@ namespace Rappen.XTB.LCG
         public bool ConstantCamelCased { get; set; }
         public bool DoStripPrefix { get; set; }
         public string StripPrefix { get; set; }
+        public string SourceFile { get; set; }
 
         internal CommonSettings commonsettings;
     }

@@ -240,6 +240,12 @@
     <Compile Include="ControlsClasses\EntityNameItem.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\GroupBoxExpanderExtensions.cs" />
+    <Compile Include="Forms\CSharpCodeGeneratedLCGSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CSharpCodeGeneratedLCGSettings.Designer.cs">
+      <DependentUpon>CSharpCodeGeneratedLCGSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ShareLink.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -498,6 +504,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DockControls\ResultGrid.resx">
       <DependentUpon>ResultGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CSharpCodeGeneratedLCGSettings.resx">
+      <DependentUpon>CSharpCodeGeneratedLCGSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SelectAttributesDialog.resx">
       <DependentUpon>SelectAttributesDialog.cs</DependentUpon>

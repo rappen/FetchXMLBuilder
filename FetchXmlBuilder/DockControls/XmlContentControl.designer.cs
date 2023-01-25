@@ -396,6 +396,7 @@
             this.btnQExFlavorSettings.TabIndex = 16;
             this.tt.SetToolTip(this.btnQExFlavorSettings, "Get settings for LCG generated constants.");
             this.btnQExFlavorSettings.UseVisualStyleBackColor = true;
+            this.btnQExFlavorSettings.Visible = false;
             this.btnQExFlavorSettings.Click += new System.EventHandler(this.btnQExFlavorSettings_Click);
             // 
             // cmbQExFlavor
