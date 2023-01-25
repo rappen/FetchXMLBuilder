@@ -179,32 +179,32 @@ namespace Rappen.XTB.FetchXmlBuilder
             });
         }
 
-        internal void QueryExpressionToFetchXml(string query)
+        internal void StringQueryExpressionToFetchXml(string query, QExStyleEnum style)
         {
             working = true;
-            WorkAsync(new WorkAsyncInfo("Translating QueryExpression to FetchXML...",
-                (eventargs) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = $"Translating {style} to FetchXML text...",
+                Work = (worker, eventargs) =>
                 {
                     var start = DateTime.Now;
-                    string fetchXml = QExParse.GetFetchXmlFromCSharpQueryExpression(query, Service);
-                    var stop = DateTime.Now;
-                    var duration = stop - start;
-                    LogUse("QueryExpressionToFetchXml", false, null, duration.TotalMilliseconds);
+                    var fetchXml = QExParse.GetFetchXmlFromCSharpQueryExpression(query, style, Service);
+                    var duration = DateTime.Now - start;
+                    LogUse($"{style}ToFetchXml", false, null, duration.TotalMilliseconds);
                     SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Execution time: {duration}"));
                     eventargs.Result = fetchXml;
-                })
-            {
+                },
                 PostWorkCallBack = (completedargs) =>
                 {
                     if (completedargs.Error != null)
                     {
-                        ShowErrorDialog(completedargs.Error, "Parse QueryExpression");
+                        ShowErrorDialog(completedargs.Error, $"Parse {style}");
                     }
                     else if (completedargs.Result is string)
                     {
                         XmlDocument doc = new XmlDocument();
                         doc.LoadXml(completedargs.Result.ToString());
-                        dockControlBuilder.Init(doc.OuterXml, null, "parse QueryExpression", true);
+                        dockControlBuilder.Init(doc.OuterXml, null, $"parse {style}", true);
                     }
                     working = false;
                 }

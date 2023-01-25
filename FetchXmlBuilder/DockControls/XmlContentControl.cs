@@ -29,6 +29,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private MarkMpn.XmlSchemaAutocomplete.Autocomplete<FetchType> _autocomplete;
         private bool _usedAutocomplete;
 
+        private bool parsecsharp =>
+            (fxb.settings.CodeGenerators.QExStyle == QExStyleEnum.QueryExpression ||
+             fxb.settings.CodeGenerators.QExStyle == QExStyleEnum.QueryByAttribute) &&
+            fxb.settings.CodeGenerators.QExFlavor == QExFlavorEnum.LateBound;
+
         internal XmlContentControl(FetchXmlBuilder caller) : this(ContentType.FetchXML, SaveFormat.XML, caller)
         {
         }
@@ -183,7 +188,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void btnParseQE_Click(object sender, EventArgs e)
         {
-            fxb.QueryExpressionToFetchXml(txtXML.Text);
+            fxb.StringQueryExpressionToFetchXml(txtXML.Text, fxb.settings.CodeGenerators.QExStyle);
         }
 
         private void XmlContentDisplayDialog_Load(object sender, EventArgs e)
@@ -904,9 +909,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 linkStyleHelp.Text = string.Empty;
             }
-            panParseQE.Visible =
-                fxb.settings.CodeGenerators.QExStyle == QExStyleEnum.QueryExpression &&
-                fxb.settings.CodeGenerators.QExFlavor == QExFlavorEnum.LateBound;
+            panParseQE.Visible = parsecsharp;
         }
 
         private void cmbQExFlavor_SelectedIndexChanged(object sender, EventArgs e)
@@ -924,9 +927,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 linkFlavorHelp.Text = string.Empty;
             }
-            panParseQE.Visible =
-                fxb.settings.CodeGenerators.QExStyle == QExStyleEnum.QueryExpression &&
-                fxb.settings.CodeGenerators.QExFlavor == QExFlavorEnum.LateBound;
+            panParseQE.Visible = parsecsharp;
         }
 
         private void chkQExFilterVariables_CheckedChanged(object sender, EventArgs e)

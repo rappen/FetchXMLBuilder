@@ -2,6 +2,7 @@
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Settings;
 using System;
 using System.CodeDom.Compiler;
 using System.Text;
@@ -13,7 +14,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
     {
         private delegate QueryExpression queryExpressionCompiler();
 
-        internal static string GetFetchXmlFromCSharpQueryExpression(string query, IOrganizationService organizationService)
+        private delegate QueryByAttribute queryByAttributeCompiler();
+
+        internal static string GetFetchXmlFromCSharpQueryExpression(string query, QExStyleEnum style, IOrganizationService organizationService)
         {
             CSharpCodeProvider provider = new CSharpCodeProvider();
             CompilerParameters parameters = new CompilerParameters();
@@ -23,7 +26,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
             parameters.GenerateInMemory = true;
             parameters.GenerateExecutable = false;
 
-            CompilerResults compilerResults = provider.CompileAssemblyFromSource(parameters, GetQueryExpressionFromScript(query));
+            var fromscript = GetQueryExpressionFromScript(query, style);
+            CompilerResults compilerResults = provider.CompileAssemblyFromSource(parameters, fromscript);
 
             if (compilerResults.Errors.HasErrors)
             {
@@ -35,41 +39,76 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Converters
                 throw new InvalidOperationException(sbuilder.ToString());
             }
 
-            QueryExpression queryExpression =
-                ((queryExpressionCompiler)Delegate.CreateDelegate(typeof(queryExpressionCompiler),
-                    compilerResults.CompiledAssembly.GetType("DynamicContentGenerator.Generator"), "Generate"))();
+            QueryBase queryBase = null;
+            switch (style)
+            {
+                case QExStyleEnum.QueryExpression:
+                    queryBase = ((queryExpressionCompiler)Delegate.CreateDelegate(typeof(queryExpressionCompiler),
+                        compilerResults.CompiledAssembly.GetType("DynamicContentGenerator.Generator"), "Generate"))();
+                    break;
 
-            return organizationService.QueryExpressionToFetchXml(queryExpression);
+                case QExStyleEnum.QueryByAttribute:
+                    queryBase = ((queryByAttributeCompiler)Delegate.CreateDelegate(typeof(queryByAttributeCompiler),
+                        compilerResults.CompiledAssembly.GetType("DynamicContentGenerator.Generator"), "Generate"))();
+                    break;
+            }
+
+            return organizationService.QueryExpressionToFetchXml(queryBase);
         }
 
-        private static string GetQueryExpressionFromScript(string query)
+        private static string GetQueryExpressionFromScript(string query, QExStyleEnum style)
         {
-            Regex varMatcher = new Regex(@"(var|QueryExpression)\W+([^\W]+)\W*=\W*new QueryExpression\W*\(");
-            Match match = varMatcher.Match(query);
-
-            if (match.Success)
+            switch (style)
             {
-                return $@"
-                    using System;
-                    using Microsoft.Xrm.Sdk;
-                    using Microsoft.Xrm.Sdk.Query;
+                case QExStyleEnum.QueryExpression:
+                    Regex varMatcher1 = new Regex(@"(var|QueryExpression)\W+([^\W]+)\W*=\W*new QueryExpression\W*\(");
+                    Match match1 = varMatcher1.Match(query);
+                    if (match1.Success)
+                    {
+                        return $@"
+                            using System;
+                            using Microsoft.Xrm.Sdk;
+                            using Microsoft.Xrm.Sdk.Query;
 
-                    namespace DynamicContentGenerator
-                    {{
-                        public class Generator
-                        {{
-                            public static QueryExpression Generate()
+                            namespace DynamicContentGenerator
                             {{
-                                {query}
-                                return {match.Groups[2].Value};
-                            }}
-                        }}
-                    }}";
+                                public class Generator
+                                {{
+                                    public static QueryExpression Generate()
+                                    {{
+                                        {query}
+                                        return {match1.Groups[2].Value};
+                                    }}
+                                }}
+                            }}";
+                    }
+                    break;
+
+                case QExStyleEnum.QueryByAttribute:
+                    Regex varMatcher2 = new Regex(@"(var|QueryByAttribute)\W+([^\W]+)\W*=\W*new QueryByAttribute\W*\(");
+                    Match match2 = varMatcher2.Match(query);
+                    if (match2.Success)
+                    {
+                        return $@"
+                            using System;
+                            using Microsoft.Xrm.Sdk;
+                            using Microsoft.Xrm.Sdk.Query;
+
+                            namespace DynamicContentGenerator
+                            {{
+                                public class Generator
+                                {{
+                                    public static QueryByAttribute Generate()
+                                    {{
+                                        {query}
+                                        return {match2.Groups[2].Value};
+                                    }}
+                                }}
+                            }}";
+                    }
+                    break;
             }
-            else
-            {
-                throw new Exception("Could not determine QueryExpression variable.");
-            }
+            throw new Exception($"Could not determine {style} variable.");
         }
     }
 }
