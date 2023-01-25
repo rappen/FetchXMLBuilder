@@ -60,6 +60,11 @@
             this.btnQExFlavorSettings = new System.Windows.Forms.Button();
             this.cmbQExFlavor = new System.Windows.Forms.ComboBox();
             this.cmbQExStyle = new System.Windows.Forms.ComboBox();
+            this.linkStyleHelp = new System.Windows.Forms.LinkLabel();
+            this.numQExIndent = new System.Windows.Forms.NumericUpDown();
+            this.rbQExObjectinitializer = new System.Windows.Forms.RadioButton();
+            this.rbQExLineByLine = new System.Windows.Forms.RadioButton();
+            this.chkQExFilterVariables = new System.Windows.Forms.CheckBox();
             this.panSQL4CDSInfo = new System.Windows.Forms.Panel();
             this.lblSQL4CDSInfo = new System.Windows.Forms.Label();
             this.txtXML = new ScintillaNET.Scintilla();
@@ -67,12 +72,7 @@
             this.tmLiveUpdate = new System.Windows.Forms.Timer(this.components);
             this.panQExOptions = new System.Windows.Forms.Panel();
             this.linkFlavorHelp = new System.Windows.Forms.LinkLabel();
-            this.linkStyleHelp = new System.Windows.Forms.LinkLabel();
             this.label3 = new System.Windows.Forms.Label();
-            this.numQExIndent = new System.Windows.Forms.NumericUpDown();
-            this.rbQExObjectinitializer = new System.Windows.Forms.RadioButton();
-            this.rbQExLineByLine = new System.Windows.Forms.RadioButton();
-            this.chkQExFilterVariables = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panCancel.SuspendLayout();
@@ -86,9 +86,9 @@
             this.panParseQE.SuspendLayout();
             this.panFormatting.SuspendLayout();
             this.gbFormatting.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numQExIndent)).BeginInit();
             this.panSQL4CDSInfo.SuspendLayout();
             this.panQExOptions.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numQExIndent)).BeginInit();
             this.SuspendLayout();
             // 
             // btnSave
@@ -105,7 +105,7 @@
             // btnParseQE
             // 
             this.btnParseQE.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnParseQE.Location = new System.Drawing.Point(4, 10);
+            this.btnParseQE.Location = new System.Drawing.Point(9, 37);
             this.btnParseQE.Name = "btnParseQE";
             this.btnParseQE.Size = new System.Drawing.Size(75, 23);
             this.btnParseQE.TabIndex = 3;
@@ -280,7 +280,7 @@
             // chkQExComments
             // 
             this.chkQExComments.AutoSize = true;
-            this.chkQExComments.Location = new System.Drawing.Point(492, 36);
+            this.chkQExComments.Location = new System.Drawing.Point(424, 39);
             this.chkQExComments.Name = "chkQExComments";
             this.chkQExComments.Size = new System.Drawing.Size(75, 17);
             this.chkQExComments.TabIndex = 4;
@@ -416,10 +416,80 @@
             this.cmbQExStyle.FormattingEnabled = true;
             this.cmbQExStyle.Location = new System.Drawing.Point(54, 10);
             this.cmbQExStyle.Name = "cmbQExStyle";
-            this.cmbQExStyle.Size = new System.Drawing.Size(186, 21);
+            this.cmbQExStyle.Size = new System.Drawing.Size(157, 21);
             this.cmbQExStyle.TabIndex = 0;
             this.tt.SetToolTip(this.cmbQExStyle, "Select type of generated code for FetchXML.");
             this.cmbQExStyle.SelectedIndexChanged += new System.EventHandler(this.cmbQExStyle_SelectedIndexChanged);
+            // 
+            // linkStyleHelp
+            // 
+            this.linkStyleHelp.AutoSize = true;
+            this.linkStyleHelp.Location = new System.Drawing.Point(217, 13);
+            this.linkStyleHelp.Name = "linkStyleHelp";
+            this.linkStyleHelp.Size = new System.Drawing.Size(55, 13);
+            this.linkStyleHelp.TabIndex = 14;
+            this.linkStyleHelp.TabStop = true;
+            this.linkStyleHelp.Text = "linkLabel1";
+            this.tt.SetToolTip(this.linkStyleHelp, "XXXXXXXXXXXX");
+            this.linkStyleHelp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkStyleHelp_LinkClicked);
+            // 
+            // numQExIndent
+            // 
+            this.numQExIndent.Location = new System.Drawing.Point(655, 11);
+            this.numQExIndent.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numQExIndent.Name = "numQExIndent";
+            this.numQExIndent.Size = new System.Drawing.Size(46, 20);
+            this.numQExIndent.TabIndex = 12;
+            this.numQExIndent.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tt.SetToolTip(this.numQExIndent, "This can indentate everything, to fit in your existing code. Usually the base lev" +
+        "el is 3.");
+            this.numQExIndent.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.numQExIndent.ValueChanged += new System.EventHandler(this.numQExIndent_ValueChanged);
+            // 
+            // rbQExObjectinitializer
+            // 
+            this.rbQExObjectinitializer.AutoSize = true;
+            this.rbQExObjectinitializer.Location = new System.Drawing.Point(508, 11);
+            this.rbQExObjectinitializer.Name = "rbQExObjectinitializer";
+            this.rbQExObjectinitializer.Size = new System.Drawing.Size(98, 17);
+            this.rbQExObjectinitializer.TabIndex = 3;
+            this.rbQExObjectinitializer.Text = "Object initializer";
+            this.tt.SetToolTip(this.rbQExObjectinitializer, "Creating as much as possible in one line (over many lines, so to say).");
+            this.rbQExObjectinitializer.UseVisualStyleBackColor = true;
+            this.rbQExObjectinitializer.CheckedChanged += new System.EventHandler(this.rbQExObjectInitializer_CheckedChanged);
+            // 
+            // rbQExLineByLine
+            // 
+            this.rbQExLineByLine.AutoSize = true;
+            this.rbQExLineByLine.Checked = true;
+            this.rbQExLineByLine.Location = new System.Drawing.Point(424, 11);
+            this.rbQExLineByLine.Name = "rbQExLineByLine";
+            this.rbQExLineByLine.Size = new System.Drawing.Size(78, 17);
+            this.rbQExLineByLine.TabIndex = 2;
+            this.rbQExLineByLine.TabStop = true;
+            this.rbQExLineByLine.Text = "Line-by-line";
+            this.tt.SetToolTip(this.rbQExLineByLine, "Using classic way, one by one line...");
+            this.rbQExLineByLine.UseVisualStyleBackColor = true;
+            // 
+            // chkQExFilterVariables
+            // 
+            this.chkQExFilterVariables.AutoSize = true;
+            this.chkQExFilterVariables.Location = new System.Drawing.Point(508, 39);
+            this.chkQExFilterVariables.Name = "chkQExFilterVariables";
+            this.chkQExFilterVariables.Size = new System.Drawing.Size(94, 17);
+            this.chkQExFilterVariables.TabIndex = 5;
+            this.chkQExFilterVariables.Text = "Filter Variables";
+            this.tt.SetToolTip(this.chkQExFilterVariables, "Check this to create variables for condition values.");
+            this.chkQExFilterVariables.UseVisualStyleBackColor = true;
+            this.chkQExFilterVariables.CheckedChanged += new System.EventHandler(this.chkQExFilterVariables_CheckedChanged);
             // 
             // panSQL4CDSInfo
             // 
@@ -504,84 +574,14 @@
             this.linkFlavorHelp.Text = "linkLabel2";
             this.linkFlavorHelp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkFlavorHelp_LinkClicked);
             // 
-            // linkStyleHelp
-            // 
-            this.linkStyleHelp.AutoSize = true;
-            this.linkStyleHelp.Location = new System.Drawing.Point(246, 13);
-            this.linkStyleHelp.Name = "linkStyleHelp";
-            this.linkStyleHelp.Size = new System.Drawing.Size(55, 13);
-            this.linkStyleHelp.TabIndex = 14;
-            this.linkStyleHelp.TabStop = true;
-            this.linkStyleHelp.Text = "linkLabel1";
-            this.tt.SetToolTip(this.linkStyleHelp, "XXXXXXXXXXXX");
-            this.linkStyleHelp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkStyleHelp_LinkClicked);
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(707, 11);
+            this.label3.Location = new System.Drawing.Point(612, 13);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(60, 13);
+            this.label3.Size = new System.Drawing.Size(37, 13);
             this.label3.TabIndex = 13;
-            this.label3.Text = "Indentation";
-            // 
-            // numQExIndent
-            // 
-            this.numQExIndent.Location = new System.Drawing.Point(772, 9);
-            this.numQExIndent.Maximum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numQExIndent.Name = "numQExIndent";
-            this.numQExIndent.Size = new System.Drawing.Size(46, 20);
-            this.numQExIndent.TabIndex = 12;
-            this.numQExIndent.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.tt.SetToolTip(this.numQExIndent, "This can indentate everything, to fit in your existing code. Usually the base lev" +
-        "el is 3.");
-            this.numQExIndent.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            this.numQExIndent.ValueChanged += new System.EventHandler(this.numQExIndent_ValueChanged);
-            // 
-            // rbQExObjectinitializer
-            // 
-            this.rbQExObjectinitializer.AutoSize = true;
-            this.rbQExObjectinitializer.Location = new System.Drawing.Point(573, 9);
-            this.rbQExObjectinitializer.Name = "rbQExObjectinitializer";
-            this.rbQExObjectinitializer.Size = new System.Drawing.Size(98, 17);
-            this.rbQExObjectinitializer.TabIndex = 3;
-            this.rbQExObjectinitializer.Text = "Object initializer";
-            this.tt.SetToolTip(this.rbQExObjectinitializer, "Creating as much as possible in one line (over many lines, so to say).");
-            this.rbQExObjectinitializer.UseVisualStyleBackColor = true;
-            this.rbQExObjectinitializer.CheckedChanged += new System.EventHandler(this.rbQExObjectInitializer_CheckedChanged);
-            // 
-            // rbQExLineByLine
-            // 
-            this.rbQExLineByLine.AutoSize = true;
-            this.rbQExLineByLine.Checked = true;
-            this.rbQExLineByLine.Location = new System.Drawing.Point(492, 9);
-            this.rbQExLineByLine.Name = "rbQExLineByLine";
-            this.rbQExLineByLine.Size = new System.Drawing.Size(78, 17);
-            this.rbQExLineByLine.TabIndex = 2;
-            this.rbQExLineByLine.TabStop = true;
-            this.rbQExLineByLine.Text = "Line-by-line";
-            this.tt.SetToolTip(this.rbQExLineByLine, "Using classic way, one by one line...");
-            this.rbQExLineByLine.UseVisualStyleBackColor = true;
-            // 
-            // chkQExFilterVariables
-            // 
-            this.chkQExFilterVariables.AutoSize = true;
-            this.chkQExFilterVariables.Location = new System.Drawing.Point(573, 36);
-            this.chkQExFilterVariables.Name = "chkQExFilterVariables";
-            this.chkQExFilterVariables.Size = new System.Drawing.Size(94, 17);
-            this.chkQExFilterVariables.TabIndex = 5;
-            this.chkQExFilterVariables.Text = "Filter Variables";
-            this.tt.SetToolTip(this.chkQExFilterVariables, "Check this to create variables for condition values.");
-            this.chkQExFilterVariables.UseVisualStyleBackColor = true;
-            this.chkQExFilterVariables.CheckedChanged += new System.EventHandler(this.chkQExFilterVariables_CheckedChanged);
+            this.label3.Text = "Indent";
             // 
             // label2
             // 
@@ -639,10 +639,10 @@
             this.panFormatting.ResumeLayout(false);
             this.gbFormatting.ResumeLayout(false);
             this.gbFormatting.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numQExIndent)).EndInit();
             this.panSQL4CDSInfo.ResumeLayout(false);
             this.panQExOptions.ResumeLayout(false);
             this.panQExOptions.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numQExIndent)).EndInit();
             this.ResumeLayout(false);
 
         }

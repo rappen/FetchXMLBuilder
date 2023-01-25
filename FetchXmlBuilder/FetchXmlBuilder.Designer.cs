@@ -551,7 +551,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowSQL.Name = "tsmiShowSQL";
             this.tsmiShowSQL.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.S)));
-            this.tsmiShowSQL.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowSQL.Size = new System.Drawing.Size(305, 38);
             this.tsmiShowSQL.Text = "SQL Query";
             this.tsmiShowSQL.Click += new System.EventHandler(this.tsmiShowSQL_Click);
             // 
@@ -561,7 +561,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowFlow.Name = "tsmiShowFlow";
             this.tsmiShowFlow.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.P)));
-            this.tsmiShowFlow.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowFlow.Size = new System.Drawing.Size(305, 38);
             this.tsmiShowFlow.Text = "Power Automate Parameters";
             this.tsmiShowFlow.Click += new System.EventHandler(this.tsmiShowFlow_Click);
             // 
@@ -571,7 +571,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowOData4.Name = "tsmiShowOData4";
             this.tsmiShowOData4.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.O)));
-            this.tsmiShowOData4.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowOData4.Size = new System.Drawing.Size(305, 38);
             this.tsmiShowOData4.Text = "OData 4.0 (WebAPI)";
             this.tsmiShowOData4.Click += new System.EventHandler(this.tsmiShowOData4_Click);
             // 
@@ -579,7 +579,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsmiShowOData.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_odata;
             this.tsmiShowOData.Name = "tsmiShowOData";
-            this.tsmiShowOData.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowOData.Size = new System.Drawing.Size(305, 38);
             this.tsmiShowOData.Text = "OData 2.0 (Deprecated)";
             this.tsmiShowOData.Click += new System.EventHandler(this.tsmiShowOData_Click);
             // 
@@ -587,18 +587,20 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsmiShowCSharpCode.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_csharp;
             this.tsmiShowCSharpCode.Name = "tsmiShowCSharpCode";
-            this.tsmiShowCSharpCode.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowCSharpCode.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.C)));
+            this.tsmiShowCSharpCode.Size = new System.Drawing.Size(305, 38);
             this.tsmiShowCSharpCode.Text = "C# code";
             this.tsmiShowCSharpCode.Click += new System.EventHandler(this.tsmiShowCSharpCode_Click);
-            this.tsmiShowCSharpCode.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt)
-            | System.Windows.Forms.Keys.C)));
             // 
             // tsmiShowFetchXMLjs
             // 
             this.tsmiShowFetchXMLjs.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_javascript;
             this.tsmiShowFetchXMLjs.Name = "tsmiShowFetchXMLjs";
-            this.tsmiShowFetchXMLjs.Size = new System.Drawing.Size(289, 22);
-            this.tsmiShowFetchXMLjs.Text = "FetchXML JavaScript code";
+            this.tsmiShowFetchXMLjs.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.J)));
+            this.tsmiShowFetchXMLjs.Size = new System.Drawing.Size(305, 38);
+            this.tsmiShowFetchXMLjs.Text = "JavaScript code";
             this.tsmiShowFetchXMLjs.Click += new System.EventHandler(this.tsmiShowFetchXMLjs_Click);
             // 
             // tsbOptions

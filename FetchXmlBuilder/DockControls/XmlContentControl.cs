@@ -6,7 +6,6 @@ using Rappen.XTB.FetchXmlBuilder.Converters;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Forms;
 using Rappen.XTB.FetchXmlBuilder.Settings;
-using Rappen.XTB.Helper;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
@@ -905,6 +904,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 linkStyleHelp.Text = string.Empty;
             }
+            panParseQE.Visible =
+                fxb.settings.CodeGenerators.QExStyle == QExStyleEnum.QueryExpression &&
+                fxb.settings.CodeGenerators.QExFlavor == QExFlavorEnum.LateBound;
         }
 
         private void cmbQExFlavor_SelectedIndexChanged(object sender, EventArgs e)
@@ -915,13 +917,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 linkFlavorHelp.Text = flavor.Creator;
                 tt.SetToolTip(linkFlavorHelp, flavor.HelpUrl);
                 btnQExFlavorSettings.Visible = flavor.Tag == QExFlavorEnum.LCGconstants;
-                cmbQExFlavor.Width = cmbQExStyle.Width - (flavor.Tag == QExFlavorEnum.LCGconstants ? btnQExFlavorSettings.Width + 6 : 0);
+                linkFlavorHelp.Left = btnQExFlavorSettings.Left + (flavor.Tag == QExFlavorEnum.LCGconstants ? btnQExFlavorSettings.Width + 6 : 0);
                 UpdateXML(fxb.GetQueryExpressionCode());
             }
             else
             {
                 linkFlavorHelp.Text = string.Empty;
             }
+            panParseQE.Visible =
+                fxb.settings.CodeGenerators.QExStyle == QExStyleEnum.QueryExpression &&
+                fxb.settings.CodeGenerators.QExFlavor == QExFlavorEnum.LateBound;
         }
 
         private void chkQExFilterVariables_CheckedChanged(object sender, EventArgs e)
