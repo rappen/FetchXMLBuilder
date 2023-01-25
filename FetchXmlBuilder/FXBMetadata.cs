@@ -359,7 +359,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     {
                         entityShitList.Add(entityName);
                     }
-                    MessageBox.Show("Metadata not found for entity " + entityName, "Load attribute metadata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    SendMessageToStatusBar(this, new XrmToolBox.Extensibility.Args.StatusBarMessageEventArgs($"Entity {entityName} can't be found."));
                 }
                 working = false;
 
