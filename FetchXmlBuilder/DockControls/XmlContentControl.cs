@@ -864,6 +864,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 fxb.settings.CodeGenerators.QExStyle = style.Tag;
                 linkStyleHelp.Text = style.LinkName;
+                tt.SetToolTip(linkStyleHelp, style.HelpUrl);
                 rbQExLineByLine.Enabled = true;
                 rbQExObjectinitializer.Enabled = true;
                 cmbQExFlavor.Enabled = true;
@@ -911,6 +912,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 fxb.settings.CodeGenerators.QExFlavor = flavor.Tag;
                 linkFlavorHelp.Text = flavor.Creator;
+                tt.SetToolTip(linkFlavorHelp, flavor.HelpUrl);
                 btnQExFlavorSettings.Visible = flavor.Tag == QExFlavorEnum.LCGconstants;
                 cmbQExFlavor.Width = cmbQExStyle.Width - (btnQExFlavorSettings.Visible ? btnQExFlavorSettings.Width + 6 : 0);
                 UpdateXML(fxb.GetQueryExpressionCode());

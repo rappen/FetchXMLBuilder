@@ -57,13 +57,15 @@
             this.rbFormatXML = new System.Windows.Forms.RadioButton();
             this.btnFormat = new System.Windows.Forms.Button();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
+            this.btnQExFlavorSettings = new System.Windows.Forms.Button();
+            this.cmbQExFlavor = new System.Windows.Forms.ComboBox();
+            this.cmbQExStyle = new System.Windows.Forms.ComboBox();
             this.panSQL4CDSInfo = new System.Windows.Forms.Panel();
             this.lblSQL4CDSInfo = new System.Windows.Forms.Label();
             this.txtXML = new ScintillaNET.Scintilla();
             this.autocompleteImageList = new System.Windows.Forms.ImageList(this.components);
             this.tmLiveUpdate = new System.Windows.Forms.Timer(this.components);
             this.panQExOptions = new System.Windows.Forms.Panel();
-            this.btnQExFlavorSettings = new System.Windows.Forms.Button();
             this.linkFlavorHelp = new System.Windows.Forms.LinkLabel();
             this.linkStyleHelp = new System.Windows.Forms.LinkLabel();
             this.label3 = new System.Windows.Forms.Label();
@@ -71,10 +73,8 @@
             this.rbQExObjectinitializer = new System.Windows.Forms.RadioButton();
             this.rbQExLineByLine = new System.Windows.Forms.RadioButton();
             this.chkQExFilterVariables = new System.Windows.Forms.CheckBox();
-            this.cmbQExFlavor = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.cmbQExStyle = new System.Windows.Forms.ComboBox();
             this.panCancel.SuspendLayout();
             this.panActions.SuspendLayout();
             this.gbActions.SuspendLayout();
@@ -264,6 +264,7 @@
             this.chkLiveUpdate.Size = new System.Drawing.Size(115, 17);
             this.chkLiveUpdate.TabIndex = 0;
             this.chkLiveUpdate.Text = "Live Update Query";
+            this.tt.SetToolTip(this.chkLiveUpdate, "Check this to work \"live\" with the FetchXML.");
             this.chkLiveUpdate.UseVisualStyleBackColor = true;
             this.chkLiveUpdate.CheckedChanged += new System.EventHandler(this.chkLiveUpdate_CheckedChanged);
             // 
@@ -284,6 +285,7 @@
             this.chkQExComments.Size = new System.Drawing.Size(75, 17);
             this.chkQExComments.TabIndex = 4;
             this.chkQExComments.Text = "Comments";
+            this.tt.SetToolTip(this.chkQExComments, "Check to add comments to make it easier to understand what we\'re doing.");
             this.chkQExComments.UseVisualStyleBackColor = true;
             this.chkQExComments.CheckedChanged += new System.EventHandler(this.chkQExComments_CheckedChanged);
             // 
@@ -385,6 +387,39 @@
             this.btnFormat.UseVisualStyleBackColor = true;
             this.btnFormat.Click += new System.EventHandler(this.btnFormat_Click);
             // 
+            // btnQExFlavorSettings
+            // 
+            this.btnQExFlavorSettings.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_settings_16;
+            this.btnQExFlavorSettings.Location = new System.Drawing.Point(217, 36);
+            this.btnQExFlavorSettings.Name = "btnQExFlavorSettings";
+            this.btnQExFlavorSettings.Size = new System.Drawing.Size(23, 23);
+            this.btnQExFlavorSettings.TabIndex = 16;
+            this.tt.SetToolTip(this.btnQExFlavorSettings, "Get settings for LCG generated constants.");
+            this.btnQExFlavorSettings.UseVisualStyleBackColor = true;
+            this.btnQExFlavorSettings.Click += new System.EventHandler(this.btnQExFlavorSettings_Click);
+            // 
+            // cmbQExFlavor
+            // 
+            this.cmbQExFlavor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbQExFlavor.FormattingEnabled = true;
+            this.cmbQExFlavor.Location = new System.Drawing.Point(54, 37);
+            this.cmbQExFlavor.Name = "cmbQExFlavor";
+            this.cmbQExFlavor.Size = new System.Drawing.Size(157, 21);
+            this.cmbQExFlavor.TabIndex = 1;
+            this.tt.SetToolTip(this.cmbQExFlavor, "Choose flavor for texts, constants, or early bound.");
+            this.cmbQExFlavor.SelectedIndexChanged += new System.EventHandler(this.cmbQExFlavor_SelectedIndexChanged);
+            // 
+            // cmbQExStyle
+            // 
+            this.cmbQExStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbQExStyle.FormattingEnabled = true;
+            this.cmbQExStyle.Location = new System.Drawing.Point(54, 10);
+            this.cmbQExStyle.Name = "cmbQExStyle";
+            this.cmbQExStyle.Size = new System.Drawing.Size(186, 21);
+            this.cmbQExStyle.TabIndex = 0;
+            this.tt.SetToolTip(this.cmbQExStyle, "Select type of generated code for FetchXML.");
+            this.cmbQExStyle.SelectedIndexChanged += new System.EventHandler(this.cmbQExStyle_SelectedIndexChanged);
+            // 
             // panSQL4CDSInfo
             // 
             this.panSQL4CDSInfo.BackColor = System.Drawing.SystemColors.Info;
@@ -457,16 +492,6 @@
             this.panQExOptions.TabIndex = 0;
             this.panQExOptions.Text = "Type of generated code";
             // 
-            // btnQExFlavorSettings
-            // 
-            this.btnQExFlavorSettings.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_settings_16;
-            this.btnQExFlavorSettings.Location = new System.Drawing.Point(217, 36);
-            this.btnQExFlavorSettings.Name = "btnQExFlavorSettings";
-            this.btnQExFlavorSettings.Size = new System.Drawing.Size(23, 23);
-            this.btnQExFlavorSettings.TabIndex = 16;
-            this.btnQExFlavorSettings.UseVisualStyleBackColor = true;
-            this.btnQExFlavorSettings.Click += new System.EventHandler(this.btnQExFlavorSettings_Click);
-            // 
             // linkFlavorHelp
             // 
             this.linkFlavorHelp.AutoSize = true;
@@ -487,6 +512,7 @@
             this.linkStyleHelp.TabIndex = 14;
             this.linkStyleHelp.TabStop = true;
             this.linkStyleHelp.Text = "linkLabel1";
+            this.tt.SetToolTip(this.linkStyleHelp, "XXXXXXXXXXXX");
             this.linkStyleHelp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkStyleHelp_LinkClicked);
             // 
             // label3
@@ -510,6 +536,8 @@
             this.numQExIndent.Size = new System.Drawing.Size(46, 20);
             this.numQExIndent.TabIndex = 12;
             this.numQExIndent.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tt.SetToolTip(this.numQExIndent, "This can indentate everything, to fit in your existing code. Usually the base lev" +
+        "el is 3.");
             this.numQExIndent.Value = new decimal(new int[] {
             3,
             0,
@@ -525,6 +553,7 @@
             this.rbQExObjectinitializer.Size = new System.Drawing.Size(98, 17);
             this.rbQExObjectinitializer.TabIndex = 3;
             this.rbQExObjectinitializer.Text = "Object initializer";
+            this.tt.SetToolTip(this.rbQExObjectinitializer, "Creating as much as possible in one line (over many lines, so to say).");
             this.rbQExObjectinitializer.UseVisualStyleBackColor = true;
             this.rbQExObjectinitializer.CheckedChanged += new System.EventHandler(this.rbQExObjectInitializer_CheckedChanged);
             // 
@@ -538,6 +567,7 @@
             this.rbQExLineByLine.TabIndex = 2;
             this.rbQExLineByLine.TabStop = true;
             this.rbQExLineByLine.Text = "Line-by-line";
+            this.tt.SetToolTip(this.rbQExLineByLine, "Using classic way, one by one line...");
             this.rbQExLineByLine.UseVisualStyleBackColor = true;
             // 
             // chkQExFilterVariables
@@ -548,18 +578,9 @@
             this.chkQExFilterVariables.Size = new System.Drawing.Size(94, 17);
             this.chkQExFilterVariables.TabIndex = 5;
             this.chkQExFilterVariables.Text = "Filter Variables";
+            this.tt.SetToolTip(this.chkQExFilterVariables, "Check this to create variables for condition values.");
             this.chkQExFilterVariables.UseVisualStyleBackColor = true;
             this.chkQExFilterVariables.CheckedChanged += new System.EventHandler(this.chkQExFilterVariables_CheckedChanged);
-            // 
-            // cmbQExFlavor
-            // 
-            this.cmbQExFlavor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbQExFlavor.FormattingEnabled = true;
-            this.cmbQExFlavor.Location = new System.Drawing.Point(54, 37);
-            this.cmbQExFlavor.Name = "cmbQExFlavor";
-            this.cmbQExFlavor.Size = new System.Drawing.Size(157, 21);
-            this.cmbQExFlavor.TabIndex = 1;
-            this.cmbQExFlavor.SelectedIndexChanged += new System.EventHandler(this.cmbQExFlavor_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -578,16 +599,6 @@
             this.label1.Size = new System.Drawing.Size(30, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Style";
-            // 
-            // cmbQExStyle
-            // 
-            this.cmbQExStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbQExStyle.FormattingEnabled = true;
-            this.cmbQExStyle.Location = new System.Drawing.Point(54, 10);
-            this.cmbQExStyle.Name = "cmbQExStyle";
-            this.cmbQExStyle.Size = new System.Drawing.Size(186, 21);
-            this.cmbQExStyle.TabIndex = 0;
-            this.cmbQExStyle.SelectedIndexChanged += new System.EventHandler(this.cmbQExStyle_SelectedIndexChanged);
             // 
             // XmlContentControl
             // 
