@@ -1271,13 +1271,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 //    ClassName = "Microsoft.Xrm.Sdk.Client",
                 //    HelpUrl = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/build-queries-with-linq-net-language-integrated-query",
                 //},
-                new QExStyle
-                {
-                    Tag = QExStyleEnum.QueryExpressionFactory,
-                    Creator = "Daryl LaBar",
-                    ClassName = "DLaB.Xrm",
-                    HelpUrl = "https://github.com/daryllabar/DLaB.Xrm/wiki/Query-Helpers",
-                },
+                //new QExStyle
+                //{
+                //    Tag = QExStyleEnum.QueryExpressionFactory,
+                //    Creator = "Daryl LaBar",
+                //    ClassName = "DLaB.Xrm",
+                //    HelpUrl = "https://github.com/daryllabar/DLaB.Xrm/wiki/Query-Helpers",
+                //},
                 new QExStyle
                 {
                     Tag = QExStyleEnum.FluentQueryExpression,
