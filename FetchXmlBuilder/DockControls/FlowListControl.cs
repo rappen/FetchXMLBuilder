@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Rappen.XTB.FetchXmlBuilder.Converters;
+using System;
+using System.Linq;
 using System.Web;
 using System.Windows.Forms;
 
@@ -7,6 +9,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
     public partial class FlowListControl : WeifenLuo.WinFormsUI.Docking.DockContent
     {
         private FetchXmlBuilder fxb;
+        private string fetchxmlformated;
 
         public FlowListControl(FetchXmlBuilder fetchXmlBuilder)
         {
@@ -15,27 +18,45 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             TabText = Text;
         }
 
-        internal void DisplayFlowList(string url)
+        internal void DisplayFlowList(string fetchxml)
         {
+            fetchxmlformated = fetchxml;
             Uri uri;
             try
             {
-                uri = new Uri(url);
-                lblError.Visible = false;
+                var odataurl = ODataCodeGenerator.ConvertToOData4(fetchxml, fxb);
+                try
+                {
+                    uri = new Uri(odataurl);
+                    lblError.Visible = false;
+                }
+                catch
+                {
+                    uri = new Uri("https://fetchxmlbuilder.com");
+                    lblError.Text = odataurl;
+                    lblError.Visible = true;
+                    lblError.BringToFront();
+                }
             }
-            catch
+            catch (Exception ex)
             {
                 uri = new Uri("https://fetchxmlbuilder.com");
-                lblError.Text = url;
+                lblError.Text = ex.Message;
                 lblError.Visible = true;
                 lblError.BringToFront();
             }
+            fetchxml = string.Join(" ", fetchxml.Split('\n').Select(a => a.Trim()));
+            var logicalnamecollection = uri.Segments.Last();
+            var displaycollectionname = fxb.entities.FirstOrDefault(e => e.LogicalCollectionName == logicalnamecollection)?.DisplayCollectionName?.UserLocalizedLabel?.Label ?? logicalnamecollection;
+            SetLink(displaycollectionname, linkTable);
             SetLink(HttpUtility.ParseQueryString(uri.Query).Get("$select"), linkSelect);
-            SetLink(HttpUtility.ParseQueryString(uri.Query).Get("$apply"), linkAggr);
             SetLink(HttpUtility.ParseQueryString(uri.Query).Get("$filter"), linkFilter);
             SetLink(HttpUtility.ParseQueryString(uri.Query).Get("$orderby"), linkOrder);
             SetLink(HttpUtility.ParseQueryString(uri.Query).Get("$expand"), linkExpand);
+            SetLink(fetchxml, linkFetchXml);
             SetLink(HttpUtility.ParseQueryString(uri.Query).Get("$top"), linkTop);
+            SetLink(HttpUtility.ParseQueryString(uri.Query).Get("$skip"), linkSkip);
+            tt.SetToolTip(linkFetchXml, fetchxmlformated);
         }
 
         private void SetLink(string text, LinkLabel link)
@@ -47,7 +68,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             if (!IsHidden)
             {
-                DisplayFlowList(fxb.GetOData(4));
+                DisplayFlowList(fxb.dockControlBuilder.GetFetchString(true, false));
                 Height = 185;
             }
             if (DockState != WeifenLuo.WinFormsUI.Docking.DockState.Unknown &&
@@ -60,7 +81,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void LinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             tm.Stop();
-            Clipboard.SetText((sender as LinkLabel)?.Text);
+            var text = sender == linkFetchXml ? fetchxmlformated : (sender as LinkLabel)?.Text;
+            Clipboard.SetText(text);
             lblCopied.Text = $"Copied {(sender as Control)?.Tag}";
             lblCopied.Visible = true;
             tm.Start();
@@ -73,7 +95,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void LinkHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FetchXmlBuilder.OpenURL("https://docs.microsoft.com/en-us/connectors/commondataservice/#list-records");
+            FetchXmlBuilder.OpenURL("https://learn.microsoft.com/en-us/connectors/commondataserviceforapps/#list-rows");
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            FetchXmlBuilder.OpenURL("https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/working-with-flows");
         }
     }
 }

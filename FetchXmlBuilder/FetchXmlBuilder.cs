@@ -1,5 +1,4 @@
-﻿using MarkMpn.FetchXmlToWebAPI;
-using McTools.Xrm.Connection;
+﻿using McTools.Xrm.Connection;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
@@ -271,17 +270,11 @@ namespace Rappen.XTB.FetchXmlBuilder
                 switch (version)
                 {
                     case 2:
-                        odata = ODataCodeGenerator.GetODataQuery(dockControlBuilder.GetFetchType(), ConnectionDetail.OrganizationDataServiceUrl, this);
+                        odata = ODataCodeGenerator.ConvertToOData2(dockControlBuilder.GetFetchType(), this);
                         break;
 
                     case 4:
-                        // Find correct WebAPI base url
-                        var baseUrl = ConnectionDetail.WebApplicationUrl;
-                        if (!baseUrl.EndsWith("/"))
-                            baseUrl += "/";
-                        var url = new Uri(new Uri(baseUrl), $"api/data/v{ConnectionDetail.OrganizationMajorVersion}.{ConnectionDetail.OrganizationMinorVersion}");
-                        var converter = new FetchXmlToWebAPIConverter(new WebAPIMetadataProvider(this), url.ToString());
-                        odata = converter.ConvertFetchXmlToWebAPI(dockControlBuilder.GetFetchString(false, false));
+                        odata = ODataCodeGenerator.ConvertToOData4(dockControlBuilder.GetFetchString(true, false), this);
                         break;
                 }
                 return odata;

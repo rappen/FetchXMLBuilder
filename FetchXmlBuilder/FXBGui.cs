@@ -151,7 +151,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             if (dockControlFlowList?.Visible == true && entities != null)
             {
-                dockControlFlowList.DisplayFlowList(GetOData(4));
+                dockControlFlowList.DisplayFlowList(dockControlBuilder.GetFetchString(true, false));
             }
             if (dockControlCSharp?.Visible == true && entities != null)
             {
