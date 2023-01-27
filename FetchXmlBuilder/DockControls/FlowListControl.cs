@@ -102,5 +102,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             FetchXmlBuilder.OpenURL("https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/working-with-flows");
         }
+
+        private void helpIcon_Click(object sender, EventArgs e)
+        {
+            FetchXmlBuilder.HelpClick(tt.GetToolTip(sender as Control));
+        }
     }
 }

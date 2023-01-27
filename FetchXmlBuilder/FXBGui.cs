@@ -182,9 +182,17 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         internal static void HelpClick(object sender)
         {
-            if (sender is Control control && control.Tag is string tag && tag.StartsWith("http"))
+            if (sender is Control control && control.Tag is string tag)
             {
-                OpenURL(tag);
+                HelpClick(tag);
+            }
+        }
+
+        internal static void HelpClick(string url)
+        {
+            if (url.StartsWith("http"))
+            {
+                OpenURL(url);
             }
         }
 
