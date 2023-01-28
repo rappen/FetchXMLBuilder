@@ -31,8 +31,13 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlowListControl));
             this.panOData = new System.Windows.Forms.Panel();
-            this.linkSkip = new System.Windows.Forms.LinkLabel();
-            this.label10 = new System.Windows.Forms.Label();
+            this.pictureBox8 = new System.Windows.Forms.PictureBox();
+            this.pictureBox7 = new System.Windows.Forms.PictureBox();
+            this.pictureBox6 = new System.Windows.Forms.PictureBox();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.linkFetchXml = new System.Windows.Forms.LinkLabel();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -55,32 +60,22 @@
             this.lblError = new System.Windows.Forms.Label();
             this.tm = new System.Windows.Forms.Timer(this.components);
             this.tt = new System.Windows.Forms.ToolTip(this.components);
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.pictureBox5 = new System.Windows.Forms.PictureBox();
-            this.pictureBox6 = new System.Windows.Forms.PictureBox();
-            this.pictureBox7 = new System.Windows.Forms.PictureBox();
-            this.pictureBox8 = new System.Windows.Forms.PictureBox();
-            this.pictureBox9 = new System.Windows.Forms.PictureBox();
             this.panOData.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.panODataLabel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).BeginInit();
             this.SuspendLayout();
             // 
             // panOData
             // 
             this.panOData.BackColor = System.Drawing.SystemColors.Window;
             this.panOData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panOData.Controls.Add(this.pictureBox9);
             this.panOData.Controls.Add(this.pictureBox8);
             this.panOData.Controls.Add(this.pictureBox7);
             this.panOData.Controls.Add(this.pictureBox6);
@@ -88,8 +83,6 @@
             this.panOData.Controls.Add(this.pictureBox3);
             this.panOData.Controls.Add(this.pictureBox2);
             this.panOData.Controls.Add(this.pictureBox4);
-            this.panOData.Controls.Add(this.linkSkip);
-            this.panOData.Controls.Add(this.label10);
             this.panOData.Controls.Add(this.linkFetchXml);
             this.panOData.Controls.Add(this.label9);
             this.panOData.Controls.Add(this.label8);
@@ -112,34 +105,104 @@
             this.panOData.Location = new System.Drawing.Point(0, 0);
             this.panOData.Name = "panOData";
             this.panOData.Padding = new System.Windows.Forms.Padding(4);
-            this.panOData.Size = new System.Drawing.Size(519, 191);
+            this.panOData.Size = new System.Drawing.Size(519, 172);
             this.panOData.TabIndex = 28;
             // 
-            // linkSkip
+            // pictureBox8
             // 
-            this.linkSkip.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.linkSkip.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.linkSkip.Location = new System.Drawing.Point(131, 141);
-            this.linkSkip.Name = "linkSkip";
-            this.linkSkip.Padding = new System.Windows.Forms.Padding(2);
-            this.linkSkip.Size = new System.Drawing.Size(376, 20);
-            this.linkSkip.TabIndex = 7;
-            this.linkSkip.TabStop = true;
-            this.linkSkip.Tag = "Skip token";
-            this.linkSkip.Text = "N/A";
-            this.linkSkip.UseMnemonic = false;
-            this.linkSkip.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel_LinkClicked);
+            this.pictureBox8.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox8.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox8.Image")));
+            this.pictureBox8.Location = new System.Drawing.Point(112, 125);
+            this.pictureBox8.Name = "pictureBox8";
+            this.pictureBox8.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox8.TabIndex = 50;
+            this.pictureBox8.TabStop = false;
+            this.pictureBox8.Tag = "";
+            this.tt.SetToolTip(this.pictureBox8, "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query" +
+        "-data-web-api#use-top-query-option");
+            this.pictureBox8.Click += new System.EventHandler(this.helpIcon_Click);
             // 
-            // label10
+            // pictureBox7
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(51, 143);
-            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(28, 13);
-            this.label10.TabIndex = 22;
-            this.label10.Text = "Skip";
+            this.pictureBox7.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox7.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox7.Image")));
+            this.pictureBox7.Location = new System.Drawing.Point(112, 106);
+            this.pictureBox7.Name = "pictureBox7";
+            this.pictureBox7.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox7.TabIndex = 49;
+            this.pictureBox7.TabStop = false;
+            this.pictureBox7.Tag = "";
+            this.tt.SetToolTip(this.pictureBox7, "https://learn.microsoft.com/en-us/connectors/commondataserviceforapps/#list-rows");
+            this.pictureBox7.Click += new System.EventHandler(this.helpIcon_Click);
+            // 
+            // pictureBox6
+            // 
+            this.pictureBox6.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox6.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox6.Image")));
+            this.pictureBox6.Location = new System.Drawing.Point(112, 87);
+            this.pictureBox6.Name = "pictureBox6";
+            this.pictureBox6.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox6.TabIndex = 48;
+            this.pictureBox6.TabStop = false;
+            this.pictureBox6.Tag = "";
+            this.tt.SetToolTip(this.pictureBox6, "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/retri" +
+        "eve-related-entities-query");
+            this.pictureBox6.Click += new System.EventHandler(this.helpIcon_Click);
+            // 
+            // pictureBox5
+            // 
+            this.pictureBox5.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
+            this.pictureBox5.Location = new System.Drawing.Point(112, 68);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox5.TabIndex = 47;
+            this.pictureBox5.TabStop = false;
+            this.pictureBox5.Tag = "";
+            this.tt.SetToolTip(this.pictureBox5, "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query" +
+        "-data-web-api#order-results");
+            this.pictureBox5.Click += new System.EventHandler(this.helpIcon_Click);
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
+            this.pictureBox3.Location = new System.Drawing.Point(112, 49);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox3.TabIndex = 46;
+            this.pictureBox3.TabStop = false;
+            this.pictureBox3.Tag = "";
+            this.tt.SetToolTip(this.pictureBox3, "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query" +
+        "-data-web-api#filter-results");
+            this.pictureBox3.Click += new System.EventHandler(this.helpIcon_Click);
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(112, 30);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox2.TabIndex = 45;
+            this.pictureBox2.TabStop = false;
+            this.pictureBox2.Tag = "";
+            this.tt.SetToolTip(this.pictureBox2, "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query" +
+        "-data-web-api#basic-query-example");
+            this.pictureBox2.Click += new System.EventHandler(this.helpIcon_Click);
+            // 
+            // pictureBox4
+            // 
+            this.pictureBox4.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
+            this.pictureBox4.Location = new System.Drawing.Point(112, 11);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox4.TabIndex = 44;
+            this.pictureBox4.TabStop = false;
+            this.pictureBox4.Tag = "";
+            this.tt.SetToolTip(this.pictureBox4, "https://learn.microsoft.com/en-us/connectors/commondataserviceforapps/#list-rows");
+            this.pictureBox4.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // linkFetchXml
             // 
@@ -226,7 +289,7 @@
             // 
             this.lblCopied.AutoSize = true;
             this.lblCopied.ForeColor = System.Drawing.Color.Red;
-            this.lblCopied.Location = new System.Drawing.Point(281, 168);
+            this.lblCopied.Location = new System.Drawing.Point(281, 147);
             this.lblCopied.Name = "lblCopied";
             this.lblCopied.Size = new System.Drawing.Size(43, 13);
             this.lblCopied.TabIndex = 14;
@@ -236,7 +299,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(135, 168);
+            this.label6.Location = new System.Drawing.Point(135, 147);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(128, 13);
@@ -353,7 +416,7 @@
             this.panODataLabel.Dock = System.Windows.Forms.DockStyle.Left;
             this.panODataLabel.Location = new System.Drawing.Point(4, 4);
             this.panODataLabel.Name = "panODataLabel";
-            this.panODataLabel.Size = new System.Drawing.Size(42, 181);
+            this.panODataLabel.Size = new System.Drawing.Size(42, 162);
             this.panODataLabel.TabIndex = 2;
             // 
             // linkHelp
@@ -391,7 +454,7 @@
             this.lblError.ForeColor = System.Drawing.Color.Red;
             this.lblError.Location = new System.Drawing.Point(131, 8);
             this.lblError.Name = "lblError";
-            this.lblError.Size = new System.Drawing.Size(376, 153);
+            this.lblError.Size = new System.Drawing.Size(376, 134);
             this.lblError.TabIndex = 0;
             this.lblError.Text = "Error";
             this.lblError.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -401,121 +464,12 @@
             this.tm.Interval = 2000;
             this.tm.Tick += new System.EventHandler(this.Tm_Tick);
             // 
-            // pictureBox4
-            // 
-            this.pictureBox4.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
-            this.pictureBox4.Location = new System.Drawing.Point(112, 11);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(14, 14);
-            this.pictureBox4.TabIndex = 44;
-            this.pictureBox4.TabStop = false;
-            this.pictureBox4.Tag = "";
-            this.tt.SetToolTip(this.pictureBox4, "https://learn.microsoft.com/en-us/connectors/commondataserviceforapps/#list-rows");
-            this.pictureBox4.Click += new System.EventHandler(this.helpIcon_Click);
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(112, 30);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(14, 14);
-            this.pictureBox2.TabIndex = 45;
-            this.pictureBox2.TabStop = false;
-            this.pictureBox2.Tag = "";
-            this.tt.SetToolTip(this.pictureBox2, "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query" +
-        "-data-web-api#basic-query-example");
-            this.pictureBox2.Click += new System.EventHandler(this.helpIcon_Click);
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(112, 49);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(14, 14);
-            this.pictureBox3.TabIndex = 46;
-            this.pictureBox3.TabStop = false;
-            this.pictureBox3.Tag = "";
-            this.tt.SetToolTip(this.pictureBox3, "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query" +
-        "-data-web-api#filter-results");
-            this.pictureBox3.Click += new System.EventHandler(this.helpIcon_Click);
-            // 
-            // pictureBox5
-            // 
-            this.pictureBox5.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
-            this.pictureBox5.Location = new System.Drawing.Point(112, 68);
-            this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(14, 14);
-            this.pictureBox5.TabIndex = 47;
-            this.pictureBox5.TabStop = false;
-            this.pictureBox5.Tag = "";
-            this.tt.SetToolTip(this.pictureBox5, "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query" +
-        "-data-web-api#order-results");
-            this.pictureBox5.Click += new System.EventHandler(this.helpIcon_Click);
-            // 
-            // pictureBox6
-            // 
-            this.pictureBox6.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox6.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox6.Image")));
-            this.pictureBox6.Location = new System.Drawing.Point(112, 87);
-            this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(14, 14);
-            this.pictureBox6.TabIndex = 48;
-            this.pictureBox6.TabStop = false;
-            this.pictureBox6.Tag = "";
-            this.tt.SetToolTip(this.pictureBox6, "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/retri" +
-        "eve-related-entities-query");
-            this.pictureBox6.Click += new System.EventHandler(this.helpIcon_Click);
-            // 
-            // pictureBox7
-            // 
-            this.pictureBox7.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox7.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox7.Image")));
-            this.pictureBox7.Location = new System.Drawing.Point(112, 106);
-            this.pictureBox7.Name = "pictureBox7";
-            this.pictureBox7.Size = new System.Drawing.Size(14, 14);
-            this.pictureBox7.TabIndex = 49;
-            this.pictureBox7.TabStop = false;
-            this.pictureBox7.Tag = "";
-            this.tt.SetToolTip(this.pictureBox7, "https://learn.microsoft.com/en-us/connectors/commondataserviceforapps/#list-rows");
-            this.pictureBox7.Click += new System.EventHandler(this.helpIcon_Click);
-            // 
-            // pictureBox8
-            // 
-            this.pictureBox8.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox8.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox8.Image")));
-            this.pictureBox8.Location = new System.Drawing.Point(112, 125);
-            this.pictureBox8.Name = "pictureBox8";
-            this.pictureBox8.Size = new System.Drawing.Size(14, 14);
-            this.pictureBox8.TabIndex = 50;
-            this.pictureBox8.TabStop = false;
-            this.pictureBox8.Tag = "";
-            this.tt.SetToolTip(this.pictureBox8, "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query" +
-        "-data-web-api#use-top-query-option");
-            this.pictureBox8.Click += new System.EventHandler(this.helpIcon_Click);
-            // 
-            // pictureBox9
-            // 
-            this.pictureBox9.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox9.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox9.Image")));
-            this.pictureBox9.Location = new System.Drawing.Point(112, 144);
-            this.pictureBox9.Name = "pictureBox9";
-            this.pictureBox9.Size = new System.Drawing.Size(14, 14);
-            this.pictureBox9.TabIndex = 51;
-            this.pictureBox9.TabStop = false;
-            this.pictureBox9.Tag = "";
-            this.tt.SetToolTip(this.pictureBox9, "https://learn.microsoft.com/en-us/connectors/commondataserviceforapps/#list-rows");
-            this.pictureBox9.Click += new System.EventHandler(this.helpIcon_Click);
-            // 
             // FlowListControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(519, 191);
+            this.ClientSize = new System.Drawing.Size(519, 172);
             this.Controls.Add(this.panOData);
             this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight) 
@@ -527,17 +481,16 @@
             this.DockStateChanged += new System.EventHandler(this.FlowListControl_DockStateChanged);
             this.panOData.ResumeLayout(false);
             this.panOData.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             this.panODataLabel.ResumeLayout(false);
             this.panODataLabel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -565,12 +518,9 @@
         private System.Windows.Forms.ToolTip tt;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.LinkLabel linkTable;
-        private System.Windows.Forms.LinkLabel linkSkip;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.LinkLabel linkFetchXml;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.PictureBox pictureBox4;
-        private System.Windows.Forms.PictureBox pictureBox9;
         private System.Windows.Forms.PictureBox pictureBox8;
         private System.Windows.Forms.PictureBox pictureBox7;
         private System.Windows.Forms.PictureBox pictureBox6;

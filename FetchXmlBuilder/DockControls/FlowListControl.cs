@@ -55,7 +55,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             SetLink(HttpUtility.ParseQueryString(uri.Query).Get("$expand"), linkExpand);
             SetLink(fetchxml, linkFetchXml);
             SetLink(HttpUtility.ParseQueryString(uri.Query).Get("$top"), linkTop);
-            SetLink(HttpUtility.ParseQueryString(uri.Query).Get("$skip"), linkSkip);
             tt.SetToolTip(linkFetchXml, fetchxmlformated);
         }
 
