@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-
-namespace Rappen.XTB.LCG
+﻿namespace Rappen.XTB.LCG
 {
     public class Settings
     {

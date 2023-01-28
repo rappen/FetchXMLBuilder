@@ -1,11 +1,10 @@
-﻿// Stolen with love from 
+﻿// Stolen with love from
 // https://github.com/dotnet/roslyn/blob/master/src/Compilers/Core/Portable/InternalUtilities/UnicodeCharacterUtilities.cs
 
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 
@@ -148,7 +147,7 @@ namespace Rappen.XTB.LCG
         private static bool IsLetterChar(UnicodeCategory cat)
         {
             // letter-character:
-            //   A Unicode character of classes Lu, Ll, Lt, Lm, Lo, or Nl 
+            //   A Unicode character of classes Lu, Ll, Lt, Lm, Lo, or Nl
             //   A Unicode-escape-sequence representing a character of classes Lu, Ll, Lt, Lm, Lo, or Nl
 
             switch (cat)
@@ -168,7 +167,7 @@ namespace Rappen.XTB.LCG
         private static bool IsCombiningChar(UnicodeCategory cat)
         {
             // combining-character:
-            //   A Unicode character of classes Mn or Mc 
+            //   A Unicode character of classes Mn or Mc
             //   A Unicode-escape-sequence representing a character of classes Mn or Mc
 
             switch (cat)
@@ -184,7 +183,7 @@ namespace Rappen.XTB.LCG
         private static bool IsDecimalDigitChar(UnicodeCategory cat)
         {
             // decimal-digit-character:
-            //   A Unicode character of the class Nd 
+            //   A Unicode character of the class Nd
             //   A unicode-escape-sequence representing a character of the class Nd
 
             return cat == UnicodeCategory.DecimalDigitNumber;
@@ -192,7 +191,7 @@ namespace Rappen.XTB.LCG
 
         private static bool IsConnectingChar(UnicodeCategory cat)
         {
-            // connecting-character:  
+            // connecting-character:
             //   A Unicode character of the class Pc
             //   A unicode-escape-sequence representing a character of the class Pc
 
@@ -202,21 +201,10 @@ namespace Rappen.XTB.LCG
         /// <summary>
         /// Returns true if the Unicode character is a formatting character (Unicode class Cf).
         /// </summary>
-        /// <param name="ch">The Unicode character.</param>
-        internal static bool IsFormattingChar(char ch)
-        {
-            // There are no FormattingChars in ASCII range
-
-            return ch > 127 && IsFormattingChar(CharUnicodeInfo.GetUnicodeCategory(ch));
-        }
-
-        /// <summary>
-        /// Returns true if the Unicode character is a formatting character (Unicode class Cf).
-        /// </summary>
         /// <param name="cat">The Unicode character.</param>
         private static bool IsFormattingChar(UnicodeCategory cat)
         {
-            // formatting-character:  
+            // formatting-character:
             //   A Unicode character of the class Cf
             //   A unicode-escape-sequence representing a character of the class Cf
 

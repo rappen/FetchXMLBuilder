@@ -232,7 +232,6 @@
     <Compile Include="Converters\LCG\ConfigurationUtils.cs" />
     <Compile Include="Converters\LCG\Extensions.cs" />
     <Compile Include="Converters\LCG\FabienDehopreIdentifier.cs" />
-    <Compile Include="Converters\LCG\LCG.cs" />
     <Compile Include="Converters\LCG\Settings.cs" />
     <Compile Include="Converters\LCG\UnicodeCharacterUtilities.cs" />
     <Compile Include="Converters\QExParse.cs" />
