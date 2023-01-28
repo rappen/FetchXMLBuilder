@@ -71,10 +71,12 @@
             this.autocompleteImageList = new System.Windows.Forms.ImageList(this.components);
             this.tmLiveUpdate = new System.Windows.Forms.Timer(this.components);
             this.panQExOptions = new System.Windows.Forms.Panel();
-            this.linkFlavorHelp = new System.Windows.Forms.LinkLabel();
+            this.panQExSmallerOptions = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.panQExStylFlavorOptions = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.linkFlavorHelp = new System.Windows.Forms.LinkLabel();
             this.panCancel.SuspendLayout();
             this.panActions.SuspendLayout();
             this.gbActions.SuspendLayout();
@@ -89,6 +91,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numQExIndent)).BeginInit();
             this.panSQL4CDSInfo.SuspendLayout();
             this.panQExOptions.SuspendLayout();
+            this.panQExSmallerOptions.SuspendLayout();
+            this.panQExStylFlavorOptions.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSave
@@ -274,13 +278,13 @@
             this.panParseQE.Dock = System.Windows.Forms.DockStyle.Right;
             this.panParseQE.Location = new System.Drawing.Point(1002, 0);
             this.panParseQE.Name = "panParseQE";
-            this.panParseQE.Size = new System.Drawing.Size(91, 63);
+            this.panParseQE.Size = new System.Drawing.Size(91, 61);
             this.panParseQE.TabIndex = 10;
             // 
             // chkQExComments
             // 
             this.chkQExComments.AutoSize = true;
-            this.chkQExComments.Location = new System.Drawing.Point(424, 39);
+            this.chkQExComments.Location = new System.Drawing.Point(14, 37);
             this.chkQExComments.Name = "chkQExComments";
             this.chkQExComments.Size = new System.Drawing.Size(75, 17);
             this.chkQExComments.TabIndex = 4;
@@ -390,7 +394,7 @@
             // btnQExFlavorSettings
             // 
             this.btnQExFlavorSettings.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_settings_16;
-            this.btnQExFlavorSettings.Location = new System.Drawing.Point(217, 36);
+            this.btnQExFlavorSettings.Location = new System.Drawing.Point(218, 34);
             this.btnQExFlavorSettings.Name = "btnQExFlavorSettings";
             this.btnQExFlavorSettings.Size = new System.Drawing.Size(23, 23);
             this.btnQExFlavorSettings.TabIndex = 16;
@@ -403,7 +407,7 @@
             // 
             this.cmbQExFlavor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbQExFlavor.FormattingEnabled = true;
-            this.cmbQExFlavor.Location = new System.Drawing.Point(54, 37);
+            this.cmbQExFlavor.Location = new System.Drawing.Point(55, 35);
             this.cmbQExFlavor.Name = "cmbQExFlavor";
             this.cmbQExFlavor.Size = new System.Drawing.Size(157, 21);
             this.cmbQExFlavor.TabIndex = 1;
@@ -414,7 +418,7 @@
             // 
             this.cmbQExStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbQExStyle.FormattingEnabled = true;
-            this.cmbQExStyle.Location = new System.Drawing.Point(54, 10);
+            this.cmbQExStyle.Location = new System.Drawing.Point(55, 8);
             this.cmbQExStyle.Name = "cmbQExStyle";
             this.cmbQExStyle.Size = new System.Drawing.Size(157, 21);
             this.cmbQExStyle.TabIndex = 0;
@@ -424,7 +428,7 @@
             // linkStyleHelp
             // 
             this.linkStyleHelp.AutoSize = true;
-            this.linkStyleHelp.Location = new System.Drawing.Point(217, 13);
+            this.linkStyleHelp.Location = new System.Drawing.Point(218, 11);
             this.linkStyleHelp.Name = "linkStyleHelp";
             this.linkStyleHelp.Size = new System.Drawing.Size(55, 13);
             this.linkStyleHelp.TabIndex = 14;
@@ -435,7 +439,7 @@
             // 
             // numQExIndent
             // 
-            this.numQExIndent.Location = new System.Drawing.Point(655, 11);
+            this.numQExIndent.Location = new System.Drawing.Point(245, 9);
             this.numQExIndent.Maximum = new decimal(new int[] {
             20,
             0,
@@ -457,7 +461,7 @@
             // rbQExObjectinitializer
             // 
             this.rbQExObjectinitializer.AutoSize = true;
-            this.rbQExObjectinitializer.Location = new System.Drawing.Point(508, 11);
+            this.rbQExObjectinitializer.Location = new System.Drawing.Point(98, 9);
             this.rbQExObjectinitializer.Name = "rbQExObjectinitializer";
             this.rbQExObjectinitializer.Size = new System.Drawing.Size(98, 17);
             this.rbQExObjectinitializer.TabIndex = 3;
@@ -470,7 +474,7 @@
             // 
             this.rbQExLineByLine.AutoSize = true;
             this.rbQExLineByLine.Checked = true;
-            this.rbQExLineByLine.Location = new System.Drawing.Point(424, 11);
+            this.rbQExLineByLine.Location = new System.Drawing.Point(14, 9);
             this.rbQExLineByLine.Name = "rbQExLineByLine";
             this.rbQExLineByLine.Size = new System.Drawing.Size(78, 17);
             this.rbQExLineByLine.TabIndex = 2;
@@ -482,7 +486,7 @@
             // chkQExFilterVariables
             // 
             this.chkQExFilterVariables.AutoSize = true;
-            this.chkQExFilterVariables.Location = new System.Drawing.Point(508, 39);
+            this.chkQExFilterVariables.Location = new System.Drawing.Point(98, 37);
             this.chkQExFilterVariables.Name = "chkQExFilterVariables";
             this.chkQExFilterVariables.Size = new System.Drawing.Size(94, 17);
             this.chkQExFilterVariables.TabIndex = 5;
@@ -517,9 +521,9 @@
             // txtXML
             // 
             this.txtXML.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtXML.Location = new System.Drawing.Point(0, 63);
+            this.txtXML.Location = new System.Drawing.Point(0, 61);
             this.txtXML.Name = "txtXML";
-            this.txtXML.Size = new System.Drawing.Size(1093, 166);
+            this.txtXML.Size = new System.Drawing.Size(1093, 168);
             this.txtXML.TabIndex = 1;
             this.txtXML.Text = "\r\n\r\n\r\n       loading...";
             this.txtXML.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtXML_KeyPress);
@@ -543,64 +547,82 @@
             // panQExOptions
             // 
             this.panQExOptions.BackColor = System.Drawing.SystemColors.Window;
-            this.panQExOptions.Controls.Add(this.btnQExFlavorSettings);
-            this.panQExOptions.Controls.Add(this.linkFlavorHelp);
-            this.panQExOptions.Controls.Add(this.linkStyleHelp);
-            this.panQExOptions.Controls.Add(this.label3);
-            this.panQExOptions.Controls.Add(this.numQExIndent);
-            this.panQExOptions.Controls.Add(this.rbQExObjectinitializer);
-            this.panQExOptions.Controls.Add(this.rbQExLineByLine);
-            this.panQExOptions.Controls.Add(this.chkQExFilterVariables);
-            this.panQExOptions.Controls.Add(this.cmbQExFlavor);
-            this.panQExOptions.Controls.Add(this.label2);
-            this.panQExOptions.Controls.Add(this.label1);
-            this.panQExOptions.Controls.Add(this.chkQExComments);
+            this.panQExOptions.Controls.Add(this.panQExSmallerOptions);
             this.panQExOptions.Controls.Add(this.panParseQE);
-            this.panQExOptions.Controls.Add(this.cmbQExStyle);
+            this.panQExOptions.Controls.Add(this.panQExStylFlavorOptions);
             this.panQExOptions.Dock = System.Windows.Forms.DockStyle.Top;
             this.panQExOptions.Location = new System.Drawing.Point(0, 0);
             this.panQExOptions.Name = "panQExOptions";
-            this.panQExOptions.Size = new System.Drawing.Size(1093, 63);
+            this.panQExOptions.Size = new System.Drawing.Size(1093, 61);
             this.panQExOptions.TabIndex = 0;
             this.panQExOptions.Text = "Type of generated code";
+            // 
+            // panQExSmallerOptions
+            // 
+            this.panQExSmallerOptions.Controls.Add(this.rbQExLineByLine);
+            this.panQExSmallerOptions.Controls.Add(this.chkQExComments);
+            this.panQExSmallerOptions.Controls.Add(this.chkQExFilterVariables);
+            this.panQExSmallerOptions.Controls.Add(this.rbQExObjectinitializer);
+            this.panQExSmallerOptions.Controls.Add(this.label3);
+            this.panQExSmallerOptions.Controls.Add(this.numQExIndent);
+            this.panQExSmallerOptions.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panQExSmallerOptions.Location = new System.Drawing.Point(418, 0);
+            this.panQExSmallerOptions.Name = "panQExSmallerOptions";
+            this.panQExSmallerOptions.Size = new System.Drawing.Size(304, 61);
+            this.panQExSmallerOptions.TabIndex = 17;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(202, 11);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(37, 13);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "Indent";
+            // 
+            // panQExStylFlavorOptions
+            // 
+            this.panQExStylFlavorOptions.Controls.Add(this.label1);
+            this.panQExStylFlavorOptions.Controls.Add(this.cmbQExStyle);
+            this.panQExStylFlavorOptions.Controls.Add(this.btnQExFlavorSettings);
+            this.panQExStylFlavorOptions.Controls.Add(this.label2);
+            this.panQExStylFlavorOptions.Controls.Add(this.linkFlavorHelp);
+            this.panQExStylFlavorOptions.Controls.Add(this.cmbQExFlavor);
+            this.panQExStylFlavorOptions.Controls.Add(this.linkStyleHelp);
+            this.panQExStylFlavorOptions.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panQExStylFlavorOptions.Location = new System.Drawing.Point(0, 0);
+            this.panQExStylFlavorOptions.Name = "panQExStylFlavorOptions";
+            this.panQExStylFlavorOptions.Size = new System.Drawing.Size(418, 61);
+            this.panQExStylFlavorOptions.TabIndex = 18;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(13, 11);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(30, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Style";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 38);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(36, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Flavor";
             // 
             // linkFlavorHelp
             // 
             this.linkFlavorHelp.AutoSize = true;
-            this.linkFlavorHelp.Location = new System.Drawing.Point(246, 40);
+            this.linkFlavorHelp.Location = new System.Drawing.Point(247, 38);
             this.linkFlavorHelp.Name = "linkFlavorHelp";
             this.linkFlavorHelp.Size = new System.Drawing.Size(55, 13);
             this.linkFlavorHelp.TabIndex = 15;
             this.linkFlavorHelp.TabStop = true;
             this.linkFlavorHelp.Text = "linkLabel2";
             this.linkFlavorHelp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkFlavorHelp_LinkClicked);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(612, 13);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(37, 13);
-            this.label3.TabIndex = 13;
-            this.label3.Text = "Indent";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 40);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(36, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Flavor";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(30, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Style";
             // 
             // XmlContentControl
             // 
@@ -623,6 +645,7 @@
             this.DockStateChanged += new System.EventHandler(this.XmlContentDisplayDialog_DockStateChanged);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.XmlContentDisplayDialog_FormClosing);
             this.Load += new System.EventHandler(this.XmlContentDisplayDialog_Load);
+            this.SizeChanged += new System.EventHandler(this.XmlContentControl_SizeChanged);
             this.VisibleChanged += new System.EventHandler(this.XmlContentDisplayDialog_VisibleChanged);
             this.Enter += new System.EventHandler(this.XmlContentControl_Enter);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.XmlContentDisplayDialog_KeyDown);
@@ -643,7 +666,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.numQExIndent)).EndInit();
             this.panSQL4CDSInfo.ResumeLayout(false);
             this.panQExOptions.ResumeLayout(false);
-            this.panQExOptions.PerformLayout();
+            this.panQExSmallerOptions.ResumeLayout(false);
+            this.panQExSmallerOptions.PerformLayout();
+            this.panQExStylFlavorOptions.ResumeLayout(false);
+            this.panQExStylFlavorOptions.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -694,5 +720,7 @@
         private System.Windows.Forms.LinkLabel linkFlavorHelp;
         private System.Windows.Forms.LinkLabel linkStyleHelp;
         private System.Windows.Forms.Button btnQExFlavorSettings;
+        private System.Windows.Forms.Panel panQExSmallerOptions;
+        private System.Windows.Forms.Panel panQExStylFlavorOptions;
     }
 }

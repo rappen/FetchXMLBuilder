@@ -26,10 +26,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private SaveFormat format;
         private string liveUpdateXml = "";
         private bool initializating = false;
+        private const string waitmessage = "Initializating...";
+        private const int qexoptionswidth = 720;
 
         private MarkMpn.XmlSchemaAutocomplete.Autocomplete<FetchType> _autocomplete;
         private bool _usedAutocomplete;
-        private const string waitmessage = "Initializating...";
 
         private bool parsecsharp =>
             (fxb.settings.CodeGenerators.QExStyle == QExStyleEnum.QueryExpression ||
@@ -975,6 +976,17 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             if (CSharpCodeGeneratedLCGSettings.GetSettings(fxb, fxb.settings.CodeGenerators.LCG_Settings))
             {
                 UpdateXML(initializating ? waitmessage : fxb.GetCSharpCode());
+            }
+        }
+
+        private void XmlContentControl_SizeChanged(object sender, EventArgs e)
+        {
+            if (panQExOptions.Visible)
+            {
+                var maxwidth = qexoptionswidth + (panParseQE.Visible ? panParseQE.Width : 0);
+                panQExStylFlavorOptions.Dock = Width < maxwidth ? DockStyle.Top : DockStyle.Left;
+                panQExSmallerOptions.Dock = Width < maxwidth ? DockStyle.Bottom : DockStyle.Left;
+                panQExOptions.Height = panQExSmallerOptions.Dock == DockStyle.Bottom ? 122 : 61;
             }
         }
     }
