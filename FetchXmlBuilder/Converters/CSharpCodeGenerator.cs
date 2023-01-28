@@ -433,6 +433,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     code.AppendLine($"{Indent(indentslevel)}// Add {columns.Columns.Count} columns to {entity}");
                 }
                 var columnsstart = string.Empty;
+                var columnend = string.Empty;
                 var aroundby = AroundBy.Parentheses;
                 switch (settings.QExStyle)
                 {
@@ -455,6 +456,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                         {
                             case QExFlavorEnum.EarlyBound:
                                 columnsstart = $".Select({GetCodeEntityPrefix(entity)} => new ";
+                                columnend = ")";
                                 aroundby = AroundBy.Braces;
                                 break;
 
@@ -470,37 +472,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 }
                 var columnscode = columns.Columns.Select(c => GetCodeAttribute(entity, c, settings.QExFlavor == QExFlavorEnum.EarlyBound)).ToArray();
                 var colsEB = GetCodeParametersMaxWidth(CODE_WIDTH_LIMIT - columnsstart.Length, indentslevel, aroundby, columnscode);
-                //var muliplerows = colsEB.Contains(CRLF);
-                code.Append(Indent(indentslevel) + columnsstart + colsEB);
-                //switch (settings.QExStyle)
-                //{
-                //    case QExStyleEnum.FluentQueryExpression:
-                //        switch (settings.QExFlavor)
-                //        {
-                //            case QExFlavorEnum.EarlyBound:
-                //                code.Append(muliplerows ? $"{CRLF}{Indent(indentslevel)}}}" : " }");
-                //                break;
-
-                //            default:
-                //                code.Append(muliplerows ? $"{CRLF}{Indent(indentslevel)}" : "");
-                //                break;
-                //        }
-                //        code.Append(")");
-                //        break;
-
-                //    default:
-                //        switch (settings.QExFlavor)
-                //        {
-                //            case QExFlavorEnum.EarlyBound:
-                //                code.Append(muliplerows ? $"{CRLF}{Indent(indentslevel)}}}" : " }");
-                //                break;
-
-                //            default:
-                //                code.Append(muliplerows ? $"{CRLF}{Indent(indentslevel)})" : ")");
-                //                break;
-                //        }
-                //        break;
-                //}
+                code.Append(Indent(indentslevel) + columnsstart + colsEB + columnend);
             }
             return code.ToString();
         }
@@ -860,7 +832,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     {
                         linkcode += $"{Indent(indentslevel)}.AddLink(new Link({GetCodeEntity(link.LinkToEntityName)}, {GetCodeAttribute(link.LinkToEntityName, link.LinkToAttributeName)}, {GetCodeAttribute(link.LinkFromEntityName, link.LinkFromAttributeName)}, JoinOperator.{link.JoinOperator})";
                     }
-                    linkcode += CRLF;
                     if (!string.IsNullOrWhiteSpace(link.EntityAlias))
                     {
                         aliascode = $"{Indent(indentslevel + 1)}.SetAlias(\"{link.EntityAlias}\")";
@@ -879,28 +850,36 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     break;
             }
             var objinicode = new List<string>
-                {
-                    aliascode,
-                    GetColumns(link.LinkToEntityName, link.Columns, linkname, OwnersType.Link, indentslevel + 1),
-                    GetFilter(link.LinkToEntityName, link.LinkCriteria, linkname, OwnersType.Link, indentslevel + 1),
-                    GetOrders(link.LinkToEntityName, link.Orders, linkname, OwnersType.Link, indentslevel + 1),
-                    GetLinkEntities(link.LinkEntities, linkname, indentslevel + 1, namestree)
-                }.Where(o => !string.IsNullOrWhiteSpace(o)).ToList();
+            {
+                aliascode,
+                GetColumns(link.LinkToEntityName, link.Columns, linkname, OwnersType.Link, indentslevel + 1),
+                GetFilter(link.LinkToEntityName, link.LinkCriteria, linkname, OwnersType.Link, indentslevel + 1),
+                GetOrders(link.LinkToEntityName, link.Orders, linkname, OwnersType.Link, indentslevel + 1),
+                GetLinkEntities(link.LinkEntities, linkname, indentslevel + 1, namestree)
+            }.Where(o => !string.IsNullOrWhiteSpace(o)).ToList();
             if (objinicode.Any())
             {
-                if (settings.QExStyle != QExStyleEnum.FluentQueryExpression)
+                if (settings.QExStyle == QExStyleEnum.FluentQueryExpression)
+                {
+                    linkcode += CRLF;
+                }
+                else
                 {
                     linkcode += $"{CRLF}{Indent(indentslevel++)}{{{CRLF}";
                 }
                 linkcode += string.Join($"{betweenchar}{CRLF}", objinicode);
                 if (settings.QExStyle == QExStyleEnum.FluentQueryExpression)
                 {
-                    linkcode += $"{CRLF}{Indent(indentslevel)})";
+                    linkcode += $"{CRLF}{Indent(indentslevel)}";
                 }
                 else
                 {
                     linkcode += $"{CRLF}{Indent(--indentslevel)}}}";
                 }
+            }
+            if (settings.QExStyle == QExStyleEnum.FluentQueryExpression)
+            {
+                linkcode += $")";
             }
 
             return linkcode;
@@ -1082,8 +1061,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             var paramsstring = string.Join("`´", parameters.Where(p => !string.IsNullOrWhiteSpace(p)));
             if (paramsstring.Length > maxwidth)
             {
-                resultstart = CRLF + Indent(multilineindents) + resultstart.Trim() + CRLF + Indent(multilineindents + 1);
-                resultend = CRLF + Indent(multilineindents) + resultend.Trim();
+                if (aroundby == AroundBy.Braces)
+                {
+                    resultstart = CRLF + Indent(multilineindents) + resultstart.Trim() + CRLF + Indent(multilineindents + 1);
+                    resultend = CRLF + Indent(multilineindents) + resultend.Trim();
+                }
+                else
+                {
+                    resultstart = resultstart.Trim() + CRLF + Indent(multilineindents + 1);
+                }
                 between = $",{CRLF}{Indent(multilineindents + 1)}";
             }
             var result = resultstart + paramsstring.Replace("`´", between) + resultend;
