@@ -327,7 +327,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             Process.Start(url);
         }
 
-        internal string GetQueryExpressionCode()
+        internal string GetCSharpCode()
         {
             switch (settings.CodeGenerators.QExStyle)
             {

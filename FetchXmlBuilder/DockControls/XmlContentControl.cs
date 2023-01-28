@@ -25,9 +25,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private ContentType contenttype;
         private SaveFormat format;
         private string liveUpdateXml = "";
+        private bool initializating = false;
 
         private MarkMpn.XmlSchemaAutocomplete.Autocomplete<FetchType> _autocomplete;
         private bool _usedAutocomplete;
+        private const string waitmessage = "Initializating...";
 
         private bool parsecsharp =>
             (fxb.settings.CodeGenerators.QExStyle == QExStyleEnum.QueryExpression ||
@@ -66,6 +68,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal void SetContentType(ContentType contentType)
         {
+            initializating = true;
             contenttype = contentType;
             Text = contenttype.ToString().Replace("_", " ").Replace("CSharp", "C#");
             TabText = Text;
@@ -83,13 +86,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             panQExOptions.Visible = contenttype == ContentType.CSharp_Code;
             panSQL4CDS.Visible = allowsql;
             panSQL4CDSInfo.Visible = allowsql;
-            cmbQExStyle.SelectedItem = cmbQExStyle.Items.Cast<QExStyle>().FirstOrDefault(s => s.Tag == fxb.settings.CodeGenerators.QExStyle);
-            cmbQExFlavor.SelectedItem = cmbQExFlavor.Items.Cast<QExFlavor>().FirstOrDefault(f => f.Tag == fxb.settings.CodeGenerators.QExFlavor);
-            rbQExLineByLine.Checked = !fxb.settings.CodeGenerators.ObjectInitializer;
-            rbQExObjectinitializer.Checked = fxb.settings.CodeGenerators.ObjectInitializer;
-            numQExIndent.Value = fxb.settings.CodeGenerators.Indents;
-            chkQExComments.Checked = fxb.settings.CodeGenerators.IncludeComments;
-            chkQExFilterVariables.Checked = fxb.settings.CodeGenerators.FilterVariables;
 
             switch (contentType)
             {
@@ -105,6 +101,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     break;
 
                 case ContentType.CSharp_Code:
+                    cmbQExStyle.SelectedItem = cmbQExStyle.Items.Cast<QExStyle>().FirstOrDefault(s => s.Tag == fxb.settings.CodeGenerators.QExStyle);
+                    cmbQExFlavor.SelectedItem = cmbQExFlavor.Items.Cast<QExFlavor>().FirstOrDefault(f => f.Tag == fxb.settings.CodeGenerators.QExFlavor);
+                    rbQExLineByLine.Checked = !fxb.settings.CodeGenerators.ObjectInitializer;
+                    rbQExObjectinitializer.Checked = fxb.settings.CodeGenerators.ObjectInitializer;
+                    numQExIndent.Value = fxb.settings.CodeGenerators.Indents;
+                    chkQExComments.Checked = fxb.settings.CodeGenerators.IncludeComments;
+                    chkQExFilterVariables.Checked = fxb.settings.CodeGenerators.FilterVariables;
                     txtXML.ConfigureForCSharp();
                     break;
 
@@ -116,6 +119,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     txtXML.ConfigureForJSON();
                     break;
             }
+            initializating = false;
         }
 
         internal void SetFormat(SaveFormat saveFormat)
@@ -903,7 +907,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                         numQExIndent.Enabled = false;
                         break;
                 }
-                UpdateXML(fxb.GetQueryExpressionCode());
+                UpdateXML(initializating ? waitmessage : fxb.GetCSharpCode());
             }
             else
             {
@@ -921,7 +925,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 tt.SetToolTip(linkFlavorHelp, flavor.HelpUrl);
                 btnQExFlavorSettings.Visible = flavor.Tag == QExFlavorEnum.LCGconstants;
                 linkFlavorHelp.Left = btnQExFlavorSettings.Left + (flavor.Tag == QExFlavorEnum.LCGconstants ? btnQExFlavorSettings.Width + 6 : 0);
-                UpdateXML(fxb.GetQueryExpressionCode());
+                UpdateXML(initializating ? waitmessage : fxb.GetCSharpCode());
             }
             else
             {
@@ -933,19 +937,19 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void chkQExFilterVariables_CheckedChanged(object sender, EventArgs e)
         {
             fxb.settings.CodeGenerators.FilterVariables = chkQExFilterVariables.Checked;
-            UpdateXML(fxb.GetQueryExpressionCode());
+            UpdateXML(initializating ? waitmessage : fxb.GetCSharpCode());
         }
 
         private void rbQExObjectInitializer_CheckedChanged(object sender, EventArgs e)
         {
             fxb.settings.CodeGenerators.ObjectInitializer = rbQExObjectinitializer.Checked;
-            UpdateXML(fxb.GetQueryExpressionCode());
+            UpdateXML(initializating ? waitmessage : fxb.GetCSharpCode());
         }
 
         private void numQExIndent_ValueChanged(object sender, EventArgs e)
         {
             fxb.settings.CodeGenerators.Indents = (int)numQExIndent.Value;
-            UpdateXML(fxb.GetQueryExpressionCode());
+            UpdateXML(initializating ? waitmessage : fxb.GetCSharpCode());
         }
 
         private void linkFlavorHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -970,7 +974,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             if (CSharpCodeGeneratedLCGSettings.GetSettings(fxb, fxb.settings.CodeGenerators.LCG_Settings))
             {
-                UpdateXML(fxb.GetQueryExpressionCode());
+                UpdateXML(initializating ? waitmessage : fxb.GetCSharpCode());
             }
         }
     }

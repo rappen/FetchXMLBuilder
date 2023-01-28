@@ -155,7 +155,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             if (dockControlCSharp?.Visible == true && entities != null)
             {
-                dockControlCSharp.UpdateXML(GetQueryExpressionCode());
+                dockControlCSharp.UpdateXML(GetCSharpCode());
             }
             if (dockControlSQL?.Visible == true)
             {
@@ -785,7 +785,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 control.EnsureVisible(dockContainer, state);
             }
-            UpdateLiveXML();
         }
 
         private void ShowMetadataControl(ref MetadataControl control, DockState defaultstate)

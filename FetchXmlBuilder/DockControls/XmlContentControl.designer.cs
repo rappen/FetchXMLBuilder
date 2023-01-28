@@ -521,6 +521,7 @@
             this.txtXML.Name = "txtXML";
             this.txtXML.Size = new System.Drawing.Size(1093, 166);
             this.txtXML.TabIndex = 1;
+            this.txtXML.Text = "\r\n\r\n\r\n       loading...";
             this.txtXML.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtXML_KeyPress);
             this.txtXML.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtXML_KeyUp);
             // 

@@ -304,7 +304,6 @@ namespace Rappen.XTB.FetchXmlBuilder
                         SendMessageToStatusBar(this, new XrmToolBox.Extensibility.Args.StatusBarMessageEventArgs($"All entities are now loaded."));
                     }
                 }
-                UpdateLiveXML();
                 working = false;
                 EnableControls(true);
                 dockControlBuilder?.ApplyCurrentSettings();

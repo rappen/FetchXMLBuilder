@@ -28,10 +28,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             {
                 throw new ArgumentOutOfRangeException("Style & Flavor", $"Combo is not possible.");
             }
-            if (settings.CodeGenerators.QExStyle == QExStyleEnum.QueryByAttribute)
-            {
-                //       throw new ArgumentException("Sorry, not yet implemented", "Style");
-            }
 
             var coder = new CSharpCodeGenerator(QEx, entities, settings);
             var result = coder.GetQueryCode();
