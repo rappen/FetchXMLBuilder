@@ -855,7 +855,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void tsbShare_Click(object sender, EventArgs e)
         {
-            ShareLink.Open(dockControlBuilder.GetFetchString(false, false), ConnectionDetail.ConnectionName);
+            ShareLink.Open(this, dockControlBuilder.GetFetchString(false, false));
         }
 
         #endregion Private Event Handlers

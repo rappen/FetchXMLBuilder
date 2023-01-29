@@ -1,19 +1,22 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
+using XrmToolBox.Extensibility;
 
 namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
     public partial class ShareLink : Form
     {
-        private string fetch;
-        private string conn;
+        private const string toolname = "FetchXML Builder";
+        private string dataparam;
+        private string connection;
 
-        public static void Open(string fetchxml, string connection)
+        public static void Open(PluginControlBase tool, string param)
         {
             new ShareLink
             {
-                fetch = fetchxml,
-                conn = connection
+                dataparam = param,
+                connection = tool.ConnectionDetail?.ConnectionName
             }.ShowDialog();
         }
 
@@ -24,16 +27,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void ShareLink_Load(object sender, System.EventArgs e)
         {
+            chkConnection.Text = $"Include connection {connection}";
             SetLink();
         }
 
         private void SetLink()
         {
-            var plugin = $"/plugin:\"FetchXML Builder\" ";
-            var connection = $"/connection:\"{conn}\" ";
-            var data = $"/data:{fetch}";
-            var link = plugin + (chkConnection.Checked ? connection : "") + data;
-            link = $"xrmtoolbox://{Uri.EscapeDataString(link)}";
+            var plugin = $"/plugin%3A{Encoded("\"" + toolname + "\"")} ";
+            var connection = chkConnection.Checked ? $"/connection%3A{Encoded("\"" + this.connection + "\"")} " : "";
+            var data = $"/data%3A{Encoded("\"" + dataparam + "\"")}";
+            var link = $"xrmtoolbox://{plugin + connection + data}";
             if (rbUrl.Checked)
             {
                 txtLink.Text = link;
@@ -52,6 +55,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
         }
 
+        private string Encoded(string param) => rbSafeLink.Checked ? Uri.EscapeDataString(param) : param;
+
         private void linkInfo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             FetchXmlBuilder.OpenURL("https://fetchxmlbuilder.com/sharing-queries/");
@@ -61,11 +66,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         {
             Clipboard.SetText(txtLink.Text);
             Close();
+            MessageBox.Show("Link is copied!", "Share Query via XrmToolBox", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void settings_CheckedChanged(object sender, EventArgs e)
         {
+            txtLinkName.Enabled = !rbUrl.Checked;
             SetLink();
+        }
+
+        private void btnTest_Click(object sender, EventArgs e)
+        {
+            Process.Start(txtLink.Text);
         }
     }
 }
