@@ -2,6 +2,7 @@
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XTB.FetchXmlBuilder.Settings;
+using Rappen.XTB.LCG;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -265,24 +266,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             {
                 var filterentity = entity;
                 var entityalias = "";
-                var values = "";
-                var token = basedname;
                 if (!string.IsNullOrWhiteSpace(cond.EntityName))
                 {
                     filterentity = entityaliases.FirstOrDefault(a => a.Key.Equals(cond.EntityName)).Value ?? cond.EntityName;
                     entityalias = "\"" + cond.EntityName + "\", ";
-                    token += "_" + cond.EntityName;
-                }
-                token += "_" + cond.AttributeName;
-                if (cond.Values.Count > 0)
-                {
-                    values = ", " + GetConditionValues(cond.Values, token, settings.FilterVariables);
-                    if (cond.CompareColumns)
-                    {
-                        values = ", true" + values;
-                    }
                 }
                 var attributename = GetCodeAttribute(filterentity, cond.AttributeName);
+                var values = GetConditionValues(filterentity, cond, basedname);
                 switch (settings.QExStyle)
                 {
                     case QExStyleEnum.QueryByAttribute:
@@ -305,8 +295,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                         conditionscode.Add($"{filter.FilterHint}.AddCondition({entityalias}{attributename}, ConditionOperator.{cond.Operator}{values});");
                         break;
                 }
-                code.Append(string.Join(CRLF, conditionscode.Select(f => f.Trim()).Where(f => !string.IsNullOrWhiteSpace(f))));
             }
+            code.Append(string.Join(CRLF, conditionscode.Select(f => f.Trim()).Where(f => !string.IsNullOrWhiteSpace(f))));
             return code.ToString().TrimEnd() + CRLF;
         }
 
@@ -705,24 +695,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             var filterentity = entity;
             var entityprefix = GetCodeEntityPrefix(entity);
             var entityalias = "";
-            var values = "";
-            var token = filtername.Replace(".", "_").Replace("_Criteria", "").Replace("_LinkCriteria", "");
             if (!string.IsNullOrWhiteSpace(cond.EntityName))
             {
                 filterentity = entityaliases.FirstOrDefault(a => a.Key.Equals(cond.EntityName)).Value ?? cond.EntityName;
                 entityalias = "\"" + cond.EntityName + "\", ";
-                token += "_" + cond.EntityName;
-            }
-            token += "_" + cond.AttributeName;
-            if (cond.Values.Count > 0)
-            {
-                values = ", " + GetConditionValues(cond.Values, token, settings.FilterVariables);
-                if (cond.CompareColumns)
-                {
-                    values = ", true" + values;
-                }
             }
             var attributename = GetCodeAttribute(filterentity, cond.AttributeName, settings.QExFlavor == QExFlavorEnum.EarlyBound);
+            var values = GetConditionValues(filterentity, cond, filtername);
             var condcode = string.Empty;
             switch (settings.QExStyle)
             {
@@ -1114,6 +1093,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             return string.Join(", ", strings);
         }
 
+        private EntityMetadata GetEntityMetadata(string entity) => metas.FirstOrDefault(e => e.LogicalName.Equals(entity));
+
         private string GetCodeEntity(string entityname)
         {
             if (metas.FirstOrDefault(e => e.LogicalName.Equals(entityname)) is EntityMetadata entity)
@@ -1124,7 +1105,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                         return entity.SchemaName + "." + settings.EBG_EntityLogicalNames;
 
                     case QExFlavorEnum.LCGconstants:
-                        return LCG.Extensions.GetEntityClass(entity, settings.LCG_Settings) + ".EntityName";
+                        return entity.GetEntityClass(settings.LCG_Settings) + ".EntityName";
 
                     case QExFlavorEnum.EarlyBound:
                         return entity.SchemaName;
@@ -1140,6 +1121,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 return entity.DisplayName.UserLocalizedLabel.Label.Substring(0, 1).ToLowerInvariant();
             }
             return entityname.Substring(0, 1).ToLowerInvariant();
+        }
+
+        private AttributeMetadata GetAttributeMetadata(string entityname, string attributename)
+        {
+            return metas.FirstOrDefault(e => e.LogicalName.Equals(entityname)) is EntityMetadata entity ?
+                entity.Attributes.FirstOrDefault(a => a.LogicalName.Equals(attributename)) : null;
         }
 
         private string GetCodeAttribute(string entityname, string attributename, bool addentityprefix = false)
@@ -1197,6 +1184,43 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
         private static string CommentLines(string codes)
         {
             return string.Join("\n", codes.Split('\n').Select(l => $"// {l}"));
+        }
+
+        private string GetConditionValues(string entity, ConditionExpression cond, string filtername)
+        {
+            var token = filtername.Replace(".", "_").Replace("_Criteria", "").Replace("_LinkCriteria", "");
+            if (!string.IsNullOrWhiteSpace(cond.EntityName))
+            {
+                token += "_" + cond.EntityName;
+            }
+            token += "_" + cond.AttributeName;
+            var values = "";
+            if (cond.Values.Count > 0)
+            {
+                values = ", " + GetConditionValues(cond.Values, token, settings.FilterVariables);
+                if (cond.CompareColumns)
+                {
+                    values = ", true" + values;
+                }
+            }
+            var entitymeta = GetEntityMetadata(entity);
+            var attributemeta = GetAttributeMetadata(entity, cond.AttributeName);
+            if (attributemeta is EnumAttributeMetadata enumattr && cond.Values.Count == 1)
+            {
+                var value = cond.Values.FirstOrDefault() as int?;
+                var optionsetvalue = enumattr.OptionSet.Options.FirstOrDefault(o => o.Value == value);
+                switch (settings.QExFlavor)
+                {
+                    case QExFlavorEnum.LCGconstants:
+                        var lcgentity = entitymeta.GetEntityClass(settings.LCG_Settings);
+                        var lcgattribute = attributemeta.GetNameTechnical(settings.LCG_Settings) + "_OptionSet";
+                        var lcgenumvalue = optionsetvalue.GetOptionSetValueName(settings.LCG_Settings);
+                        values = $", (int){lcgentity}.{lcgattribute}.{lcgenumvalue}";
+                        break;
+                }
+            }
+
+            return values;
         }
 
         #endregion Helpers
@@ -1342,9 +1366,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
 
     internal enum AroundBy
     {
-        //       None,
         Parentheses,
-
         Braces
     }
 }

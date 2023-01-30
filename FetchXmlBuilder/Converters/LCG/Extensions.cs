@@ -151,5 +151,58 @@ namespace Rappen.XTB.LCG
             result = CamelCaseIt(result, lcgsettings);
             return result;
         }
+
+        public static string GetNameTechnical(this AttributeMetadata Metadata, Settings settings)
+        {
+            var name = string.Empty;
+            switch (settings.ConstantName)
+            {
+                case NameType.DisplayName:
+                    name = StringToCSharpIdentifier(Metadata?.DisplayName?.UserLocalizedLabel?.Label ?? Metadata?.LogicalName);
+                    break;
+
+                case NameType.LogicalName:
+                    name = settings.GetNonDisplayName(Metadata?.LogicalName);
+                    break;
+
+                case NameType.SchemaName:
+                    name = settings.GetNonDisplayName(Metadata?.SchemaName);
+                    break;
+            }
+            return name;
+        }
+
+        internal static string GetOptionSetValueName(this OptionMetadata optionmetadata, Settings lcgsettings)
+        {
+            var label = StringToCSharpIdentifier(optionmetadata.Label.UserLocalizedLabel.Label);
+            if (lcgsettings.ConstantCamelCased)
+            {
+                label = label.CamelCaseIt(lcgsettings);
+            }
+            if (string.IsNullOrEmpty(label) || !UnicodeCharacterUtilities.IsIdentifierStartCharacter(label[0]) || !label.IsValidIdentifier())
+            {
+                label = "_" + label;
+            }
+            return label;
+        }
+
+        public static string GetNonDisplayName(this Settings settings, string name)
+        {
+            if (settings.DoStripPrefix && !string.IsNullOrEmpty(settings.StripPrefix))
+            {
+                foreach (var prefix in settings.StripPrefix.Split(',')
+                                               .Select(p => p.Trim())
+                                               .Where(p => !string.IsNullOrWhiteSpace(p)
+                                                      && name.ToLowerInvariant().StartsWith(p)))
+                {
+                    name = name.Substring(prefix.Length);
+                }
+            }
+            if (settings.ConstantCamelCased)
+            {
+                name = name.CamelCaseIt(settings);
+            }
+            return name;
+        }
     }
 }
