@@ -804,7 +804,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     {
                         var linkshortname = GetVarName("l", false, namestree = namestree ?? new List<string>());
                         var fromprefix = GetCodeEntityPrefix(link.LinkFromEntityName);
-                        var toprefix = GetCodeEntityPrefix(link.LinkFromEntityName);
+                        var toprefix = GetCodeEntityPrefix(link.LinkToEntityName);
                         linkcode += $"{Indent(indentslevel)}.AddLink<{GetCodeEntity(link.LinkToEntityName)}>({fromprefix} => {fromprefix}.{GetCodeAttribute(link.LinkFromEntityName, link.LinkFromAttributeName)}, {toprefix} => {toprefix}.{GetCodeAttribute(link.LinkToEntityName, link.LinkToAttributeName)}, {linkshortname} => {linkshortname}";
                     }
                     else
