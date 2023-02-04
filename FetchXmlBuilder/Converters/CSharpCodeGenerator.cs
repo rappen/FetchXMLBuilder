@@ -1055,60 +1055,40 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             return result;
         }
 
-        private static string GetConditionValues(DataCollection<object> values, string token, bool createvariables)
-        {
-            var strings = new List<string>();
-            var i = 1;
-            foreach (var value in values)
-            {
-                var valuestr = string.Empty;
-                if (value is string || value is Guid)
-                {
-                    valuestr = "\"" + value.ToString() + "\"";
-                }
-                else if (value is bool)
-                {
-                    valuestr = (bool)value ? "true" : "false";
-                }
-                else
-                {
-                    valuestr = value.ToString();
-                }
-                if (createvariables)
-                {
-                    if (values.Count == 1)
-                    {
-                        strings.Add($"<<<{token}|{valuestr}>>>");
-                    }
-                    else
-                    {
-                        strings.Add($"<<<{token}_{i++}|{valuestr}>>>");
-                    }
-                }
-                else
-                {
-                    strings.Add(valuestr);
-                }
-            }
-            return string.Join(", ", strings);
-        }
-
         private EntityMetadata GetEntityMetadata(string entity) => metas.FirstOrDefault(e => e.LogicalName.Equals(entity));
 
-        private string GetCodeEntity(string entityname)
+        private string GetEntityName(string entityname)
         {
             if (metas.FirstOrDefault(e => e.LogicalName.Equals(entityname)) is EntityMetadata entity)
             {
                 switch (settings.QExFlavor)
                 {
                     case QExFlavorEnum.EBGconstants:
-                        return entity.SchemaName + "." + settings.EBG_EntityLogicalNames;
-
-                    case QExFlavorEnum.LCGconstants:
-                        return entity.GetEntityClass(settings.LCG_Settings) + ".EntityName";
-
                     case QExFlavorEnum.EarlyBound:
                         return entity.SchemaName;
+
+                    case QExFlavorEnum.LCGconstants:
+                        return entity.GetEntityClass(settings.LCG_Settings);
+                }
+            }
+            return entityname;
+        }
+
+        private string GetCodeEntity(string entityname)
+        {
+            var result = GetEntityName(entityname);
+            if (metas.FirstOrDefault(e => e.LogicalName.Equals(entityname)) is EntityMetadata)
+            {
+                switch (settings.QExFlavor)
+                {
+                    case QExFlavorEnum.EBGconstants:
+                        return result + "." + settings.EBG_EntityLogicalNames;
+
+                    case QExFlavorEnum.LCGconstants:
+                        return result + ".EntityName";
+
+                    case QExFlavorEnum.EarlyBound:
+                        return result;
                 }
             }
             return "\"" + entityname + "\"";
@@ -1188,36 +1168,91 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
 
         private string GetConditionValues(string entity, ConditionExpression cond, string filtername)
         {
+            if (cond.Values.Count == 0)
+            {
+                return string.Empty;
+            }
             var token = filtername.Replace(".", "_").Replace("_Criteria", "").Replace("_LinkCriteria", "");
             if (!string.IsNullOrWhiteSpace(cond.EntityName))
             {
                 token += "_" + cond.EntityName;
             }
             token += "_" + cond.AttributeName;
-            var values = "";
-            if (cond.Values.Count > 0)
-            {
-                values = ", " + GetConditionValues(cond.Values, token, settings.FilterVariables);
-                if (cond.CompareColumns)
-                {
-                    values = ", true" + values;
-                }
-            }
+
             var entitymeta = GetEntityMetadata(entity);
             var attributemeta = GetAttributeMetadata(entity, cond.AttributeName);
-            if (attributemeta is EnumAttributeMetadata enumattr && cond.Values.Count == 1)
+            var enumattr = attributemeta as EnumAttributeMetadata;
+            var lcgentity = entitymeta.GetEntityClass(settings.LCG_Settings);
+            var lcgoptionset = attributemeta.GetNameTechnical(settings.LCG_Settings) + "_OptionSet";
+            var ebgentity = GetEntityName(entity);
+            var ebgoptionset = enumattr != null ?
+                enumattr.OptionSet?.IsGlobal == true ?
+                    enumattr.SchemaName :
+                    ebgentity + (enumattr is StateAttributeMetadata ? "State" : "_" + enumattr.SchemaName) : string.Empty;
+            var strings = new List<string>();
+            var i = 1;
+            foreach (var value in cond.Values)
             {
-                var value = cond.Values.FirstOrDefault() as int?;
-                var optionsetvalue = enumattr.OptionSet.Options.FirstOrDefault(o => o.Value == value);
-                switch (settings.QExFlavor)
+                var valuestr = string.Empty;
+
+                if (enumattr != null)
                 {
-                    case QExFlavorEnum.LCGconstants:
-                        var lcgentity = entitymeta.GetEntityClass(settings.LCG_Settings);
-                        var lcgattribute = attributemeta.GetNameTechnical(settings.LCG_Settings) + "_OptionSet";
-                        var lcgenumvalue = optionsetvalue.GetOptionSetValueName(settings.LCG_Settings);
-                        values = $", (int){lcgentity}.{lcgattribute}.{lcgenumvalue}";
-                        break;
+                    var valueint = value as int?;
+                    if (valueint == null)
+                    {
+                        valueint = int.Parse(value as string);
+                    }
+                    var optionsetvalue = enumattr.OptionSet.Options.FirstOrDefault(o => o.Value == valueint);
+                    switch (settings.QExFlavor)
+                    {
+                        case QExFlavorEnum.LCGconstants:
+                            var lcgenumvalue = optionsetvalue.GetOptionSetValueName(settings.LCG_Settings);
+                            valuestr = $"(int){lcgentity}.{lcgoptionset}.{lcgenumvalue}";
+                            break;
+
+                        case QExFlavorEnum.EBGconstants:
+                        case QExFlavorEnum.EarlyBound:
+                            var ebgenumvalue = LCG.Extensions.StringToCSharpIdentifier(optionsetvalue.Label.UserLocalizedLabel.Label);
+                            valuestr = $"(int){ebgoptionset}.{ebgenumvalue}";
+                            break;
+
+                        default:
+                            valuestr = value.ToString();
+                            break;
+                    }
                 }
+                else if (value is string || value is Guid)
+                {
+                    valuestr = "\"" + value.ToString() + "\"";
+                }
+                else if (value is bool)
+                {
+                    valuestr = (bool)value ? "true" : "false";
+                }
+                else
+                {
+                    valuestr = value.ToString();
+                }
+                if (settings.FilterVariables)
+                {
+                    if (cond.Values.Count == 1)
+                    {
+                        strings.Add($"<<<{token}|{valuestr}>>>");
+                    }
+                    else
+                    {
+                        strings.Add($"<<<{token}_{i++}|{valuestr}>>>");
+                    }
+                }
+                else
+                {
+                    strings.Add(valuestr);
+                }
+            }
+            var values = ", " + string.Join(", ", strings);
+            if (cond.CompareColumns)
+            {
+                values = ", true" + values;
             }
 
             return values;

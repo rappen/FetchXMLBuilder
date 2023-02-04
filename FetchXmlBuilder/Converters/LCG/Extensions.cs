@@ -83,7 +83,7 @@ namespace Rappen.XTB.LCG
             return name;
         }
 
-        internal static string StringToCSharpIdentifier(string name)
+        public static string StringToCSharpIdentifier(string name)
         {
             name = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.GetEncoding("ISO-8859-8").GetBytes(name))
                 .Replace(" ", "")
