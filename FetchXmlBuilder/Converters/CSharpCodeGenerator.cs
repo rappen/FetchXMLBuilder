@@ -1193,6 +1193,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             var i = 1;
             foreach (var value in cond.Values)
             {
+                var usetoken = settings.FilterVariables;
                 var valuestr = string.Empty;
 
                 if (enumattr != null)
@@ -1208,12 +1209,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                         case QExFlavorEnum.LCGconstants:
                             var lcgenumvalue = optionsetvalue.GetOptionSetValueName(settings.LCG_Settings);
                             valuestr = $"(int){lcgentity}.{lcgoptionset}.{lcgenumvalue}";
+                            usetoken = false;
                             break;
 
                         case QExFlavorEnum.EBGconstants:
                         case QExFlavorEnum.EarlyBound:
                             var ebgenumvalue = LCG.Extensions.StringToCSharpIdentifier(optionsetvalue.Label.UserLocalizedLabel.Label);
                             valuestr = $"(int){ebgoptionset}.{ebgenumvalue}";
+                            usetoken = false;
                             break;
 
                         default:
@@ -1233,7 +1236,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 {
                     valuestr = value.ToString();
                 }
-                if (settings.FilterVariables)
+                if (usetoken)
                 {
                     if (cond.Values.Count == 1)
                     {
