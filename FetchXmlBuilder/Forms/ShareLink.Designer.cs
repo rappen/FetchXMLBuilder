@@ -43,6 +43,7 @@
             this.rbAlmostReadable = new System.Windows.Forms.RadioButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnTest = new System.Windows.Forms.Button();
+            this.btnClose = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,7 +73,8 @@
             // btnCopy
             // 
             this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCopy.Location = new System.Drawing.Point(461, 278);
+            this.btnCopy.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnCopy.Location = new System.Drawing.Point(380, 278);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(75, 23);
             this.btnCopy.TabIndex = 2;
@@ -197,7 +199,7 @@
             // btnTest
             // 
             this.btnTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTest.Location = new System.Drawing.Point(380, 278);
+            this.btnTest.Location = new System.Drawing.Point(299, 278);
             this.btnTest.Name = "btnTest";
             this.btnTest.Size = new System.Drawing.Size(75, 23);
             this.btnTest.TabIndex = 13;
@@ -205,13 +207,26 @@
             this.btnTest.UseVisualStyleBackColor = true;
             this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
             // 
+            // btnClose
+            // 
+            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnClose.Location = new System.Drawing.Point(461, 278);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(75, 23);
+            this.btnClose.TabIndex = 14;
+            this.btnClose.Text = "Close";
+            this.btnClose.UseVisualStyleBackColor = true;
+            // 
             // ShareLink
             // 
             this.AcceptButton = this.btnCopy;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
+            this.CancelButton = this.btnClose;
             this.ClientSize = new System.Drawing.Size(558, 313);
+            this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnTest);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.rbMarkdown);
@@ -252,5 +267,6 @@
         private System.Windows.Forms.RadioButton rbAlmostReadable;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnTest;
+        private System.Windows.Forms.Button btnClose;
     }
 }
