@@ -27,7 +27,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             if (settings.CodeGenerators.QExStyle == QExStyleEnum.QueryExpression &&
                 settings.CodeGenerators.QExFlavor == QExFlavorEnum.EarlyBound)
             {
-                throw new ArgumentOutOfRangeException("Style & Flavor", $"Combo is not possible.");
+                throw new ArgumentOutOfRangeException("Style & Flavor", "Combo is not possible.");
+            }
+            if (settings.CodeGenerators.QExStyle == QExStyleEnum.QueryExpressionFactory)
+            {
+                throw new ArgumentOutOfRangeException("Style", "Sorry, not yet finalized. It's a bit tricky, but we're getting there... One day...");
+            }
+            if (settings.CodeGenerators.QExStyle == QExStyleEnum.OrganizationServiceContext)
+            {
+                throw new ArgumentOutOfRangeException("Style", "Not really started yet. Might get there... One month...");
             }
 
             var coder = new CSharpCodeGenerator(QEx, entities, settings);
@@ -1308,20 +1316,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     ClassName = "Microsoft.CrmSdk.CoreAssemblies",
                     HelpUrl = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/samples/retrieve-multiple-querybyattribute-class",
                 },
-                //new QExStyle
-                //{
-                //    Tag = QExStyleEnum.OrganizationServiceContext,
-                //    Creator = "Microsoft",
-                //    ClassName = "Microsoft.Xrm.Sdk.Client",
-                //    HelpUrl = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/build-queries-with-linq-net-language-integrated-query",
-                //},
-                //new QExStyle
-                //{
-                //    Tag = QExStyleEnum.QueryExpressionFactory,
-                //    Creator = "Daryl LaBar",
-                //    ClassName = "DLaB.Xrm",
-                //    HelpUrl = "https://github.com/daryllabar/DLaB.Xrm/wiki/Query-Helpers",
-                //},
                 new QExStyle
                 {
                     Tag = QExStyleEnum.FluentQueryExpression,
@@ -1335,6 +1329,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     Creator = "Microsoft",
                     ClassName = "plain fetchxml",
                     HelpUrl = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/use-fetchxml-construct-query",
+                },
+                new QExStyle
+                {
+                    Tag = QExStyleEnum.OrganizationServiceContext,
+                    Creator = "Microsoft",
+                    ClassName = "Microsoft.Xrm.Sdk.Client",
+                    HelpUrl = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/build-queries-with-linq-net-language-integrated-query",
+                },
+                new QExStyle
+                {
+                    Tag = QExStyleEnum.QueryExpressionFactory,
+                    Creator = "Daryl LaBar",
+                    ClassName = "DLaB.Xrm",
+                    HelpUrl = "https://github.com/daryllabar/DLaB.Xrm/wiki/Query-Helpers",
                 }
             };
         }

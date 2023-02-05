@@ -894,6 +894,28 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                         rbQExObjectinitializer.Checked = true;
                         break;
 
+                    case QExStyleEnum.QueryExpressionFactory:
+                        MessageBox.Show(@"This feature is not yet finalized... #sorry
+
+Do you like that idea?
+Click the ""Help"" button to vote on this Issue #822 and it will be implemented, one day...!
+
+More votes == released sooner.", "QueryExpressionFactory",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0,
+                            "https://github.com/rappen/FetchXMLBuilder/issues/822");
+                        break;
+
+                    case QExStyleEnum.OrganizationServiceContext:
+                        MessageBox.Show(@"This feature is not yet started implementation.
+
+Do you like that idea?
+Click the ""Help"" button to vote on this Issue #859 and it will be implemented, one month...!
+
+More votes == released sooner.", "OrganizationServiceContext",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0,
+                            "https://github.com/rappen/FetchXMLBuilder/issues/859");
+                        break;
+
                     case QExStyleEnum.FetchXML:
                         rbQExObjectinitializer.Enabled = false;
                         cmbQExFlavor.Enabled = false;
