@@ -277,9 +277,25 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         protected override Dictionary<string, string> GetAttributesCollection()
         {
             var result = base.GetAttributesCollection();
-            if (!result.ContainsKey("value") && cmbValue.Enabled && cmbValue.DropDownStyle == ComboBoxStyle.Simple)
+            if (panValueOf.Visible == false && result.ContainsKey("valueof"))
+            {
+                result.Remove("valueof");
+            }
+            if (panValueOf.Visible == true && result.ContainsKey("valueof") && !string.IsNullOrWhiteSpace(result["valueof"]))
+            {
+                if (result.ContainsKey("value"))
+                {
+                    result.Remove("value");
+                }
+            }
+            else if (!result.ContainsKey("value") && cmbValue.Enabled && cmbValue.DropDownStyle == ComboBoxStyle.Simple)
             {
                 result.Add("value", "");
+            }
+            if (cmbOperator.SelectedItem is OperatorItem oper && oper.IsMultipleValuesType)
+            {
+                result.Remove("value");
+                result.Remove("valueof");
             }
             return result;
         }
