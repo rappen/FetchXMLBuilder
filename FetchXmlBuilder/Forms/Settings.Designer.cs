@@ -30,8 +30,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
-            Rappen.XTB.FetchXmlBuilder.Settings.XmlColors xmlColors1 = new Rappen.XTB.FetchXmlBuilder.Settings.XmlColors();
+            Rappen.XTB.FetchXmlBuilder.Settings.XmlColors xmlColors3 = new Rappen.XTB.FetchXmlBuilder.Settings.XmlColors();
             this.cmbResult = new System.Windows.Forms.ComboBox();
             this.chkResAllPages = new System.Windows.Forms.CheckBox();
             this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
@@ -73,14 +74,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabLayout = new System.Windows.Forms.TabPage();
             this.tabBehavior = new System.Windows.Forms.TabPage();
             this.tabResults = new System.Windows.Forms.TabPage();
-            this.tabAdvanced = new System.Windows.Forms.TabPage();
-            this.tabDefaultQuery = new System.Windows.Forms.TabPage();
-            this.tabXmlScheme = new System.Windows.Forms.TabPage();
-            this.panResultView = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
+            this.panResultView = new System.Windows.Forms.Panel();
+            this.tabAdvanced = new System.Windows.Forms.TabPage();
             this.chkShowOData2 = new System.Windows.Forms.CheckBox();
+            this.tabDefaultQuery = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tabXmlScheme = new System.Windows.Forms.TabPage();
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
+            this.linkDeprecatedExecFetchReq = new System.Windows.Forms.LinkLabel();
+            this.tt = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -89,10 +92,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabLayout.SuspendLayout();
             this.tabBehavior.SuspendLayout();
             this.tabResults.SuspendLayout();
+            this.panResultView.SuspendLayout();
             this.tabAdvanced.SuspendLayout();
             this.tabDefaultQuery.SuspendLayout();
             this.tabXmlScheme.SuspendLayout();
-            this.panResultView.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmbResult
@@ -550,6 +553,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // tabResults
             // 
             this.tabResults.BackColor = System.Drawing.SystemColors.Window;
+            this.tabResults.Controls.Add(this.linkDeprecatedExecFetchReq);
             this.tabResults.Controls.Add(this.label2);
             this.tabResults.Controls.Add(this.panResultView);
             this.tabResults.Controls.Add(this.cmbResult);
@@ -560,6 +564,27 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabResults.Size = new System.Drawing.Size(505, 153);
             this.tabResults.TabIndex = 3;
             this.tabResults.Text = "Results";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(20, 20);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(64, 13);
+            this.label2.TabIndex = 20;
+            this.label2.Text = "Result Type";
+            // 
+            // panResultView
+            // 
+            this.panResultView.Controls.Add(this.chkClickableLinks);
+            this.panResultView.Controls.Add(this.linkLayout);
+            this.panResultView.Controls.Add(this.numMaxColumnWidth);
+            this.panResultView.Controls.Add(this.label1);
+            this.panResultView.Controls.Add(this.chkWorkWithLayout);
+            this.panResultView.Location = new System.Drawing.Point(260, 23);
+            this.panResultView.Name = "panResultView";
+            this.panResultView.Size = new System.Drawing.Size(224, 100);
+            this.panResultView.TabIndex = 19;
             // 
             // tabAdvanced
             // 
@@ -576,6 +601,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabAdvanced.TabIndex = 4;
             this.tabAdvanced.Text = "Advanced";
             // 
+            // chkShowOData2
+            // 
+            this.chkShowOData2.AutoSize = true;
+            this.chkShowOData2.Location = new System.Drawing.Point(20, 89);
+            this.chkShowOData2.Name = "chkShowOData2";
+            this.chkShowOData2.Size = new System.Drawing.Size(172, 17);
+            this.chkShowOData2.TabIndex = 10;
+            this.chkShowOData2.Text = "Show deprecated \"OData 2.0\"";
+            this.chkShowOData2.UseVisualStyleBackColor = true;
+            // 
             // tabDefaultQuery
             // 
             this.tabDefaultQuery.BackColor = System.Drawing.SystemColors.Window;
@@ -588,6 +623,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabDefaultQuery.TabIndex = 5;
             this.tabDefaultQuery.Text = "Default Query";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(20, 20);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(124, 13);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Default Query FetchXML";
+            // 
             // tabXmlScheme
             // 
             this.tabXmlScheme.BackColor = System.Drawing.SystemColors.Window;
@@ -599,36 +643,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabXmlScheme.TabIndex = 6;
             this.tabXmlScheme.Text = "XML Scheme";
             // 
-            // panResultView
-            // 
-            this.panResultView.Controls.Add(this.chkClickableLinks);
-            this.panResultView.Controls.Add(this.linkLayout);
-            this.panResultView.Controls.Add(this.numMaxColumnWidth);
-            this.panResultView.Controls.Add(this.label1);
-            this.panResultView.Controls.Add(this.chkWorkWithLayout);
-            this.panResultView.Location = new System.Drawing.Point(260, 23);
-            this.panResultView.Name = "panResultView";
-            this.panResultView.Size = new System.Drawing.Size(224, 100);
-            this.panResultView.TabIndex = 19;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(20, 20);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(64, 13);
-            this.label2.TabIndex = 20;
-            this.label2.Text = "Result Type";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(20, 20);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(124, 13);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "Default Query FetchXML";
-            // 
             // propXmlColors
             // 
             this.propXmlColors.CanShowVisualStyleGlyphs = false;
@@ -637,34 +651,38 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.propXmlColors.Location = new System.Drawing.Point(6, 18);
             this.propXmlColors.Name = "propXmlColors";
             this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            xmlColors1.AttributeKey = System.Drawing.Color.Red;
-            xmlColors1.AttributeKeyColor = "Red";
-            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
-            xmlColors1.AttributeValueColor = "Blue";
-            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            xmlColors1.CommentColor = "0";
-            xmlColors1.Element = System.Drawing.Color.DarkRed;
-            xmlColors1.ElementColor = "DarkRed";
-            xmlColors1.Tag = System.Drawing.Color.Blue;
-            xmlColors1.TagColor = "Blue";
-            xmlColors1.Value = System.Drawing.Color.Black;
-            xmlColors1.ValueColor = "Black";
-            this.propXmlColors.SelectedObject = xmlColors1;
+            xmlColors3.AttributeKey = System.Drawing.Color.Red;
+            xmlColors3.AttributeKeyColor = "Red";
+            xmlColors3.AttributeValue = System.Drawing.Color.Blue;
+            xmlColors3.AttributeValueColor = "Blue";
+            xmlColors3.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            xmlColors3.CommentColor = "0";
+            xmlColors3.Element = System.Drawing.Color.DarkRed;
+            xmlColors3.ElementColor = "DarkRed";
+            xmlColors3.Tag = System.Drawing.Color.Blue;
+            xmlColors3.TagColor = "Blue";
+            xmlColors3.Value = System.Drawing.Color.Black;
+            xmlColors3.ValueColor = "Black";
+            this.propXmlColors.SelectedObject = xmlColors3;
             this.propXmlColors.Size = new System.Drawing.Size(252, 97);
             this.propXmlColors.TabIndex = 7;
             this.propXmlColors.ToolbarVisible = false;
             this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
             this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
             // 
-            // chkShowOData2
+            // linkDeprecatedExecFetchReq
             // 
-            this.chkShowOData2.AutoSize = true;
-            this.chkShowOData2.Location = new System.Drawing.Point(20, 89);
-            this.chkShowOData2.Name = "chkShowOData2";
-            this.chkShowOData2.Size = new System.Drawing.Size(172, 17);
-            this.chkShowOData2.TabIndex = 10;
-            this.chkShowOData2.Text = "Show deprecated \"OData 2.0\"";
-            this.chkShowOData2.UseVisualStyleBackColor = true;
+            this.linkDeprecatedExecFetchReq.AutoSize = true;
+            this.linkDeprecatedExecFetchReq.Location = new System.Drawing.Point(20, 128);
+            this.linkDeprecatedExecFetchReq.Name = "linkDeprecatedExecFetchReq";
+            this.linkDeprecatedExecFetchReq.Size = new System.Drawing.Size(263, 13);
+            this.linkDeprecatedExecFetchReq.TabIndex = 21;
+            this.linkDeprecatedExecFetchReq.TabStop = true;
+            this.linkDeprecatedExecFetchReq.Text = "ExecuteFetchRequest is deprecated - read more here!";
+            this.tt.SetToolTip(this.linkDeprecatedExecFetchReq, "https://learn.microsoft.com/dotnet/api/microsoft.crm.sdk.messages.executefetchreq" +
+        "uest");
+            this.linkDeprecatedExecFetchReq.Visible = false;
+            this.linkDeprecatedExecFetchReq.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkGeneral_Click);
             // 
             // Settings
             // 
@@ -695,13 +713,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabBehavior.PerformLayout();
             this.tabResults.ResumeLayout(false);
             this.tabResults.PerformLayout();
+            this.panResultView.ResumeLayout(false);
+            this.panResultView.PerformLayout();
             this.tabAdvanced.ResumeLayout(false);
             this.tabAdvanced.PerformLayout();
             this.tabDefaultQuery.ResumeLayout(false);
             this.tabDefaultQuery.PerformLayout();
             this.tabXmlScheme.ResumeLayout(false);
-            this.panResultView.ResumeLayout(false);
-            this.panResultView.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -757,5 +775,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox chkShowOData2;
+        private System.Windows.Forms.LinkLabel linkDeprecatedExecFetchReq;
+        private System.Windows.Forms.ToolTip tt;
     }
 }
