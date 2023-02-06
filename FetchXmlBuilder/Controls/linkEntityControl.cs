@@ -372,6 +372,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
             if (control == txtAlias)
             {
+                if (Validations.ValidateAlias(txtAlias.Text) is ControlValidationResult aliasresult)
+                {
+                    return aliasresult;
+                }
                 if (string.IsNullOrWhiteSpace(txtAlias.Text) && fxb.settings.Results.WorkWithLayout)
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "Using Layout: Alias is needed to show these attributes");

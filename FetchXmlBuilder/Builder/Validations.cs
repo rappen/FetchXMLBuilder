@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XRM.Helpers.FetchXML;
+using System;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -7,6 +8,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
 {
     internal static class Validations
     {
+        internal const string allowedaliaschars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
+
         internal static ControlValidationResult GetWarning(TreeNode node, FetchXmlBuilder fxb)
         {
             if (!fxb.settings.ShowValidation || node == null)
@@ -45,6 +48,24 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
             return null;
         }
 
+        internal static ControlValidationResult ValidateAlias(string alias)
+        {
+            if (string.IsNullOrEmpty(alias))
+            {
+                return null;
+            }
+            var aliasinvalid = alias.Where(c => !allowedaliaschars.Contains(c) && !char.IsDigit(c));
+            if (aliasinvalid.Any())
+            {
+                return new ControlValidationResult(ControlValidationLevel.Error, $"Incorrect characters in Alias: {string.Join(", ", aliasinvalid)}");
+            }
+            if (!allowedaliaschars.Contains(alias[0]))
+            {
+                return new ControlValidationResult(ControlValidationLevel.Error, $"Incorrect first characters in Alias: {alias[0]}");
+            }
+            return null;
+        }
+
         private static ControlValidationResult ValidateFetch(TreeNode node, FetchXmlBuilder fxb)
         {
             if (!node.Nodes.OfType<TreeNode>().Any(n => n.Name == "entity"))
@@ -67,6 +88,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
         private static ControlValidationResult ValidateLinkEntity(TreeNode node, FetchXmlBuilder fxb)
         {
             var name = node.Value("name");
+            var alias = node.Value("alias");
+            if (ValidateAlias(alias) is ControlValidationResult aliasresult)
+            {
+                return aliasresult;
+            }
             if (string.IsNullOrWhiteSpace(name) ||
                 string.IsNullOrWhiteSpace(node.Value("to")) ||
                 string.IsNullOrWhiteSpace(node.Value("from")))
@@ -74,7 +100,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                 return new ControlValidationResult(ControlValidationLevel.Warning, "Link-Entity must include Name, To, From.");
             }
             if (fxb.settings.Results.WorkWithLayout &&
-                string.IsNullOrWhiteSpace(node.Value("alias")) &&
+                string.IsNullOrWhiteSpace(alias) &&
                 node.Nodes.OfType<TreeNode>().Any(n => n.Name == "attribute"))
             {
                 return new ControlValidationResult(ControlValidationLevel.Warning, "Using Layout: Alias is needed to show these attributes");
@@ -111,6 +137,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                 }
             }
             var alias = node.Value("alias");
+            if (ValidateAlias(alias) is ControlValidationResult aliasresult)
+            {
+                return aliasresult;
+            }
             if (node.IsFetchAggregate())
             {
                 if (string.IsNullOrWhiteSpace(alias))

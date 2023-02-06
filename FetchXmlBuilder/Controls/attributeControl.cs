@@ -81,6 +81,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 {
                     return new ControlValidationResult(ControlValidationLevel.Error, "Alias must be specified in aggregate queries");
                 }
+                if (Validations.ValidateAlias(txtAlias.Text) is ControlValidationResult aliasresult)
+                {
+                    return aliasresult;
+                }
             }
 
             return base.ValidateControl(control);
