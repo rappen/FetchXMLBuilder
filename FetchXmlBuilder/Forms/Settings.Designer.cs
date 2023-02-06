@@ -32,7 +32,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
-            Rappen.XTB.FetchXmlBuilder.Settings.XmlColors xmlColors3 = new Rappen.XTB.FetchXmlBuilder.Settings.XmlColors();
+            Rappen.XTB.FetchXmlBuilder.Settings.XmlColors xmlColors1 = new Rappen.XTB.FetchXmlBuilder.Settings.XmlColors();
             this.cmbResult = new System.Windows.Forms.ComboBox();
             this.chkResAllPages = new System.Windows.Forms.CheckBox();
             this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
@@ -74,6 +74,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabLayout = new System.Windows.Forms.TabPage();
             this.tabBehavior = new System.Windows.Forms.TabPage();
             this.tabResults = new System.Windows.Forms.TabPage();
+            this.linkDeprecatedExecFetchReq = new System.Windows.Forms.LinkLabel();
             this.label2 = new System.Windows.Forms.Label();
             this.panResultView = new System.Windows.Forms.Panel();
             this.tabAdvanced = new System.Windows.Forms.TabPage();
@@ -82,7 +83,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.label3 = new System.Windows.Forms.Label();
             this.tabXmlScheme = new System.Windows.Forms.TabPage();
             this.propXmlColors = new System.Windows.Forms.PropertyGrid();
-            this.linkDeprecatedExecFetchReq = new System.Windows.Forms.LinkLabel();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
@@ -122,6 +122,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkResAllPages.Size = new System.Drawing.Size(111, 17);
             this.chkResAllPages.TabIndex = 10;
             this.chkResAllPages.Text = "Retrieve all pages";
+            this.tt.SetToolTip(this.chkResAllPages, "Check this to always retrieve and keep retrieving\r\nuntill all the data is now her" +
+        "e. But be careful...");
             this.chkResAllPages.UseVisualStyleBackColor = true;
             // 
             // chkAppResultsNewWindow
@@ -132,6 +134,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkAppResultsNewWindow.Size = new System.Drawing.Size(192, 17);
             this.chkAppResultsNewWindow.TabIndex = 12;
             this.chkAppResultsNewWindow.Text = "Always open results in new window";
+            this.tt.SetToolTip(this.chkAppResultsNewWindow, "To compare results it might be good to always\r\nget the result in a new window.");
             this.chkAppResultsNewWindow.UseVisualStyleBackColor = true;
             // 
             // label1
@@ -165,6 +168,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.numMaxColumnWidth.Size = new System.Drawing.Size(75, 20);
             this.numMaxColumnWidth.TabIndex = 15;
             this.numMaxColumnWidth.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tt.SetToolTip(this.numMaxColumnWidth, "Helps to not getting gazillion width columns for crazy\r\nwide data.");
             this.numMaxColumnWidth.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.numMaxColumnWidth.Value = new decimal(new int[] {
             500,
@@ -180,6 +184,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkClickableLinks.Size = new System.Drawing.Size(157, 17);
             this.chkClickableLinks.TabIndex = 14;
             this.chkClickableLinks.Text = "Double-click links on results";
+            this.tt.SetToolTip(this.chkClickableLinks, "I may be easy and nice to double-click to open that \r\nrecord or lookups in the re" +
+        "sults.");
             this.chkClickableLinks.UseVisualStyleBackColor = true;
             // 
             // chkAlwaysShowAggregateProperties
@@ -190,6 +196,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkAlwaysShowAggregateProperties.Size = new System.Drawing.Size(195, 17);
             this.chkAlwaysShowAggregateProperties.TabIndex = 9;
             this.chkAlwaysShowAggregateProperties.Text = "Always show aggregating properties";
+            this.tt.SetToolTip(this.chkAlwaysShowAggregateProperties, "Aggregation properties of the attributes are only\r\nshowing if the fetch says it s" +
+        "hould aggregate.\r\nIf you check this one, they will always be shown.");
             this.chkAlwaysShowAggregateProperties.UseVisualStyleBackColor = true;
             // 
             // chkAppFriendlyResults
@@ -200,6 +208,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkAppFriendlyResults.Size = new System.Drawing.Size(181, 17);
             this.chkAppFriendlyResults.TabIndex = 2;
             this.chkAppFriendlyResults.Text = "Friendly results (CTRL+SHIFT+F)";
+            this.tt.SetToolTip(this.chkAppFriendlyResults, "Flip between at showing values and headers\r\nwith a friendly name or a technical v" +
+        "alue.\r\nNote it can easily be flipped outside these settings with <CTRL+SHIFT>+F\r" +
+        "\n");
             this.chkAppFriendlyResults.UseVisualStyleBackColor = true;
             // 
             // chkUseLookup
@@ -210,6 +221,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkUseLookup.Size = new System.Drawing.Size(193, 17);
             this.chkUseLookup.TabIndex = 8;
             this.chkUseLookup.Text = "Use Lookup control instead of Guid";
+            this.tt.SetToolTip(this.chkUseLookup, "Check this to be able to select a record instead of only\r\nwriting the Guid. Most " +
+        "used in conditional values.");
             this.chkUseLookup.UseVisualStyleBackColor = true;
             // 
             // chkAppSingle
@@ -220,6 +233,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkAppSingle.Size = new System.Drawing.Size(203, 17);
             this.chkAppSingle.TabIndex = 3;
             this.chkAppSingle.Text = "Use single quotation in rendered XML";
+            this.tt.SetToolTip(this.chkAppSingle, "Flip this between singe quote and double quotes in the FetchXML.");
             this.chkAppSingle.UseVisualStyleBackColor = true;
             // 
             // chkAppFriendly
@@ -230,6 +244,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkAppFriendly.Size = new System.Drawing.Size(179, 17);
             this.chkAppFriendly.TabIndex = 1;
             this.chkAppFriendly.Text = "Friendly names i query (CTRL+F)";
+            this.tt.SetToolTip(this.chkAppFriendly, "Flip between at showing entities and attributes etc names\r\nwith a friendly name o" +
+        "r a technical logical_name.\r\nNote it can easily be flipped outside these setting" +
+        "s with <CTRL>+F");
             this.chkAppFriendly.UseVisualStyleBackColor = true;
             // 
             // chkShowButtonTexts
@@ -240,6 +257,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkShowButtonTexts.Size = new System.Drawing.Size(111, 17);
             this.chkShowButtonTexts.TabIndex = 1;
             this.chkShowButtonTexts.Text = "Show button texts";
+            this.tt.SetToolTip(this.chkShowButtonTexts, "Buttons in the main menu can only be showing\r\ntheir icons, or also include their " +
+        "texts.");
             this.chkShowButtonTexts.UseVisualStyleBackColor = true;
             // 
             // chkShowNodeTypes
@@ -250,6 +269,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkShowNodeTypes.Size = new System.Drawing.Size(156, 17);
             this.chkShowNodeTypes.TabIndex = 3;
             this.chkShowNodeTypes.Text = "Show treeview nodes types";
+            this.tt.SetToolTip(this.chkShowNodeTypes, "Check this to show each type of nodes in\r\nthe treeview in the Query Builder.");
             this.chkShowNodeTypes.UseVisualStyleBackColor = true;
             // 
             // chkShowHelp
@@ -260,6 +280,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkShowHelp.Size = new System.Drawing.Size(100, 17);
             this.chkShowHelp.TabIndex = 2;
             this.chkShowHelp.Text = "Show help links";
+            this.tt.SetToolTip(this.chkShowHelp, "There are a lot of help link in this tool.\r\nThey can be hidden with this setting." +
+        "");
             this.chkShowHelp.UseVisualStyleBackColor = true;
             // 
             // chkAppAllowUncustViews
@@ -270,6 +292,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkAppAllowUncustViews.Size = new System.Drawing.Size(198, 17);
             this.chkAppAllowUncustViews.TabIndex = 6;
             this.chkAppAllowUncustViews.Text = "Allow opening uncustomizable views";
+            this.tt.SetToolTip(this.chkAppAllowUncustViews, "Some views don\'t allow to change. But they can be\r\nopened. If you check this one." +
+        "");
             this.chkAppAllowUncustViews.UseVisualStyleBackColor = true;
             // 
             // chkUseSQL4CDS
@@ -280,6 +304,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkUseSQL4CDS.Size = new System.Drawing.Size(197, 17);
             this.chkUseSQL4CDS.TabIndex = 5;
             this.chkUseSQL4CDS.Text = "Use SQL 4 CDS for SQL conversion";
+            this.tt.SetToolTip(this.chkUseSQL4CDS, "Converting from FetchXML to SQL can be done by\r\nthe SQL 4 CDS tool. If unchecked," +
+        " I will try within FetchXML Builder.");
             this.chkUseSQL4CDS.UseVisualStyleBackColor = true;
             // 
             // chkAppNoSavePrompt
@@ -290,6 +316,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkAppNoSavePrompt.Size = new System.Drawing.Size(159, 17);
             this.chkAppNoSavePrompt.TabIndex = 2;
             this.chkAppNoSavePrompt.Text = "Do not prompt to save to file";
+            this.tt.SetToolTip(this.chkAppNoSavePrompt, "Check this to please just close FetchXML Builder\r\nwithout asking me if it should " +
+        "be save on disk.");
             this.chkAppNoSavePrompt.UseVisualStyleBackColor = true;
             // 
             // panel1
@@ -395,6 +423,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkShowValidationInfo.Size = new System.Drawing.Size(131, 17);
             this.chkShowValidationInfo.TabIndex = 8;
             this.chkShowValidationInfo.Text = "Show Information Tips";
+            this.tt.SetToolTip(this.chkShowValidationInfo, "It might be too much with the Information-level of\r\ntips. So it might be good to " +
+        "hide it by unchecking.");
             this.chkShowValidationInfo.UseVisualStyleBackColor = true;
             // 
             // chkShowValidation
@@ -405,6 +435,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkShowValidation.Size = new System.Drawing.Size(146, 17);
             this.chkShowValidation.TabIndex = 7;
             this.chkShowValidation.Text = "Show Error/Warning Tips";
+            this.tt.SetToolTip(this.chkShowValidation, "It is probably good to get warnings and error notes\r\nhere and there. But it can b" +
+        "e disabled.");
             this.chkShowValidation.UseVisualStyleBackColor = true;
             this.chkShowValidation.CheckedChanged += new System.EventHandler(this.chkShowValidation_CheckedChanged);
             // 
@@ -416,6 +448,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkAddConditionToFilter.Size = new System.Drawing.Size(193, 17);
             this.chkAddConditionToFilter.TabIndex = 4;
             this.chkAddConditionToFilter.Text = "Add Condition to Filter automatically";
+            this.tt.SetToolTip(this.chkAddConditionToFilter, "Check this if automagically create a Condition also\r\nwhen creating an Filter. You" +
+        " probably will always\r\nneed an Condition there...");
             this.chkAddConditionToFilter.UseVisualStyleBackColor = true;
             // 
             // chkShowRepository
@@ -426,6 +460,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkShowRepository.Size = new System.Drawing.Size(135, 17);
             this.chkShowRepository.TabIndex = 4;
             this.chkShowRepository.Text = "Show Repository menu";
+            this.tt.SetToolTip(this.chkShowRepository, "Do you like to use Repository?\r\nCheck this to show it in the menu.");
             this.chkShowRepository.UseVisualStyleBackColor = true;
             // 
             // chkShowAllAttributes
@@ -436,6 +471,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkShowAllAttributes.Size = new System.Drawing.Size(169, 17);
             this.chkShowAllAttributes.TabIndex = 5;
             this.chkShowAllAttributes.Text = "Show \"all-attributes\" (bad use)";
+            this.tt.SetToolTip(this.chkShowAllAttributes, "all-attributes is a big no-no.\r\nBut you can, if you check this one.");
             this.chkShowAllAttributes.UseVisualStyleBackColor = true;
             // 
             // linkLabel1
@@ -459,6 +495,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkWaitUntilMetadataLoaded.Size = new System.Drawing.Size(172, 17);
             this.chkWaitUntilMetadataLoaded.TabIndex = 1;
             this.chkWaitUntilMetadataLoaded.Text = "Wait until all entities are loaded";
+            this.tt.SetToolTip(this.chkWaitUntilMetadataLoaded, "Unchecked it will load metadata in the background.\r\nChecked and it will load it e" +
+        "verything, them the tool\r\ncan be used.");
             this.chkWaitUntilMetadataLoaded.UseVisualStyleBackColor = true;
             // 
             // chkTryMetadataCache
@@ -469,6 +507,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkTryMetadataCache.Size = new System.Drawing.Size(202, 17);
             this.chkTryMetadataCache.TabIndex = 0;
             this.chkTryMetadataCache.Text = "Use cached metadata in XrmToolBox";
+            this.tt.SetToolTip(this.chkTryMetadataCache, "XrmToolBox has a general cache for Dataverse metadata.\r\nMay be smart, may not. Tr" +
+        "y it!");
             this.chkTryMetadataCache.UseVisualStyleBackColor = true;
             this.chkTryMetadataCache.CheckedChanged += new System.EventHandler(this.chkTryMetadataCache_CheckedChanged);
             // 
@@ -481,7 +521,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.linkLayout.TabIndex = 18;
             this.linkLayout.TabStop = true;
             this.linkLayout.Text = "Read docs!";
-            this.linkLayout.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLayout_LinkClicked);
+            this.tt.SetToolTip(this.linkLayout, "https://fetchxmlbuilder.com/features/layouts");
+            this.linkLayout.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkGeneral_Click);
             // 
             // chkWorkWithLayout
             // 
@@ -491,6 +532,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkWorkWithLayout.Size = new System.Drawing.Size(135, 17);
             this.chkWorkWithLayout.TabIndex = 17;
             this.chkWorkWithLayout.Text = "Work with View Layout";
+            this.tt.SetToolTip(this.chkWorkWithLayout, "FetchXML AND LayoutXML!\r\nProbably read about it... Link is here.");
             this.chkWorkWithLayout.UseVisualStyleBackColor = true;
             // 
             // tabSettings
@@ -565,6 +607,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabResults.TabIndex = 3;
             this.tabResults.Text = "Results";
             // 
+            // linkDeprecatedExecFetchReq
+            // 
+            this.linkDeprecatedExecFetchReq.AutoSize = true;
+            this.linkDeprecatedExecFetchReq.Location = new System.Drawing.Point(20, 128);
+            this.linkDeprecatedExecFetchReq.Name = "linkDeprecatedExecFetchReq";
+            this.linkDeprecatedExecFetchReq.Size = new System.Drawing.Size(263, 13);
+            this.linkDeprecatedExecFetchReq.TabIndex = 21;
+            this.linkDeprecatedExecFetchReq.TabStop = true;
+            this.linkDeprecatedExecFetchReq.Text = "ExecuteFetchRequest is deprecated - read more here!";
+            this.tt.SetToolTip(this.linkDeprecatedExecFetchReq, "https://learn.microsoft.com/dotnet/api/microsoft.crm.sdk.messages.executefetchreq" +
+        "uest");
+            this.linkDeprecatedExecFetchReq.Visible = false;
+            this.linkDeprecatedExecFetchReq.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkGeneral_Click);
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -609,6 +665,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkShowOData2.Size = new System.Drawing.Size(172, 17);
             this.chkShowOData2.TabIndex = 10;
             this.chkShowOData2.Text = "Show deprecated \"OData 2.0\"";
+            this.tt.SetToolTip(this.chkShowOData2, "OData v2.0 is deprecated and removed from the\r\nplatform at 2023-03-30.\r\nYou can s" +
+        "how it anyway, if you which, but checking this one.");
             this.chkShowOData2.UseVisualStyleBackColor = true;
             // 
             // tabDefaultQuery
@@ -651,38 +709,24 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.propXmlColors.Location = new System.Drawing.Point(6, 18);
             this.propXmlColors.Name = "propXmlColors";
             this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            xmlColors3.AttributeKey = System.Drawing.Color.Red;
-            xmlColors3.AttributeKeyColor = "Red";
-            xmlColors3.AttributeValue = System.Drawing.Color.Blue;
-            xmlColors3.AttributeValueColor = "Blue";
-            xmlColors3.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            xmlColors3.CommentColor = "0";
-            xmlColors3.Element = System.Drawing.Color.DarkRed;
-            xmlColors3.ElementColor = "DarkRed";
-            xmlColors3.Tag = System.Drawing.Color.Blue;
-            xmlColors3.TagColor = "Blue";
-            xmlColors3.Value = System.Drawing.Color.Black;
-            xmlColors3.ValueColor = "Black";
-            this.propXmlColors.SelectedObject = xmlColors3;
+            xmlColors1.AttributeKey = System.Drawing.Color.Red;
+            xmlColors1.AttributeKeyColor = "Red";
+            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
+            xmlColors1.AttributeValueColor = "Blue";
+            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            xmlColors1.CommentColor = "0";
+            xmlColors1.Element = System.Drawing.Color.DarkRed;
+            xmlColors1.ElementColor = "DarkRed";
+            xmlColors1.Tag = System.Drawing.Color.Blue;
+            xmlColors1.TagColor = "Blue";
+            xmlColors1.Value = System.Drawing.Color.Black;
+            xmlColors1.ValueColor = "Black";
+            this.propXmlColors.SelectedObject = xmlColors1;
             this.propXmlColors.Size = new System.Drawing.Size(252, 97);
             this.propXmlColors.TabIndex = 7;
             this.propXmlColors.ToolbarVisible = false;
             this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
             this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
-            // 
-            // linkDeprecatedExecFetchReq
-            // 
-            this.linkDeprecatedExecFetchReq.AutoSize = true;
-            this.linkDeprecatedExecFetchReq.Location = new System.Drawing.Point(20, 128);
-            this.linkDeprecatedExecFetchReq.Name = "linkDeprecatedExecFetchReq";
-            this.linkDeprecatedExecFetchReq.Size = new System.Drawing.Size(263, 13);
-            this.linkDeprecatedExecFetchReq.TabIndex = 21;
-            this.linkDeprecatedExecFetchReq.TabStop = true;
-            this.linkDeprecatedExecFetchReq.Text = "ExecuteFetchRequest is deprecated - read more here!";
-            this.tt.SetToolTip(this.linkDeprecatedExecFetchReq, "https://learn.microsoft.com/dotnet/api/microsoft.crm.sdk.messages.executefetchreq" +
-        "uest");
-            this.linkDeprecatedExecFetchReq.Visible = false;
-            this.linkDeprecatedExecFetchReq.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkGeneral_Click);
             // 
             // Settings
             // 
