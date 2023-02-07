@@ -82,8 +82,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabDefaultQuery = new System.Windows.Forms.TabPage();
             this.label3 = new System.Windows.Forms.Label();
             this.tabXmlScheme = new System.Windows.Forms.TabPage();
-            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
+            this.btnResetAll = new System.Windows.Forms.Button();
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -407,7 +409,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             this.btnResetXmlColors.Image = ((System.Drawing.Image)(resources.GetObject("btnResetXmlColors.Image")));
             this.btnResetXmlColors.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnResetXmlColors.Location = new System.Drawing.Point(241, 79);
+            this.btnResetXmlColors.Location = new System.Drawing.Point(239, 101);
             this.btnResetXmlColors.Name = "btnResetXmlColors";
             this.btnResetXmlColors.Size = new System.Drawing.Size(92, 23);
             this.btnResetXmlColors.TabIndex = 8;
@@ -541,9 +543,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabSettings.Controls.Add(this.tabLayout);
             this.tabSettings.Controls.Add(this.tabBehavior);
             this.tabSettings.Controls.Add(this.tabResults);
-            this.tabSettings.Controls.Add(this.tabAdvanced);
             this.tabSettings.Controls.Add(this.tabDefaultQuery);
             this.tabSettings.Controls.Add(this.tabXmlScheme);
+            this.tabSettings.Controls.Add(this.tabAdvanced);
             this.tabSettings.Location = new System.Drawing.Point(12, 12);
             this.tabSettings.Name = "tabSettings";
             this.tabSettings.SelectedIndex = 0;
@@ -645,6 +647,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // tabAdvanced
             // 
             this.tabAdvanced.BackColor = System.Drawing.SystemColors.Window;
+            this.tabAdvanced.Controls.Add(this.btnResetAll);
             this.tabAdvanced.Controls.Add(this.chkShowOData2);
             this.tabAdvanced.Controls.Add(this.chkShowAllAttributes);
             this.tabAdvanced.Controls.Add(this.chkAlwaysShowAggregateProperties);
@@ -693,6 +696,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // tabXmlScheme
             // 
             this.tabXmlScheme.BackColor = System.Drawing.SystemColors.Window;
+            this.tabXmlScheme.Controls.Add(this.label4);
             this.tabXmlScheme.Controls.Add(this.btnResetXmlColors);
             this.tabXmlScheme.Controls.Add(this.propXmlColors);
             this.tabXmlScheme.Location = new System.Drawing.Point(4, 22);
@@ -701,12 +705,23 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabXmlScheme.TabIndex = 6;
             this.tabXmlScheme.Text = "XML Scheme";
             // 
+            // btnResetAll
+            // 
+            this.btnResetAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnResetAll.Location = new System.Drawing.Point(312, 115);
+            this.btnResetAll.Name = "btnResetAll";
+            this.btnResetAll.Size = new System.Drawing.Size(177, 23);
+            this.btnResetAll.TabIndex = 11;
+            this.btnResetAll.Text = "Reset to default settings";
+            this.btnResetAll.UseVisualStyleBackColor = true;
+            this.btnResetAll.Click += new System.EventHandler(this.btnResetAll_Click);
+            // 
             // propXmlColors
             // 
             this.propXmlColors.CanShowVisualStyleGlyphs = false;
             this.propXmlColors.HelpVisible = false;
             this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.Location = new System.Drawing.Point(6, 18);
+            this.propXmlColors.Location = new System.Drawing.Point(4, 40);
             this.propXmlColors.Name = "propXmlColors";
             this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
             xmlColors1.AttributeKey = System.Drawing.Color.Red;
@@ -727,6 +742,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.propXmlColors.ToolbarVisible = false;
             this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
             this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(20, 20);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(127, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "XML colors for FetchXML";
             // 
             // Settings
             // 
@@ -764,6 +788,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabDefaultQuery.ResumeLayout(false);
             this.tabDefaultQuery.PerformLayout();
             this.tabXmlScheme.ResumeLayout(false);
+            this.tabXmlScheme.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -821,5 +846,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.CheckBox chkShowOData2;
         private System.Windows.Forms.LinkLabel linkDeprecatedExecFetchReq;
         private System.Windows.Forms.ToolTip tt;
+        private System.Windows.Forms.Button btnResetAll;
+        private System.Windows.Forms.Label label4;
     }
 }

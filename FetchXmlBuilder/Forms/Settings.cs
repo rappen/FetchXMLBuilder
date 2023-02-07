@@ -224,5 +224,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         {
             FetchXmlBuilder.HelpClick(tt.GetToolTip(sender as Control));
         }
+
+        private void btnResetAll_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want it to get back default settings?\n\nYes or No...", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+            {
+                PopulateSettings(new FXBSettings());
+            }
+        }
     }
 }

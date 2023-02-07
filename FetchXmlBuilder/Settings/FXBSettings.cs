@@ -29,7 +29,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public string CurrentVersion { get; set; }
         public string LastOpenedViewEntity { get; set; }
         public Guid LastOpenedViewId { get; set; }
-        public bool DoNotPromptToSave { get; set; } = false;
+        public bool DoNotPromptToSave { get; set; } = true;
         public DockStates DockStates { get; set; } = new DockStates();
         public ContentWindows ContentWindows { get; set; } = new ContentWindows();
         public bool OpenUncustomizableViews { get; set; } = false;
