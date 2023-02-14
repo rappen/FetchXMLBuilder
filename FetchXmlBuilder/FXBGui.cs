@@ -64,7 +64,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     // Main menu items
                     tsbExecute.Enabled = enabled && Service != null;
                     tsbAbort.Visible = settings.Results.RetrieveAllPages;
-                    tsbBDU.Visible = bduexists && callerArgs?.SourcePlugin != "Bulk Data Updater";
+                    tsbBDU.Visible = settings.ShowBDU && bduexists && callerArgs?.SourcePlugin != "Bulk Data Updater";
                     tsbBDU.Enabled = enabled && (dockControlBuilder?.IsFetchAggregate() == false);
                     tsbReturnToCaller.Visible = CallerWantsResults();
 

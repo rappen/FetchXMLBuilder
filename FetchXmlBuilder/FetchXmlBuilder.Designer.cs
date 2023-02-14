@@ -69,12 +69,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbShare = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbView = new System.Windows.Forms.ToolStripDropDownButton();
-            this.tsmiShowFetchXML = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiShowLayoutXML = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiShowMetadata = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiResetWindowLayout = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbConvert = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiShowSQL = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowFlow = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,12 +76,17 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowOData = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowCSharpCode = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowFetchXMLjs = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsbView = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsmiShowFetchXML = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowLayoutXML = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowMetadata = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiResetWindowLayout = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbOptions = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSelect = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.tmsiShowReleaseNotes = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbReturnToCaller = new System.Windows.Forms.ToolStripButton();
             this.tsbBDU = new System.Windows.Forms.ToolStripButton();
             this.tslAbout = new System.Windows.Forms.ToolStripLabel();
@@ -113,14 +112,13 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbExecute,
             this.tsbAbort,
             this.toolStripSeparator7,
+            this.tsbBDU,
             this.tsbShare,
             this.toolStripSeparator10,
-            this.tsbView,
             this.tsbConvert,
+            this.tsbView,
             this.tsbOptions,
-            this.toolStripSeparator3,
             this.tsbReturnToCaller,
-            this.tsbBDU,
             this.tslAbout});
             this.toolStripMain.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolStripMain.Location = new System.Drawing.Point(0, 0);
@@ -475,6 +473,79 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.toolStripSeparator10.Name = "toolStripSeparator10";
             this.toolStripSeparator10.Size = new System.Drawing.Size(6, 39);
             // 
+            // tsbConvert
+            // 
+            this.tsbConvert.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiShowSQL,
+            this.tsmiShowFlow,
+            this.tsmiShowOData4,
+            this.tsmiShowOData,
+            this.tsmiShowCSharpCode,
+            this.tsmiShowFetchXMLjs});
+            this.tsbConvert.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_convert;
+            this.tsbConvert.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbConvert.Name = "tsbConvert";
+            this.tsbConvert.Size = new System.Drawing.Size(94, 36);
+            this.tsbConvert.Text = "Convert";
+            // 
+            // tsmiShowSQL
+            // 
+            this.tsmiShowSQL.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_sql;
+            this.tsmiShowSQL.Name = "tsmiShowSQL";
+            this.tsmiShowSQL.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.S)));
+            this.tsmiShowSQL.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowSQL.Text = "SQL Query";
+            this.tsmiShowSQL.Click += new System.EventHandler(this.tsmiShowSQL_Click);
+            // 
+            // tsmiShowFlow
+            // 
+            this.tsmiShowFlow.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_flow;
+            this.tsmiShowFlow.Name = "tsmiShowFlow";
+            this.tsmiShowFlow.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.P)));
+            this.tsmiShowFlow.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowFlow.Text = "Power Automate Parameters";
+            this.tsmiShowFlow.Click += new System.EventHandler(this.tsmiShowFlow_Click);
+            // 
+            // tsmiShowOData4
+            // 
+            this.tsmiShowOData4.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_odata;
+            this.tsmiShowOData4.Name = "tsmiShowOData4";
+            this.tsmiShowOData4.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.O)));
+            this.tsmiShowOData4.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowOData4.Text = "OData 4.0 (WebAPI)";
+            this.tsmiShowOData4.Click += new System.EventHandler(this.tsmiShowOData4_Click);
+            // 
+            // tsmiShowOData
+            // 
+            this.tsmiShowOData.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_odata;
+            this.tsmiShowOData.Name = "tsmiShowOData";
+            this.tsmiShowOData.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowOData.Text = "OData 2.0 (Deprecated)";
+            this.tsmiShowOData.Click += new System.EventHandler(this.tsmiShowOData_Click);
+            // 
+            // tsmiShowCSharpCode
+            // 
+            this.tsmiShowCSharpCode.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_csharp;
+            this.tsmiShowCSharpCode.Name = "tsmiShowCSharpCode";
+            this.tsmiShowCSharpCode.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.C)));
+            this.tsmiShowCSharpCode.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowCSharpCode.Text = "C# code";
+            this.tsmiShowCSharpCode.Click += new System.EventHandler(this.tsmiShowCSharpCode_Click);
+            // 
+            // tsmiShowFetchXMLjs
+            // 
+            this.tsmiShowFetchXMLjs.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_javascript;
+            this.tsmiShowFetchXMLjs.Name = "tsmiShowFetchXMLjs";
+            this.tsmiShowFetchXMLjs.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.J)));
+            this.tsmiShowFetchXMLjs.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowFetchXMLjs.Text = "JavaScript code";
+            this.tsmiShowFetchXMLjs.Click += new System.EventHandler(this.tsmiShowFetchXMLjs_Click);
+            // 
             // tsbView
             // 
             this.tsbView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -530,79 +601,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiResetWindowLayout.Text = "Reset window layout";
             this.tsmiResetWindowLayout.Click += new System.EventHandler(this.tsmiResetWindowLayout_Click);
             // 
-            // tsbConvert
-            // 
-            this.tsbConvert.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiShowSQL,
-            this.tsmiShowFlow,
-            this.tsmiShowOData4,
-            this.tsmiShowOData,
-            this.tsmiShowCSharpCode,
-            this.tsmiShowFetchXMLjs});
-            this.tsbConvert.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_convert;
-            this.tsbConvert.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbConvert.Name = "tsbConvert";
-            this.tsbConvert.Size = new System.Drawing.Size(94, 36);
-            this.tsbConvert.Text = "Convert";
-            // 
-            // tsmiShowSQL
-            // 
-            this.tsmiShowSQL.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_sql;
-            this.tsmiShowSQL.Name = "tsmiShowSQL";
-            this.tsmiShowSQL.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
-            | System.Windows.Forms.Keys.S)));
-            this.tsmiShowSQL.Size = new System.Drawing.Size(305, 38);
-            this.tsmiShowSQL.Text = "SQL Query";
-            this.tsmiShowSQL.Click += new System.EventHandler(this.tsmiShowSQL_Click);
-            // 
-            // tsmiShowFlow
-            // 
-            this.tsmiShowFlow.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_flow;
-            this.tsmiShowFlow.Name = "tsmiShowFlow";
-            this.tsmiShowFlow.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
-            | System.Windows.Forms.Keys.P)));
-            this.tsmiShowFlow.Size = new System.Drawing.Size(305, 38);
-            this.tsmiShowFlow.Text = "Power Automate Parameters";
-            this.tsmiShowFlow.Click += new System.EventHandler(this.tsmiShowFlow_Click);
-            // 
-            // tsmiShowOData4
-            // 
-            this.tsmiShowOData4.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_odata;
-            this.tsmiShowOData4.Name = "tsmiShowOData4";
-            this.tsmiShowOData4.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
-            | System.Windows.Forms.Keys.O)));
-            this.tsmiShowOData4.Size = new System.Drawing.Size(305, 38);
-            this.tsmiShowOData4.Text = "OData 4.0 (WebAPI)";
-            this.tsmiShowOData4.Click += new System.EventHandler(this.tsmiShowOData4_Click);
-            // 
-            // tsmiShowOData
-            // 
-            this.tsmiShowOData.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_odata;
-            this.tsmiShowOData.Name = "tsmiShowOData";
-            this.tsmiShowOData.Size = new System.Drawing.Size(305, 38);
-            this.tsmiShowOData.Text = "OData 2.0 (Deprecated)";
-            this.tsmiShowOData.Click += new System.EventHandler(this.tsmiShowOData_Click);
-            // 
-            // tsmiShowCSharpCode
-            // 
-            this.tsmiShowCSharpCode.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_csharp;
-            this.tsmiShowCSharpCode.Name = "tsmiShowCSharpCode";
-            this.tsmiShowCSharpCode.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
-            | System.Windows.Forms.Keys.C)));
-            this.tsmiShowCSharpCode.Size = new System.Drawing.Size(305, 38);
-            this.tsmiShowCSharpCode.Text = "C# code";
-            this.tsmiShowCSharpCode.Click += new System.EventHandler(this.tsmiShowCSharpCode_Click);
-            // 
-            // tsmiShowFetchXMLjs
-            // 
-            this.tsmiShowFetchXMLjs.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_javascript;
-            this.tsmiShowFetchXMLjs.Name = "tsmiShowFetchXMLjs";
-            this.tsmiShowFetchXMLjs.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
-            | System.Windows.Forms.Keys.J)));
-            this.tsmiShowFetchXMLjs.Size = new System.Drawing.Size(305, 38);
-            this.tsmiShowFetchXMLjs.Text = "JavaScript code";
-            this.tsmiShowFetchXMLjs.Click += new System.EventHandler(this.tsmiShowFetchXMLjs_Click);
-            // 
             // tsbOptions
             // 
             this.tsbOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -644,11 +642,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tmsiShowReleaseNotes.Size = new System.Drawing.Size(253, 22);
             this.tmsiShowReleaseNotes.Text = "Open Release Notes";
             this.tmsiShowReleaseNotes.Click += new System.EventHandler(this.tmsiShowReleaseNotes_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 39);
             // 
             // tsbReturnToCaller
             // 
@@ -734,7 +727,6 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         internal System.Windows.Forms.ToolStrip toolStripMain;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         internal System.Windows.Forms.ToolStripDropDownButton tsbOpen;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenFile;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenView;

@@ -38,6 +38,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             chkShowValidation.Checked = settings.ShowValidation;
             chkShowValidationInfo.Checked = settings.ShowValidationInfo;
             chkShowRepository.Checked = settings.ShowRepository;
+            chkShowBulkDataUpdater.Checked = settings.ShowBDU;
             chkShowAllAttributes.Checked = settings.QueryOptions.ShowAllAttributes;
             chkShowOData2.Checked = settings.ShowOData2;
             cmbResult.SelectedIndex = SettingResultToComboBoxItem(settings.Results.ResultOutput);
@@ -98,6 +99,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.ShowValidation = chkShowValidation.Checked;
             settings.ShowValidationInfo = settings.ShowValidation && chkShowValidationInfo.Checked;
             settings.ShowRepository = chkShowRepository.Checked;
+            settings.ShowBDU=chkShowBulkDataUpdater.Checked;
             settings.QueryOptions.ShowAllAttributes = chkShowAllAttributes.Checked;
             settings.ShowOData2 = chkShowOData2.Checked;
             settings.XmlColors = propXmlColors.SelectedObject as XmlColors;

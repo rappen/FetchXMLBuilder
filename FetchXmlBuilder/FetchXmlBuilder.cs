@@ -65,7 +65,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // Add the event handler for handling non-UI thread exceptions to the event.
             //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Error_UnhandledException);
 
-            tslAbout.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString() + " by Jonas Rapp";
+            //tslAbout.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString() + " by Jonas Rapp";
 
             ai = new AppInsights(aiEndpoint, aiKey, Assembly.GetExecutingAssembly(), "FetchXML Builder");
             var theme = new VS2015LightTheme();
@@ -360,6 +360,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             toolStripMain.Items.OfType<ToolStripItem>().ToList().ForEach(i => i.DisplayStyle = settings.ShowButtonTexts ? ToolStripItemDisplayStyle.ImageAndText : ToolStripItemDisplayStyle.Image);
             tsbRepo.Visible = settings.ShowRepository;
+            tsbBDU.Visible = settings.ShowBDU;
             tsmiShowOData.Visible = settings.ShowOData2;
             if (reloadquery && connectionsettings != null && !string.IsNullOrWhiteSpace(connectionsettings.FetchXML))
             {

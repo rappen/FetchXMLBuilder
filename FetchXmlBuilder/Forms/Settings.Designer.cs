@@ -77,15 +77,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.linkDeprecatedExecFetchReq = new System.Windows.Forms.LinkLabel();
             this.label2 = new System.Windows.Forms.Label();
             this.panResultView = new System.Windows.Forms.Panel();
-            this.tabAdvanced = new System.Windows.Forms.TabPage();
-            this.chkShowOData2 = new System.Windows.Forms.CheckBox();
             this.tabDefaultQuery = new System.Windows.Forms.TabPage();
             this.label3 = new System.Windows.Forms.Label();
             this.tabXmlScheme = new System.Windows.Forms.TabPage();
-            this.tt = new System.Windows.Forms.ToolTip(this.components);
-            this.btnResetAll = new System.Windows.Forms.Button();
-            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.label4 = new System.Windows.Forms.Label();
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
+            this.tabAdvanced = new System.Windows.Forms.TabPage();
+            this.btnResetAll = new System.Windows.Forms.Button();
+            this.chkShowOData2 = new System.Windows.Forms.CheckBox();
+            this.tt = new System.Windows.Forms.ToolTip(this.components);
+            this.chkShowBulkDataUpdater = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -95,9 +96,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabBehavior.SuspendLayout();
             this.tabResults.SuspendLayout();
             this.panResultView.SuspendLayout();
-            this.tabAdvanced.SuspendLayout();
             this.tabDefaultQuery.SuspendLayout();
             this.tabXmlScheme.SuspendLayout();
+            this.tabAdvanced.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmbResult
@@ -569,6 +570,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // tabLayout
             // 
             this.tabLayout.BackColor = System.Drawing.SystemColors.Window;
+            this.tabLayout.Controls.Add(this.chkShowBulkDataUpdater);
             this.tabLayout.Controls.Add(this.chkShowButtonTexts);
             this.tabLayout.Controls.Add(this.chkShowRepository);
             this.tabLayout.Controls.Add(this.chkShowHelp);
@@ -644,34 +646,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.panResultView.Size = new System.Drawing.Size(224, 100);
             this.panResultView.TabIndex = 19;
             // 
-            // tabAdvanced
-            // 
-            this.tabAdvanced.BackColor = System.Drawing.SystemColors.Window;
-            this.tabAdvanced.Controls.Add(this.btnResetAll);
-            this.tabAdvanced.Controls.Add(this.chkShowOData2);
-            this.tabAdvanced.Controls.Add(this.chkShowAllAttributes);
-            this.tabAdvanced.Controls.Add(this.chkAlwaysShowAggregateProperties);
-            this.tabAdvanced.Controls.Add(this.chkWaitUntilMetadataLoaded);
-            this.tabAdvanced.Controls.Add(this.chkAppAllowUncustViews);
-            this.tabAdvanced.Controls.Add(this.chkTryMetadataCache);
-            this.tabAdvanced.Location = new System.Drawing.Point(4, 22);
-            this.tabAdvanced.Name = "tabAdvanced";
-            this.tabAdvanced.Size = new System.Drawing.Size(505, 153);
-            this.tabAdvanced.TabIndex = 4;
-            this.tabAdvanced.Text = "Advanced";
-            // 
-            // chkShowOData2
-            // 
-            this.chkShowOData2.AutoSize = true;
-            this.chkShowOData2.Location = new System.Drawing.Point(20, 89);
-            this.chkShowOData2.Name = "chkShowOData2";
-            this.chkShowOData2.Size = new System.Drawing.Size(172, 17);
-            this.chkShowOData2.TabIndex = 10;
-            this.chkShowOData2.Text = "Show deprecated \"OData 2.0\"";
-            this.tt.SetToolTip(this.chkShowOData2, "OData v2.0 is deprecated and removed from the\r\nplatform at 2023-03-30.\r\nYou can s" +
-        "how it anyway, if you which, but checking this one.");
-            this.chkShowOData2.UseVisualStyleBackColor = true;
-            // 
             // tabDefaultQuery
             // 
             this.tabDefaultQuery.BackColor = System.Drawing.SystemColors.Window;
@@ -705,16 +679,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabXmlScheme.TabIndex = 6;
             this.tabXmlScheme.Text = "XML Scheme";
             // 
-            // btnResetAll
+            // label4
             // 
-            this.btnResetAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnResetAll.Location = new System.Drawing.Point(312, 115);
-            this.btnResetAll.Name = "btnResetAll";
-            this.btnResetAll.Size = new System.Drawing.Size(177, 23);
-            this.btnResetAll.TabIndex = 11;
-            this.btnResetAll.Text = "Reset to default settings";
-            this.btnResetAll.UseVisualStyleBackColor = true;
-            this.btnResetAll.Click += new System.EventHandler(this.btnResetAll_Click);
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(20, 20);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(127, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "XML colors for FetchXML";
             // 
             // propXmlColors
             // 
@@ -743,14 +715,56 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
             this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
             // 
-            // label4
+            // tabAdvanced
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(20, 20);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(127, 13);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "XML colors for FetchXML";
+            this.tabAdvanced.BackColor = System.Drawing.SystemColors.Window;
+            this.tabAdvanced.Controls.Add(this.btnResetAll);
+            this.tabAdvanced.Controls.Add(this.chkShowOData2);
+            this.tabAdvanced.Controls.Add(this.chkShowAllAttributes);
+            this.tabAdvanced.Controls.Add(this.chkAlwaysShowAggregateProperties);
+            this.tabAdvanced.Controls.Add(this.chkWaitUntilMetadataLoaded);
+            this.tabAdvanced.Controls.Add(this.chkAppAllowUncustViews);
+            this.tabAdvanced.Controls.Add(this.chkTryMetadataCache);
+            this.tabAdvanced.Location = new System.Drawing.Point(4, 22);
+            this.tabAdvanced.Name = "tabAdvanced";
+            this.tabAdvanced.Size = new System.Drawing.Size(505, 153);
+            this.tabAdvanced.TabIndex = 4;
+            this.tabAdvanced.Text = "Advanced";
+            // 
+            // btnResetAll
+            // 
+            this.btnResetAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnResetAll.Location = new System.Drawing.Point(312, 115);
+            this.btnResetAll.Name = "btnResetAll";
+            this.btnResetAll.Size = new System.Drawing.Size(177, 23);
+            this.btnResetAll.TabIndex = 11;
+            this.btnResetAll.Text = "Reset to default settings";
+            this.btnResetAll.UseVisualStyleBackColor = true;
+            this.btnResetAll.Click += new System.EventHandler(this.btnResetAll_Click);
+            // 
+            // chkShowOData2
+            // 
+            this.chkShowOData2.AutoSize = true;
+            this.chkShowOData2.Location = new System.Drawing.Point(20, 89);
+            this.chkShowOData2.Name = "chkShowOData2";
+            this.chkShowOData2.Size = new System.Drawing.Size(172, 17);
+            this.chkShowOData2.TabIndex = 10;
+            this.chkShowOData2.Text = "Show deprecated \"OData 2.0\"";
+            this.tt.SetToolTip(this.chkShowOData2, "OData v2.0 is deprecated and removed from the\r\nplatform at 2023-03-30.\r\nYou can s" +
+        "how it anyway, if you which, but checking this one.");
+            this.chkShowOData2.UseVisualStyleBackColor = true;
+            // 
+            // chkShowBulkDataUpdater
+            // 
+            this.chkShowBulkDataUpdater.AutoSize = true;
+            this.chkShowBulkDataUpdater.Location = new System.Drawing.Point(20, 112);
+            this.chkShowBulkDataUpdater.Name = "chkShowBulkDataUpdater";
+            this.chkShowBulkDataUpdater.Size = new System.Drawing.Size(181, 17);
+            this.chkShowBulkDataUpdater.TabIndex = 5;
+            this.chkShowBulkDataUpdater.Text = "Integrate with Bulk Data Updater";
+            this.tt.SetToolTip(this.chkShowBulkDataUpdater, "Show or hide the Bulk Data Updater button to send\r\nthis query to BDU, to be able " +
+        "to update, delete, etc.");
+            this.chkShowBulkDataUpdater.UseVisualStyleBackColor = true;
             // 
             // Settings
             // 
@@ -783,12 +797,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabResults.PerformLayout();
             this.panResultView.ResumeLayout(false);
             this.panResultView.PerformLayout();
-            this.tabAdvanced.ResumeLayout(false);
-            this.tabAdvanced.PerformLayout();
             this.tabDefaultQuery.ResumeLayout(false);
             this.tabDefaultQuery.PerformLayout();
             this.tabXmlScheme.ResumeLayout(false);
             this.tabXmlScheme.PerformLayout();
+            this.tabAdvanced.ResumeLayout(false);
+            this.tabAdvanced.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -848,5 +862,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.ToolTip tt;
         private System.Windows.Forms.Button btnResetAll;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox chkShowBulkDataUpdater;
     }
 }
