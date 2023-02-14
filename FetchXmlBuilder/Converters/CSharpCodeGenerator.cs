@@ -1031,7 +1031,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             }
             if (qex.TopCount != null)
             {
-                queryoptions.Add($"{Indent(indentslevel)}{pre}TopCount{valuepre}{qex.TopCount}{valuepost}");
+                var topcount = settings.QExStyle == QExStyleEnum.FluentQueryExpression ? "Top" : "TopCount";
+                queryoptions.Add($"{Indent(indentslevel)}{pre}{topcount}{valuepre}{qex.TopCount}{valuepost}");
             }
             if (!string.IsNullOrWhiteSpace(qex.PageInfo?.PagingCookie))
             {
