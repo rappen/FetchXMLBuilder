@@ -649,6 +649,12 @@
   <ItemGroup>
     <None Include="Resources\icons8-settings-16.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-adjust-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-meat-grinder-32.png" />
+  </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />
   <Import Project="..\MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutoComplete.projitems" Label="Shared" />
