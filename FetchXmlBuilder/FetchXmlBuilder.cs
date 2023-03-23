@@ -229,6 +229,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             dockControlBuilder?.Close();
             dockControlFetchXml?.Close();
             dockControlFetchXmlJs?.Close();
+            dockControlPowerPlatformCLI?.Close();
             dockControlFetchResult?.Close();
             dockControlGrid?.Close();
             dockControlOData2?.Close();
@@ -675,6 +676,11 @@ namespace Rappen.XTB.FetchXmlBuilder
         private void tsmiShowFetchXMLjs_Click(object sender, EventArgs e)
         {
             ShowContentControl(ref dockControlFetchXmlJs, ContentType.JavaScript_Query, SaveFormat.None, settings.DockStates.FetchXMLJs);
+        }
+
+        private void tsmiShowPowerPlatformCLI_Click(object sender, EventArgs e)
+        {
+            ShowContentControl(ref dockControlPowerPlatformCLI, ContentType.Power_Platform_CLI, SaveFormat.None, settings.DockStates.PowerPlatformCLI);
         }
 
         private void tsmiShowLayoutXML_Click(object sender, EventArgs e)

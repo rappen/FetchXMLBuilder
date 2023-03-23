@@ -116,6 +116,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     txtXML.ConfigureForJavaScript();
                     break;
 
+                case ContentType.Power_Platform_CLI:
+                    panActions.Visible = false;
+                    txtXML.ConfigureForCSharp();
+                    txtXML.WrapMode = ScintillaNET.WrapMode.Char;
+                    break;
+
                 case ContentType.Serialized_Result_JSON:
                     txtXML.ConfigureForJSON();
                     break;
@@ -127,6 +133,33 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             format = saveFormat;
             panSave.Visible = format != SaveFormat.None;
+        }
+
+        internal static string GetFetchMini(string fetchxml, char quotationchar = '\'', bool removecomments = true)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(fetchxml);
+            var comments = doc.SelectNodes("//comment()");
+            if (comments.Count > 0 && removecomments)
+            {
+                foreach (XmlNode node in comments)
+                {
+                    node.ParentNode.RemoveChild(node);
+                }
+            }
+
+            string xml;
+            using (var stringWriter = new StringWriter())
+            {
+                using (var xmlWriter = new XmlFragmentWriter(stringWriter))
+                {
+                    xmlWriter.QuoteChar = quotationchar;
+                    doc.Save(xmlWriter);
+                    xml = stringWriter.ToString();
+                }
+            }
+            var result = StripSpaces(xml);
+            return result;
         }
 
         private void btnFormat_Click(object sender, EventArgs e)
@@ -281,28 +314,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 FormatAsXML();
             }
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(txtXML.Text);
-            var comments = doc.SelectNodes("//comment()");
-            if (comments.Count > 0 && MessageBox.Show("Remove comments?", "Minify XML", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                foreach (XmlNode node in comments)
-                {
-                    node.ParentNode.RemoveChild(node);
-                }
-            }
-
-            string xml;
-            using (var stringWriter = new StringWriter())
-            {
-                using (var xmlWriter = new XmlFragmentWriter(stringWriter))
-                {
-                    xmlWriter.QuoteChar = fxb.settings.QueryOptions.UseSingleQuotation ? '\'' : '"';
-                    doc.Save(xmlWriter);
-                    xml = stringWriter.ToString();
-                }
-            }
-            txtXML.Text = StripSpaces(xml);
+            var fetchxml = txtXML.Text;
+            var removecomm = MessageBox.Show("Remove comments?", "Minify XML", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+            string result = GetFetchMini(fetchxml, fxb.settings.QueryOptions.UseSingleQuotation ? '\'' : '"', removecomm);
+            txtXML.Text = result;
         }
 
         private string GetCompactXml()
@@ -433,6 +448,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
                     case ContentType.JavaScript_Query:
                         fxb.settings.DockStates.FetchXMLJs = DockState;
+                        break;
+
+                    case ContentType.Power_Platform_CLI:
+                        fxb.settings.DockStates.PowerPlatformCLI = DockState;
                         break;
 
                     case ContentType.CSharp_Code:
@@ -1022,7 +1041,8 @@ More votes == released sooner.", "OrganizationServiceContext",
         Serialized_Result_JSON,
         CSharp_Code,
         SQL_Query,
-        JavaScript_Query
+        JavaScript_Query,
+        Power_Platform_CLI
     }
 
     internal enum SaveFormat

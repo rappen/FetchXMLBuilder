@@ -81,6 +81,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public DockState CSharp { get; set; } = DockState.DockRight;
         public DockState SQLQuery { get; set; } = DockState.DockRight;
         public DockState FlowList { get; set; } = DockState.Float;
+        public DockState PowerPlatformCLI { get; set; } = DockState.DockBottom;
     }
 
     public class ContentWindow
@@ -99,6 +100,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public ContentWindow FetchXmlCsWindow { get; set; } = new ContentWindow();
         public ContentWindow FetchXmlJsWindow { get; set; } = new ContentWindow();
         public ContentWindow CSharpWindow { get; set; } = new ContentWindow();
+        public ContentWindow PowerPlatformCLI { get; set; } = new ContentWindow();
 
         internal ContentWindow GetContentWindow(ContentType type)
         {
@@ -123,6 +125,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
 
                 case ContentType.JavaScript_Query:
                     return FetchXmlJsWindow;
+
+                case ContentType.Power_Platform_CLI:
+                    return PowerPlatformCLI;
             }
             return new ContentWindow();
         }
@@ -149,6 +154,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
 
                 case ContentType.JavaScript_Query:
                     FetchXmlJsWindow = windowSettings;
+                    break;
+
+                case ContentType.Power_Platform_CLI:
+                    PowerPlatformCLI = windowSettings;
                     break;
             }
         }

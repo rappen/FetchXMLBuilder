@@ -33,6 +33,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         private XmlContentControl dockControlFetchResult;
         private XmlContentControl dockControlFetchXml;
         private XmlContentControl dockControlFetchXmlJs;
+        private XmlContentControl dockControlPowerPlatformCLI;
         private ODataControl dockControlOData2;
         private ODataControl dockControlOData4;
         private FlowListControl dockControlFlowList;
@@ -166,6 +167,10 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 dockControlFetchXmlJs.UpdateXML(GetJavaScriptCode());
             }
+            if (dockControlPowerPlatformCLI?.Visible == true)
+            {
+                dockControlPowerPlatformCLI.UpdateXML(GetPowerPlatformCLIFetch());
+            }
             if (dockControlMeta?.Visible == true)
             {
                 dockControlMeta.UpdateMeta(dockControlBuilder.SelectedMetadata());
@@ -284,6 +289,13 @@ namespace Rappen.XTB.FetchXmlBuilder
                 js = "Failed to generate JavaScript code.\n\n" + ex.Message;
             }
             return js;
+        }
+
+        private string GetPowerPlatformCLIFetch()
+        {
+            var fxl = dockControlBuilder.GetFetchString(false, false);
+            fxl = XmlContentControl.GetFetchMini(fxl);
+            return $"pac org fetch --xml \"{fxl}\"";
         }
 
         private void OpenCWPFeed()
