@@ -1205,7 +1205,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 var usetoken = settings.FilterVariables;
                 var valuestr = string.Empty;
 
-                if (enumattr != null)
+                if (enumattr != null && enumattr.OptionSet != null)
                 {
                     var valueint = value as int?;
                     if (valueint == null)
