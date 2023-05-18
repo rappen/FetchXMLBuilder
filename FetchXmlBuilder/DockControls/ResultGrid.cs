@@ -14,6 +14,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private FetchXmlBuilder form;
         private QueryInfo queryinfo;
         private bool reloaded;
+        private DateTime lasterrormessage;
 
         public ResultGrid(FetchXmlBuilder fetchXmlBuilder)
         {
@@ -135,9 +136,20 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 var col = crmGridView1.Columns[cell.Name];
                 if (col != null)
                 {
-                    col.DisplayIndex = Math.Min(cell.DisplayIndex, crmGridView1.Columns.Count - 1);
-                    col.Width = cell.Width;
-                    col.Visible = cell.Width > 0;
+                    try
+                    {
+                        col.DisplayIndex = Math.Min(cell.DisplayIndex, crmGridView1.Columns.Count - 1);
+                        col.Width = cell.Width;
+                        col.Visible = cell.Width > 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (lasterrormessage < DateTime.Now.AddMinutes(-1))
+                        {
+                            MessageBox.Show($"Oops - unexpcted error. But never mind, just try again...\n\n{ex}");
+                            lasterrormessage = DateTime.Now;
+                        }
+                    }
                 }
             }
             reloaded = false;
