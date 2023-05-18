@@ -129,7 +129,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
         {
             var result = $@"<grid name='resultset' object='{EntityMeta?.ObjectTypeCode}' jump='{EntityMeta?.PrimaryNameAttribute}' select='1' icon='1' preview='1'>
   <row name='result' id='{EntityMeta?.PrimaryIdAttribute}'>
-    {string.Join("\n    ", Cells?.Where(c => c.Width > 0).Select(c => c.ToXML()))}
+    {string.Join("\n    ", Cells?./*Where(c => c.Width > 0).*/Select(c => c.ToXML()))}
   </row>
 </grid>";
             return result;
