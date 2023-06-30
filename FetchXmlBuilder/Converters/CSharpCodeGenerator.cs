@@ -236,7 +236,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             var code = new StringBuilder();
             filter.FilterHint = $"{ownerName}.{(ownerType == OwnersType.Root ? "Criteria" : ownerType == OwnersType.Link ? "LinkCriteria" : "Filters")}";
             var rootfilters = filter.FilterHint.EndsWith("Criteria") || filter.FilterHint.EndsWith("Criteria.Filters");
-            if (ownerType == OwnersType.Sub)
+            if (ownerType == OwnersType.Sub || (ownerType == OwnersType.Link && (filter.FilterOperator == LogicalOperator.Or || !filter.Conditions.Any())))
             {
                 filter.FilterHint = GetVarName($"{ownerName}.{(filter.FilterOperator == LogicalOperator.Or ? "Or" : "And")}".Replace(".Criteria", "").Replace(".LinkCriteria", ""), several);
 
@@ -591,7 +591,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     break;
 
                 default:
-                    if (ownerType == OwnersType.Sub)
+                    if (ownerType == OwnersType.Sub || (ownerType == OwnersType.Link && (filter.FilterOperator == LogicalOperator.Or || !filter.Conditions.Any())))
                     {
                         code.Append($"{Indent(indentslevel)}new FilterExpression({(filter.FilterOperator == LogicalOperator.Or ? "LogicalOperator.Or" : "")}){CRLF}{Indent(indentslevel++)}{{{CRLF}");
                     }
