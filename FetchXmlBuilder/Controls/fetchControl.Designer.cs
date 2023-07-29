@@ -231,14 +231,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             this.pictureBox4.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
-            this.pictureBox4.Location = new System.Drawing.Point(68, 285);
+            this.pictureBox4.Location = new System.Drawing.Point(66, 285);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(14, 14);
             this.pictureBox4.TabIndex = 42;
             this.pictureBox4.TabStop = false;
             this.pictureBox4.Tag = "https://learn.microsoft.com/en-us/power-apps/maker/data-platform/data-retention-o" +
     "verview";
-            this.pictureBox4.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // dataSourceComboBox
             // 
