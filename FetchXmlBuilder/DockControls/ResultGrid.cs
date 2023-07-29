@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Views;
 using System;
 using System.Linq;
 using System.Windows.Forms;
@@ -11,20 +13,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
     {
         private FetchXmlBuilder form;
         private QueryInfo queryinfo;
+        private bool reloaded;
+        private DateTime lasterrormessage;
 
         public ResultGrid(FetchXmlBuilder fetchXmlBuilder)
         {
             InitializeComponent();
             this.PrepareGroupBoxExpanders();
             form = fetchXmlBuilder;
-            mnuFriendly.Checked = form.settings.Results.Friendly;
-            mnuIdCol.Checked = form.settings.Results.Id;
-            mnuIndexCol.Checked = form.settings.Results.Index;
-            mnuNullCol.Checked = form.settings.Results.NullColumns;
-            mnuSysCol.Checked = form.settings.Results.SysColumns;
-            mnuLocalTime.Checked = form.settings.Results.LocalTime;
-            mnuCopyHeaders.Checked = form.settings.Results.CopyHeaders;
-            mnuQuickFilter.Checked = form.settings.Results.QuickFilter;
             ApplySettingsToGrid();
         }
 
@@ -36,24 +32,42 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 this.EnsureVisible(form.dockContainer, form.settings.DockStates.ResultView);
             }
-
             crmGridView1.DataSource = queryinfo.Results;
             crmGridView1.ColumnOrder = queryinfo.AttributesSignature.Trim().Replace('\n', ',');
-            RefreshData();
+            ApplySettingsToGrid();
+            SetQueryIfChangesDesign();
+            txtPagingCookie.Text = queryinfo.Results.PagingCookie;
         }
 
         internal void ApplySettingsToGrid()
         {
-            crmGridView1.ShowFriendlyNames = form.settings.Results.Friendly;
-            crmGridView1.ShowIdColumn = form.settings.Results.Id;
-            crmGridView1.ShowIndexColumn = form.settings.Results.Index;
-            crmGridView1.ShowAllColumnsInColumnOrder = form.settings.Results.NullColumns;
-            crmGridView1.ShowColumnsNotInColumnOrder = form.settings.Results.SysColumns;
-            crmGridView1.ShowLocalTimes = form.settings.Results.LocalTime;
-            crmGridView1.ClipboardCopyMode = form.settings.Results.CopyHeaders ?
+            mnuFriendly.Checked = form.settings.Results.Friendly;
+            mnuIdCol.Checked = form.settings.Results.WorkWithLayout ? false : form.settings.Results.Id;
+            mnuIndexCol.Checked = form.settings.Results.WorkWithLayout ? false : form.settings.Results.Index;
+            mnuNullCol.Checked = form.settings.Results.WorkWithLayout ? true : form.settings.Results.NullColumns;
+            mnuSysCol.Checked = form.settings.Results.WorkWithLayout ? false : form.settings.Results.SysColumns;
+            mnuLocalTime.Checked = form.settings.Results.LocalTime;
+            mnuCopyHeaders.Checked = form.settings.Results.CopyHeaders;
+            mnuQuickFilter.Checked = form.settings.Results.QuickFilter;
+            mnuPagingCookie.Checked = form.settings.Results.PagingCookie;
+
+            mnuIdCol.Enabled = !form.settings.Results.WorkWithLayout;
+            mnuIndexCol.Enabled = !form.settings.Results.WorkWithLayout;
+            mnuNullCol.Enabled = !form.settings.Results.WorkWithLayout;
+            mnuSysCol.Enabled = !form.settings.Results.WorkWithLayout;
+
+            crmGridView1.ShowFriendlyNames = mnuFriendly.Checked;
+            crmGridView1.ShowIdColumn = mnuIdCol.Checked;
+            crmGridView1.ShowIndexColumn = mnuIndexCol.Checked;
+            crmGridView1.ShowAllColumnsInColumnOrder = mnuNullCol.Checked;
+            crmGridView1.ShowColumnsNotInColumnOrder = mnuSysCol.Checked;
+            crmGridView1.ShowLocalTimes = mnuLocalTime.Checked;
+            crmGridView1.ClipboardCopyMode = mnuCopyHeaders.Checked ?
                 DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             crmGridView1.Service = form.Service;
-            panQuickFilter.Visible = form.settings.Results.QuickFilter;
+            panQuickFilter.Visible = mnuQuickFilter.Checked;
+            gbPagingCookie.Visible = mnuPagingCookie.Checked;
+            mnuResetLayout.Visible = form.settings.Results.WorkWithLayout;
             RefreshData();
         }
 
@@ -67,6 +81,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             form.settings.Results.LocalTime = mnuLocalTime.Checked;
             form.settings.Results.CopyHeaders = mnuCopyHeaders.Checked;
             form.settings.Results.QuickFilter = mnuQuickFilter.Checked;
+            form.settings.Results.PagingCookie = mnuPagingCookie.Checked;
             ApplySettingsToGrid();
         }
 
@@ -81,14 +96,83 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 crmGridView1.FilterText = string.Empty;
             }
+            reloaded = true;
             crmGridView1.SuspendLayout();
             crmGridView1.Refresh();
-            crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
+            if (form.dockControlBuilder.LayoutXML == null)
+            {
+                crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
+            }
+            else
+            {
+                SetLayoutToGrid();
+            }
             crmGridView1.Columns.Cast<DataGridViewColumn>()
                 .Where(c => c.Width > form.settings.Results.MaxColumnWidth)
                 .ToList()
                 .ForEach(c => c.Width = form.settings.Results.MaxColumnWidth);
+            GetLayoutFromGrid();
             crmGridView1.ResumeLayout();
+            reloaded = false;
+        }
+
+        internal void SetQueryIfChangesDesign()
+        {
+            var changed = queryinfo?.QuerySignature != form.dockControlBuilder?.GetTreeChecksum(null);
+            Text = "Result View" + (changed ? " *" : "");
+            crmGridView1.DefaultCellStyle.BackColor = changed ? System.Drawing.Color.LightGray : System.Drawing.Color.White;
+            crmGridView1.DefaultCellStyle.ForeColor = changed ? System.Drawing.Color.Gray : System.Drawing.SystemColors.ControlText;
+        }
+
+        internal void SetLayoutToGrid()
+        {
+            if (form.dockControlBuilder?.LayoutXML?.Cells == null)
+            {
+                return;
+            }
+            reloaded = true;
+            foreach (var cell in form.dockControlBuilder.LayoutXML.Cells)
+            {
+                var col = crmGridView1.Columns[cell.Name];
+                if (col != null)
+                {
+                    try
+                    {
+                        col.DisplayIndex = Math.Min(cell.DisplayIndex, crmGridView1.Columns.Count - 1);
+                        col.Width = cell.Width;
+                        col.Visible = cell.Width > 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (lasterrormessage < DateTime.Now.AddMinutes(-1))
+                        {
+                            MessageBox.Show($"Oops - unexpcted error. But never mind, just try again...\n\n{ex}");
+                            lasterrormessage = DateTime.Now;
+                        }
+                    }
+                }
+            }
+            reloaded = false;
+        }
+
+        private void GetLayoutFromGrid()
+        {
+            if (!form.settings.Results.WorkWithLayout ||
+                !(form.dockControlBuilder.RootEntityMetadata is EntityMetadata entity) ||
+                crmGridView1.DataSource == null)
+            {
+                return;
+            }
+            if (form.dockControlBuilder.LayoutXML == null || form.dockControlBuilder.LayoutXML.EntityMeta != entity)
+            {
+                form.dockControlBuilder.LayoutXML = new LayoutXML(entity, form);
+            }
+            var columns = crmGridView1.Columns.Cast<DataGridViewColumn>()
+                .Where(c => !c.Name.StartsWith("#") && c.Visible && c.Width > 5)
+                .OrderBy(c => c.DisplayIndex)
+                .ToDictionary(c => c.Name, c => c.Width);
+            form.dockControlBuilder.LayoutXML.MakeSureAllCellsExistForColumns(columns);
+            form.dockControlBuilder.UpdateLayoutXML();
         }
 
         private void crmGridView1_RecordDoubleClick(object sender, Rappen.XTB.Helpers.Controls.XRMRecordEventArgs e)
@@ -217,6 +301,30 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 form.LogUse("CopyRecord");
                 Clipboard.SetText(url);
             }
+        }
+
+        private void crmGridView1_LayoutChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            if (!reloaded)
+            {
+                GetLayoutFromGrid();
+            }
+        }
+
+        private void mnuResetLayout_Click(object sender, EventArgs e)
+        {
+            form.dockControlBuilder.ResetLayout();
+            RefreshData();
+        }
+
+        private void txtPagingCookie_Click(object sender, EventArgs e)
+        {
+            txtPagingCookie.SelectAll();
+        }
+
+        private void mnuPagingCookie_Click(object sender, EventArgs e)
+        {
+            gbPagingCookie.Visible = mnuPagingCookie.Checked;
         }
     }
 }

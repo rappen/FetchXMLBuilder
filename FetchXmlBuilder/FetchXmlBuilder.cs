@@ -1,10 +1,8 @@
-﻿using MarkMpn.FetchXmlToWebAPI;
-using McTools.Xrm.Connection;
-using Microsoft.Xrm.Sdk;
+﻿using McTools.Xrm.Connection;
 using Rappen.XRM.Helpers.Extensions;
+using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Builder;
-using Rappen.XTB.FetchXmlBuilder.Controls;
 using Rappen.XTB.FetchXmlBuilder.Converters;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
@@ -22,6 +20,7 @@ using System.Xml;
 using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
+using Entity = Microsoft.Xrm.Sdk.Entity;
 
 namespace Rappen.XTB.FetchXmlBuilder
 {
@@ -65,6 +64,8 @@ namespace Rappen.XTB.FetchXmlBuilder
             // https://stackoverflow.com/questions/5762526/how-can-i-make-something-that-catches-all-unhandled-exceptions-in-a-winforms-a
             // Add the event handler for handling non-UI thread exceptions to the event.
             //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Error_UnhandledException);
+
+            //tslAbout.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString() + " by Jonas Rapp";
 
             ai = new AppInsights(aiEndpoint, aiKey, Assembly.GetExecutingAssembly(), "FetchXML Builder");
             var theme = new VS2015LightTheme();
@@ -186,7 +187,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
         }
 
-        private Entity View
+        internal Entity View
         {
             get { return view; }
             set
@@ -227,14 +228,14 @@ namespace Rappen.XTB.FetchXmlBuilder
             SaveDockPanels();
             dockControlBuilder?.Close();
             dockControlFetchXml?.Close();
-            dockControlFetchXmlCs?.Close();
             dockControlFetchXmlJs?.Close();
+            dockControlPowerPlatformCLI?.Close();
             dockControlFetchResult?.Close();
             dockControlGrid?.Close();
             dockControlOData2?.Close();
             dockControlOData4?.Close();
             dockControlFlowList?.Close();
-            dockControlQExp?.Close();
+            dockControlCSharp?.Close();
             dockControlSQL?.Close();
             dockControlMeta?.Close();
             SaveSetting();
@@ -245,7 +246,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             if (state is string fetch && fetch.ToLowerInvariant().StartsWith("<fetch"))
             {
-                dockControlBuilder.Init(fetch, null, false);
+                dockControlBuilder.Init(fetch, null, null, false);
             }
         }
 
@@ -270,17 +271,11 @@ namespace Rappen.XTB.FetchXmlBuilder
                 switch (version)
                 {
                     case 2:
-                        odata = ODataCodeGenerator.GetODataQuery(dockControlBuilder.GetFetchType(), ConnectionDetail.OrganizationDataServiceUrl, this);
+                        odata = ODataCodeGenerator.ConvertToOData2(dockControlBuilder.GetFetchType(), this);
                         break;
 
                     case 4:
-                        // Find correct WebAPI base url
-                        var baseUrl = ConnectionDetail.WebApplicationUrl;
-                        if (!baseUrl.EndsWith("/"))
-                            baseUrl += "/";
-                        var url = new Uri(new Uri(baseUrl), $"api/data/v{ConnectionDetail.OrganizationMajorVersion}.{ConnectionDetail.OrganizationMinorVersion}");
-                        var converter = new FetchXmlToWebAPIConverter(new WebAPIMetadataProvider(this), url.ToString());
-                        odata = converter.ConvertFetchXmlToWebAPI(dockControlBuilder.GetFetchString(false, false));
+                        odata = ODataCodeGenerator.ConvertToOData4(dockControlBuilder.GetFetchString(true, false), this);
                         break;
                 }
                 return odata;
@@ -333,6 +328,31 @@ namespace Rappen.XTB.FetchXmlBuilder
             Process.Start(url);
         }
 
+        internal string GetCSharpCode()
+        {
+            switch (settings.CodeGenerators.QExStyle)
+            {
+                case QExStyleEnum.FetchXML:
+                    var fetch = dockControlBuilder.GetFetchString(true, false);
+                    return CSharpCodeGeneratorFetchXML.GetCSharpFetchXMLCode(fetch, settings.CodeGenerators);
+
+                default:
+                    try
+                    {
+                        var QEx = dockControlBuilder.GetQueryExpression(false);
+                        return CSharpCodeGenerator.GetCSharpQueryExpression(QEx, entities, settings);
+                    }
+                    catch (FetchIsAggregateException ex)
+                    {
+                        return $"/*\nThis FetchXML is not possible to convert to QueryExpression in the current version of the SDK.\n\n{ex.Message}\n*/";
+                    }
+                    catch (Exception ex)
+                    {
+                        return $"/*\nFailed to generate C# {settings.CodeGenerators.QExStyle} with {settings.CodeGenerators.QExFlavor} code.\n\n{ex.Message}\n*/";
+                    }
+            }
+        }
+
         #endregion Internal Methods
 
         #region Private Methods
@@ -341,9 +361,11 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             toolStripMain.Items.OfType<ToolStripItem>().ToList().ForEach(i => i.DisplayStyle = settings.ShowButtonTexts ? ToolStripItemDisplayStyle.ImageAndText : ToolStripItemDisplayStyle.Image);
             tsbRepo.Visible = settings.ShowRepository;
+            tsbBDU.Visible = settings.ShowBDU;
+            tsmiShowOData.Visible = settings.ShowOData2;
             if (reloadquery && connectionsettings != null && !string.IsNullOrWhiteSpace(connectionsettings.FetchXML))
             {
-                dockControlBuilder.Init(connectionsettings.FetchXML, "loaded from last session", false);
+                dockControlBuilder.Init(connectionsettings.FetchXML, connectionsettings.LayoutXML, "loaded from last session", false);
             }
             dockControlBuilder.lblQAExpander.GroupBoxSetState(null, settings.QueryOptions.ShowQuickActions);
             var ass = Assembly.GetExecutingAssembly().GetName();
@@ -382,25 +404,6 @@ namespace Rappen.XTB.FetchXmlBuilder
                 }
             }
             return result;
-        }
-
-        private string GetQueryExpressionCode()
-        {
-            var code = string.Empty;
-            try
-            {
-                var QEx = dockControlBuilder.GetQueryExpression(null, false);
-                code = QueryExpressionCodeGenerator.GetCSharpQueryExpression(QEx);
-            }
-            catch (FetchIsAggregateException ex)
-            {
-                code = "This FetchXML is not possible to convert to QueryExpression in the current version of the SDK.\n\n" + ex.Message;
-            }
-            catch (Exception ex)
-            {
-                code = "Failed to generate C# QueryExpression code.\n\n" + ex.Message;
-            }
-            return code;
         }
 
         private string GetSQLQuery(out bool sql4cds)
@@ -494,6 +497,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 connectionsettings = new FXBConnectionSettings();
             }
             connectionsettings.FetchXML = dockControlBuilder.GetFetchString(false, false);
+            connectionsettings.LayoutXML = dockControlBuilder.LayoutXML?.ToXML();
             SettingsManager.Instance.Save(typeof(FetchXmlBuilder), connectionsettings, ConnectionDetail?.ConnectionName);
         }
 
@@ -518,7 +522,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 if (!working)
                 {
-                    LoadEntities(e.ConnectionDetail);
+                    LoadEntities();
                 }
             }
             else
@@ -561,7 +565,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             var query = dockControlBuilder.GetFetchString(false, false);
             var newconnection = sender == tsmiCloneNewConnection;
-            LogUse(newconnection ? "Clone-Connect" : "Clone");
+            LogUse(newconnection ? "Clone-Connection" : "Clone");
             DuplicateRequested?.Invoke(this, new DuplicateToolArgs(query, newconnection));
         }
 
@@ -580,11 +584,11 @@ namespace Rappen.XTB.FetchXmlBuilder
                     return;
                 }
                 LogUse("New");
-                dockControlBuilder.Init(null, "new", false);
+                dockControlBuilder.Init(null, null, "new", false);
                 return;
             }
             var newconnection = sender == tsmiNewNewConnection;
-            LogUse(newconnection ? "New-NewConnection" : "New-New");
+            LogUse(newconnection ? "New-New-Connection" : "New-New");
             DuplicateRequested?.Invoke(this, new DuplicateToolArgs(settings.QueryOptions.NewQueryTemplate, newconnection));
         }
 
@@ -669,14 +673,19 @@ namespace Rappen.XTB.FetchXmlBuilder
             ShowMetadataControl(ref dockControlMeta, DockState.DockRight);
         }
 
-        private void tsmiShowFetchXMLcs_Click(object sender, EventArgs e)
-        {
-            ShowContentControl(ref dockControlFetchXmlCs, ContentType.CSharp_Query, SaveFormat.None, settings.DockStates.FetchXMLCs);
-        }
-
         private void tsmiShowFetchXMLjs_Click(object sender, EventArgs e)
         {
             ShowContentControl(ref dockControlFetchXmlJs, ContentType.JavaScript_Query, SaveFormat.None, settings.DockStates.FetchXMLJs);
+        }
+
+        private void tsmiShowPowerPlatformCLI_Click(object sender, EventArgs e)
+        {
+            ShowContentControl(ref dockControlPowerPlatformCLI, ContentType.Power_Platform_CLI, SaveFormat.None, settings.DockStates.PowerPlatformCLI);
+        }
+
+        private void tsmiShowLayoutXML_Click(object sender, EventArgs e)
+        {
+            ShowContentControl(ref dockControlLayoutXml, ContentType.LayoutXML, SaveFormat.None, settings.DockStates.LayoutXML);
         }
 
         private void tsmiShowOData_Click(object sender, EventArgs e)
@@ -694,9 +703,9 @@ namespace Rappen.XTB.FetchXmlBuilder
             ShowFlowListControl(ref dockControlFlowList, settings.DockStates.FlowList);
         }
 
-        private void tsmiShowQueryExpression_Click(object sender, EventArgs e)
+        private void tsmiShowCSharpCode_Click(object sender, EventArgs e)
         {
-            ShowContentControl(ref dockControlQExp, ContentType.QueryExpression, SaveFormat.None, settings.DockStates.QueryExpression);
+            ShowContentControl(ref dockControlCSharp, ContentType.CSharp_Code, SaveFormat.None, settings.DockStates.CSharp);
         }
 
         private void tsmiShowSQL_Click(object sender, EventArgs e)
@@ -732,7 +741,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             if (sender is ToolStripMenuItem menu && menu.Tag is QueryDefinition query)
             {
-                dockControlBuilder.Init(query.Fetch, $"open repo {query.Name}", false);
+                dockControlBuilder.Init(query.Fetch, null, $"open repo {query.Name}", false);
                 tsbRepo.Tag = query;
                 dockControlBuilder.SetFetchName($"Repo: {query.Name}");
             }
@@ -849,6 +858,11 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
             OpenURL(Welcome.GetReleaseNotesUrl(version));
+        }
+
+        private void tsbShare_Click(object sender, EventArgs e)
+        {
+            ShareLink.Open(this, dockControlBuilder.GetFetchString(false, false));
         }
 
         #endregion Private Event Handlers

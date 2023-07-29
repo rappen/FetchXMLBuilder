@@ -96,6 +96,9 @@ namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
 
                 case ConditionOperator.UnderOrEqual:
                     return "eq-or-under";
+
+                case ConditionOperator.DoesNotContainValues:
+                    return "not-contain-values";
             }
             var coname = oper.ToString();
             if (coname.StartsWith("OlderThan"))

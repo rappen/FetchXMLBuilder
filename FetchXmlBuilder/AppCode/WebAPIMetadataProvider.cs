@@ -33,14 +33,19 @@ namespace Rappen.XTB.FetchXmlBuilder.AppCode
 
         public EntityMetadata GetEntity(int otc)
         {
-            var metadata = fetchXmlBuilder.entities.SingleOrDefault(e => e.ObjectTypeCode == otc);
+            if (fetchXmlBuilder.entities == null)
+            {
+                throw new Exception("Metadata not loaded");
+            }
 
-            if (metadata == null)
+            var entity = fetchXmlBuilder.entities.SingleOrDefault(e => e.ObjectTypeCode == otc);
+
+            if (entity == null)
             {
                 throw new Exception($"No metadata for entity: {otc}");
             }
 
-            return metadata;
+            return GetEntity(entity.LogicalName);
         }
     }
 }

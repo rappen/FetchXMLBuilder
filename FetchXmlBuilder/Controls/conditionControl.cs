@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.Builder;
 using Rappen.XTB.FetchXmlBuilder.ControlsClasses;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
@@ -276,9 +277,25 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         protected override Dictionary<string, string> GetAttributesCollection()
         {
             var result = base.GetAttributesCollection();
-            if (!result.ContainsKey("value") && cmbValue.Enabled && cmbValue.DropDownStyle == ComboBoxStyle.Simple)
+            if (panValueOf.Visible == false && result.ContainsKey("valueof"))
+            {
+                result.Remove("valueof");
+            }
+            if (panValueOf.Visible == true && result.ContainsKey("valueof") && !string.IsNullOrWhiteSpace(result["valueof"]))
+            {
+                if (result.ContainsKey("value"))
+                {
+                    result.Remove("value");
+                }
+            }
+            else if (!result.ContainsKey("value") && cmbValue.Enabled && cmbValue.DropDownStyle == ComboBoxStyle.Simple)
             {
                 result.Add("value", "");
+            }
+            if (cmbOperator.SelectedItem is OperatorItem oper && oper.IsMultipleValuesType)
+            {
+                result.Remove("value");
+                result.Remove("valueof");
             }
             return result;
         }
@@ -509,8 +526,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 }
                 else if (managedProp != null && managedProp.ValueAttributeTypeCode == AttributeTypeCode.Boolean)
                 {
-                    cmbValue.Items.Add(new OptionsetItem(new OptionMetadata(new Microsoft.Xrm.Sdk.Label(new LocalizedLabel("False", 0), null), 0)));
-                    cmbValue.Items.Add(new OptionsetItem(new OptionMetadata(new Microsoft.Xrm.Sdk.Label(new LocalizedLabel("True", 0), null), 1)));
+                    cmbValue.Items.Add(new OptionsetItem(new OptionMetadata(new Microsoft.Xrm.Sdk.Label("False", 0), 0)));
+                    cmbValue.Items.Add(new OptionsetItem(new OptionMetadata(new Microsoft.Xrm.Sdk.Label("True", 0), 1)));
                     var value = cmbValue.Text;
                     cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
                     cmbValue.AutoCompleteMode = AutoCompleteMode.SuggestAppend;

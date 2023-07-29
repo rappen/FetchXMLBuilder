@@ -1,4 +1,4 @@
-﻿using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.FetchXmlBuilder.DockControls;
 using ScintillaNET;
 using System;
 using System.Collections.Generic;
@@ -15,14 +15,21 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         private bool _useFriendlyNames;
 
         public bool UseFriendlyNames
-        { get { return _useFriendlyNames; } set { _useFriendlyNames = value; FetchXmlBuilder.friendlyNames = value; } }
+        {
+            get { return _useFriendlyNames; }
+            set
+            {
+                _useFriendlyNames = value;
+                FetchXmlBuilder.friendlyNames = value;
+            }
+        }
 
         public QueryOptions QueryOptions { get; set; } = new QueryOptions();
         public ResultOptions Results { get; set; } = new ResultOptions();
         public string CurrentVersion { get; set; }
         public string LastOpenedViewEntity { get; set; }
         public Guid LastOpenedViewId { get; set; }
-        public bool DoNotPromptToSave { get; set; } = false;
+        public bool DoNotPromptToSave { get; set; } = true;
         public DockStates DockStates { get; set; } = new DockStates();
         public ContentWindows ContentWindows { get; set; } = new ContentWindows();
         public bool OpenUncustomizableViews { get; set; } = false;
@@ -37,8 +44,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool ShowValidation { get; set; } = true;
         public bool ShowValidationInfo { get; set; } = true;
         public bool ShowRepository { get; set; } = false;
+        public bool ShowBDU { get; set; } = true;
+        public bool ShowOData2 { get; set; }
         public bool TryMetadataCache { get; set; } = true;
         public bool WaitUntilMetadataLoaded { get; set; } = false;
+        public bool AlwaysShowAggregationProperties { get; set; } = false;
+        public CodeGenerators CodeGenerators { get; set; } = new CodeGenerators();
     }
 
     public class ResultOptions
@@ -54,8 +65,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool RetrieveAllPages { get; set; } = false;
         public bool AlwaysNewWindow { get; set; } = false;
         public bool QuickFilter { get; set; } = false;
+        public bool PagingCookie { get; set; } = false;
         public bool ClickableLinks { get; set; } = true;
         public int MaxColumnWidth { get; set; } = 500;
+        public bool WorkWithLayout { get; set; } = true;
     }
 
     public class DockStates
@@ -63,11 +76,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public DockState ResultView { get; set; } = DockState.Document;
         public DockState FetchResult { get; set; } = DockState.Document;
         public DockState FetchXML { get; set; } = DockState.Document;
-        public DockState FetchXMLCs { get; set; } = DockState.DockRight;
+        public DockState LayoutXML { get; set; } = DockState.Document;
         public DockState FetchXMLJs { get; set; } = DockState.DockRight;
-        public DockState QueryExpression { get; set; } = DockState.DockRight;
+        public DockState CSharp { get; set; } = DockState.DockRight;
         public DockState SQLQuery { get; set; } = DockState.DockRight;
         public DockState FlowList { get; set; } = DockState.Float;
+        public DockState PowerPlatformCLI { get; set; } = DockState.DockBottom;
     }
 
     public class ContentWindow
@@ -81,10 +95,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
     {
         public ContentWindow FetchResult { get; set; } = new ContentWindow();
         public ContentWindow FetchXmlWindow { get; set; } = new ContentWindow();
+        public ContentWindow LayoutXmlWindow { get; set; } = new ContentWindow();
         public ContentWindow SQLWindow { get; set; } = new ContentWindow();
         public ContentWindow FetchXmlCsWindow { get; set; } = new ContentWindow();
         public ContentWindow FetchXmlJsWindow { get; set; } = new ContentWindow();
-        public ContentWindow QueryExpressionWindow { get; set; } = new ContentWindow();
+        public ContentWindow CSharpWindow { get; set; } = new ContentWindow();
+        public ContentWindow PowerPlatformCLI { get; set; } = new ContentWindow();
 
         internal ContentWindow GetContentWindow(ContentType type)
         {
@@ -98,17 +114,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
                 case ContentType.FetchXML:
                     return FetchXmlWindow;
 
+                case ContentType.LayoutXML:
+                    return LayoutXmlWindow;
+
                 case ContentType.SQL_Query:
                     return SQLWindow;
 
-                case ContentType.QueryExpression:
-                    return QueryExpressionWindow;
-
-                case ContentType.CSharp_Query:
-                    return FetchXmlCsWindow;
+                case ContentType.CSharp_Code:
+                    return CSharpWindow;
 
                 case ContentType.JavaScript_Query:
                     return FetchXmlJsWindow;
+
+                case ContentType.Power_Platform_CLI:
+                    return PowerPlatformCLI;
             }
             return new ContentWindow();
         }
@@ -121,20 +140,24 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
                     FetchXmlWindow = windowSettings;
                     break;
 
+                case ContentType.LayoutXML:
+                    LayoutXmlWindow = windowSettings;
+                    break;
+
                 case ContentType.SQL_Query:
                     SQLWindow = windowSettings;
                     break;
 
-                case ContentType.QueryExpression:
-                    QueryExpressionWindow = windowSettings;
-                    break;
-
-                case ContentType.CSharp_Query:
-                    FetchXmlCsWindow = windowSettings;
+                case ContentType.CSharp_Code:
+                    CSharpWindow = windowSettings;
                     break;
 
                 case ContentType.JavaScript_Query:
                     FetchXmlJsWindow = windowSettings;
+                    break;
+
+                case ContentType.Power_Platform_CLI:
+                    PowerPlatformCLI = windowSettings;
                     break;
             }
         }
@@ -226,5 +249,36 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         JSON = 2,
         Raw = 3,
         JSONWebAPI = 4
+    }
+
+    public class CodeGenerators
+    {
+        public QExStyleEnum QExStyle { get; set; } = QExStyleEnum.QueryExpression;
+        public QExFlavorEnum QExFlavor { get; set; } = QExFlavorEnum.LateBound;
+        public bool ObjectInitializer { get; set; } = false;
+        public int Indents { get; set; } = 0;
+        public bool IncludeComments { get; set; } = true;
+        public bool FilterVariables { get; set; } = true;
+        public string EBG_EntityLogicalNames { get; set; } = "EntityLogicalName";
+        public string EBG_AttributeLogicalNameClass { get; set; } = "Fields.";
+        public LCG.Settings LCG_Settings { get; set; } = new LCG.Settings();
+    }
+
+    public enum QExStyleEnum
+    {
+        QueryExpression,
+        QueryByAttribute,
+        OrganizationServiceContext,
+        QueryExpressionFactory,
+        FluentQueryExpression,
+        FetchXML
+    }
+
+    public enum QExFlavorEnum
+    {
+        LateBound,
+        EBGconstants,
+        LCGconstants,
+        EarlyBound
     }
 }

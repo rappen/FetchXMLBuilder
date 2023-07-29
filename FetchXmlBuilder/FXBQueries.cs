@@ -1,9 +1,10 @@
-﻿using Microsoft.Crm.Sdk.Messages;
+﻿using Cinteros.Xrm.FetchXmlBuilder.Converters;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
+using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.Serialization;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
-using Rappen.XTB.FetchXmlBuilder.Converters;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using System;
@@ -19,13 +20,13 @@ namespace Rappen.XTB.FetchXmlBuilder
     {
         private string attributesChecksum = "";
 
-        internal EntityCollection RetrieveMultiple(QueryBase query)
+        internal EntityCollection RetrieveMultiple(QueryBase query, bool allrecords = true)
         {
             EntityCollection result = null;
             var start = DateTime.Now;
             try
             {
-                result = Service.RetrieveMultiple(query);
+                result = allrecords ? Service.RetrieveMultipleAll(query) : Service.RetrieveMultiple(query);
             }
             finally
             {
@@ -177,33 +178,32 @@ namespace Rappen.XTB.FetchXmlBuilder
             });
         }
 
-        internal void QueryExpressionToFetchXml(string query)
+        internal void StringQueryExpressionToFetchXml(string query, QExStyleEnum style)
         {
             working = true;
-            LogUse("QueryExpressionToFetchXml");
-            WorkAsync(new WorkAsyncInfo("Translating QueryExpression to FetchXML...",
-                (eventargs) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = $"Translating {style} to FetchXML text...",
+                Work = (worker, eventargs) =>
                 {
                     var start = DateTime.Now;
-                    string fetchXml = QueryExpressionCodeGenerator.GetFetchXmlFromCSharpQueryExpression(query, Service);
-                    var stop = DateTime.Now;
-                    var duration = stop - start;
-                    LogUse("QueryExpressionToFetchXml", false, null, duration.TotalMilliseconds);
+                    var fetchXml = QExParse.GetFetchXmlFromCSharpQueryExpression(query, style, Service);
+                    var duration = DateTime.Now - start;
+                    LogUse($"{style}ToFetchXml", false, null, duration.TotalMilliseconds);
                     SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Execution time: {duration}"));
                     eventargs.Result = fetchXml;
-                })
-            {
+                },
                 PostWorkCallBack = (completedargs) =>
                 {
                     if (completedargs.Error != null)
                     {
-                        ShowErrorDialog(completedargs.Error, "Parse QueryExpression");
+                        ShowErrorDialog(completedargs.Error, $"Parse {style}");
                     }
                     else if (completedargs.Result is string)
                     {
                         XmlDocument doc = new XmlDocument();
                         doc.LoadXml(completedargs.Result.ToString());
-                        dockControlBuilder.Init(doc.OuterXml, "parse QueryExpression", true);
+                        dockControlBuilder.Init(doc.OuterXml, null, $"parse {style}", true);
                     }
                     working = false;
                 }
@@ -258,7 +258,6 @@ namespace Rappen.XTB.FetchXmlBuilder
         private void RetrieveMultiple(string fetch)
         {
             working = true;
-            LogUse("RetrieveMultiple-" + settings.Results.ResultOutput.ToString());
             SendMessageToStatusBar(this, new StatusBarMessageEventArgs("Retrieving..."));
             tsbAbort.Enabled = true;
             WorkAsync(new WorkAsyncInfo
@@ -268,7 +267,8 @@ namespace Rappen.XTB.FetchXmlBuilder
                 Work = (worker, eventargs) =>
                 {
                     QueryBase query = new FetchExpression(fetch);
-                    var attributessignature = dockControlBuilder.GetAttributesSignature(null);
+                    var querysignature = dockControlBuilder.GetTreeChecksum(null);
+                    var attributessignature = dockControlBuilder.GetAttributesSignature();
                     var start = DateTime.Now;
                     EntityCollection resultCollection = null;
                     EntityCollection tmpResult = null;
@@ -280,7 +280,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                             eventargs.Cancel = true;
                             break;
                         }
-                        tmpResult = RetrieveMultiple(query);
+                        tmpResult = RetrieveMultiple(query, false);
                         if (resultCollection == null)
                         {
                             resultCollection = tmpResult;
@@ -329,7 +329,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                         SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Retrieved {resultCollection.Entities.Count} records on {pageinfo} in {duration.TotalSeconds:F2} seconds"));
                     }
                     while (!eventargs.Cancel && settings.Results.RetrieveAllPages && (query is QueryExpression || query is FetchExpression) && tmpResult.MoreRecords);
-                    LogUse("RetrieveMultiple", false, resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds);
+                    LogUse($"RetrieveMultiple-{settings.Results.ResultOutput}", false, resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds);
                     if (settings.Results.ResultOutput == ResultOutput.JSON)
                     {
                         var json = EntityCollectionSerializer.ToJSONComplex(resultCollection, Formatting.Indented);
@@ -345,6 +345,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                         eventargs.Result = new QueryInfo
                         {
                             Query = query,
+                            QuerySignature = querysignature,
                             AttributesSignature = attributessignature,
                             Results = resultCollection
                         };

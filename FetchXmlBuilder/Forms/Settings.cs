@@ -38,15 +38,19 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             chkShowValidation.Checked = settings.ShowValidation;
             chkShowValidationInfo.Checked = settings.ShowValidationInfo;
             chkShowRepository.Checked = settings.ShowRepository;
+            chkShowBulkDataUpdater.Checked = settings.ShowBDU;
             chkShowAllAttributes.Checked = settings.QueryOptions.ShowAllAttributes;
+            chkShowOData2.Checked = settings.ShowOData2;
             cmbResult.SelectedIndex = SettingResultToComboBoxItem(settings.Results.ResultOutput);
             chkResAllPages.Checked = settings.Results.RetrieveAllPages;
             chkClickableLinks.Checked = settings.Results.ClickableLinks;
             numMaxColumnWidth.Value = settings.Results.MaxColumnWidth;
+            chkWorkWithLayout.Checked = settings.Results.WorkWithLayout;
             propXmlColors.SelectedObject = settings.XmlColors;
             txtFetch.ConfigureForXml(settings);
             txtFetch.FormatXML(settings.QueryOptions.NewQueryTemplate, settings);
             chkTryMetadataCache.Checked = settings.TryMetadataCache;
+            chkAlwaysShowAggregateProperties.Checked = settings.AlwaysShowAggregationProperties;
             if (chkTryMetadataCache.Checked)
             {
                 chkWaitUntilMetadataLoaded.Enabled = true;
@@ -84,6 +88,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.Results.RetrieveAllPages = chkResAllPages.Checked;
             settings.Results.ClickableLinks = chkClickableLinks.Checked;
             settings.Results.MaxColumnWidth = (int)numMaxColumnWidth.Value;
+            settings.Results.WorkWithLayout = chkWorkWithLayout.Checked;
             settings.OpenUncustomizableViews = chkAppAllowUncustViews.Checked;
             settings.AddConditionToFilter = chkAddConditionToFilter.Checked;
             settings.UseSQL4CDS = chkUseSQL4CDS.Checked;
@@ -94,10 +99,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.ShowValidation = chkShowValidation.Checked;
             settings.ShowValidationInfo = settings.ShowValidation && chkShowValidationInfo.Checked;
             settings.ShowRepository = chkShowRepository.Checked;
+            settings.ShowBDU=chkShowBulkDataUpdater.Checked;
             settings.QueryOptions.ShowAllAttributes = chkShowAllAttributes.Checked;
+            settings.ShowOData2 = chkShowOData2.Checked;
             settings.XmlColors = propXmlColors.SelectedObject as XmlColors;
             settings.TryMetadataCache = chkTryMetadataCache.Checked;
             settings.WaitUntilMetadataLoaded = chkWaitUntilMetadataLoaded.Checked;
+            settings.AlwaysShowAggregationProperties = chkAlwaysShowAggregateProperties.Checked;
             return settings;
         }
 
@@ -199,6 +207,31 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             if (!chkTryMetadataCache.Checked)
             {
                 chkWaitUntilMetadataLoaded.Checked = false;
+            }
+        }
+
+        private void cmbResult_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var resulttype = ResultItemToSettingResult(cmbResult.SelectedIndex);
+            panResultView.Enabled = resulttype == ResultOutput.Grid;
+            linkDeprecatedExecFetchReq.Visible = resulttype == ResultOutput.Raw;
+        }
+
+        private void linkLayout_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FetchXmlBuilder.OpenURL("https://fetchxmlbuilder.com/features/layouts");
+        }
+
+        private void linkGeneral_Click(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FetchXmlBuilder.HelpClick(tt.GetToolTip(sender as Control));
+        }
+
+        private void btnResetAll_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want it to get back default settings?\n\nYes or No...", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+            {
+                PopulateSettings(new FXBSettings());
             }
         }
     }

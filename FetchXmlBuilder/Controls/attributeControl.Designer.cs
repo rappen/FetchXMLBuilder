@@ -44,10 +44,21 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panAggregate = new System.Windows.Forms.Panel();
+            this.lblWidth = new System.Windows.Forms.Label();
+            this.trkLayoutWidth = new System.Windows.Forms.TrackBar();
+            this.chkLayoutVisible = new System.Windows.Forms.CheckBox();
+            this.grpLayout = new System.Windows.Forms.GroupBox();
+            this.lblIndex = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
+            this.panel1.SuspendLayout();
+            this.panAggregate.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trkLayoutWidth)).BeginInit();
+            this.grpLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -110,7 +121,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             "max",
             "min",
             "sum"});
-            this.cmbAggregate.Location = new System.Drawing.Point(7, 96);
+            this.cmbAggregate.Location = new System.Drawing.Point(7, 16);
             this.cmbAggregate.Name = "cmbAggregate";
             this.cmbAggregate.Size = new System.Drawing.Size(263, 21);
             this.cmbAggregate.Sorted = true;
@@ -121,7 +132,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(4, 82);
+            this.label5.Location = new System.Drawing.Point(4, 2);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(56, 13);
             this.label5.TabIndex = 31;
@@ -130,7 +141,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // chkGroupBy
             // 
             this.chkGroupBy.AutoSize = true;
-            this.chkGroupBy.Location = new System.Drawing.Point(7, 124);
+            this.chkGroupBy.Location = new System.Drawing.Point(7, 44);
             this.chkGroupBy.Name = "chkGroupBy";
             this.chkGroupBy.Size = new System.Drawing.Size(69, 17);
             this.chkGroupBy.TabIndex = 33;
@@ -142,7 +153,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(4, 169);
+            this.label7.Location = new System.Drawing.Point(4, 89);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(74, 13);
             this.label7.TabIndex = 35;
@@ -166,7 +177,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             "quarter",
             "week",
             "year"});
-            this.cmbDateGrouping.Location = new System.Drawing.Point(7, 183);
+            this.cmbDateGrouping.Location = new System.Drawing.Point(7, 103);
             this.cmbDateGrouping.Name = "cmbDateGrouping";
             this.cmbDateGrouping.Size = new System.Drawing.Size(263, 21);
             this.cmbDateGrouping.Sorted = true;
@@ -177,7 +188,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             this.chkUserTZ.AutoSize = true;
             this.chkUserTZ.Enabled = false;
-            this.chkUserTZ.Location = new System.Drawing.Point(7, 147);
+            this.chkUserTZ.Location = new System.Drawing.Point(7, 67);
             this.chkUserTZ.Name = "chkUserTZ";
             this.chkUserTZ.Size = new System.Drawing.Size(96, 17);
             this.chkUserTZ.TabIndex = 37;
@@ -189,7 +200,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             this.chkDistinct.AutoSize = true;
             this.chkDistinct.Enabled = false;
-            this.chkDistinct.Location = new System.Drawing.Point(127, 124);
+            this.chkDistinct.Location = new System.Drawing.Point(127, 44);
             this.chkDistinct.Name = "chkDistinct";
             this.chkDistinct.Size = new System.Drawing.Size(61, 17);
             this.chkDistinct.TabIndex = 34;
@@ -214,7 +225,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(72, 126);
+            this.pictureBox2.Location = new System.Drawing.Point(72, 46);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(14, 14);
             this.pictureBox2.TabIndex = 42;
@@ -227,7 +238,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             this.pictureBox3.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(184, 126);
+            this.pictureBox3.Location = new System.Drawing.Point(184, 46);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(14, 14);
             this.pictureBox3.TabIndex = 43;
@@ -249,34 +260,120 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
     "te-metadata";
             this.pictureBox4.Click += new System.EventHandler(this.helpIcon_Click);
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.pictureBox4);
+            this.panel1.Controls.Add(this.cmbAttribute);
+            this.panel1.Controls.Add(this.txtAlias);
+            this.panel1.Controls.Add(this.label4);
+            this.panel1.Controls.Add(this.pictureBox1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(293, 83);
+            this.panel1.TabIndex = 45;
+            // 
+            // panAggregate
+            // 
+            this.panAggregate.Controls.Add(this.label5);
+            this.panAggregate.Controls.Add(this.cmbAggregate);
+            this.panAggregate.Controls.Add(this.pictureBox3);
+            this.panAggregate.Controls.Add(this.chkGroupBy);
+            this.panAggregate.Controls.Add(this.pictureBox2);
+            this.panAggregate.Controls.Add(this.cmbDateGrouping);
+            this.panAggregate.Controls.Add(this.chkDistinct);
+            this.panAggregate.Controls.Add(this.label7);
+            this.panAggregate.Controls.Add(this.chkUserTZ);
+            this.panAggregate.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panAggregate.Location = new System.Drawing.Point(0, 83);
+            this.panAggregate.Name = "panAggregate";
+            this.panAggregate.Size = new System.Drawing.Size(293, 133);
+            this.panAggregate.TabIndex = 46;
+            // 
+            // lblWidth
+            // 
+            this.lblWidth.AutoSize = true;
+            this.lblWidth.Location = new System.Drawing.Point(10, 66);
+            this.lblWidth.Name = "lblWidth";
+            this.lblWidth.Size = new System.Drawing.Size(35, 13);
+            this.lblWidth.TabIndex = 3;
+            this.lblWidth.Text = "Width";
+            // 
+            // trkLayoutWidth
+            // 
+            this.trkLayoutWidth.AllowDrop = true;
+            this.trkLayoutWidth.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.trkLayoutWidth.LargeChange = 25;
+            this.trkLayoutWidth.Location = new System.Drawing.Point(7, 36);
+            this.trkLayoutWidth.Maximum = 500;
+            this.trkLayoutWidth.Name = "trkLayoutWidth";
+            this.trkLayoutWidth.Size = new System.Drawing.Size(263, 45);
+            this.trkLayoutWidth.SmallChange = 10;
+            this.trkLayoutWidth.TabIndex = 2;
+            this.trkLayoutWidth.TickFrequency = 100;
+            this.trkLayoutWidth.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.trkLayoutWidth.Value = 100;
+            this.trkLayoutWidth.Scroll += new System.EventHandler(this.trkLayoutWidth_Scroll);
+            // 
+            // chkLayoutVisible
+            // 
+            this.chkLayoutVisible.AutoSize = true;
+            this.chkLayoutVisible.Location = new System.Drawing.Point(7, 19);
+            this.chkLayoutVisible.Name = "chkLayoutVisible";
+            this.chkLayoutVisible.Size = new System.Drawing.Size(150, 17);
+            this.chkLayoutVisible.TabIndex = 1;
+            this.chkLayoutVisible.Text = "Show Attribute in the View";
+            this.chkLayoutVisible.UseVisualStyleBackColor = true;
+            this.chkLayoutVisible.CheckedChanged += new System.EventHandler(this.chkLayoutVisible_CheckedChanged);
+            // 
+            // grpLayout
+            // 
+            this.grpLayout.Controls.Add(this.lblIndex);
+            this.grpLayout.Controls.Add(this.lblWidth);
+            this.grpLayout.Controls.Add(this.chkLayoutVisible);
+            this.grpLayout.Controls.Add(this.trkLayoutWidth);
+            this.grpLayout.Dock = System.Windows.Forms.DockStyle.Top;
+            this.grpLayout.Location = new System.Drawing.Point(0, 216);
+            this.grpLayout.Name = "grpLayout";
+            this.grpLayout.Size = new System.Drawing.Size(293, 86);
+            this.grpLayout.TabIndex = 48;
+            this.grpLayout.TabStop = false;
+            this.grpLayout.Text = "View Layout";
+            // 
+            // lblIndex
+            // 
+            this.lblIndex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblIndex.AutoSize = true;
+            this.lblIndex.Location = new System.Drawing.Point(181, 66);
+            this.lblIndex.Name = "lblIndex";
+            this.lblIndex.Size = new System.Drawing.Size(70, 13);
+            this.lblIndex.TabIndex = 4;
+            this.lblIndex.Text = "Display Index";
+            // 
             // attributeControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.pictureBox4);
-            this.Controls.Add(this.pictureBox3);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.chkDistinct);
-            this.Controls.Add(this.chkUserTZ);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.cmbDateGrouping);
-            this.Controls.Add(this.chkGroupBy);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.cmbAggregate);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.txtAlias);
-            this.Controls.Add(this.cmbAttribute);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.grpLayout);
+            this.Controls.Add(this.panAggregate);
+            this.Controls.Add(this.panel1);
             this.Name = "attributeControl";
-            this.Size = new System.Drawing.Size(293, 215);
+            this.Size = new System.Drawing.Size(293, 326);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.panAggregate.ResumeLayout(false);
+            this.panAggregate.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trkLayoutWidth)).EndInit();
+            this.grpLayout.ResumeLayout(false);
+            this.grpLayout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -296,5 +393,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.PictureBox pictureBox4;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panAggregate;
+        private System.Windows.Forms.TrackBar trkLayoutWidth;
+        private System.Windows.Forms.CheckBox chkLayoutVisible;
+        private System.Windows.Forms.Label lblWidth;
+        private System.Windows.Forms.GroupBox grpLayout;
+        private System.Windows.Forms.Label lblIndex;
     }
 }

@@ -25,18 +25,19 @@ namespace Rappen.XTB.FetchXmlBuilder
     {
         internal static bool friendlyNames = false;
         internal TreeBuilderControl dockControlBuilder;
+        internal XmlContentControl dockControlLayoutXml;
+        internal ResultGrid dockControlGrid;
         internal HistoryManager historyMgr = new HistoryManager();
         internal bool historyisavailable = true;
         private string cwpfeed;
         private XmlContentControl dockControlFetchResult;
         private XmlContentControl dockControlFetchXml;
-        private XmlContentControl dockControlFetchXmlCs;
         private XmlContentControl dockControlFetchXmlJs;
-        private ResultGrid dockControlGrid;
+        private XmlContentControl dockControlPowerPlatformCLI;
         private ODataControl dockControlOData2;
         private ODataControl dockControlOData4;
         private FlowListControl dockControlFlowList;
-        private XmlContentControl dockControlQExp;
+        private XmlContentControl dockControlCSharp;
         private XmlContentControl dockControlSQL;
         private MetadataControl dockControlMeta;
         private Entity dynml;
@@ -58,28 +59,43 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 try
                 {
-                    tsbNew.Enabled = enabled;
-                    tsbOpen.Enabled = enabled;
-                    tsmiOpenFile.Enabled = enabled;
+                    // Menus
+                    toolStripMain.Enabled = enabled;
+
+                    // Main menu items
+                    tsbExecute.Enabled = enabled && Service != null;
+                    tsbAbort.Visible = settings.Results.RetrieveAllPages;
+                    tsbBDU.Visible = settings.ShowBDU && bduexists && callerArgs?.SourcePlugin != "Bulk Data Updater";
+                    tsbBDU.Enabled = enabled && (dockControlBuilder?.IsFetchAggregate() == false);
+                    tsbReturnToCaller.Visible = CallerWantsResults();
+
+                    // Sub menu Open items
                     tsmiOpenView.Enabled = enabled && Service != null;
                     tsmiOpenML.Visible = enabled && Service != null && GetEntity("list") != null;
                     tsmiOpenCWP.Visible = enabled && Service != null && GetEntity("cint_feed") != null;
-                    tsbReturnToCaller.Visible = CallerWantsResults();
-                    tsbSave.Enabled = enabled;
+
+                    // Sub menu Save items
                     tsmiSaveFile.Enabled = enabled && dockControlBuilder?.FetchChanged == true && !string.IsNullOrEmpty(FileName);
-                    tsmiSaveFileAs.Enabled = enabled;
                     tsmiSaveView.Enabled = enabled && Service != null && View != null && View.IsCustomizable();
-                    tsmiSaveViewAs.Enabled = tsmiSaveView.Enabled;
+                    tsmiSaveViewAs.Enabled = enabled && Service != null && (tsmiSaveView.Enabled || settings.Results.WorkWithLayout);
                     tsmiSaveML.Enabled = enabled && Service != null && DynML != null;
                     tsmiSaveCWP.Visible = enabled && Service != null && GetEntity("cint_feed") != null;
                     tsmiSaveCWP.Enabled = enabled && Service != null && dockControlBuilder?.FetchChanged == true && !string.IsNullOrEmpty(CWPFeed);
-                    tsbView.Enabled = enabled;
-                    tsbExecute.Enabled = enabled && Service != null;
+
+                    // Sub menu Options items
                     tsmiSelect.Enabled = enabled && Service != null;
-                    tsbAbort.Visible = settings.Results.RetrieveAllPages;
-                    tsbBDU.Visible = bduexists && callerArgs?.SourcePlugin != "Bulk Data Updater";
-                    tsbBDU.Enabled = enabled && (dockControlBuilder?.IsFetchAggregate() == false);
+
+                    // Sub menu Convert items
+                    tsmiShowLayoutXML.Enabled = enabled && Service != null && (dockControlBuilder?.IsFetchAggregate() == false) && settings.Results.WorkWithLayout;
+                    tsmiShowMetadata.Enabled = enabled && Service != null;
+                    tsmiShowFlow.Enabled = enabled && Service != null;
+                    tsmiShowOData.Enabled = enabled && Service != null;
+                    tsmiShowOData4.Enabled = enabled && Service != null;
+                    tsmiShowCSharpCode.Enabled = enabled && Service != null && (dockControlBuilder?.IsFetchAggregate() == false);
+
+                    // Enable local menus/buttons/etc
                     dockControlBuilder?.EnableControls(enabled);
+
                     buttonsEnabled = enabled;
                 }
                 catch
@@ -113,18 +129,18 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         internal void UpdateLiveXML(bool preventxmlupdate = false)
         {
-            var fetch = string.Empty;
-            string GetFetch()
-            {
-                if (string.IsNullOrWhiteSpace(fetch))
-                {
-                    fetch = dockControlBuilder.GetFetchString(true, false);
-                }
-                return fetch;
-            }
             if (!preventxmlupdate && dockControlFetchXml?.Visible == true)
             {
-                dockControlFetchXml.UpdateXML(GetFetch());
+                dockControlFetchXml.UpdateXML(dockControlBuilder.GetFetchString(true, false));
+            }
+            if (!preventxmlupdate && dockControlLayoutXml?.Visible == true)
+            {
+                dockControlBuilder.LayoutXML?.MakeSureAllCellsExistForAttributes();
+                dockControlLayoutXml.UpdateXML(dockControlBuilder.LayoutXML?.ToXML());
+            }
+            if (dockControlGrid?.Visible == true)
+            {
+                dockControlGrid.SetQueryIfChangesDesign();
             }
             if (dockControlOData2?.Visible == true && entities != null)
             {
@@ -136,24 +152,24 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             if (dockControlFlowList?.Visible == true && entities != null)
             {
-                dockControlFlowList.DisplayFlowList(GetOData(4));
+                dockControlFlowList.DisplayFlowList(dockControlBuilder.GetFetchString(true, false));
             }
-            if (dockControlQExp?.Visible == true && entities != null)
+            if (dockControlCSharp?.Visible == true && entities != null)
             {
-                dockControlQExp.UpdateXML(GetQueryExpressionCode());
+                dockControlCSharp.UpdateXML(GetCSharpCode());
             }
-            if (dockControlSQL?.Visible == true && entities != null)
+            if (dockControlSQL?.Visible == true)
             {
                 var sql = GetSQLQuery(out var sql4cds);
                 dockControlSQL.UpdateSQL(sql, sql4cds);
             }
-            if (dockControlFetchXmlCs?.Visible == true)
-            {
-                dockControlFetchXmlCs.UpdateXML(GetCSharpCode());
-            }
             if (dockControlFetchXmlJs?.Visible == true)
             {
                 dockControlFetchXmlJs.UpdateXML(GetJavaScriptCode());
+            }
+            if (dockControlPowerPlatformCLI?.Visible == true)
+            {
+                dockControlPowerPlatformCLI.UpdateXML(GetPowerPlatformCLIFetch());
             }
             if (dockControlMeta?.Visible == true)
             {
@@ -171,9 +187,17 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         internal static void HelpClick(object sender)
         {
-            if (sender is Control control && control.Tag is string tag && tag.StartsWith("http"))
+            if (sender is Control control && control.Tag is string tag)
             {
-                OpenURL(tag);
+                HelpClick(tag);
+            }
+        }
+
+        internal static void HelpClick(string url)
+        {
+            if (url.StartsWith("http"))
+            {
+                OpenURL(url);
             }
         }
 
@@ -244,22 +268,12 @@ namespace Rappen.XTB.FetchXmlBuilder
                 dockControlFetchXml = new XmlContentControl(this);
                 return dockControlFetchXml;
             }
+            else if (persistString == XmlContentControl.GetPersistString(ContentType.LayoutXML) && dockControlLayoutXml?.IsDisposed != false)
+            {
+                dockControlLayoutXml = new XmlContentControl(ContentType.LayoutXML, SaveFormat.None, this);
+                return dockControlLayoutXml;
+            }
             return null;
-        }
-
-        private string GetCSharpCode()
-        {
-            var cs = string.Empty;
-            var fetch = dockControlBuilder.GetFetchString(true, false);
-            try
-            {
-                cs = CSharpCodeGenerator.GetCSharpCode(fetch);
-            }
-            catch (Exception ex)
-            {
-                cs = "Failed to generate C# code.\n\n" + ex.Message;
-            }
-            return cs;
         }
 
         private string GetJavaScriptCode()
@@ -275,6 +289,13 @@ namespace Rappen.XTB.FetchXmlBuilder
                 js = "Failed to generate JavaScript code.\n\n" + ex.Message;
             }
             return js;
+        }
+
+        private string GetPowerPlatformCLIFetch()
+        {
+            var fxl = dockControlBuilder.GetFetchString(false, false);
+            fxl = XmlContentControl.GetFetchMini(fxl);
+            return $"pac org fetch --xml \"{fxl}\"";
         }
 
         private void OpenCWPFeed()
@@ -297,7 +318,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             if (feed.Contains("cint_fetchxml"))
             {
                 CWPFeed = feed.Contains("cint_id") ? feed["cint_id"].ToString() : feedid;
-                dockControlBuilder.Init(feed["cint_fetchxml"].ToString(), "open CWP feed", false);
+                dockControlBuilder.Init(feed["cint_fetchxml"].ToString(), null, "open CWP feed", false);
                 LogUse("OpenCWP");
             }
             EnableControls(true);
@@ -321,7 +342,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 FileName = ofd.FileName;
                 var fetchDoc = new XmlDocument();
                 fetchDoc.Load(ofd.FileName);
-                dockControlBuilder.Init(fetchDoc.OuterXml, "open file", true);
+                dockControlBuilder.Init(fetchDoc.OuterXml, null, "open file", true);
                 LogUse("OpenFile");
             }
             EnableControls(true);
@@ -340,7 +361,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 if (mlselector.View.Contains("query") && !string.IsNullOrEmpty(mlselector.View["query"].ToString()))
                 {
                     DynML = mlselector.View;
-                    dockControlBuilder.Init(DynML["query"].ToString(), "open marketing list", false);
+                    dockControlBuilder.Init(DynML["query"].ToString(), null, "open marketing list", false);
                     LogUse("OpenML");
                 }
                 else
@@ -374,9 +395,9 @@ namespace Rappen.XTB.FetchXmlBuilder
                     if (viewselector.View.Contains("fetchxml") && !string.IsNullOrEmpty(viewselector.View["fetchxml"].ToString()))
                     {
                         View = viewselector.View;
-                        dockControlBuilder.Init(View["fetchxml"].ToString(), "open view", false);
-                        attributesChecksum = dockControlBuilder.GetAttributesSignature(null);
-                        LogUse("OpenView");
+                        dockControlBuilder.Init(View["fetchxml"].ToString(), View["layoutxml"].ToString(), "open view", false);
+                        attributesChecksum = dockControlBuilder.GetAttributesSignature();
+                        LogUse($"OpenView-{(View.LogicalName == "savedquery" ? "S" : "P")}");
                     }
                     else
                     {
@@ -574,52 +595,116 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void SaveView(bool saveas)
         {
-            var currentAttributes = dockControlBuilder.GetAttributesSignature(null);
-            if (currentAttributes != attributesChecksum)
+            var entityname = View?["returnedtypecode"].ToString() ?? dockControlBuilder.RootEntityName;
+            if (GetEntity(entityname) == null)
             {
-                MessageBox.Show("Cannot save view, returned attributes must not be changed.\n\nExpected attributes:\n  " +
-                    attributesChecksum.Replace("\n", "\n  ") + "\nCurrent attributes:\n  " + currentAttributes.Replace("\n", "\n  "),
-                    "Cannot save view", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Can't set the correct ReturnedTypeCode from the metadata: {entityname}", "Save View",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0,
+                    "https://docs.microsoft.com/power-apps/developer/model-driven-apps/customize-entity-views?WT.mc_id=BA-MVP-5002475#create-views");
                 return;
             }
-            var viewname = View["name"].ToString();
+            if (dockControlBuilder.PrimaryIdNode == null)
+            {
+                if (MessageBox.Show($"Views should really include the primary id.\nYou should add attribute {dockControlBuilder.PrimaryIdName}.\n\nYes - I will fix it\nNo - I don't care.",
+                                    "Save View", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.No)
+                {
+                    return;
+                }
+            }
+            var includelayout = saveas;
+            if (!includelayout && settings.Results.WorkWithLayout)
+            {
+                var inclresult = MessageBox.Show("Include the layout of the view?", "Save View",
+                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, 0,
+                    "https://jonasr.app/fxb-layout/#howto");
+                switch (inclresult)
+                {
+                    case DialogResult.Yes:
+                        includelayout = true;
+                        break;
+
+                    case DialogResult.No:
+                        includelayout = false;
+                        break;
+
+                    default:
+                        return;
+                }
+            }
+            if (!includelayout)
+            {
+                var currentAttributes = dockControlBuilder.GetAttributesSignature();
+                if (currentAttributes != attributesChecksum)
+                {
+                    MessageBox.Show("Cannot save view, returned attributes must not be changed.\n\nExpected attributes:\n  " +
+                        attributesChecksum.Replace("\n", "\n  ") + "\nCurrent attributes:\n  " + currentAttributes.Replace("\n", "\n  "),
+                        "Cannot save view", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+            var viewname = View?.GetAttributeValue<string>("name");
+            var viewtype = View?.LogicalName;
             if (saveas)
             {
-                var newviewname = Prompt.ShowDialog("Enter name for the new personal view", "Save View As", viewname);
+                var typeresult = MessageBox.Show("Save as a System View?\n\nYes - creating a new System View\nNo - creating a new Personal View", "Save View As",
+                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, 0,
+                    "https://docs.microsoft.com/power-apps/maker/model-driven-apps/create-edit-views?WT.mc_id=BA-MVP-5002475#types-of-views");
+                switch (typeresult)
+                {
+                    case DialogResult.Yes:
+                        viewtype = "savedquery";
+                        break;
+
+                    case DialogResult.No:
+                        viewtype = "userquery";
+                        break;
+
+                    default:
+                        return;
+                }
+                var newviewname = Prompt.ShowDialog("Enter name for the new view", "Save View As", viewname);
                 if (string.IsNullOrEmpty(newviewname))
                 {
                     MessageBox.Show("No name for new view.", "Save View As", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                if (newviewname.ToLowerInvariant() == viewname.ToLowerInvariant())
+                if (newviewname.ToLowerInvariant() == viewname?.ToLowerInvariant())
                 {
                     MessageBox.Show("Enter a new name for this view.", "Save View As", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 viewname = newviewname;
             }
-            else if (View.LogicalName == "savedquery")
+            if (viewtype == "savedquery")
             {
-                if (MessageBox.Show("This will update and publish the saved query in CRM.\n\nConfirm!", "Confirm",
+                if (MessageBox.Show("This will update and publish the saved query in Dataverse.\n\nConfirm!", "Confirm",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.Cancel)
                 {
                     return;
                 }
             }
-            var xml = dockControlBuilder.GetFetchString(false, false);
-            var entityname = View["returnedtypecode"].ToString();
-            var newView = new Entity(saveas ? "userquery" : View.LogicalName);
-            newView["fetchxml"] = xml;
+            var fetch = dockControlBuilder.GetFetchString(false, false);
+            var layout = includelayout ? dockControlBuilder.LayoutXML.ToXML() : View?["layoutxml"].ToString();
+            var newView = new Entity(viewtype);
+            newView["fetchxml"] = fetch;
+            newView["returnedtypecode"] = entityname;
+            if (includelayout && !string.IsNullOrWhiteSpace(layout))
+            {
+                newView["layoutxml"] = layout;
+            }
             if (saveas)
             {
                 newView["name"] = viewname;
-                newView["layoutxml"] = View["layoutxml"];
-                newView["returnedtypecode"] = View["returnedtypecode"];
                 newView["querytype"] = 0;
             }
             else
             {
-                newView.Id = View.Id;
+                newView.Id = View?.Id ?? Guid.Empty;
+                if (newView.Id.Equals(Guid.Empty))
+                {
+                    MessageBox.Show("Somehow missing the Id for the existing view.\nSorry. Try again, or reboot, or anything else...", "Oops", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
 
             var msg = newView.LogicalName == "savedquery" ? "Saving and publishing {0}..." : "Saving {0}...";
@@ -635,13 +720,13 @@ namespace Rappen.XTB.FetchXmlBuilder
                     {
                         Service.Update(newView);
                     }
-                    LogUse("SaveView");
+                    LogUse($"SaveView{(newView.Contains("layoutxml") ? "Layout" : "")}-{(newView.LogicalName == "savedquery" ? "S" : "P")}");
                     if (newView.LogicalName == "savedquery")
                     {
                         var pubRequest = new PublishXmlRequest();
                         pubRequest.ParameterXml = string.Format(
                             @"<importexportxml><entities><entity>{0}</entity></entities><nodes/><securityroles/><settings/><workflows/></importexportxml>",
-                            View["returnedtypecode"].ToString());
+                            newView["returnedtypecode"].ToString());
                         Execute(pubRequest);
                     }
                 })
@@ -654,15 +739,24 @@ namespace Rappen.XTB.FetchXmlBuilder
                     }
                     else
                     {
-                        if (completedargs.Result is Entity newview)
+                        if (completedargs.Result is Entity newview && saveas)
                         {
-                            entityname = newview["returnedtypecode"].ToString();
-                            if (!views.ContainsKey(entityname + "|U"))
+                            if (views != null)
                             {
-                                views.Add(entityname + "|U", new List<Entity>());
+                                entityname = newview["returnedtypecode"].ToString();
+                                var viewsuffix = newview.LogicalName == "savedquery" ? "S" : "U";
+                                if (!views.ContainsKey(entityname + "|" + viewsuffix))
+                                {
+                                    views.Add(entityname + "|" + viewsuffix, new List<Entity>());
+                                }
+                                views[entityname + "|" + viewsuffix].Add(newView);
                             }
-                            views[entityname + "|U"].Add(newView);
                             View = newview;
+                            if (newView.LogicalName == "savedquery")
+                            {
+                                MessageBox.Show($"{viewname} is created in the system.\n\nNote that it is now only in the Default solution!\nMake sure you go and add it to your own solutions.",
+                                    "New View", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            }
                         }
                         dockControlBuilder.ClearChanged();
                     }
@@ -703,7 +797,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 control.EnsureVisible(dockContainer, state);
             }
-            UpdateLiveXML();
         }
 
         private void ShowMetadataControl(ref MetadataControl control, DockState defaultstate)

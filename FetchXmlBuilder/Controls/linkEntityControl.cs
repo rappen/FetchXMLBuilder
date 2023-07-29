@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
+using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.Builder;
 using Rappen.XTB.FetchXmlBuilder.ControlsClasses;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
@@ -366,6 +367,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 if (fxb.entities != null && !cmbTo.Items.OfType<string>().Any(i => i == cmbTo.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Info, "To attribute", ControlValidationMessage.NotShowingNow);
+                }
+            }
+
+            if (control == txtAlias)
+            {
+                if (Validations.ValidateAlias(txtAlias.Text) is ControlValidationResult aliasresult)
+                {
+                    return aliasresult;
+                }
+                if (string.IsNullOrWhiteSpace(txtAlias.Text) && fxb.settings.Results.WorkWithLayout)
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Using Layout: Alias is needed to show these attributes");
                 }
             }
 

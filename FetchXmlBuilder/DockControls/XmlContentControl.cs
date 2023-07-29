@@ -2,7 +2,9 @@
 using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.Converters;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Forms;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using Rappen.XTB.XmlEditorUtils;
 using System;
@@ -23,9 +25,17 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private ContentType contenttype;
         private SaveFormat format;
         private string liveUpdateXml = "";
+        private bool initializating = false;
+        private const string waitmessage = "Initializating...";
+        private const int qexoptionswidth = 720;
 
         private MarkMpn.XmlSchemaAutocomplete.Autocomplete<FetchType> _autocomplete;
         private bool _usedAutocomplete;
+
+        private bool parsecsharp =>
+            (fxb.settings.CodeGenerators.QExStyle == QExStyleEnum.QueryExpression ||
+             fxb.settings.CodeGenerators.QExStyle == QExStyleEnum.QueryByAttribute) &&
+            fxb.settings.CodeGenerators.QExFlavor == QExFlavorEnum.LateBound;
 
         internal XmlContentControl(FetchXmlBuilder caller) : this(ContentType.FetchXML, SaveFormat.XML, caller)
         {
@@ -36,10 +46,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             InitializeComponent();
             this.PrepareGroupBoxExpanders();
             fxb = caller;
+            cmbQExStyle.Items.AddRange(QExStyle.GetComboBoxItems());
+            cmbQExFlavor.Items.AddRange(QExFlavor.GetComboBoxItems());
             SetContentType(contentType);
             SetFormat(saveFormat);
             UpdateButtons();
-            if (contentType == ContentType.FetchXML)
+            if (contentType == ContentType.FetchXML || contentType == ContentType.LayoutXML)
             {
                 InitIntellisense();
             }
@@ -57,27 +69,29 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal void SetContentType(ContentType contentType)
         {
+            initializating = true;
             contenttype = contentType;
             Text = contenttype.ToString().Replace("_", " ").Replace("CSharp", "C#");
             TabText = Text;
             var windowSettings = fxb.settings.ContentWindows.GetContentWindow(contenttype);
-            var allowedit = contenttype == ContentType.FetchXML;
-            var allowparse = contenttype == ContentType.QueryExpression;
+            var allowedit = contenttype == ContentType.FetchXML || contenttype == ContentType.LayoutXML;
             var allowsql = contenttype == ContentType.SQL_Query;
             chkLiveUpdate.Checked = allowedit && windowSettings.LiveUpdate;
             lblFormatExpander.GroupBoxSetState(tt, windowSettings.FormatExpanded);
             lblActionsExpander.GroupBoxSetState(tt, windowSettings.ActionExpanded);
+            panActions.Visible = contenttype != ContentType.CSharp_Code;
             panLiveUpdate.Visible = allowedit;
             panOk.Visible = allowedit;
             panFormatting.Visible = allowedit;
-            panExecute.Visible = allowedit;
-            panParseQE.Visible = allowparse;
+            panExecute.Visible = allowedit && contenttype == ContentType.FetchXML;
+            panQExOptions.Visible = contenttype == ContentType.CSharp_Code;
             panSQL4CDS.Visible = allowsql;
             panSQL4CDSInfo.Visible = allowsql;
 
             switch (contentType)
             {
                 case ContentType.FetchXML:
+                case ContentType.LayoutXML:
                 case ContentType.FetchXML_Result:
                 case ContentType.Serialized_Result_XML:
                     txtXML.ConfigureForXml(fxb.settings);
@@ -87,8 +101,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     txtXML.ConfigureForSQL();
                     break;
 
-                case ContentType.CSharp_Query:
-                case ContentType.QueryExpression:
+                case ContentType.CSharp_Code:
+                    cmbQExStyle.SelectedItem = cmbQExStyle.Items.Cast<QExStyle>().FirstOrDefault(s => s.Tag == fxb.settings.CodeGenerators.QExStyle);
+                    cmbQExFlavor.SelectedItem = cmbQExFlavor.Items.Cast<QExFlavor>().FirstOrDefault(f => f.Tag == fxb.settings.CodeGenerators.QExFlavor);
+                    rbQExLineByLine.Checked = !fxb.settings.CodeGenerators.ObjectInitializer;
+                    rbQExObjectinitializer.Checked = fxb.settings.CodeGenerators.ObjectInitializer;
+                    numQExIndent.Value = fxb.settings.CodeGenerators.Indents;
+                    chkQExComments.Checked = fxb.settings.CodeGenerators.IncludeComments;
+                    chkQExFilterVariables.Checked = fxb.settings.CodeGenerators.FilterVariables;
                     txtXML.ConfigureForCSharp();
                     break;
 
@@ -96,16 +116,50 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     txtXML.ConfigureForJavaScript();
                     break;
 
+                case ContentType.Power_Platform_CLI:
+                    panActions.Visible = false;
+                    txtXML.ConfigureForCSharp();
+                    txtXML.WrapMode = ScintillaNET.WrapMode.Char;
+                    break;
+
                 case ContentType.Serialized_Result_JSON:
                     txtXML.ConfigureForJSON();
                     break;
             }
+            initializating = false;
         }
 
         internal void SetFormat(SaveFormat saveFormat)
         {
             format = saveFormat;
             panSave.Visible = format != SaveFormat.None;
+        }
+
+        internal static string GetFetchMini(string fetchxml, char quotationchar = '\'', bool removecomments = true)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(fetchxml);
+            var comments = doc.SelectNodes("//comment()");
+            if (comments.Count > 0 && removecomments)
+            {
+                foreach (XmlNode node in comments)
+                {
+                    node.ParentNode.RemoveChild(node);
+                }
+            }
+
+            string xml;
+            using (var stringWriter = new StringWriter())
+            {
+                using (var xmlWriter = new XmlFragmentWriter(stringWriter))
+                {
+                    xmlWriter.QuoteChar = quotationchar;
+                    doc.Save(xmlWriter);
+                    xml = stringWriter.ToString();
+                }
+            }
+            var result = StripSpaces(xml);
+            return result;
         }
 
         private void btnFormat_Click(object sender, EventArgs e)
@@ -140,13 +194,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         public void UpdateXML(string xmlString)
         {
-            if (txtXML.Lexer == ScintillaNET.Lexer.Xml)
+            if (Visible)
             {
-                FormatXML(xmlString, true);
-            }
-            else
-            {
-                txtXML.Text = xmlString;
+                if (txtXML.Lexer == ScintillaNET.Lexer.Xml)
+                {
+                    FormatXML(xmlString, true);
+                }
+                else
+                {
+                    txtXML.Text = xmlString;
+                }
             }
             liveUpdateXml = xmlString;
         }
@@ -169,7 +226,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void btnParseQE_Click(object sender, EventArgs e)
         {
-            fxb.QueryExpressionToFetchXml(txtXML.Text);
+            fxb.StringQueryExpressionToFetchXml(txtXML.Text, fxb.settings.CodeGenerators.QExStyle);
         }
 
         private void XmlContentDisplayDialog_Load(object sender, EventArgs e)
@@ -201,13 +258,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 return;
             }
-            if (!FetchIsPlain() && !FetchIsMini())
+            if (!XMLIsPlain() && !XMLIsMini())
             {
-                if (FetchIsHtml())
+                if (XMLIsHtml())
                 {
                     txtXML.Text = HttpUtility.HtmlDecode(txtXML.Text.Trim());
                 }
-                else if (FetchIsEscaped())
+                else if (XMLIsEscaped())
                 {
                     txtXML.Text = Uri.UnescapeDataString(txtXML.Text.Trim());
                 }
@@ -216,7 +273,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     if (MessageBox.Show("Unrecognized encoding, unsure what to do with it.\n" +
                         "Currently FXB can handle htmlencoded and urlescaped strings.\n\n" +
                         "Would you like to submit an issue to FetchXML Builder to be able to handle this?",
-                        "Decode FetchXML", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                        "Decode " + Text, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
                     {
                         FetchXmlBuilder.OpenURL("https://github.com/rappen/FetchXMLBuilder/issues/new");
                     }
@@ -234,7 +291,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 UpdateButtons();
                 return;
             }
-            if (!FetchIsPlain())
+            if (!XMLIsPlain())
             {
                 FormatAsXML();
             }
@@ -244,7 +301,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void FormatAsEsc()
         {
-            if (!FetchIsPlain())
+            if (!XMLIsPlain())
             {
                 FormatAsXML();
             }
@@ -253,37 +310,19 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void FormatAsMini()
         {
-            if (!FetchIsPlain() && !FetchIsMini())
+            if (!XMLIsPlain() && !XMLIsMini())
             {
                 FormatAsXML();
             }
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(txtXML.Text);
-            var comments = doc.SelectNodes("//comment()");
-            if (comments.Count > 0 && MessageBox.Show("Remove comments?", "Minify XML", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                foreach (XmlNode node in comments)
-                {
-                    node.ParentNode.RemoveChild(node);
-                }
-            }
-
-            string xml;
-            using (var stringWriter = new StringWriter())
-            {
-                using (var xmlWriter = new XmlFragmentWriter(stringWriter))
-                {
-                    xmlWriter.QuoteChar = fxb.settings.QueryOptions.UseSingleQuotation ? '\'' : '"';
-                    doc.Save(xmlWriter);
-                    xml = stringWriter.ToString();
-                }
-            }
-            txtXML.Text = StripSpaces(xml);
+            var fetchxml = txtXML.Text;
+            var removecomm = MessageBox.Show("Remove comments?", "Minify XML", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+            string result = GetFetchMini(fetchxml, fxb.settings.QueryOptions.UseSingleQuotation ? '\'' : '"', removecomm);
+            txtXML.Text = result;
         }
 
         private string GetCompactXml()
         {
-            if (!FetchIsPlain())
+            if (!XMLIsPlain())
             {
                 FormatAsXML();
             }
@@ -300,15 +339,15 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private XmlStyle GetStyle()
         {
-            if (FetchIsMini())
+            if (XMLIsMini())
             {
                 return XmlStyle.Mini;
             }
-            if (FetchIsHtml())
+            if (XMLIsHtml())
             {
                 return XmlStyle.Html;
             }
-            if (FetchIsEscaped())
+            if (XMLIsEscaped())
             {
                 return XmlStyle.Esc;
             }
@@ -337,26 +376,36 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        private bool FetchIsPlain()
+        private bool XMLIsPlain()
         {
             var lines = txtXML.Text.Trim().Split('\n').Select(l => l.Trim()).ToList();
-            return lines.Count > 1 && lines[0].StartsWith("<fetch");
+            return lines.Count > 1 && lines[0].StartsWith("<" + ContentTypeStart(contenttype));
         }
 
-        private bool FetchIsMini()
+        private bool XMLIsMini()
         {
             var lines = txtXML.Text.Trim().Split('\n').Select(l => l.Trim()).ToList();
-            return lines.Count == 1 && lines[0].StartsWith("<fetch");
+            return lines.Count == 1 && lines[0].StartsWith("<" + ContentTypeStart(contenttype));
         }
 
-        private bool FetchIsHtml()
+        private bool XMLIsHtml()
         {
-            return txtXML.Text.Trim().ToLowerInvariant().StartsWith("&lt;fetch");
+            return txtXML.Text.Trim().ToLowerInvariant().StartsWith("&lt;" + ContentTypeStart(contenttype));
         }
 
-        private bool FetchIsEscaped()
+        private bool XMLIsEscaped()
         {
-            return txtXML.Text.Trim().ToLowerInvariant().StartsWith("%3cfetch");
+            return txtXML.Text.Trim().ToLowerInvariant().StartsWith("%3c" + ContentTypeStart(contenttype));
+        }
+
+        private string ContentTypeStart(ContentType type)
+        {
+            switch (type)
+            {
+                case ContentType.FetchXML: return "fetch";
+                case ContentType.LayoutXML: return "grid";
+                default: return "dscxdsfdcvgfgwesdxdzsfdcbgf454";
+            }
         }
 
         private void txtXML_TextChanged(object sender, EventArgs e)
@@ -366,10 +415,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void UpdateButtons()
         {
-            var plain = FetchIsPlain();
-            rbFormatEsc.Checked = FetchIsEscaped();
-            rbFormatHTML.Checked = FetchIsHtml();
-            rbFormatMini.Checked = FetchIsMini();
+            var plain = XMLIsPlain();
+            rbFormatEsc.Checked = XMLIsEscaped();
+            rbFormatHTML.Checked = XMLIsHtml();
+            rbFormatMini.Checked = XMLIsMini();
             rbFormatXML.Checked = plain;
             btnFormat.Enabled = plain;
             btnExecute.Enabled = plain && !chkLiveUpdate.Checked;
@@ -393,16 +442,20 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                         fxb.settings.DockStates.FetchXML = DockState;
                         break;
 
-                    case ContentType.CSharp_Query:
-                        fxb.settings.DockStates.FetchXMLCs = DockState;
+                    case ContentType.LayoutXML:
+                        fxb.settings.DockStates.LayoutXML = DockState;
                         break;
 
                     case ContentType.JavaScript_Query:
                         fxb.settings.DockStates.FetchXMLJs = DockState;
                         break;
 
-                    case ContentType.QueryExpression:
-                        fxb.settings.DockStates.QueryExpression = DockState;
+                    case ContentType.Power_Platform_CLI:
+                        fxb.settings.DockStates.PowerPlatformCLI = DockState;
+                        break;
+
+                    case ContentType.CSharp_Code:
+                        fxb.settings.DockStates.CSharp = DockState;
                         break;
 
                     case ContentType.SQL_Query:
@@ -758,15 +811,30 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 doc.LoadXml(txtXML.Text);
                 if (doc.OuterXml != liveUpdateXml)
                 {
-                    fxb.dockControlBuilder.ParseXML(txtXML.Text, false);
-                    fxb.UpdateLiveXML(live);
-                    fxb.historyMgr.RecordHistory(action, txtXML.Text);
+                    switch (contenttype)
+                    {
+                        case ContentType.FetchXML:
+                            fxb.dockControlBuilder.ParseXML(txtXML.Text, false);
+                            fxb.historyMgr.RecordHistory(action, txtXML.Text);
+                            break;
+
+                        case ContentType.LayoutXML:
+                            fxb.dockControlBuilder.SetLayoutFromXML(txtXML.Text);
+                            fxb.dockControlGrid?.SetLayoutToGrid();
+                            break;
+                    }
                 }
                 liveUpdateXml = doc.OuterXml;
             }
             catch (Exception)
             {
+                if (contenttype == ContentType.LayoutXML && !live)
+                {
+                    fxb.dockControlBuilder.SetLayoutFromXML(null);
+                    fxb.dockControlGrid?.SetLayoutToGrid();
+                }
             }
+            fxb.UpdateLiveXML(live);
         }
 
         private void txtXML_KeyUp(object sender, KeyEventArgs e)
@@ -777,18 +845,205 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 tmLiveUpdate.Start();
             }
         }
+
+        private void rbQExStyle_Click(object sender, EventArgs e)
+        {
+            //            if (rbQExQExFactory.Checked)
+            //            {
+            //                MessageBox.Show(@"This feature is not yet implemented... #sorry
+
+            //Do you like that idea?
+            //Click the ""Help"" button to vote on this Issue #822 and it will be implemented, one day...!
+
+            //More votes == released sooner.", "QueryExpressionFactory",
+            //                    MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0,
+            //                    "https://github.com/rappen/FetchXMLBuilder/issues/822");
+            //                if (fxb.settings.CodeGenerators.Style == CodeGenerationStyle.EarlyBoundEBG)
+            //                {
+            //                    rbQExEarly.Checked = true;
+            //                }
+            //                else
+            //                {
+            //                    rbQExLate.Checked = true;
+            //                }
+            //                return;
+            //            }
+            //            fxb.settings.CodeGenerators.Style = rbQExEarly.Checked ? CodeGenerationStyle.EarlyBoundEBG : rbQExQExFactory.Checked ? CodeGenerationStyle.QueryExpressionFactory : CodeGenerationStyle.LateBound;
+            //            fxb.UpdateLiveXML();
+        }
+
+        private void chkQExComments_CheckedChanged(object sender, EventArgs e)
+        {
+            fxb.settings.CodeGenerators.IncludeComments = chkQExComments.Checked;
+            fxb.UpdateLiveXML();
+        }
+
+        private void linkEBG_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FetchXmlBuilder.OpenURL("https://www.xrmtoolbox.com/plugins/DLaB.Xrm.EarlyBoundGenerator/");
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FetchXmlBuilder.OpenURL("https://github.com/rappen/FetchXMLBuilder/issues/822");
+        }
+
+        private void cmbQExStyle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbQExStyle.SelectedItem is QExStyle style)
+            {
+                fxb.settings.CodeGenerators.QExStyle = style.Tag;
+                linkStyleHelp.Text = style.LinkName;
+                tt.SetToolTip(linkStyleHelp, style.HelpUrl);
+                rbQExLineByLine.Enabled = true;
+                rbQExObjectinitializer.Enabled = true;
+                cmbQExFlavor.Enabled = true;
+                chkQExComments.Enabled = true;
+                numQExIndent.Enabled = true;
+                switch (fxb.settings.CodeGenerators.QExStyle)
+                {
+                    case QExStyleEnum.QueryExpression:
+                        if (fxb.settings.CodeGenerators.QExFlavor == QExFlavorEnum.EarlyBound)
+                        {
+                            cmbQExFlavor.SelectedIndex = 0;
+                        }
+                        break;
+
+                    case QExStyleEnum.FluentQueryExpression:
+                        rbQExLineByLine.Enabled = false;
+                        rbQExObjectinitializer.Checked = true;
+                        break;
+
+                    case QExStyleEnum.QueryExpressionFactory:
+                        MessageBox.Show(@"This feature is not yet finalized... #sorry
+
+Do you like that idea?
+Click the ""Help"" button to vote on this Issue #822 and it will be implemented, one day...!
+
+More votes == released sooner.", "QueryExpressionFactory",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0,
+                            "https://github.com/rappen/FetchXMLBuilder/issues/822");
+                        break;
+
+                    case QExStyleEnum.OrganizationServiceContext:
+                        MessageBox.Show(@"This feature is not yet started implementation.
+
+Do you like that idea?
+Click the ""Help"" button to vote on this Issue #859 and it will be implemented, one month...!
+
+More votes == released sooner.", "OrganizationServiceContext",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0,
+                            "https://github.com/rappen/FetchXMLBuilder/issues/859");
+                        break;
+
+                    case QExStyleEnum.FetchXML:
+                        rbQExObjectinitializer.Enabled = false;
+                        cmbQExFlavor.Enabled = false;
+                        chkQExComments.Enabled = false;
+                        chkQExComments.Checked = false;
+                        rbQExLineByLine.Checked = true;
+                        if (fxb.settings.CodeGenerators.QExFlavor != QExFlavorEnum.LateBound)
+                        {
+                            cmbQExFlavor.SelectedIndex = 0;
+                        }
+                        numQExIndent.Value = 0;
+                        numQExIndent.Enabled = false;
+                        break;
+                }
+                UpdateXML(initializating ? waitmessage : fxb.GetCSharpCode());
+            }
+            else
+            {
+                linkStyleHelp.Text = string.Empty;
+            }
+            panParseQE.Visible = parsecsharp;
+        }
+
+        private void cmbQExFlavor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbQExFlavor.SelectedItem is QExFlavor flavor)
+            {
+                fxb.settings.CodeGenerators.QExFlavor = flavor.Tag;
+                linkFlavorHelp.Text = flavor.Creator;
+                tt.SetToolTip(linkFlavorHelp, flavor.HelpUrl);
+                btnQExFlavorSettings.Visible = flavor.Tag == QExFlavorEnum.LCGconstants;
+                linkFlavorHelp.Left = btnQExFlavorSettings.Left + (flavor.Tag == QExFlavorEnum.LCGconstants ? btnQExFlavorSettings.Width + 6 : 0);
+                UpdateXML(initializating ? waitmessage : fxb.GetCSharpCode());
+            }
+            else
+            {
+                linkFlavorHelp.Text = string.Empty;
+            }
+            panParseQE.Visible = parsecsharp;
+        }
+
+        private void chkQExFilterVariables_CheckedChanged(object sender, EventArgs e)
+        {
+            fxb.settings.CodeGenerators.FilterVariables = chkQExFilterVariables.Checked;
+            UpdateXML(initializating ? waitmessage : fxb.GetCSharpCode());
+        }
+
+        private void rbQExObjectInitializer_CheckedChanged(object sender, EventArgs e)
+        {
+            fxb.settings.CodeGenerators.ObjectInitializer = rbQExObjectinitializer.Checked;
+            UpdateXML(initializating ? waitmessage : fxb.GetCSharpCode());
+        }
+
+        private void numQExIndent_ValueChanged(object sender, EventArgs e)
+        {
+            fxb.settings.CodeGenerators.Indents = (int)numQExIndent.Value;
+            UpdateXML(initializating ? waitmessage : fxb.GetCSharpCode());
+        }
+
+        private void linkFlavorHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var url = (cmbQExFlavor.SelectedItem is QExFlavor flavor) ? flavor.HelpUrl : string.Empty;
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                FetchXmlBuilder.OpenURL(url);
+            }
+        }
+
+        private void linkStyleHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var url = (cmbQExStyle.SelectedItem is QExStyle style) ? style.HelpUrl : string.Empty;
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                FetchXmlBuilder.OpenURL(url);
+            }
+        }
+
+        private void btnQExFlavorSettings_Click(object sender, EventArgs e)
+        {
+            if (CSharpCodeGeneratedLCGSettings.GetSettings(fxb, fxb.settings.CodeGenerators.LCG_Settings))
+            {
+                UpdateXML(initializating ? waitmessage : fxb.GetCSharpCode());
+            }
+        }
+
+        private void XmlContentControl_SizeChanged(object sender, EventArgs e)
+        {
+            if (panQExOptions.Visible)
+            {
+                var maxwidth = qexoptionswidth + (panParseQE.Visible ? panParseQE.Width : 0);
+                panQExStylFlavorOptions.Dock = Width < maxwidth ? DockStyle.Top : DockStyle.Left;
+                panQExSmallerOptions.Dock = Width < maxwidth ? DockStyle.Bottom : DockStyle.Left;
+                panQExOptions.Height = panQExSmallerOptions.Dock == DockStyle.Bottom ? 122 : 61;
+            }
+        }
     }
 
     public enum ContentType
     {
         FetchXML,
+        LayoutXML,
         FetchXML_Result,
         Serialized_Result_XML,
         Serialized_Result_JSON,
-        QueryExpression,
+        CSharp_Code,
         SQL_Query,
         JavaScript_Query,
-        CSharp_Query
+        Power_Platform_CLI
     }
 
     internal enum SaveFormat

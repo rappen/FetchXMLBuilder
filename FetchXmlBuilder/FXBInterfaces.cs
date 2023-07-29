@@ -13,6 +13,7 @@ namespace Rappen.XTB.FetchXmlBuilder
     public partial class FetchXmlBuilder : IGitHubPlugin, IPayPalPlugin, IMessageBusHost, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin, IDuplicatableTool, ISettingsPlugin
     {
         private MessageBusEventArgs callerArgs = null;
+        private const string URLcaller = "URL Protocol";
 
         #region Public Events
 
@@ -65,9 +66,23 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             dockControlBuilder.ParseXML(fetchXml, false);
             UpdateLiveXML();
-            tsbReturnToCaller.ToolTipText = "Return " + requestedType + " to " + callerArgs.SourcePlugin;
+            tsbReturnToCaller.Text = callerArgs.SourcePlugin == URLcaller ? "FetchXML from an URL" : "Return FetchXML";
+            tsbReturnToCaller.Image =
+                callerArgs.SourcePlugin == "Bulk Data Updater" ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.BDU_2019_032_tsp :
+                callerArgs.SourcePlugin == URLcaller ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_web :
+                Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_return;
+            tsbReturnToCaller.ToolTipText = callerArgs.SourcePlugin == URLcaller ? "Show 'Sharing Queries' on my website." : "Return " + requestedType + " to " + callerArgs.SourcePlugin;
             dockControlBuilder.RecordHistory("called from " + message.SourcePlugin);
             LogUse("CalledBy." + callerArgs.SourcePlugin);
+            if (callerArgs.SourcePlugin == "View Designer" && !connectionsettings.TipsAgainstOrViewDesignerToolShown)
+            {
+                if (MessageBox.Show("Did you know you can work with the layouts too in the FetchXML Builder?\nClick the Help button to see how!\n\nDon't show again.",
+                    "Called from View Designer", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2, 0,
+                    Utils.ProcessURL("https://jonasr.app/fxb-layout/")) == DialogResult.OK)
+                {
+                    connectionsettings.TipsAgainstOrViewDesignerToolShown = true;
+                }
+            }
             EnableControls(true);
         }
 
@@ -80,6 +95,10 @@ namespace Rappen.XTB.FetchXmlBuilder
             else if (e.KeyDown(Keys.E, false, true, false) && tsmiShowFetchXML.Enabled)
             {
                 tsmiShowFetchXML_Click(null, null);
+            }
+            else if (e.KeyDown(Keys.L, false, true, false) && tsmiShowLayoutXML.Enabled)
+            {
+                tsmiShowLayoutXML_Click(null, null);
             }
             else if (e.KeyDown(Keys.N, false, true, false) && tsbNew.Enabled)
             {
@@ -134,7 +153,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         public void ShowAboutDialog()
         {
-            LogUse("OpenAbout");
+            LogUse("ShowAbout");
             var about = new About();
             about.StartPosition = FormStartPosition.CenterParent;
             about.lblVersion.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -144,7 +163,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         public void ShowSettings()
         {
             var settingDlg = new Forms.Settings(this);
-            LogUse("OpenOptions");
+            LogUse("ShowOptions");
             if (settingDlg.ShowDialog(this) == DialogResult.OK)
             {
                 LogUse("SaveOptions");
@@ -162,7 +181,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     }
                     else
                     {
-                        LoadEntities(ConnectionDetail);
+                        LoadEntities();
                     }
                 }
                 SaveSetting();
@@ -170,6 +189,11 @@ namespace Rappen.XTB.FetchXmlBuilder
                 ApplySettings(false);
                 dockControlBuilder.ApplyCurrentSettings();
                 dockControlFetchXml?.ApplyCurrentSettings();
+                dockControlGrid?.ApplySettingsToGrid();
+                if (dockControlLayoutXml?.Visible == true && !settings.Results.WorkWithLayout)
+                {
+                    dockControlLayoutXml.PanelPane?.CloseActiveContent();
+                }
                 EnableControls();
             }
         }
@@ -188,6 +212,11 @@ namespace Rappen.XTB.FetchXmlBuilder
                 return;
             }
             LogUse("ReturnTo." + callerArgs.SourcePlugin);
+            if (callerArgs.SourcePlugin == URLcaller)
+            {
+                OpenURL("https://fetchxmlbuilder.com/sharing-queries/");
+                return;
+            }
             var fetch = dockControlBuilder.GetFetchString(true, true);
             if (string.IsNullOrWhiteSpace(fetch))
             {

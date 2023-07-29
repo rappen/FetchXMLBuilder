@@ -21,6 +21,7 @@ namespace Rappen.XTB.FetchXmlBuilder.AppCode
             if (urib.Host.ToLowerInvariant().Contains("microsoft.com"))
             {
                 microsoftparams.AllKeys.ToList().ForEach(k => qry[k] = microsoftparams[k]);
+                urib.Path = urib.Path.Replace("/en-us/", "/");
             }
             commonparams.AllKeys.ToList().ForEach(k => qry[k] = commonparams[k]);
 

@@ -1,11 +1,14 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Builder;
 using Rappen.XTB.FetchXmlBuilder.Controls;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Forms;
+using Rappen.XTB.FetchXmlBuilder.Views;
+using Rappen.XTB.Helpers.Controls;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
@@ -26,6 +29,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private FetchXmlBuilder fxb;
         private string treeChecksum = "";
         private FetchXmlElementControlBase ctrl;
+        private LayoutXML layoutxml;
+        private string layoutxmloriginal;
 
         #endregion Private Fields
 
@@ -63,6 +68,18 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 {
                     splitContainer1.SplitterDistance = value;
                 }
+            }
+        }
+
+        internal LayoutXML LayoutXML
+        {
+            get
+            {
+                return fxb.settings.Results.WorkWithLayout ? layoutxml : null;
+            }
+            set
+            {
+                layoutxml = fxb.settings.Results.WorkWithLayout ? value : null;
             }
         }
 
@@ -126,54 +143,64 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             gbProperties.Enabled = enabled;
         }
 
-        internal string GetAttributesSignature(XmlNode entity)
+        internal IEnumerable<TreeNode> GetAllLayoutValidAttributes(TreeNode entity = null)
         {
-            var result = "";
+            var result = new List<TreeNode>();
             if (entity == null)
             {
-                var xml = GetFetchDocument();
-                entity = xml.SelectSingleNode("fetch/entity");
+                entity = RootEntityNode;
             }
             if (entity != null)
             {
-                var alias = "";
-
-                if (entity.LocalName == "link-entity")
+                var entityalias = entity.Name == "link-entity" ? entity.Value("alias") : string.Empty;
+                result.AddRange(entity.Nodes.Cast<TreeNode>().Where(a => a.IsAttributeValidForView()));
+                var linkEntities = entity.Nodes.Cast<TreeNode>().Where(e => e.Name == "link-entity");
+                foreach (var link in linkEntities)
                 {
-                    alias = entity.Attributes["alias"]?.Value;
-
-                    if (alias == null)
-                    {
-                        // No explicit alias, so calculate what alias the server will give it
-                        alias = entity.Attributes["name"].Value + GetUniqueLinkEntitySuffix(entity).ToString();
-                    }
-
-                    alias += ".";
-                }
-                var entityAttributes = entity.SelectNodes("attribute");
-                foreach (XmlNode attr in entityAttributes)
-                {
-                    if (attr.Attributes["alias"] != null)
-                    {
-                        result += attr.Attributes["alias"].Value + "\n";
-                    }
-                    else if (attr.Attributes["name"] != null)
-                    {
-                        result += alias + attr.Attributes["name"].Value + "\n";
-                    }
-                }
-                var linkEntities = entity.SelectNodes("link-entity");
-                foreach (XmlNode link in linkEntities)
-                {
-                    result += GetAttributesSignature(link);
+                    result.AddRange(GetAllLayoutValidAttributes(link));
                 }
             }
             return result;
         }
 
-        private int GetUniqueLinkEntitySuffix(XmlNode entity)
+        internal TreeNode GetAttributeNodeFromLayoutName(string attributelayoutname)
         {
-            var root = entity.OwnerDocument.DocumentElement;
+            return GetAllLayoutValidAttributes().FirstOrDefault(a => a.GetAttributeLayoutName().Equals(attributelayoutname));
+        }
+
+        internal string GetAttributesSignature()
+        {
+            return string.Join("\n", GetAllLayoutValidAttributes().Select(a => a.GetAttributeLayoutName()));
+        }
+
+        internal FetchXmlElementControlBase GetCurrentControl()
+        {
+            return panelContainer.Controls.Cast<FetchXmlElementControlBase>().FirstOrDefault();
+        }
+
+        internal TreeNode RootEntityNode =>
+            tvFetch.Nodes.Cast<TreeNode>()?
+                .FirstOrDefault(n => n.Name == "fetch")?
+                .Nodes.Cast<TreeNode>()?
+                .FirstOrDefault(n => n.Name == "entity");
+
+        internal EntityMetadata RootEntityMetadata => fxb.GetEntity(RootEntityName);
+
+        internal string RootEntityName => RootEntityNode?.Value("name");
+
+        internal string PrimaryIdName => RootEntityMetadata?.PrimaryIdAttribute;
+
+        internal TreeNode PrimaryIdNode =>
+            tvFetch.Nodes.Cast<TreeNode>()?
+               .FirstOrDefault(n => n.Name == "fetch")?
+                .Nodes.Cast<TreeNode>()?
+                .FirstOrDefault(n => n.Name == "entity")?
+                .Nodes.Cast<TreeNode>()?
+                .FirstOrDefault(n => n.Name == "attribute" && n.Value("name") == PrimaryIdName);
+
+        private int GetUniqueLinkEntitySuffix(TreeNode entity)
+        {
+            var root = tvFetch.Nodes.Cast<TreeNode>().FirstOrDefault(n => n.Name == "fetch");
             var links = 0;
 
             FindLinkElement(root, ref links, entity);
@@ -181,19 +208,19 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             return links;
         }
 
-        private bool FindLinkElement(XmlNode root, ref int links, XmlNode find)
+        private bool FindLinkElement(TreeNode node, ref int links, TreeNode find)
         {
-            if (root is XmlElement element && element.LocalName == "link-entity" && !element.HasAttribute("alias"))
+            if (node != null && node.Name == "link-entity" && string.IsNullOrWhiteSpace(node.Value("alias")))
             {
                 links++;
             }
 
-            if (root == find)
+            if (node == find)
             {
                 return true;
             }
 
-            foreach (XmlNode child in root.ChildNodes)
+            foreach (TreeNode child in node.Nodes)
             {
                 if (FindLinkElement(child, ref links, find))
                 {
@@ -221,8 +248,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
                 if (format)
                 {
-                    XDocument doc = XDocument.Parse(xml);
-                    xml = doc.ToString();
+                    xml = XDocument.Parse(xml).ToString();
                 }
             }
             return xml;
@@ -245,27 +271,31 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             return ctrl?.Metadata();
         }
 
-        internal QueryExpression GetQueryExpression(string fetch = null, bool validate = true)
+        internal QueryExpression GetQueryExpression(bool validate = true)
         {
             if (fxb.Service == null)
             {
-                throw new Exception("Must be connected to CRM to convert to QueryExpression.");
+                throw new Exception("Must be connected to Dataverse to convert to QueryExpression.");
             }
-            if (string.IsNullOrWhiteSpace(fetch))
-            {
-                fetch = GetFetchString(false, validate);
-            }
+            var fetchdoc = GetFetchDocument();
+            var fetch = fetchdoc.OuterXml;
             if (TreeNodeHelper.IsFetchAggregate(fetch))
             {
                 throw new FetchIsAggregateException("QueryExpression does not support aggregate queries.");
             }
-            var convert = (FetchXmlToQueryExpressionResponse)fxb.Execute(new FetchXmlToQueryExpressionRequest() { FetchXml = fetch });
-            return convert.Query;
+            var query = ((FetchXmlToQueryExpressionResponse)fxb.Execute(new FetchXmlToQueryExpressionRequest() { FetchXml = fetch })).Query;
+            if (fetchdoc.SelectSingleNode("fetch").AttributeBool("no-lock") == true && !query.NoLock)
+            {
+                query.NoLock = true;
+            }
+            return query;
         }
 
-        internal void Init(string fetchStr, string action, bool validate)
+        internal void Init(string fetchStr, string layoutStr, string action, bool validate)
         {
             ParseXML(fetchStr, validate);
+            layoutxmloriginal = layoutStr;
+            ResetLayout();
             fxb.UpdateLiveXML();
             ClearChanged();
             fxb.EnableControls(true);
@@ -305,6 +335,21 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 FetchChanged = true;
                 fxb.EnableControls(true);
                 BuildAndValidateXml(validate);
+            }
+        }
+
+        internal void ResetLayout()
+        {
+            LayoutXML = fxb.settings.Results.WorkWithLayout && !string.IsNullOrWhiteSpace(layoutxmloriginal)
+                ? new LayoutXML(layoutxmloriginal, fxb) : null;
+        }
+
+        internal void SetLayoutFromXML(string layoutxml)
+        {
+            LayoutXML = new LayoutXML(layoutxml, fxb);
+            if (GetCurrentControl() is attributeControl attrcontrol)
+            {
+                attrcontrol.UpdateUIFromCell();
             }
         }
 
@@ -355,6 +400,19 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         internal void UpdateAllNode()
         {
             tvFetch.Nodes.OfType<TreeNode>().ToList().ForEach(n => UpdateChildNode(n));
+        }
+
+        internal void UpdateLayoutXML()
+        {
+            if (LayoutXML == null)
+            {
+                return;
+            }
+            fxb.dockControlLayoutXml?.UpdateXML(LayoutXML.ToXML());
+            if (GetCurrentControl() is attributeControl attrcontrol)
+            {
+                attrcontrol.UpdateUIFromCell();
+            }
         }
 
         #endregion Internal Methods
@@ -463,7 +521,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             return doc;
         }
 
-        private string GetTreeChecksum(TreeNode node)
+        internal string GetTreeChecksum(TreeNode node)
         {
             if (node == null)
             {

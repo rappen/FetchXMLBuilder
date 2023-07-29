@@ -1,4 +1,7 @@
-﻿using Microsoft.Xrm.Sdk.Metadata;
+﻿using MarkMpn.FetchXmlToWebAPI;
+using McTools.Xrm.Connection;
+using Microsoft.Xrm.Sdk.Metadata;
+using Rappen.XTB.FetchXmlBuilder.AppCode;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +11,25 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
 {
     public class ODataCodeGenerator
     {
-        public static string GetODataQuery(FetchType fetch, string organizationServiceUrl, FetchXmlBuilder sender)
+        public static string ConvertToOData4(string fetchxml, FetchXmlBuilder fxb)
+        {
+            // Find correct WebAPI base url
+            var baseUrl = fxb.ConnectionDetail.WebApplicationUrl;
+            if (!baseUrl.EndsWith("/"))
+                baseUrl += "/";
+            var url = new Uri(new Uri(baseUrl), $"api/data/v{fxb.ConnectionDetail.OrganizationMajorVersion}.{fxb.ConnectionDetail.OrganizationMinorVersion}");
+            var converter = new FetchXmlToWebAPIConverter(new WebAPIMetadataProvider(fxb), url.ToString());
+            var odata4 = converter.ConvertFetchXmlToWebAPI(fetchxml);
+            return odata4;
+        }
+
+        public static string ConvertToOData2(FetchType fetch, FetchXmlBuilder sender)
         {
             if (sender.Service == null)
             {
                 throw new Exception("Must have an active connection to CRM to compose OData query.");
             }
+            var organizationServiceUrl = sender.ConnectionDetail.OrganizationDataServiceUrl;
             var url = organizationServiceUrl;
             var entity = fetch.Items.Where(i => i is FetchEntityType).FirstOrDefault() as FetchEntityType;
             if (entity == null)

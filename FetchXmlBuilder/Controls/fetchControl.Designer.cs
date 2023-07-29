@@ -173,9 +173,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(4, 191);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(75, 13);
+            this.label11.Size = new System.Drawing.Size(76, 13);
             this.label11.TabIndex = 37;
-            this.label11.Text = "Paging cookie";
+            this.label11.Text = "Paging Cookie";
             // 
             // checkBox5
             // 

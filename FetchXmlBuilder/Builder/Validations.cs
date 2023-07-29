@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
-using Rappen.XTB.FetchXmlBuilder.Controls;
+using Rappen.XRM.Helpers.FetchXML;
+using System;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -7,6 +8,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
 {
     internal static class Validations
     {
+        internal const string allowedaliaschars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
+
         internal static ControlValidationResult GetWarning(TreeNode node, FetchXmlBuilder fxb)
         {
             if (!fxb.settings.ShowValidation || node == null)
@@ -27,6 +30,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                 case "attribute":
                     return ValidateAttribute(node, fxb);
 
+                case "all-attributes":
+                    return ValidateAllAttribute(node, fxb);
+
                 case "filter":
                     return ValidateFilter(node, fxb);
 
@@ -38,6 +44,24 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
 
                 case "order":
                     return ValidateOrder(node, fxb);
+            }
+            return null;
+        }
+
+        internal static ControlValidationResult ValidateAlias(string alias)
+        {
+            if (string.IsNullOrEmpty(alias))
+            {
+                return null;
+            }
+            var aliasinvalid = alias.Where(c => !allowedaliaschars.Contains(c) && !char.IsDigit(c));
+            if (aliasinvalid.Any())
+            {
+                return new ControlValidationResult(ControlValidationLevel.Error, $"Incorrect characters in Alias: {string.Join(", ", aliasinvalid)}");
+            }
+            if (!allowedaliaschars.Contains(alias[0]))
+            {
+                return new ControlValidationResult(ControlValidationLevel.Error, $"Incorrect first characters in Alias: {alias[0]}");
             }
             return null;
         }
@@ -77,11 +101,22 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
             }
 
             var name = node.Value("name");
+            var alias = node.Value("alias");
+            if (ValidateAlias(alias) is ControlValidationResult aliasresult)
+            {
+                return aliasresult;
+            }
             if (string.IsNullOrWhiteSpace(name) ||
                 string.IsNullOrWhiteSpace(node.Value("to")) ||
                 string.IsNullOrWhiteSpace(node.Value("from")))
             {
                 return new ControlValidationResult(ControlValidationLevel.Warning, "Link-Entity must include Name, To, From.");
+            }
+            if (fxb.settings.Results.WorkWithLayout &&
+                string.IsNullOrWhiteSpace(alias) &&
+                node.Nodes.OfType<TreeNode>().Any(n => n.Name == "attribute"))
+            {
+                return new ControlValidationResult(ControlValidationLevel.Warning, "Using Layout: Alias is needed to show these attributes");
             }
 
             if (node.Value("intersect") != "true" &&
@@ -115,6 +150,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                 }
             }
             var alias = node.Value("alias");
+            if (ValidateAlias(alias) is ControlValidationResult aliasresult)
+            {
+                return aliasresult;
+            }
             if (node.IsFetchAggregate())
             {
                 if (string.IsNullOrWhiteSpace(alias))
@@ -146,6 +185,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                 {
                     return new ControlValidationResult(ControlValidationLevel.Info, "Distinct queries should be sorted by all attributes for correct paging.", "https://markcarrington.dev/2020/12/08/dataverse-paging-with-distinct/");
                 }
+            }
+            return null;
+        }
+
+        private static ControlValidationResult ValidateAllAttribute(TreeNode node, FetchXmlBuilder fxb)
+        {
+            if (fxb.settings.Results.WorkWithLayout)
+            {
+                return new ControlValidationResult(ControlValidationLevel.Warning, "Using Layout: All-Attributes is not possible to show");
             }
             return null;
         }

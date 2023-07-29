@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
+using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.ControlsClasses;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.FetchXmlBuilder.Views;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -61,6 +63,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private void cmbEntity_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             fxb.ShowMetadata(Metadata());
+            if (IsInitialized &&
+                cmbEntity.SelectedItem is EntityItem item &&
+                item.Meta?.LogicalName != fxb.dockControlBuilder.LayoutXML?.EntityMeta?.LogicalName)
+            {
+                fxb.dockControlBuilder.LayoutXML = new LayoutXML(item.Meta, fxb);
+            }
         }
 
         public override MetadataBase Metadata()
