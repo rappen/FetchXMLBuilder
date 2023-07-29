@@ -233,6 +233,7 @@
     <Compile Include="ControlsClasses\EntityNameItem.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\GroupBoxExpanderExtensions.cs" />
+    <Compile Include="Resources\FetchExtensions.cs" />
     <Compile Include="Settings\FXBConnectionSettings.cs" />
     <Compile Include="FXBGui.cs">
       <SubType>UserControl</SubType>
