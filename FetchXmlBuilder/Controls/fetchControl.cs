@@ -9,28 +9,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 {
     public partial class fetchControl : FetchXmlElementControlBase
     {
-        class DataSourceItem : IComboBoxItem
-        {
-            private readonly string _value;
-            private readonly string _name;
-
-            public DataSourceItem(string value, string name)
-            {
-                _value = value;
-                _name = name;
-            }
-
-            public string GetValue()
-            {
-                return _value;
-            }
-
-            public override string ToString()
-            {
-                return _name;
-            }
-        }
-
         public fetchControl() : this(null, null, null)
         {
         }
@@ -45,8 +23,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         {
             base.PopulateControls();
 
-            dataSourceComboBox.Items.Add(new DataSourceItem("", "Live"));
-            dataSourceComboBox.Items.Add(new DataSourceItem("archive", "Long Term Retention"));
+            dataSourceComboBox.Items.Add("");
+            dataSourceComboBox.Items.Add("archive");
         }
 
         private void textPagingCookie_Leave(object sender, EventArgs e)
