@@ -1,5 +1,6 @@
 ﻿using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -16,6 +17,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         {
             InitializeComponent();
             InitializeFXB(collection, fetchXmlBuilder, tree, null);
+        }
+
+        protected override void PopulateControls()
+        {
+            base.PopulateControls();
+
+            dataSourceComboBox.Items.Add("");
+            dataSourceComboBox.Items.Add("archive");
         }
 
         private void textPagingCookie_Leave(object sender, EventArgs e)

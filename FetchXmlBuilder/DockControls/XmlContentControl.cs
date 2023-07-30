@@ -545,6 +545,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             _autocomplete.AddMemberDescription<FetchType>(nameof(FetchType.pagingcookie), "Paging Cookie", "The paging cookie returned with the previous page of results. Supplying this value makes it more efficient to retrieve the next page.");
             _autocomplete.AddMemberDescription<FetchType>(nameof(FetchType.returntotalrecordcount), "Return Total Record Count", "Indicates if the total number of possible results should be returned along with this page of results.");
             _autocomplete.AddMemberDescription<FetchType>(nameof(FetchType.top), "Top Count", "The maximum number of records to return. No further pages of data will be returned.");
+            _autocomplete.AddMemberDescription<FetchType>(nameof(FetchType.datasource), "Data Source", "Set to 'archive' to access Long Term Retention data, or leave blank to access live data.");
 
             _autocomplete.AddTypeDescription<FetchEntityType>("Main Entity", "Gives the name of the entity type the query will return.");
             _autocomplete.AddMemberDescription<FetchEntityType>(nameof(FetchEntityType.enableprefiltering), "Enable Prefiltering", "If this query is being used in an SSRS report, indicates if the report can be pre-filtered by the user selecting the records to run it on.");

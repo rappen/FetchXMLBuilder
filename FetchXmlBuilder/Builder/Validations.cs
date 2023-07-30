@@ -72,6 +72,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
             {
                 return new ControlValidationResult(ControlValidationLevel.Error, "Missing entity under the fetch.");
             }
+            if (!string.IsNullOrWhiteSpace(node.Value("datasource")) && node.Value("datasource") != "archive")
+            {
+                return new ControlValidationResult(ControlValidationLevel.Error, "Invalid data source value");
+            }
+            if (node.Value("datasource") == "archive" && node.IsFetchAggregate())
+            {
+                return new ControlValidationResult(ControlValidationLevel.Error, "Aggregate queries cannot use Long Term Retention data", "https://learn.microsoft.com/en-us/power-apps/maker/data-platform/data-retention-view#limitations-for-retrieval-of-retained-data");
+            }
             return null;
         }
 
@@ -87,6 +95,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
 
         private static ControlValidationResult ValidateLinkEntity(TreeNode node, FetchXmlBuilder fxb)
         {
+            if (node.TreeView.Nodes[0].Value("datasource") == "archive")
+            {
+                return new ControlValidationResult(ControlValidationLevel.Error, "Link-Entity cannot be used with Long Term Retention data", "https://learn.microsoft.com/en-us/power-apps/maker/data-platform/data-retention-view#limitations-for-retrieval-of-retained-data");
+            }
+
             var name = node.Value("name");
             var alias = node.Value("alias");
             if (ValidateAlias(alias) is ControlValidationResult aliasresult)
