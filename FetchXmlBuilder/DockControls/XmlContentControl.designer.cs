@@ -46,7 +46,8 @@
             this.panOk = new System.Windows.Forms.Panel();
             this.panLiveUpdate = new System.Windows.Forms.Panel();
             this.chkLiveUpdate = new System.Windows.Forms.CheckBox();
-            this.panParseQE = new System.Windows.Forms.Panel();
+            this.panQEButtons = new System.Windows.Forms.Panel();
+            this.btnCopyCsharp = new System.Windows.Forms.Button();
             this.chkQExComments = new System.Windows.Forms.CheckBox();
             this.panFormatting = new System.Windows.Forms.Panel();
             this.gbFormatting = new System.Windows.Forms.GroupBox();
@@ -85,7 +86,7 @@
             this.panSave.SuspendLayout();
             this.panOk.SuspendLayout();
             this.panLiveUpdate.SuspendLayout();
-            this.panParseQE.SuspendLayout();
+            this.panQEButtons.SuspendLayout();
             this.panFormatting.SuspendLayout();
             this.gbFormatting.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numQExIndent)).BeginInit();
@@ -272,14 +273,25 @@
             this.chkLiveUpdate.UseVisualStyleBackColor = true;
             this.chkLiveUpdate.CheckedChanged += new System.EventHandler(this.chkLiveUpdate_CheckedChanged);
             // 
-            // panParseQE
+            // panQEButtons
             // 
-            this.panParseQE.Controls.Add(this.btnParseQE);
-            this.panParseQE.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panParseQE.Location = new System.Drawing.Point(1002, 0);
-            this.panParseQE.Name = "panParseQE";
-            this.panParseQE.Size = new System.Drawing.Size(91, 61);
-            this.panParseQE.TabIndex = 10;
+            this.panQEButtons.Controls.Add(this.btnCopyCsharp);
+            this.panQEButtons.Controls.Add(this.btnParseQE);
+            this.panQEButtons.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panQEButtons.Location = new System.Drawing.Point(1002, 0);
+            this.panQEButtons.Name = "panQEButtons";
+            this.panQEButtons.Size = new System.Drawing.Size(91, 61);
+            this.panQEButtons.TabIndex = 10;
+            // 
+            // btnCopyCsharp
+            // 
+            this.btnCopyCsharp.Location = new System.Drawing.Point(9, 6);
+            this.btnCopyCsharp.Name = "btnCopyCsharp";
+            this.btnCopyCsharp.Size = new System.Drawing.Size(75, 23);
+            this.btnCopyCsharp.TabIndex = 4;
+            this.btnCopyCsharp.Text = "Copy";
+            this.btnCopyCsharp.UseVisualStyleBackColor = true;
+            this.btnCopyCsharp.Click += new System.EventHandler(this.btnCopyCsharp_Click);
             // 
             // chkQExComments
             // 
@@ -548,7 +560,7 @@
             // 
             this.panQExOptions.BackColor = System.Drawing.SystemColors.Window;
             this.panQExOptions.Controls.Add(this.panQExSmallerOptions);
-            this.panQExOptions.Controls.Add(this.panParseQE);
+            this.panQExOptions.Controls.Add(this.panQEButtons);
             this.panQExOptions.Controls.Add(this.panQExStylFlavorOptions);
             this.panQExOptions.Dock = System.Windows.Forms.DockStyle.Top;
             this.panQExOptions.Location = new System.Drawing.Point(0, 0);
@@ -659,7 +671,7 @@
             this.panOk.ResumeLayout(false);
             this.panLiveUpdate.ResumeLayout(false);
             this.panLiveUpdate.PerformLayout();
-            this.panParseQE.ResumeLayout(false);
+            this.panQEButtons.ResumeLayout(false);
             this.panFormatting.ResumeLayout(false);
             this.gbFormatting.ResumeLayout(false);
             this.gbFormatting.PerformLayout();
@@ -691,7 +703,7 @@
         private System.Windows.Forms.RadioButton rbFormatMini;
         internal System.Windows.Forms.Button btnFormat;
         private System.Windows.Forms.Panel panExecute;
-        private System.Windows.Forms.Panel panParseQE;
+        private System.Windows.Forms.Panel panQEButtons;
         private System.Windows.Forms.Panel panSave;
         private System.Windows.Forms.Panel panOk;
         private System.Windows.Forms.Panel panLiveUpdate;
@@ -722,5 +734,6 @@
         private System.Windows.Forms.Button btnQExFlavorSettings;
         private System.Windows.Forms.Panel panQExSmallerOptions;
         private System.Windows.Forms.Panel panQExStylFlavorOptions;
+        private System.Windows.Forms.Button btnCopyCsharp;
     }
 }

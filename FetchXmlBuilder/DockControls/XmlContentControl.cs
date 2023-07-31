@@ -956,7 +956,7 @@ More votes == released sooner.", "OrganizationServiceContext",
             {
                 linkStyleHelp.Text = string.Empty;
             }
-            panParseQE.Visible = parsecsharp;
+            btnParseQE.Visible = parsecsharp;
         }
 
         private void cmbQExFlavor_SelectedIndexChanged(object sender, EventArgs e)
@@ -974,7 +974,7 @@ More votes == released sooner.", "OrganizationServiceContext",
             {
                 linkFlavorHelp.Text = string.Empty;
             }
-            panParseQE.Visible = parsecsharp;
+            btnParseQE.Visible = parsecsharp;
         }
 
         private void chkQExFilterVariables_CheckedChanged(object sender, EventArgs e)
@@ -1025,11 +1025,16 @@ More votes == released sooner.", "OrganizationServiceContext",
         {
             if (panQExOptions.Visible)
             {
-                var maxwidth = qexoptionswidth + (panParseQE.Visible ? panParseQE.Width : 0);
+                var maxwidth = qexoptionswidth + (panQEButtons.Visible ? panQEButtons.Width : 0);
                 panQExStylFlavorOptions.Dock = Width < maxwidth ? DockStyle.Top : DockStyle.Left;
                 panQExSmallerOptions.Dock = Width < maxwidth ? DockStyle.Bottom : DockStyle.Left;
                 panQExOptions.Height = panQExSmallerOptions.Dock == DockStyle.Bottom ? 122 : 61;
             }
+        }
+
+        private void btnCopyCsharp_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(txtXML.Text);
         }
     }
 
