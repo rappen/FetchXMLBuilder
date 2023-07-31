@@ -1129,15 +1129,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     case QExFlavorEnum.EarlyBound:
                         if (addentityprefix)
                         {
-                            return GetCodeEntityPrefix(entityname) + "." + attribute.SchemaName;
+                            return GetCodeEntityPrefix(entityname) + "." + attribute.CapitSchemaName(settings.QExFlavor);
                         }
-                        return attribute.SchemaName;
+                        return attribute.CapitSchemaName(settings.QExFlavor);
 
                     case QExFlavorEnum.LCGconstants:
                         return LCG.Extensions.GetEntityClass(entity, settings.LCG_Settings) + "." + LCG.Extensions.GetAttributeProperty(attribute, settings.LCG_Settings);
 
                     default:
-                        return entity.SchemaName + "." + settings.EBG_AttributeLogicalNameClass + attribute.SchemaName;
+                        return entity.SchemaName + "." + settings.EBG_AttributeLogicalNameClass + attribute.CapitSchemaName(settings.QExFlavor);
                 }
             }
             return "\"" + attributename + "\"";
@@ -1415,5 +1415,24 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
     {
         Parentheses,
         Braces
+    }
+
+    internal static class EBGExtensions
+    {
+        internal static string CapitSchemaName(this AttributeMetadata attribute, QExFlavorEnum flavor)
+        {
+            switch (flavor)
+            {
+                case QExFlavorEnum.EBGconstants:
+                case QExFlavorEnum.EarlyBound:
+                    switch (attribute.SchemaName.ToLowerInvariant())
+                    {
+                        case "statecode": return "StateCode";
+                        case "statuscode": return "StatusCode";
+                    }
+                    break;
+            }
+            return attribute.SchemaName;
+        }
     }
 }
