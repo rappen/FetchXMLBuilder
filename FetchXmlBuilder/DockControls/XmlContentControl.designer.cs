@@ -78,6 +78,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.linkFlavorHelp = new System.Windows.Forms.LinkLabel();
+            this.panPowerPlatformCLIOptions = new System.Windows.Forms.Panel();
+            this.btnPowerPlatformCLICopy = new System.Windows.Forms.Button();
             this.panCancel.SuspendLayout();
             this.panActions.SuspendLayout();
             this.gbActions.SuspendLayout();
@@ -94,6 +96,7 @@
             this.panQExOptions.SuspendLayout();
             this.panQExSmallerOptions.SuspendLayout();
             this.panQExStylFlavorOptions.SuspendLayout();
+            this.panPowerPlatformCLIOptions.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSave
@@ -291,7 +294,7 @@
             this.btnCopyCsharp.TabIndex = 4;
             this.btnCopyCsharp.Text = "Copy";
             this.btnCopyCsharp.UseVisualStyleBackColor = true;
-            this.btnCopyCsharp.Click += new System.EventHandler(this.btnCopyCsharp_Click);
+            this.btnCopyCsharp.Click += new System.EventHandler(this.btnCopyText_Click);
             // 
             // chkQExComments
             // 
@@ -535,7 +538,7 @@
             this.txtXML.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtXML.Location = new System.Drawing.Point(0, 61);
             this.txtXML.Name = "txtXML";
-            this.txtXML.Size = new System.Drawing.Size(1093, 168);
+            this.txtXML.Size = new System.Drawing.Size(1093, 132);
             this.txtXML.TabIndex = 1;
             this.txtXML.Text = "\r\n\r\n\r\n       loading...";
             this.txtXML.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtXML_KeyPress);
@@ -636,6 +639,26 @@
             this.linkFlavorHelp.Text = "linkLabel2";
             this.linkFlavorHelp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkFlavorHelp_LinkClicked);
             // 
+            // panPowerPlatformCLIOptions
+            // 
+            this.panPowerPlatformCLIOptions.Controls.Add(this.btnPowerPlatformCLICopy);
+            this.panPowerPlatformCLIOptions.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panPowerPlatformCLIOptions.Location = new System.Drawing.Point(0, 193);
+            this.panPowerPlatformCLIOptions.Name = "panPowerPlatformCLIOptions";
+            this.panPowerPlatformCLIOptions.Size = new System.Drawing.Size(1093, 36);
+            this.panPowerPlatformCLIOptions.TabIndex = 12;
+            // 
+            // btnPowerPlatformCLICopy
+            // 
+            this.btnPowerPlatformCLICopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPowerPlatformCLICopy.Location = new System.Drawing.Point(1011, 6);
+            this.btnPowerPlatformCLICopy.Name = "btnPowerPlatformCLICopy";
+            this.btnPowerPlatformCLICopy.Size = new System.Drawing.Size(75, 23);
+            this.btnPowerPlatformCLICopy.TabIndex = 0;
+            this.btnPowerPlatformCLICopy.Text = "Copy";
+            this.btnPowerPlatformCLICopy.UseVisualStyleBackColor = true;
+            this.btnPowerPlatformCLICopy.Click += new System.EventHandler(this.btnCopyText_Click);
+            // 
             // XmlContentControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -644,6 +667,7 @@
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(1093, 359);
             this.Controls.Add(this.txtXML);
+            this.Controls.Add(this.panPowerPlatformCLIOptions);
             this.Controls.Add(this.panQExOptions);
             this.Controls.Add(this.panSQL4CDSInfo);
             this.Controls.Add(this.panFormatting);
@@ -682,6 +706,7 @@
             this.panQExSmallerOptions.PerformLayout();
             this.panQExStylFlavorOptions.ResumeLayout(false);
             this.panQExStylFlavorOptions.PerformLayout();
+            this.panPowerPlatformCLIOptions.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -735,5 +760,7 @@
         private System.Windows.Forms.Panel panQExSmallerOptions;
         private System.Windows.Forms.Panel panQExStylFlavorOptions;
         private System.Windows.Forms.Button btnCopyCsharp;
+        private System.Windows.Forms.Panel panPowerPlatformCLIOptions;
+        private System.Windows.Forms.Button btnPowerPlatformCLICopy;
     }
 }

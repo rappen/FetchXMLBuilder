@@ -11,10 +11,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
 using System.Xml;
+using XrmToolBox.Extensibility;
 
 namespace Rappen.XTB.FetchXmlBuilder.DockControls
 {
@@ -87,6 +89,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             panQExOptions.Visible = contenttype == ContentType.CSharp_Code;
             panSQL4CDS.Visible = allowsql;
             panSQL4CDSInfo.Visible = allowsql;
+            panPowerPlatformCLIOptions.Visible = contenttype == ContentType.Power_Platform_CLI;
 
             switch (contentType)
             {
@@ -1032,9 +1035,10 @@ More votes == released sooner.", "OrganizationServiceContext",
             }
         }
 
-        private void btnCopyCsharp_Click(object sender, EventArgs e)
+        private void btnCopyText_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(txtXML.Text);
+            fxb.WorkAsync(new WorkAsyncInfo { Message = "Copying!", Work = (w, a) => { Thread.Sleep(300); } });
         }
     }
 
