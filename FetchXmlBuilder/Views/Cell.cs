@@ -9,6 +9,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
         public string Name;
         public int Width;
         public bool IsHidden;
+        public bool disableSorting;
+        public string imageproviderwebresource;
+        public string imageproviderfunctionname;
         public TreeNode Attribute;
         public LayoutXML Parent;
 
@@ -28,9 +31,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             }
             IsHidden = ishiddenstr == "1" || ishiddenstr == "true" || width == 0;
             Width = IsHidden ? 0 : width;
+            bool.TryParse(cell.AttributeValue("disableSorting").Replace("1", "True").Replace("0", "False"), out disableSorting);
+            imageproviderfunctionname = cell.AttributeValue("imageproviderfunctionname");
+            imageproviderwebresource = cell.AttributeValue("imageproviderwebresource");
         }
 
-        public override string ToString() => $"{Name} ({Width})";
+        public override string ToString() => $"{Name} ({(IsHidden ? "Hidden" : Width.ToString())})";
 
         public string ToXML()
         {
@@ -42,6 +48,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             else
             {
                 result += $"width='{Width}' ";
+            }
+            if (disableSorting)
+            {
+                result += "disableSorting='1' ";
+            }
+            if (!string.IsNullOrWhiteSpace(imageproviderfunctionname))
+            {
+                result += $"imageproviderfunctionname='{imageproviderfunctionname}' ";
+            }
+            if (!string.IsNullOrWhiteSpace(imageproviderwebresource))
+            {
+                result += $"imageproviderwebresource='{imageproviderwebresource}' ";
             }
             result += "/>";
             return result;
