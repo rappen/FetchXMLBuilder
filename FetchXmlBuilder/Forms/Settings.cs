@@ -9,6 +9,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
     {
         private FetchXmlBuilder fxb;
         private bool validateinfo;
+        internal bool forcereloadingmetadata = false;
 
         public Settings(FetchXmlBuilder fxb)
         {
@@ -99,7 +100,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.ShowValidation = chkShowValidation.Checked;
             settings.ShowValidationInfo = settings.ShowValidation && chkShowValidationInfo.Checked;
             settings.ShowRepository = chkShowRepository.Checked;
-            settings.ShowBDU=chkShowBulkDataUpdater.Checked;
+            settings.ShowBDU = chkShowBulkDataUpdater.Checked;
             settings.QueryOptions.ShowAllAttributes = chkShowAllAttributes.Checked;
             settings.ShowOData2 = chkShowOData2.Checked;
             settings.XmlColors = propXmlColors.SelectedObject as XmlColors;
@@ -232,6 +233,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             if (MessageBox.Show("Are you sure you want it to get back default settings?\n\nYes or No...", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
             {
                 PopulateSettings(new FXBSettings());
+            }
+        }
+
+        private void btnForceReloadMetadata_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Shall we reload all metadata?\n\nYes or No...", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+            {
+                forcereloadingmetadata = true;
+                DialogResult = DialogResult.OK;
             }
         }
     }

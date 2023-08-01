@@ -72,6 +72,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabSettings = new System.Windows.Forms.TabControl();
             this.tabAppearance = new System.Windows.Forms.TabPage();
             this.tabLayout = new System.Windows.Forms.TabPage();
+            this.chkShowBulkDataUpdater = new System.Windows.Forms.CheckBox();
             this.tabBehavior = new System.Windows.Forms.TabPage();
             this.tabResults = new System.Windows.Forms.TabPage();
             this.linkDeprecatedExecFetchReq = new System.Windows.Forms.LinkLabel();
@@ -81,12 +82,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.label3 = new System.Windows.Forms.Label();
             this.tabXmlScheme = new System.Windows.Forms.TabPage();
             this.label4 = new System.Windows.Forms.Label();
-            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.tabAdvanced = new System.Windows.Forms.TabPage();
+            this.btnForceReloadMetadata = new System.Windows.Forms.Button();
             this.btnResetAll = new System.Windows.Forms.Button();
             this.chkShowOData2 = new System.Windows.Forms.CheckBox();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
-            this.chkShowBulkDataUpdater = new System.Windows.Forms.CheckBox();
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -582,6 +583,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabLayout.TabIndex = 1;
             this.tabLayout.Text = "Layout";
             // 
+            // chkShowBulkDataUpdater
+            // 
+            this.chkShowBulkDataUpdater.AutoSize = true;
+            this.chkShowBulkDataUpdater.Location = new System.Drawing.Point(20, 112);
+            this.chkShowBulkDataUpdater.Name = "chkShowBulkDataUpdater";
+            this.chkShowBulkDataUpdater.Size = new System.Drawing.Size(181, 17);
+            this.chkShowBulkDataUpdater.TabIndex = 5;
+            this.chkShowBulkDataUpdater.Text = "Integrate with Bulk Data Updater";
+            this.tt.SetToolTip(this.chkShowBulkDataUpdater, "Show or hide the Bulk Data Updater button to send\r\nthis query to BDU, to be able " +
+        "to update, delete, etc.");
+            this.chkShowBulkDataUpdater.UseVisualStyleBackColor = true;
+            // 
             // tabBehavior
             // 
             this.tabBehavior.BackColor = System.Drawing.SystemColors.Window;
@@ -688,6 +701,56 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.label4.TabIndex = 9;
             this.label4.Text = "XML colors for FetchXML";
             // 
+            // tabAdvanced
+            // 
+            this.tabAdvanced.BackColor = System.Drawing.SystemColors.Window;
+            this.tabAdvanced.Controls.Add(this.btnForceReloadMetadata);
+            this.tabAdvanced.Controls.Add(this.btnResetAll);
+            this.tabAdvanced.Controls.Add(this.chkShowOData2);
+            this.tabAdvanced.Controls.Add(this.chkShowAllAttributes);
+            this.tabAdvanced.Controls.Add(this.chkAlwaysShowAggregateProperties);
+            this.tabAdvanced.Controls.Add(this.chkWaitUntilMetadataLoaded);
+            this.tabAdvanced.Controls.Add(this.chkAppAllowUncustViews);
+            this.tabAdvanced.Controls.Add(this.chkTryMetadataCache);
+            this.tabAdvanced.Location = new System.Drawing.Point(4, 22);
+            this.tabAdvanced.Name = "tabAdvanced";
+            this.tabAdvanced.Size = new System.Drawing.Size(505, 153);
+            this.tabAdvanced.TabIndex = 4;
+            this.tabAdvanced.Text = "Advanced";
+            // 
+            // btnForceReloadMetadata
+            // 
+            this.btnForceReloadMetadata.Location = new System.Drawing.Point(280, 66);
+            this.btnForceReloadMetadata.Name = "btnForceReloadMetadata";
+            this.btnForceReloadMetadata.Size = new System.Drawing.Size(177, 23);
+            this.btnForceReloadMetadata.TabIndex = 12;
+            this.btnForceReloadMetadata.Text = "[BETA] Reload all metadata";
+            this.btnForceReloadMetadata.UseVisualStyleBackColor = true;
+            this.btnForceReloadMetadata.Click += new System.EventHandler(this.btnForceReloadMetadata_Click);
+            // 
+            // btnResetAll
+            // 
+            this.btnResetAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnResetAll.Location = new System.Drawing.Point(280, 116);
+            this.btnResetAll.Name = "btnResetAll";
+            this.btnResetAll.Size = new System.Drawing.Size(177, 23);
+            this.btnResetAll.TabIndex = 11;
+            this.btnResetAll.Text = "Reset all settings to default";
+            this.btnResetAll.UseVisualStyleBackColor = true;
+            this.btnResetAll.Click += new System.EventHandler(this.btnResetAll_Click);
+            // 
+            // chkShowOData2
+            // 
+            this.chkShowOData2.AutoSize = true;
+            this.chkShowOData2.Location = new System.Drawing.Point(20, 89);
+            this.chkShowOData2.Name = "chkShowOData2";
+            this.chkShowOData2.Size = new System.Drawing.Size(172, 17);
+            this.chkShowOData2.TabIndex = 10;
+            this.chkShowOData2.Text = "Show deprecated \"OData 2.0\"";
+            this.tt.SetToolTip(this.chkShowOData2, "OData v2.0 is deprecated and removed from the\r\nplatform at 2023-03-30.\r\nYou can s" +
+        "how it anyway, if you which, but checking this one.");
+            this.chkShowOData2.UseVisualStyleBackColor = true;
+            // 
             // propXmlColors
             // 
             this.propXmlColors.CanShowVisualStyleGlyphs = false;
@@ -714,57 +777,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.propXmlColors.ToolbarVisible = false;
             this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
             this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
-            // 
-            // tabAdvanced
-            // 
-            this.tabAdvanced.BackColor = System.Drawing.SystemColors.Window;
-            this.tabAdvanced.Controls.Add(this.btnResetAll);
-            this.tabAdvanced.Controls.Add(this.chkShowOData2);
-            this.tabAdvanced.Controls.Add(this.chkShowAllAttributes);
-            this.tabAdvanced.Controls.Add(this.chkAlwaysShowAggregateProperties);
-            this.tabAdvanced.Controls.Add(this.chkWaitUntilMetadataLoaded);
-            this.tabAdvanced.Controls.Add(this.chkAppAllowUncustViews);
-            this.tabAdvanced.Controls.Add(this.chkTryMetadataCache);
-            this.tabAdvanced.Location = new System.Drawing.Point(4, 22);
-            this.tabAdvanced.Name = "tabAdvanced";
-            this.tabAdvanced.Size = new System.Drawing.Size(505, 153);
-            this.tabAdvanced.TabIndex = 4;
-            this.tabAdvanced.Text = "Advanced";
-            // 
-            // btnResetAll
-            // 
-            this.btnResetAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnResetAll.Location = new System.Drawing.Point(312, 115);
-            this.btnResetAll.Name = "btnResetAll";
-            this.btnResetAll.Size = new System.Drawing.Size(177, 23);
-            this.btnResetAll.TabIndex = 11;
-            this.btnResetAll.Text = "Reset to default settings";
-            this.btnResetAll.UseVisualStyleBackColor = true;
-            this.btnResetAll.Click += new System.EventHandler(this.btnResetAll_Click);
-            // 
-            // chkShowOData2
-            // 
-            this.chkShowOData2.AutoSize = true;
-            this.chkShowOData2.Location = new System.Drawing.Point(20, 89);
-            this.chkShowOData2.Name = "chkShowOData2";
-            this.chkShowOData2.Size = new System.Drawing.Size(172, 17);
-            this.chkShowOData2.TabIndex = 10;
-            this.chkShowOData2.Text = "Show deprecated \"OData 2.0\"";
-            this.tt.SetToolTip(this.chkShowOData2, "OData v2.0 is deprecated and removed from the\r\nplatform at 2023-03-30.\r\nYou can s" +
-        "how it anyway, if you which, but checking this one.");
-            this.chkShowOData2.UseVisualStyleBackColor = true;
-            // 
-            // chkShowBulkDataUpdater
-            // 
-            this.chkShowBulkDataUpdater.AutoSize = true;
-            this.chkShowBulkDataUpdater.Location = new System.Drawing.Point(20, 112);
-            this.chkShowBulkDataUpdater.Name = "chkShowBulkDataUpdater";
-            this.chkShowBulkDataUpdater.Size = new System.Drawing.Size(181, 17);
-            this.chkShowBulkDataUpdater.TabIndex = 5;
-            this.chkShowBulkDataUpdater.Text = "Integrate with Bulk Data Updater";
-            this.tt.SetToolTip(this.chkShowBulkDataUpdater, "Show or hide the Bulk Data Updater button to send\r\nthis query to BDU, to be able " +
-        "to update, delete, etc.");
-            this.chkShowBulkDataUpdater.UseVisualStyleBackColor = true;
             // 
             // Settings
             // 
@@ -863,5 +875,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.Button btnResetAll;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox chkShowBulkDataUpdater;
+        private System.Windows.Forms.Button btnForceReloadMetadata;
     }
 }

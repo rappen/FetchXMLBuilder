@@ -284,15 +284,19 @@ namespace Rappen.XTB.FetchXmlBuilder
             return true;
         }
 
-        private void LoadEntities()
+        private void LoadEntities(bool forcereload = false)
         {
+            if (SendMessageToStatusBar != null)
+            {
+                SendMessageToStatusBar(this, new XrmToolBox.Extensibility.Args.StatusBarMessageEventArgs($"{(forcereload ? "Reloading" : "Loading")} all entities..."));
+            }
             working = true;
             entities = null;
             entityShitList = new List<string>();
-            this.GetAllEntityMetadatas(SetAfterEntitiesLoaded, settings.TryMetadataCache, settings.WaitUntilMetadataLoaded);
+            this.GetAllEntityMetadatas(SetAfterEntitiesLoaded, settings.TryMetadataCache, settings.WaitUntilMetadataLoaded || forcereload, forcereload);
         }
 
-        private void SetAfterEntitiesLoaded(IEnumerable<EntityMetadata> newEntityMetadata)
+        private void SetAfterEntitiesLoaded(IEnumerable<EntityMetadata> newEntityMetadata, bool manually)
         {
             MethodInvoker mi = delegate
             {
@@ -301,7 +305,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     entities = newEntityMetadata.ToList();
                     if (SendMessageToStatusBar != null)
                     {
-                        SendMessageToStatusBar(this, new XrmToolBox.Extensibility.Args.StatusBarMessageEventArgs($"All entities are now loaded."));
+                        SendMessageToStatusBar(this, new XrmToolBox.Extensibility.Args.StatusBarMessageEventArgs($"{(manually ? "Reloaded" : "Loaded")} {entities.Count} entities."));
                     }
                 }
                 working = false;

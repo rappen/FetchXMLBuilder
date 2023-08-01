@@ -169,19 +169,29 @@ namespace Rappen.XTB.FetchXmlBuilder
                 LogUse("SaveOptions");
                 var oldtrycachemetadata = settings.TryMetadataCache;
                 settings = settingDlg.GetSettings();
-                if (Service != null && oldtrycachemetadata != settings.TryMetadataCache)
+                if (Service != null)
                 {
-                    var msg = settings.TryMetadataCache ?
-                        "It is now trying to retrieve chached metadata in the background, and may take a few or many seconds." :
-                        "Metadata is now reloaded in the old fashioned way.";
-                    if (MessageBox.Show("The 'Use cache metadata' flag has been changed.\n\n" + msg + "\n\nClick Cancel to NOT change this.",
-                        "Metadata changed", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.Cancel)
+                    if (oldtrycachemetadata != settings.TryMetadataCache)
                     {
-                        settings.TryMetadataCache = !settings.TryMetadataCache;
+                        var msg = settings.TryMetadataCache ?
+                            "It is now trying to retrieve chached metadata in the background, and may take a few or many seconds." :
+                            "Metadata is now reloaded in the old fashioned way.";
+                        if (MessageBox.Show("The 'Use cache metadata' flag has been changed.\n\n" + msg + "\n\nClick Cancel to NOT change this.",
+                            "Metadata changed", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.Cancel)
+                        {
+                            settings.TryMetadataCache = !settings.TryMetadataCache;
+                        }
+                        else
+                        {
+                            LoadEntities(true);
+                        }
                     }
-                    else
+                    else if (settingDlg.forcereloadingmetadata)
                     {
-                        LoadEntities();
+                        if (MessageBox.Show("Reloading all metadata.\nIt may take a while... (10-300 secs)", "Reload metadata", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
+                        {
+                            LoadEntities(true);
+                        }
                     }
                 }
                 SaveSetting();
