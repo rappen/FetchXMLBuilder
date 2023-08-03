@@ -239,6 +239,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.cmbValue.Sorted = true;
             this.cmbValue.TabIndex = 4;
             this.cmbValue.Tag = "value";
+            this.cmbValue.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cmbValue_KeyPress);
             // 
             // lblValueHint
             // 

@@ -10,6 +10,7 @@ using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.ServiceModel;
 using System.Windows.Forms;
@@ -115,25 +116,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
                 if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem oper && (!oper.IsMultipleValuesType || Node.Nodes.Count > 0))
                 {
-                    AttributeItem attribute = null;
-                    if (cmbAttribute.SelectedItem != null && cmbAttribute.SelectedItem is AttributeItem)
-                    {   // Get type from condition attribute
-                        attribute = (AttributeItem)cmbAttribute.SelectedItem;
-                    }
-                    var valueType = oper.ValueType;
+                    var attribute = cmbAttribute.SelectedItem as AttributeItem; ;
+                    var valueType = GetValueType(oper, attribute);
                     var attributeType = oper.AttributeType;
                     var value = ControlUtils.GetValueFromControl(cmbValue).Trim();
-                    if (valueType == AttributeTypeCode.ManagedProperty)
-                    {   // Type not defined by operator
-                        if (attribute != null)
-                        {   // Get type from condition attribute
-                            valueType = attribute.Metadata.AttributeType;
-                        }
-                        else
-                        {   // Default, cannot determine type
-                            valueType = AttributeTypeCode.String;
-                        }
-                    }
 
                     if (attributeType != null && attribute != null && control == cmbOperator)
                     {
@@ -216,8 +202,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                                 break;
 
                             case AttributeTypeCode.DateTime:
-                                DateTime date;
-                                if (!DateTime.TryParse(value, out date))
+                                if (!DateTime.TryParse(value, out DateTime _))
                                 {
                                     return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires date value");
                                 }
@@ -229,8 +214,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                             case AttributeTypeCode.Picklist:
                             case AttributeTypeCode.BigInt:
                             case AttributeTypeCode.EntityName:
-                                int intvalue;
-                                if (!int.TryParse(value, out intvalue))
+                                if (!int.TryParse(value, out int _))
                                 {
                                     return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires whole number value");
                                 }
@@ -239,8 +223,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                             case AttributeTypeCode.Decimal:
                             case AttributeTypeCode.Double:
                             case AttributeTypeCode.Money:
-                                decimal decvalue;
-                                if (!decimal.TryParse(value, out decvalue))
+                                if (!decimal.TryParse(value, out decimal _))
                                 {
                                     return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires decimal value");
                                 }
@@ -250,8 +233,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                             case AttributeTypeCode.Customer:
                             case AttributeTypeCode.Owner:
                             case AttributeTypeCode.Uniqueidentifier:
-                                Guid guidvalue;
-                                if (!Guid.TryParse(value, out guidvalue))
+                                if (!Guid.TryParse(value, out Guid _))
                                 {
                                     return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires a proper guid with format: " + Guid.Empty.ToString());
                                 }
@@ -272,6 +254,28 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             }
 
             return base.ValidateControl(control);
+        }
+
+        private static AttributeTypeCode? GetValueType(OperatorItem oper, AttributeItem attributeitem)
+        {
+            if (oper == null)
+            {
+                return null;
+            }
+            var valueType = oper.ValueType;
+            if (valueType == AttributeTypeCode.ManagedProperty)
+            {   // Type not defined by operator
+                if (attributeitem != null)
+                {   // Get type from condition attribute
+                    valueType = attributeitem.Metadata.AttributeType;
+                }
+                else
+                {   // Default, cannot determine type
+                    valueType = AttributeTypeCode.String;
+                }
+            }
+
+            return valueType;
         }
 
         protected override Dictionary<string, string> GetAttributesCollection()
@@ -664,6 +668,27 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         public override void Focus()
         {
             cmbAttribute.Focus();
+        }
+
+        private void cmbValue_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsDigit(e.KeyChar))
+            {
+                return;
+            }
+            var valuetype = GetValueType(cmbOperator.SelectedItem as OperatorItem, cmbAttribute.SelectedItem as AttributeItem);
+            if (valuetype.IsDecimalable())
+            {
+                var sepcurrent = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator[0];
+                if (e.KeyChar == sepcurrent)
+                {
+                    var sepinvariant = CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator[0];
+                    if (sepinvariant != sepcurrent)
+                    {
+                        e.KeyChar = sepinvariant;
+                    }
+                }
+            }
         }
     }
 }

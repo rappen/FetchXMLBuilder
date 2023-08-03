@@ -73,6 +73,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Extensions
             return string.Empty;
         }
 
+        internal static bool IsDecimalable(this AttributeTypeCode? attributetype)
+        {
+            if (attributetype == null)
+            {
+                return false;
+            }
+            return
+                attributetype == AttributeTypeCode.Decimal ||
+                attributetype == AttributeTypeCode.Double ||
+                attributetype == AttributeTypeCode.Money;
+        }
+
         public static void Move<T>(this List<T> list, T item, int newIndex)
         {   // From this tip: https://stackoverflow.com/a/450250/2866704
             if (item != null)
