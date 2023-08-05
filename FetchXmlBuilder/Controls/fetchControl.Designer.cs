@@ -58,7 +58,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(4, 41);
+            this.label4.Location = new System.Drawing.Point(4, 86);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(53, 13);
             this.label4.TabIndex = 23;
@@ -66,21 +66,19 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             // textPageSize
             // 
-            this.textPageSize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textPageSize.Location = new System.Drawing.Point(7, 55);
+            this.textPageSize.Location = new System.Drawing.Point(7, 100);
             this.textPageSize.Name = "textPageSize";
-            this.textPageSize.Size = new System.Drawing.Size(214, 20);
-            this.textPageSize.TabIndex = 2;
+            this.textPageSize.Size = new System.Drawing.Size(106, 20);
+            this.textPageSize.TabIndex = 7;
             this.textPageSize.Tag = "count";
             // 
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(7, 127);
+            this.checkBox1.Location = new System.Drawing.Point(8, 64);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(75, 17);
-            this.checkBox1.TabIndex = 7;
+            this.checkBox1.TabIndex = 5;
             this.checkBox1.Tag = "aggregate";
             this.checkBox1.Text = "Aggregate";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -88,21 +86,19 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(7, 81);
+            this.checkBox2.Location = new System.Drawing.Point(119, 19);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(61, 17);
-            this.checkBox2.TabIndex = 3;
+            this.checkBox2.TabIndex = 2;
             this.checkBox2.Tag = "distinct";
             this.checkBox2.Text = "Distinct";
             this.checkBox2.UseVisualStyleBackColor = true;
             // 
             // textTop
             // 
-            this.textTop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.textTop.Location = new System.Drawing.Point(7, 16);
             this.textTop.Name = "textTop";
-            this.textTop.Size = new System.Drawing.Size(214, 20);
+            this.textTop.Size = new System.Drawing.Size(106, 20);
             this.textTop.TabIndex = 1;
             this.textTop.Tag = "top";
             // 
@@ -118,10 +114,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(119, 81);
+            this.checkBox3.Location = new System.Drawing.Point(7, 42);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(63, 17);
-            this.checkBox3.TabIndex = 4;
+            this.checkBox3.TabIndex = 3;
             this.checkBox3.Tag = "no-lock";
             this.checkBox3.Text = "No-lock";
             this.checkBox3.UseVisualStyleBackColor = true;
@@ -129,10 +125,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // checkBox4
             // 
             this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(119, 104);
+            this.checkBox4.Location = new System.Drawing.Point(119, 42);
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(113, 17);
-            this.checkBox4.TabIndex = 6;
+            this.checkBox4.TabIndex = 4;
             this.checkBox4.Tag = "returntotalrecordcount";
             this.checkBox4.Text = "Total record count";
             this.checkBox4.UseVisualStyleBackColor = true;
@@ -141,16 +137,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             this.textPage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textPage.Location = new System.Drawing.Point(7, 166);
+            this.textPage.Location = new System.Drawing.Point(119, 100);
             this.textPage.Name = "textPage";
-            this.textPage.Size = new System.Drawing.Size(214, 20);
+            this.textPage.Size = new System.Drawing.Size(102, 20);
             this.textPage.TabIndex = 8;
             this.textPage.Tag = "page";
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(4, 152);
+            this.label10.Location = new System.Drawing.Point(116, 86);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(32, 13);
             this.label10.TabIndex = 35;
@@ -160,10 +156,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             this.textPagingCookie.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textPagingCookie.Location = new System.Drawing.Point(7, 205);
-            this.textPagingCookie.Multiline = true;
+            this.textPagingCookie.Location = new System.Drawing.Point(7, 139);
             this.textPagingCookie.Name = "textPagingCookie";
-            this.textPagingCookie.Size = new System.Drawing.Size(214, 74);
+            this.textPagingCookie.Size = new System.Drawing.Size(214, 20);
             this.textPagingCookie.TabIndex = 9;
             this.textPagingCookie.Tag = "paging-cookie";
             this.textPagingCookie.Leave += new System.EventHandler(this.textPagingCookie_Leave);
@@ -171,7 +166,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(4, 191);
+            this.label11.Location = new System.Drawing.Point(4, 125);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(76, 13);
             this.label11.TabIndex = 37;
@@ -180,10 +175,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // checkBox5
             // 
             this.checkBox5.AutoSize = true;
-            this.checkBox5.Location = new System.Drawing.Point(7, 104);
+            this.checkBox5.Location = new System.Drawing.Point(119, 64);
             this.checkBox5.Name = "checkBox5";
             this.checkBox5.Size = new System.Drawing.Size(97, 17);
-            this.checkBox5.TabIndex = 5;
+            this.checkBox5.TabIndex = 6;
             this.checkBox5.Tag = "latematerialize";
             this.checkBox5.Text = "LateMaterialize";
             this.checkBox5.UseVisualStyleBackColor = true;
@@ -192,7 +187,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(99, 106);
+            this.pictureBox1.Location = new System.Drawing.Point(211, 66);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(14, 14);
             this.pictureBox1.TabIndex = 38;
@@ -205,7 +200,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(76, 129);
+            this.pictureBox2.Location = new System.Drawing.Point(77, 66);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(14, 14);
             this.pictureBox2.TabIndex = 39;
@@ -218,7 +213,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             this.pictureBox3.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(77, 191);
+            this.pictureBox3.Location = new System.Drawing.Point(79, 125);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(14, 14);
             this.pictureBox3.TabIndex = 40;
@@ -231,7 +226,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             this.pictureBox4.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
-            this.pictureBox4.Location = new System.Drawing.Point(69, 285);
+            this.pictureBox4.Location = new System.Drawing.Point(69, 162);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(14, 14);
             this.pictureBox4.TabIndex = 42;
@@ -247,16 +242,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.dataSourceComboBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.dataSourceComboBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.dataSourceComboBox.FormattingEnabled = true;
-            this.dataSourceComboBox.Location = new System.Drawing.Point(7, 301);
+            this.dataSourceComboBox.Location = new System.Drawing.Point(7, 178);
             this.dataSourceComboBox.Name = "dataSourceComboBox";
             this.dataSourceComboBox.Size = new System.Drawing.Size(214, 21);
-            this.dataSourceComboBox.TabIndex = 43;
+            this.dataSourceComboBox.TabIndex = 10;
             this.dataSourceComboBox.Tag = "datasource";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 285);
+            this.label1.Location = new System.Drawing.Point(4, 162);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(65, 13);
             this.label1.TabIndex = 44;
@@ -286,7 +281,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.Controls.Add(this.textPageSize);
             this.Controls.Add(this.label4);
             this.Name = "fetchControl";
-            this.Size = new System.Drawing.Size(247, 334);
+            this.Size = new System.Drawing.Size(247, 211);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
