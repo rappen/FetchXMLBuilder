@@ -91,7 +91,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.panTreeSplitter);
             this.splitContainer1.Size = new System.Drawing.Size(594, 438);
             this.splitContainer1.SplitterDistance = 248;
-            this.splitContainer1.SplitterWidth = 6;
+            this.splitContainer1.SplitterWidth = 8;
             this.splitContainer1.TabIndex = 0;
             // 
             // tvFetch

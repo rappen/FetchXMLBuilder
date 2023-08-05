@@ -968,7 +968,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void TreeBuilderControl_Load(object sender, EventArgs e)
         {
-            splitContainer1.SplitterDistance = splitContainer1.Height * 3 / 4;
+            splitContainer1.SplitterDistance = splitContainer1.Height / 2;
         }
 
         private void tvFetch_AfterSelect(object sender, TreeViewEventArgs e)
