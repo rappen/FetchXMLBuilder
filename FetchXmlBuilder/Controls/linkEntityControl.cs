@@ -23,8 +23,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         {
             InitializeComponent();
             BeginInit();
-            rbAttrIdOnly.Checked = fetchXmlBuilder.settings.LinkEntityIdAttributesOnly;
-            rbAttrAll.Checked = !rbAttrIdOnly.Checked;
+            chkOnlyLpks.Checked = fetchXmlBuilder.settings.LinkEntityIdAttributesOnly;
             InitializeFXB(null, fetchXmlBuilder, tree, node);
             EndInit();
             RefreshAttributes();
@@ -158,7 +157,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private string[] GetRelevantLinkAttributes(string entity)
         {
             var linkAttributes = fxb.GetDisplayAttributes(entity);
-            if (rbAttrIdOnly.Checked)
+            if (chkOnlyLpks.Checked)
             {
                 linkAttributes = linkAttributes
                     .Where(a => a.IsPrimaryId == true ||
@@ -393,7 +392,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             }
             if (fxb != null && fxb.settings != null)
             {
-                fxb.settings.LinkEntityIdAttributesOnly = rbAttrIdOnly.Checked;
+                fxb.settings.LinkEntityIdAttributesOnly = chkOnlyLpks.Checked;
             }
             RefreshAttributes();
             Save(false);

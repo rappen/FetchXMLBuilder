@@ -43,10 +43,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.cmbRelationship = new System.Windows.Forms.ComboBox();
-            this.rbAttrIdOnly = new System.Windows.Forms.RadioButton();
-            this.rbAttrAll = new System.Windows.Forms.RadioButton();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.chkOnlyLpks = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
@@ -127,8 +126,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             // comboBox2
             // 
-            this.comboBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBox2.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.comboBox2.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -139,7 +136,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             "outer"});
             this.comboBox2.Location = new System.Drawing.Point(7, 176);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(214, 21);
+            this.comboBox2.Size = new System.Drawing.Size(92, 21);
             this.comboBox2.Sorted = true;
             this.comboBox2.TabIndex = 5;
             this.comboBox2.Tag = "link-type";
@@ -156,7 +153,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(4, 202);
+            this.label7.Location = new System.Drawing.Point(103, 163);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(29, 13);
             this.label7.TabIndex = 35;
@@ -167,16 +164,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             this.txtAlias.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAlias.Location = new System.Drawing.Point(7, 216);
+            this.txtAlias.Location = new System.Drawing.Point(106, 177);
             this.txtAlias.Name = "txtAlias";
-            this.txtAlias.Size = new System.Drawing.Size(214, 20);
+            this.txtAlias.Size = new System.Drawing.Size(115, 20);
             this.txtAlias.TabIndex = 6;
             this.txtAlias.Tag = "alias";
             // 
             // chkIntersect
             // 
             this.chkIntersect.AutoSize = true;
-            this.chkIntersect.Location = new System.Drawing.Point(7, 244);
+            this.chkIntersect.Location = new System.Drawing.Point(7, 203);
             this.chkIntersect.Name = "chkIntersect";
             this.chkIntersect.Size = new System.Drawing.Size(67, 17);
             this.chkIntersect.TabIndex = 7;
@@ -187,7 +184,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(106, 244);
+            this.checkBox2.Location = new System.Drawing.Point(106, 203);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(56, 17);
             this.checkBox2.TabIndex = 8;
@@ -218,29 +215,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.cmbRelationship.SelectedIndexChanged += new System.EventHandler(this.cmbRelationship_SelectedIndexChanged);
             this.cmbRelationship.DropDownClosed += new System.EventHandler(this.cmbRelationship_DropDownClosed);
             // 
-            // rbAttrIdOnly
-            // 
-            this.rbAttrIdOnly.AutoSize = true;
-            this.rbAttrIdOnly.Checked = true;
-            this.rbAttrIdOnly.Location = new System.Drawing.Point(106, 267);
-            this.rbAttrIdOnly.Name = "rbAttrIdOnly";
-            this.rbAttrIdOnly.Size = new System.Drawing.Size(103, 17);
-            this.rbAttrIdOnly.TabIndex = 40;
-            this.rbAttrIdOnly.TabStop = true;
-            this.rbAttrIdOnly.Text = "Id / Lookup only";
-            this.rbAttrIdOnly.UseVisualStyleBackColor = true;
-            // 
-            // rbAttrAll
-            // 
-            this.rbAttrAll.AutoSize = true;
-            this.rbAttrAll.Location = new System.Drawing.Point(7, 267);
-            this.rbAttrAll.Name = "rbAttrAll";
-            this.rbAttrAll.Size = new System.Drawing.Size(82, 17);
-            this.rbAttrAll.TabIndex = 41;
-            this.rbAttrAll.Text = "All attributes";
-            this.rbAttrAll.UseVisualStyleBackColor = true;
-            this.rbAttrAll.CheckedChanged += new System.EventHandler(this.rbAttr_CheckedChanged);
-            // 
             // pictureBox2
             // 
             this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -265,14 +239,24 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.pictureBox1.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.query.joinoperator";
             this.pictureBox1.Click += new System.EventHandler(this.helpIcon_Click);
             // 
+            // chkOnlyLpks
+            // 
+            this.chkOnlyLpks.AutoSize = true;
+            this.chkOnlyLpks.Location = new System.Drawing.Point(7, 226);
+            this.chkOnlyLpks.Name = "chkOnlyLpks";
+            this.chkOnlyLpks.Size = new System.Drawing.Size(186, 17);
+            this.chkOnlyLpks.TabIndex = 50;
+            this.chkOnlyLpks.Text = "Show only Lookups/IDs attributes";
+            this.chkOnlyLpks.UseVisualStyleBackColor = true;
+            this.chkOnlyLpks.CheckedChanged += new System.EventHandler(this.rbAttr_CheckedChanged);
+            // 
             // linkEntityControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.chkOnlyLpks);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.rbAttrAll);
-            this.Controls.Add(this.rbAttrIdOnly);
             this.Controls.Add(this.cmbRelationship);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.checkBox2);
@@ -288,7 +272,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.Controls.Add(this.cmbEntity);
             this.Controls.Add(this.label2);
             this.Name = "linkEntityControl";
-            this.Size = new System.Drawing.Size(247, 304);
+            this.Size = new System.Drawing.Size(247, 254);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
@@ -312,9 +296,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ComboBox cmbRelationship;
-        private System.Windows.Forms.RadioButton rbAttrIdOnly;
-        private System.Windows.Forms.RadioButton rbAttrAll;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.CheckBox chkOnlyLpks;
     }
 }
