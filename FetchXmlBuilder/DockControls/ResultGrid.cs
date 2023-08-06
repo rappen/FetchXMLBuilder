@@ -1,11 +1,13 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Query;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Views;
 using System;
 using System.Linq;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace Rappen.XTB.FetchXmlBuilder.DockControls
 {
@@ -37,6 +39,41 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             ApplySettingsToGrid();
             SetQueryIfChangesDesign();
             txtPagingCookie.Text = queryinfo.Results.PagingCookie;
+            if (queryinfo.Query is FetchExpression && !form.settings.Results.RetrieveAllPages && (queryinfo.Results.MoreRecords || queryinfo.PageNo > 1))
+            {
+                mnuPage.Text = (queryinfo.PageNo < 10 ? "Page " : "") + queryinfo.PageNo.ToString() + (queryinfo.Pages > 0 ? $"/{queryinfo.Pages}" : "");
+                mnuPageMinus.Enabled = queryinfo.PageNo > 1;
+                mnuPagePlus.Enabled = queryinfo.Results.MoreRecords;
+                mnuPage.Visible = true;
+                mnuPageMinus.Visible = true;
+                mnuPagePlus.Visible = true;
+            }
+            else
+            {
+                mnuPage.Visible = false;
+                mnuPageMinus.Visible = false;
+                mnuPagePlus.Visible = false;
+            }
+            if (queryinfo.RecordFrom > -1 && queryinfo.RecordTo > -1)
+            {
+                if (queryinfo.RecordFrom > 1 || queryinfo.Results.MoreRecords)
+                {
+                    mnuRecordsNumbers.Text = $"Records: {queryinfo.RecordFrom}-{queryinfo.RecordTo}";
+                    if (queryinfo.Results.TotalRecordCount > 0)
+                    {
+                        mnuRecordsNumbers.Text += $" ({queryinfo.Results.TotalRecordCount})";
+                    }
+                }
+                else
+                {
+                    mnuRecordsNumbers.Text = $"Records: {queryinfo.RecordTo}";
+                }
+                mnuRecordsNumbers.Visible = true;
+            }
+            else
+            {
+                mnuRecordsNumbers.Visible = false;
+            }
         }
 
         internal void ApplySettingsToGrid()
@@ -325,6 +362,26 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void mnuPagingCookie_Click(object sender, EventArgs e)
         {
             gbPagingCookie.Visible = mnuPagingCookie.Checked;
+        }
+
+        private void mnuPagePlusMinus_Click(object sender, EventArgs e)
+        {
+            var direction = sender == mnuPageMinus ? -1 : sender == mnuPagePlus ? 1 : 0;
+            if (direction != 0 && queryinfo.Query is FetchExpression fetchexpr)
+            {
+                mnuPageMinus.Enabled = false;
+                mnuPagePlus.Enabled = false;
+
+                //var fetchxml = Fetch.FromString(fetchexpr.Query);
+                //fetchxml.PageNumber = (fetchxml.PageNumber ?? 1) + direction;
+
+                var page = queryinfo.PageNo + direction;
+                var fetchdoc = new XmlDocument();
+                fetchdoc.LoadXml(fetchexpr.Query);
+                var fetchnode = fetchdoc.SelectSingleNode("fetch") as XmlElement;
+                fetchnode.SetAttribute("page", page.ToString());
+                form.FetchResults(fetchdoc.OuterXml);
+            }
         }
     }
 }
