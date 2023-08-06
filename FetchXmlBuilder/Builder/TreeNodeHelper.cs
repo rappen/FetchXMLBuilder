@@ -8,7 +8,7 @@ using System.Xml;
 
 namespace Rappen.XTB.FetchXmlBuilder.Builder
 {
-    internal class TreeNodeHelper
+    internal static class TreeNodeHelper
     {
         /// <summary>
         /// Reuses an existing node in a tree to represent a new FetchXML item
@@ -589,6 +589,29 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                 }
             }
             return result;
+        }
+
+        internal static void SetNodeAttributeValue(this TreeNode node, string attribute, string value)
+        {
+            var collec = (Dictionary<string, string>)node.Tag;
+            if (collec.ContainsKey(attribute))
+            {
+                collec[attribute] = value;
+            }
+            else
+            {
+                collec.Add(attribute, value);
+            }
+        }
+
+        internal static string GetNodeAttributeValue(this TreeNode node, string attribute)
+        {
+            var collec = (Dictionary<string, string>)node.Tag;
+            if (collec.ContainsKey(attribute))
+            {
+                return collec[attribute];
+            }
+            return null;
         }
     }
 }
