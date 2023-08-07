@@ -18,6 +18,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             InitializeComponent();
             GenerateAllItems(attributes, selectedAttributes);
             PopulateAttributes();
+            SetSelectedNos();
             this.ActiveControl = txtFilter;
         }
 
@@ -45,7 +46,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
         }
 
-        private void PopulateAttributes()
+        private void PopulateAttributes(bool required = false)
         {
             lvAttributes.Items.Clear();
             foreach (var item in allItems)
@@ -53,9 +54,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 var filter = txtFilter.Text.ToUpperInvariant();
                 if (string.IsNullOrWhiteSpace(filter) || item.Name.ToUpperInvariant().Contains(filter) || item.Text.ToUpperInvariant().Contains(filter))
                 {
+                    if (required && !IsRequired(item.Tag as AttributeMetadata))
+                    {
+                        continue;
+                    }
                     lvAttributes.Items.Add(item);
                 }
             }
+        }
+
+        private bool IsRequired(AttributeMetadata meta)
+        {
+            return (meta.RequiredLevel?.Value == AttributeRequiredLevel.ApplicationRequired ||
+                    meta.RequiredLevel?.Value == AttributeRequiredLevel.SystemRequired) &&
+                   string.IsNullOrEmpty(meta.AttributeOf);
         }
 
         public List<AttributeMetadata> GetSelectedAttributes()
@@ -130,6 +142,30 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             {
                 metadataControl1.SelectedObject = meta;
             }
+        }
+
+        private void lvAttributes_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            SetSelectedNos();
+        }
+
+        private void SetSelectedNos()
+        {
+            try
+            {
+                lblSelectedNo.Text = $"Selected {allItems.Where(a => a.Checked).Count()}/{allItems.Count}";
+            }
+            catch { }
+        }
+
+        private void lnkShowRequired_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            PopulateAttributes(true);
+        }
+
+        private void lnkShowAll_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            PopulateAttributes();
         }
     }
 }
