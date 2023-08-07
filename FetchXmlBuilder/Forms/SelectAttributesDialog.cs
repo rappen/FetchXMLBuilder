@@ -1,10 +1,14 @@
-﻿using Microsoft.Xrm.Sdk.Metadata;
+﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Query;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using System.Xml;
+using XrmToolBox.Extensibility;
 
 namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
@@ -12,12 +16,21 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
     {
         private int sortcolumn = 0;
         private List<ListViewItem> allItems;
+        private List<string> viewcolumns;
+        private FetchXmlBuilder fxb;
+        private string entity;
+        private bool initiating = true;
+        private bool working = false;
 
-        public SelectAttributesDialog(List<AttributeMetadata> attributes, List<string> selectedAttributes)
+        public SelectAttributesDialog(FetchXmlBuilder fxb, string entity, List<string> selectedAttributes)
         {
+            this.fxb = fxb;
+            this.entity = entity;
+            var attributes = new List<AttributeMetadata>(fxb.GetDisplayAttributes(entity));
             InitializeComponent();
             GenerateAllItems(attributes, selectedAttributes);
             PopulateAttributes();
+            initiating = false;
             SetSelectedNos();
             this.ActiveControl = txtFilter;
         }
@@ -46,8 +59,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
         }
 
-        private void PopulateAttributes(bool required = false)
+        private void PopulateAttributes(bool required = false, bool isonanyview = false)
         {
+            initiating = true;
             lvAttributes.Items.Clear();
             foreach (var item in allItems)
             {
@@ -58,9 +72,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                     {
                         continue;
                     }
+                    if (isonanyview && !IsOnAnyView(item.Tag as AttributeMetadata))
+                    {
+                        continue;
+                    }
                     lvAttributes.Items.Add(item);
                 }
             }
+            initiating = false;
+            SetSelectedNos();
         }
 
         private bool IsRequired(AttributeMetadata meta)
@@ -68,6 +88,72 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             return (meta.RequiredLevel?.Value == AttributeRequiredLevel.ApplicationRequired ||
                     meta.RequiredLevel?.Value == AttributeRequiredLevel.SystemRequired) &&
                    string.IsNullOrEmpty(meta.AttributeOf);
+        }
+
+        private bool IsOnAnyView(AttributeMetadata meta)
+        {
+            if (viewcolumns == null)
+            {
+                if (working)
+                {
+                    return false;
+                }
+                working = true;
+                Enabled = false;
+                fxb.WorkAsync(new WorkAsyncInfo
+                {
+                    Message = "Loading views...",
+                    Work = (w, a) =>
+                    {
+                        if (fxb.Service == null)
+                        {
+                            throw new Exception("Need a connection to load views.");
+                        }
+                        var qexs = new QueryExpression("savedquery");
+                        qexs.ColumnSet = new ColumnSet("name", "returnedtypecode", "layoutxml", "iscustomizable");
+                        qexs.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entity);
+                        qexs.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
+                        qexs.Criteria.AddCondition("layoutxml", ConditionOperator.NotNull);
+                        a.Result = fxb.RetrieveMultiple(qexs);
+                    },
+                    PostWorkCallBack = (a) =>
+                    {
+                        if (a.Error != null)
+                        {
+                            fxb.ShowErrorDialog(a.Error);
+                        }
+                        else if (a.Result is EntityCollection views)
+                        {
+                            SetViewColumns(views);
+                            PopulateAttributes(false, true);
+                        }
+                        Enabled = true;
+                        working = false;
+                    }
+                });
+                return false;
+            }
+            return viewcolumns.Contains(meta.LogicalName);
+        }
+
+        private void SetViewColumns(EntityCollection views)
+        {
+            viewcolumns = new List<string>();
+            foreach (var view in views.Entities)
+            {
+                var layout = view.GetAttributeValue<string>("layoutxml");
+                var layoutdoc = new XmlDocument();
+                layoutdoc.LoadXml(layout);
+                if (layoutdoc.SelectSingleNode("grid") is XmlElement grid &&
+                    grid.SelectSingleNode("row") is XmlElement row)
+                {
+                    viewcolumns.AddRange(row.ChildNodes
+                        .Cast<XmlNode>()
+                        .Where(n => n.Name == "cell")
+                        .Select(c => c.AttributeValue("name")));
+                }
+            }
+            viewcolumns = viewcolumns.Distinct().ToList();
         }
 
         public List<AttributeMetadata> GetSelectedAttributes()
@@ -81,14 +167,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 }
             }
             return result;
-        }
-
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-            foreach (ListViewItem item in lvAttributes.Items)
-            {
-                item.Checked = checkBox1.Checked;
-            }
         }
 
         private void lvAttributes_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -146,16 +224,26 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void lvAttributes_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
-            SetSelectedNos();
+            timerSummary.Stop();
+            timerSummary.Start();
         }
 
         private void SetSelectedNos()
         {
-            try
+            if (initiating || working)
+            {
+                return;
+            }
+            //try
             {
                 lblSelectedNo.Text = $"Selected {allItems.Where(a => a.Checked).Count()}/{allItems.Count}";
             }
-            catch { }
+            //catch { }
+        }
+
+        private void lnkShowAll_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            PopulateAttributes();
         }
 
         private void lnkShowRequired_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -163,9 +251,30 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             PopulateAttributes(true);
         }
 
-        private void lnkShowAll_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void lnkShowOnViews_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            PopulateAttributes();
+            PopulateAttributes(false, true);
+        }
+
+        private void timerSummary_Tick(object sender, EventArgs e)
+        {
+            timerSummary.Enabled = false;
+            SetSelectedNos();
+        }
+
+        private void lnkCheckShown_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            lvAttributes.Items.Cast<ListViewItem>().ToList().ForEach(a => a.Checked = true);
+        }
+
+        private void lnkUncheckShown_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            lvAttributes.Items.Cast<ListViewItem>().ToList().ForEach(a => a.Checked = false);
+        }
+
+        private void lnkUncheckAll_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            allItems.ForEach(a => a.Checked = false);
         }
     }
 }

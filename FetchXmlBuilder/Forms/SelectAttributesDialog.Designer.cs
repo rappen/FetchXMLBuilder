@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectAttributesDialog));
             this.panel2 = new System.Windows.Forms.Panel();
             this.chkMetamore = new System.Windows.Forms.CheckBox();
@@ -35,10 +36,13 @@
             this.btnOk = new System.Windows.Forms.Button();
             this.panCancel = new System.Windows.Forms.Panel();
             this.button2 = new System.Windows.Forms.Button();
+            this.lblSelectedNo = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lnkShowOnViews = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
+            this.lnkShowAll = new System.Windows.Forms.LinkLabel();
             this.txtFilter = new System.Windows.Forms.TextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.lnkShowRequired = new System.Windows.Forms.LinkLabel();
             this.lvAttributes = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -48,12 +52,13 @@
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.lnkShowRequired = new System.Windows.Forms.LinkLabel();
-            this.lblSelectedNo = new System.Windows.Forms.Label();
+            this.lnkUncheckAll = new System.Windows.Forms.LinkLabel();
+            this.lnkUncheckShown = new System.Windows.Forms.LinkLabel();
+            this.lnkCheckShown = new System.Windows.Forms.LinkLabel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.timerSummary = new System.Windows.Forms.Timer(this.components);
             this.metadataControl1 = new Rappen.XTB.FetchXmlBuilder.Controls.XRMMetadataControl();
-            this.lnkShowAll = new System.Windows.Forms.LinkLabel();
             this.panel2.SuspendLayout();
             this.panOk.SuspendLayout();
             this.panCancel.SuspendLayout();
@@ -67,14 +72,13 @@
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.lblSelectedNo);
             this.panel2.Controls.Add(this.chkMetamore);
             this.panel2.Controls.Add(this.panOk);
             this.panel2.Controls.Add(this.panCancel);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel2.Location = new System.Drawing.Point(0, 450);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(493, 51);
+            this.panel2.Size = new System.Drawing.Size(485, 51);
             this.panel2.TabIndex = 6;
             // 
             // chkMetamore
@@ -92,7 +96,7 @@
             // 
             this.panOk.Controls.Add(this.btnOk);
             this.panOk.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panOk.Location = new System.Drawing.Point(300, 0);
+            this.panOk.Location = new System.Drawing.Point(292, 0);
             this.panOk.Name = "panOk";
             this.panOk.Size = new System.Drawing.Size(102, 51);
             this.panOk.TabIndex = 6;
@@ -111,7 +115,7 @@
             // 
             this.panCancel.Controls.Add(this.button2);
             this.panCancel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panCancel.Location = new System.Drawing.Point(402, 0);
+            this.panCancel.Location = new System.Drawing.Point(394, 0);
             this.panCancel.Name = "panCancel";
             this.panCancel.Size = new System.Drawing.Size(91, 51);
             this.panCancel.TabIndex = 5;
@@ -126,46 +130,82 @@
             this.button2.Text = "Cancel";
             this.button2.UseVisualStyleBackColor = true;
             // 
+            // lblSelectedNo
+            // 
+            this.lblSelectedNo.BackColor = System.Drawing.Color.Transparent;
+            this.lblSelectedNo.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lblSelectedNo.Location = new System.Drawing.Point(285, 0);
+            this.lblSelectedNo.Name = "lblSelectedNo";
+            this.lblSelectedNo.Padding = new System.Windows.Forms.Padding(0, 0, 8, 0);
+            this.lblSelectedNo.Size = new System.Drawing.Size(191, 27);
+            this.lblSelectedNo.TabIndex = 8;
+            this.lblSelectedNo.Text = "Selected 0/x";
+            this.lblSelectedNo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.lnkShowOnViews);
             this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.lnkShowAll);
             this.panel1.Controls.Add(this.txtFilter);
-            this.panel1.Controls.Add(this.checkBox1);
+            this.panel1.Controls.Add(this.lnkShowRequired);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(493, 45);
+            this.panel1.Size = new System.Drawing.Size(485, 45);
             this.panel1.TabIndex = 8;
+            // 
+            // lnkShowOnViews
+            // 
+            this.lnkShowOnViews.AutoSize = true;
+            this.lnkShowOnViews.Location = new System.Drawing.Point(92, 19);
+            this.lnkShowOnViews.Name = "lnkShowOnViews";
+            this.lnkShowOnViews.Size = new System.Drawing.Size(52, 13);
+            this.lnkShowOnViews.TabIndex = 2;
+            this.lnkShowOnViews.TabStop = true;
+            this.lnkShowOnViews.Text = "On Views";
+            this.lnkShowOnViews.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkShowOnViews_LinkClicked);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(167, 19);
+            this.label1.Location = new System.Drawing.Point(221, 19);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(68, 13);
+            this.label1.Size = new System.Drawing.Size(29, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Attribute filter";
+            this.label1.Text = "Filter";
+            // 
+            // lnkShowAll
+            // 
+            this.lnkShowAll.AutoSize = true;
+            this.lnkShowAll.Location = new System.Drawing.Point(12, 19);
+            this.lnkShowAll.Name = "lnkShowAll";
+            this.lnkShowAll.Size = new System.Drawing.Size(18, 13);
+            this.lnkShowAll.TabIndex = 1;
+            this.lnkShowAll.TabStop = true;
+            this.lnkShowAll.Text = "All";
+            this.lnkShowAll.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkShowAll_LinkClicked);
             // 
             // txtFilter
             // 
             this.txtFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtFilter.Location = new System.Drawing.Point(251, 16);
+            this.txtFilter.Location = new System.Drawing.Point(256, 16);
             this.txtFilter.Name = "txtFilter";
-            this.txtFilter.Size = new System.Drawing.Size(229, 20);
+            this.txtFilter.Size = new System.Drawing.Size(216, 20);
             this.txtFilter.TabIndex = 1;
             this.txtFilter.TextChanged += new System.EventHandler(this.txtFilter_TextChanged);
             // 
-            // checkBox1
+            // lnkShowRequired
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(15, 18);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(125, 17);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "Check / Uncheck all";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.lnkShowRequired.AutoSize = true;
+            this.lnkShowRequired.Location = new System.Drawing.Point(36, 19);
+            this.lnkShowRequired.Name = "lnkShowRequired";
+            this.lnkShowRequired.Size = new System.Drawing.Size(50, 13);
+            this.lnkShowRequired.TabIndex = 0;
+            this.lnkShowRequired.TabStop = true;
+            this.lnkShowRequired.Text = "Required";
+            this.lnkShowRequired.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkShowRequired_LinkClicked);
             // 
             // lvAttributes
             // 
@@ -184,7 +224,7 @@
             this.lvAttributes.Location = new System.Drawing.Point(9, 72);
             this.lvAttributes.Name = "lvAttributes";
             this.lvAttributes.ShowGroups = false;
-            this.lvAttributes.Size = new System.Drawing.Size(484, 378);
+            this.lvAttributes.Size = new System.Drawing.Size(476, 378);
             this.lvAttributes.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvAttributes.TabIndex = 8;
             this.lvAttributes.UseCompatibleStateImageBehavior = false;
@@ -249,9 +289,54 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.metadataControl1);
             this.splitContainer1.Size = new System.Drawing.Size(792, 501);
-            this.splitContainer1.SplitterDistance = 493;
+            this.splitContainer1.SplitterDistance = 485;
             this.splitContainer1.SplitterWidth = 8;
             this.splitContainer1.TabIndex = 10;
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.lnkUncheckAll);
+            this.panel4.Controls.Add(this.lnkUncheckShown);
+            this.panel4.Controls.Add(this.lnkCheckShown);
+            this.panel4.Controls.Add(this.lblSelectedNo);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel4.Location = new System.Drawing.Point(9, 45);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(476, 27);
+            this.panel4.TabIndex = 10;
+            // 
+            // lnkUncheckAll
+            // 
+            this.lnkUncheckAll.AutoSize = true;
+            this.lnkUncheckAll.Location = new System.Drawing.Point(176, 3);
+            this.lnkUncheckAll.Name = "lnkUncheckAll";
+            this.lnkUncheckAll.Size = new System.Drawing.Size(65, 13);
+            this.lnkUncheckAll.TabIndex = 11;
+            this.lnkUncheckAll.TabStop = true;
+            this.lnkUncheckAll.Text = "Uncheck All";
+            this.lnkUncheckAll.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkUncheckAll_LinkClicked);
+            // 
+            // lnkUncheckShown
+            // 
+            this.lnkUncheckShown.AutoSize = true;
+            this.lnkUncheckShown.Location = new System.Drawing.Point(83, 3);
+            this.lnkUncheckShown.Name = "lnkUncheckShown";
+            this.lnkUncheckShown.Size = new System.Drawing.Size(87, 13);
+            this.lnkUncheckShown.TabIndex = 10;
+            this.lnkUncheckShown.TabStop = true;
+            this.lnkUncheckShown.Text = "Uncheck Shown";
+            this.lnkUncheckShown.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkUncheckShown_LinkClicked);
+            // 
+            // lnkCheckShown
+            // 
+            this.lnkCheckShown.AutoSize = true;
+            this.lnkCheckShown.Location = new System.Drawing.Point(3, 3);
+            this.lnkCheckShown.Name = "lnkCheckShown";
+            this.lnkCheckShown.Size = new System.Drawing.Size(74, 13);
+            this.lnkCheckShown.TabIndex = 9;
+            this.lnkCheckShown.TabStop = true;
+            this.lnkCheckShown.Text = "Check Shown";
+            this.lnkCheckShown.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkCheckShown_LinkClicked);
             // 
             // panel3
             // 
@@ -261,36 +346,9 @@
             this.panel3.Size = new System.Drawing.Size(9, 405);
             this.panel3.TabIndex = 9;
             // 
-            // panel4
+            // timerSummary
             // 
-            this.panel4.Controls.Add(this.lnkShowAll);
-            this.panel4.Controls.Add(this.lnkShowRequired);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel4.Location = new System.Drawing.Point(9, 45);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(484, 27);
-            this.panel4.TabIndex = 10;
-            // 
-            // lnkShowRequired
-            // 
-            this.lnkShowRequired.AutoSize = true;
-            this.lnkShowRequired.Location = new System.Drawing.Point(27, 3);
-            this.lnkShowRequired.Name = "lnkShowRequired";
-            this.lnkShowRequired.Size = new System.Drawing.Size(50, 13);
-            this.lnkShowRequired.TabIndex = 0;
-            this.lnkShowRequired.TabStop = true;
-            this.lnkShowRequired.Text = "Required";
-            this.lnkShowRequired.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkShowRequired_LinkClicked);
-            // 
-            // lblSelectedNo
-            // 
-            this.lblSelectedNo.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lblSelectedNo.Location = new System.Drawing.Point(150, 0);
-            this.lblSelectedNo.Name = "lblSelectedNo";
-            this.lblSelectedNo.Size = new System.Drawing.Size(150, 51);
-            this.lblSelectedNo.TabIndex = 8;
-            this.lblSelectedNo.Text = "Selected 0/x";
-            this.lblSelectedNo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.timerSummary.Tick += new System.EventHandler(this.timerSummary_Tick);
             // 
             // metadataControl1
             // 
@@ -299,19 +357,8 @@
             this.metadataControl1.Location = new System.Drawing.Point(0, 0);
             this.metadataControl1.MscrmLinkSeparator = false;
             this.metadataControl1.Name = "metadataControl1";
-            this.metadataControl1.Size = new System.Drawing.Size(291, 501);
+            this.metadataControl1.Size = new System.Drawing.Size(299, 501);
             this.metadataControl1.TabIndex = 0;
-            // 
-            // lnkShowAll
-            // 
-            this.lnkShowAll.AutoSize = true;
-            this.lnkShowAll.Location = new System.Drawing.Point(3, 3);
-            this.lnkShowAll.Name = "lnkShowAll";
-            this.lnkShowAll.Size = new System.Drawing.Size(18, 13);
-            this.lnkShowAll.TabIndex = 1;
-            this.lnkShowAll.TabStop = true;
-            this.lnkShowAll.Text = "All";
-            this.lnkShowAll.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkShowAll_LinkClicked);
             // 
             // SelectAttributesDialog
             // 
@@ -349,7 +396,6 @@
         private System.Windows.Forms.Panel panCancel;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.ListView lvAttributes;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
@@ -368,5 +414,10 @@
         private System.Windows.Forms.LinkLabel lnkShowRequired;
         private System.Windows.Forms.Label lblSelectedNo;
         private System.Windows.Forms.LinkLabel lnkShowAll;
+        private System.Windows.Forms.LinkLabel lnkShowOnViews;
+        private System.Windows.Forms.Timer timerSummary;
+        private System.Windows.Forms.LinkLabel lnkUncheckAll;
+        private System.Windows.Forms.LinkLabel lnkUncheckShown;
+        private System.Windows.Forms.LinkLabel lnkCheckShown;
     }
 }
