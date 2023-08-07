@@ -32,7 +32,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             PopulateAttributes();
             initiating = false;
             SetSelectedNos();
-            this.ActiveControl = txtFilter;
+            ActiveControl = txtFilter;
         }
 
         private void GenerateAllItems(List<AttributeMetadata> attributes, List<string> selectedAttributes)
@@ -198,7 +198,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
             splitContainer1.Panel2Collapsed = !chkMetamore.Checked;
             var width = (from ColumnHeader col in lvAttributes.Columns select col.Width).Sum() + 70;
-            Width = Math.Max(width, 400) + splitContainer1.Panel2.Width;
+            Width = Math.Max(width, 450) + splitContainer1.Panel2.Width;
         }
 
         private void ShowHideMeta(bool on, ColumnHeader col)
@@ -228,6 +228,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             timerSummary.Start();
         }
 
+        private void timerSummary_Tick(object sender, EventArgs e)
+        {
+            timerSummary.Enabled = false;
+            SetSelectedNos();
+        }
+
         private void SetSelectedNos()
         {
             if (initiating || working)
@@ -254,12 +260,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private void lnkShowOnViews_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             PopulateAttributes(false, true);
-        }
-
-        private void timerSummary_Tick(object sender, EventArgs e)
-        {
-            timerSummary.Enabled = false;
-            SetSelectedNos();
         }
 
         private void lnkCheckShown_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
