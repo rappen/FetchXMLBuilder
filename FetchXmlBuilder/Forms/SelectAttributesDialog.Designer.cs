@@ -54,7 +54,6 @@
             this.lnkUncheckAll = new System.Windows.Forms.LinkLabel();
             this.lnkUncheckShown = new System.Windows.Forms.LinkLabel();
             this.lnkCheckShown = new System.Windows.Forms.LinkLabel();
-            this.panel3 = new System.Windows.Forms.Panel();
             this.timerSummary = new System.Windows.Forms.Timer(this.components);
             this.metadataControl1 = new Rappen.XTB.FetchXmlBuilder.Controls.XRMMetadataControl();
             this.grpChecked = new System.Windows.Forms.GroupBox();
@@ -77,9 +76,9 @@
             this.panel2.Controls.Add(this.panOk);
             this.panel2.Controls.Add(this.panCancel);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 450);
+            this.panel2.Location = new System.Drawing.Point(10, 450);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(456, 51);
+            this.panel2.Size = new System.Drawing.Size(446, 51);
             this.panel2.TabIndex = 6;
             // 
             // chkMetamore
@@ -97,7 +96,7 @@
             // 
             this.panOk.Controls.Add(this.btnOk);
             this.panOk.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panOk.Location = new System.Drawing.Point(263, 0);
+            this.panOk.Location = new System.Drawing.Point(253, 0);
             this.panOk.Name = "panOk";
             this.panOk.Size = new System.Drawing.Size(102, 51);
             this.panOk.TabIndex = 6;
@@ -116,7 +115,7 @@
             // 
             this.panCancel.Controls.Add(this.button2);
             this.panCancel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panCancel.Location = new System.Drawing.Point(365, 0);
+            this.panCancel.Location = new System.Drawing.Point(355, 0);
             this.panCancel.Name = "panCancel";
             this.panCancel.Size = new System.Drawing.Size(91, 51);
             this.panCancel.TabIndex = 5;
@@ -135,7 +134,7 @@
             // 
             this.lblSelectedNo.BackColor = System.Drawing.Color.Transparent;
             this.lblSelectedNo.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lblSelectedNo.Location = new System.Drawing.Point(262, 16);
+            this.lblSelectedNo.Location = new System.Drawing.Point(252, 16);
             this.lblSelectedNo.Name = "lblSelectedNo";
             this.lblSelectedNo.Padding = new System.Windows.Forms.Padding(0, 0, 8, 0);
             this.lblSelectedNo.Size = new System.Drawing.Size(191, 24);
@@ -180,7 +179,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFilter.Location = new System.Drawing.Point(286, 16);
             this.txtFilter.Name = "txtFilter";
-            this.txtFilter.Size = new System.Drawing.Size(157, 20);
+            this.txtFilter.Size = new System.Drawing.Size(147, 20);
             this.txtFilter.TabIndex = 1;
             this.txtFilter.TextChanged += new System.EventHandler(this.txtFilter_TextChanged);
             // 
@@ -209,10 +208,10 @@
             this.lvAttributes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvAttributes.FullRowSelect = true;
             this.lvAttributes.HideSelection = false;
-            this.lvAttributes.Location = new System.Drawing.Point(9, 91);
+            this.lvAttributes.Location = new System.Drawing.Point(10, 101);
             this.lvAttributes.Name = "lvAttributes";
             this.lvAttributes.ShowGroups = false;
-            this.lvAttributes.Size = new System.Drawing.Size(447, 359);
+            this.lvAttributes.Size = new System.Drawing.Size(446, 349);
             this.lvAttributes.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvAttributes.TabIndex = 8;
             this.lvAttributes.UseCompatibleStateImageBehavior = false;
@@ -268,10 +267,10 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.lvAttributes);
-            this.splitContainer1.Panel1.Controls.Add(this.panel3);
             this.splitContainer1.Panel1.Controls.Add(this.panel2);
             this.splitContainer1.Panel1.Controls.Add(this.grpChecked);
             this.splitContainer1.Panel1.Controls.Add(this.grpShow);
+            this.splitContainer1.Panel1.Padding = new System.Windows.Forms.Padding(10, 10, 0, 0);
             // 
             // splitContainer1.Panel2
             // 
@@ -314,14 +313,6 @@
             this.lnkCheckShown.Text = "Check Shown";
             this.lnkCheckShown.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkCheckShown_LinkClicked);
             // 
-            // panel3
-            // 
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel3.Location = new System.Drawing.Point(0, 91);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(9, 359);
-            this.panel3.TabIndex = 9;
-            // 
             // timerSummary
             // 
             this.timerSummary.Tick += new System.EventHandler(this.timerSummary_Tick);
@@ -343,9 +334,9 @@
             this.grpChecked.Controls.Add(this.lnkUncheckShown);
             this.grpChecked.Controls.Add(this.lnkCheckShown);
             this.grpChecked.Dock = System.Windows.Forms.DockStyle.Top;
-            this.grpChecked.Location = new System.Drawing.Point(0, 48);
+            this.grpChecked.Location = new System.Drawing.Point(10, 58);
             this.grpChecked.Name = "grpChecked";
-            this.grpChecked.Size = new System.Drawing.Size(456, 43);
+            this.grpChecked.Size = new System.Drawing.Size(446, 43);
             this.grpChecked.TabIndex = 11;
             this.grpChecked.TabStop = false;
             this.grpChecked.Text = "Checked attributes";
@@ -359,9 +350,9 @@
             this.grpShow.Controls.Add(this.lnkShowRequired);
             this.grpShow.Controls.Add(this.txtFilter);
             this.grpShow.Dock = System.Windows.Forms.DockStyle.Top;
-            this.grpShow.Location = new System.Drawing.Point(0, 0);
+            this.grpShow.Location = new System.Drawing.Point(10, 10);
             this.grpShow.Name = "grpShow";
-            this.grpShow.Size = new System.Drawing.Size(456, 48);
+            this.grpShow.Size = new System.Drawing.Size(446, 48);
             this.grpShow.TabIndex = 12;
             this.grpShow.TabStop = false;
             this.grpShow.Text = "Show attributes";
@@ -425,7 +416,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader7;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private Controls.XRMMetadataControl metadataControl1;
-        private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.LinkLabel lnkShowRequired;
         private System.Windows.Forms.Label lblSelectedNo;
         private System.Windows.Forms.LinkLabel lnkShowAll;
