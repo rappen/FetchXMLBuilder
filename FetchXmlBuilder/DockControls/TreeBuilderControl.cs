@@ -786,9 +786,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 fxb.LoadEntityDetails(entityName, SelectAttributes);
                 return;
             }
-            var attributes = new List<AttributeMetadata>(fxb.GetDisplayAttributes(entityName));
             var selected = entityNode.Nodes.Cast<TreeNode>().Where(n => n.Name == "attribute").Select(n => n.Value("name")).Where(a => !string.IsNullOrEmpty(a)).ToList();
-            var selectAttributesDlg = new SelectAttributesDialog(attributes, selected);
+            var selectAttributesDlg = new SelectAttributesDialog(fxb, entityName, selected);
             selectAttributesDlg.StartPosition = FormStartPosition.CenterParent;
             if (selectAttributesDlg.ShowDialog() == DialogResult.OK)
             {
