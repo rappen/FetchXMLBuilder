@@ -9,6 +9,7 @@ using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using System;
 using System.Collections.Generic;
+using System.ServiceModel;
 using System.Windows.Forms;
 using System.Xml;
 using XrmToolBox.Extensibility;
@@ -176,6 +177,31 @@ namespace Rappen.XTB.FetchXmlBuilder
                     }
                 }
             });
+        }
+
+        internal Entity GetViewById(Guid id)
+        {
+            var cols = new ColumnSet("name", "returnedtypecode", "fetchxml", "layoutxml");
+            try
+            {
+                return Service.Retrieve("savedquery", id, cols);
+            }
+            catch (FaultException<OrganizationServiceFault>)
+            {
+                try
+                {
+                    return Service.Retrieve("userquery", id, cols);
+                }
+                catch (FaultException<OrganizationServiceFault>)
+                {
+                    MessageBox.Show($"Cannot find either a system's or a personal's view with id {id}.", "Loading View", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    ShowErrorDialog(ex);
+                }
+            }
+            return null;
         }
 
         internal void StringQueryExpressionToFetchXml(string query, QExStyleEnum style)

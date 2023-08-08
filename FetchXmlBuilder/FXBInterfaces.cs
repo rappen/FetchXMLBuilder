@@ -50,6 +50,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
             callerArgs = message;
             var fetchXml = string.Empty;
+            var layoutxml = string.Empty;
             var requestedType = "FetchXML";
             if (message.TargetArgument != null)
             {
@@ -59,20 +60,33 @@ namespace Rappen.XTB.FetchXmlBuilder
                     fetchXml = fxbArg.FetchXML;
                     requestedType = fxbArg.Request.ToString();
                 }
-                else if (message.TargetArgument is string)
+                else if (message.TargetArgument is string strArgument)
                 {
-                    fetchXml = (string)message.TargetArgument;
+                    if (strArgument.ToLowerInvariant().StartsWith("view:"))
+                    {
+                        if (!Guid.TryParse(strArgument.Split(':')[1], out Guid id))
+                        {
+                            MessageBox.Show($"Incorrect Guid: {strArgument}", "Loading Views", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        View = GetViewById(id);
+                        fetchXml = View?.GetAttributeValue<string>("fetchxml");
+                        layoutxml = View?.GetAttributeValue<string>("layoutxml");
+                    }
+                    else
+                    {
+                        fetchXml = strArgument;
+                    }
                 }
             }
-            dockControlBuilder.ParseXML(fetchXml, false);
-            UpdateLiveXML();
+            dockControlBuilder.Init(fetchXml, layoutxml, $"called from {message.SourcePlugin}", false);
+            attributesChecksum = dockControlBuilder.GetAttributesSignature();
             tsbReturnToCaller.Text = callerArgs.SourcePlugin == URLcaller ? "FetchXML from an URL" : "Return FetchXML";
             tsbReturnToCaller.Image =
                 callerArgs.SourcePlugin == "Bulk Data Updater" ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.BDU_2019_032_tsp :
                 callerArgs.SourcePlugin == URLcaller ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_web :
                 Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_return;
             tsbReturnToCaller.ToolTipText = callerArgs.SourcePlugin == URLcaller ? "Show 'Sharing Queries' on my website." : "Return " + requestedType + " to " + callerArgs.SourcePlugin;
-            dockControlBuilder.RecordHistory("called from " + message.SourcePlugin);
             LogUse("CalledBy." + callerArgs.SourcePlugin);
             if (callerArgs.SourcePlugin == "View Designer" && !connectionsettings.TipsAgainstOrViewDesignerToolShown)
             {
