@@ -369,13 +369,13 @@
             // lnkShowOnForms
             // 
             this.lnkShowOnForms.AutoSize = true;
-            this.lnkShowOnForms.Enabled = false;
             this.lnkShowOnForms.Location = new System.Drawing.Point(180, 19);
             this.lnkShowOnForms.Name = "lnkShowOnForms";
             this.lnkShowOnForms.Size = new System.Drawing.Size(52, 13);
             this.lnkShowOnForms.TabIndex = 3;
             this.lnkShowOnForms.TabStop = true;
             this.lnkShowOnForms.Text = "On Forms";
+            this.lnkShowOnForms.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkShowOnForms_LinkClicked);
             // 
             // SelectAttributesDialog
             // 

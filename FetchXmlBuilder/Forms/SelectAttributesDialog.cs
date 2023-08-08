@@ -17,6 +17,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private int sortcolumn = 0;
         private List<ListViewItem> allItems;
         private List<string> viewcolumns;
+        private List<string> formcolumns;
         private FetchXmlBuilder fxb;
         private string entity;
         private bool initiating = true;
@@ -59,7 +60,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
         }
 
-        private void PopulateAttributes(bool required = false, bool isonanyview = false)
+        private void PopulateAttributes(bool required = false, bool isonanyview = false, bool isonanyform = false)
         {
             initiating = true;
             lvAttributes.Items.Clear();
@@ -73,6 +74,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                         continue;
                     }
                     if (isonanyview && !IsOnAnyView(item.Tag as AttributeMetadata))
+                    {
+                        continue;
+                    }
+                    if (isonanyform && !IsOnAnyForm(item.Tag as AttributeMetadata))
                     {
                         continue;
                     }
@@ -136,6 +141,52 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             return viewcolumns.Contains(meta.LogicalName);
         }
 
+        private bool IsOnAnyForm(AttributeMetadata meta)
+        {
+            if (formcolumns == null)
+            {
+                if (working)
+                {
+                    return false;
+                }
+                working = true;
+                Enabled = false;
+                fxb.WorkAsync(new WorkAsyncInfo
+                {
+                    Message = "Loading forms...",
+                    Work = (w, a) =>
+                    {
+                        if (fxb.Service == null)
+                        {
+                            throw new Exception("Need a connection to load forms.");
+                        }
+                        var query = new QueryExpression("systemform");
+                        query.ColumnSet.AddColumns("name", "type", "formxml");
+                        query.Criteria.AddCondition("objecttypecode", ConditionOperator.Equal, entity);
+                        query.Criteria.AddCondition("formactivationstate", ConditionOperator.Equal, 1);
+                        query.Criteria.AddCondition("formxml", ConditionOperator.NotNull);
+                        a.Result = fxb.RetrieveMultiple(query);
+                    },
+                    PostWorkCallBack = (a) =>
+                    {
+                        if (a.Error != null)
+                        {
+                            fxb.ShowErrorDialog(a.Error);
+                        }
+                        else if (a.Result is EntityCollection forms)
+                        {
+                            SetFormColumns(forms);
+                            PopulateAttributes(isonanyform: true);
+                        }
+                        Enabled = true;
+                        working = false;
+                    }
+                });
+                return false;
+            }
+            return formcolumns.Contains(meta.LogicalName);
+        }
+
         private void SetViewColumns(EntityCollection views)
         {
             viewcolumns = new List<string>();
@@ -154,6 +205,37 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 }
             }
             viewcolumns = viewcolumns.Distinct().ToList();
+        }
+
+        private void SetFormColumns(EntityCollection forms)
+        {
+            formcolumns = new List<string>();
+            foreach (var form in forms.Entities)
+            {
+                var formxml = form.GetAttributeValue<string>("formxml");
+                var formdoc = new XmlDocument();
+                formdoc.LoadXml(formxml);
+                var nodes = formdoc.ChildNodes;
+                foreach (XmlNode node in nodes)
+                {
+                    formcolumns.AddRange(FindCellControlFields(node));
+                }
+            }
+            formcolumns = formcolumns.Distinct().ToList();
+        }
+
+        private IEnumerable<string> FindCellControlFields(XmlNode node)
+        {
+            var result = new List<string>();
+            if (node.Name == "cell" &&
+                node.SelectSingleNode("control") is XmlNode control &&
+                control.AttributeValue("datafieldname") is string field &&
+                !string.IsNullOrEmpty(field))
+            {
+                result.Add(field);
+            }
+            node.ChildNodes.Cast<XmlNode>().ToList().ForEach(n => result.AddRange(FindCellControlFields(n)));
+            return result;
         }
 
         public List<AttributeMetadata> GetSelectedAttributes()
@@ -254,12 +336,17 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void lnkShowRequired_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            PopulateAttributes(true);
+            PopulateAttributes(required: true);
         }
 
         private void lnkShowOnViews_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            PopulateAttributes(false, true);
+            PopulateAttributes(isonanyview: true);
+        }
+
+        private void lnkShowOnForms_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            PopulateAttributes(isonanyform: true);
         }
 
         private void lnkCheckShown_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
