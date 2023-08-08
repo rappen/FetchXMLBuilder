@@ -94,6 +94,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal void ApplyCurrentSettings()
         {
+            if (IsDisposed)
+            {
+                return;
+            }
             BuildAndValidateXml(false);
             DisplayDefinition(GetFetchDocument());
             HandleNodeSelection(tvFetch.SelectedNode);
