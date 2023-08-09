@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Xml;
@@ -97,7 +98,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Extensions
                     if (newIndex > oldIndex) newIndex--;
                     // the actual index could have shifted due to the removal
 
-                    list.Insert(newIndex, item);
+                    list.Insert(Math.Min(newIndex, list.Count), item);
                 }
             }
         }
