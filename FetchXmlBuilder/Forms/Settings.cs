@@ -26,6 +26,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
             chkAppFriendly.Checked = settings.UseFriendlyNames;
             chkAppFriendlyResults.Checked = settings.Results.Friendly;
+            chkAppBothNamesResults.Checked = settings.Results.BothNames;
             chkAppSingle.Checked = settings.QueryOptions.UseSingleQuotation;
             chkAppNoSavePrompt.Checked = settings.DoNotPromptToSave;
             chkAppResultsNewWindow.Checked = settings.Results.AlwaysNewWindow;
@@ -81,6 +82,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             var settings = fxb.settings;
             settings.UseFriendlyNames = chkAppFriendly.Checked;
             settings.Results.Friendly = chkAppFriendlyResults.Checked;
+            settings.Results.BothNames = chkAppBothNamesResults.Checked;
             settings.QueryOptions.UseSingleQuotation = chkAppSingle.Checked;
             settings.QueryOptions.NewQueryTemplate = txtFetch.Text;
             settings.DoNotPromptToSave = chkAppNoSavePrompt.Checked;

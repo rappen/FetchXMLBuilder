@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.ctxmenuGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctxRecord = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxRecordOpen = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,6 +60,7 @@
             this.mnuPagePlus = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuPage = new System.Windows.Forms.ToolStripTextBox();
             this.mnuPageMinus = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuRecordsNumbers = new System.Windows.Forms.ToolStripTextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
             this.panQuickFilter = new System.Windows.Forms.Panel();
@@ -71,7 +72,7 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.gbPagingCookie = new System.Windows.Forms.GroupBox();
             this.crmGridView1 = new Rappen.XTB.Helpers.Controls.XRMDataGridView();
-            this.mnuRecordsNumbers = new System.Windows.Forms.ToolStripTextBox();
+            this.mnuBothNames = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxmenuGrid.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.mnuOptions.SuspendLayout();
@@ -224,6 +225,7 @@
             // 
             this.mnuBehavior.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuFriendly,
+            this.mnuBothNames,
             this.mnuLocalTime,
             this.mnuCopyHeaders,
             this.mnuQuickFilter,
@@ -360,6 +362,18 @@
             this.mnuPageMinus.Visible = false;
             this.mnuPageMinus.Click += new System.EventHandler(this.mnuPagePlusMinus_Click);
             // 
+            // mnuRecordsNumbers
+            // 
+            this.mnuRecordsNumbers.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.mnuRecordsNumbers.BackColor = System.Drawing.SystemColors.Window;
+            this.mnuRecordsNumbers.Name = "mnuRecordsNumbers";
+            this.mnuRecordsNumbers.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.mnuRecordsNumbers.ReadOnly = true;
+            this.mnuRecordsNumbers.Size = new System.Drawing.Size(200, 23);
+            this.mnuRecordsNumbers.Text = "Records 100001-100010 (999999)";
+            this.mnuRecordsNumbers.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.mnuRecordsNumbers.Visible = false;
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.groupBox1);
@@ -455,8 +469,8 @@
             this.crmGridView1.AllowUserToDeleteRows = false;
             this.crmGridView1.AllowUserToOrderColumns = true;
             this.crmGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.crmGridView1.AutoRefresh = false;
             this.crmGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
             this.crmGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -483,17 +497,14 @@
             this.crmGridView1.ColumnDisplayIndexChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.crmGridView1_LayoutChanged);
             this.crmGridView1.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.crmGridView1_LayoutChanged);
             // 
-            // mnuRecordsNumbers
+            // mnuBothNames
             // 
-            this.mnuRecordsNumbers.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.mnuRecordsNumbers.BackColor = System.Drawing.SystemColors.Window;
-            this.mnuRecordsNumbers.Name = "mnuRecordsNumbers";
-            this.mnuRecordsNumbers.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.mnuRecordsNumbers.ReadOnly = true;
-            this.mnuRecordsNumbers.Size = new System.Drawing.Size(200, 23);
-            this.mnuRecordsNumbers.Text = "Records 100001-100010 (999999)";
-            this.mnuRecordsNumbers.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.mnuRecordsNumbers.Visible = false;
+            this.mnuBothNames.Name = "mnuBothNames";
+            this.mnuBothNames.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.B)));
+            this.mnuBothNames.Size = new System.Drawing.Size(228, 22);
+            this.mnuBothNames.Text = "Both Names";
+            this.mnuBothNames.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
             // ResultGrid
             // 
@@ -570,5 +581,6 @@
         private System.Windows.Forms.ToolStripTextBox mnuPage;
         private System.Windows.Forms.ToolStripMenuItem mnuPageMinus;
         private System.Windows.Forms.ToolStripTextBox mnuRecordsNumbers;
+        private System.Windows.Forms.ToolStripMenuItem mnuBothNames;
     }
 }

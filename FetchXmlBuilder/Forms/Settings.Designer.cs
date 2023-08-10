@@ -82,12 +82,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.label3 = new System.Windows.Forms.Label();
             this.tabXmlScheme = new System.Windows.Forms.TabPage();
             this.label4 = new System.Windows.Forms.Label();
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.tabAdvanced = new System.Windows.Forms.TabPage();
             this.btnForceReloadMetadata = new System.Windows.Forms.Button();
             this.btnResetAll = new System.Windows.Forms.Button();
             this.chkShowOData2 = new System.Windows.Forms.CheckBox();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
-            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
+            this.chkAppBothNamesResults = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -209,9 +210,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkAppFriendlyResults.AutoSize = true;
             this.chkAppFriendlyResults.Location = new System.Drawing.Point(20, 43);
             this.chkAppFriendlyResults.Name = "chkAppFriendlyResults";
-            this.chkAppFriendlyResults.Size = new System.Drawing.Size(181, 17);
+            this.chkAppFriendlyResults.Size = new System.Drawing.Size(262, 17);
             this.chkAppFriendlyResults.TabIndex = 2;
-            this.chkAppFriendlyResults.Text = "Friendly results (CTRL+SHIFT+F)";
+            this.chkAppFriendlyResults.Text = "Friendly names/values in results (CTRL+SHIFT+F)";
             this.tt.SetToolTip(this.chkAppFriendlyResults, "Flip between at showing values and headers\r\nwith a friendly name or a technical v" +
         "alue.\r\nNote it can easily be flipped outside these settings with <CTRL+SHIFT>+F\r" +
         "\n");
@@ -220,10 +221,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // chkUseLookup
             // 
             this.chkUseLookup.AutoSize = true;
-            this.chkUseLookup.Location = new System.Drawing.Point(20, 89);
+            this.chkUseLookup.Location = new System.Drawing.Point(20, 112);
             this.chkUseLookup.Name = "chkUseLookup";
             this.chkUseLookup.Size = new System.Drawing.Size(193, 17);
-            this.chkUseLookup.TabIndex = 8;
+            this.chkUseLookup.TabIndex = 5;
             this.chkUseLookup.Text = "Use Lookup control instead of Guid";
             this.tt.SetToolTip(this.chkUseLookup, "Check this to be able to select a record instead of only\r\nwriting the Guid. Most " +
         "used in conditional values.");
@@ -232,10 +233,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // chkAppSingle
             // 
             this.chkAppSingle.AutoSize = true;
-            this.chkAppSingle.Location = new System.Drawing.Point(20, 66);
+            this.chkAppSingle.Location = new System.Drawing.Point(20, 89);
             this.chkAppSingle.Name = "chkAppSingle";
             this.chkAppSingle.Size = new System.Drawing.Size(203, 17);
-            this.chkAppSingle.TabIndex = 3;
+            this.chkAppSingle.TabIndex = 4;
             this.chkAppSingle.Text = "Use single quotation in rendered XML";
             this.tt.SetToolTip(this.chkAppSingle, "Flip this between singe quote and double quotes in the FetchXML.");
             this.chkAppSingle.UseVisualStyleBackColor = true;
@@ -557,6 +558,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // tabAppearance
             // 
             this.tabAppearance.BackColor = System.Drawing.SystemColors.Window;
+            this.tabAppearance.Controls.Add(this.chkAppBothNamesResults);
             this.tabAppearance.Controls.Add(this.chkAppFriendly);
             this.tabAppearance.Controls.Add(this.chkAppFriendlyResults);
             this.tabAppearance.Controls.Add(this.chkAppSingle);
@@ -701,6 +703,33 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.label4.TabIndex = 9;
             this.label4.Text = "XML colors for FetchXML";
             // 
+            // propXmlColors
+            // 
+            this.propXmlColors.CanShowVisualStyleGlyphs = false;
+            this.propXmlColors.HelpVisible = false;
+            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.Location = new System.Drawing.Point(4, 40);
+            this.propXmlColors.Name = "propXmlColors";
+            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            xmlColors1.AttributeKey = System.Drawing.Color.Red;
+            xmlColors1.AttributeKeyColor = "Red";
+            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
+            xmlColors1.AttributeValueColor = "Blue";
+            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            xmlColors1.CommentColor = "0";
+            xmlColors1.Element = System.Drawing.Color.DarkRed;
+            xmlColors1.ElementColor = "DarkRed";
+            xmlColors1.Tag = System.Drawing.Color.Blue;
+            xmlColors1.TagColor = "Blue";
+            xmlColors1.Value = System.Drawing.Color.Black;
+            xmlColors1.ValueColor = "Black";
+            this.propXmlColors.SelectedObject = xmlColors1;
+            this.propXmlColors.Size = new System.Drawing.Size(252, 97);
+            this.propXmlColors.TabIndex = 7;
+            this.propXmlColors.ToolbarVisible = false;
+            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
+            // 
             // tabAdvanced
             // 
             this.tabAdvanced.BackColor = System.Drawing.SystemColors.Window;
@@ -751,32 +780,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         "how it anyway, if you which, but checking this one.");
             this.chkShowOData2.UseVisualStyleBackColor = true;
             // 
-            // propXmlColors
+            // chkAppBothNamesResults
             // 
-            this.propXmlColors.CanShowVisualStyleGlyphs = false;
-            this.propXmlColors.HelpVisible = false;
-            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.Location = new System.Drawing.Point(4, 40);
-            this.propXmlColors.Name = "propXmlColors";
-            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            xmlColors1.AttributeKey = System.Drawing.Color.Red;
-            xmlColors1.AttributeKeyColor = "Red";
-            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
-            xmlColors1.AttributeValueColor = "Blue";
-            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            xmlColors1.CommentColor = "0";
-            xmlColors1.Element = System.Drawing.Color.DarkRed;
-            xmlColors1.ElementColor = "DarkRed";
-            xmlColors1.Tag = System.Drawing.Color.Blue;
-            xmlColors1.TagColor = "Blue";
-            xmlColors1.Value = System.Drawing.Color.Black;
-            xmlColors1.ValueColor = "Black";
-            this.propXmlColors.SelectedObject = xmlColors1;
-            this.propXmlColors.Size = new System.Drawing.Size(252, 97);
-            this.propXmlColors.TabIndex = 7;
-            this.propXmlColors.ToolbarVisible = false;
-            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
+            this.chkAppBothNamesResults.AutoSize = true;
+            this.chkAppBothNamesResults.Location = new System.Drawing.Point(20, 66);
+            this.chkAppBothNamesResults.Name = "chkAppBothNamesResults";
+            this.chkAppBothNamesResults.Size = new System.Drawing.Size(249, 17);
+            this.chkAppBothNamesResults.TabIndex = 3;
+            this.chkAppBothNamesResults.Text = "Both names/values in results (CTRL+SHIFT+B)";
+            this.chkAppBothNamesResults.UseVisualStyleBackColor = true;
             // 
             // Settings
             // 
@@ -876,5 +888,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox chkShowBulkDataUpdater;
         private System.Windows.Forms.Button btnForceReloadMetadata;
+        private System.Windows.Forms.CheckBox chkAppBothNamesResults;
     }
 }

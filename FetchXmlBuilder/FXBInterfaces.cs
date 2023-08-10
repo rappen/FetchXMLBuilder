@@ -148,6 +148,11 @@ namespace Rappen.XTB.FetchXmlBuilder
                 settings.Results.Friendly = !settings.Results.Friendly;
                 dockControlGrid?.ApplySettingsToGrid();
             }
+            else if (e.KeyDown(Keys.B, true, true, false))
+            {
+                settings.Results.BothNames = !settings.Results.BothNames;
+                dockControlGrid?.ApplySettingsToGrid();
+            }
         }
 
         public void ReceiveKeyPressShortcut(KeyPressEventArgs e)

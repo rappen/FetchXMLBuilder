@@ -55,6 +55,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
     public class ResultOptions
     {
         public bool Friendly { get; set; }
+        public bool BothNames { get; set; }
         public bool Id { get; set; }
         public bool Index { get; set; }
         public bool NullColumns { get; set; }

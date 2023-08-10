@@ -79,6 +79,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         internal void ApplySettingsToGrid()
         {
             mnuFriendly.Checked = form.settings.Results.Friendly;
+            mnuBothNames.Checked = form.settings.Results.BothNames;
             mnuIdCol.Checked = form.settings.Results.WorkWithLayout ? false : form.settings.Results.Id;
             mnuIndexCol.Checked = form.settings.Results.WorkWithLayout ? false : form.settings.Results.Index;
             mnuNullCol.Checked = form.settings.Results.WorkWithLayout ? true : form.settings.Results.NullColumns;
@@ -94,6 +95,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             mnuSysCol.Enabled = !form.settings.Results.WorkWithLayout;
 
             crmGridView1.ShowFriendlyNames = mnuFriendly.Checked;
+            crmGridView1.ShowBothNames = mnuBothNames.Checked;
             crmGridView1.ShowIdColumn = mnuIdCol.Checked;
             crmGridView1.ShowIndexColumn = mnuIndexCol.Checked;
             crmGridView1.ShowAllColumnsInColumnOrder = mnuNullCol.Checked;
@@ -111,6 +113,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void UpdateSettingsFromSelectedOptions()
         {
             form.settings.Results.Friendly = mnuFriendly.Checked;
+            form.settings.Results.BothNames = mnuBothNames.Checked;
             form.settings.Results.Index = mnuIndexCol.Checked;
             form.settings.Results.NullColumns = mnuNullCol.Checked;
             form.settings.Results.SysColumns = mnuSysCol.Checked;
@@ -168,27 +171,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 return;
             }
             reloaded = true;
-            foreach (var cell in form.dockControlBuilder.LayoutXML.Cells)
-            {
-                var col = crmGridView1.Columns[cell.Name];
-                if (col != null)
-                {
-                    try
-                    {
-                        col.DisplayIndex = Math.Min(cell.DisplayIndex, crmGridView1.Columns.Count - 1);
-                        col.Width = cell.Width;
-                        col.Visible = cell.Width > 0;
-                    }
-                    catch (Exception ex)
-                    {
-                        if (lasterrormessage < DateTime.Now.AddMinutes(-1))
-                        {
-                            MessageBox.Show($"Oops - unexpcted error. But never mind, just try again...\n\n{ex}");
-                            lasterrormessage = DateTime.Now;
-                        }
-                    }
-                }
-            }
+            crmGridView1.LayoutXML = form.dockControlBuilder?.LayoutXML?.ToXML();
+            crmGridView1.Refresh();
             reloaded = false;
         }
 
@@ -205,7 +189,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 form.dockControlBuilder.LayoutXML = new LayoutXML(entity, form);
             }
             var columns = crmGridView1.Columns.Cast<DataGridViewColumn>()
-                .Where(c => !c.Name.StartsWith("#") && c.Visible && c.Width > 5)
+                .Where(c => !c.Name.StartsWith("#") && !c.Name.EndsWith("|both") && c.Visible && c.Width > 5)
                 .OrderBy(c => c.DisplayIndex)
                 .ToDictionary(c => c.Name, c => c.Width);
             form.dockControlBuilder.LayoutXML.MakeSureAllCellsExistForColumns(columns);
