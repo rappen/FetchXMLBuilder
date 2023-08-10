@@ -135,8 +135,16 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             if (!preventxmlupdate && dockControlLayoutXml?.Visible == true)
             {
-                dockControlBuilder.LayoutXML?.MakeSureAllCellsExistForAttributes();
-                dockControlLayoutXml.UpdateXML(dockControlBuilder.LayoutXML?.ToXML());
+                if (settings.Results.WorkWithLayout)
+                {
+                    dockControlBuilder.LayoutXML?.MakeSureAllCellsExistForAttributes();
+                    dockControlLayoutXml.UpdateXML(dockControlBuilder.LayoutXML?.ToXML());
+                }
+                else
+                {
+                    dockControlLayoutXml.Close();
+                    dockControlBuilder.LayoutXML = null;
+                }
             }
             if (dockControlGrid?.Visible == true)
             {
