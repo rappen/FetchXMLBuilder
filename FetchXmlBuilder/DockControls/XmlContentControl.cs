@@ -81,15 +81,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             chkLiveUpdate.Checked = allowedit && windowSettings.LiveUpdate;
             lblFormatExpander.GroupBoxSetState(tt, windowSettings.FormatExpanded);
             lblActionsExpander.GroupBoxSetState(tt, windowSettings.ActionExpanded);
-            panActions.Visible = contenttype != ContentType.CSharp_Code;
             panLiveUpdate.Visible = allowedit;
             panOk.Visible = allowedit;
+            panParseQE.Visible = contenttype == ContentType.CSharp_Code;
             panFormatting.Visible = allowedit;
             panExecute.Visible = allowedit && contenttype == ContentType.FetchXML;
             panQExOptions.Visible = contenttype == ContentType.CSharp_Code;
             panSQL4CDS.Visible = allowsql;
             panSQL4CDSInfo.Visible = allowsql;
-            panPowerPlatformCLIOptions.Visible = contenttype == ContentType.Power_Platform_CLI;
 
             switch (contentType)
             {
@@ -120,7 +119,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     break;
 
                 case ContentType.Power_Platform_CLI:
-                    panActions.Visible = false;
                     txtXML.ConfigureForCSharp();
                     txtXML.WrapMode = ScintillaNET.WrapMode.Char;
                     break;
@@ -129,6 +127,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     txtXML.ConfigureForJSON();
                     break;
             }
+            XmlContentControl_SizeChanged();
             initializating = false;
         }
 
@@ -1024,13 +1023,12 @@ More votes == released sooner.", "OrganizationServiceContext",
             }
         }
 
-        private void XmlContentControl_SizeChanged(object sender, EventArgs e)
+        private void XmlContentControl_SizeChanged(object sender = null, EventArgs e = null)
         {
             if (panQExOptions.Visible)
             {
-                var maxwidth = qexoptionswidth + (panQEButtons.Visible ? panQEButtons.Width : 0);
-                panQExStylFlavorOptions.Dock = Width < maxwidth ? DockStyle.Top : DockStyle.Left;
-                panQExSmallerOptions.Dock = Width < maxwidth ? DockStyle.Bottom : DockStyle.Left;
+                panQExStylFlavorOptions.Dock = Width < qexoptionswidth ? DockStyle.Top : DockStyle.Left;
+                panQExSmallerOptions.Dock = Width < qexoptionswidth ? DockStyle.Bottom : DockStyle.Left;
                 panQExOptions.Height = panQExSmallerOptions.Dock == DockStyle.Bottom ? 122 : 61;
             }
         }

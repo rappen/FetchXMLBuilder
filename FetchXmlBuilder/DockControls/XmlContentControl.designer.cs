@@ -31,23 +31,24 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlContentControl));
             this.btnSave = new System.Windows.Forms.Button();
-            this.btnParseQE = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.panCancel = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.panActions = new System.Windows.Forms.Panel();
             this.gbActions = new System.Windows.Forms.GroupBox();
+            this.panCopy = new System.Windows.Forms.Panel();
+            this.btnCopy = new System.Windows.Forms.Button();
             this.panSQL4CDS = new System.Windows.Forms.Panel();
             this.btnSQL4CDS = new System.Windows.Forms.Button();
             this.lblActionsExpander = new System.Windows.Forms.Label();
             this.panExecute = new System.Windows.Forms.Panel();
             this.btnExecute = new System.Windows.Forms.Button();
             this.panSave = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.panOk = new System.Windows.Forms.Panel();
             this.panLiveUpdate = new System.Windows.Forms.Panel();
             this.chkLiveUpdate = new System.Windows.Forms.CheckBox();
-            this.panQEButtons = new System.Windows.Forms.Panel();
-            this.btnCopyCsharp = new System.Windows.Forms.Button();
             this.chkQExComments = new System.Windows.Forms.CheckBox();
             this.panFormatting = new System.Windows.Forms.Panel();
             this.gbFormatting = new System.Windows.Forms.GroupBox();
@@ -78,17 +79,18 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.linkFlavorHelp = new System.Windows.Forms.LinkLabel();
-            this.panPowerPlatformCLIOptions = new System.Windows.Forms.Panel();
-            this.btnPowerPlatformCLICopy = new System.Windows.Forms.Button();
+            this.panParseQE = new System.Windows.Forms.Panel();
+            this.btnParseQE = new System.Windows.Forms.Button();
             this.panCancel.SuspendLayout();
             this.panActions.SuspendLayout();
             this.gbActions.SuspendLayout();
+            this.panCopy.SuspendLayout();
             this.panSQL4CDS.SuspendLayout();
             this.panExecute.SuspendLayout();
             this.panSave.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.panOk.SuspendLayout();
             this.panLiveUpdate.SuspendLayout();
-            this.panQEButtons.SuspendLayout();
             this.panFormatting.SuspendLayout();
             this.gbFormatting.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numQExIndent)).BeginInit();
@@ -96,7 +98,7 @@
             this.panQExOptions.SuspendLayout();
             this.panQExSmallerOptions.SuspendLayout();
             this.panQExStylFlavorOptions.SuspendLayout();
-            this.panPowerPlatformCLIOptions.SuspendLayout();
+            this.panParseQE.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSave
@@ -109,17 +111,6 @@
             this.btnSave.Text = "Save...";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // btnParseQE
-            // 
-            this.btnParseQE.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnParseQE.Location = new System.Drawing.Point(9, 37);
-            this.btnParseQE.Name = "btnParseQE";
-            this.btnParseQE.Size = new System.Drawing.Size(75, 23);
-            this.btnParseQE.TabIndex = 3;
-            this.btnParseQE.Text = "Parse";
-            this.btnParseQE.UseVisualStyleBackColor = true;
-            this.btnParseQE.Click += new System.EventHandler(this.btnParseQE_Click);
             // 
             // btnOk
             // 
@@ -166,6 +157,8 @@
             // 
             this.gbActions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbActions.Controls.Add(this.panParseQE);
+            this.gbActions.Controls.Add(this.panCopy);
             this.gbActions.Controls.Add(this.panSQL4CDS);
             this.gbActions.Controls.Add(this.lblActionsExpander);
             this.gbActions.Controls.Add(this.panExecute);
@@ -179,6 +172,26 @@
             this.gbActions.TabIndex = 4;
             this.gbActions.TabStop = false;
             this.gbActions.Text = "Actions";
+            // 
+            // panCopy
+            // 
+            this.panCopy.Controls.Add(this.btnCopy);
+            this.panCopy.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panCopy.Location = new System.Drawing.Point(496, 16);
+            this.panCopy.Name = "panCopy";
+            this.panCopy.Size = new System.Drawing.Size(91, 28);
+            this.panCopy.TabIndex = 9;
+            // 
+            // btnCopy
+            // 
+            this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCopy.Location = new System.Drawing.Point(6, 0);
+            this.btnCopy.Name = "btnCopy";
+            this.btnCopy.Size = new System.Drawing.Size(75, 23);
+            this.btnCopy.TabIndex = 6;
+            this.btnCopy.Text = "Copy";
+            this.btnCopy.UseVisualStyleBackColor = true;
+            this.btnCopy.Click += new System.EventHandler(this.btnCopyText_Click);
             // 
             // panSQL4CDS
             // 
@@ -239,12 +252,32 @@
             // 
             // panSave
             // 
+            this.panSave.Controls.Add(this.panel1);
             this.panSave.Controls.Add(this.btnSave);
             this.panSave.Dock = System.Windows.Forms.DockStyle.Right;
             this.panSave.Location = new System.Drawing.Point(819, 16);
             this.panSave.Name = "panSave";
             this.panSave.Size = new System.Drawing.Size(91, 28);
             this.panSave.TabIndex = 2;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.button1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(91, 28);
+            this.panel1.TabIndex = 7;
+            // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Location = new System.Drawing.Point(6, 0);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "Save...";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // panOk
             // 
@@ -275,26 +308,6 @@
             this.tt.SetToolTip(this.chkLiveUpdate, "Check this to work \"live\" with the FetchXML.");
             this.chkLiveUpdate.UseVisualStyleBackColor = true;
             this.chkLiveUpdate.CheckedChanged += new System.EventHandler(this.chkLiveUpdate_CheckedChanged);
-            // 
-            // panQEButtons
-            // 
-            this.panQEButtons.Controls.Add(this.btnCopyCsharp);
-            this.panQEButtons.Controls.Add(this.btnParseQE);
-            this.panQEButtons.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panQEButtons.Location = new System.Drawing.Point(1002, 0);
-            this.panQEButtons.Name = "panQEButtons";
-            this.panQEButtons.Size = new System.Drawing.Size(91, 61);
-            this.panQEButtons.TabIndex = 10;
-            // 
-            // btnCopyCsharp
-            // 
-            this.btnCopyCsharp.Location = new System.Drawing.Point(9, 6);
-            this.btnCopyCsharp.Name = "btnCopyCsharp";
-            this.btnCopyCsharp.Size = new System.Drawing.Size(75, 23);
-            this.btnCopyCsharp.TabIndex = 4;
-            this.btnCopyCsharp.Text = "Copy";
-            this.btnCopyCsharp.UseVisualStyleBackColor = true;
-            this.btnCopyCsharp.Click += new System.EventHandler(this.btnCopyText_Click);
             // 
             // chkQExComments
             // 
@@ -538,7 +551,7 @@
             this.txtXML.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtXML.Location = new System.Drawing.Point(0, 61);
             this.txtXML.Name = "txtXML";
-            this.txtXML.Size = new System.Drawing.Size(1093, 132);
+            this.txtXML.Size = new System.Drawing.Size(1093, 168);
             this.txtXML.TabIndex = 1;
             this.txtXML.Text = "\r\n\r\n\r\n       loading...";
             this.txtXML.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtXML_KeyPress);
@@ -563,7 +576,6 @@
             // 
             this.panQExOptions.BackColor = System.Drawing.SystemColors.Window;
             this.panQExOptions.Controls.Add(this.panQExSmallerOptions);
-            this.panQExOptions.Controls.Add(this.panQEButtons);
             this.panQExOptions.Controls.Add(this.panQExStylFlavorOptions);
             this.panQExOptions.Dock = System.Windows.Forms.DockStyle.Top;
             this.panQExOptions.Location = new System.Drawing.Point(0, 0);
@@ -639,25 +651,25 @@
             this.linkFlavorHelp.Text = "linkLabel2";
             this.linkFlavorHelp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkFlavorHelp_LinkClicked);
             // 
-            // panPowerPlatformCLIOptions
+            // panParseQE
             // 
-            this.panPowerPlatformCLIOptions.Controls.Add(this.btnPowerPlatformCLICopy);
-            this.panPowerPlatformCLIOptions.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panPowerPlatformCLIOptions.Location = new System.Drawing.Point(0, 193);
-            this.panPowerPlatformCLIOptions.Name = "panPowerPlatformCLIOptions";
-            this.panPowerPlatformCLIOptions.Size = new System.Drawing.Size(1093, 36);
-            this.panPowerPlatformCLIOptions.TabIndex = 12;
+            this.panParseQE.Controls.Add(this.btnParseQE);
+            this.panParseQE.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panParseQE.Location = new System.Drawing.Point(405, 16);
+            this.panParseQE.Name = "panParseQE";
+            this.panParseQE.Size = new System.Drawing.Size(91, 28);
+            this.panParseQE.TabIndex = 10;
             // 
-            // btnPowerPlatformCLICopy
+            // btnParseQE
             // 
-            this.btnPowerPlatformCLICopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnPowerPlatformCLICopy.Location = new System.Drawing.Point(1011, 6);
-            this.btnPowerPlatformCLICopy.Name = "btnPowerPlatformCLICopy";
-            this.btnPowerPlatformCLICopy.Size = new System.Drawing.Size(75, 23);
-            this.btnPowerPlatformCLICopy.TabIndex = 0;
-            this.btnPowerPlatformCLICopy.Text = "Copy";
-            this.btnPowerPlatformCLICopy.UseVisualStyleBackColor = true;
-            this.btnPowerPlatformCLICopy.Click += new System.EventHandler(this.btnCopyText_Click);
+            this.btnParseQE.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnParseQE.Location = new System.Drawing.Point(6, 0);
+            this.btnParseQE.Name = "btnParseQE";
+            this.btnParseQE.Size = new System.Drawing.Size(75, 23);
+            this.btnParseQE.TabIndex = 6;
+            this.btnParseQE.Text = "Parse";
+            this.btnParseQE.UseVisualStyleBackColor = true;
+            this.btnParseQE.Click += new System.EventHandler(this.btnParseQE_Click);
             // 
             // XmlContentControl
             // 
@@ -667,7 +679,6 @@
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(1093, 359);
             this.Controls.Add(this.txtXML);
-            this.Controls.Add(this.panPowerPlatformCLIOptions);
             this.Controls.Add(this.panQExOptions);
             this.Controls.Add(this.panSQL4CDSInfo);
             this.Controls.Add(this.panFormatting);
@@ -689,13 +700,14 @@
             this.panActions.ResumeLayout(false);
             this.gbActions.ResumeLayout(false);
             this.gbActions.PerformLayout();
+            this.panCopy.ResumeLayout(false);
             this.panSQL4CDS.ResumeLayout(false);
             this.panExecute.ResumeLayout(false);
             this.panSave.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.panOk.ResumeLayout(false);
             this.panLiveUpdate.ResumeLayout(false);
             this.panLiveUpdate.PerformLayout();
-            this.panQEButtons.ResumeLayout(false);
             this.panFormatting.ResumeLayout(false);
             this.gbFormatting.ResumeLayout(false);
             this.gbFormatting.PerformLayout();
@@ -706,7 +718,7 @@
             this.panQExSmallerOptions.PerformLayout();
             this.panQExStylFlavorOptions.ResumeLayout(false);
             this.panQExStylFlavorOptions.PerformLayout();
-            this.panPowerPlatformCLIOptions.ResumeLayout(false);
+            this.panParseQE.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -716,7 +728,6 @@
         private System.Windows.Forms.Panel panCancel;
         private System.Windows.Forms.Button btnCancel;
         internal System.Windows.Forms.Button btnExecute;
-        internal System.Windows.Forms.Button btnParseQE;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Panel panActions;
         private System.Windows.Forms.GroupBox gbActions;
@@ -728,7 +739,6 @@
         private System.Windows.Forms.RadioButton rbFormatMini;
         internal System.Windows.Forms.Button btnFormat;
         private System.Windows.Forms.Panel panExecute;
-        private System.Windows.Forms.Panel panQEButtons;
         private System.Windows.Forms.Panel panSave;
         private System.Windows.Forms.Panel panOk;
         private System.Windows.Forms.Panel panLiveUpdate;
@@ -759,8 +769,11 @@
         private System.Windows.Forms.Button btnQExFlavorSettings;
         private System.Windows.Forms.Panel panQExSmallerOptions;
         private System.Windows.Forms.Panel panQExStylFlavorOptions;
-        private System.Windows.Forms.Button btnCopyCsharp;
-        private System.Windows.Forms.Panel panPowerPlatformCLIOptions;
-        private System.Windows.Forms.Button btnPowerPlatformCLICopy;
+        private System.Windows.Forms.Panel panCopy;
+        private System.Windows.Forms.Button btnCopy;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Panel panParseQE;
+        private System.Windows.Forms.Button btnParseQE;
     }
 }

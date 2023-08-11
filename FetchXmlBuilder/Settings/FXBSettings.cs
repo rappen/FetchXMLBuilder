@@ -82,7 +82,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public DockState CSharp { get; set; } = DockState.DockRight;
         public DockState SQLQuery { get; set; } = DockState.DockRight;
         public DockState FlowList { get; set; } = DockState.Float;
-        public DockState PowerPlatformCLI { get; set; } = DockState.DockBottom;
+        public DockState PowerPlatformCLI { get; set; } = DockState.DockRight;
     }
 
     public class ContentWindow
