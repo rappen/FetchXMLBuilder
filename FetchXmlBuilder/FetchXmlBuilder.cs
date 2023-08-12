@@ -29,10 +29,13 @@ namespace Rappen.XTB.FetchXmlBuilder
         #region AI to log
 
         private const string aiEndpoint = "https://dc.services.visualstudio.com/v2/track";
-        private const string aiKey = "eed73022-2444-45fd-928b-5eebd8fa46a6";    // jonas@rappen.net tenant, XrmToolBox
+        private const string aiKey1 = "eed73022-2444-45fd-928b-5eebd8fa46a6";    // jonas@rappen.net tenant, XrmToolBox
 
         //private const string aiKey = "b6a4ec7c-ab43-4780-97cd-021e99506337";   // jonas@jonasr.app, XrmToolBoxInsights
-        private readonly AppInsights ai;
+        private const string aiKey2 = "d46e9c12-ee8b-4b28-9643-dae62ae7d3d4";    // jonas@jonasr.app, XrmToolBoxTools
+
+        private readonly AppInsights ai1;
+        private readonly AppInsights ai2;
 
         #endregion AI to log
 
@@ -67,7 +70,8 @@ namespace Rappen.XTB.FetchXmlBuilder
 
             //tslAbout.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString() + " by Jonas Rapp";
 
-            ai = new AppInsights(aiEndpoint, aiKey, Assembly.GetExecutingAssembly(), "FetchXML Builder");
+            ai1 = new AppInsights(aiEndpoint, aiKey1, Assembly.GetExecutingAssembly(), "FetchXML Builder");
+            ai2 = new AppInsights(aiEndpoint, aiKey2, Assembly.GetExecutingAssembly(), "FetchXML Builder");
             var theme = new VS2015LightTheme();
             dockContainer.Theme = theme;
             dockContainer.Theme.Skin.DockPaneStripSkin.TextFont = Font;
@@ -239,7 +243,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             dockControlSQL?.Close();
             dockControlMeta?.Close();
             SaveSetting();
-            LogUse("Close");
+            LogUse("Close", ai2: true);
         }
 
         public void ApplyState(object state)
@@ -300,9 +304,16 @@ namespace Rappen.XTB.FetchXmlBuilder
             return warning;
         }
 
-        internal void LogUse(string action, bool forceLog = false, double? count = null, double? duration = null)
+        internal void LogUse(string action, bool forceLog = false, double? count = null, double? duration = null, bool ai1 = true, bool ai2 = false)
         {
-            ai.WriteEvent(action, count, duration, HandleAIResult);
+            if (ai1)
+            {
+                this.ai1.WriteEvent(action, count, duration, HandleAIResult);
+            }
+            if (ai2)
+            {
+                this.ai2.WriteEvent(action, count, duration, HandleAIResult);
+            }
         }
 
         private void HandleAIResult(string result)
@@ -376,7 +387,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 var oldversion = settings.CurrentVersion;
                 settings.CurrentVersion = version;
                 SaveSetting();
-                LogUse("ShowWelcome");
+                LogUse("ShowWelcome", ai2: true);
                 Welcome.ShowWelcome(this, oldversion);
             }
         }
@@ -536,7 +547,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void FetchXmlBuilder_Load(object sender, EventArgs e)
         {
-            LogUse("Load");
+            LogUse("Load", ai2: true);
             CheckIntegrationTools();
             SetupDockControls();
             ApplySettings(true);

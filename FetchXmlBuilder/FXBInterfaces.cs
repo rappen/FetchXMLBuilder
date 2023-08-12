@@ -87,7 +87,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 callerArgs.SourcePlugin == URLcaller ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_web :
                 Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_return;
             tsbReturnToCaller.ToolTipText = callerArgs.SourcePlugin == URLcaller ? "Show 'Sharing Queries' on my website." : "Return " + requestedType + " to " + callerArgs.SourcePlugin;
-            LogUse("CalledBy." + callerArgs.SourcePlugin);
+            LogUse("CalledBy." + callerArgs.SourcePlugin, ai2: true);
             if (callerArgs.SourcePlugin == "View Designer" && !connectionsettings.TipsAgainstOrViewDesignerToolShown)
             {
                 if (MessageBox.Show("Did you know you can work with the layouts too in the FetchXML Builder?\nClick the Help button to see how!\n\nDon't show again.",
@@ -240,7 +240,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 return;
             }
-            LogUse("ReturnTo." + callerArgs.SourcePlugin);
+            LogUse("ReturnTo." + callerArgs.SourcePlugin, ai2: true);
             if (callerArgs.SourcePlugin == URLcaller)
             {
                 OpenURL("https://fetchxmlbuilder.com/sharing-queries/");
