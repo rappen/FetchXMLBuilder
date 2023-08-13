@@ -41,7 +41,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             txtPagingCookie.Text = queryinfo.Results.PagingCookie;
             if (queryinfo.Query is FetchExpression && !form.settings.Results.RetrieveAllPages && (queryinfo.Results.MoreRecords || queryinfo.PageNo > 1))
             {
-                SetPageNo();
+                mnuPage.Text = (queryinfo.PageNo < 10 ? "Page " : "") + queryinfo.PageNo.ToString() + (queryinfo.Pages > 0 ? $"/{queryinfo.Pages}" : "");
                 mnuPageMinus.Enabled = queryinfo.PageNo > 1;
                 mnuPagePlus.Enabled = queryinfo.Results.MoreRecords;
                 mnuPage.Visible = true;
@@ -74,11 +74,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 mnuRecordsNumbers.Visible = false;
             }
-        }
-
-        private void SetPageNo()
-        {
-            mnuPage.Text = (queryinfo.PageNo < 10 ? "Page " : "") + queryinfo.PageNo.ToString() + (queryinfo.Pages > 0 ? $"/{queryinfo.Pages}" : "");
         }
 
         internal void ApplySettingsToGrid()
