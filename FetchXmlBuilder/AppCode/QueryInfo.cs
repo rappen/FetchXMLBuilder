@@ -59,7 +59,10 @@ namespace Rappen.XTB.FetchXmlBuilder.AppCode
                     Pages = (int)Math.Ceiling((decimal)result.TotalRecordCount / PageSize);
                 }
                 RecordFrom = 1 + (PageNo - 1) * PageSize;
-                RecordTo = RecordFrom - 1 + result.Entities.Count;
+                if (result.Entities.Count > 0)
+                {
+                    RecordTo = RecordFrom - 1 + result.Entities.Count;
+                }
             }
         }
     }

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.ctxmenuGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctxRecord = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxRecordOpen = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,6 +47,7 @@
             this.mnuOptions = new System.Windows.Forms.MenuStrip();
             this.mnuBehavior = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuFriendly = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuBothNames = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuLocalTime = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuCopyHeaders = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuQuickFilter = new System.Windows.Forms.ToolStripMenuItem();
@@ -72,7 +73,6 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.gbPagingCookie = new System.Windows.Forms.GroupBox();
             this.crmGridView1 = new Rappen.XTB.Helpers.Controls.XRMDataGridView();
-            this.mnuBothNames = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxmenuGrid.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.mnuOptions.SuspendLayout();
@@ -245,6 +245,15 @@
             this.mnuFriendly.Text = "Friendly Names";
             this.mnuFriendly.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
+            // mnuBothNames
+            // 
+            this.mnuBothNames.Name = "mnuBothNames";
+            this.mnuBothNames.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.B)));
+            this.mnuBothNames.Size = new System.Drawing.Size(228, 22);
+            this.mnuBothNames.Text = "Both Names";
+            this.mnuBothNames.Click += new System.EventHandler(this.chkGridOptions_Click);
+            // 
             // mnuLocalTime
             // 
             this.mnuLocalTime.CheckOnClick = true;
@@ -343,13 +352,17 @@
             // 
             this.mnuPage.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.mnuPage.BackColor = System.Drawing.SystemColors.Window;
+            this.mnuPage.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.mnuPage.Name = "mnuPage";
             this.mnuPage.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.mnuPage.ReadOnly = true;
             this.mnuPage.Size = new System.Drawing.Size(80, 23);
             this.mnuPage.Text = "Page";
             this.mnuPage.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.mnuPage.Visible = false;
+            this.mnuPage.Enter += new System.EventHandler(this.mnuPage_Enter);
+            this.mnuPage.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.mnuPage_KeyPress);
+            this.mnuPage.Validating += new System.ComponentModel.CancelEventHandler(this.mnuPage_Validating);
+            this.mnuPage.Validated += new System.EventHandler(this.mnuPage_Validated);
             // 
             // mnuPageMinus
             // 
@@ -469,8 +482,8 @@
             this.crmGridView1.AllowUserToDeleteRows = false;
             this.crmGridView1.AllowUserToOrderColumns = true;
             this.crmGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             this.crmGridView1.AutoRefresh = false;
             this.crmGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
             this.crmGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -496,15 +509,6 @@
             this.crmGridView1.RecordEnter += new Rappen.XTB.Helpers.Controls.XRMRecordEventHandler(this.crmGridView1_RecordEnter);
             this.crmGridView1.ColumnDisplayIndexChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.crmGridView1_LayoutChanged);
             this.crmGridView1.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.crmGridView1_LayoutChanged);
-            // 
-            // mnuBothNames
-            // 
-            this.mnuBothNames.Name = "mnuBothNames";
-            this.mnuBothNames.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.B)));
-            this.mnuBothNames.Size = new System.Drawing.Size(228, 22);
-            this.mnuBothNames.Text = "Both Names";
-            this.mnuBothNames.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
             // ResultGrid
             // 

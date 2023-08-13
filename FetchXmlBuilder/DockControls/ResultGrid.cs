@@ -41,7 +41,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             txtPagingCookie.Text = queryinfo.Results.PagingCookie;
             if (queryinfo.Query is FetchExpression && !form.settings.Results.RetrieveAllPages && (queryinfo.Results.MoreRecords || queryinfo.PageNo > 1))
             {
-                mnuPage.Text = (queryinfo.PageNo < 10 ? "Page " : "") + queryinfo.PageNo.ToString() + (queryinfo.Pages > 0 ? $"/{queryinfo.Pages}" : "");
+                SetPageNo();
                 mnuPageMinus.Enabled = queryinfo.PageNo > 1;
                 mnuPagePlus.Enabled = queryinfo.Results.MoreRecords;
                 mnuPage.Visible = true;
@@ -74,6 +74,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 mnuRecordsNumbers.Visible = false;
             }
+        }
+
+        private void SetPageNo()
+        {
+            mnuPage.Text = (queryinfo.PageNo < 10 ? "Page " : "") + queryinfo.PageNo.ToString() + (queryinfo.Pages > 0 ? $"/{queryinfo.Pages}" : "");
         }
 
         internal void ApplySettingsToGrid()
@@ -348,23 +353,55 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             gbPagingCookie.Visible = mnuPagingCookie.Checked;
         }
 
-        private void mnuPagePlusMinus_Click(object sender, EventArgs e)
+        private void RetrievePageNo(int page)
         {
-            var direction = sender == mnuPageMinus ? -1 : sender == mnuPagePlus ? 1 : 0;
-            if (direction != 0 && queryinfo.Query is FetchExpression fetchexpr)
+            if (queryinfo.Query is FetchExpression fetchexpr)
             {
-                mnuPageMinus.Enabled = false;
-                mnuPagePlus.Enabled = false;
-
-                //var fetchxml = Fetch.FromString(fetchexpr.Query);
-                //fetchxml.PageNumber = (fetchxml.PageNumber ?? 1) + direction;
-
-                var page = queryinfo.PageNo + direction;
                 var fetchdoc = new XmlDocument();
                 fetchdoc.LoadXml(fetchexpr.Query);
                 var fetchnode = fetchdoc.SelectSingleNode("fetch") as XmlElement;
                 fetchnode.SetAttribute("page", page.ToString());
                 form.FetchResults(fetchdoc.OuterXml);
+            }
+        }
+
+        private void mnuPagePlusMinus_Click(object sender, EventArgs e)
+        {
+            var direction = sender == mnuPageMinus ? -1 : sender == mnuPagePlus ? 1 : 0;
+            if (direction != 0)
+            {
+                mnuPageMinus.Enabled = false;
+                mnuPagePlus.Enabled = false;
+                var page = queryinfo.PageNo + direction;
+                RetrievePageNo(page);
+            }
+        }
+
+        private void mnuPage_Enter(object sender, EventArgs e)
+        {
+            mnuPage.Text = "";
+        }
+
+        private void mnuPage_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = !int.TryParse(mnuPage.Text, out var _);
+        }
+
+        private void mnuPage_Validated(object sender, EventArgs e)
+        {
+            if (int.TryParse(mnuPage.Text, out int page) && page != queryinfo.PageNo)
+            {
+                RetrievePageNo(page);
+            }
+        }
+
+        private void mnuPage_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter || e.KeyChar == (char)Keys.Tab)
+            {
+                e.KeyChar = (char)Keys.None;
+                e.Handled = true;
+                mnuRecordsNumbers.Focus();
             }
         }
     }
