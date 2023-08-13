@@ -31,14 +31,8 @@ namespace Rappen.XTB.FetchXmlBuilder.AppCode
                     fetchdoc.LoadXml(fetch.Query);
                     if (fetchdoc.SelectSingleNode("fetch") is XmlElement fetchnode)
                     {
-                        if (fetchnode.AttributeInt("count") is int count)
-                        {
-                            PageSize = count;
-                        }
-                        if (fetchnode.AttributeInt("page") is int page)
-                        {
-                            PageNo = page;
-                        }
+                        PageSize = Math.Min(fetchnode.AttributeInt("count") ?? 5000, 5000);
+                        PageNo = fetchnode.AttributeInt("page") ?? 1;
                     }
                 }
             }
@@ -60,7 +54,7 @@ namespace Rappen.XTB.FetchXmlBuilder.AppCode
                         PageNo = page;
                     }
                 }
-                if (result.TotalRecordCount > -1 && PageSize > 0)
+                if (result.TotalRecordCount > -1 && result.TotalRecordCount < 5000 && PageSize > 0 && result.TotalRecordCount > PageSize)
                 {
                     Pages = (int)Math.Ceiling((decimal)result.TotalRecordCount / PageSize);
                 }

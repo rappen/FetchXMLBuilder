@@ -59,7 +59,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 if (queryinfo.RecordFrom > 1 || queryinfo.Results.MoreRecords)
                 {
                     mnuRecordsNumbers.Text = $"Records: {queryinfo.RecordFrom}-{queryinfo.RecordTo}";
-                    if (queryinfo.Results.TotalRecordCount > 0)
+                    if (queryinfo.Results.TotalRecordCount > 0 && queryinfo.Results.TotalRecordCount < 5000)
                     {
                         mnuRecordsNumbers.Text += $" ({queryinfo.Results.TotalRecordCount})";
                     }
