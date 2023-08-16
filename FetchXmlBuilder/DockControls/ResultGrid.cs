@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using Rappen.XRM.Helpers.Extensions;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Views;
@@ -352,8 +353,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             if (queryinfo.Query is FetchExpression fetchexpr)
             {
-                var fetchdoc = new XmlDocument();
-                fetchdoc.LoadXml(fetchexpr.Query);
+                var fetchdoc = fetchexpr.Query.ToXml();
                 var fetchnode = fetchdoc.SelectSingleNode("fetch") as XmlElement;
                 fetchnode.SetAttribute("page", page.ToString());
                 form.FetchResults(fetchdoc.OuterXml);

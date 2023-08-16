@@ -139,8 +139,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal static string GetFetchMini(string fetchxml, char quotationchar = '\'', bool removecomments = true)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(fetchxml);
+            XmlDocument doc = fetchxml.ToXml();
             var comments = doc.SelectNodes("//comment()");
             if (comments.Count > 0 && removecomments)
             {
@@ -809,8 +808,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             try
             {
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(txtXML.Text);
+                XmlDocument doc = txtXML.Text.ToXml();
                 if (doc.OuterXml != liveUpdateXml)
                 {
                     switch (contenttype)

@@ -227,9 +227,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     }
                     else if (completedargs.Result is string)
                     {
-                        XmlDocument doc = new XmlDocument();
-                        doc.LoadXml(completedargs.Result.ToString());
-                        dockControlBuilder.Init(doc.OuterXml, null, $"parse {style}", true);
+                        dockControlBuilder.Init(completedargs.Result.ToString().ToXml().OuterXml, null, $"parse {style}", true);
                     }
                     working = false;
                 }
@@ -262,9 +260,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     }
                     else if (completedargs.Result is string)
                     {
-                        XmlDocument doc = new XmlDocument();
-                        doc.LoadXml(completedargs.Result.ToString());
-                        ShowResultControl(doc.OuterXml, ContentType.FetchXML_Result, SaveFormat.XML, settings.DockStates.FetchResult);
+                        ShowResultControl(completedargs.Result.ToString().ToXml().OuterXml, ContentType.FetchXML_Result, SaveFormat.XML, settings.DockStates.FetchResult);
                     }
                 }
             });
@@ -328,8 +324,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                             }
                             else if (query is FetchExpression fex && fex.Query is string pagefetch)
                             {
-                                var pagedoc = new XmlDocument();
-                                pagedoc.LoadXml(pagefetch);
+                                var pagedoc = pagefetch.ToXml();
                                 if (pagedoc.SelectSingleNode("fetch") is XmlElement fetchnode)
                                 {
                                     if (!int.TryParse(fetchnode.GetAttribute("page"), out int pageno))

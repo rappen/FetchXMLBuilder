@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
+using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.FetchXML;
 using System;
 using System.Xml;
@@ -27,9 +28,7 @@ namespace Rappen.XTB.FetchXmlBuilder.AppCode
                 query = value;
                 if (query is FetchExpression fetch)
                 {
-                    var fetchdoc = new XmlDocument();
-                    fetchdoc.LoadXml(fetch.Query);
-                    if (fetchdoc.SelectSingleNode("fetch") is XmlElement fetchnode)
+                    if (fetch.Query.ToXml().SelectSingleNode("fetch") is XmlElement fetchnode)
                     {
                         PageSize = Math.Min(fetchnode.AttributeInt("count") ?? 5000, 5000);
                         PageNo = fetchnode.AttributeInt("page") ?? 1;
@@ -46,9 +45,7 @@ namespace Rappen.XTB.FetchXmlBuilder.AppCode
                 result = value;
                 if (!string.IsNullOrEmpty(result.PagingCookie))
                 {
-                    var cookdoc = new XmlDocument();
-                    cookdoc.LoadXml(result.PagingCookie);
-                    if (cookdoc.SelectSingleNode("cookie") is XmlElement cookie &&
+                    if (result.PagingCookie.ToXml().SelectSingleNode("cookie") is XmlElement cookie &&
                         cookie.AttributeInt("page") is int page)
                     {
                         PageNo = page;

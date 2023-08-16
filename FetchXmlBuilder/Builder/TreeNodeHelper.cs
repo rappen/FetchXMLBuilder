@@ -1,4 +1,5 @@
-﻿using Rappen.XRM.Helpers.FetchXML;
+﻿using Rappen.XRM.Helpers.Extensions;
+using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using System.Collections.Generic;
@@ -544,12 +545,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
             return childNode;
         }
 
-        internal static bool IsFetchAggregate(string fetch)
-        {
-            var xml = new XmlDocument();
-            xml.LoadXml(fetch);
-            return IsFetchAggregate(xml);
-        }
+        internal static bool IsFetchAggregate(string fetch) => IsFetchAggregate(fetch.ToXml());
 
         private static bool IsFetchAggregate(XmlDocument xml)
         {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
-using System.Xml;
+using Rappen.XRM.Helpers.Extensions;
 
 namespace Rappen.XTB.FetchXmlBuilder.Extensions
 {
@@ -21,8 +21,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Extensions
                 Query = query
             };
             QueryExpressionToFetchXmlResponse response = (QueryExpressionToFetchXmlResponse)organizationService.Execute(request);
-            var doc = new XmlDocument();
-            doc.LoadXml(response.FetchXml);
+            var doc = response.FetchXml.ToXml();
             var fetchnode = doc.SelectSingleNode("fetch");
             if (fetchnode != null && fetchnode.Attributes["useraworderby"] != null)
             {

@@ -1,4 +1,5 @@
-﻿using Rappen.XTB.FetchXmlBuilder.Settings;
+﻿using Rappen.XRM.Helpers.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Settings;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
@@ -12,8 +13,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
         public static string GetCSharpFetchXMLCode(string fetchXml, CodeGenerators codesettings)
         {
             var data = new Dictionary<string, string>();
-            var xml = new XmlDocument();
-            xml.LoadXml(fetchXml);
+            var xml = fetchXml.ToXml();
 
             if (codesettings.FilterVariables)
             {

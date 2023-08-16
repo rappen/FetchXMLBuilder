@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using Rappen.XRM.Helpers.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.XmlEditorUtils;
 using System;
@@ -193,9 +194,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             foreach (var view in views.Entities)
             {
                 var layout = view.GetAttributeValue<string>("layoutxml");
-                var layoutdoc = new XmlDocument();
-                layoutdoc.LoadXml(layout);
-                if (layoutdoc.SelectSingleNode("grid") is XmlElement grid &&
+                if (layout.ToXml().SelectSingleNode("grid") is XmlElement grid &&
                     grid.SelectSingleNode("row") is XmlElement row)
                 {
                     viewcolumns.AddRange(row.ChildNodes
@@ -213,9 +212,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             foreach (var form in forms.Entities)
             {
                 var formxml = form.GetAttributeValue<string>("formxml");
-                var formdoc = new XmlDocument();
-                formdoc.LoadXml(formxml);
-                var nodes = formdoc.ChildNodes;
+                var nodes = formxml.ToXml().ChildNodes;
                 foreach (XmlNode node in nodes)
                 {
                     formcolumns.AddRange(FindCellControlFields(node));

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Rappen.XRM.Helpers.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
@@ -12,10 +13,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
         {
             var data = new Dictionary<string, string>();
             var lines = new List<string>();
-            var xml = new XmlDocument();
-            xml.LoadXml(fetchXml);
 
-            Convert(xml.DocumentElement, 0, lines, data);
+            Convert(fetchXml.ToXml().DocumentElement, 0, lines, data);
 
             var js = "";
 

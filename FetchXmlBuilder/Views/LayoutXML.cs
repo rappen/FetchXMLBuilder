@@ -1,7 +1,7 @@
-﻿using Rappen.XTB.FetchXmlBuilder.Builder;
+﻿using Microsoft.Xrm.Sdk.Metadata;
+using Rappen.XRM.Helpers.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Builder;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
-using Microsoft.Xrm.Sdk.Metadata;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -58,9 +58,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             if (!string.IsNullOrEmpty(layoutxmlstr))
             {
                 createdfromaview = fxb.View != null;
-                var doc = new XmlDocument();
-                doc.LoadXml(layoutxmlstr);
-                if (doc.SelectSingleNode("grid") is XmlElement grid)
+                if (layoutxmlstr.ToXml().SelectSingleNode("grid") is XmlElement grid)
                 {
                     if (int.TryParse(grid.AttributeValue("object"), out int entityid))
                     {
