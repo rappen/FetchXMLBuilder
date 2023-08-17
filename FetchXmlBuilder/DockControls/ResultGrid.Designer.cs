@@ -380,6 +380,7 @@
             // 
             this.mnuRecordsNumbers.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.mnuRecordsNumbers.BackColor = System.Drawing.SystemColors.Window;
+            this.mnuRecordsNumbers.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.mnuRecordsNumbers.Name = "mnuRecordsNumbers";
             this.mnuRecordsNumbers.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.mnuRecordsNumbers.ReadOnly = true;

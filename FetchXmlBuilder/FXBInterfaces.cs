@@ -51,6 +51,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             callerArgs = message;
             var fetchXml = string.Empty;
             var layoutxml = string.Empty;
+            var fromview = false;
             var requestedType = "FetchXML";
             if (message.TargetArgument != null)
             {
@@ -72,6 +73,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                         View = GetViewById(id);
                         fetchXml = View?.GetAttributeValue<string>("fetchxml");
                         layoutxml = View?.GetAttributeValue<string>("layoutxml");
+                        fromview = true;
                     }
                     else
                     {
@@ -79,7 +81,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     }
                 }
             }
-            dockControlBuilder.Init(fetchXml, layoutxml, $"called from {message.SourcePlugin}", false);
+            dockControlBuilder.Init(fetchXml, layoutxml, fromview, $"called from {message.SourcePlugin}", false);
             attributesChecksum = dockControlBuilder.GetAttributesSignature();
             tsbReturnToCaller.Text = callerArgs.SourcePlugin == URLcaller ? "FetchXML from an URL" : "Return FetchXML";
             tsbReturnToCaller.Image =

@@ -250,7 +250,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             if (state is string fetch && fetch.ToLowerInvariant().StartsWith("<fetch"))
             {
-                dockControlBuilder.Init(fetch, null, null, false);
+                dockControlBuilder.Init(fetch, null, false, null, false);
             }
         }
 
@@ -376,7 +376,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             tsmiShowOData.Visible = settings.ShowOData2;
             if (reloadquery && connectionsettings != null && !string.IsNullOrWhiteSpace(connectionsettings.FetchXML))
             {
-                dockControlBuilder.Init(connectionsettings.FetchXML, connectionsettings.LayoutXML, "loaded from last session", false);
+                dockControlBuilder.Init(connectionsettings.FetchXML, connectionsettings.LayoutXML, false, "loaded from last session", false);
             }
             dockControlBuilder.lblQAExpander.GroupBoxSetState(null, settings.QueryOptions.ShowQuickActions);
             var ass = Assembly.GetExecutingAssembly().GetName();
@@ -595,7 +595,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     return;
                 }
                 LogUse("New");
-                dockControlBuilder.Init(null, null, "new", false);
+                dockControlBuilder.Init(null, null, false, "new", false);
                 return;
             }
             var newconnection = sender == tsmiNewNewConnection;
@@ -752,7 +752,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             if (sender is ToolStripMenuItem menu && menu.Tag is QueryDefinition query)
             {
-                dockControlBuilder.Init(query.Fetch, null, $"open repo {query.Name}", false);
+                dockControlBuilder.Init(query.Fetch, null, false, $"open repo {query.Name}", false);
                 tsbRepo.Tag = query;
                 dockControlBuilder.SetFetchName($"Repo: {query.Name}");
             }

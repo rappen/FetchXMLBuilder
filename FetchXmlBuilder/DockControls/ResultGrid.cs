@@ -142,6 +142,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             crmGridView1.Refresh();
             if (form.dockControlBuilder.LayoutXML == null)
             {
+                ShowHiddenColumns();
                 crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
             }
             else
@@ -155,6 +156,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             GetLayoutFromGrid();
             crmGridView1.ResumeLayout();
             reloaded = false;
+        }
+
+        private void ShowHiddenColumns()
+        {
+            crmGridView1.Columns.Cast<DataGridViewColumn>()
+                .Where(c => !c.Name.StartsWith("#") && !c.Visible)
+                .ToList()
+                .ForEach(c => c.Visible = true);
         }
 
         internal void SetQueryIfChangesDesign()

@@ -326,7 +326,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             if (feed.Contains("cint_fetchxml"))
             {
                 CWPFeed = feed.Contains("cint_id") ? feed["cint_id"].ToString() : feedid;
-                dockControlBuilder.Init(feed["cint_fetchxml"].ToString(), null, "open CWP feed", false);
+                dockControlBuilder.Init(feed["cint_fetchxml"].ToString(), null, false, "open CWP feed", false);
                 LogUse("OpenCWP");
             }
             EnableControls(true);
@@ -350,7 +350,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 FileName = ofd.FileName;
                 var fetchDoc = new XmlDocument();
                 fetchDoc.Load(ofd.FileName);
-                dockControlBuilder.Init(fetchDoc.OuterXml, null, "open file", true);
+                dockControlBuilder.Init(fetchDoc.OuterXml, null, false, "open file", true);
                 LogUse("OpenFile");
             }
             EnableControls(true);
@@ -369,7 +369,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 if (mlselector.View.Contains("query") && !string.IsNullOrEmpty(mlselector.View["query"].ToString()))
                 {
                     DynML = mlselector.View;
-                    dockControlBuilder.Init(DynML["query"].ToString(), null, "open marketing list", false);
+                    dockControlBuilder.Init(DynML["query"].ToString(), null, false, "open marketing list", false);
                     LogUse("OpenML");
                 }
                 else
@@ -403,7 +403,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     if (viewselector.View.Contains("fetchxml") && !string.IsNullOrEmpty(viewselector.View["fetchxml"].ToString()))
                     {
                         View = viewselector.View;
-                        dockControlBuilder.Init(View["fetchxml"].ToString(), View["layoutxml"].ToString(), "open view", false);
+                        dockControlBuilder.Init(View["fetchxml"].ToString(), View["layoutxml"].ToString(), true, "open view", false);
                         attributesChecksum = dockControlBuilder.GetAttributesSignature();
                         LogUse($"OpenView-{(View.LogicalName == "savedquery" ? "S" : "P")}");
                     }

@@ -112,6 +112,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
                 {
                     Name = nw.Key,
                     Width = nw.Value,
+                    IsHidden = nw.Value < 5,
                     Attribute = fxb.dockControlBuilder.GetAttributeNodeFromLayoutName(nw.Key)
                 }));
             Cells.ToList().ForEach(c => c.Width = namewidths.ContainsKey(c.Name) ? namewidths[c.Name] : 0);

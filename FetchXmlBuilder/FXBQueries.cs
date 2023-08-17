@@ -227,7 +227,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     }
                     else if (completedargs.Result is string)
                     {
-                        dockControlBuilder.Init(completedargs.Result.ToString().ToXml().OuterXml, null, $"parse {style}", true);
+                        dockControlBuilder.Init(completedargs.Result.ToString().ToXml().OuterXml, null, false, $"parse {style}", true);
                     }
                     working = false;
                 }

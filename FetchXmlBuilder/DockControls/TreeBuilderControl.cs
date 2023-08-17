@@ -295,11 +295,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             return query;
         }
 
-        internal void Init(string fetchStr, string layoutStr, string action, bool validate)
+        internal void Init(string fetchStr, string layoutStr, bool layoutisfromview, string action, bool validate)
         {
             ParseXML(fetchStr, validate);
-            layoutxmloriginal = layoutStr;
-            ResetLayout();
+            layoutxmloriginal = layoutisfromview ? layoutStr : string.Empty;
+            ResetLayout(layoutStr);
             fxb.UpdateLiveXML();
             ClearChanged();
             fxb.EnableControls(true);
@@ -342,10 +342,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        internal void ResetLayout()
+        internal void ResetLayout(string layoutxml = null)
         {
-            LayoutXML = fxb.settings.Results.WorkWithLayout && !string.IsNullOrWhiteSpace(layoutxmloriginal)
-                ? new LayoutXML(layoutxmloriginal, fxb) : null;
+            if (string.IsNullOrWhiteSpace(layoutxml))
+            {
+                layoutxml = layoutxmloriginal;
+            }
+            LayoutXML = fxb.settings.Results.WorkWithLayout && !string.IsNullOrWhiteSpace(layoutxml)
+                ? new LayoutXML(layoutxml, fxb) : null;
         }
 
         internal void SetLayoutFromXML(string layoutxml)
