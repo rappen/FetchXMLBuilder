@@ -696,7 +696,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void tsmiShowLayoutXML_Click(object sender, EventArgs e)
         {
-            ShowContentControl(ref dockControlLayoutXml, ContentType.LayoutXML, SaveFormat.None, settings.DockStates.LayoutXML);
+            ShowLayoutXML();
         }
 
         private void tsmiShowOData_Click(object sender, EventArgs e)

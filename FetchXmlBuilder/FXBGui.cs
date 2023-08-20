@@ -906,5 +906,10 @@ namespace Rappen.XTB.FetchXmlBuilder
             resultControl.EnsureVisible(dockContainer, defaultstate);
             resultControl.UpdateXML(content);
         }
+
+        internal void ShowLayoutXML()
+        {
+            ShowContentControl(ref dockControlLayoutXml, ContentType.LayoutXML, SaveFormat.None, settings.DockStates.LayoutXML);
+        }
     }
 }
