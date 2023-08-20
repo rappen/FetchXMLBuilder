@@ -90,11 +90,18 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             mnuQuickFilter.Checked = form.settings.Results.QuickFilter;
             mnuPagingCookie.Checked = form.settings.Results.PagingCookie;
 
-            mnuIdCol.Enabled = !form.settings.Results.WorkWithLayout;
-            mnuIndexCol.Enabled = !form.settings.Results.WorkWithLayout;
-            mnuNullCol.Enabled = !form.settings.Results.WorkWithLayout;
-            mnuSysCol.Enabled = !form.settings.Results.WorkWithLayout;
+            mnuIdCol.Visible = !form.settings.Results.WorkWithLayout;
+            mnuIndexCol.Visible = !form.settings.Results.WorkWithLayout;
+            mnuNullCol.Visible = !form.settings.Results.WorkWithLayout;
+            mnuSysCol.Visible = !form.settings.Results.WorkWithLayout;
+            mnuResetLayout.Visible = form.settings.Results.WorkWithLayout && !string.IsNullOrWhiteSpace(crmGridView1.LayoutXML);
+            mnuShowAllCol.Visible = form.settings.Results.WorkWithLayout;
+            mnuShowLayoutXML.Visible = form.settings.Results.WorkWithLayout;
 
+            if (!form.settings.Results.WorkWithLayout)
+            {
+                crmGridView1.LayoutXML = null;
+            }
             crmGridView1.ShowFriendlyNames = mnuFriendly.Checked;
             crmGridView1.ShowBothNames = mnuBothNames.Checked;
             crmGridView1.ShowIdColumn = mnuIdCol.Checked;
@@ -107,7 +114,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             crmGridView1.Service = form.Service;
             panQuickFilter.Visible = mnuQuickFilter.Checked;
             gbPagingCookie.Visible = mnuPagingCookie.Checked;
-            mnuResetLayout.Visible = form.settings.Results.WorkWithLayout;
             RefreshData();
         }
 
@@ -164,6 +170,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 .Where(c => !c.Name.StartsWith("#") && !c.Visible)
                 .ToList()
                 .ForEach(c => c.Visible = true);
+            crmGridView1.Columns.Cast<DataGridViewColumn>()
+                .Where(c => c.Visible && c.Width < 10)
+                .ToList()
+                .ForEach(c => c.Width = 100);
         }
 
         internal void SetQueryIfChangesDesign()
@@ -176,7 +186,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal void SetLayoutToGrid()
         {
-            if (form.dockControlBuilder?.LayoutXML?.Cells == null)
+            if (!form.settings.Results.WorkWithLayout || form.dockControlBuilder?.LayoutXML?.Cells == null)
             {
                 return;
             }
@@ -407,6 +417,23 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 e.Handled = true;
                 mnuRecordsNumbers.Focus();
             }
+        }
+
+        private void mnuAutoSizeAll_Click(object sender, EventArgs e)
+        {
+            crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
+            GetLayoutFromGrid();
+        }
+
+        private void mnuShowAllCol_Click(object sender, EventArgs e)
+        {
+            ShowHiddenColumns();
+            GetLayoutFromGrid();
+        }
+
+        private void mnuShowLayoutXML_Click(object sender, EventArgs e)
+        {
+            form.ShowLayoutXML();
         }
     }
 }

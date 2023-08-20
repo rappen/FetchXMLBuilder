@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.ctxmenuGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctxRecord = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxRecordOpen = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,6 +58,9 @@
             this.mnuNullCol = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuSysCol = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuResetLayout = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuShowAllCol = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuAutoSizeAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuShowLayoutXML = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuPagePlus = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuPage = new System.Windows.Forms.ToolStripTextBox();
             this.mnuPageMinus = new System.Windows.Forms.ToolStripMenuItem();
@@ -208,7 +211,6 @@
             this.mnuOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuBehavior,
             this.mnuColumns,
-            this.mnuResetLayout,
             this.mnuPagePlus,
             this.mnuPage,
             this.mnuPageMinus,
@@ -293,7 +295,11 @@
             this.mnuIndexCol,
             this.mnuIdCol,
             this.mnuNullCol,
-            this.mnuSysCol});
+            this.mnuSysCol,
+            this.mnuResetLayout,
+            this.mnuShowAllCol,
+            this.mnuAutoSizeAll,
+            this.mnuShowLayoutXML});
             this.mnuColumns.Name = "mnuColumns";
             this.mnuColumns.Size = new System.Drawing.Size(67, 23);
             this.mnuColumns.Text = "Columns";
@@ -303,7 +309,7 @@
             // 
             this.mnuIndexCol.CheckOnClick = true;
             this.mnuIndexCol.Name = "mnuIndexCol";
-            this.mnuIndexCol.Size = new System.Drawing.Size(148, 22);
+            this.mnuIndexCol.Size = new System.Drawing.Size(180, 22);
             this.mnuIndexCol.Text = "Index";
             this.mnuIndexCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
@@ -311,7 +317,7 @@
             // 
             this.mnuIdCol.CheckOnClick = true;
             this.mnuIdCol.Name = "mnuIdCol";
-            this.mnuIdCol.Size = new System.Drawing.Size(148, 22);
+            this.mnuIdCol.Size = new System.Drawing.Size(180, 22);
             this.mnuIdCol.Text = "Primary Key";
             this.mnuIdCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
@@ -319,7 +325,7 @@
             // 
             this.mnuNullCol.CheckOnClick = true;
             this.mnuNullCol.Name = "mnuNullCol";
-            this.mnuNullCol.Size = new System.Drawing.Size(148, 22);
+            this.mnuNullCol.Size = new System.Drawing.Size(180, 22);
             this.mnuNullCol.Text = "Without value";
             this.mnuNullCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
@@ -327,16 +333,37 @@
             // 
             this.mnuSysCol.CheckOnClick = true;
             this.mnuSysCol.Name = "mnuSysCol";
-            this.mnuSysCol.Size = new System.Drawing.Size(148, 22);
+            this.mnuSysCol.Size = new System.Drawing.Size(180, 22);
             this.mnuSysCol.Text = "System added";
             this.mnuSysCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
             // mnuResetLayout
             // 
             this.mnuResetLayout.Name = "mnuResetLayout";
-            this.mnuResetLayout.Size = new System.Drawing.Size(86, 23);
+            this.mnuResetLayout.Size = new System.Drawing.Size(180, 22);
             this.mnuResetLayout.Text = "Reset Layout";
             this.mnuResetLayout.Click += new System.EventHandler(this.mnuResetLayout_Click);
+            // 
+            // mnuShowAllCol
+            // 
+            this.mnuShowAllCol.Name = "mnuShowAllCol";
+            this.mnuShowAllCol.Size = new System.Drawing.Size(180, 22);
+            this.mnuShowAllCol.Text = "Show All";
+            this.mnuShowAllCol.Click += new System.EventHandler(this.mnuShowAllCol_Click);
+            // 
+            // mnuAutoSizeAll
+            // 
+            this.mnuAutoSizeAll.Name = "mnuAutoSizeAll";
+            this.mnuAutoSizeAll.Size = new System.Drawing.Size(180, 22);
+            this.mnuAutoSizeAll.Text = "Auto Size All";
+            this.mnuAutoSizeAll.Click += new System.EventHandler(this.mnuAutoSizeAll_Click);
+            // 
+            // mnuShowLayoutXML
+            // 
+            this.mnuShowLayoutXML.Name = "mnuShowLayoutXML";
+            this.mnuShowLayoutXML.Size = new System.Drawing.Size(180, 22);
+            this.mnuShowLayoutXML.Text = "Show LayoutXML";
+            this.mnuShowLayoutXML.Click += new System.EventHandler(this.mnuShowLayoutXML_Click);
             // 
             // mnuPagePlus
             // 
@@ -352,11 +379,12 @@
             // mnuPage
             // 
             this.mnuPage.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.mnuPage.AutoSize = false;
             this.mnuPage.BackColor = System.Drawing.SystemColors.Window;
             this.mnuPage.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.mnuPage.Name = "mnuPage";
             this.mnuPage.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.mnuPage.Size = new System.Drawing.Size(80, 23);
+            this.mnuPage.Size = new System.Drawing.Size(62, 23);
             this.mnuPage.Text = "Page";
             this.mnuPage.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.mnuPage.Visible = false;
@@ -379,12 +407,13 @@
             // mnuRecordsNumbers
             // 
             this.mnuRecordsNumbers.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.mnuRecordsNumbers.AutoSize = false;
             this.mnuRecordsNumbers.BackColor = System.Drawing.SystemColors.Window;
             this.mnuRecordsNumbers.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.mnuRecordsNumbers.Name = "mnuRecordsNumbers";
             this.mnuRecordsNumbers.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.mnuRecordsNumbers.ReadOnly = true;
-            this.mnuRecordsNumbers.Size = new System.Drawing.Size(200, 23);
+            this.mnuRecordsNumbers.Size = new System.Drawing.Size(182, 23);
             this.mnuRecordsNumbers.Text = "Records 100001-100010 (999999)";
             this.mnuRecordsNumbers.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.mnuRecordsNumbers.Visible = false;
@@ -484,8 +513,8 @@
             this.crmGridView1.AllowUserToDeleteRows = false;
             this.crmGridView1.AllowUserToOrderColumns = true;
             this.crmGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             this.crmGridView1.AutoRefresh = false;
             this.crmGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
             this.crmGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -577,7 +606,6 @@
         private System.Windows.Forms.ToolStripMenuItem ctxColumn;
         private System.Windows.Forms.ToolStripMenuItem ctxColumnCopy;
         private System.Windows.Forms.ToolStripMenuItem ctxRecordCopy;
-        private System.Windows.Forms.ToolStripMenuItem mnuResetLayout;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.TextBox txtPagingCookie;
         private System.Windows.Forms.ToolStripMenuItem mnuPagingCookie;
@@ -588,5 +616,9 @@
         private System.Windows.Forms.ToolStripMenuItem mnuPageMinus;
         private System.Windows.Forms.ToolStripTextBox mnuRecordsNumbers;
         private System.Windows.Forms.ToolStripMenuItem mnuBothNames;
+        private System.Windows.Forms.ToolStripMenuItem mnuResetLayout;
+        private System.Windows.Forms.ToolStripMenuItem mnuShowAllCol;
+        private System.Windows.Forms.ToolStripMenuItem mnuAutoSizeAll;
+        private System.Windows.Forms.ToolStripMenuItem mnuShowLayoutXML;
     }
 }
