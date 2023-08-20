@@ -57,7 +57,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             if (queryinfo.RecordFrom > -1 && queryinfo.RecordTo > -1)
             {
-                if (queryinfo.RecordFrom > 1 || queryinfo.Results.MoreRecords)
+                if (!form.settings.Results.RetrieveAllPages && (queryinfo.RecordFrom > 1 || queryinfo.Results.MoreRecords))
                 {
                     mnuRecordsNumbers.Text = $"Records: {queryinfo.RecordFrom}-{queryinfo.RecordTo}";
                     if (queryinfo.Results.TotalRecordCount > 0 && queryinfo.Results.TotalRecordCount < 5000)
@@ -67,7 +67,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
                 else
                 {
-                    mnuRecordsNumbers.Text = $"Records: {queryinfo.RecordTo}";
+                    mnuRecordsNumbers.Text = $"Records: {queryinfo.Results.Entities.Count}";
                 }
                 mnuRecordsNumbers.Visible = true;
             }
