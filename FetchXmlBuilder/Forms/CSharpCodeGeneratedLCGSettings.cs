@@ -1,4 +1,5 @@
-﻿using Rappen.XTB.Helper;
+﻿using McTools.Xrm.Connection;
+using Rappen.XTB.Helper;
 using Rappen.XTB.LCG;
 using System;
 using System.IO;
@@ -88,7 +89,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                     {
                         var document = new XmlDocument();
                         document.Load(ofd.FileName);
-                        lcgsettings = (LCG.Settings)XrmToolBox.PluginsStore.XmlSerializerHelper.Deserialize(document.OuterXml, typeof(LCG.Settings));
+                        lcgsettings = (LCG.Settings)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(LCG.Settings));
                     }
                     lcgsettings.SourceFile = ofd.FileName;
                     SetSettings(lcgsettings);
