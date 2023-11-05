@@ -316,7 +316,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 FormatAsXML();
             }
             var fetchxml = txtXML.Text;
-            var removecomm = MessageBox.Show("Remove comments?", "Minify XML", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+            var removecomm = false;
+            if (fetchxml.Contains("<!--"))
+            {
+                removecomm = MessageBox.Show("Remove comments?", "Minify XML", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+            }
             string result = GetFetchMini(fetchxml, fxb.settings.QueryOptions.UseSingleQuotation ? '\'' : '"', removecomm);
             txtXML.Text = result;
         }
