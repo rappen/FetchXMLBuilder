@@ -344,6 +344,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal void ResetLayout(string layoutxml = null)
         {
+            //           fxb.dockControlLayoutXml?.Close();
             if (string.IsNullOrWhiteSpace(layoutxml))
             {
                 layoutxml = layoutxmloriginal;
@@ -416,7 +417,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 return;
             }
-            fxb.dockControlLayoutXml?.UpdateXML(LayoutXML.ToXML());
+            fxb.dockControlLayoutXml?.UpdateXML(LayoutXML?.ToXML());
             if (GetCurrentControl() is attributeControl attrcontrol)
             {
                 attrcontrol.UpdateUIFromCell();

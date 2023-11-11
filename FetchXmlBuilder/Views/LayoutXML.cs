@@ -79,6 +79,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
                 Cells = new List<Cell>();
             }
             MakeSureAllCellsExistForAttributes();
+            createdfromaview = false;
         }
 
         public override string ToString() => $"{EntityMeta?.LogicalName} {Cells?.Where(c => c.Width > 0).Count()}/{Cells?.Count} cells";
@@ -96,6 +97,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             Cells.Where(c => c.Attribute == null).ToList().ForEach(c => c.Attribute = attributes.FirstOrDefault(a => c.Name == a.GetAttributeLayoutName()));
             // Remove unused Cells
             Cells.Where(c => c.Attribute?.TreeView == null).ToList().ForEach(c => Cells.Remove(c));
+            Cells.Where(c => c.Attribute?.Name == "#comment").ToList().ForEach(c => Cells.Remove(c));
         }
 
         internal void MakeSureAllCellsExistForColumns(Dictionary<string, int> namewidths)

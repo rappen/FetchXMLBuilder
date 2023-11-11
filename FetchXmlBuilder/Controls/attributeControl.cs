@@ -166,6 +166,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             {
                 cell.Name = Node.GetAttributeLayoutName();
                 cell.Width = chkLayoutVisible.Checked ? trkLayoutWidth.Value : 0;
+                cell.IsHidden = !chkLayoutVisible.Checked;
                 fxb.dockControlLayoutXml?.UpdateXML(cell.Parent?.ToXML());
             }
             grpLayout.Visible = cell != null;

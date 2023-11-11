@@ -129,21 +129,24 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         internal void UpdateLiveXML(bool preventxmlupdate = false)
         {
-            if (!preventxmlupdate && dockControlFetchXml?.Visible == true)
+            if (!preventxmlupdate)
             {
-                dockControlFetchXml.UpdateXML(dockControlBuilder.GetFetchString(true, false));
-            }
-            if (!preventxmlupdate && dockControlLayoutXml?.Visible == true)
-            {
-                if (settings.Results.WorkWithLayout)
+                dockControlBuilder?.LayoutXML?.MakeSureAllCellsExistForAttributes();
+                if (dockControlFetchXml?.Visible == true)
                 {
-                    dockControlBuilder.LayoutXML?.MakeSureAllCellsExistForAttributes();
-                    dockControlLayoutXml.UpdateXML(dockControlBuilder.LayoutXML?.ToXML());
+                    dockControlFetchXml.UpdateXML(dockControlBuilder.GetFetchString(true, false));
                 }
-                else
+                if (dockControlLayoutXml?.Visible == true)
                 {
-                    dockControlLayoutXml.Close();
-                    dockControlBuilder.LayoutXML = null;
+                    if (settings.Results.WorkWithLayout)
+                    {
+                        dockControlLayoutXml.UpdateXML(dockControlBuilder.LayoutXML?.ToXML());
+                    }
+                    else
+                    {
+                        dockControlLayoutXml.Close();
+                        dockControlBuilder.LayoutXML = null;
+                    }
                 }
             }
             if (dockControlGrid?.Visible == true)

@@ -212,7 +212,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 .Where(c => !c.Name.StartsWith("#") && !c.Name.EndsWith("|both") && c.Visible && c.Width > 5)
                 .OrderBy(c => c.DisplayIndex)
                 .ToDictionary(c => c.Name, c => c.Width);
-            form.dockControlBuilder.LayoutXML.MakeSureAllCellsExistForColumns(columns);
+            form.dockControlBuilder.LayoutXML?.MakeSureAllCellsExistForColumns(columns);
             form.dockControlBuilder.UpdateLayoutXML();
         }
 
