@@ -5,9 +5,14 @@ VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FetchXMLBuilder", "FetchXmlBuilder\FetchXMLBuilder.csproj", "{D746CBE7-7787-47FC-B773-F089A44DF8C9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{13AB47EF-2E67-4179-876C-88816794849B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Solution", ".Solution", "{13AB47EF-2E67-4179-876C-88816794849B}"
 	ProjectSection(SolutionItems) = preProject
 		FetchXMLBuilder.nuspec = FetchXMLBuilder.nuspec
+		.gitignore = .gitignore
+		.gitmodules = .gitmodules
+		codealike.json = codealike.json
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FXBTests", "FXBTests\FXBTests.csproj", "{8F32EF58-AC53-49DE-957B-102D78368377}"
@@ -25,6 +30,26 @@ EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rappen.XRM.Helpers", "Rappen.XTB.Helper\Rappen.XRM.Helpers\Rappen.XRM.Helpers.shproj", "{2EBF1257-150F-46C8-8BBD-2A9235C0EB45}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rappen.XTB.Helpers", "Rappen.XTB.Helper\Rappen.XTB.Helpers\Rappen.XTB.Helpers.shproj", "{0B88B381-EE9D-41E8-A62C-90152C42DE90}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rappen.XTB.Helper", "Rappen.XTB.Helper", "{E49A4379-E519-43E1-BD48-DF29899D6BA8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MarkMpn", "MarkMpn", "{2B10400B-19BC-4312-B0F6-A7C2B652C4E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MsCrmTools", "MsCrmTools", "{F766102D-D48A-4B02-A50A-1EF23F0BA6CD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FetchXmlBuilder", "FetchXmlBuilder", "{66E5ECCC-633F-4768-9AD5-5882A275BBB4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{1F30C1EF-F64B-409F-9ACB-6C080CB14442}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnet-desktop.yml = .github\workflows\dotnet-desktop.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{127056AD-D27A-4C8B-97FB-D83093A7F9C1}"
+	ProjectSection(SolutionItems) = preProject
+		images\Execute.png = images\Execute.png
+		images\FXB.ico = images\FXB.ico
+		images\shot1.png = images\shot1.png
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -63,5 +88,18 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB94D8EC-E778-4D0A-BE34-CBE2342DB0F3}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2EBF1257-150F-46C8-8BBD-2A9235C0EB45} = {E49A4379-E519-43E1-BD48-DF29899D6BA8}
+		{0B88B381-EE9D-41E8-A62C-90152C42DE90} = {E49A4379-E519-43E1-BD48-DF29899D6BA8}
+		{543E6D79-2913-4B00-AAAC-5661F6ADB1A5} = {2B10400B-19BC-4312-B0F6-A7C2B652C4E8}
+		{CE3B0F1B-1668-4AC3-A7AD-FE1872C6BCC3} = {2B10400B-19BC-4312-B0F6-A7C2B652C4E8}
+		{4C497B9C-B9DD-4B3D-8ECC-C504AFCADD65} = {2B10400B-19BC-4312-B0F6-A7C2B652C4E8}
+		{9C6AADAA-CF44-4BCE-90C7-79E6C6EF6DEC} = {F766102D-D48A-4B02-A50A-1EF23F0BA6CD}
+		{D746CBE7-7787-47FC-B773-F089A44DF8C9} = {66E5ECCC-633F-4768-9AD5-5882A275BBB4}
+		{FAF35E13-1A84-45B3-A315-C62D15AC888A} = {66E5ECCC-633F-4768-9AD5-5882A275BBB4}
+		{8F32EF58-AC53-49DE-957B-102D78368377} = {66E5ECCC-633F-4768-9AD5-5882A275BBB4}
+		{1F30C1EF-F64B-409F-9ACB-6C080CB14442} = {13AB47EF-2E67-4179-876C-88816794849B}
+		{127056AD-D27A-4C8B-97FB-D83093A7F9C1} = {13AB47EF-2E67-4179-876C-88816794849B}
 	EndGlobalSection
 EndGlobal
