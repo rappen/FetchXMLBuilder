@@ -173,7 +173,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         {
             foreach (var item in xrmSolution.Items)
             {
-                if (item is Rappen.XTB.Helpers.ControlItems.EntityItem entityitem)
+                if (item is Helpers.ControlItems.EntityItem entityitem)
                 {
                     if (GetPublisherId(entityitem.Entity).Equals(id))
                     {
@@ -182,15 +182,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                     }
                 }
             }
-        }
-
-        private void checkBox_CheckStateChanged(object sender, EventArgs e)
-        {
-            if (sender is CheckBox chk && chk.Tag is string tag)
-            {
-                chk.Text = chk.CheckState.TriToString(tag);
-            }
-            UpdateSelections();
         }
 
         private void UpdateSelections(object sender = null, EventArgs e = null)
