@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ShowMetadataOptions));
             this.gbEntities = new System.Windows.Forms.GroupBox();
             this.pictureBox11 = new System.Windows.Forms.PictureBox();
@@ -42,16 +43,28 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.chkVirtual = new Rappen.XTB.Helpers.Controls.TriCheckBox();
             this.btnEClear = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.cmbEOwnership = new System.Windows.Forms.ComboBox();
+            this.chkEActivityParty = new Rappen.XTB.Helpers.Controls.TriCheckBox();
+            this.chkEActivity = new Rappen.XTB.Helpers.Controls.TriCheckBox();
+            this.chkELogical = new Rappen.XTB.Helpers.Controls.TriCheckBox();
+            this.chkEAudit = new Rappen.XTB.Helpers.Controls.TriCheckBox();
+            this.chkEAdvFind = new Rappen.XTB.Helpers.Controls.TriCheckBox();
+            this.chkEIntersect = new Rappen.XTB.Helpers.Controls.TriCheckBox();
+            this.chkECustomizable = new Rappen.XTB.Helpers.Controls.TriCheckBox();
+            this.chkECustom = new Rappen.XTB.Helpers.Controls.TriCheckBox();
+            this.chkEManaged = new Rappen.XTB.Helpers.Controls.TriCheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.gbAttributes = new System.Windows.Forms.GroupBox();
             this.pictureBox23 = new System.Windows.Forms.PictureBox();
+            this.chkACalculationOf = new Rappen.XTB.Helpers.Controls.TriCheckBox();
             this.pictureBox22 = new System.Windows.Forms.PictureBox();
+            this.chkAAttributeOf = new Rappen.XTB.Helpers.Controls.TriCheckBox();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
             this.pictureBox12 = new System.Windows.Forms.PictureBox();
             this.pictureBox13 = new System.Windows.Forms.PictureBox();
@@ -63,7 +76,17 @@
             this.pictureBox19 = new System.Windows.Forms.PictureBox();
             this.pictureBox20 = new System.Windows.Forms.PictureBox();
             this.pictureBox21 = new System.Windows.Forms.PictureBox();
+            this.chkARead = new Rappen.XTB.Helpers.Controls.TriCheckBox();
             this.btnAClear = new System.Windows.Forms.Button();
+            this.chkAFiltered = new Rappen.XTB.Helpers.Controls.TriCheckBox();
+            this.chkARetrievable = new Rappen.XTB.Helpers.Controls.TriCheckBox();
+            this.chkALogical = new Rappen.XTB.Helpers.Controls.TriCheckBox();
+            this.chkAAudit = new Rappen.XTB.Helpers.Controls.TriCheckBox();
+            this.chkAAdvFind = new Rappen.XTB.Helpers.Controls.TriCheckBox();
+            this.chkAGrid = new Rappen.XTB.Helpers.Controls.TriCheckBox();
+            this.chkACustomizable = new Rappen.XTB.Helpers.Controls.TriCheckBox();
+            this.chkACustom = new Rappen.XTB.Helpers.Controls.TriCheckBox();
+            this.chkAManaged = new Rappen.XTB.Helpers.Controls.TriCheckBox();
             this.gbAlwaysAttributes = new System.Windows.Forms.GroupBox();
             this.chkAShowAddress = new System.Windows.Forms.CheckBox();
             this.chkAShowPrimary = new System.Windows.Forms.CheckBox();
@@ -84,6 +107,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.panSelectSolution = new System.Windows.Forms.Panel();
             this.chkShowAllSolutions = new System.Windows.Forms.CheckBox();
+            this.xrmSolution = new Rappen.XTB.Helpers.Controls.XRMColumnLookup();
             this.panSolutions = new System.Windows.Forms.Panel();
             this.rbSpecificPublisher = new System.Windows.Forms.RadioButton();
             this.rbSpecificSolution = new System.Windows.Forms.RadioButton();
@@ -91,29 +115,7 @@
             this.rbAllSolutions = new System.Windows.Forms.RadioButton();
             this.chkFilterMetadata = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.xrmSolution = new Rappen.XTB.Helpers.Controls.XRMColumnLookup();
-            this.chkACalculationOf = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkAAttributeOf = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkARead = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkAFiltered = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkARetrievable = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkALogical = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkAAudit = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkAAdvFind = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkAGrid = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkACustomizable = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkACustom = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkAManaged = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkVirtual = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkEActivityParty = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkEActivity = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkELogical = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkEAudit = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkEAdvFind = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkEIntersect = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkECustomizable = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkECustom = new Rappen.XTB.Helpers.Controls.TriCheckBox();
-            this.chkEManaged = new Rappen.XTB.Helpers.Controls.TriCheckBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.gbEntities.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
@@ -352,7 +354,7 @@
             // 
             // chkVirtual
             // 
-            this.chkVirtual.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkVirtual.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkVirtual.Checked = true;
             this.chkVirtual.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -365,6 +367,7 @@
             this.chkVirtual.TextChecked = "Only Virtual";
             this.chkVirtual.TextIndeterminate = "All Entities (Virtual)";
             this.chkVirtual.TextUnchecked = "Not Virtual";
+            this.toolTip1.SetToolTip(this.chkVirtual, "Filter by Virtual tables");
             this.chkVirtual.UseVisualStyleBackColor = true;
             this.chkVirtual.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
@@ -404,11 +407,12 @@
             this.cmbEOwnership.Name = "cmbEOwnership";
             this.cmbEOwnership.Size = new System.Drawing.Size(120, 21);
             this.cmbEOwnership.TabIndex = 11;
+            this.toolTip1.SetToolTip(this.cmbEOwnership, "Filter by type of owners");
             this.cmbEOwnership.SelectedIndexChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkEActivityParty
             // 
-            this.chkEActivityParty.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkEActivityParty.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkEActivityParty.Checked = true;
             this.chkEActivityParty.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -421,12 +425,13 @@
             this.chkEActivityParty.TextChecked = "Only Activity Party";
             this.chkEActivityParty.TextIndeterminate = "All Entities (Activity Party)";
             this.chkEActivityParty.TextUnchecked = "Not Activity Party";
+            this.toolTip1.SetToolTip(this.chkEActivityParty, "Filter by tables who can be part of an Activity");
             this.chkEActivityParty.UseVisualStyleBackColor = true;
             this.chkEActivityParty.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkEActivity
             // 
-            this.chkEActivity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkEActivity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkEActivity.Checked = true;
             this.chkEActivity.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -439,12 +444,13 @@
             this.chkEActivity.TextChecked = "Only Activity";
             this.chkEActivity.TextIndeterminate = "All Entities (Activity)";
             this.chkEActivity.TextUnchecked = "Not Activity";
+            this.toolTip1.SetToolTip(this.chkEActivity, "Filter tables by the Acivity flag");
             this.chkEActivity.UseVisualStyleBackColor = true;
             this.chkEActivity.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkELogical
             // 
-            this.chkELogical.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkELogical.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkELogical.Checked = true;
             this.chkELogical.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -457,12 +463,13 @@
             this.chkELogical.TextChecked = "Only Logical";
             this.chkELogical.TextIndeterminate = "All Entities (Logical)";
             this.chkELogical.TextUnchecked = "Not Logical";
+            this.toolTip1.SetToolTip(this.chkELogical, "Filter by Logical flag - Logical are created internaly by the Dataverse");
             this.chkELogical.UseVisualStyleBackColor = true;
             this.chkELogical.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkEAudit
             // 
-            this.chkEAudit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkEAudit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkEAudit.Checked = true;
             this.chkEAudit.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -475,12 +482,13 @@
             this.chkEAudit.TextChecked = "Only Audit";
             this.chkEAudit.TextIndeterminate = "All Entities (Audit)";
             this.chkEAudit.TextUnchecked = "Not Audit";
+            this.toolTip1.SetToolTip(this.chkEAudit, "Filter by Audit setting");
             this.chkEAudit.UseVisualStyleBackColor = true;
             this.chkEAudit.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkEAdvFind
             // 
-            this.chkEAdvFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkEAdvFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkEAdvFind.Checked = true;
             this.chkEAdvFind.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -490,15 +498,16 @@
             this.chkEAdvFind.TabIndex = 6;
             this.chkEAdvFind.Tag = "";
             this.chkEAdvFind.Text = "All Entities (Valid for Adv.Find)";
-            this.chkEAdvFind.TextChecked = "Only Valid  for Adv.Find";
+            this.chkEAdvFind.TextChecked = "Only Valid for Adv.Find";
             this.chkEAdvFind.TextIndeterminate = "All Entities (Valid for Adv.Find)";
             this.chkEAdvFind.TextUnchecked = "Not Valid for Adv.Find";
+            this.toolTip1.SetToolTip(this.chkEAdvFind, "Filter by tables available for Advanced Find");
             this.chkEAdvFind.UseVisualStyleBackColor = true;
             this.chkEAdvFind.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkEIntersect
             // 
-            this.chkEIntersect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkEIntersect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkEIntersect.Checked = true;
             this.chkEIntersect.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -511,12 +520,13 @@
             this.chkEIntersect.TextChecked = "Only Intersect";
             this.chkEIntersect.TextIndeterminate = "All Entities and Intersect";
             this.chkEIntersect.TextUnchecked = "Not Intersect";
+            this.toolTip1.SetToolTip(this.chkEIntersect, "Filter by Intersect tables - tables between table 1 and 2 for M:M-relationships");
             this.chkEIntersect.UseVisualStyleBackColor = true;
             this.chkEIntersect.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkECustomizable
             // 
-            this.chkECustomizable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkECustomizable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkECustomizable.Checked = true;
             this.chkECustomizable.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -529,12 +539,13 @@
             this.chkECustomizable.TextChecked = "Customizable";
             this.chkECustomizable.TextIndeterminate = "All Un-/Customizable";
             this.chkECustomizable.TextUnchecked = "Uncustomizable";
+            this.toolTip1.SetToolTip(this.chkECustomizable, "Filter by if it is customizable tables");
             this.chkECustomizable.UseVisualStyleBackColor = true;
             this.chkECustomizable.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkECustom
             // 
-            this.chkECustom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkECustom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkECustom.Checked = true;
             this.chkECustom.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -547,12 +558,13 @@
             this.chkECustom.TextChecked = "Custom";
             this.chkECustom.TextIndeterminate = "All Standard/Custom";
             this.chkECustom.TextUnchecked = "Standard";
+            this.toolTip1.SetToolTip(this.chkECustom, "Filter by if it is custom or standard tables");
             this.chkECustom.UseVisualStyleBackColor = true;
             this.chkECustom.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkEManaged
             // 
-            this.chkEManaged.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkEManaged.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkEManaged.Checked = true;
             this.chkEManaged.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -565,6 +577,7 @@
             this.chkEManaged.TextChecked = "Managed";
             this.chkEManaged.TextIndeterminate = "All Managed/Unmanaged";
             this.chkEManaged.TextUnchecked = "Unmanaged";
+            this.toolTip1.SetToolTip(this.chkEManaged, "Filter by Managed status");
             this.chkEManaged.UseVisualStyleBackColor = true;
             this.chkEManaged.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
@@ -663,7 +676,7 @@
             // 
             // chkACalculationOf
             // 
-            this.chkACalculationOf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkACalculationOf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkACalculationOf.Checked = true;
             this.chkACalculationOf.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -676,9 +689,10 @@
             this.chkACalculationOf.TextChecked = "Is Calculation Money";
             this.chkACalculationOf.TextIndeterminate = "All Attributes (Calculation Money)";
             this.chkACalculationOf.TextUnchecked = "Not Calculation Money";
+            this.toolTip1.SetToolTip(this.chkACalculationOf, "Filter by calculated attribute, like creditlimit_base");
             this.chkACalculationOf.UseVisualStyleBackColor = true;
             this.chkACalculationOf.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
-          // 
+            // 
             // pictureBox22
             // 
             this.pictureBox22.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -694,7 +708,7 @@
             // 
             // chkAAttributeOf
             // 
-            this.chkAAttributeOf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkAAttributeOf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAAttributeOf.Checked = true;
             this.chkAAttributeOf.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -707,6 +721,7 @@
             this.chkAAttributeOf.TextChecked = "Of Something Else";
             this.chkAAttributeOf.TextIndeterminate = "All Attributes (AttributesOf)";
             this.chkAAttributeOf.TextUnchecked = "Not Of Something Else";
+            this.toolTip1.SetToolTip(this.chkAAttributeOf, "Filter by AttributeOf - created readonly internally, like createbyname");
             this.chkAAttributeOf.UseVisualStyleBackColor = true;
             this.chkAAttributeOf.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
@@ -854,9 +869,9 @@
     "etadata.ismanaged";
             this.pictureBox21.Click += new System.EventHandler(this.helpIcon_Click);
             // 
-        // chkARead
+            // chkARead
             // 
-            this.chkARead.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkARead.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkARead.Checked = true;
             this.chkARead.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -869,6 +884,7 @@
             this.chkARead.TextChecked = "Only Valid for Read";
             this.chkARead.TextIndeterminate = "All Attributes (Valid for Read)";
             this.chkARead.TextUnchecked = "Not Valid for Read";
+            this.toolTip1.SetToolTip(this.chkARead, "Filter by available to Read");
             this.chkARead.UseVisualStyleBackColor = true;
             this.chkARead.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
@@ -885,7 +901,7 @@
             // 
             // chkAFiltered
             // 
-            this.chkAFiltered.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkAFiltered.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAFiltered.Checked = true;
             this.chkAFiltered.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -894,16 +910,17 @@
             this.chkAFiltered.Size = new System.Drawing.Size(180, 17);
             this.chkAFiltered.TabIndex = 10;
             this.chkAFiltered.Tag = "";
-            this.chkAFiltered.Text = "All Attributes (Filtered)";
-            this.chkAFiltered.TextChecked = "Only Filtered";
-            this.chkAFiltered.TextIndeterminate = "All Attributes (Filtered)";
-            this.chkAFiltered.TextUnchecked = "Not Filtered";
+            this.chkAFiltered.Text = "All Attributes (Filterable)";
+            this.chkAFiltered.TextChecked = "Only Filterable";
+            this.chkAFiltered.TextIndeterminate = "All Attributes (Filterable)";
+            this.chkAFiltered.TextUnchecked = "Not Filterable";
+            this.toolTip1.SetToolTip(this.chkAFiltered, "Filter by Filterable");
             this.chkAFiltered.UseVisualStyleBackColor = true;
             this.chkAFiltered.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkARetrievable
             // 
-            this.chkARetrievable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkARetrievable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkARetrievable.Checked = true;
             this.chkARetrievable.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -916,12 +933,13 @@
             this.chkARetrievable.TextChecked = "Only Retrievable";
             this.chkARetrievable.TextIndeterminate = "All Attributes (Retrievable)";
             this.chkARetrievable.TextUnchecked = "Not Retrievable";
+            this.toolTip1.SetToolTip(this.chkARetrievable, "Filter attributes by being Retrievable");
             this.chkARetrievable.UseVisualStyleBackColor = true;
             this.chkARetrievable.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkALogical
             // 
-            this.chkALogical.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkALogical.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkALogical.Checked = true;
             this.chkALogical.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -934,12 +952,13 @@
             this.chkALogical.TextChecked = "Only Logical";
             this.chkALogical.TextIndeterminate = "All Attributes (Logical)";
             this.chkALogical.TextUnchecked = "Not Logical";
+            this.toolTip1.SetToolTip(this.chkALogical, "Filter by Logical flag - Logical are created internaly by the Dataverse");
             this.chkALogical.UseVisualStyleBackColor = true;
             this.chkALogical.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkAAudit
             // 
-            this.chkAAudit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkAAudit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAAudit.Checked = true;
             this.chkAAudit.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -952,12 +971,13 @@
             this.chkAAudit.TextChecked = "Only Audit";
             this.chkAAudit.TextIndeterminate = "All Attributes (Audit)";
             this.chkAAudit.TextUnchecked = "Not Audit";
+            this.toolTip1.SetToolTip(this.chkAAudit, "Filter by Audit setting");
             this.chkAAudit.UseVisualStyleBackColor = true;
             this.chkAAudit.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkAAdvFind
             // 
-            this.chkAAdvFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkAAdvFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAAdvFind.Checked = true;
             this.chkAAdvFind.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -970,12 +990,13 @@
             this.chkAAdvFind.TextChecked = "Only Valid for Adv.Find";
             this.chkAAdvFind.TextIndeterminate = "All Attributes (Valid for Adv.Find)";
             this.chkAAdvFind.TextUnchecked = "Not Valid for Adv.Find";
+            this.toolTip1.SetToolTip(this.chkAAdvFind, "Filter by attributes available for Advanced Find");
             this.chkAAdvFind.UseVisualStyleBackColor = true;
             this.chkAAdvFind.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkAGrid
             // 
-            this.chkAGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkAGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAGrid.Checked = true;
             this.chkAGrid.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -988,12 +1009,13 @@
             this.chkAGrid.TextChecked = "Only Valid for Grid";
             this.chkAGrid.TextIndeterminate = "All Attributes (Valid for Grid)";
             this.chkAGrid.TextUnchecked = "Not Valid for Grid";
+            this.toolTip1.SetToolTip(this.chkAGrid, "Filter by available to add to Grids");
             this.chkAGrid.UseVisualStyleBackColor = true;
             this.chkAGrid.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkACustomizable
             // 
-            this.chkACustomizable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkACustomizable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkACustomizable.Checked = true;
             this.chkACustomizable.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -1006,12 +1028,13 @@
             this.chkACustomizable.TextChecked = "Customizable";
             this.chkACustomizable.TextIndeterminate = "All Un-/Customizable";
             this.chkACustomizable.TextUnchecked = "Uncustomizable";
+            this.toolTip1.SetToolTip(this.chkACustomizable, "Filter by if it is customizable attributes");
             this.chkACustomizable.UseVisualStyleBackColor = true;
             this.chkACustomizable.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkACustom
             // 
-            this.chkACustom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkACustom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkACustom.Checked = true;
             this.chkACustom.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -1024,12 +1047,13 @@
             this.chkACustom.TextChecked = "Custom";
             this.chkACustom.TextIndeterminate = "All Standard/Custom";
             this.chkACustom.TextUnchecked = "Standard";
+            this.toolTip1.SetToolTip(this.chkACustom, "Filter by if it is custom or standard attributes");
             this.chkACustom.UseVisualStyleBackColor = true;
             this.chkACustom.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // chkAManaged
             // 
-            this.chkAManaged.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.chkAManaged.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAManaged.Checked = true;
             this.chkAManaged.CheckState = System.Windows.Forms.CheckState.Indeterminate;
@@ -1042,9 +1066,10 @@
             this.chkAManaged.TextChecked = "Managed";
             this.chkAManaged.TextIndeterminate = "All Managed/Unmanaged";
             this.chkAManaged.TextUnchecked = "Unmanaged";
+            this.toolTip1.SetToolTip(this.chkAManaged, "Filter by Managed status");
             this.chkAManaged.UseVisualStyleBackColor = true;
             this.chkAManaged.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
-           // 
+            // 
             // gbAlwaysAttributes
             // 
             this.gbAlwaysAttributes.Controls.Add(this.chkAShowAddress);
@@ -1357,7 +1382,7 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Filter by Metadata";
             // 
-         // ShowMetadataOptions
+            // ShowMetadataOptions
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1518,5 +1543,6 @@
         internal Helpers.Controls.TriCheckBox chkAManaged;
         internal Helpers.Controls.TriCheckBox chkAAttributeOf;
         internal Helpers.Controls.TriCheckBox chkACalculationOf;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
