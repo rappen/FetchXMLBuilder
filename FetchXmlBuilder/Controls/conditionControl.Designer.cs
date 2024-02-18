@@ -39,6 +39,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.cmbValue = new System.Windows.Forms.ComboBox();
             this.lblValueHint = new System.Windows.Forms.Label();
             this.panAttribte = new System.Windows.Forms.Panel();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panValue = new System.Windows.Forms.Panel();
             this.panValueLookup = new System.Windows.Forms.Panel();
@@ -58,9 +60,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.cmbValueOf = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panAttribte.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panValue.SuspendLayout();
             this.panValueLookup.SuspendLayout();
@@ -69,8 +71,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panGuidSelector.SuspendLayout();
             this.panValueOf.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -113,6 +113,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbOperator.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbOperator.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cmbOperator.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbOperator.FormattingEnabled = true;
             this.cmbOperator.Items.AddRange(new object[] {
             "begins-with",
@@ -269,6 +270,32 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panAttribte.Size = new System.Drawing.Size(311, 120);
             this.panAttribte.TabIndex = 43;
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(52, 82);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox2.TabIndex = 47;
+            this.pictureBox2.TabStop = false;
+            this.pictureBox2.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.query.conditionoper" +
+    "ator";
+            this.pictureBox2.Click += new System.EventHandler(this.helpIcon_Click);
+            // 
+            // pictureBox4
+            // 
+            this.pictureBox4.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
+            this.pictureBox4.Location = new System.Drawing.Point(49, 42);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox4.TabIndex = 46;
+            this.pictureBox4.TabStop = false;
+            this.pictureBox4.Tag = "https://docs.microsoft.com/en-us/powerapps/developer/data-platform/entity-attribu" +
+    "te-metadata";
+            this.pictureBox4.Click += new System.EventHandler(this.helpIcon_Click);
+            // 
             // pictureBox1
             // 
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -360,6 +387,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             // dlgLookup
             // 
+            this.dlgLookup.AdditionalViews = ((System.Collections.Generic.Dictionary<string, System.Collections.Generic.List<Microsoft.Xrm.Sdk.Entity>>)(resources.GetObject("dlgLookup.AdditionalViews")));
             this.dlgLookup.IncludePersonalViews = true;
             this.dlgLookup.LogicalName = "";
             this.dlgLookup.LogicalNames = null;
@@ -478,32 +506,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.label6.TabIndex = 31;
             this.label6.Text = "Value Of";
             // 
-            // pictureBox4
-            // 
-            this.pictureBox4.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
-            this.pictureBox4.Location = new System.Drawing.Point(49, 42);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(14, 14);
-            this.pictureBox4.TabIndex = 46;
-            this.pictureBox4.TabStop = false;
-            this.pictureBox4.Tag = "https://docs.microsoft.com/en-us/powerapps/developer/data-platform/entity-attribu" +
-    "te-metadata";
-            this.pictureBox4.Click += new System.EventHandler(this.helpIcon_Click);
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(52, 82);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(14, 14);
-            this.pictureBox2.TabIndex = 47;
-            this.pictureBox2.TabStop = false;
-            this.pictureBox2.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.query.conditionoper" +
-    "ator";
-            this.pictureBox2.Click += new System.EventHandler(this.helpIcon_Click);
-            // 
             // conditionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -519,6 +521,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.Size = new System.Drawing.Size(311, 258);
             this.panAttribte.ResumeLayout(false);
             this.panAttribte.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panValue.ResumeLayout(false);
             this.panValue.PerformLayout();
@@ -533,8 +537,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panValueOf.ResumeLayout(false);
             this.panValueOf.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 

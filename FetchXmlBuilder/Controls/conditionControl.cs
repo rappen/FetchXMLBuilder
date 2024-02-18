@@ -422,6 +422,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 cmbOperator.Items.Clear();
                 cmbOperator.Items.AddRange(OperatorItem.GetConditionsByAttributeType(attributeType, attributeItem.Metadata.AttributeTypeName?.Value));
                 ReFillControl(cmbOperator);
+                if (cmbOperator.SelectedItem == null && cmbOperator.Items.Count > 0)
+                {
+                    cmbOperator.SelectedIndex = 0;
+                }
             }
         }
 
