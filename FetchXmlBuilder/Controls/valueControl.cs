@@ -76,6 +76,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                         cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
                         cmbValue.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                     }
+                    else if (attribute is BooleanAttributeMetadata boolmeta)
+                    {
+                        cmbValue.Items.Add(new OptionsetItem(boolmeta.OptionSet.FalseOption));
+                        cmbValue.Items.Add(new OptionsetItem(boolmeta.OptionSet.TrueOption));
+                        var value = cmbValue.Text;
+                        cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
+                        cmbValue.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                        cmbValue.SelectedItem = cmbValue.Items.OfType<OptionsetItem>().FirstOrDefault(i => i.GetValue() == value);
+                    }
                     else if (attribute is LookupAttributeMetadata lookupmeta)
                     {
                         // TODO: Show lookup control

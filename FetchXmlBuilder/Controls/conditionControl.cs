@@ -114,7 +114,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                         "https://docs.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml-schema#:~:text=%3Cxs%3AsimpleType%20name%3D%22operator%22%3E");
                 }
 
-                if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem oper && (!oper.IsMultipleValuesType || Node.Nodes.Count > 0))
+                if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem oper && (!oper.IsMultipleValuesType || Node.Nodes.Count == 0))
                 {
                     var attribute = cmbAttribute.SelectedItem as AttributeItem; ;
                     var valueType = GetValueType(oper, attribute);
@@ -197,7 +197,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                             case AttributeTypeCode.Boolean:
                                 if (value != "0" && value != "1")
                                 {
-                                    return new ControlValidationResult(ControlValidationLevel.Error, "Value must be 0 or 1");
+                                    if (oper.IsMultipleValuesType && !string.IsNullOrWhiteSpace(value))
+                                    {
+                                        var split = value.Split(',');
+                                        if (split.Any(v => v.Trim() != "0" && v.Trim() != "1"))
+                                        {
+                                            return new ControlValidationResult(ControlValidationLevel.Error, "Value must be 0 or 1, separated by commas");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return new ControlValidationResult(ControlValidationLevel.Error, "Value must be 0 or 1");
+                                    }
                                 }
                                 break;
 
@@ -216,7 +227,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                             case AttributeTypeCode.EntityName:
                                 if (!int.TryParse(value, out int _))
                                 {
-                                    return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires whole number value");
+                                    if (oper.IsMultipleValuesType && !string.IsNullOrWhiteSpace(value))
+                                    {
+                                        var split = value.Split(',');
+                                        if (split.Any(v => !int.TryParse(v.Trim(), out int _)))
+                                        {
+                                            return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires whole number values separated by commas");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires whole number value");
+                                    }
                                 }
                                 break;
 
@@ -478,6 +500,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                          !(attribute.Metadata is EntityNameAttributeMetadata))
                 {
                     cmbValue.Items.AddRange(options.Options.Select(o => new OptionsetItem(o)).ToArray());
+                    var value = cmbValue.Text;
+                    cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
+                    cmbValue.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                    cmbValue.SelectedItem = cmbValue.Items.OfType<OptionsetItem>().FirstOrDefault(i => i.GetValue() == value);
+                }
+                else if (attribute.Metadata is BooleanAttributeMetadata boolmeta)
+                {
+                    cmbValue.Items.Add(new OptionsetItem(boolmeta.OptionSet.FalseOption));
+                    cmbValue.Items.Add(new OptionsetItem(boolmeta.OptionSet.TrueOption));
                     var value = cmbValue.Text;
                     cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
                     cmbValue.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
