@@ -92,6 +92,40 @@ namespace Rappen.XTB.FetchXmlBuilder
             return result;
         }
 
+        internal string GetContitionValue(string entityName, string attributeName, string value)
+        {
+            if (friendlyNames &&
+                GetAttribute(entityName, attributeName) is AttributeMetadata attribute)
+            {
+                if (attribute is EnumAttributeMetadata enummeta &&
+                    int.TryParse(value, out var optionsetvalue) &&
+                    enummeta.OptionSet.Options.FirstOrDefault(o => o.Value == optionsetvalue) is OptionMetadata valuemeta &&
+                    valuemeta.Label?.UserLocalizedLabel?.Label is string label &&
+                    !string.IsNullOrEmpty(label))
+                {
+                    return label;
+                }
+                if (attribute is BooleanAttributeMetadata boolmeta &&
+                    int.TryParse(value, out var boolvalue) &&
+                    (boolvalue == 0 || boolvalue == 1) &&
+                    boolmeta.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label is string falselabel &&
+                    boolmeta.OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label is string truelabel &&
+                    !string.IsNullOrEmpty(falselabel) &&
+                    !string.IsNullOrEmpty(truelabel))
+                {
+                    if (boolvalue == 0)
+                    {
+                        return falselabel;
+                    }
+                    if (boolvalue == 1)
+                    {
+                        return truelabel;
+                    }
+                }
+            }
+            return value;
+        }
+
         internal IEnumerable<AttributeMetadata> GetAllAttribues(string entityName)
         {
             return GetEntity(entityName)?.Attributes ?? new AttributeMetadata[0];

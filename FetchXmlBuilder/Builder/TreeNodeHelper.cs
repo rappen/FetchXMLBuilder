@@ -210,11 +210,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                         var val = node.Value("value");
                         var valueOf = node.Value("valueof");
                         var uiname = node.Value("uiname");
-                        if (node.Parent != null && node.Parent.Parent != null)
+                        if (node.Parent?.Parent != null)
                         {
-                            var parent = node.Parent.Parent.Value("name");
-                            attr = fxb.GetAttributeDisplayName(parent, attr);
-                            valueOf = fxb.GetAttributeDisplayName(parent, valueOf);
+                            var entity = node.Parent.Parent.Value("name");
+                            val = fxb.GetContitionValue(entity, attr, val);
+                            attr = fxb.GetAttributeDisplayName(entity, attr);
+                            valueOf = fxb.GetAttributeDisplayName(entity, valueOf);
                         }
                         if (!string.IsNullOrEmpty(ent))
                         {
@@ -239,6 +240,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
 
                 case "value":
                     var value = node.Value("#text");
+                    if (node.Parent?.Parent?.Parent != null)
+                    {
+                        var entity = node.Parent.Parent.Parent.Value("name");
+                        var attr = node.Parent.Value("attribute");
+                        value = fxb.GetContitionValue(entity, attr, value);
+                    }
                     text += " " + value;
                     break;
 
