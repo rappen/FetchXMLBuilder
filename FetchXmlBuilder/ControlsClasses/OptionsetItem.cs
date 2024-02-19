@@ -14,7 +14,7 @@ namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
 
         public override string ToString()
         {
-            return meta.Label.UserLocalizedLabel.Label + " (" + meta.Value.ToString() + ")";
+            return meta.Label?.UserLocalizedLabel?.Label + " (" + meta.Value?.ToString() + ")";
         }
 
         public string GetValue()
