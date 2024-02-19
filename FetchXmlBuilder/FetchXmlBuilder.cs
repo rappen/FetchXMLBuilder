@@ -569,6 +569,8 @@ namespace Rappen.XTB.FetchXmlBuilder
         private void tsbAbort_Click(object sender, EventArgs e)
         {
             tsbAbort.Enabled = false;
+            Enabled = false;
+            Cursor = Cursors.WaitCursor;
             CancelWorker();
         }
 

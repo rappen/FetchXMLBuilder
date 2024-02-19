@@ -7,6 +7,7 @@ using Rappen.XRM.Helpers.Serialization;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Settings;
+using Rappen.XTB.Helpers.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ServiceModel;
@@ -72,7 +73,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             if (working)
             {
-                MessageBox.Show("Busy doing something...\n\nPlease wait until current transaction is done.");
+                MessageBox.Show("Busy doing something...\n\nPlease wait until current transaction is done.\n\nCoffee break perhaps?\nFor me too.\nClick the button 'Help' to join me!", "Waiting...", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, "https://www.buymeacoffee.com/rappen");
                 return;
             }
             if (string.IsNullOrEmpty(fetch))
@@ -281,6 +282,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             working = true;
             SendMessageToStatusBar(this, new StatusBarMessageEventArgs("Retrieving..."));
+            tsbExecute.Enabled = false;
             tsbAbort.Enabled = true;
             WorkAsync(new WorkAsyncInfo
             {
@@ -292,64 +294,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     var querysignature = dockControlBuilder.GetTreeChecksum(null);
                     var attributessignature = dockControlBuilder.GetAttributesSignature();
                     var start = DateTime.Now;
-                    EntityCollection resultCollection = null;
-                    EntityCollection tmpResult = null;
-                    var page = 0;
-                    do
-                    {
-                        if (worker.CancellationPending)
-                        {
-                            eventargs.Cancel = true;
-                            break;
-                        }
-                        tmpResult = RetrieveMultiple(query, false);
-                        if (resultCollection == null)
-                        {
-                            resultCollection = tmpResult;
-                        }
-                        else
-                        {
-                            resultCollection.Entities.AddRange(tmpResult.Entities);
-                            resultCollection.MoreRecords = tmpResult.MoreRecords;
-                            resultCollection.PagingCookie = tmpResult.PagingCookie;
-                            resultCollection.TotalRecordCount = tmpResult.TotalRecordCount;
-                            resultCollection.TotalRecordCountLimitExceeded = tmpResult.TotalRecordCountLimitExceeded;
-                        }
-                        if (settings.Results.RetrieveAllPages && tmpResult.MoreRecords)
-                        {
-                            if (query is QueryExpression qex)
-                            {
-                                qex.PageInfo.PageNumber++;
-                                qex.PageInfo.PagingCookie = tmpResult.PagingCookie;
-                            }
-                            else if (query is FetchExpression fex && fex.Query is string pagefetch)
-                            {
-                                var pagedoc = pagefetch.ToXml();
-                                if (pagedoc.SelectSingleNode("fetch") is XmlElement fetchnode)
-                                {
-                                    if (!int.TryParse(fetchnode.GetAttribute("page"), out int pageno))
-                                    {
-                                        pageno = 1;
-                                    }
-                                    pageno++;
-                                    fetchnode.SetAttribute("page", pageno.ToString());
-                                    fetchnode.SetAttribute("pagingcookie", tmpResult.PagingCookie);
-                                    query = new FetchExpression(pagedoc.OuterXml);
-                                }
-                            }
-                            else
-                            {
-                                MessageBox.Show("Unable to retrieve more pages, unexpected query.", "Retrieve all pages", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                break;
-                            }
-                        }
-                        page++;
-                        var duration = DateTime.Now - start;
-                        var pageinfo = page == 1 ? "first page" : $"{page} pages";
-                        worker.ReportProgress(0, $"Retrieved {pageinfo} in {duration.TotalSeconds:F2} sec");
-                        SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Retrieved {resultCollection.Entities.Count} records on {pageinfo} in {duration.TotalSeconds:F2} seconds"));
-                    }
-                    while (!eventargs.Cancel && settings.Results.RetrieveAllPages && (query is QueryExpression || query is FetchExpression) && tmpResult.MoreRecords);
+                    EntityCollection resultCollection = Service.RetrieveMultipleAll(query, worker, eventargs, null);
                     LogUse($"RetrieveMultiple-{settings.Results.ResultOutput}", false, resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds);
                     if (settings.Results.ResultOutput == ResultOutput.JSON)
                     {
@@ -380,6 +325,9 @@ namespace Rappen.XTB.FetchXmlBuilder
                 {
                     working = false;
                     tsbAbort.Enabled = false;
+                    tsbExecute.Enabled = true;
+                    Enabled = true;
+                    Cursor = Cursors.Default;
                     if (completedargs.Error != null)
                     {
                         LogError("RetrieveMultiple error: {0}", completedargs.Error);
@@ -419,6 +367,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                                 ShowResultControl(serialized.OuterXml, ContentType.Serialized_Result_XML, SaveFormat.XML, settings.DockStates.FetchResult);
                                 break;
                         }
+                        queryinfo.Results.Entities.WarnIf50kReturned(queryinfo.Query);
                     }
                     else if ((settings.Results.ResultOutput == ResultOutput.JSON || settings.Results.ResultOutput == ResultOutput.JSONWebAPI) && completedargs.Result is string json)
                     {
