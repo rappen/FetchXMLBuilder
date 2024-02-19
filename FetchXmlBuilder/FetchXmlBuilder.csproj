@@ -642,6 +642,9 @@
   <ItemGroup>
     <None Include="Resources\Power Platform Developer icon.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bmc-32.png" />
+  </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />
   <Import Project="..\MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutoComplete.projitems" Label="Shared" />

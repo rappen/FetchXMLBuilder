@@ -68,7 +68,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // Add the event handler for handling non-UI thread exceptions to the event.
             //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Error_UnhandledException);
 
-            //tslAbout.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString() + " by Jonas Rapp";
+            tslAbout.ToolTipText = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 
             ai1 = new AppInsights(aiEndpoint, aiKey1, Assembly.GetExecutingAssembly(), "FetchXML Builder");
             ai2 = new AppInsights(aiEndpoint, aiKey2, Assembly.GetExecutingAssembly(), "FetchXML Builder");
@@ -876,6 +876,11 @@ namespace Rappen.XTB.FetchXmlBuilder
         private void tsbShare_Click(object sender, EventArgs e)
         {
             ShareLink.Open(this, dockControlBuilder.GetFetchString(false, false));
+        }
+
+        private void tsbBymeacoffee_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://www.buymeacoffee.com/rappen");
         }
 
         #endregion Private Event Handlers
