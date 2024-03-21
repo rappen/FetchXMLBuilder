@@ -126,6 +126,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             // comboBox2
             // 
+            this.comboBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBox2.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.comboBox2.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -133,11 +135,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.comboBox2.Items.AddRange(new object[] {
             "",
             "inner",
-            "outer"});
+            "outer",
+            "any",
+            "not any",
+            "all",
+            "not all",
+            "exists",
+            "matchfirstrowusingcrossapply"});
             this.comboBox2.Location = new System.Drawing.Point(7, 176);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(92, 21);
-            this.comboBox2.Sorted = true;
+            this.comboBox2.Size = new System.Drawing.Size(214, 21);
             this.comboBox2.TabIndex = 5;
             this.comboBox2.Tag = "link-type";
             // 
@@ -153,7 +160,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(103, 163);
+            this.label7.Location = new System.Drawing.Point(4, 200);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(29, 13);
             this.label7.TabIndex = 35;
@@ -164,16 +171,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             this.txtAlias.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAlias.Location = new System.Drawing.Point(106, 177);
+            this.txtAlias.Location = new System.Drawing.Point(7, 214);
             this.txtAlias.Name = "txtAlias";
-            this.txtAlias.Size = new System.Drawing.Size(115, 20);
+            this.txtAlias.Size = new System.Drawing.Size(214, 20);
             this.txtAlias.TabIndex = 6;
             this.txtAlias.Tag = "alias";
             // 
             // chkIntersect
             // 
             this.chkIntersect.AutoSize = true;
-            this.chkIntersect.Location = new System.Drawing.Point(7, 203);
+            this.chkIntersect.Location = new System.Drawing.Point(7, 245);
             this.chkIntersect.Name = "chkIntersect";
             this.chkIntersect.Size = new System.Drawing.Size(67, 17);
             this.chkIntersect.TabIndex = 7;
@@ -184,7 +191,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(106, 203);
+            this.checkBox2.Location = new System.Drawing.Point(106, 245);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(56, 17);
             this.checkBox2.TabIndex = 8;
@@ -242,7 +249,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // chkOnlyLpks
             // 
             this.chkOnlyLpks.AutoSize = true;
-            this.chkOnlyLpks.Location = new System.Drawing.Point(7, 226);
+            this.chkOnlyLpks.Location = new System.Drawing.Point(7, 268);
             this.chkOnlyLpks.Name = "chkOnlyLpks";
             this.chkOnlyLpks.Size = new System.Drawing.Size(186, 17);
             this.chkOnlyLpks.TabIndex = 50;
@@ -272,7 +279,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.Controls.Add(this.cmbEntity);
             this.Controls.Add(this.label2);
             this.Name = "linkEntityControl";
-            this.Size = new System.Drawing.Size(247, 254);
+            this.Size = new System.Drawing.Size(247, 293);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
