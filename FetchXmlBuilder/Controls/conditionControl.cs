@@ -400,7 +400,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             }
             BeginInit();
             var attributes = fxb.GetDisplayAttributes(entityName);
-            attributes.ToList().ForEach(a => AttributeItem.AddAttributeToComboBox(cmbAttribute, a, true, FetchXmlBuilder.friendlyNames));
+            cmbAttribute.Items.AddRange(attributes?.Select(a => new AttributeItem(a)).ToArray());
             // RefreshFill now that attributes are loaded
             ReFillControl(cmbAttribute);
             ReFillControl(cmbValue);

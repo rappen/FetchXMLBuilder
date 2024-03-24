@@ -42,15 +42,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 cmbAggregate.SelectedIndex = -1;
                 chkGroupBy.Checked = false;
             }
-
-            if (attributes != null)
-            {
-                foreach (var attribute in attributes)
-                {
-                    AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, false, FetchXmlBuilder.friendlyNames);
-                }
-            }
-
+            cmbAttribute.Items.AddRange(attributes?.Select(a => new AttributeItem(a)).ToArray());
             UpdateUIFromCell();
         }
 

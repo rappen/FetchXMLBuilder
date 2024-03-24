@@ -31,20 +31,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         protected override void PopulateControls()
         {
             var aggregate = Node.IsFetchAggregate();
+            cmbAttribute.Items.Clear();
+            cmbAlias.Items.Clear();
             if (!aggregate)
             {
-                cmbAttribute.Items.Clear();
-                if (attributes != null)
-                {
-                    foreach (var attribute in attributes)
-                    {
-                        AttributeItem.AddAttributeToComboBox(cmbAttribute, attribute, false, friendly);
-                    }
-                }
+                cmbAttribute.Items.AddRange(attributes?.Select(a => new AttributeItem(a)).ToArray());
             }
             else
             {
-                cmbAlias.Items.Clear();
                 cmbAlias.Items.Add("");
                 cmbAlias.Items.AddRange(GetAliases(Tree.tvFetch.Nodes[0]).ToArray());
             }
