@@ -322,7 +322,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             foreach (var link in linkEntities)
             {
                 var linkcode = string.Empty;
-                var linkname = GetVarName(string.IsNullOrEmpty(link.EntityAlias) ? LineStart + "_" + link.LinkToEntityName : link.EntityAlias);
+                 var linkname = GetVarName(string.IsNullOrEmpty(link.EntityAlias) || link.LinkToEntityName == link.EntityAlias ? LineStart + "_" + link.LinkToEntityName : link.EntityAlias);
                 if (settings.IncludeComments)
                 {
                     linkcode += $"//{CRLF}// Add link-entity {linkname}{CRLF}";
