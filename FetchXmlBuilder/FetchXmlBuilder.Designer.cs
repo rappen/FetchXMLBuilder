@@ -91,6 +91,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tmsiShowReleaseNotes = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbReturnToCaller = new System.Windows.Forms.ToolStripButton();
             this.tslAbout = new System.Windows.Forms.ToolStripLabel();
+            this.tsbLearnFetchXml = new System.Windows.Forms.ToolStripButton();
             this.tsbBymeacoffee = new System.Windows.Forms.ToolStripButton();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.splitter2 = new System.Windows.Forms.Splitter();
@@ -122,11 +123,12 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbOptions,
             this.tsbReturnToCaller,
             this.tslAbout,
+            this.tsbLearnFetchXml,
             this.tsbBymeacoffee});
             this.toolStripMain.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolStripMain.Location = new System.Drawing.Point(0, 0);
             this.toolStripMain.Name = "toolStripMain";
-            this.toolStripMain.Size = new System.Drawing.Size(1437, 39);
+            this.toolStripMain.Size = new System.Drawing.Size(1298, 39);
             this.toolStripMain.TabIndex = 22;
             this.toolStripMain.Text = "toolStrip1";
             this.toolStripMain.Click += new System.EventHandler(this.toolStripMain_Click);
@@ -686,6 +688,18 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tslAbout.Text = "by Jonas Rapp";
             this.tslAbout.Click += new System.EventHandler(this.tslAbout_Click);
             // 
+            // tsbLearnFetchXml
+            // 
+            this.tsbLearnFetchXml.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.tsbLearnFetchXml.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.Microsoft_logo_32;
+            this.tsbLearnFetchXml.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbLearnFetchXml.Name = "tsbLearnFetchXml";
+            this.tsbLearnFetchXml.Size = new System.Drawing.Size(125, 36);
+            this.tsbLearnFetchXml.Tag = "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/overview";
+            this.tsbLearnFetchXml.Text = "Learn FetchXml";
+            this.tsbLearnFetchXml.ToolTipText = "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/overview";
+            this.tsbLearnFetchXml.Click += new System.EventHandler(this.LinkButton_Click);
+            // 
             // tsbBymeacoffee
             // 
             this.tsbBymeacoffee.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
@@ -694,8 +708,9 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbBymeacoffee.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbBymeacoffee.Name = "tsbBymeacoffee";
             this.tsbBymeacoffee.Size = new System.Drawing.Size(36, 36);
+            this.tsbBymeacoffee.Tag = "https://www.buymeacoffee.com/rappen";
             this.tsbBymeacoffee.ToolTipText = "By Me A Coffee!";
-            this.tsbBymeacoffee.Click += new System.EventHandler(this.tsbBymeacoffee_Click);
+            this.tsbBymeacoffee.Click += new System.EventHandler(this.LinkButton_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -707,7 +722,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.splitter2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.splitter2.Location = new System.Drawing.Point(0, 397);
             this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(1437, 3);
+            this.splitter2.Size = new System.Drawing.Size(1298, 3);
             this.splitter2.TabIndex = 4;
             this.splitter2.TabStop = false;
             // 
@@ -721,7 +736,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.dockContainer.DocumentStyle = WeifenLuo.WinFormsUI.Docking.DocumentStyle.DockingWindow;
             this.dockContainer.Location = new System.Drawing.Point(0, 39);
             this.dockContainer.Name = "dockContainer";
-            this.dockContainer.Size = new System.Drawing.Size(1437, 360);
+            this.dockContainer.Size = new System.Drawing.Size(1298, 360);
             this.dockContainer.TabIndex = 33;
             // 
             // FetchXmlBuilder
@@ -735,7 +750,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "FetchXmlBuilder";
             this.PluginIcon = ((System.Drawing.Icon)(resources.GetObject("$this.PluginIcon")));
-            this.Size = new System.Drawing.Size(1437, 400);
+            this.Size = new System.Drawing.Size(1298, 400);
             this.TabIcon = ((System.Drawing.Image)(resources.GetObject("$this.TabIcon")));
             this.ConnectionUpdated += new XrmToolBox.Extensibility.PluginControlBase.ConnectionUpdatedHandler(this.FetchXmlBuilder_ConnectionUpdated);
             this.Load += new System.EventHandler(this.FetchXmlBuilder_Load);
@@ -814,5 +829,6 @@ namespace Rappen.XTB.FetchXmlBuilder
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowPowerPlatformCLI;
         private System.Windows.Forms.ToolStripButton tsbBymeacoffee;
+        private System.Windows.Forms.ToolStripButton tsbLearnFetchXml;
     }
 }
