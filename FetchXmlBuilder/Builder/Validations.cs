@@ -118,6 +118,22 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
             {
                 return new ControlValidationResult(ControlValidationLevel.Warning, "Using Layout: Alias is needed to show these attributes");
             }
+            if (node.ParentNotEntity() is TreeNode parent && parent.Name == "filter")
+            {
+                var type = node.Value("link-type");
+                if (!type.Equals("any") && !type.Equals("not any") && !type.Equals("all") && !type.Equals("not all"))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Filter by link-entity has to be type any, not any, all, or not all", "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/filter-rows#filter-on-values-in-related-records");
+                }
+                if (node.Nodes.OfType<TreeNode>().Any(c => c.Name == "attribute"))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Link-entity under filter can't return any attributes.", "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/filter-rows#filter-on-values-in-related-records");
+                }
+                if (!parent.Value("type").Equals("or"))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "For filter link-entity it should by of type 'or'.", "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/filter-rows#filter-on-values-in-related-records");
+                }
+            }
 
             if (node.Value("intersect") != "true" &&
                 fxb.GetAttribute(name, node.Value("from")) is AttributeMetadata fromAttr && fromAttr.IsPrimaryId == false)
@@ -158,7 +174,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
             {
                 if (string.IsNullOrWhiteSpace(alias))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "Aggregate should always have an Alias.", "https://docs.microsoft.com/en-us/powerapps/developer/data-platform/use-fetchxml-aggregation#about-aggregation");
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Aggregate should always have an Alias.", "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/aggregate-data#about-aggregation");
                 }
 
                 if (node.Value("groupby") == "true")
@@ -217,7 +233,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
             var oper = node.Value("operator");
             if (oper == "contains" || oper == "does-not-contain")
             {
-                return new ControlValidationResult(ControlValidationLevel.Error, $"Condition operator '{oper}' is not supported by FetchXml.", "https://docs.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml-schema");
+                return new ControlValidationResult(ControlValidationLevel.Error, $"Condition operator '{oper}' is not supported by FetchXml.", "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/reference/");
             }
             var entityname = node.Value("entityname");
             if (!string.IsNullOrWhiteSpace(entityname) && !node.LocalEntityIsRoot())
@@ -259,11 +275,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
             {
                 if (string.IsNullOrWhiteSpace(alias))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "Order Alias must be included in aggregate query.", "https://docs.microsoft.com/en-us/power-apps/developer/data-platform/use-fetchxml-aggregation#order-by");
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Order Alias must be included in aggregate query.", "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/aggregate-data#order-by");
                 }
                 if (!string.IsNullOrWhiteSpace(attribute))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "Order Name must NOT be included in aggregate query.", "https://docs.microsoft.com/en-us/power-apps/developer/data-platform/use-fetchxml-aggregation#order-by");
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Order Name must NOT be included in aggregate query.", "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/aggregate-data#order-by");
                 }
             }
             else
@@ -276,7 +292,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
 
             if (node.Parent.Name == "link-entity")
             {
-                return new ControlValidationResult(ControlValidationLevel.Info, "Sorting on a link-entity triggers legacy paging.", "https://docs.microsoft.com/en-us/powerapps/developer/data-platform/org-service/paging-behaviors-and-ordering#ordering-and-multiple-table-queries");
+                return new ControlValidationResult(ControlValidationLevel.Info, "Sorting on a link-entity triggers legacy paging.", "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/order-rows#process-link-entity-orders-first");
             }
             var parententity = node.LocalEntityName();
             if (fxb.entities != null && !string.IsNullOrWhiteSpace(attribute))

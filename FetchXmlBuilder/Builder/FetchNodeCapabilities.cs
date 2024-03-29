@@ -89,6 +89,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
 
                 case "filter":
                     ChildTypes.Add(new FetchNodeCapabilities("condition"));
+                    ChildTypes.Add(new FetchNodeCapabilities("link-entity"));
                     ChildTypes.Add(new FetchNodeCapabilities("filter"));
                     ChildTypes.Add(new FetchNodeCapabilities("-"));
                     ChildTypes.Add(new FetchNodeCapabilities("#comment"));

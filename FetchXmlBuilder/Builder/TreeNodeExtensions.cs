@@ -34,6 +34,23 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
             return node.LocalEntityNode().Value("name");
         }
 
+        internal static TreeNode ParentNotEntity(this TreeNode node)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+            while (node.Name.Equals("entity") || node.Name.Equals("link-entity"))
+            {
+                node = node.Parent;
+                if (node == null)
+                {
+                    return null;
+                }
+            }
+            return node;
+        }
+
         internal static string Value(this TreeNode node, string key)
         {
             if (node != null && node.Tag != null && node.Tag is Dictionary<string, string> tag && tag.ContainsKey(key))

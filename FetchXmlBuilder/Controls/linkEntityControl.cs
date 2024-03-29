@@ -41,7 +41,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 }
             }
 
-            var parententityname = Node.Parent.Value("name");
+            var parententityname = Node.Parent.LocalEntityName();
             if (fxb.NeedToLoadEntity(parententityname))
             {
                 if (!fxb.working)
@@ -80,7 +80,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private void RefreshRelationships()
         {
             cmbRelationship.Items.Clear();
-            var parententityname = Node.Parent.Value("name");
+            var parententitynode = Node.Parent.LocalEntityNode();
+            var parententityname = parententitynode.Value("name");
             var parententity = fxb.GetEntity(parententityname);
             if (parententity != null)
             {
@@ -112,7 +113,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 }
                 if (mm.Length > 0)
                 {
-                    var greatparententityname = Node.Parent.Parent != null ? Node.Parent.Parent.Value("name") : "";
+                    var greatparententityname = parententitynode.Parent != null ? parententitynode.Parent.Value("name") : "";
                     cmbRelationship.Items.Add("- M:M -");
                     list.Clear();
                     foreach (var rel in mm)
@@ -148,7 +149,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             {
                 cmbFrom.Items.AddRange(GetRelevantLinkAttributes(linkentity));
             }
-            var parententity = Node.Parent.Value("name");
+            var parententity = Node.Parent.LocalEntityName();
             cmbTo.Items.AddRange(GetRelevantLinkAttributes(parententity));
             ValidationSuspended = false;
             fxb.ShowMetadata(Metadata());
@@ -174,7 +175,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         {
             if (cmbRelationship.SelectedItem != null && cmbRelationship.SelectedItem is EntityRelationship rel)
             {
-                var parent = Node.Parent.Value("name");
+                var parentnode = Node.Parent.LocalEntityNode();
+                var parent = parentnode.Value("name");
                 string entity;
                 string from;
                 string to;
@@ -218,7 +220,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
                     if (parent == mm.IntersectEntityName)
                     {
-                        var greatparent = Node.Parent.Parent.Value("name");
+                        var greatparent = parentnode.Parent.Value("name");
                         if (greatparent == mm.Entity1LogicalName && rel.Role == EntityRole.Referencing)
                         {
                             entity = mm.Entity2LogicalName;
@@ -369,6 +371,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 }
             }
 
+            if (control == cmbType)
+            {
+                if (Node.Parent.Name == "filter")
+                {
+                    var type = cmbType.Text;
+                    if (!type.Equals("any") && !type.Equals("not any") && !type.Equals("all") && !type.Equals("not all"))
+                    {
+                        return new ControlValidationResult(ControlValidationLevel.Warning, "For filter link-entity has to be type any, not any, all, or not all");
+                    }
+                }
+            }
+
             if (control == txtAlias)
             {
                 if (Validations.ValidateAlias(txtAlias.Text) is ControlValidationResult aliasresult)
@@ -411,7 +425,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             }
             else if (cmbTo.Focused)
             {
-                var parententity = Node.Parent.Value("name");
+                var parententity = Node.Parent.LocalEntityName();
                 if (!string.IsNullOrWhiteSpace(cmbTo.Text) &&
                     fxb.GetEntity(parententity) is EntityMetadata pmeta &&
                     pmeta.Attributes.FirstOrDefault(a => a.LogicalName == cmbTo.Text) is AttributeMetadata pameta)

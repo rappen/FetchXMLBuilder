@@ -35,7 +35,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.cmbTo = new System.Windows.Forms.ComboBox();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.cmbType = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.txtAlias = new System.Windows.Forms.TextBox();
@@ -124,15 +124,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.cmbTo.Tag = "to|true";
             this.cmbTo.Enter += new System.EventHandler(this.cmbEntity_Enter);
             // 
-            // comboBox2
+            // cmbType
             // 
-            this.comboBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.cmbType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox2.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.comboBox2.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Items.AddRange(new object[] {
+            this.cmbType.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cmbType.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cmbType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbType.FormattingEnabled = true;
+            this.cmbType.Items.AddRange(new object[] {
             "",
             "inner",
             "outer",
@@ -142,11 +142,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             "not all",
             "exists",
             "matchfirstrowusingcrossapply"});
-            this.comboBox2.Location = new System.Drawing.Point(7, 176);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(214, 21);
-            this.comboBox2.TabIndex = 5;
-            this.comboBox2.Tag = "link-type";
+            this.cmbType.Location = new System.Drawing.Point(7, 176);
+            this.cmbType.Name = "cmbType";
+            this.cmbType.Size = new System.Drawing.Size(214, 21);
+            this.cmbType.TabIndex = 5;
+            this.cmbType.Tag = "link-type";
             // 
             // label6
             // 
@@ -271,7 +271,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.Controls.Add(this.label7);
             this.Controls.Add(this.txtAlias);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.comboBox2);
+            this.Controls.Add(this.cmbType);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.cmbTo);
             this.Controls.Add(this.label4);
@@ -295,7 +295,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox cmbTo;
-        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox cmbType;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txtAlias;
