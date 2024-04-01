@@ -31,7 +31,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             }
             var organizationServiceUrl = sender.ConnectionDetail.OrganizationDataServiceUrl;
             var url = organizationServiceUrl;
-            var entity = fetch.Items.Where(i => i is FetchEntityType).FirstOrDefault() as FetchEntityType;
+            var entity = fetch.Item;
             if (entity == null)
             {
                 throw new Exception("Fetch must contain entity definition");
@@ -100,7 +100,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             {
                 foreach (FetchLinkEntityType linkitem in linkitems)
                 {
-                    if (linkitem.linktype == "outer")
+                    if (linkitem.linktype == FetchLinkEntityTypeLinktype.outer)
                     {
                         throw new Exception("OData queries do not support outer joins");
                     }
@@ -197,7 +197,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             {
                 if (item is condition)
                 {
-                    result += GetCondition(entity, item as condition, sender);
+                    result += GetCondition(entity, item as FetchConditionType, sender);
                 }
                 else if (item is filter)
                 {
@@ -216,7 +216,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             return result;
         }
 
-        private static string GetCondition(FetchEntityType entity, condition condition, FetchXmlBuilder sender)
+        private static string GetCondition(FetchEntityType entity, FetchConditionType condition, FetchXmlBuilder sender)
         {
             var result = "";
             if (!string.IsNullOrEmpty(condition.attribute))
@@ -410,7 +410,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     if (linkitems.Count == 1)
                     {
                         var nextlink = (FetchLinkEntityType)linkitems[0];
-                        if (nextlink.linktype == "outer")
+                        if (nextlink.linktype == FetchLinkEntityTypeLinktype.outer)
                         {
                             throw new Exception("OData queries do not support outer joins");
                         }
@@ -432,7 +432,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     if (linkitems.Count == 1)
                     {
                         var nextlink = (FetchLinkEntityType)linkitems[0];
-                        if (nextlink.linktype == "outer")
+                        if (nextlink.linktype == FetchLinkEntityTypeLinktype.outer)
                         {
                             throw new Exception("OData queries do not support outer joins");
                         }
