@@ -698,7 +698,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbLearnFetchXml.Tag = "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/overview";
             this.tsbLearnFetchXml.Text = "Learn FetchXml";
             this.tsbLearnFetchXml.ToolTipText = "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/overview";
-            this.tsbLearnFetchXml.Click += new System.EventHandler(this.LinkButton_Click);
+            this.tsbLearnFetchXml.Click += new System.EventHandler(this.HelpClick);
             // 
             // tsbBymeacoffee
             // 
@@ -710,7 +710,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbBymeacoffee.Size = new System.Drawing.Size(36, 36);
             this.tsbBymeacoffee.Tag = "https://www.buymeacoffee.com/rappen";
             this.tsbBymeacoffee.ToolTipText = "By Me A Coffee!";
-            this.tsbBymeacoffee.Click += new System.EventHandler(this.LinkButton_Click);
+            this.tsbBymeacoffee.Click += new System.EventHandler(this.HelpClick);
             // 
             // toolStripMenuItem1
             // 

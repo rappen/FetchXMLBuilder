@@ -196,11 +196,17 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
         }
 
+        internal void HelpClick(object sender, EventArgs e) => HelpClick(sender);
+
         internal static void HelpClick(object sender)
         {
             if (sender is Control control && control.Tag is string tag)
             {
                 HelpClick(tag);
+            }
+            else if (sender is ToolStripItem tsi && tsi.Tag is string tsitag)
+            {
+                HelpClick(tsitag);
             }
         }
 

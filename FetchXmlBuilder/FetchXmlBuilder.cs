@@ -878,18 +878,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             ShareLink.Open(this, dockControlBuilder.GetFetchString(false, false));
         }
 
-        private void LinkButton_Click(object sender, EventArgs e)
-        {
-            if (sender is ToolStripItem tsi && tsi.Tag is string tag1 && tag1.StartsWith("http") == true)
-            {
-                OpenURL(tag1);
-            }
-            else if (sender is Control control && control.Tag is string tag2 && tag2.StartsWith("http") == true)
-            {
-                OpenURL(tag2);
-            }
-        }
-
         #endregion Private Event Handlers
     }
 }
