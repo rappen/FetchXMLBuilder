@@ -154,5 +154,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
 
             return tooltip;
         }
+
+        internal static bool HeritanceOfFilter(this TreeNode node)
+        {
+            if (node == null)
+            {
+                return false;
+            }
+            if (node.Name == "filter")
+            {
+                return true;
+            }
+            return HeritanceOfFilter(node.Parent);
+        }
     }
 }

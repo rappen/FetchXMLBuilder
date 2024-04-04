@@ -28,6 +28,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(conditionControl));
             this.label2 = new System.Windows.Forms.Label();
             this.cmbAttribute = new System.Windows.Forms.ComboBox();
@@ -38,7 +39,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.cmbEntity = new System.Windows.Forms.ComboBox();
             this.cmbValue = new System.Windows.Forms.ComboBox();
             this.lblValueHint = new System.Windows.Forms.Label();
-            this.panAttribte = new System.Windows.Forms.Panel();
+            this.panOperator = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -57,10 +58,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.rbEnterGuid = new System.Windows.Forms.RadioButton();
             this.rbUseLookup = new System.Windows.Forms.RadioButton();
             this.panValueOf = new System.Windows.Forms.Panel();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.panValoeOfAttr = new System.Windows.Forms.Panel();
             this.cmbValueOf = new System.Windows.Forms.ComboBox();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.panAttribte.SuspendLayout();
+            this.panValueOfAlias = new System.Windows.Forms.Panel();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.cmbValueOfAlias = new System.Windows.Forms.ComboBox();
+            this.panAttrEntity = new System.Windows.Forms.Panel();
+            this.pictureBox6 = new System.Windows.Forms.PictureBox();
+            this.panAttribute = new System.Windows.Forms.Panel();
+            this.panAttr = new System.Windows.Forms.Panel();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.panOperator.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -70,14 +81,21 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panUitype.SuspendLayout();
             this.panGuidSelector.SuspendLayout();
             this.panValueOf.SuspendLayout();
+            this.panValoeOfAttr.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            this.panValueOfAlias.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
+            this.panAttrEntity.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
+            this.panAttribute.SuspendLayout();
+            this.panAttr.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(4, 42);
+            this.label2.Location = new System.Drawing.Point(4, 2);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(46, 13);
             this.label2.TabIndex = 5;
@@ -90,9 +108,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.cmbAttribute.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbAttribute.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbAttribute.FormattingEnabled = true;
-            this.cmbAttribute.Location = new System.Drawing.Point(7, 56);
+            this.cmbAttribute.Location = new System.Drawing.Point(7, 16);
             this.cmbAttribute.Name = "cmbAttribute";
-            this.cmbAttribute.Size = new System.Drawing.Size(281, 21);
+            this.cmbAttribute.Size = new System.Drawing.Size(177, 21);
             this.cmbAttribute.Sorted = true;
             this.cmbAttribute.TabIndex = 2;
             this.cmbAttribute.Tag = "attribute|true";
@@ -101,7 +119,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(4, 82);
+            this.label4.Location = new System.Drawing.Point(4, 2);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(48, 13);
             this.label4.TabIndex = 29;
@@ -187,7 +205,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             "yesterday",
             "contains-values",
             "not-contains-values"});
-            this.cmbOperator.Location = new System.Drawing.Point(7, 96);
+            this.cmbOperator.Location = new System.Drawing.Point(7, 16);
             this.cmbOperator.Name = "cmbOperator";
             this.cmbOperator.Size = new System.Drawing.Size(281, 21);
             this.cmbOperator.TabIndex = 3;
@@ -208,23 +226,23 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(4, 2);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(33, 13);
+            this.label9.Size = new System.Drawing.Size(56, 13);
             this.label9.TabIndex = 39;
-            this.label9.Text = "Entity";
+            this.label9.Text = "Link Entity";
+            this.toolTip1.SetToolTip(this.label9, "Filters on link-entity");
             // 
             // cmbEntity
             // 
-            this.cmbEntity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbEntity.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbEntity.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbEntity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbEntity.FormattingEnabled = true;
             this.cmbEntity.Location = new System.Drawing.Point(7, 16);
             this.cmbEntity.Name = "cmbEntity";
-            this.cmbEntity.Size = new System.Drawing.Size(281, 21);
+            this.cmbEntity.Size = new System.Drawing.Size(95, 21);
             this.cmbEntity.TabIndex = 1;
             this.cmbEntity.Tag = "entityname";
+            this.toolTip1.SetToolTip(this.cmbEntity, "Filters on link-entity");
             this.cmbEntity.SelectedIndexChanged += new System.EventHandler(this.cmbEntity_SelectedIndexChanged);
             // 
             // cmbValue
@@ -253,60 +271,54 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.lblValueHint.Text = "ValueHint";
             this.lblValueHint.Visible = false;
             // 
-            // panAttribte
+            // panOperator
             // 
-            this.panAttribte.Controls.Add(this.pictureBox2);
-            this.panAttribte.Controls.Add(this.pictureBox4);
-            this.panAttribte.Controls.Add(this.pictureBox1);
-            this.panAttribte.Controls.Add(this.cmbOperator);
-            this.panAttribte.Controls.Add(this.label2);
-            this.panAttribte.Controls.Add(this.cmbAttribute);
-            this.panAttribte.Controls.Add(this.label4);
-            this.panAttribte.Controls.Add(this.cmbEntity);
-            this.panAttribte.Controls.Add(this.label9);
-            this.panAttribte.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panAttribte.Location = new System.Drawing.Point(0, 0);
-            this.panAttribte.Name = "panAttribte";
-            this.panAttribte.Size = new System.Drawing.Size(311, 120);
-            this.panAttribte.TabIndex = 43;
+            this.panOperator.Controls.Add(this.pictureBox2);
+            this.panOperator.Controls.Add(this.cmbOperator);
+            this.panOperator.Controls.Add(this.label4);
+            this.panOperator.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panOperator.Location = new System.Drawing.Point(0, 40);
+            this.panOperator.Name = "panOperator";
+            this.panOperator.Size = new System.Drawing.Size(311, 40);
+            this.panOperator.TabIndex = 2;
             // 
             // pictureBox2
             // 
             this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(52, 82);
+            this.pictureBox2.Location = new System.Drawing.Point(52, 2);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(14, 14);
             this.pictureBox2.TabIndex = 47;
             this.pictureBox2.TabStop = false;
-            this.pictureBox2.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.query.conditionoper" +
-    "ator";
+            this.pictureBox2.Tag = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml/fil" +
+    "ter-rows#operator-parameters";
             this.pictureBox2.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // pictureBox4
             // 
             this.pictureBox4.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
-            this.pictureBox4.Location = new System.Drawing.Point(49, 42);
+            this.pictureBox4.Location = new System.Drawing.Point(49, 2);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(14, 14);
             this.pictureBox4.TabIndex = 46;
             this.pictureBox4.TabStop = false;
-            this.pictureBox4.Tag = "https://docs.microsoft.com/en-us/powerapps/developer/data-platform/entity-attribu" +
-    "te-metadata";
+            this.pictureBox4.Tag = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml/fil" +
+    "ter-rows";
             this.pictureBox4.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // pictureBox1
             // 
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(37, 2);
+            this.pictureBox1.Location = new System.Drawing.Point(84, 16);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(14, 14);
             this.pictureBox1.TabIndex = 45;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Tag = "https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/use-fetc" +
-    "hxml-left-outer-join-query-records-not-in";
+            this.pictureBox1.Tag = "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/filter-ro" +
+    "ws#filters-on-link-entity";
             this.pictureBox1.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // panValue
@@ -314,10 +326,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panValue.Controls.Add(this.cmbValue);
             this.panValue.Controls.Add(this.label5);
             this.panValue.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panValue.Location = new System.Drawing.Point(0, 120);
+            this.panValue.Location = new System.Drawing.Point(0, 80);
             this.panValue.Name = "panValue";
             this.panValue.Size = new System.Drawing.Size(311, 40);
-            this.panValue.TabIndex = 44;
+            this.panValue.TabIndex = 3;
             // 
             // panValueLookup
             // 
@@ -325,10 +337,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panValueLookup.Controls.Add(this.txtLookup);
             this.panValueLookup.Controls.Add(this.label1);
             this.panValueLookup.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panValueLookup.Location = new System.Drawing.Point(0, 160);
+            this.panValueLookup.Location = new System.Drawing.Point(0, 120);
             this.panValueLookup.Name = "panValueLookup";
             this.panValueLookup.Size = new System.Drawing.Size(311, 40);
-            this.panValueLookup.TabIndex = 45;
+            this.panValueLookup.TabIndex = 4;
             this.panValueLookup.Visible = false;
             // 
             // btnLookup
@@ -380,7 +392,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             this.panValueHint.Controls.Add(this.lblValueHint);
             this.panValueHint.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panValueHint.Location = new System.Drawing.Point(0, 265);
+            this.panValueHint.Location = new System.Drawing.Point(0, 225);
             this.panValueHint.Name = "panValueHint";
             this.panValueHint.Size = new System.Drawing.Size(311, 32);
             this.panValueHint.TabIndex = 47;
@@ -400,7 +412,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panUitype.Controls.Add(this.txtUitype);
             this.panUitype.Controls.Add(this.label3);
             this.panUitype.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panUitype.Location = new System.Drawing.Point(0, 297);
+            this.panUitype.Location = new System.Drawing.Point(0, 257);
             this.panUitype.Name = "panUitype";
             this.panUitype.Size = new System.Drawing.Size(311, 46);
             this.panUitype.TabIndex = 48;
@@ -430,7 +442,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panGuidSelector.Controls.Add(this.rbEnterGuid);
             this.panGuidSelector.Controls.Add(this.rbUseLookup);
             this.panGuidSelector.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panGuidSelector.Location = new System.Drawing.Point(0, 200);
+            this.panGuidSelector.Location = new System.Drawing.Point(0, 160);
             this.panGuidSelector.Name = "panGuidSelector";
             this.panGuidSelector.Size = new System.Drawing.Size(311, 25);
             this.panGuidSelector.TabIndex = 49;
@@ -461,27 +473,24 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             // panValueOf
             // 
-            this.panValueOf.Controls.Add(this.pictureBox3);
-            this.panValueOf.Controls.Add(this.cmbValueOf);
-            this.panValueOf.Controls.Add(this.label6);
+            this.panValueOf.Controls.Add(this.panValoeOfAttr);
+            this.panValueOf.Controls.Add(this.panValueOfAlias);
             this.panValueOf.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panValueOf.Location = new System.Drawing.Point(0, 225);
+            this.panValueOf.Location = new System.Drawing.Point(0, 185);
             this.panValueOf.Name = "panValueOf";
             this.panValueOf.Size = new System.Drawing.Size(311, 40);
-            this.panValueOf.TabIndex = 50;
+            this.panValueOf.TabIndex = 5;
             // 
-            // pictureBox3
+            // panValoeOfAttr
             // 
-            this.pictureBox3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(53, 2);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(14, 14);
-            this.pictureBox3.TabIndex = 44;
-            this.pictureBox3.TabStop = false;
-            this.pictureBox3.Tag = "https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/column-c" +
-    "omparison";
-            this.pictureBox3.Click += new System.EventHandler(this.helpIcon_Click);
+            this.panValoeOfAttr.Controls.Add(this.cmbValueOf);
+            this.panValoeOfAttr.Controls.Add(this.pictureBox3);
+            this.panValoeOfAttr.Controls.Add(this.label6);
+            this.panValoeOfAttr.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panValoeOfAttr.Location = new System.Drawing.Point(104, 0);
+            this.panValoeOfAttr.Name = "panValoeOfAttr";
+            this.panValoeOfAttr.Size = new System.Drawing.Size(207, 40);
+            this.panValoeOfAttr.TabIndex = 2;
             // 
             // cmbValueOf
             // 
@@ -492,10 +501,25 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.cmbValueOf.FormattingEnabled = true;
             this.cmbValueOf.Location = new System.Drawing.Point(7, 16);
             this.cmbValueOf.Name = "cmbValueOf";
-            this.cmbValueOf.Size = new System.Drawing.Size(281, 21);
+            this.cmbValueOf.Size = new System.Drawing.Size(177, 21);
             this.cmbValueOf.Sorted = true;
             this.cmbValueOf.TabIndex = 32;
             this.cmbValueOf.Tag = "valueof";
+            this.toolTip1.SetToolTip(this.cmbValueOf, "Filter on column values in the same row");
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
+            this.pictureBox3.Location = new System.Drawing.Point(52, 2);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox3.TabIndex = 44;
+            this.pictureBox3.TabStop = false;
+            this.pictureBox3.Tag = "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/filter-ro" +
+    "ws#filter-on-column-values-in-the-same-row";
+            this.toolTip1.SetToolTip(this.pictureBox3, "MS Learn: Filter on column values in the same row");
+            this.pictureBox3.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // label6
             // 
@@ -505,6 +529,103 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.label6.Size = new System.Drawing.Size(48, 13);
             this.label6.TabIndex = 31;
             this.label6.Text = "Value Of";
+            this.toolTip1.SetToolTip(this.label6, "Filter on column values in the same row");
+            // 
+            // panValueOfAlias
+            // 
+            this.panValueOfAlias.Controls.Add(this.pictureBox5);
+            this.panValueOfAlias.Controls.Add(this.label7);
+            this.panValueOfAlias.Controls.Add(this.cmbValueOfAlias);
+            this.panValueOfAlias.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panValueOfAlias.Location = new System.Drawing.Point(0, 0);
+            this.panValueOfAlias.Name = "panValueOfAlias";
+            this.panValueOfAlias.Size = new System.Drawing.Size(104, 40);
+            this.panValueOfAlias.TabIndex = 1;
+            // 
+            // pictureBox5
+            // 
+            this.pictureBox5.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
+            this.pictureBox5.Location = new System.Drawing.Point(56, 2);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox5.TabIndex = 47;
+            this.pictureBox5.TabStop = false;
+            this.pictureBox5.Tag = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml/fil" +
+    "ter-rows#cross-table-comparisons";
+            this.toolTip1.SetToolTip(this.pictureBox5, "MS Learn: Cross table comparisons");
+            this.pictureBox5.Click += new System.EventHandler(this.helpIcon_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(4, 2);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(52, 13);
+            this.label7.TabIndex = 46;
+            this.label7.Text = "Link Alias";
+            this.toolTip1.SetToolTip(this.label7, "Cross table comparisons");
+            // 
+            // cmbValueOfAlias
+            // 
+            this.cmbValueOfAlias.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cmbValueOfAlias.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cmbValueOfAlias.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbValueOfAlias.FormattingEnabled = true;
+            this.cmbValueOfAlias.Location = new System.Drawing.Point(7, 16);
+            this.cmbValueOfAlias.Name = "cmbValueOfAlias";
+            this.cmbValueOfAlias.Size = new System.Drawing.Size(95, 21);
+            this.cmbValueOfAlias.TabIndex = 45;
+            this.cmbValueOfAlias.Tag = "valueofalias";
+            this.toolTip1.SetToolTip(this.cmbValueOfAlias, "Cross table comparisons");
+            this.cmbValueOfAlias.SelectedIndexChanged += new System.EventHandler(this.cmbValueOfAlias_SelectedIndexChanged);
+            // 
+            // panAttrEntity
+            // 
+            this.panAttrEntity.Controls.Add(this.pictureBox6);
+            this.panAttrEntity.Controls.Add(this.cmbEntity);
+            this.panAttrEntity.Controls.Add(this.label9);
+            this.panAttrEntity.Controls.Add(this.pictureBox1);
+            this.panAttrEntity.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panAttrEntity.Location = new System.Drawing.Point(0, 0);
+            this.panAttrEntity.Name = "panAttrEntity";
+            this.panAttrEntity.Size = new System.Drawing.Size(104, 40);
+            this.panAttrEntity.TabIndex = 1;
+            // 
+            // pictureBox6
+            // 
+            this.pictureBox6.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox6.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox6.Image")));
+            this.pictureBox6.Location = new System.Drawing.Point(59, 2);
+            this.pictureBox6.Name = "pictureBox6";
+            this.pictureBox6.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox6.TabIndex = 48;
+            this.pictureBox6.TabStop = false;
+            this.pictureBox6.Tag = "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/filter-ro" +
+    "ws#filters-on-link-entity";
+            this.toolTip1.SetToolTip(this.pictureBox6, "MS Learn: Filters on link-entity");
+            this.pictureBox6.Click += new System.EventHandler(this.helpIcon_Click);
+            // 
+            // panAttribute
+            // 
+            this.panAttribute.Controls.Add(this.cmbAttribute);
+            this.panAttribute.Controls.Add(this.pictureBox4);
+            this.panAttribute.Controls.Add(this.label2);
+            this.panAttribute.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panAttribute.Location = new System.Drawing.Point(104, 0);
+            this.panAttribute.Name = "panAttribute";
+            this.panAttribute.Size = new System.Drawing.Size(207, 40);
+            this.panAttribute.TabIndex = 2;
+            // 
+            // panAttr
+            // 
+            this.panAttr.Controls.Add(this.panAttribute);
+            this.panAttr.Controls.Add(this.panAttrEntity);
+            this.panAttr.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panAttr.Location = new System.Drawing.Point(0, 0);
+            this.panAttr.Name = "panAttr";
+            this.panAttr.Size = new System.Drawing.Size(311, 40);
+            this.panAttr.TabIndex = 1;
             // 
             // conditionControl
             // 
@@ -516,11 +637,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.Controls.Add(this.panGuidSelector);
             this.Controls.Add(this.panValueLookup);
             this.Controls.Add(this.panValue);
-            this.Controls.Add(this.panAttribte);
+            this.Controls.Add(this.panOperator);
+            this.Controls.Add(this.panAttr);
             this.Name = "conditionControl";
-            this.Size = new System.Drawing.Size(311, 258);
-            this.panAttribte.ResumeLayout(false);
-            this.panAttribte.PerformLayout();
+            this.Size = new System.Drawing.Size(311, 379);
+            this.panOperator.ResumeLayout(false);
+            this.panOperator.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -535,8 +657,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panGuidSelector.ResumeLayout(false);
             this.panGuidSelector.PerformLayout();
             this.panValueOf.ResumeLayout(false);
-            this.panValueOf.PerformLayout();
+            this.panValoeOfAttr.ResumeLayout(false);
+            this.panValoeOfAttr.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            this.panValueOfAlias.ResumeLayout(false);
+            this.panValueOfAlias.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
+            this.panAttrEntity.ResumeLayout(false);
+            this.panAttrEntity.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
+            this.panAttribute.ResumeLayout(false);
+            this.panAttribute.PerformLayout();
+            this.panAttr.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 
@@ -552,7 +684,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private System.Windows.Forms.ComboBox cmbEntity;
         private System.Windows.Forms.ComboBox cmbValue;
         private System.Windows.Forms.Label lblValueHint;
-        private System.Windows.Forms.Panel panAttribte;
+        private System.Windows.Forms.Panel panOperator;
         private System.Windows.Forms.Panel panValue;
         private System.Windows.Forms.Panel panValueLookup;
         private System.Windows.Forms.Label label1;
@@ -574,5 +706,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox4;
+        private System.Windows.Forms.ComboBox cmbValueOfAlias;
+        private System.Windows.Forms.Panel panAttrEntity;
+        private System.Windows.Forms.Panel panAttribute;
+        private System.Windows.Forms.Panel panAttr;
+        private System.Windows.Forms.Panel panValueOfAlias;
+        private System.Windows.Forms.PictureBox pictureBox5;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Panel panValoeOfAttr;
+        private System.Windows.Forms.PictureBox pictureBox6;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

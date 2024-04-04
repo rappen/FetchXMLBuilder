@@ -40,25 +40,50 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             dlgLookup.Service = fetchXmlBuilder.Service;
             rbUseLookup.Checked = fetchXmlBuilder.settings.UseLookup;
             rbEnterGuid.Checked = !rbUseLookup.Checked;
-            InitializeFXB(null, fetchXmlBuilder, tree, node);
+            var collect = (Dictionary<string, string>)node.Tag;
+            if (collect != null && collect.TryGetValue("valueof", out var valueof) && valueof.Split('.') is string[] valueofsplits && valueofsplits.Length == 2)
+            {
+                collect.Add("valueofalias", valueofsplits[0]);
+                collect["valueof"] = valueofsplits[1];
+            }
+            InitializeFXB(collect, fetchXmlBuilder, tree, node);
             EndInit();
             RefreshAttributes();
+            EnableValueFields();
         }
 
         #endregion Public Constructors
 
-        #region Protected Methods
+        #region Public Override Methods
+
+        public override MetadataBase Metadata()
+        {
+            if (cmbAttribute.SelectedItem is AttributeItem item)
+            {
+                return item.Metadata;
+            }
+            return base.Metadata();
+        }
+
+        public override void Focus()
+        {
+            cmbAttribute.Focus();
+        }
+
+        public override bool Save(bool keyPress)
+        {
+            EnableValueFields();
+            return base.Save(keyPress);
+        }
+
+        #endregion Public Override Methods
+
+        #region Protected Override Methods
 
         protected override void PopulateControls()
         {
-            cmbEntity.Items.Clear();
-            var closestEntity = GetClosestEntityNode(Node);
-            if (closestEntity != null && closestEntity.Name == "entity")
-            {
-                cmbEntity.Items.Add("");
-                cmbEntity.Items.AddRange(GetEntities(Tree.tvFetch.Nodes[0]).ToArray());
-            }
-            cmbEntity.Enabled = cmbEntity.Items.Count > 0;
+            SetEntitiesAliases(cmbEntity, false);
+            SetEntitiesAliases(cmbValueOfAlias, true);
             cmbOperator.Items.Clear();
             foreach (var oper in Enum.GetValues(typeof(ConditionOperator)))
             {
@@ -78,8 +103,22 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             {
                 ExtractCommaSeparatedValues();
             }
-
             base.SaveInternal(silent);
+        }
+
+        private void EnableValueFields()
+        {
+            panValueOf.Enabled = string.IsNullOrEmpty(cmbValue.Text);
+            if (!panValueOf.Enabled)
+            {
+                cmbValueOf.Text = null;
+                cmbValueOfAlias.Text = null;
+            }
+            cmbValue.Enabled = string.IsNullOrEmpty(cmbValueOf.Text);
+            if (!cmbValue.Enabled)
+            {
+                cmbValue.Text = null;
+            }
         }
 
         protected override ControlValidationResult ValidateControl(Control control)
@@ -278,28 +317,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             return base.ValidateControl(control);
         }
 
-        private static AttributeTypeCode? GetValueType(OperatorItem oper, AttributeItem attributeitem)
-        {
-            if (oper == null)
-            {
-                return null;
-            }
-            var valueType = oper.ValueType;
-            if (valueType == AttributeTypeCode.ManagedProperty)
-            {   // Type not defined by operator
-                if (attributeitem != null)
-                {   // Get type from condition attribute
-                    valueType = attributeitem.Metadata.AttributeType;
-                }
-                else
-                {   // Default, cannot determine type
-                    valueType = AttributeTypeCode.String;
-                }
-            }
-
-            return valueType;
-        }
-
         protected override Dictionary<string, string> GetAttributesCollection()
         {
             var result = base.GetAttributesCollection();
@@ -323,21 +340,43 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 result.Remove("value");
                 result.Remove("valueof");
             }
+            if (result.TryGetValue("valueofalias", out var alias))
+            {
+                if (!string.IsNullOrWhiteSpace(alias) &&
+                    result.TryGetValue("valueof", out var valueof) &&
+                    !string.IsNullOrWhiteSpace(valueof))
+                {
+                    result["valueof"] = alias + "." + valueof;
+                }
+                result.Remove("valueofalias");
+            }
             return result;
         }
 
-        #endregion Protected Methods
+        #endregion Protected Override Methods
 
         #region Private Methods
 
-        private static TreeNode GetClosestEntityNode(TreeNode node)
+        private static AttributeTypeCode? GetValueType(OperatorItem oper, AttributeItem attributeitem)
         {
-            var parentNode = node.Parent;
-            while (parentNode != null && parentNode.Name != "entity" && parentNode.Name != "link-entity")
+            if (oper == null)
             {
-                parentNode = parentNode.Parent;
+                return null;
             }
-            return parentNode;
+            var valueType = oper.ValueType;
+            if (valueType == AttributeTypeCode.ManagedProperty)
+            {   // Type not defined by operator
+                if (attributeitem != null)
+                {   // Get type from condition attribute
+                    valueType = attributeitem.Metadata.AttributeType;
+                }
+                else
+                {   // Default, cannot determine type
+                    valueType = AttributeTypeCode.String;
+                }
+            }
+
+            return valueType;
         }
 
         private void ExtractCommaSeparatedValues()
@@ -359,16 +398,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             }
         }
 
-        private List<EntityNode> GetEntities(TreeNode node)
+        private List<EntityNode> GetEntities(TreeNode node, bool needsalias)
         {
             var result = new List<EntityNode>();
-            if (node.Name == "link-entity")
+            if (node.HeritanceOfFilter())
+            {
+                return result;
+            }
+            if (node.Name == "link-entity" && (!needsalias || !string.IsNullOrWhiteSpace(node.Value("alias"))))
             {
                 result.Add(new EntityNode(node));
             }
             foreach (TreeNode child in node.Nodes)
             {
-                result.AddRange(GetEntities(child));
+                result.AddRange(GetEntities(child, needsalias));
             }
             return result;
         }
@@ -383,7 +426,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             var entityNode = cmbEntity.SelectedItem is EntityNode ? (EntityNode)cmbEntity.SelectedItem : null;
             if (entityNode == null)
             {
-                entityNode = new EntityNode(GetClosestEntityNode(Node));
+                entityNode = new EntityNode(Node.LocalEntityNode());
             }
             if (entityNode == null)
             {
@@ -444,20 +487,53 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             {
                 panValueOf.Visible = true;
                 cmbValueOf.Items.Clear();
-                if (attribute != null)
+
+                var aliasyNode = cmbValueOfAlias.SelectedItem is EntityNode ? (EntityNode)cmbValueOfAlias.SelectedItem : null;
+                if (aliasyNode == null)
                 {
-                    cmbValueOf.Items.AddRange(cmbAttribute.Items
-                        .Cast<AttributeItem>()
-                        .Where(a => a.Metadata.AttributeType == attribute.Metadata.AttributeType)
-                        .Select(a => new AttributeItem(a.Metadata))
-                        .ToArray());
+                    aliasyNode = new EntityNode(Node.LocalEntityNode());
                 }
+                if (aliasyNode == null)
+                {
+                    return;
+                }
+                var entityName = aliasyNode.EntityName;
+                if (fxb.NeedToLoadEntity(entityName))
+                {
+                    if (!fxb.working)
+                    {
+                        fxb.LoadEntityDetails(entityName, RefreshAttributes);
+                    }
+                    return;
+                }
+                BeginInit();
+                var attributes = fxb.GetDisplayAttributes(entityName);
+                cmbValueOf.Items.AddRange(attributes?.Select(a => new AttributeItem(a)).ToArray());
+                // RefreshFill now that attributes are loaded
+                //ReFillControl(cmbValueOf);
+                EndInit();
             }
             else
             {
                 cmbValueOf.Text = "";
             }
-            ReFillControl(cmbValueOf);
+            //ReFillControl(cmbValueOf);
+        }
+
+        private void SetEntitiesAliases(ComboBox cmb, bool needsalias)
+        {
+            cmb.Items.Clear();
+            var closestEntity = Node.LocalEntityNode();
+            if (closestEntity != null && closestEntity.Name == "entity")
+            {
+                cmb.Items.Add("");
+                cmb.Items.AddRange(GetEntities(Tree.tvFetch.Nodes[0], needsalias).ToArray());
+            }
+            cmb.Enabled = cmb.Items.Count > 1;
+            if (cmb.Parent is Panel pan)
+            {
+                pan.Visible = cmb.Enabled;
+            }
         }
 
         private void UpdateValueField()
@@ -503,6 +579,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                          enummeta.OptionSet is OptionSetMetadata options &&
                          !(attribute.Metadata is EntityNameAttributeMetadata))
                 {
+                    cmbValue.Items.Add("");
                     cmbValue.Items.AddRange(options.Options.Select(o => new OptionsetItem(o)).ToArray());
                     var value = cmbValue.Text;
                     cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -511,6 +588,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 }
                 else if (attribute.Metadata is BooleanAttributeMetadata boolmeta)
                 {
+                    cmbValue.Items.Add("");
                     cmbValue.Items.Add(new OptionsetItem(boolmeta.OptionSet.FalseOption));
                     cmbValue.Items.Add(new OptionsetItem(boolmeta.OptionSet.TrueOption));
                     var value = cmbValue.Text;
@@ -523,6 +601,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                     var entities = fxb.GetDisplayEntities();
                     if (entities != null)
                     {
+                        cmbValue.Items.Add("");
                         cmbValue.Items.AddRange(entities.Select(e => new EntityNameItem(e)).ToArray());
                         var value = cmbValue.Text;
                         cmbValue.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -565,6 +644,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 }
                 else if (managedProp != null && managedProp.ValueAttributeTypeCode == AttributeTypeCode.Boolean)
                 {
+                    cmbValue.Items.Add("");
                     cmbValue.Items.Add(new OptionsetItem(new OptionMetadata(new Microsoft.Xrm.Sdk.Label("False", 0), 0)));
                     cmbValue.Items.Add(new OptionsetItem(new OptionMetadata(new Microsoft.Xrm.Sdk.Label("True", 0), 1)));
                     var value = cmbValue.Text;
@@ -604,7 +684,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 {
                     if (attrmeta.IsLogical == false)
                     {
-                        var entitynode = new EntityNode(GetClosestEntityNode(Node));
+                        var entitynode = new EntityNode(Node.LocalEntityNode());
                         dlgLookup.LogicalName = entitynode.EntityName;
                     }
                     else if (attrmeta.LogicalName.EndsWith("addressid"))
@@ -670,6 +750,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private void rbUseLookup_CheckedChanged(object sender, EventArgs e)
         {
+            if (fxb?.settings != null)
+            {
+                fxb.settings.UseLookup = rbUseLookup.Checked;
+            }
             UpdateValueField();
         }
 
@@ -684,25 +768,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             }
         }
 
-        #endregion Private Event Handlers
-
         private void helpIcon_Click(object sender, EventArgs e)
         {
             FetchXmlBuilder.HelpClick(sender);
-        }
-
-        public override MetadataBase Metadata()
-        {
-            if (cmbAttribute.SelectedItem is AttributeItem item)
-            {
-                return item.Metadata;
-            }
-            return base.Metadata();
-        }
-
-        public override void Focus()
-        {
-            cmbAttribute.Focus();
         }
 
         private void cmbValue_KeyPress(object sender, KeyPressEventArgs e)
@@ -725,5 +793,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 }
             }
         }
+
+        private void cmbValueOfAlias_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshValueOf();
+        }
+
+        #endregion Private Event Handlers
     }
 }

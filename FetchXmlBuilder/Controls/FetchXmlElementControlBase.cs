@@ -46,7 +46,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         protected static Icon WarningIcon { get; }
         protected static Icon InfoIcon { get; }
 
-        public void InitializeFXB(Dictionary<string, string> collection, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree, TreeNode node)
+        protected void InitializeFXB(Dictionary<string, string> collection, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree, TreeNode node)
         {
             BeginInit();
 
