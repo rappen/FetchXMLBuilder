@@ -73,7 +73,7 @@ namespace Rappen.XTB.XmlEditorUtils
                     string defaultvalue;
                     if (GetControlDefinition(control, out attribute, out required, out defaultvalue))
                     {
-                        var value = ControlUtils.GetValueFromControl(control);
+                        var value = GetValueFromControl(control);
                         if (validate && required && string.IsNullOrEmpty(value))
                         {
                             throw new ArgumentNullException(attribute, "Field cannot be empty");
@@ -192,7 +192,7 @@ namespace Rappen.XTB.XmlEditorUtils
 
         public static void FillControl(Dictionary<string, string> collection, Control control, IDefinitionSavable saveable)
         {
-            if (control.Tag != null && control.Tag != "uiname" && GetControlDefinition(control, out string attribute, out bool required, out string defaultvalue))
+            if (control.Tag != null && control.Tag.ToString() != "uiname" && GetControlDefinition(control, out string attribute, out bool required, out string defaultvalue))
             {
                 if (!collection.TryGetValue(attribute, out string value))
                 {
