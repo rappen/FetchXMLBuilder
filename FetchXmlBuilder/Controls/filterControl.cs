@@ -24,9 +24,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private void EnableQFControls()
         {
             chkOverrideQFLimit.Enabled = chkIsQF.Checked;
-            if (!chkOverrideQFLimit.Enabled && chkOverrideQFLimit.Checked)
+            chkOverrideQFLimitBypass.Enabled = chkIsQF.Checked;
+            if (!chkOverrideQFLimit.Enabled)
             {
                 chkOverrideQFLimit.Checked = false;
+            }
+            if (!chkOverrideQFLimitBypass.Enabled)
+            {
+                chkOverrideQFLimitBypass.Checked = false;
             }
         }
 
