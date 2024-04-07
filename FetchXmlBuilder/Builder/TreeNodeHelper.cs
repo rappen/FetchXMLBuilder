@@ -166,11 +166,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                     {
                         text += " ";
                         AttributeMetadata attrmeta = null;
-                        if (node.Parent != null)
+                        if (node.LocalEntityName() is string attentity && !string.IsNullOrEmpty(attentity))
                         {
-                            var parent = node.Parent.Value("name");
-                            attrmeta = fxb.GetAttribute(parent, name);
-                            name = fxb.GetAttributeDisplayName(parent, name);
+                            attrmeta = fxb.GetAttribute(attentity, name);
+                            name = fxb.GetAttributeDisplayName(attentity, name);
                         }
                         if (!string.IsNullOrEmpty(agg) && !string.IsNullOrEmpty(name))
                         {
@@ -217,12 +216,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                         var val = node.Value("value");
                         var valueOf = node.Value("valueof");
                         var uiname = node.Value("uiname");
-                        if (node.Parent?.Parent != null)
+                        if (node.LocalEntityName() is string cndentity && !string.IsNullOrEmpty(cndentity))
                         {
-                            var entity = node.Parent.Parent.Value("name");
-                            val = fxb.GetContitionValue(entity, attr, val);
-                            attr = fxb.GetAttributeDisplayName(entity, attr);
-                            valueOf = fxb.GetAttributeDisplayName(entity, valueOf);
+                            val = fxb.GetContitionValue(cndentity, attr, val);
+                            attr = fxb.GetAttributeDisplayName(cndentity, attr);
+                            valueOf = fxb.GetAttributeDisplayName(cndentity, valueOf);
                         }
                         if (!string.IsNullOrEmpty(ent))
                         {
@@ -247,11 +245,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
 
                 case "value":
                     var value = node.Value("#text");
-                    if (node.Parent?.Parent?.Parent != null)
+                    if (node.LocalEntityName() is string valentity && !string.IsNullOrEmpty(valentity))
                     {
-                        var entity = node.Parent.Parent.Parent.Value("name");
                         var attr = node.Parent.Value("attribute");
-                        value = fxb.GetContitionValue(entity, attr, value);
+                        value = fxb.GetContitionValue(valentity, attr, value);
                     }
                     text += " " + value;
                     break;
@@ -266,10 +263,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                         }
                         else if (!string.IsNullOrEmpty(attr))
                         {
-                            if (!string.IsNullOrEmpty(attr) && node.Parent != null)
+                            if (node.LocalEntityName() is string ordentity && !string.IsNullOrEmpty(ordentity))
                             {
-                                var parent = node.Parent.Value("name");
-                                attr = fxb.GetAttributeDisplayName(parent, attr);
+                                attr = fxb.GetAttributeDisplayName(ordentity, attr);
                             }
                             {
                                 text += " " + attr;
