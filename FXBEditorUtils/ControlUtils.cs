@@ -103,6 +103,7 @@ namespace Rappen.XTB.XmlEditorUtils
             }
             controls.OfType<Control>().Where(y => y.Tag != null).OrderBy(y => y.TabIndex).ToList().ForEach(c => FillControl(collection, c, saveable));
             controls.OfType<Panel>().OrderBy(p => p.TabIndex).ToList().ForEach(p => FillControls(collection, p.Controls, saveable));
+            controls.OfType<GroupBox>().OrderBy(g => g.TabIndex).ToList().ForEach(g => FillControls(collection, g.Controls, saveable));
         }
 
         private class TextBoxEventHandler

@@ -1,8 +1,8 @@
 ﻿using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
-using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Rappen.XTB.FetchXmlBuilder.Controls
@@ -66,6 +66,24 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         public override void Focus()
         {
             textTop.Focus();
+        }
+
+        private void cmbOptionsAdd_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var option = cmbOptionsAdd.Text;
+            cmbOptionsAdd.SelectedIndex = -1;
+            if (string.IsNullOrWhiteSpace(option))
+            {
+                return;
+            }
+            if (txtOptions.Text.Contains(option))
+            {
+                MessageBox.Show($"Options already has {option}. Only one can be added.");
+                return;
+            }
+            var ops = txtOptions.Text.Split(',').ToList();
+            ops.Add(option);
+            txtOptions.Text = string.Join(",", ops.Where(o => !string.IsNullOrWhiteSpace(o)));
         }
     }
 }
