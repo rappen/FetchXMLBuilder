@@ -106,21 +106,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             base.SaveInternal(silent);
         }
 
-        private void EnableValueFields()
-        {
-            panValueOf.Enabled = string.IsNullOrEmpty(cmbValue.Text);
-            if (!panValueOf.Enabled)
-            {
-                cmbValueOf.Text = null;
-                cmbValueOfAlias.Text = null;
-            }
-            cmbValue.Enabled = string.IsNullOrEmpty(cmbValueOf.Text);
-            if (!cmbValue.Enabled)
-            {
-                cmbValue.Text = null;
-            }
-        }
-
         protected override ControlValidationResult ValidateControl(Control control)
         {
             if (control == cmbAttribute)
@@ -379,6 +364,21 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             return valueType;
         }
 
+        private void EnableValueFields()
+        {
+            panValueOf.Enabled = string.IsNullOrEmpty(cmbValue.Text);
+            if (!panValueOf.Enabled)
+            {
+                cmbValueOf.Text = null;
+                cmbValueOfAlias.Text = null;
+            }
+            cmbValue.Enabled = string.IsNullOrEmpty(cmbValueOf.Text);
+            if (!cmbValue.Enabled)
+            {
+                cmbValue.Text = null;
+            }
+        }
+
         private void ExtractCommaSeparatedValues()
         {
             var oper = (OperatorItem)cmbOperator.SelectedItem;
@@ -443,7 +443,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             }
             BeginInit();
             var attributes = fxb.GetDisplayAttributes(entityName);
-            cmbAttribute.Items.AddRange(attributes?.Select(a => new AttributeItem(a)).ToArray());
+            cmbAttribute.Items.AddRange(attributes?.Select(a => new AttributeItem(a, fxb.settings.ShowAttributeTypes)).ToArray());
             // RefreshFill now that attributes are loaded
             ReFillControl(cmbAttribute);
             ReFillControl(cmbValue);
@@ -508,7 +508,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 }
                 BeginInit();
                 var attributes = fxb.GetDisplayAttributes(entityName);
-                cmbValueOf.Items.AddRange(attributes?.Select(a => new AttributeItem(a)).ToArray());
+                cmbValueOf.Items.AddRange(attributes?
+                    .Select(a => new AttributeItem(a, fxb.settings.ShowAttributeTypes))
+                    .Where(a => TypeIsCloseEnough(a.Metadata, attribute.Metadata))
+                    .ToArray());
                 // RefreshFill now that attributes are loaded
                 //ReFillControl(cmbValueOf);
                 EndInit();
@@ -518,6 +521,31 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 cmbValueOf.Text = "";
             }
             //ReFillControl(cmbValueOf);
+        }
+
+        private bool TypeIsCloseEnough(AttributeMetadata comparer, AttributeMetadata target)
+        {
+            if (comparer.AttributeType == target.AttributeType)
+            {
+                return true;
+            }
+            if (target is StringAttributeMetadata)
+            {
+                return comparer is MemoAttributeMetadata;
+            }
+            if (target is MemoAttributeMetadata)
+            {
+                return comparer is StringAttributeMetadata;
+            }
+            if (target is EnumAttributeMetadata)
+            {
+                return comparer is IntegerAttributeMetadata;
+            }
+            if (target is IntegerAttributeMetadata)
+            {
+                return comparer is EnumAttributeMetadata;
+            }
+            return false;
         }
 
         private void SetEntitiesAliases(ComboBox cmb, bool needsalias)

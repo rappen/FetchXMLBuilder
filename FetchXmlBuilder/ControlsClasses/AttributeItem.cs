@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
+using Rappen.XRM.Helpers.Extensions;
 using Rappen.XTB.XmlEditorUtils;
 using System.Windows.Forms;
 
@@ -7,6 +8,7 @@ namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
     internal class AttributeItem : IComboBoxItem
     {
         private AttributeMetadata meta = null;
+        private bool includetypeindisplayname;
 
         public AttributeMetadata Metadata
         {
@@ -14,9 +16,10 @@ namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
             set { meta = value; }
         }
 
-        public AttributeItem(AttributeMetadata Attribute)
+        public AttributeItem(AttributeMetadata Attribute, bool IncludeTypeInDisplayName)
         {
             meta = Attribute;
+            includetypeindisplayname = IncludeTypeInDisplayName;
         }
 
         public override string ToString()
@@ -29,6 +32,7 @@ namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
             //if (meta.IsSecured == true) result += " Sec";
             //if (meta.IsValidForAdvancedFind.Value) result += " AF";
             //if (meta.AttributeType != null) result += " " + meta.AttributeType.ToString();
+            if (includetypeindisplayname) result += $" ({meta.ToTypeName(FetchXmlBuilder.friendlyNames)})";
             return result;
         }
 
@@ -37,7 +41,7 @@ namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
             return meta.LogicalName;
         }
 
-        public static void AddAttributeToComboBox(ComboBox cmb, AttributeMetadata meta, bool allowvirtual, bool friendly)
+        public static void AddAttributeToComboBox(ComboBox cmb, AttributeMetadata meta, bool includetypeindisplayname, bool allowvirtual, bool friendly)
         {
             var add = false;
             if (!friendly)
@@ -58,7 +62,7 @@ namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
             }
             if (add)
             {
-                cmb.Items.Add(new AttributeItem(meta));
+                cmb.Items.Add(new AttributeItem(meta, includetypeindisplayname));
             }
         }
     }

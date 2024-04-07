@@ -45,6 +45,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool ShowValidationInfo { get; set; } = true;
         public bool ShowRepository { get; set; } = false;
         public bool ShowBDU { get; set; } = true;
+        public bool ShowTreeviewAttributeTypes { get; set; } = false;
+        public bool ShowAttributeTypes { get; set; } = true;
         public bool ShowOData2 { get; set; }
         public bool TryMetadataCache { get; set; } = true;
         public bool WaitUntilMetadataLoaded { get; set; } = false;

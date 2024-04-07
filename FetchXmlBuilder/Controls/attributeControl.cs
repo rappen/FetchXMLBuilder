@@ -42,7 +42,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 cmbAggregate.SelectedIndex = -1;
                 chkGroupBy.Checked = false;
             }
-            cmbAttribute.Items.AddRange(attributes?.Select(a => new AttributeItem(a)).ToArray());
+            cmbAttribute.Items.AddRange(attributes?.Select(a => new AttributeItem(a, fxb.settings.ShowAttributeTypes)).ToArray());
             UpdateUIFromCell();
         }
 

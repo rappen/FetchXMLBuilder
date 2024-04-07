@@ -1,4 +1,5 @@
-﻿using Rappen.XRM.Helpers.Extensions;
+﻿using Microsoft.Xrm.Sdk.Metadata;
+using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Settings;
@@ -164,9 +165,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                     if (!string.IsNullOrEmpty(name))
                     {
                         text += " ";
+                        AttributeMetadata attrmeta = null;
                         if (node.Parent != null)
                         {
                             var parent = node.Parent.Value("name");
+                            attrmeta = fxb.GetAttribute(parent, name);
                             name = fxb.GetAttributeDisplayName(parent, name);
                         }
                         if (!string.IsNullOrEmpty(agg) && !string.IsNullOrEmpty(name))
@@ -189,6 +192,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                         if (grp == "true")
                         {
                             text += " GRP";
+                        }
+                        if (fxb.settings.ShowTreeviewAttributeTypes && attrmeta != null)
+                        {
+                            text += $" ({attrmeta.ToTypeName(fxb.settings.UseFriendlyNames)})";
                         }
                     }
                     break;

@@ -35,7 +35,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             cmbAlias.Items.Clear();
             if (!aggregate)
             {
-                cmbAttribute.Items.AddRange(attributes?.Select(a => new AttributeItem(a)).ToArray());
+                cmbAttribute.Items.AddRange(attributes?.Select(a => new AttributeItem(a, fxb.settings.ShowAttributeTypes)).ToArray());
             }
             else
             {

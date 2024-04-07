@@ -45,22 +45,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             return attributeName;
         }
 
-        internal static string GetAttributeDisplayName(AttributeMetadata attribute)
-        {
-            string attributeName = attribute.LogicalName;
-            if (friendlyNames)
-            {
-                if (attribute.DisplayName.UserLocalizedLabel != null)
-                {
-                    attributeName = attribute.DisplayName.UserLocalizedLabel.Label;
-                }
-                if (attributeName == attribute.LogicalName && attribute.DisplayName.LocalizedLabels.Count > 0)
-                {
-                    attributeName = attribute.DisplayName.LocalizedLabels[0].Label;
-                }
-            }
-            return attributeName;
-        }
+        internal static string GetAttributeDisplayName(AttributeMetadata attribute) => friendlyNames ? attribute.ToDisplayName() : attribute.LogicalName;
 
         internal string GetEntityDisplayName(string entityName)
         {
@@ -75,22 +60,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             return entityName;
         }
 
-        internal static string GetEntityDisplayName(EntityMetadata entity)
-        {
-            var result = entity.LogicalName;
-            if (friendlyNames)
-            {
-                if (entity.DisplayName.UserLocalizedLabel != null)
-                {
-                    result = entity.DisplayName.UserLocalizedLabel.Label;
-                }
-                if (result == entity.LogicalName && entity.DisplayName.LocalizedLabels.Count > 0)
-                {
-                    result = entity.DisplayName.LocalizedLabels[0].Label;
-                }
-            }
-            return result;
-        }
+        internal static string GetEntityDisplayName(EntityMetadata entity) => friendlyNames ? entity.ToDisplayName() : entity.LogicalName;
 
         internal string GetContitionValue(string entityName, string attributeName, string value)
         {
