@@ -366,7 +366,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private void EnableValueFields()
         {
-            panValueOf.Enabled = string.IsNullOrEmpty(cmbValue.Text);
+            panValueOf.Enabled = string.IsNullOrEmpty(cmbValue.Text) || cmbValue.Text == Guid.Empty.ToString();
             if (!panValueOf.Enabled)
             {
                 cmbValueOf.Text = null;
