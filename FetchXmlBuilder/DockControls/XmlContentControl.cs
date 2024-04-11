@@ -1,4 +1,5 @@
-﻿using MarkMpn.XmlSchemaAutocomplete.Scintilla;
+﻿using MarkMpn.XmlSchemaAutocomplete;
+using MarkMpn.XmlSchemaAutocomplete.Scintilla;
 using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
@@ -550,7 +551,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             _autocomplete.AddMemberDescription<FetchType>(nameof(FetchType.pagingcookie), "Paging Cookie", "The paging cookie returned with the previous page of results. Supplying this value makes it more efficient to retrieve the next page.");
             _autocomplete.AddMemberDescription<FetchType>(nameof(FetchType.returntotalrecordcount), "Return Total Record Count", "Indicates if the total number of possible results should be returned along with this page of results.");
             _autocomplete.AddMemberDescription<FetchType>(nameof(FetchType.top), "Top Count", "The maximum number of records to return. No further pages of data will be returned.");
-            _autocomplete.AddMemberDescription<FetchType>(nameof(FetchType.datasource), "Data Source", "Set to 'archive' to access Long Term Retention data, or leave blank to access live data.");
+            _autocomplete.AddMemberDescription<FetchType>(nameof(FetchType.datasource), "Data Source", "Set to 'retained' to access Long Term Retention data, or leave blank to access live data.");
 
             _autocomplete.AddTypeDescription<FetchEntityType>("Main Entity", "Gives the name of the entity type the query will return.");
             _autocomplete.AddMemberDescription<FetchEntityType>(nameof(FetchEntityType.enableprefiltering), "Enable Prefiltering", "If this query is being used in an SSRS report, indicates if the report can be pre-filtered by the user selecting the records to run it on.");
@@ -565,7 +566,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             _autocomplete.AddMemberDescription<FetchAttributeType>(nameof(FetchAttributeType.groupby), "Grouping", "Indicates that the results should be grouped by this attribute. Only applies to aggregate queries.");
             _autocomplete.AddMemberDescription<FetchAttributeType>(nameof(FetchAttributeType.name), "Attribute Name", "The name of the attribute to include.");
 
-            _autocomplete.AddTypeDescription<allattributes>("All Attributes", "Includes all attributes from the entity in the query results.");
+            _autocomplete.AddTypeDescription<FetchAllAttributesType>("All Attributes", "Includes all attributes from the entity in the query results.");
 
             _autocomplete.AddTypeDescription<FetchLinkEntityType>("Link Entity", "Joins the entity to another entity");
             _autocomplete.AddMemberDescription<FetchLinkEntityType>(nameof(FetchLinkEntityType.alias), "Alias Name", "The alias name to apply to this linked entity.");
@@ -576,33 +577,35 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             _autocomplete.AddMemberDescription<FetchLinkEntityType>(nameof(FetchLinkEntityType.name), "Entity Name", "The name of the entity to join to.");
             _autocomplete.AddMemberDescription<FetchLinkEntityType>(nameof(FetchLinkEntityType.prefilterparametername), "Prefilter Parameter Name", "If prefiltering is enabled, this gives the name of the parameter that will be used for the filtering.");
             _autocomplete.AddMemberDescription<FetchLinkEntityType>(nameof(FetchLinkEntityType.to), "Join To Attribute", "The name of the attribute in the parent entity that should be used in the join.");
-            _autocomplete.AddMemberDescription<FetchLinkEntityType>(nameof(FetchLinkEntityType.visible), "Is Visible", "Indicates if this linked entity should be visible in the Advanced Find editor.");
+            //_autocomplete.AddMemberDescription<FetchLinkEntityType>(nameof(FetchLinkEntityType.visible), "Is Visible", "Indicates if this linked entity should be visible in the Advanced Find editor.");
 
-            _autocomplete.AddTypeDescription<filter>("Filter", "Applies a filter to the query results using multiple conditions or sub-filters.");
-            _autocomplete.AddMemberDescription<filter>(nameof(filter.isquickfindfields), "Is Quick Find", "If this FetchXML is being used in a Quick Find view, indicates that the quick-find filter conditions should be added to this filter.");
-            _autocomplete.AddMemberDescription<filter>(nameof(filter.type), "Filter Operator", "Indicates if the conditions and sub-filters in this filter should be combined with a logical AND or OR operator.");
+            _autocomplete.AddTypeDescription<FetchFilterType>("Filter", "Applies a filter to the query results using multiple conditions or sub-filters.");
+            _autocomplete.AddMemberDescription<FetchFilterType>(nameof(FetchFilterType.isquickfindfields), "Is Quick Find", "If this FetchXML is being used in a Quick Find view, indicates that the quick-find filter conditions should be added to this filter.");
+            _autocomplete.AddMemberDescription<FetchFilterType>(nameof(FetchFilterType.type), "Filter Operator", "Indicates if the conditions and sub-filters in this filter should be combined with a logical AND or OR operator.");
 
-            _autocomplete.AddTypeDescription<condition>("Condition", "Filters the query results based on the value of a specific attribute");
-            _autocomplete.AddMemberDescription<condition>(nameof(condition.alias), "Alias Name", "The name of the aliased attribute that this condition applies to.");
-            _autocomplete.AddMemberDescription<condition>(nameof(condition.attribute), "Attribute Name", "The name of the attribute that this condition applies to.");
-            _autocomplete.AddMemberDescription<condition>(nameof(condition.entityname), "Entity Name", "The name of the linked entity that the attribute to filter on is in.");
-            _autocomplete.AddMemberDescription<condition>(nameof(condition.@operator), "Operator", "The type of filter condition to apply to this attribute.");
-            _autocomplete.AddMemberDescription<condition>(nameof(condition.uihidden), "Is Hidden", "Indicates if the condition should be hidden from the Advanced Find view.");
-            _autocomplete.AddMemberDescription<condition>(nameof(condition.uiname), "Lookup Value Name", "When filtering on a lookup value, gives the name of the associated record to show in the Advanced Find view.");
-            _autocomplete.AddMemberDescription<condition>(nameof(condition.uitype), "Lookup Value Type", "When filtering on a lookup value, gives the type of the associated record to show in the Advanced Find view.");
-            _autocomplete.AddMemberDescription<condition>(nameof(condition.value), "Value", "The value to compare the records against to check if they should be included in the results.");
-            _autocomplete.AddMemberDescription<condition>(nameof(condition.valueof), "Compare To Attribute", "The name of another attribute to compare the first attribute to.");
+            _autocomplete.AddTypeDescription<FetchConditionType>("Condition", "Filters the query results based on the value of a specific attribute");
+            _autocomplete.AddMemberDescription<FetchConditionType>(nameof(FetchConditionType.alias), "Alias Name", "The name of the aliased attribute that this condition applies to.");
+            _autocomplete.AddMemberDescription<FetchConditionType>(nameof(FetchConditionType.attribute), "Attribute Name", "The name of the attribute that this condition applies to.");
+            _autocomplete.AddMemberDescription<FetchConditionType>(nameof(FetchConditionType.entityname), "Entity Name", "The name of the linked entity that the attribute to filter on is in.");
+            _autocomplete.AddMemberDescription<FetchConditionType>(nameof(FetchConditionType.@operator), "Operator", "The type of filter condition to apply to this attribute.");
+            _autocomplete.AddMemberDescription<FetchConditionType>(nameof(FetchConditionType.uihidden), "Is Hidden", "Indicates if the condition should be hidden from the Advanced Find view.");
+            _autocomplete.AddMemberDescription<FetchConditionType>(nameof(FetchConditionType.uiname), "Lookup Value Name", "When filtering on a lookup value, gives the name of the associated record to show in the Advanced Find view.");
+            _autocomplete.AddMemberDescription<FetchConditionType>(nameof(FetchConditionType.uitype), "Lookup Value Type", "When filtering on a lookup value, gives the type of the associated record to show in the Advanced Find view.");
+            _autocomplete.AddMemberDescription<FetchConditionType>(nameof(FetchConditionType.value), "Value", "The value to compare the records against to check if they should be included in the results.");
+            _autocomplete.AddMemberDescription<FetchConditionType>(nameof(FetchConditionType.valueof), "Compare To Attribute", "The name of another attribute to compare the first attribute to.");
 
-            _autocomplete.AddTypeDescription<conditionValue>("Condition Value", "Specifies one of a list of possible values to use in an \"in\" or \"not-in\" condition");
-            _autocomplete.AddMemberDescription<conditionValue>(nameof(conditionValue.uiname), "Lookup Value Name", "When filtering on a lookup value, gives the name of the associated record to show in the Advanced Find view.");
-            _autocomplete.AddMemberDescription<conditionValue>(nameof(conditionValue.uitype), "Lookup Value Type", "When filtering on a lookup value, gives the type of the associated record to show in the Advanced Find view.");
+            _autocomplete.AddTypeDescription<FetchConditionValueType>("Condition Value", "Specifies one of a list of possible values to use in an \"in\" or \"not-in\" condition");
+            _autocomplete.AddMemberDescription<FetchConditionValueType>(nameof(FetchConditionValueType.uiname), "Lookup Value Name", "When filtering on a lookup value, gives the name of the associated record to show in the Advanced Find view.");
+            _autocomplete.AddMemberDescription<FetchConditionValueType>(nameof(FetchConditionValueType.uitype), "Lookup Value Type", "When filtering on a lookup value, gives the type of the associated record to show in the Advanced Find view.");
 
             _autocomplete.AddTypeDescription<FetchOrderType>("Sort Order", "Sorts the query results based on a specific attribute");
             _autocomplete.AddMemberDescription<FetchOrderType>(nameof(FetchOrderType.alias), "Alias Name", "The name of the aliased attribute to sort the results by.");
             _autocomplete.AddMemberDescription<FetchOrderType>(nameof(FetchOrderType.attribute), "Attribute Name", "The name of the attribute to sort the results by.");
             _autocomplete.AddMemberDescription<FetchOrderType>(nameof(FetchOrderType.descending), "Descending Order", "Indicates if the results should be sorted in descending order by this attribute.");
+            _autocomplete.AddMemberDescription<FetchOrderType>(nameof(FetchOrderType.entityname), "Entity Name", "The name of the linked entity that the attribute to sort by is in.");
 
             _autocomplete.AutocompleteAttributeValue += AutocompleteAttributeValue;
+            _autocomplete.AutocompleteValue += AutocompleteValue;
 
             var helper = new ScintillaXmlHelper(txtXML, _autocomplete);
             helper.Menu.ImageList = autocompleteImageList;
@@ -616,6 +619,35 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 _usedAutocomplete = true;
             };
             helper.Attach();
+        }
+
+        private void AutocompleteValue(object sender, AutocompleteValueEventArgs e)
+        {
+            if (e.Element.Name == "value" && ((XmlElement)e.Element.ParentNode)?.Name == "condition")
+            {
+                var entityNode = (XmlElement)e.Element.ParentNode;
+                while (entityNode != null && entityNode.Name != "entity" && entityNode.Name != "link-entity")
+                    entityNode = (XmlElement)entityNode.ParentNode;
+
+                // <condition> and <order> can also override entityname
+                if (!String.IsNullOrEmpty(e.Element.GetAttribute("entityname")))
+                {
+                    entityNode = (XmlElement)e.Element.OwnerDocument.SelectSingleNode("//link-entity[@alias='" + e.Element.GetAttribute("entityname") + "']");
+                }
+
+                if (entityNode != null && (entityNode.Name == "entity" || entityNode.Name == "link-entity"))
+                {
+                    if (TryGetAttributes(entityNode.GetAttribute("name"), out _, out var attrs))
+                    {
+                        var attr = attrs.SingleOrDefault(a => a.LogicalName == ((XmlElement)e.Element.ParentNode).GetAttribute("attribute"));
+
+                        if (attr is EnumAttributeMetadata enumAttr)
+                        {
+                            e.Suggestions.AddRange(enumAttr.OptionSet.Options.Select(opt => new MarkMpn.XmlSchemaAutocomplete.AutocompleteValueSuggestion { Value = opt.Value.ToString(), DisplayName = $"{opt.Value} - {opt.Label?.UserLocalizedLabel?.Label}" }));
+                        }
+                    }
+                }
+            }
         }
 
         private void AutocompleteAttributeValue(object sender, MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueEventArgs e)
@@ -643,6 +675,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 while (entityNode != null && entityNode.Name != "entity" && entityNode.Name != "link-entity")
                     entityNode = (XmlElement)entityNode.ParentNode;
 
+                // <condition> and <order> can also override entityname
+                if ((e.Element.Name == "condition" || e.Element.Name == "order") && !String.IsNullOrEmpty(e.Element.GetAttribute("entityname")))
+                {
+                    entityNode = (XmlElement)e.Element.OwnerDocument.SelectSingleNode("//link-entity[@alias='" + e.Element.GetAttribute("entityname") + "']");
+                }
+
                 if (entityNode != null && (entityNode.Name == "entity" || entityNode.Name == "link-entity"))
                 {
                     if (TryGetAttributes(entityNode.GetAttribute("name"), out _, out var attrs))
@@ -665,8 +703,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             // Autocomplete attribute names for <link-entity> elements
             if (e.Element.Name == "link-entity" && (e.Attribute.Name == "from" || e.Attribute.Name == "to"))
             {
-                var entityNode = e.Attribute.Name == "from" ? e.Element : (XmlElement)e.Element.ParentNode;
-                var otherEntityNode = e.Attribute.Name == "from" ? (XmlElement)e.Element.ParentNode : e.Element;
+                var parent = (XmlElement)e.Element.ParentNode;
+                while (parent.Name != "entity" && parent.Name != "link-entity" && parent.ParentNode != null)
+                    parent = (XmlElement)parent.ParentNode;
+
+                var entityNode = e.Attribute.Name == "from" ? e.Element : parent;
+                var otherEntityNode = e.Attribute.Name == "from" ? parent : e.Element;
 
                 if (entityNode != null && TryGetAttributes(entityNode.GetAttribute("name"), out var entity, out var attrs))
                 {
@@ -696,11 +738,34 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 e.Suggestions.AddRange(aliases.Select(alias => new MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion { Value = alias }));
             }
 
+            // Autocomplete entity names for <condition> and <order> elements
+            if ((e.Element.Name == "condition" || e.Element.Name == "order") && e.Attribute.Name == "entityname")
+            {
+                var aliases = e.Element.OwnerDocument.SelectNodes("//link-entity/@alias").Cast<XmlAttribute>().Select(alias => alias.Value).Distinct();
+                e.Suggestions.AddRange(aliases.Select(alias => new MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion { Value = alias }));
+            }
+
             // Autocomplete link types
             if (e.Element.Name == "link-entity" && e.Attribute.Name == "link-type")
             {
-                e.Suggestions.Add(new MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion { Value = "inner" });
-                e.Suggestions.Add(new MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion { Value = "outer" });
+                e.Suggestions.Clear();
+
+                // Different link types available in filters
+                if (((XmlElement)e.Element.ParentNode).Name == "filter")
+                {
+                    e.Suggestions.Add(new MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion { Value = "all" });
+                    e.Suggestions.Add(new MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion { Value = "any" });
+                    e.Suggestions.Add(new MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion { Value = "not all" });
+                    e.Suggestions.Add(new MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion { Value = "not any" });
+                }
+                else
+                {
+                    e.Suggestions.Add(new MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion { Value = "inner" });
+                    e.Suggestions.Add(new MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion { Value = "outer" });
+                    e.Suggestions.Add(new MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion { Value = "exists" });
+                    e.Suggestions.Add(new MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion { Value = "in" });
+                    e.Suggestions.Add(new MarkMpn.XmlSchemaAutocomplete.AutocompleteAttributeValueSuggestion { Value = "matchfirstrowusingcrossapply" });
+                }
             }
 
             // Autocomplete known values for <condition> elements
@@ -709,6 +774,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 var entityNode = (XmlElement)e.Element.ParentNode;
                 while (entityNode != null && entityNode.Name != "entity" && entityNode.Name != "link-entity")
                     entityNode = (XmlElement)entityNode.ParentNode;
+
+                // <condition> and <order> can also override entityname
+                if ((e.Element.Name == "condition" || e.Element.Name == "order") && !String.IsNullOrEmpty(e.Element.GetAttribute("entityname")))
+                {
+                    entityNode = (XmlElement)e.Element.OwnerDocument.SelectSingleNode("//link-entity[@alias='" + e.Element.GetAttribute("entityname") + "']");
+                }
 
                 if (entityNode != null && (entityNode.Name == "entity" || entityNode.Name == "link-entity"))
                 {

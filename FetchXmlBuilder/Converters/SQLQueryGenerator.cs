@@ -16,7 +16,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
         {
             aliasmap = new Dictionary<string, string>();
             var sql = new StringBuilder();
-            var entity = fetch.Items.FirstOrDefault(i => i is FetchEntityType) as FetchEntityType;
+            var entity = fetch.Item;
             if (entity == null)
             {
                 throw new Exception("Fetch must contain entity definition");
@@ -35,7 +35,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 selectcols = GetSelect(entity);
                 ordercols = GetOrder(entity.Items.Where(i => i is FetchOrderType).ToList(), string.Empty);
                 var join = GetJoin(entity.Items.Where(i => i is FetchLinkEntityType).ToList(), entity.name, fxb);
-                var where = GetWhere(entity.name, string.Empty, entity.Items.Where(i => i is filter && ((filter)i).Items != null && ((filter)i).Items.Length > 0).ToList(), fxb);
+                var where = GetWhere(entity.name, string.Empty, entity.Items.Where(i => i is FetchFilterType && ((FetchFilterType)i).Items != null && ((FetchFilterType)i).Items.Length > 0).ToList(), fxb);
                 sql.AppendLine(string.Join(", ", selectcols));
                 sql.AppendLine($"FROM {entity.name}");
                 if (join != null && join.Count > 0)
@@ -80,7 +80,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             foreach (FetchLinkEntityType linkitem in linkentities)
             {
                 var join = new StringBuilder();
-                if (linkitem.linktype == "outer")
+                if (linkitem.linktype == FetchLinkEntityTypeLinktype.outer)
                 {
                     join.Append("LEFT OUTER ");
                 }
@@ -92,7 +92,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 join.Append($"JOIN {linkitem.name} {linkalias} ON {linkalias}.{linkitem.from} = {entityalias}.{linkitem.to}");
                 if (linkitem.Items != null)
                 {
-                    var linkwhere = GetWhere(linkitem.name, linkalias, linkitem.Items.Where(i => i is filter && ((filter)i).Items != null && ((filter)i).Items.Length > 0).ToList(), fxb);
+                    var linkwhere = GetWhere(linkitem.name, linkalias, linkitem.Items.Where(i => i is FetchFilterType && ((FetchFilterType)i).Items != null && ((FetchFilterType)i).Items.Length > 0).ToList(), fxb);
                     if (!string.IsNullOrEmpty(linkwhere))
                     {
                         join.Append($" AND {linkwhere} ");
@@ -144,7 +144,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             var resultList = new StringBuilder();
             if (filteritems.Count > 0)
             {
-                foreach (filter filteritem in filteritems)
+                foreach (FetchFilterType filteritem in filteritems)
                 {
                     resultList.Append(GetFilter(entityname, entityalias, filteritem, fxb));
                 }
@@ -152,27 +152,27 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             return resultList.ToString();
         }
 
-        private static string GetFilter(string entityname, string entityalias, filter filteritem, FetchXmlBuilder fxb)
+        private static string GetFilter(string entityname, string entityalias, FetchFilterType filteritem, FetchXmlBuilder fxb)
         {
             var result = "";
             if (filteritem.Items == null || filteritem.Items.Length == 0)
             {
                 return "";
             }
-            var logical = filteritem.type == filterType.or ? " OR " : " AND ";
+            var logical = filteritem.type == FetchFilterTypeType.or ? " OR " : " AND ";
             if (filteritem.Items.Length > 1)
             {
                 result = "(";
             }
             foreach (var item in filteritem.Items)
             {
-                if (item is condition)
+                if (item is FetchConditionType)
                 {
-                    result += GetCondition(entityname, entityalias, item as condition, fxb);
+                    result += GetCondition(entityname, entityalias, item as FetchConditionType, fxb);
                 }
-                else if (item is filter)
+                else if (item is FetchFilterType)
                 {
-                    result += GetFilter(entityname, entityalias, item as filter, fxb);
+                    result += GetFilter(entityname, entityalias, item as FetchFilterType, fxb);
                 }
                 result += logical;
             }
@@ -187,7 +187,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             return result;
         }
 
-        private static string GetCondition(string entityname, string entityalias, condition condition, FetchXmlBuilder fxb)
+        private static string GetCondition(string entityname, string entityalias, FetchConditionType condition, FetchXmlBuilder fxb)
         {
             var result = new StringBuilder();
             if (!string.IsNullOrEmpty(entityalias))
