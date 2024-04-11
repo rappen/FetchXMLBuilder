@@ -513,7 +513,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                     .Where(a => TypeIsCloseEnough(a.Metadata, attribute.Metadata))
                     .ToArray());
                 // RefreshFill now that attributes are loaded
-                //ReFillControl(cmbValueOf);
+                ReFillControl(cmbValueOf);
                 EndInit();
             }
             else
