@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.ServiceModel;
 using System.Windows.Forms;
 
@@ -22,6 +23,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         #region Private Properties
 
         private bool valueOfSupported = false;
+        private bool valueOfEdited = false;
 
         #endregion Private Properties
 
@@ -40,13 +42,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             dlgLookup.Service = fetchXmlBuilder.Service;
             rbUseLookup.Checked = fetchXmlBuilder.settings.UseLookup;
             rbEnterGuid.Checked = !rbUseLookup.Checked;
-            var collect = (Dictionary<string, string>)node.Tag;
-            if (collect != null && collect.TryGetValue("valueof", out var valueof) && valueof.Split('.') is string[] valueofsplits && valueofsplits.Length == 2)
-            {
-                collect.Add("valueofalias", valueofsplits[0]);
-                collect["valueof"] = valueofsplits[1];
-            }
-            InitializeFXB(collect, fetchXmlBuilder, tree, node);
+            InitializeFXB(null, fetchXmlBuilder, tree, node);
             EndInit();
             RefreshAttributes();
             EnableValueFields();
@@ -309,7 +305,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             {
                 result.Remove("valueof");
             }
-            if (panValueOf.Visible == true && result.ContainsKey("valueof") && !string.IsNullOrWhiteSpace(result["valueof"]))
+            if (result.TryGetValue("valueof", out var valueof) && string.IsNullOrWhiteSpace(valueof))
+            {
+                result.Remove("valueof");
+            }
+            if (result.ContainsKey("valueof"))
             {
                 if (result.ContainsKey("value"))
                 {
@@ -324,16 +324,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             {
                 result.Remove("value");
                 result.Remove("valueof");
-            }
-            if (result.TryGetValue("valueofalias", out var alias))
-            {
-                if (!string.IsNullOrWhiteSpace(alias) &&
-                    result.TryGetValue("valueof", out var valueof) &&
-                    !string.IsNullOrWhiteSpace(valueof))
-                {
-                    result["valueof"] = alias + "." + valueof;
-                }
-                result.Remove("valueofalias");
             }
             return result;
         }
@@ -369,10 +359,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             panValueOf.Enabled = string.IsNullOrEmpty(cmbValue.Text) || cmbValue.Text == Guid.Empty.ToString();
             if (!panValueOf.Enabled)
             {
-                cmbValueOf.Text = null;
-                cmbValueOfAlias.Text = null;
+                txtValueOf.Text = "";
             }
-            cmbValue.Enabled = string.IsNullOrEmpty(cmbValueOf.Text);
+            cmbValue.Enabled = string.IsNullOrWhiteSpace(txtValueOf.Text);
             if (!cmbValue.Enabled)
             {
                 cmbValue.Text = null;
@@ -488,16 +477,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 panValueOf.Visible = true;
                 cmbValueOf.Items.Clear();
 
-                var aliasyNode = cmbValueOfAlias.SelectedItem is EntityNode ? (EntityNode)cmbValueOfAlias.SelectedItem : null;
-                if (aliasyNode == null)
+                var aliasNode = cmbValueOfAlias.SelectedItem is EntityNode ? (EntityNode)cmbValueOfAlias.SelectedItem : null;
+                if (aliasNode == null)
                 {
-                    aliasyNode = new EntityNode(Node.LocalEntityNode());
+                    aliasNode = new EntityNode(Node.LocalEntityNode());
                 }
-                if (aliasyNode == null)
-                {
-                    return;
-                }
-                var entityName = aliasyNode.EntityName;
+                var entityName = aliasNode.EntityName;
                 if (fxb.NeedToLoadEntity(entityName))
                 {
                     if (!fxb.working)
@@ -507,20 +492,19 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                     return;
                 }
                 BeginInit();
+                cmbValueOf.Items.Add("");
                 var attributes = fxb.GetDisplayAttributes(entityName);
                 cmbValueOf.Items.AddRange(attributes?
                     .Select(a => new AttributeItem(a, fxb.settings.ShowAttributeTypes))
                     .Where(a => TypeIsCloseEnough(a.Metadata, attribute.Metadata))
                     .ToArray());
-                // RefreshFill now that attributes are loaded
-                ReFillControl(cmbValueOf);
                 EndInit();
             }
             else
             {
                 cmbValueOf.Text = "";
             }
-            //ReFillControl(cmbValueOf);
+            ControlUtils.SetComboBoxValue(cmbValueOf, GetValueOf(txtValueOf.Text));
         }
 
         private bool TypeIsCloseEnough(AttributeMetadata comparer, AttributeMetadata target)
@@ -735,6 +719,50 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             }
         }
 
+        private void SetValueOfFromUI()
+        {
+            if (!IsInitialized)
+            {
+                return;
+            }
+            valueOfEdited = true;
+            var valueof = ControlUtils.GetValueFromControl(cmbValueOf);
+            var valueofalias = string.IsNullOrWhiteSpace(valueof) ? string.Empty : ControlUtils.GetValueFromControl(cmbValueOfAlias);
+            txtValueOf.Text = (string.IsNullOrWhiteSpace(valueofalias) ? "" : valueofalias + ".") + valueof;
+            valueOfEdited = false;
+        }
+
+        private void SetValueOfControlsFromFetchXml()
+        {
+            if (valueOfEdited)
+            {
+                return;
+            }
+            var valueof = txtValueOf.Text;
+            ControlUtils.SetComboBoxValue(cmbValueOfAlias, GetValueOfAlias(valueof));
+            ControlUtils.SetComboBoxValue(cmbValueOf, GetValueOf(valueof));
+        }
+
+        private string GetValueOfAlias(string valueof)
+        {
+            if (valueof.Contains("."))
+            {
+                var splits = valueof.Split('.');
+                return splits[0];
+            }
+            return string.Empty;
+        }
+
+        private string GetValueOf(string valueof)
+        {
+            if (valueof.Contains("."))
+            {
+                var splits = valueof.Split('.');
+                return splits[1];
+            }
+            return valueof;
+        }
+
         #endregion Private Methods
 
         #region Private Event Handlers
@@ -822,9 +850,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             }
         }
 
+        private void txtValueOf_TextChanged(object sender, EventArgs e)
+        {
+            SetValueOfControlsFromFetchXml();
+        }
+
         private void cmbValueOfAlias_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshValueOf();
+            SetValueOfFromUI();
+        }
+
+        private void cmbValueOf_Changed(object sender, EventArgs e)
+        {
+            SetValueOfFromUI();
         }
 
         #endregion Private Event Handlers

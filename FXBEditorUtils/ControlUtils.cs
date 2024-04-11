@@ -218,35 +218,40 @@ namespace Rappen.XTB.XmlEditorUtils
                 }
                 else if (control is ComboBox cmb)
                 {
-                    object selitem = null;
-                    foreach (var item in cmb.Items)
+                    SetComboBoxValue(cmb, value, saveable);
+                }
+            }
+        }
+
+        public static void SetComboBoxValue(ComboBox cmb, string value, IDefinitionSavable saveable = null)
+        {
+            object selitem = null;
+            foreach (var item in cmb.Items)
+            {
+                if (item is IComboBoxItem)
+                {
+                    if (((IComboBoxItem)item).GetValue() == value)
                     {
-                        if (item is IComboBoxItem)
-                        {
-                            if (((IComboBoxItem)item).GetValue() == value)
-                            {
-                                selitem = item;
-                                break;
-                            }
-                        }
-                    }
-                    if (selitem != null)
-                    {
-                        cmb.SelectedItem = selitem;
-                    }
-                    else if (value != null && cmb.Items.IndexOf(value) >= 0)
-                    {
-                        cmb.SelectedItem = value;
-                    }
-                    else
-                    {
-                        cmb.Text = value;
-                    }
-                    if (saveable != null)
-                    {
-                        new ComboBoxEventHandler(cmb, saveable).Attach();
+                        selitem = item;
+                        break;
                     }
                 }
+            }
+            if (selitem != null)
+            {
+                cmb.SelectedItem = selitem;
+            }
+            else if (value != null && cmb.Items.IndexOf(value) >= 0)
+            {
+                cmb.SelectedItem = value;
+            }
+            else
+            {
+                cmb.Text = value;
+            }
+            if (saveable != null)
+            {
+                new ComboBoxEventHandler(cmb, saveable).Attach();
             }
         }
     }

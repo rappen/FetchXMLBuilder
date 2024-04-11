@@ -52,6 +52,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panValueHint = new System.Windows.Forms.Panel();
             this.dlgLookup = new Rappen.XTB.Helpers.Controls.XRMLookupDialog();
             this.panUitype = new System.Windows.Forms.Panel();
+            this.txtValueOf = new System.Windows.Forms.TextBox();
             this.txtUitype = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.panGuidSelector = new System.Windows.Forms.Panel();
@@ -392,7 +393,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             this.panValueHint.Controls.Add(this.lblValueHint);
             this.panValueHint.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panValueHint.Location = new System.Drawing.Point(0, 225);
+            this.panValueHint.Location = new System.Drawing.Point(0, 241);
             this.panValueHint.Name = "panValueHint";
             this.panValueHint.Size = new System.Drawing.Size(311, 32);
             this.panValueHint.TabIndex = 47;
@@ -412,19 +413,34 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panUitype.Controls.Add(this.txtUitype);
             this.panUitype.Controls.Add(this.label3);
             this.panUitype.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panUitype.Location = new System.Drawing.Point(0, 257);
+            this.panUitype.Location = new System.Drawing.Point(0, 273);
             this.panUitype.Name = "panUitype";
-            this.panUitype.Size = new System.Drawing.Size(311, 46);
+            this.panUitype.Size = new System.Drawing.Size(311, 33);
             this.panUitype.TabIndex = 48;
             this.panUitype.Visible = false;
+            // 
+            // txtValueOf
+            // 
+            this.txtValueOf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtValueOf.BackColor = System.Drawing.SystemColors.Window;
+            this.txtValueOf.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtValueOf.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.txtValueOf.Location = new System.Drawing.Point(9, 39);
+            this.txtValueOf.Name = "txtValueOf";
+            this.txtValueOf.ReadOnly = true;
+            this.txtValueOf.Size = new System.Drawing.Size(177, 13);
+            this.txtValueOf.TabIndex = 33;
+            this.txtValueOf.Tag = "valueof";
+            this.txtValueOf.TextChanged += new System.EventHandler(this.txtValueOf_TextChanged);
             // 
             // txtUitype
             // 
             this.txtUitype.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUitype.Location = new System.Drawing.Point(7, 16);
+            this.txtUitype.Location = new System.Drawing.Point(52, 0);
             this.txtUitype.Name = "txtUitype";
-            this.txtUitype.Size = new System.Drawing.Size(281, 20);
+            this.txtUitype.Size = new System.Drawing.Size(236, 20);
             this.txtUitype.TabIndex = 32;
             this.txtUitype.Tag = "uitype";
             // 
@@ -478,18 +494,19 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panValueOf.Dock = System.Windows.Forms.DockStyle.Top;
             this.panValueOf.Location = new System.Drawing.Point(0, 185);
             this.panValueOf.Name = "panValueOf";
-            this.panValueOf.Size = new System.Drawing.Size(311, 40);
+            this.panValueOf.Size = new System.Drawing.Size(311, 56);
             this.panValueOf.TabIndex = 5;
             // 
             // panValoeOfAttr
             // 
             this.panValoeOfAttr.Controls.Add(this.cmbValueOf);
+            this.panValoeOfAttr.Controls.Add(this.txtValueOf);
             this.panValoeOfAttr.Controls.Add(this.pictureBox3);
             this.panValoeOfAttr.Controls.Add(this.label6);
             this.panValoeOfAttr.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panValoeOfAttr.Location = new System.Drawing.Point(104, 0);
             this.panValoeOfAttr.Name = "panValoeOfAttr";
-            this.panValoeOfAttr.Size = new System.Drawing.Size(207, 40);
+            this.panValoeOfAttr.Size = new System.Drawing.Size(207, 56);
             this.panValoeOfAttr.TabIndex = 2;
             // 
             // cmbValueOf
@@ -504,8 +521,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.cmbValueOf.Size = new System.Drawing.Size(177, 21);
             this.cmbValueOf.Sorted = true;
             this.cmbValueOf.TabIndex = 32;
-            this.cmbValueOf.Tag = "valueof";
+            this.cmbValueOf.Tag = "";
             this.toolTip1.SetToolTip(this.cmbValueOf, "Filter on column values in the same row");
+            this.cmbValueOf.SelectedIndexChanged += new System.EventHandler(this.cmbValueOf_Changed);
+            this.cmbValueOf.TextUpdate += new System.EventHandler(this.cmbValueOf_Changed);
             // 
             // pictureBox3
             // 
@@ -539,7 +558,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panValueOfAlias.Dock = System.Windows.Forms.DockStyle.Left;
             this.panValueOfAlias.Location = new System.Drawing.Point(0, 0);
             this.panValueOfAlias.Name = "panValueOfAlias";
-            this.panValueOfAlias.Size = new System.Drawing.Size(104, 40);
+            this.panValueOfAlias.Size = new System.Drawing.Size(104, 56);
             this.panValueOfAlias.TabIndex = 1;
             // 
             // pictureBox5
@@ -576,7 +595,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.cmbValueOfAlias.Name = "cmbValueOfAlias";
             this.cmbValueOfAlias.Size = new System.Drawing.Size(95, 21);
             this.cmbValueOfAlias.TabIndex = 45;
-            this.cmbValueOfAlias.Tag = "valueofalias";
+            this.cmbValueOfAlias.Tag = "";
             this.toolTip1.SetToolTip(this.cmbValueOfAlias, "Cross table comparisons");
             this.cmbValueOfAlias.SelectedIndexChanged += new System.EventHandler(this.cmbValueOfAlias_SelectedIndexChanged);
             // 
@@ -716,5 +735,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private System.Windows.Forms.Panel panValoeOfAttr;
         private System.Windows.Forms.PictureBox pictureBox6;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.TextBox txtValueOf;
     }
 }
