@@ -357,6 +357,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private void EnableValueFields()
         {
             panValueOf.Enabled = string.IsNullOrEmpty(cmbValue.Text) || cmbValue.Text == Guid.Empty.ToString();
+            txtValueOf.Visible = panValueOf.Enabled;
             if (!panValueOf.Enabled)
             {
                 txtValueOf.Text = "";
@@ -557,10 +558,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             panValue.Visible = true;
             panValueLookup.Visible = false;
             panGuidSelector.Visible = false;
+            panDatePicker.Visible = false;
+            panDateSelector.Visible = false;
             cmbValue.Items.Clear();
             cmbValue.DropDownStyle = ComboBoxStyle.Simple;
             cmbValue.AutoCompleteMode = AutoCompleteMode.None;
-            lblValueHint.Visible = false;
+            panValueHint.Visible = false;
             if (cmbOperator.SelectedItem == null || !(cmbOperator.SelectedItem is OperatorItem oper))
             {
                 return;
@@ -580,7 +583,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                     if (Node.Nodes.Count == 0)
                     {
                         lblValueHint.Text = "Enter comma-separated " + valueType.ToString() + " values or add sub-nodes.";
-                        lblValueHint.Visible = true;
+                        panValueHint.Visible = true;
                     }
                     else
                     {
@@ -713,10 +716,25 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 {
                     cmbValue.Text = Guid.Empty.ToString();
                 }
-                panGuidSelector.Visible = true;
                 panValue.Visible = !rbUseLookup.Checked;
+                panGuidSelector.Visible = true;
                 panValueLookup.Visible = rbUseLookup.Checked;
             }
+            else if (valueType == AttributeTypeCode.DateTime)
+            {
+                panValue.Visible = !rbDatePicker.Checked;
+                dtPicker.Value = DateTime.TryParse(cmbValue.Text, out DateTime dt) ? dt : DateTime.Now;
+                panDateSelector.Visible = true;
+                panDatePicker.Visible = rbDatePicker.Checked;
+            }
+            // But them in correct order again
+            panValue.BringToFront();
+            panValueLookup.BringToFront();
+            panDatePicker.BringToFront();
+            panGuidSelector.BringToFront();
+            panDateSelector.BringToFront();
+            panValueHint.BringToFront();
+            panValueOf.BringToFront();
         }
 
         private void SetValueOfFromUI()
@@ -864,6 +882,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private void cmbValueOf_Changed(object sender, EventArgs e)
         {
             SetValueOfFromUI();
+        }
+
+        private void dtPicker_ValueChanged(object sender, EventArgs e)
+        {
+            cmbValue.Text = dtPicker.Value.ToString();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FetchXmlBuilder.HelpClick(sender);
         }
 
         #endregion Private Event Handlers

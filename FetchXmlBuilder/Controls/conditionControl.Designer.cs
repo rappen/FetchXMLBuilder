@@ -52,9 +52,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panValueHint = new System.Windows.Forms.Panel();
             this.dlgLookup = new Rappen.XTB.Helpers.Controls.XRMLookupDialog();
             this.panUitype = new System.Windows.Forms.Panel();
-            this.txtValueOf = new System.Windows.Forms.TextBox();
             this.txtUitype = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.txtValueOf = new System.Windows.Forms.TextBox();
             this.panGuidSelector = new System.Windows.Forms.Panel();
             this.rbEnterGuid = new System.Windows.Forms.RadioButton();
             this.rbUseLookup = new System.Windows.Forms.RadioButton();
@@ -72,6 +72,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panAttribute = new System.Windows.Forms.Panel();
             this.panAttr = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.dtPicker = new System.Windows.Forms.DateTimePicker();
+            this.panDateSelector = new System.Windows.Forms.Panel();
+            this.rbDateText = new System.Windows.Forms.RadioButton();
+            this.rbDatePicker = new System.Windows.Forms.RadioButton();
+            this.panDatePicker = new System.Windows.Forms.Panel();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.panOperator.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -90,6 +96,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
             this.panAttribute.SuspendLayout();
             this.panAttr.SuspendLayout();
+            this.panDateSelector.SuspendLayout();
+            this.panDatePicker.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -338,10 +346,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panValueLookup.Controls.Add(this.txtLookup);
             this.panValueLookup.Controls.Add(this.label1);
             this.panValueLookup.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panValueLookup.Location = new System.Drawing.Point(0, 120);
+            this.panValueLookup.Location = new System.Drawing.Point(0, 160);
             this.panValueLookup.Name = "panValueLookup";
             this.panValueLookup.Size = new System.Drawing.Size(311, 40);
-            this.panValueLookup.TabIndex = 4;
+            this.panValueLookup.TabIndex = 5;
             this.panValueLookup.Visible = false;
             // 
             // btnLookup
@@ -393,7 +401,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             this.panValueHint.Controls.Add(this.lblValueHint);
             this.panValueHint.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panValueHint.Location = new System.Drawing.Point(0, 241);
+            this.panValueHint.Location = new System.Drawing.Point(0, 306);
             this.panValueHint.Name = "panValueHint";
             this.panValueHint.Size = new System.Drawing.Size(311, 32);
             this.panValueHint.TabIndex = 47;
@@ -413,26 +421,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panUitype.Controls.Add(this.txtUitype);
             this.panUitype.Controls.Add(this.label3);
             this.panUitype.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panUitype.Location = new System.Drawing.Point(0, 273);
+            this.panUitype.Location = new System.Drawing.Point(0, 338);
             this.panUitype.Name = "panUitype";
             this.panUitype.Size = new System.Drawing.Size(311, 33);
             this.panUitype.TabIndex = 48;
             this.panUitype.Visible = false;
-            // 
-            // txtValueOf
-            // 
-            this.txtValueOf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtValueOf.BackColor = System.Drawing.SystemColors.Window;
-            this.txtValueOf.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtValueOf.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.txtValueOf.Location = new System.Drawing.Point(9, 39);
-            this.txtValueOf.Name = "txtValueOf";
-            this.txtValueOf.ReadOnly = true;
-            this.txtValueOf.Size = new System.Drawing.Size(177, 13);
-            this.txtValueOf.TabIndex = 33;
-            this.txtValueOf.Tag = "valueof";
-            this.txtValueOf.TextChanged += new System.EventHandler(this.txtValueOf_TextChanged);
             // 
             // txtUitype
             // 
@@ -453,15 +446,30 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.label3.TabIndex = 31;
             this.label3.Text = "UI Type";
             // 
+            // txtValueOf
+            // 
+            this.txtValueOf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtValueOf.BackColor = System.Drawing.SystemColors.Window;
+            this.txtValueOf.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtValueOf.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.txtValueOf.Location = new System.Drawing.Point(9, 39);
+            this.txtValueOf.Name = "txtValueOf";
+            this.txtValueOf.ReadOnly = true;
+            this.txtValueOf.Size = new System.Drawing.Size(177, 13);
+            this.txtValueOf.TabIndex = 33;
+            this.txtValueOf.Tag = "valueof";
+            this.txtValueOf.TextChanged += new System.EventHandler(this.txtValueOf_TextChanged);
+            // 
             // panGuidSelector
             // 
             this.panGuidSelector.Controls.Add(this.rbEnterGuid);
             this.panGuidSelector.Controls.Add(this.rbUseLookup);
             this.panGuidSelector.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panGuidSelector.Location = new System.Drawing.Point(0, 160);
+            this.panGuidSelector.Location = new System.Drawing.Point(0, 225);
             this.panGuidSelector.Name = "panGuidSelector";
             this.panGuidSelector.Size = new System.Drawing.Size(311, 25);
-            this.panGuidSelector.TabIndex = 49;
+            this.panGuidSelector.TabIndex = 6;
             this.panGuidSelector.Visible = false;
             // 
             // rbEnterGuid
@@ -492,10 +500,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panValueOf.Controls.Add(this.panValoeOfAttr);
             this.panValueOf.Controls.Add(this.panValueOfAlias);
             this.panValueOf.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panValueOf.Location = new System.Drawing.Point(0, 185);
+            this.panValueOf.Location = new System.Drawing.Point(0, 250);
             this.panValueOf.Name = "panValueOf";
             this.panValueOf.Size = new System.Drawing.Size(311, 56);
-            this.panValueOf.TabIndex = 5;
+            this.panValueOf.TabIndex = 8;
             // 
             // panValoeOfAttr
             // 
@@ -646,6 +654,77 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panAttr.Size = new System.Drawing.Size(311, 40);
             this.panAttr.TabIndex = 1;
             // 
+            // dtPicker
+            // 
+            this.dtPicker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtPicker.CustomFormat = "yyyy-MM-dd HH:mm:ss";
+            this.dtPicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtPicker.Location = new System.Drawing.Point(7, 16);
+            this.dtPicker.Name = "dtPicker";
+            this.dtPicker.Size = new System.Drawing.Size(281, 20);
+            this.dtPicker.TabIndex = 50;
+            this.dtPicker.ValueChanged += new System.EventHandler(this.dtPicker_ValueChanged);
+            // 
+            // panDateSelector
+            // 
+            this.panDateSelector.Controls.Add(this.rbDateText);
+            this.panDateSelector.Controls.Add(this.rbDatePicker);
+            this.panDateSelector.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panDateSelector.Location = new System.Drawing.Point(0, 200);
+            this.panDateSelector.Name = "panDateSelector";
+            this.panDateSelector.Size = new System.Drawing.Size(311, 25);
+            this.panDateSelector.TabIndex = 7;
+            this.panDateSelector.Visible = false;
+            // 
+            // rbDateText
+            // 
+            this.rbDateText.AutoSize = true;
+            this.rbDateText.Location = new System.Drawing.Point(108, 3);
+            this.rbDateText.Name = "rbDateText";
+            this.rbDateText.Size = new System.Drawing.Size(70, 17);
+            this.rbDateText.TabIndex = 1;
+            this.rbDateText.Text = "Enter text";
+            this.rbDateText.UseVisualStyleBackColor = true;
+            // 
+            // rbDatePicker
+            // 
+            this.rbDatePicker.AutoSize = true;
+            this.rbDatePicker.Checked = true;
+            this.rbDatePicker.Location = new System.Drawing.Point(7, 3);
+            this.rbDatePicker.Name = "rbDatePicker";
+            this.rbDatePicker.Size = new System.Drawing.Size(100, 17);
+            this.rbDatePicker.TabIndex = 0;
+            this.rbDatePicker.TabStop = true;
+            this.rbDatePicker.Text = "Use DatePicker";
+            this.rbDatePicker.UseVisualStyleBackColor = true;
+            this.rbDatePicker.CheckedChanged += new System.EventHandler(this.rbUseLookup_CheckedChanged);
+            // 
+            // panDatePicker
+            // 
+            this.panDatePicker.Controls.Add(this.dtPicker);
+            this.panDatePicker.Controls.Add(this.linkLabel1);
+            this.panDatePicker.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panDatePicker.Location = new System.Drawing.Point(0, 120);
+            this.panDatePicker.Name = "panDatePicker";
+            this.panDatePicker.Size = new System.Drawing.Size(311, 40);
+            this.panDatePicker.TabIndex = 4;
+            this.panDatePicker.Visible = false;
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(13, 21);
+            this.linkLabel1.Location = new System.Drawing.Point(4, 2);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(121, 17);
+            this.linkLabel1.TabIndex = 51;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Tag = "https://wikipedia.org/wiki/ISO_8601";
+            this.linkLabel1.Text = "Date / Time (ISO 8601)";
+            this.linkLabel1.UseCompatibleTextRendering = true;
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
             // conditionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -654,12 +733,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.Controls.Add(this.panValueHint);
             this.Controls.Add(this.panValueOf);
             this.Controls.Add(this.panGuidSelector);
+            this.Controls.Add(this.panDateSelector);
             this.Controls.Add(this.panValueLookup);
+            this.Controls.Add(this.panDatePicker);
             this.Controls.Add(this.panValue);
             this.Controls.Add(this.panOperator);
             this.Controls.Add(this.panAttr);
             this.Name = "conditionControl";
-            this.Size = new System.Drawing.Size(311, 379);
+            this.Size = new System.Drawing.Size(311, 523);
             this.panOperator.ResumeLayout(false);
             this.panOperator.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
@@ -688,6 +769,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.panAttribute.ResumeLayout(false);
             this.panAttribute.PerformLayout();
             this.panAttr.ResumeLayout(false);
+            this.panDateSelector.ResumeLayout(false);
+            this.panDateSelector.PerformLayout();
+            this.panDatePicker.ResumeLayout(false);
+            this.panDatePicker.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 
@@ -706,6 +791,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private System.Windows.Forms.Panel panOperator;
         private System.Windows.Forms.Panel panValue;
         private System.Windows.Forms.Panel panValueLookup;
+        private System.Windows.Forms.Panel panDatePicker;
+        private System.Windows.Forms.Panel panGuidSelector;
+        private System.Windows.Forms.Panel panDateSelector;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnLookup;
         private Rappen.XTB.Helpers.Controls.XRMRecordHost xrmRecord;
@@ -715,7 +803,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private System.Windows.Forms.Panel panUitype;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtUitype;
-        private System.Windows.Forms.Panel panGuidSelector;
         private System.Windows.Forms.RadioButton rbEnterGuid;
         private System.Windows.Forms.RadioButton rbUseLookup;
         private System.Windows.Forms.Panel panValueOf;
@@ -736,5 +823,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private System.Windows.Forms.PictureBox pictureBox6;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.TextBox txtValueOf;
+        private System.Windows.Forms.DateTimePicker dtPicker;
+        private System.Windows.Forms.RadioButton rbDateText;
+        private System.Windows.Forms.RadioButton rbDatePicker;
+        private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }
