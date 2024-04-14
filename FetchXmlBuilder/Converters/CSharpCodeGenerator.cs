@@ -229,6 +229,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             {
                 return string.Empty;
             }
+            if (filter.Filters.Count == 1 && !filter.Conditions.Any())
+            {
+                return GetFilterLbL(entity, filter.Filters.First(), ownerName, ownerType, several);
+            }
             if (settings.QExStyle == QExStyleEnum.QueryByAttribute && ownerType != OwnersType.Root)
             {
                 throw new Exception("Only root filters are supported for QueryByAttribute. Use QueryExpression if you need it.");
@@ -236,6 +240,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             var code = new StringBuilder();
             filter.FilterHint = $"{ownerName}.{(ownerType == OwnersType.Root ? "Criteria" : ownerType == OwnersType.Link ? "LinkCriteria" : "Filters")}";
             var rootfilters = filter.FilterHint.EndsWith("Criteria") || filter.FilterHint.EndsWith("Criteria.Filters");
+            if (ownerType == OwnersType.Root && filter.FilterOperator == LogicalOperator.Or)
+            {
+                code.AppendLine($"{ownerName}.Criteria.FilterOperator = LogicalOperator.Or;");
+            }
             if (ownerType == OwnersType.Sub || (ownerType == OwnersType.Link && (filter.FilterOperator == LogicalOperator.Or || !filter.Conditions.Any())))
             {
                 filter.FilterHint = GetVarName($"{ownerName}.{(filter.FilterOperator == LogicalOperator.Or ? "Or" : "And")}".Replace(".Criteria", "").Replace(".LinkCriteria", ""), several);
@@ -245,7 +253,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     code.AppendLine($"//{CRLF}// Add filter {filter.FilterHint} to {ownerName}");
                 }
                 code.AppendLine($"var {filter.FilterHint} = new FilterExpression({(filter.FilterOperator == LogicalOperator.Or ? "LogicalOperator.Or" : "")});");
-                code.AppendLine($"{ownerName}.AddFilter({filter.FilterHint});");
+                switch (ownerType)
+                {
+                    case OwnersType.Link:
+                        code.AppendLine($"{ownerName}.LinkCriteria = {filter.FilterHint};");
+                        break;
+
+                    default:
+                        code.AppendLine($"{ownerName}.AddFilter({filter.FilterHint});");
+                        break;
+                }
             }
             var filtercode = new List<string>
             {
@@ -322,7 +339,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             foreach (var link in linkEntities)
             {
                 var linkcode = string.Empty;
-                 var linkname = GetVarName(string.IsNullOrEmpty(link.EntityAlias) || link.LinkToEntityName == link.EntityAlias ? LineStart + "_" + link.LinkToEntityName : link.EntityAlias);
+                var linkname = GetVarName(string.IsNullOrEmpty(link.EntityAlias) || link.LinkToEntityName == link.EntityAlias ? LineStart + "_" + link.LinkToEntityName : link.EntityAlias);
                 if (settings.IncludeComments)
                 {
                     linkcode += $"//{CRLF}// Add link-entity {linkname}{CRLF}";
@@ -485,13 +502,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             var filterscode = "";
             var filters = filter.Filters.Where(f => f.Conditions.Any() || f.Filters.Any());
             var filtercodes = new List<string>();
-            var rootfilters = settings.QExFlavor == QExFlavorEnum.EarlyBound && (filter.FilterHint.EndsWith("Criteria") || filter.FilterHint.EndsWith("Criteria.Filters"));
+            var rootfilters = filter.FilterHint.EndsWith("Criteria") || filter.FilterHint.EndsWith("Criteria.Filters");
+            var dlabrootfilters = settings.QExFlavor == QExFlavorEnum.EarlyBound && rootfilters;
             var comment = $"{Indent(indentslevel)}// Add {filters.Count()} filters to {entity}{CRLF}";
             // Before filters
             switch (settings.QExStyle)
             {
                 case QExStyleEnum.QueryExpressionFactory:
-                    if (!rootfilters)
+                    if (!dlabrootfilters)
                     {
                         filterscode += $"{Indent(indentslevel)}Filters ={CRLF}{Indent(indentslevel++)}{{{CRLF}";
                     }
@@ -515,7 +533,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             switch (settings.QExStyle)
             {
                 case QExStyleEnum.QueryExpressionFactory:
-                    if (!rootfilters)
+                    if (!dlabrootfilters)
                     {
                         filterscode += $"{CRLF}{Indent(--indentslevel)}}}";
                     }
@@ -537,6 +555,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             {
                 return string.Empty;
             }
+            if (filter.Filters.Count == 1 && !filter.Conditions.Any())
+            {
+                return GetFilterOI(entity, filter.Filters.First(), ownerName, ownerType, indentslevel, namestree);
+            }
             if (settings.QExStyle == QExStyleEnum.QueryByAttribute && ownerType != OwnersType.Root)
             {
                 throw new Exception("Only root filters are supported for QueryByAttribute. Use QueryExpression if you need it.");
@@ -547,12 +569,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             var commentconds = filter.Conditions.Count > 0 ? $" {filter.Conditions.Count} conditions" : "";
             var commentfilts = filter.Filters.Count > 0 ? $" {filter.Filters.Count} filters" : "";
             var comment = $"{Indent(indentslevel)}// Add filter to {entity} with{commentconds}{commentfilts}{CRLF}";
-            var dlabrootfilters = /*settings.QExFlavor == QExFlavorEnum.EarlyBound &&*/ (filter.FilterHint.EndsWith("Criteria") || filter.FilterHint.EndsWith("Criteria.Filters"));
+            var rootfilters = filter.FilterHint.EndsWith("Criteria") || filter.FilterHint.EndsWith("Criteria.Filters");
             var addfilterexpression = true;
             switch (settings.QExStyle)
             {
                 case QExStyleEnum.QueryExpressionFactory:
-                    if (!dlabrootfilters || filter.FilterOperator == LogicalOperator.Or || !filter.Conditions.Any())
+                    if (!rootfilters || filter.FilterOperator == LogicalOperator.Or || !filter.Conditions.Any())
                     {
                         code.Append($"{Indent(indentslevel)}new FilterExpression({(filter.FilterOperator == LogicalOperator.Or ? "LogicalOperator.Or" : "")}){CRLF}{Indent(indentslevel++)}{{{CRLF}");
                     }
@@ -591,13 +613,21 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     break;
 
                 default:
-                    if (ownerType == OwnersType.Sub || (ownerType == OwnersType.Link && (filter.FilterOperator == LogicalOperator.Or || !filter.Conditions.Any())))
+                    if (ownerType == OwnersType.Sub)
                     {
-                        code.Append($"{Indent(indentslevel)}new FilterExpression({(filter.FilterOperator == LogicalOperator.Or ? "LogicalOperator.Or" : "")}){CRLF}{Indent(indentslevel++)}{{{CRLF}");
+                        code.Append($"{Indent(indentslevel)}new FilterExpression{CRLF}{Indent(indentslevel++)}{{{CRLF}");
+                    }
+                    else if (ownerType == OwnersType.Link && (filter.FilterOperator == LogicalOperator.Or || !filter.Conditions.Any()))
+                    {
+                        code.Append($"{Indent(indentslevel)}LinkCriteria ={CRLF}{Indent(indentslevel++)}{{{CRLF}");
                     }
                     else
                     {
                         code.Append($"{Indent(indentslevel)}{filterObjectName} ={CRLF}{Indent(indentslevel++)}{{{CRLF}");
+                    }
+                    if (filter.FilterOperator == LogicalOperator.Or)
+                    {
+                        code.Append($"{Indent(indentslevel)}FilterOperator = LogicalOperator.Or,{CRLF}");
                     }
                     break;
             }
