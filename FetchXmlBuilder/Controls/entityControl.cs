@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XRM.Helpers.FetchXML;
-using Rappen.XTB.FetchXmlBuilder.ControlsClasses;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Views;
+using Rappen.XTB.Helpers.ControlItems;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -18,6 +18,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         public entityControl(Dictionary<string, string> collection, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree)
         {
             InitializeComponent();
+            chkIncludeLogicalName.Checked = fetchXmlBuilder.settings.UseFriendlyAndRawEntities;
             InitializeFXB(collection, fetchXmlBuilder, tree, null);
         }
 
@@ -27,7 +28,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             var entities = fxb.GetDisplayEntities();
             if (entities != null)
             {
-                cmbEntity.Items.AddRange(entities.Select(e => new EntityItem(e)).ToArray());
+                cmbEntity.Items.AddRange(entities.Select(e => new EntityMetadataItem(e, fxb.settings.UseFriendlyNames, fxb.settings.UseFriendlyAndRawEntities)).ToArray());
             }
         }
 
@@ -40,7 +41,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                     return new ControlValidationResult(ControlValidationLevel.Error, "Entity", ControlValidationMessage.IsRequired);
                 }
 
-                if (!(cmbEntity.SelectedItem is EntityItem) && fxb.entities != null)
+                if (!(cmbEntity.SelectedItem is EntityMetadataItem) && fxb.entities != null)
                 {
                     if (!fxb.entities.Any(e => e.LogicalName == cmbEntity.Text))
                     {
@@ -51,7 +52,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                         return new ControlValidationResult(ControlValidationLevel.Info, "Entity", ControlValidationMessage.NotShowingNow);
                     }
                 }
-                if (fxb.entities != null && !cmbEntity.Items.OfType<EntityItem>().Any(i => i.ToString() == cmbEntity.Text))
+                if (fxb.entities != null && !cmbEntity.Items.OfType<EntityMetadataItem>().Any(i => i.ToString() == cmbEntity.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "Entity", ControlValidationMessage.IsRequired);
                 }
@@ -64,18 +65,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         {
             fxb.ShowMetadata(Metadata());
             if (IsInitialized &&
-                cmbEntity.SelectedItem is EntityItem item &&
-                item.Meta?.LogicalName != fxb.dockControlBuilder.LayoutXML?.EntityMeta?.LogicalName)
+                cmbEntity.SelectedItem is EntityMetadataItem item &&
+                item.Metadata?.LogicalName != fxb.dockControlBuilder.LayoutXML?.EntityMeta?.LogicalName)
             {
-                fxb.dockControlBuilder.LayoutXML = new LayoutXML(item.Meta, fxb);
+                fxb.dockControlBuilder.LayoutXML = new LayoutXML(item.Metadata, fxb);
             }
         }
 
         public override MetadataBase Metadata()
         {
-            if (cmbEntity.SelectedItem is EntityItem item)
+            if (cmbEntity.SelectedItem is EntityMetadataItem item)
             {
-                return item.Meta;
+                return item.Metadata;
             }
             return fxb.GetEntity(cmbEntity.Text) ?? base.Metadata();
         }
@@ -83,6 +84,23 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         public override void Focus()
         {
             cmbEntity.Focus();
+        }
+
+        private void chkIncludeLogicalName_CheckedChanged(object sender, System.EventArgs e)
+        {
+            if (fxb == null)
+            {
+                return;
+            }
+            fxb.settings.UseFriendlyAndRawEntities = chkIncludeLogicalName.Checked;
+            SetIncLogName();
+        }
+
+        private void SetIncLogName()
+        {
+            SaveInternal(false);
+            PopulateControls();
+            ReFillControl(cmbEntity);
         }
     }
 }
