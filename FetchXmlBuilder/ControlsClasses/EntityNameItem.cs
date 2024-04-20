@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
-using Rappen.XTB.XmlEditorUtils;
+using Rappen.XTB.Helpers.Interfaces;
 
 namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
 {
-    public class EntityNameItem : IComboBoxItem
+    public class EntityNameItem : IXRMControlItem
     {
         private EntityMetadata meta = null;
 
@@ -12,14 +12,8 @@ namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
             meta = Entity;
         }
 
-        public override string ToString()
-        {
-            return FetchXmlBuilder.GetEntityDisplayName(meta);
-        }
+        public override string ToString() => FetchXmlBuilder.GetEntityDisplayName(meta);
 
-        public string GetValue()
-        {
-            return meta.ObjectTypeCode.Value.ToString();
-        }
+        public string GetValue() => meta.ObjectTypeCode.Value.ToString();
     }
 }

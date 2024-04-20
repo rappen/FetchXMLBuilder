@@ -6,7 +6,8 @@ using Rappen.XTB.FetchXmlBuilder.Builder;
 using Rappen.XTB.FetchXmlBuilder.ControlsClasses;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
-using Rappen.XTB.XmlEditorUtils;
+using Rappen.XTB.Helpers;
+using Rappen.XTB.Helpers.ControlItems;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -53,7 +54,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         public override MetadataBase Metadata()
         {
-            if (cmbAttribute.SelectedItem is AttributeItem item)
+            if (cmbAttribute.SelectedItem is AttributeMetadataItem item)
             {
                 return item.Metadata;
             }
@@ -110,7 +111,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                     return new ControlValidationResult(ControlValidationLevel.Error, "Attribute", ControlValidationMessage.IsRequired);
                 }
 
-                if (fxb.entities != null && !cmbAttribute.Items.OfType<AttributeItem>().Any(i => i.ToString() == cmbAttribute.Text))
+                if (fxb.entities != null && !cmbAttribute.Items.OfType<AttributeMetadataItem>().Any(i => i.ToString() == cmbAttribute.Text))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute", ControlValidationMessage.InValid);
                 }
@@ -135,7 +136,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
                 if (cmbOperator.SelectedItem != null && cmbOperator.SelectedItem is OperatorItem oper && (!oper.IsMultipleValuesType || Node.Nodes.Count == 0))
                 {
-                    var attribute = cmbAttribute.SelectedItem as AttributeItem; ;
+                    var attribute = cmbAttribute.SelectedItem as AttributeMetadataItem; ;
                     var valueType = GetValueType(oper, attribute);
                     var attributeType = oper.AttributeType;
                     var value = ControlUtils.GetValueFromControl(cmbValue).Trim();
@@ -331,7 +332,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         #region Private Methods
 
-        private static AttributeTypeCode? GetValueType(OperatorItem oper, AttributeItem attributeitem)
+        private static AttributeTypeCode? GetValueType(OperatorItem oper, AttributeMetadataItem attributeitem)
         {
             if (oper == null)
             {
@@ -432,7 +433,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             }
             BeginInit();
             var attributes = fxb.GetDisplayAttributes(entityName);
-            cmbAttribute.Items.AddRange(attributes?.Select(a => new AttributeItem(a, fxb.settings.ShowAttributeTypes)).ToArray());
+            cmbAttribute.Items.AddRange(attributes?.Select(a => new AttributeMetadataItem(a, fxb.settings.UseFriendlyNames, fxb.settings.ShowAttributeTypes)).ToArray());
             // RefreshFill now that attributes are loaded
             ReFillControl(cmbAttribute);
             ReFillControl(cmbValue);
@@ -448,7 +449,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             {
                 return;
             }
-            if (cmbAttribute.SelectedItem is AttributeItem attributeItem && attributeItem.Metadata.AttributeType is AttributeTypeCode attributeType)
+            if (cmbAttribute.SelectedItem is AttributeMetadataItem attributeItem && attributeItem.Metadata.AttributeType is AttributeTypeCode attributeType)
             {
                 //cmbOperator.SelectedItem = null;
                 cmbOperator.Items.Clear();
@@ -468,7 +469,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 return;
             }
             panValueOf.Visible = false;
-            if (!valueOfSupported || !(cmbOperator.SelectedItem is OperatorItem oper) || !(cmbAttribute.SelectedItem is AttributeItem attribute))
+            if (!valueOfSupported || !(cmbOperator.SelectedItem is OperatorItem oper) || !(cmbAttribute.SelectedItem is AttributeMetadataItem attribute))
             {
                 return;
             }
@@ -495,7 +496,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 cmbValueOf.Items.Add("");
                 var attributes = fxb.GetDisplayAttributes(entityName);
                 cmbValueOf.Items.AddRange(attributes?
-                    .Select(a => new AttributeItem(a, fxb.settings.ShowAttributeTypes))
+                    .Select(a => new AttributeMetadataItem(a, fxb.settings.UseFriendlyNames, fxb.settings.ShowAttributeTypes))
                     .Where(a => TypeIsCloseEnough(a.Metadata, attribute.Metadata))
                     .ToArray());
                 EndInit();
@@ -568,7 +569,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 return;
             }
             var valueType = oper.ValueType;
-            var attribute = cmbAttribute.SelectedItem as AttributeItem;
+            var attribute = cmbAttribute.SelectedItem as AttributeMetadataItem;
             if (valueType == AttributeTypeCode.ManagedProperty && attribute != null)
             {   // Indicates value type is determined by selected attribute
                 valueType = attribute.Metadata.AttributeType;
@@ -852,7 +853,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             {
                 return;
             }
-            var valuetype = GetValueType(cmbOperator.SelectedItem as OperatorItem, cmbAttribute.SelectedItem as AttributeItem);
+            var valuetype = GetValueType(cmbOperator.SelectedItem as OperatorItem, cmbAttribute.SelectedItem as AttributeMetadataItem);
             if (valuetype.IsDecimalable())
             {
                 var sepcurrent = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator[0];

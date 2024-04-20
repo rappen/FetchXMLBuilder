@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
-using Rappen.XTB.FetchXmlBuilder.ControlsClasses;
 using Rappen.XTB.FetchXmlBuilder.Views;
-using Rappen.XTB.XmlEditorUtils;
+using Rappen.XTB.Helpers;
+using Rappen.XTB.Helpers.ControlItems;
 using System;
 using System.Windows.Forms;
 
@@ -32,7 +32,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 {
                     if (entity.IsIntersect != true && Caller.views.ContainsKey(entity.LogicalName + "|S"))
                     {
-                        var ei = new EntityItem(entity);
+                        var ei = new EntityMetadataItem(entity, Caller.settings.UseFriendlyNames, Caller.settings.UseFriendlyAndRawEntities);
                         cmbEntity.Items.Add(ei);
                         if (entity.LogicalName == Caller.settings.LastOpenedViewEntity)
                         {

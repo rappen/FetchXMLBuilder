@@ -1,11 +1,11 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
-using Rappen.XTB.XmlEditorUtils;
+using Rappen.XTB.Helpers.Interfaces;
 using System.Collections.Generic;
 
 namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
 {
-    public class OperatorItem : IComboBoxItem
+    public class OperatorItem : IXRMControlItem
     {
         private ConditionOperator oper = ConditionOperator.Equal;
 

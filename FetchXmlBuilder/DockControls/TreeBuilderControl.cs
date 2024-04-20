@@ -2,13 +2,13 @@
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XRM.Helpers.FetchXML;
+using Rappen.XRM.Helpers.Interfaces;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Builder;
 using Rappen.XTB.FetchXmlBuilder.Controls;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Forms;
 using Rappen.XTB.FetchXmlBuilder.Views;
-using Rappen.XTB.Helpers.Controls;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;

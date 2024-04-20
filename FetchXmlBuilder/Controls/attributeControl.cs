@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.Builder;
-using Rappen.XTB.FetchXmlBuilder.ControlsClasses;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Views;
+using Rappen.XTB.Helpers.ControlItems;
 using System;
 using System.Linq;
 using System.Windows.Forms;
@@ -42,7 +42,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 cmbAggregate.SelectedIndex = -1;
                 chkGroupBy.Checked = false;
             }
-            cmbAttribute.Items.AddRange(attributes?.Select(a => new AttributeItem(a, fxb.settings.ShowAttributeTypes)).ToArray());
+            cmbAttribute.Items.AddRange(attributes?.Select(a => new AttributeMetadataItem(a, fxb.settings.UseFriendlyNames, fxb.settings.ShowAttributeTypes)).ToArray());
             UpdateUIFromCell();
         }
 
@@ -56,12 +56,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 }
                 if (fxb.entities != null)
                 {
-                    var attributename = (cmbAttribute.SelectedItem is AttributeItem item && item.Metadata != null) ? item.Metadata.LogicalName : cmbAttribute.Text;
+                    var attributename = (cmbAttribute.SelectedItem is AttributeMetadataItem item && item.Metadata != null) ? item.Metadata.LogicalName : cmbAttribute.Text;
                     if (!allattributes.Any(a => a.LogicalName == attributename))
                     {
                         return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute", ControlValidationMessage.NotInMetadata);
                     }
-                    if (!cmbAttribute.Items.OfType<AttributeItem>().Any(a => a.ToString() == cmbAttribute.Text))
+                    if (!cmbAttribute.Items.OfType<AttributeMetadataItem>().Any(a => a.ToString() == cmbAttribute.Text))
                     {
                         return new ControlValidationResult(ControlValidationLevel.Info, "Attribute", ControlValidationMessage.NotShowingNow);
                     }
@@ -183,7 +183,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         public override MetadataBase Metadata()
         {
-            if (cmbAttribute.SelectedItem is AttributeItem item)
+            if (cmbAttribute.SelectedItem is AttributeMetadataItem item)
             {
                 return item.Metadata;
             }

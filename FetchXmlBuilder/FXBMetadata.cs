@@ -40,14 +40,14 @@ namespace Rappen.XTB.FetchXmlBuilder
             var attribute = GetAttribute(entityName, attributeName);
             if (attribute != null)
             {
-                attributeName = GetAttributeDisplayName(attribute);
+                attributeName = GetAttributeDisplayName(attribute, false);
             }
             return attributeName;
         }
 
-        internal static string GetAttributeDisplayName(AttributeMetadata attribute) => friendlyNames ? attribute.ToDisplayName() : attribute.LogicalName;
+        internal static string GetAttributeDisplayName(AttributeMetadata attribute, bool includetype) => friendlyNames ? attribute.ToDisplayName(includetype) : attribute.LogicalName;
 
-        internal string GetEntityDisplayName(string entityName)
+        internal string GetEntityDisplayName(string entityName, bool incldelogicalname = false)
         {
             if (!friendlyNames)
             {
@@ -55,12 +55,12 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             if (GetEntity(entityName) is EntityMetadata meta)
             {
-                entityName = GetEntityDisplayName(meta);
+                entityName = GetEntityDisplayName(meta, incldelogicalname);
             }
             return entityName;
         }
 
-        internal static string GetEntityDisplayName(EntityMetadata entity) => friendlyNames ? entity.ToDisplayName() : entity.LogicalName;
+        internal static string GetEntityDisplayName(EntityMetadata entity, bool includelogicalname = false) => friendlyNames ? entity.ToDisplayName(includelogicalname) : entity.LogicalName;
 
         internal string GetContitionValue(string entityName, string attributeName, string value)
         {
@@ -202,7 +202,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 throw new ArgumentException("Cannot handle call-back method for synchronous loading.", "detailsLoaded");
             }
             working = true;
-            var name = GetEntityDisplayName(entityName);
+            var name = GetEntityDisplayName(entityName, false);
             if (async)
             {
                 WorkAsync(new WorkAsyncInfo($"Loading {name}...",

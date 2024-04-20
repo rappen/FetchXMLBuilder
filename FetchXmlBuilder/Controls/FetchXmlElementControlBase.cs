@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XRM.Helpers.FetchXML;
+using Rappen.XRM.Helpers.Interfaces;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.Helpers;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;

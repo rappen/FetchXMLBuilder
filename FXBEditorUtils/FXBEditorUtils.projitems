@@ -9,10 +9,7 @@
     <Import_RootNamespace>FXBEditorUtils</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)ControlUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FindTextHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IComboBoxItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IDefinitionSavable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ListViewItemComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Prompt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SaveEventArgs.cs" />

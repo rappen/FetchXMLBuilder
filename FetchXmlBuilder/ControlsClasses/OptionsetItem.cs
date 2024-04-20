@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
-using Rappen.XTB.XmlEditorUtils;
+using Rappen.XTB.Helpers.Interfaces;
 
 namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
 {
-    internal class OptionsetItem : IComboBoxItem
+    internal class OptionsetItem : IXRMControlItem
     {
         private OptionMetadata meta = null;
 

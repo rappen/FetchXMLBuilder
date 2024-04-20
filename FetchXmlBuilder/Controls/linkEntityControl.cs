@@ -4,6 +4,7 @@ using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.Builder;
 using Rappen.XTB.FetchXmlBuilder.ControlsClasses;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.Helpers.ControlItems;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -442,9 +443,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private MetadataBase GetEntityMetadata()
         {
-            if (cmbEntity.SelectedItem is EntityItem item)
+            if (cmbEntity.SelectedItem is EntityMetadataItem item)
             {
-                return item.Meta;
+                return item.Metadata;
             }
             return fxb.GetEntity(cmbEntity.Text) ?? base.Metadata();
         }

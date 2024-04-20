@@ -24,6 +24,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
             }
         }
 
+        public bool UseFriendlyAndRawEntities { get; set; }
+
         public QueryOptions QueryOptions { get; set; } = new QueryOptions();
         public ResultOptions Results { get; set; } = new ResultOptions();
         public string CurrentVersion { get; set; }

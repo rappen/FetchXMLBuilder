@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xrm.Sdk;
-using Rappen.XTB.XmlEditorUtils;
+using Rappen.XTB.Helpers.Interfaces;
 
 namespace Rappen.XTB.FetchXmlBuilder.Views
 {
-    public class ViewItem : IComboBoxItem
+    public class ViewItem : IXRMControlItem
     {
         private Entity view = null;
 
