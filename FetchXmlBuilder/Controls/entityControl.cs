@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
+using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Views;
@@ -11,6 +12,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 {
     public partial class entityControl : FetchXmlElementControlBase
     {
+        private List<EntityMetadata> allentities;
+
         public entityControl() : this(new Dictionary<string, string>(), null, null)
         {
         }
@@ -25,12 +28,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         protected override void PopulateControls()
         {
-            cmbEntity.Items.Clear();
-            var entities = fxb.GetDisplayEntities();
-            if (entities != null)
-            {
-                cmbEntity.Items.AddRange(entities.Select(e => new EntityMetadataItem(e, fxb.settings.UseFriendlyNames, fxb.settings.UseFriendlyAndRawEntities)).ToArray());
-            }
+            allentities = fxb.GetDisplayEntities();
+            FilterEntities();
         }
 
         protected override ControlValidationResult ValidateControl(Control control)
@@ -102,6 +101,32 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             SaveInternal(false);
             PopulateControls();
             ReFillControl(cmbEntity);
+        }
+
+        private void picFilter_Click(object sender, System.EventArgs e)
+        {
+            panFilter.Visible = !panFilter.Visible;
+            FilterEntities();
+        }
+
+        private void txtFilter_TextChanged(object sender, System.EventArgs e)
+        {
+            FilterEntities();
+        }
+
+        private void FilterEntities()
+        {
+            cmbEntity.Items.Clear();
+            var text = panFilter.Visible ? txtFilter.Text.ToLowerInvariant() : string.Empty;
+            var entities = allentities?.Where(e =>
+                string.IsNullOrWhiteSpace(text) ||
+                e.LogicalName.ToLowerInvariant().Contains(text) ||
+                e.ToDisplayName().ToLowerInvariant().Contains(text));
+            cmbEntity.Items.AddRange(entities.Select(e => new EntityMetadataItem(e, fxb.settings.UseFriendlyNames, fxb.settings.UseFriendlyAndRawEntities)).ToArray());
+            if (IsInitialized)
+            {
+                ReFillControl(cmbEntity);
+            }
         }
     }
 }
