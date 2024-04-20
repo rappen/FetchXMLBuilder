@@ -19,6 +19,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         {
             InitializeComponent();
             chkIncludeLogicalName.Checked = fetchXmlBuilder.settings.UseFriendlyAndRawEntities;
+            chkIncludeLogicalName.Enabled = fetchXmlBuilder.settings.UseFriendlyNames;
             InitializeFXB(collection, fetchXmlBuilder, tree, null);
         }
 
