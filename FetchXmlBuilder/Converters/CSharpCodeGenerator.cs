@@ -1166,6 +1166,17 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     case QExFlavorEnum.LCGconstants:
                         return LCG.Extensions.GetEntityClass(entity, settings.LCG_Settings) + "." + LCG.Extensions.GetAttributeProperty(attribute, settings.LCG_Settings);
 
+                    case QExFlavorEnum.EBGconstants:
+                        if (attribute.IsPrimaryId == true)
+                        {
+                            return entity.SchemaName + ".PrimaryIdAttribute";
+                        }
+                        if (attribute.IsPrimaryName == true)
+                        {
+                            return entity.SchemaName + ".PrimaryNameAttribute";
+                        }
+                        return entity.SchemaName + "." + settings.EBG_AttributeLogicalNameClass + attribute.CapitSchemaName(settings.QExFlavor);
+
                     default:
                         return entity.SchemaName + "." + settings.EBG_AttributeLogicalNameClass + attribute.CapitSchemaName(settings.QExFlavor);
                 }
