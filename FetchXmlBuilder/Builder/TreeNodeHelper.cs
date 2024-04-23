@@ -115,6 +115,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
             var agg = node.Value("aggregate");
             var name = node.Value("name");
             var alias = node.Value("alias");
+            if (string.IsNullOrWhiteSpace(alias))
+            {
+                alias = null;
+            }
             switch (node.Name)
             {
                 case "fetch":
@@ -149,11 +153,22 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                     break;
 
                 case "entity":
-                case "link-entity":
                     text += " " + fxb.GetEntityDisplayName(name);
-                    if (!string.IsNullOrEmpty(alias))
+                    break;
+
+                case "link-entity":
+                    var dispname = fxb.GetEntityDisplayName(name);
+                    if (!string.IsNullOrEmpty(alias) && !alias.ToLowerInvariant().Equals(dispname.ToLowerInvariant()))
                     {
-                        text += " (" + alias + ")";
+                        text += $" {alias} ({dispname})";
+                    }
+                    else
+                    {
+                        text += $" {alias ?? dispname}";
+                    }
+                    if (node.Value("link-type") is string linktype && !string.IsNullOrEmpty(linktype))
+                    {
+                        text += $" ({linktype})";
                     }
                     if (node.Value("intersect") == "true")
                     {
@@ -179,13 +194,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                             }
                             text += agg + "(" + name + ")";
                         }
-                        else if (!string.IsNullOrEmpty(alias))
-                        {
-                            text += alias + " (" + name + ")";
-                        }
                         else
                         {
-                            text += name;
+                            text += alias ?? name;
                         }
                         var grp = node.Value("groupby");
                         if (grp == "true")
