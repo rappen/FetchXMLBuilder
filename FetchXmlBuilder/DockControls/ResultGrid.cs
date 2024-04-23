@@ -98,7 +98,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             mnuShowAllCol.Visible = form.settings.Results.WorkWithLayout;
             mnuShowLayoutXML.Visible = form.settings.Results.WorkWithLayout;
 
-            if (!form.settings.Results.WorkWithLayout)
+            if (!form.settings.Results.WorkWithLayout && crmGridView1.LayoutXML != null)
             {
                 crmGridView1.LayoutXML = null;
             }
@@ -145,9 +145,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             reloaded = true;
             crmGridView1.SuspendLayout();
-            crmGridView1.Refresh();
             if (form.dockControlBuilder.LayoutXML == null)
             {
+                crmGridView1.Refresh();
                 ShowHiddenColumns();
                 crmGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
             }
@@ -190,10 +190,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 return;
             }
+            var tmpreloaded = reloaded;
             reloaded = true;
             crmGridView1.LayoutXML = form.dockControlBuilder?.LayoutXML?.ToXML();
             crmGridView1.Refresh();
-            reloaded = false;
+            reloaded = tmpreloaded;
         }
 
         private void GetLayoutFromGrid()
@@ -346,7 +347,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void crmGridView1_LayoutChanged(object sender, DataGridViewColumnEventArgs e)
         {
-            if (!reloaded)
+            if (!reloaded && !crmGridView1.SettingsWidths)
             {
                 GetLayoutFromGrid();
             }
@@ -434,6 +435,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void mnuShowLayoutXML_Click(object sender, EventArgs e)
         {
             form.ShowLayoutXML();
+        }
+
+        private void crmGridView1_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (!reloaded)
+            {
+                GetLayoutFromGrid();
+            }
         }
     }
 }
