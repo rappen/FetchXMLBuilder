@@ -168,11 +168,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                     }
                     if (node.Value("link-type") is string linktype && !string.IsNullOrEmpty(linktype))
                     {
-                        text += $" ({linktype})";
+                        text += $" {linktype}";
                     }
-                    if (node.Value("intersect") == "true")
+                    if (GetLinkDirection(node, fxb) is string direction && !string.IsNullOrEmpty(direction))
                     {
-                        text += " M:M";
+                        text += $" {direction}";
                     }
                     break;
 
@@ -314,6 +314,42 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
             {
                 Validate(node, fxb);
             }
+        }
+
+        private static string GetLinkDirection(TreeNode node, FetchXmlBuilder fxb)
+        {
+            if (fxb.entities == null)
+            {
+                return string.Empty;
+            }
+            var linkentity = node.Value("name");
+            var parentname = node.Parent.Value("name");
+            var from = node.Value("from");
+            var to = node.Value("to");
+            var parent = fxb.entities.FirstOrDefault(e => e.LogicalName == parentname);
+            if (parent == null)
+            {
+                return string.Empty;
+            }
+            if (parent.OneToManyRelationships.Any(r =>
+                r.ReferencingEntity == linkentity &&
+                r.ReferencingAttribute == from &&
+                r.ReferencedAttribute == to))
+            {
+                return "1:M";
+            }
+            if (parent.ManyToOneRelationships.Any(r =>
+                r.ReferencedEntity == linkentity &&
+                r.ReferencingAttribute == to &&
+                r.ReferencedAttribute == from))
+            {
+                return "M:1";
+            }
+            if (node.Value("intersect") == "true")
+            {
+                return "M:M";
+            }
+            return string.Empty;
         }
 
         public static void Validate(TreeNode node, FetchXmlBuilder fxb)
