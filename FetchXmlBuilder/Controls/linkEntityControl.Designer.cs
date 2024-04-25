@@ -231,7 +231,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.pictureBox2.Size = new System.Drawing.Size(14, 14);
             this.pictureBox2.TabIndex = 48;
             this.pictureBox2.TabStop = false;
-            this.pictureBox2.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.query.linkentity";
+            this.pictureBox2.Tag = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml/joi" +
+    "n-tables";
             this.pictureBox2.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // pictureBox1
@@ -243,7 +244,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.pictureBox1.Size = new System.Drawing.Size(14, 14);
             this.pictureBox1.TabIndex = 49;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Tag = "https://docs.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.query.joinoperator";
+            this.pictureBox1.Tag = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml/ref" +
+    "erence/link-entity#link-type-options";
             this.pictureBox1.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // chkOnlyLpks
