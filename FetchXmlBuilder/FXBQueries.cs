@@ -294,7 +294,9 @@ namespace Rappen.XTB.FetchXmlBuilder
                     var querysignature = dockControlBuilder.GetTreeChecksum(null);
                     var attributessignature = dockControlBuilder.GetAttributesSignature();
                     var start = DateTime.Now;
-                    var resultCollection = Service.RetrieveMultipleAll(query, worker, eventargs, "Executing FetchXML...\nRecords: {retrieving}\nPage: {page}\nTime: {time}", false);
+                    var resultCollection = settings.Results.RetrieveAllPages ?
+                        Service.RetrieveMultipleAll(query, worker, eventargs, "Executing FetchXML...\nRecords: {retrieving}\nPage: {page}\nTime: {time}", false) :
+                        Service.RetrieveMultiple(query);
                     LogUse($"RetrieveMultiple-{settings.Results.ResultOutput}", false, resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds);
                     if (settings.Results.ResultOutput == ResultOutput.JSON)
                     {
