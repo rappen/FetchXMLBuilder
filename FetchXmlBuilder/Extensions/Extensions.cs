@@ -2,29 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Xml;
 
 namespace Rappen.XTB.FetchXmlBuilder.Extensions
 {
     public static class Extensions
     {
-        internal static string ToTypeString(this AttributeMetadata attribute)
-        {
-            if (attribute == null)
-            {
-                return string.Empty;
-            }
-            if (attribute.AttributeTypeName?.Value != null)
-            {
-                return attribute.AttributeTypeName.Value.RemoveEnd("Type");
-            }
-            if (attribute.AttributeType != null)
-            {
-                return attribute.AttributeType.ToString();
-            }
-            return string.Empty;
-        }
-
         internal static string RemoveEnd(this string text, string remove)
         {
             if (text == null || string.IsNullOrEmpty(remove) || !text.EndsWith(remove))
@@ -37,15 +19,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Extensions
         internal static bool KeyDown(this KeyEventArgs keyevent, Keys key, bool shift, bool control, bool alt)
         {
             return keyevent.KeyCode == key && keyevent.Shift == shift && keyevent.Control == control && keyevent.Alt == alt;
-        }
-
-        internal static string AttributeValue(this XmlNode node, string key)
-        {
-            if (node != null && node.Attributes != null && node.Attributes[key] is XmlAttribute attr)
-            {
-                return attr.Value;
-            }
-            return string.Empty;
         }
 
         internal static bool IsDecimalable(this AttributeTypeCode? attributetype)

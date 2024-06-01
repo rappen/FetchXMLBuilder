@@ -1,4 +1,4 @@
-﻿using Rappen.XTB.FetchXmlBuilder.Extensions;
+﻿using Rappen.XRM.Helpers.Extensions;
 using System.Windows.Forms;
 using System.Xml;
 

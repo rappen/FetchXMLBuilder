@@ -2,7 +2,6 @@
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XRM.Helpers.Extensions;
-using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
@@ -47,7 +46,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 var item = new ListViewItem(new string[] {
                     name,
                     attribute.LogicalName,
-                    attribute.ToTypeString(),
+                    attribute.ToTypeName(),
                     attribute.IsValidForRead.HasValue ? attribute.IsValidForRead.Value.ToString() : "",
                     attribute.IsValidForGrid.HasValue ? attribute.IsValidForGrid.Value.ToString() : "",
                     attribute.IsValidForAdvancedFind.Value.ToString(),
