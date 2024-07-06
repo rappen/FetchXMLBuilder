@@ -9,6 +9,7 @@ using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Forms;
 using Rappen.XTB.FetchXmlBuilder.Settings;
+using Rappen.XTB.Helpers;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
@@ -69,6 +70,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // Add the event handler for handling non-UI thread exceptions to the event.
             //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Error_UnhandledException);
 
+            UrlUtils.TOOL_NAME = "FetchXMLBuilder";
             tslAbout.ToolTipText = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 
             ai1 = new AppInsights(aiEndpoint, aiKey1, Assembly.GetExecutingAssembly(), "FetchXML Builder");
