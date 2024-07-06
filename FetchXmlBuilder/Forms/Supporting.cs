@@ -14,9 +14,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private const string tool = "FetchXML%20Builder";
         private const string formidcorp = "wpf17273";
         private const string formidpriv = "wpf17612";
-        private const string urlcorp = "https://jonasr.app/supporting/?{formid}_1_first={firstname}&{formid}_1_last={lastname}&{formid}_27={company}&{formid}_3={country}&{formid}_4={email}&{formid}_19={size}&{formid}_24={amount}&{formid}_9={tool}&{formid}_31={tool}&{formid}_32={version}&{formid}_33={instid}";
+        private const string urlcorp = "https://jonasr.app/supporting/?{formid}_1_first={firstname}&{formid}_1_last={lastname}&{formid}_27={company}&{formid}_3={country}&{formid}_4={email}&{formid}_19={size}&{formid}_24={amount}&{formid}_13={tool}&{formid}_31={tool}&{formid}_32={version}&{formid}_33={instid}";
 
-        private const string urlinde = "https://jonasr.app/supporting/personal/?{formid}_1_first={firstname}&{formid}_1_last={lastname}&{formid}_3={country}&{formid}_4={email}&{formid}_9={tool}&{formid}_31={tool}&{formid}_32={version}&{formid}_33={instid}";
+        private const string urlinde = "https://jonasr.app/supporting/personal/?{formid}_1_first={firstname}&{formid}_1_last={lastname}&{formid}_3={country}&{formid}_4={email}&{formid}_13={tool}&{formid}_31={tool}&{formid}_32={version}&{formid}_33={instid}";
         private Version version;
         private Guid installationid;
 
@@ -142,8 +142,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
 
         private void rbI_CheckedChanged(object sender, EventArgs e)
         {
-            panPersonal.Left = 30;
-            panPersonal.Top = 180;
+            panPersonal.Left = panCorp.Left;
+            panPersonal.Top = panCorp.Top;
             panPersonal.Visible = rbPersonal.Checked;
             panCorp.Visible = !panPersonal.Visible;
             btnSave.Image = rbPersonal.Checked ?
@@ -159,8 +159,8 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Forms
         private void btnInfo_Click(object sender, EventArgs e)
         {
             panInfo.Visible = !panInfo.Visible;
-            panInfo.Left = 70;
-            panInfo.Top = 30;
+            panInfo.Left = 50;
+            panInfo.Top = 10;
         }
 
         private void btnInfoClose_Click(object sender, EventArgs e)

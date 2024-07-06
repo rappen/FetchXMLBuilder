@@ -423,6 +423,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icons8_close_16_yellow {
+            get {
+                object obj = ResourceManager.GetObject("icons8-close-16-yellow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icons8_info_24__1_ {
             get {
                 object obj = ResourceManager.GetObject("icons8-info-24 (1)", resourceCulture);

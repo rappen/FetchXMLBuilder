@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Supporting));
             this.label1 = new System.Windows.Forms.Label();
             this.lblCompany = new System.Windows.Forms.Label();
             this.txtCompany = new System.Windows.Forms.TextBox();
@@ -101,7 +102,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(46, 142);
+            this.label3.Location = new System.Drawing.Point(46, 126);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(78, 18);
             this.label3.TabIndex = 3;
@@ -111,7 +112,7 @@
             // 
             this.panel1.Controls.Add(this.rbPersonal);
             this.panel1.Controls.Add(this.rbCompany);
-            this.panel1.Location = new System.Drawing.Point(169, 128);
+            this.panel1.Location = new System.Drawing.Point(169, 112);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(245, 42);
             this.panel1.TabIndex = 1;
@@ -159,7 +160,7 @@
             // 
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(0)))));
-            this.linkLabel1.Location = new System.Drawing.Point(42, 375);
+            this.linkLabel1.Location = new System.Drawing.Point(461, 384);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(43, 18);
             this.linkLabel1.TabIndex = 100;
@@ -317,9 +318,9 @@
             this.panInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
             this.panInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panInfo.Controls.Add(this.panel2);
-            this.panInfo.Location = new System.Drawing.Point(56, 713);
+            this.panInfo.Location = new System.Drawing.Point(33, 678);
             this.panInfo.Name = "panInfo";
-            this.panInfo.Size = new System.Drawing.Size(394, 256);
+            this.panInfo.Size = new System.Drawing.Size(437, 390);
             this.panInfo.TabIndex = 11;
             this.panInfo.Visible = false;
             // 
@@ -336,7 +337,7 @@
             this.panel2.Controls.Add(this.label2);
             this.panel2.Location = new System.Drawing.Point(5, 5);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(382, 244);
+            this.panel2.Size = new System.Drawing.Size(425, 378);
             this.panel2.TabIndex = 0;
             // 
             // label2
@@ -346,7 +347,7 @@
             this.label2.Font = new System.Drawing.Font("Berlin Sans FB", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(12, 10);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(368, 35);
+            this.label2.Size = new System.Drawing.Size(411, 35);
             this.label2.TabIndex = 0;
             this.label2.Text = "How and Why do we support?";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -356,28 +357,29 @@
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(66)))), ((int)(((byte)(173)))));
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox1.ForeColor = System.Drawing.Color.Yellow;
             this.textBox1.Location = new System.Drawing.Point(16, 53);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(348, 162);
+            this.textBox1.Size = new System.Drawing.Size(391, 296);
             this.textBox1.TabIndex = 1;
-            this.textBox1.Text = "Because...";
+            this.textBox1.Text = resources.GetString("textBox1.Text");
             // 
             // linkHelping
             // 
+            this.linkHelping.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.linkHelping.AutoSize = true;
             this.linkHelping.LinkColor = System.Drawing.Color.Yellow;
-            this.linkHelping.Location = new System.Drawing.Point(13, 218);
+            this.linkHelping.Location = new System.Drawing.Point(94, 348);
             this.linkHelping.Name = "linkHelping";
-            this.linkHelping.Size = new System.Drawing.Size(175, 18);
+            this.linkHelping.Size = new System.Drawing.Size(179, 18);
             this.linkHelping.TabIndex = 2;
             this.linkHelping.TabStop = true;
             this.linkHelping.Tag = "https://jonasr.app/helping/";
-            this.linkHelping.Text = "Helping me - Helping you";
+            this.linkHelping.Text = "https://jonasr.app/helping/";
             this.linkHelping.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkHelping_LinkClicked);
             // 
             // btnInfo
@@ -394,10 +396,11 @@
             // 
             // btnInfoClose
             // 
+            this.btnInfoClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnInfoClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnInfoClose.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
-            this.btnInfoClose.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icons8_close_16;
-            this.btnInfoClose.Location = new System.Drawing.Point(347, 3);
+            this.btnInfoClose.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icons8_close_16_yellow;
+            this.btnInfoClose.Location = new System.Drawing.Point(390, 3);
             this.btnInfoClose.Name = "btnInfoClose";
             this.btnInfoClose.Size = new System.Drawing.Size(30, 30);
             this.btnInfoClose.TabIndex = 13;
@@ -412,6 +415,8 @@
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(210, 68);
             this.btnSave.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.btnSave, "Click to forward you to supporting form on JonasR.app.\r\nInformation added here wi" +
+        "ll be brought in next form.");
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnCorp_Click);
             // 
@@ -420,7 +425,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(66)))), ((int)(((byte)(173)))));
-            this.ClientSize = new System.Drawing.Size(516, 434);
+            this.ClientSize = new System.Drawing.Size(516, 432);
             this.ControlBox = false;
             this.Controls.Add(this.btnInfo);
             this.Controls.Add(this.panInfo);
@@ -439,7 +444,7 @@
             this.MinimizeBox = false;
             this.Name = "Supporting";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Supporting";
+            this.Text = "We Support Tools";
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Supporting_FormClosing);
             this.panel1.ResumeLayout(false);
