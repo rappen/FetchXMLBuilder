@@ -83,9 +83,29 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Corporate_Supports_Tools_2_narrow_200 {
+            get {
+                object obj = ResourceManager.GetObject("Corporate Supports Tools 2 narrow 200", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap FXB_2019_2_032_tsp {
             get {
                 object obj = ResourceManager.GetObject("FXB-2019-2-032-tsp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap I_Support_Tools_narrow_200 {
+            get {
+                object obj = ResourceManager.GetObject("I Support Tools narrow 200", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -386,6 +406,26 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         internal static System.Drawing.Bitmap icon_xml {
             get {
                 object obj = ResourceManager.GetObject("icon-xml", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icons8_close_16 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-close-16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icons8_info_24__1_ {
+            get {
+                object obj = ResourceManager.GetObject("icons8-info-24 (1)", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

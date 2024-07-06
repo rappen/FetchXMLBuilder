@@ -96,6 +96,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.dockContainer = new WeifenLuo.WinFormsUI.Docking.DockPanel();
+            this.tsbSupport = new System.Windows.Forms.ToolStripButton();
             this.toolStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -124,11 +125,12 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbReturnToCaller,
             this.tslAbout,
             this.tsbLearnFetchXml,
-            this.tsbBymeacoffee});
+            this.tsbBymeacoffee,
+            this.tsbSupport});
             this.toolStripMain.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolStripMain.Location = new System.Drawing.Point(0, 0);
             this.toolStripMain.Name = "toolStripMain";
-            this.toolStripMain.Size = new System.Drawing.Size(1298, 39);
+            this.toolStripMain.Size = new System.Drawing.Size(1714, 39);
             this.toolStripMain.TabIndex = 22;
             this.toolStripMain.Text = "toolStrip1";
             this.toolStripMain.Click += new System.EventHandler(this.toolStripMain_Click);
@@ -722,7 +724,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.splitter2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.splitter2.Location = new System.Drawing.Point(0, 397);
             this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(1298, 3);
+            this.splitter2.Size = new System.Drawing.Size(1714, 3);
             this.splitter2.TabIndex = 4;
             this.splitter2.TabStop = false;
             // 
@@ -736,8 +738,18 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.dockContainer.DocumentStyle = WeifenLuo.WinFormsUI.Docking.DocumentStyle.DockingWindow;
             this.dockContainer.Location = new System.Drawing.Point(0, 39);
             this.dockContainer.Name = "dockContainer";
-            this.dockContainer.Size = new System.Drawing.Size(1298, 360);
+            this.dockContainer.Size = new System.Drawing.Size(1714, 360);
             this.dockContainer.TabIndex = 33;
+            // 
+            // tsbSupport
+            // 
+            this.tsbSupport.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbSupport.Image = ((System.Drawing.Image)(resources.GetObject("tsbSupport.Image")));
+            this.tsbSupport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbSupport.Name = "tsbSupport";
+            this.tsbSupport.Size = new System.Drawing.Size(53, 36);
+            this.tsbSupport.Text = "Support";
+            this.tsbSupport.Click += new System.EventHandler(this.tsbSupport_Click);
             // 
             // FetchXmlBuilder
             // 
@@ -750,7 +762,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "FetchXmlBuilder";
             this.PluginIcon = ((System.Drawing.Icon)(resources.GetObject("$this.PluginIcon")));
-            this.Size = new System.Drawing.Size(1298, 400);
+            this.Size = new System.Drawing.Size(1714, 400);
             this.TabIcon = ((System.Drawing.Image)(resources.GetObject("$this.TabIcon")));
             this.ConnectionUpdated += new XrmToolBox.Extensibility.PluginControlBase.ConnectionUpdatedHandler(this.FetchXmlBuilder_ConnectionUpdated);
             this.Load += new System.EventHandler(this.FetchXmlBuilder_Load);
@@ -830,5 +842,6 @@ namespace Rappen.XTB.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiShowPowerPlatformCLI;
         private System.Windows.Forms.ToolStripButton tsbBymeacoffee;
         private System.Windows.Forms.ToolStripButton tsbLearnFetchXml;
+        private System.Windows.Forms.ToolStripButton tsbSupport;
     }
 }
