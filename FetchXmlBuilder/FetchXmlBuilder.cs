@@ -1,5 +1,4 @@
-﻿using Cinteros.Xrm.FetchXmlBuilder.Forms;
-using McTools.Xrm.Connection;
+﻿using McTools.Xrm.Connection;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
@@ -885,7 +884,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void tsbSupport_Click(object sender, EventArgs e)
         {
-            new Supporting(this).ShowDialog(this);
+            Supporting.MayShow(this);
         }
     }
 }

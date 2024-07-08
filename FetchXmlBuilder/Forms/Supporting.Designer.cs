@@ -1,4 +1,4 @@
-﻿namespace Cinteros.Xrm.FetchXmlBuilder.Forms
+﻿namespace Rappen.XTB
 {
     partial class Supporting
     {
@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Supporting));
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblHeader = new System.Windows.Forms.Label();
             this.lblCompany = new System.Windows.Forms.Label();
             this.txtCompany = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -38,16 +38,16 @@
             this.rbPersonal = new System.Windows.Forms.RadioButton();
             this.rbCompany = new System.Windows.Forms.RadioButton();
             this.panCorp = new System.Windows.Forms.Panel();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.txtCountry = new System.Windows.Forms.TextBox();
             this.lblCountry = new System.Windows.Forms.Label();
             this.cmbSize = new System.Windows.Forms.ComboBox();
             this.lblSize = new System.Windows.Forms.Label();
-            this.txtInvoiceemail = new System.Windows.Forms.TextBox();
+            this.txtEmail = new System.Windows.Forms.TextBox();
             this.lblInvoiceemail = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.txtIFirst = new System.Windows.Forms.TextBox();
             this.txtILast = new System.Windows.Forms.TextBox();
+            this.btnSave = new System.Windows.Forms.Button();
             this.panPersonal = new System.Windows.Forms.Panel();
             this.txtICountry = new System.Windows.Forms.TextBox();
             this.lblICountry = new System.Windows.Forms.Label();
@@ -56,12 +56,14 @@
             this.lblIName = new System.Windows.Forms.Label();
             this.panInfo = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.linkHelping = new System.Windows.Forms.LinkLabel();
-            this.btnInfo = new System.Windows.Forms.Button();
             this.btnInfoClose = new System.Windows.Forms.Button();
-            this.btnSave = new System.Windows.Forms.Button();
+            this.linkHelping = new System.Windows.Forms.LinkLabel();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.btnInfo = new System.Windows.Forms.Button();
+            this.lblLater = new System.Windows.Forms.Label();
+            this.lblAlready = new System.Windows.Forms.Label();
+            this.pics = new System.Windows.Forms.ImageList(this.components);
             this.panel1.SuspendLayout();
             this.panCorp.SuspendLayout();
             this.panPersonal.SuspendLayout();
@@ -69,16 +71,16 @@
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // label1
+            // lblHeader
             // 
-            this.label1.Font = new System.Drawing.Font("Berlin Sans FB", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.Yellow;
-            this.label1.Location = new System.Drawing.Point(49, 38);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(421, 38);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "We Support Tools!";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblHeader.Font = new System.Drawing.Font("Berlin Sans FB", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHeader.ForeColor = System.Drawing.Color.Yellow;
+            this.lblHeader.Location = new System.Drawing.Point(49, 38);
+            this.lblHeader.Name = "lblHeader";
+            this.lblHeader.Size = new System.Drawing.Size(421, 38);
+            this.lblHeader.TabIndex = 0;
+            this.lblHeader.Text = "We Support Tools!";
+            this.lblHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblCompany
             // 
@@ -98,6 +100,7 @@
             this.txtCompany.Size = new System.Drawing.Size(292, 25);
             this.txtCompany.TabIndex = 1;
             this.toolTip1.SetToolTip(this.txtCompany, "Name of your company");
+            this.txtCompany.Validating += new System.ComponentModel.CancelEventHandler(this.txtCompany_Validating);
             // 
             // label3
             // 
@@ -126,7 +129,7 @@
             this.rbPersonal.TabIndex = 1;
             this.rbPersonal.Text = "myself";
             this.rbPersonal.UseVisualStyleBackColor = true;
-            this.rbPersonal.CheckedChanged += new System.EventHandler(this.rbI_CheckedChanged);
+            this.rbPersonal.CheckedChanged += new System.EventHandler(this.rbType_CheckedChanged);
             // 
             // rbCompany
             // 
@@ -139,7 +142,7 @@
             this.rbCompany.TabStop = true;
             this.rbCompany.Text = "our company";
             this.rbCompany.UseVisualStyleBackColor = true;
-            this.rbCompany.CheckedChanged += new System.EventHandler(this.rbI_CheckedChanged);
+            this.rbCompany.CheckedChanged += new System.EventHandler(this.rbType_CheckedChanged);
             // 
             // panCorp
             // 
@@ -147,7 +150,7 @@
             this.panCorp.Controls.Add(this.lblCountry);
             this.panCorp.Controls.Add(this.cmbSize);
             this.panCorp.Controls.Add(this.lblSize);
-            this.panCorp.Controls.Add(this.txtInvoiceemail);
+            this.panCorp.Controls.Add(this.txtEmail);
             this.panCorp.Controls.Add(this.lblInvoiceemail);
             this.panCorp.Controls.Add(this.lblCompany);
             this.panCorp.Controls.Add(this.txtCompany);
@@ -156,32 +159,20 @@
             this.panCorp.Size = new System.Drawing.Size(456, 148);
             this.panCorp.TabIndex = 2;
             // 
-            // linkLabel1
-            // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(0)))));
-            this.linkLabel1.Location = new System.Drawing.Point(461, 384);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(43, 18);
-            this.linkLabel1.TabIndex = 100;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Later";
-            this.toolTip1.SetToolTip(this.linkLabel1, "I will fill this in later.");
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.later_LinkClicked);
-            // 
             // txtCountry
             // 
             this.txtCountry.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
             this.txtCountry.ForeColor = System.Drawing.Color.Yellow;
-            this.txtCountry.Location = new System.Drawing.Point(148, 109);
+            this.txtCountry.Location = new System.Drawing.Point(148, 78);
             this.txtCountry.Name = "txtCountry";
             this.txtCountry.Size = new System.Drawing.Size(292, 25);
-            this.txtCountry.TabIndex = 4;
+            this.txtCountry.TabIndex = 3;
+            this.txtCountry.Validating += new System.ComponentModel.CancelEventHandler(this.txtCountry_Validating);
             // 
             // lblCountry
             // 
             this.lblCountry.AutoSize = true;
-            this.lblCountry.Location = new System.Drawing.Point(16, 112);
+            this.lblCountry.Location = new System.Drawing.Point(16, 81);
             this.lblCountry.Name = "lblCountry";
             this.lblCountry.Size = new System.Drawing.Size(59, 18);
             this.lblCountry.TabIndex = 7;
@@ -201,28 +192,30 @@
             "11-50",
             "51-100",
             "101+"});
-            this.cmbSize.Location = new System.Drawing.Point(148, 78);
+            this.cmbSize.Location = new System.Drawing.Point(148, 109);
             this.cmbSize.Name = "cmbSize";
             this.cmbSize.Size = new System.Drawing.Size(292, 26);
-            this.cmbSize.TabIndex = 3;
+            this.cmbSize.TabIndex = 4;
+            this.cmbSize.Validating += new System.ComponentModel.CancelEventHandler(this.cmbSize_Validating);
             // 
             // lblSize
             // 
             this.lblSize.AutoSize = true;
-            this.lblSize.Location = new System.Drawing.Point(16, 81);
+            this.lblSize.Location = new System.Drawing.Point(16, 112);
             this.lblSize.Name = "lblSize";
             this.lblSize.Size = new System.Drawing.Size(91, 18);
             this.lblSize.TabIndex = 5;
             this.lblSize.Text = "Users of FXB";
             // 
-            // txtInvoiceemail
+            // txtEmail
             // 
-            this.txtInvoiceemail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
-            this.txtInvoiceemail.ForeColor = System.Drawing.Color.Yellow;
-            this.txtInvoiceemail.Location = new System.Drawing.Point(148, 47);
-            this.txtInvoiceemail.Name = "txtInvoiceemail";
-            this.txtInvoiceemail.Size = new System.Drawing.Size(292, 25);
-            this.txtInvoiceemail.TabIndex = 2;
+            this.txtEmail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.txtEmail.ForeColor = System.Drawing.Color.Yellow;
+            this.txtEmail.Location = new System.Drawing.Point(148, 47);
+            this.txtEmail.Name = "txtEmail";
+            this.txtEmail.Size = new System.Drawing.Size(292, 25);
+            this.txtEmail.TabIndex = 2;
+            this.txtEmail.Validating += new System.ComponentModel.CancelEventHandler(this.txtEmail_Validating);
             // 
             // lblInvoiceemail
             // 
@@ -242,6 +235,7 @@
             this.txtIFirst.Size = new System.Drawing.Size(141, 25);
             this.txtIFirst.TabIndex = 1;
             this.toolTip1.SetToolTip(this.txtIFirst, "Name of your company");
+            this.txtIFirst.Validating += new System.ComponentModel.CancelEventHandler(this.txtIFirst_Validating);
             // 
             // txtILast
             // 
@@ -252,6 +246,22 @@
             this.txtILast.Size = new System.Drawing.Size(145, 25);
             this.txtILast.TabIndex = 2;
             this.toolTip1.SetToolTip(this.txtILast, "Name of your company");
+            this.txtILast.Validating += new System.ComponentModel.CancelEventHandler(this.txtIFirst_Validating);
+            // 
+            // btnSave
+            // 
+            this.btnSave.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSave.ImageIndex = 0;
+            this.btnSave.ImageList = this.pics;
+            this.btnSave.Location = new System.Drawing.Point(178, 334);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(210, 68);
+            this.btnSave.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.btnSave, "Click to forward you to supporting form on JonasR.app.\r\nInformation added here wi" +
+        "ll be brought in next form.");
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnCorp_Click);
             // 
             // panPersonal
             // 
@@ -276,6 +286,7 @@
             this.txtICountry.Name = "txtICountry";
             this.txtICountry.Size = new System.Drawing.Size(292, 25);
             this.txtICountry.TabIndex = 4;
+            this.txtICountry.Validating += new System.ComponentModel.CancelEventHandler(this.txtICountry_Validating);
             // 
             // lblICountry
             // 
@@ -294,6 +305,7 @@
             this.txtIEmail.Name = "txtIEmail";
             this.txtIEmail.Size = new System.Drawing.Size(292, 25);
             this.txtIEmail.TabIndex = 3;
+            this.txtIEmail.Validating += new System.ComponentModel.CancelEventHandler(this.txtIEmail_Validating);
             // 
             // lblIEmail
             // 
@@ -340,17 +352,32 @@
             this.panel2.Size = new System.Drawing.Size(425, 378);
             this.panel2.TabIndex = 0;
             // 
-            // label2
+            // btnInfoClose
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.Font = new System.Drawing.Font("Berlin Sans FB", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(12, 10);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(411, 35);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "How and Why do we support?";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.btnInfoClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnInfoClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnInfoClose.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.btnInfoClose.Image = ((System.Drawing.Image)(resources.GetObject("btnInfoClose.Image")));
+            this.btnInfoClose.Location = new System.Drawing.Point(390, 3);
+            this.btnInfoClose.Name = "btnInfoClose";
+            this.btnInfoClose.Size = new System.Drawing.Size(30, 30);
+            this.btnInfoClose.TabIndex = 13;
+            this.btnInfoClose.UseVisualStyleBackColor = true;
+            this.btnInfoClose.Click += new System.EventHandler(this.btnInfoClose_Click);
+            // 
+            // linkHelping
+            // 
+            this.linkHelping.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.linkHelping.AutoSize = true;
+            this.linkHelping.LinkColor = System.Drawing.Color.Yellow;
+            this.linkHelping.Location = new System.Drawing.Point(94, 348);
+            this.linkHelping.Name = "linkHelping";
+            this.linkHelping.Size = new System.Drawing.Size(179, 18);
+            this.linkHelping.TabIndex = 2;
+            this.linkHelping.TabStop = true;
+            this.linkHelping.Tag = "https://jonasr.app/helping/";
+            this.linkHelping.Text = "https://jonasr.app/helping/";
+            this.linkHelping.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkHelping_LinkClicked);
             // 
             // textBox1
             // 
@@ -368,25 +395,23 @@
             this.textBox1.TabIndex = 1;
             this.textBox1.Text = resources.GetString("textBox1.Text");
             // 
-            // linkHelping
+            // label2
             // 
-            this.linkHelping.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.linkHelping.AutoSize = true;
-            this.linkHelping.LinkColor = System.Drawing.Color.Yellow;
-            this.linkHelping.Location = new System.Drawing.Point(94, 348);
-            this.linkHelping.Name = "linkHelping";
-            this.linkHelping.Size = new System.Drawing.Size(179, 18);
-            this.linkHelping.TabIndex = 2;
-            this.linkHelping.TabStop = true;
-            this.linkHelping.Tag = "https://jonasr.app/helping/";
-            this.linkHelping.Text = "https://jonasr.app/helping/";
-            this.linkHelping.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkHelping_LinkClicked);
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.Font = new System.Drawing.Font("Berlin Sans FB", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(12, 10);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(411, 35);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "How and Why do we support?";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnInfo
             // 
             this.btnInfo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
-            this.btnInfo.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icons8_info_24__1_;
+            this.btnInfo.Image = ((System.Drawing.Image)(resources.GetObject("btnInfo.Image")));
             this.btnInfo.Location = new System.Drawing.Point(12, 12);
             this.btnInfo.Name = "btnInfo";
             this.btnInfo.Size = new System.Drawing.Size(30, 30);
@@ -394,48 +419,56 @@
             this.btnInfo.UseVisualStyleBackColor = true;
             this.btnInfo.Click += new System.EventHandler(this.btnInfo_Click);
             // 
-            // btnInfoClose
+            // lblLater
             // 
-            this.btnInfoClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnInfoClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnInfoClose.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
-            this.btnInfoClose.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icons8_close_16_yellow;
-            this.btnInfoClose.Location = new System.Drawing.Point(390, 3);
-            this.btnInfoClose.Name = "btnInfoClose";
-            this.btnInfoClose.Size = new System.Drawing.Size(30, 30);
-            this.btnInfoClose.TabIndex = 13;
-            this.btnInfoClose.UseVisualStyleBackColor = true;
-            this.btnInfoClose.Click += new System.EventHandler(this.btnInfoClose_Click);
+            this.lblLater.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblLater.AutoSize = true;
+            this.lblLater.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblLater.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(0)))));
+            this.lblLater.Location = new System.Drawing.Point(461, 386);
+            this.lblLater.Name = "lblLater";
+            this.lblLater.Size = new System.Drawing.Size(43, 18);
+            this.lblLater.TabIndex = 101;
+            this.lblLater.Text = "Later";
+            this.lblLater.Click += new System.EventHandler(this.lblLater_Click);
             // 
-            // btnSave
+            // lblAlready
             // 
-            this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSave.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.Corporate_Supports_Tools_2_narrow_200;
-            this.btnSave.Location = new System.Drawing.Point(178, 334);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(210, 68);
-            this.btnSave.TabIndex = 4;
-            this.toolTip1.SetToolTip(this.btnSave, "Click to forward you to supporting form on JonasR.app.\r\nInformation added here wi" +
-        "ll be brought in next form.");
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnCorp_Click);
+            this.lblAlready.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblAlready.AutoSize = true;
+            this.lblAlready.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblAlready.Location = new System.Drawing.Point(9, 368);
+            this.lblAlready.Name = "lblAlready";
+            this.lblAlready.Size = new System.Drawing.Size(82, 36);
+            this.lblAlready.TabIndex = 102;
+            this.lblAlready.Text = "I\'m already\r\nsupporting!";
+            this.lblAlready.Visible = false;
+            this.lblAlready.Click += new System.EventHandler(this.lblAlready_Click);
+            // 
+            // pics
+            // 
+            this.pics.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("pics.ImageStream")));
+            this.pics.TransparentColor = System.Drawing.Color.Transparent;
+            this.pics.Images.SetKeyName(0, "Corporate Supports Tools 2 narrow 200.png");
+            this.pics.Images.SetKeyName(1, "I Support Tools narrow 200.png");
             // 
             // Supporting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(66)))), ((int)(((byte)(173)))));
-            this.ClientSize = new System.Drawing.Size(516, 432);
+            this.ClientSize = new System.Drawing.Size(516, 429);
             this.ControlBox = false;
+            this.Controls.Add(this.lblAlready);
             this.Controls.Add(this.btnInfo);
             this.Controls.Add(this.panInfo);
-            this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.panPersonal);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.panCorp);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblHeader);
+            this.Controls.Add(this.lblLater);
             this.Font = new System.Drawing.Font("Berlin Sans FB", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.Yellow;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -463,7 +496,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblHeader;
         private System.Windows.Forms.Label lblCompany;
         private System.Windows.Forms.TextBox txtCompany;
         private System.Windows.Forms.Label label3;
@@ -471,14 +504,13 @@
         private System.Windows.Forms.RadioButton rbPersonal;
         private System.Windows.Forms.RadioButton rbCompany;
         private System.Windows.Forms.Panel panCorp;
-        private System.Windows.Forms.TextBox txtInvoiceemail;
+        private System.Windows.Forms.TextBox txtEmail;
         private System.Windows.Forms.Label lblInvoiceemail;
         private System.Windows.Forms.ComboBox cmbSize;
         private System.Windows.Forms.Label lblSize;
         private System.Windows.Forms.TextBox txtCountry;
         private System.Windows.Forms.Label lblCountry;
         private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Panel panPersonal;
         private System.Windows.Forms.TextBox txtILast;
@@ -495,5 +527,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnInfo;
         private System.Windows.Forms.Button btnInfoClose;
+        private System.Windows.Forms.Label lblLater;
+        private System.Windows.Forms.Label lblAlready;
+        private System.Windows.Forms.ImageList pics;
     }
 }
