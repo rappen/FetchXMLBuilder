@@ -47,7 +47,8 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.txtIFirst = new System.Windows.Forms.TextBox();
             this.txtILast = new System.Windows.Forms.TextBox();
-            this.btnSave = new System.Windows.Forms.Button();
+            this.btnSubmit = new System.Windows.Forms.Button();
+            this.pics = new System.Windows.Forms.ImageList(this.components);
             this.panPersonal = new System.Windows.Forms.Panel();
             this.txtICountry = new System.Windows.Forms.TextBox();
             this.lblICountry = new System.Windows.Forms.Label();
@@ -63,12 +64,20 @@
             this.btnInfo = new System.Windows.Forms.Button();
             this.lblLater = new System.Windows.Forms.Label();
             this.lblAlready = new System.Windows.Forms.Label();
-            this.pics = new System.Windows.Forms.ImageList(this.components);
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.rbPersonalContribute = new System.Windows.Forms.RadioButton();
+            this.rbPersonalMonetary = new System.Windows.Forms.RadioButton();
+            this.label1 = new System.Windows.Forms.Label();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.laterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.neverWillBeSupportingThisToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panCorp.SuspendLayout();
             this.panPersonal.SuspendLayout();
             this.panInfo.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblHeader
@@ -105,7 +114,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(46, 126);
+            this.label3.Location = new System.Drawing.Point(46, 108);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(78, 18);
             this.label3.TabIndex = 3;
@@ -115,19 +124,19 @@
             // 
             this.panel1.Controls.Add(this.rbPersonal);
             this.panel1.Controls.Add(this.rbCompany);
-            this.panel1.Location = new System.Drawing.Point(169, 112);
+            this.panel1.Location = new System.Drawing.Point(169, 104);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(245, 42);
+            this.panel1.Size = new System.Drawing.Size(317, 24);
             this.panel1.TabIndex = 1;
             // 
             // rbPersonal
             // 
             this.rbPersonal.AutoSize = true;
-            this.rbPersonal.Location = new System.Drawing.Point(145, 12);
+            this.rbPersonal.Location = new System.Drawing.Point(145, 2);
             this.rbPersonal.Name = "rbPersonal";
-            this.rbPersonal.Size = new System.Drawing.Size(68, 22);
+            this.rbPersonal.Size = new System.Drawing.Size(82, 22);
             this.rbPersonal.TabIndex = 1;
-            this.rbPersonal.Text = "myself";
+            this.rbPersonal.Text = "Personal";
             this.rbPersonal.UseVisualStyleBackColor = true;
             this.rbPersonal.CheckedChanged += new System.EventHandler(this.rbType_CheckedChanged);
             // 
@@ -135,12 +144,12 @@
             // 
             this.rbCompany.AutoSize = true;
             this.rbCompany.Checked = true;
-            this.rbCompany.Location = new System.Drawing.Point(12, 12);
+            this.rbCompany.Location = new System.Drawing.Point(12, 2);
             this.rbCompany.Name = "rbCompany";
-            this.rbCompany.Size = new System.Drawing.Size(112, 22);
+            this.rbCompany.Size = new System.Drawing.Size(92, 22);
             this.rbCompany.TabIndex = 0;
             this.rbCompany.TabStop = true;
-            this.rbCompany.Text = "our company";
+            this.rbCompany.Text = "Corporate";
             this.rbCompany.UseVisualStyleBackColor = true;
             this.rbCompany.CheckedChanged += new System.EventHandler(this.rbType_CheckedChanged);
             // 
@@ -154,7 +163,7 @@
             this.panCorp.Controls.Add(this.lblInvoiceemail);
             this.panCorp.Controls.Add(this.lblCompany);
             this.panCorp.Controls.Add(this.txtCompany);
-            this.panCorp.Location = new System.Drawing.Point(30, 180);
+            this.panCorp.Location = new System.Drawing.Point(30, 132);
             this.panCorp.Name = "panCorp";
             this.panCorp.Size = new System.Drawing.Size(456, 148);
             this.panCorp.TabIndex = 2;
@@ -248,23 +257,32 @@
             this.toolTip1.SetToolTip(this.txtILast, "Name of your company");
             this.txtILast.Validating += new System.ComponentModel.CancelEventHandler(this.txtIFirst_Validating);
             // 
-            // btnSave
+            // btnSubmit
             // 
-            this.btnSave.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSave.ImageIndex = 0;
-            this.btnSave.ImageList = this.pics;
-            this.btnSave.Location = new System.Drawing.Point(178, 334);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(210, 68);
-            this.btnSave.TabIndex = 4;
-            this.toolTip1.SetToolTip(this.btnSave, "Click to forward you to supporting form on JonasR.app.\r\nInformation added here wi" +
+            this.btnSubmit.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSubmit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSubmit.ImageIndex = 0;
+            this.btnSubmit.ImageList = this.pics;
+            this.btnSubmit.Location = new System.Drawing.Point(178, 330);
+            this.btnSubmit.Name = "btnSubmit";
+            this.btnSubmit.Size = new System.Drawing.Size(210, 68);
+            this.btnSubmit.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.btnSubmit, "Click to forward you to supporting form on JonasR.app.\r\nInformation added here wi" +
         "ll be brought in next form.");
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnCorp_Click);
+            this.btnSubmit.UseVisualStyleBackColor = true;
+            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
+            // 
+            // pics
+            // 
+            this.pics.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("pics.ImageStream")));
+            this.pics.TransparentColor = System.Drawing.Color.Transparent;
+            this.pics.Images.SetKeyName(0, "Corporate Supports Tools 2 narrow 200.png");
+            this.pics.Images.SetKeyName(1, "I Support Tools narrow 200.png");
+            this.pics.Images.SetKeyName(2, "I Contribute Tools narrow 200.png");
             // 
             // panPersonal
             // 
+            this.panPersonal.Controls.Add(this.panel3);
             this.panPersonal.Controls.Add(this.txtILast);
             this.panPersonal.Controls.Add(this.txtICountry);
             this.panPersonal.Controls.Add(this.lblICountry);
@@ -409,6 +427,7 @@
             // 
             // btnInfo
             // 
+            this.btnInfo.ContextMenuStrip = this.contextMenuStrip1;
             this.btnInfo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
             this.btnInfo.Image = ((System.Drawing.Image)(resources.GetObject("btnInfo.Image")));
@@ -425,11 +444,12 @@
             this.lblLater.AutoSize = true;
             this.lblLater.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblLater.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(0)))));
-            this.lblLater.Location = new System.Drawing.Point(461, 386);
+            this.lblLater.Location = new System.Drawing.Point(461, 377);
             this.lblLater.Name = "lblLater";
             this.lblLater.Size = new System.Drawing.Size(43, 18);
             this.lblLater.TabIndex = 101;
             this.lblLater.Text = "Later";
+            this.toolTip1.SetToolTip(this.lblLater, "Close this window.\r\nYou will get a new chance later!");
             this.lblLater.Click += new System.EventHandler(this.lblLater_Click);
             // 
             // lblAlready
@@ -437,38 +457,99 @@
             this.lblAlready.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblAlready.AutoSize = true;
             this.lblAlready.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblAlready.Location = new System.Drawing.Point(9, 368);
+            this.lblAlready.Location = new System.Drawing.Point(9, 359);
             this.lblAlready.Name = "lblAlready";
             this.lblAlready.Size = new System.Drawing.Size(82, 36);
             this.lblAlready.TabIndex = 102;
             this.lblAlready.Text = "I\'m already\r\nsupporting!";
+            this.toolTip1.SetToolTip(this.lblAlready, "I have already supported in one way!");
             this.lblAlready.Visible = false;
             this.lblAlready.Click += new System.EventHandler(this.lblAlready_Click);
             // 
-            // pics
+            // panel3
             // 
-            this.pics.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("pics.ImageStream")));
-            this.pics.TransparentColor = System.Drawing.Color.Transparent;
-            this.pics.Images.SetKeyName(0, "Corporate Supports Tools 2 narrow 200.png");
-            this.pics.Images.SetKeyName(1, "I Support Tools narrow 200.png");
+            this.panel3.Controls.Add(this.rbPersonalContribute);
+            this.panel3.Controls.Add(this.rbPersonalMonetary);
+            this.panel3.Location = new System.Drawing.Point(139, 107);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(301, 26);
+            this.panel3.TabIndex = 8;
+            // 
+            // rbPersonalContribute
+            // 
+            this.rbPersonalContribute.AutoSize = true;
+            this.rbPersonalContribute.Location = new System.Drawing.Point(145, 2);
+            this.rbPersonalContribute.Name = "rbPersonalContribute";
+            this.rbPersonalContribute.Size = new System.Drawing.Size(105, 22);
+            this.rbPersonalContribute.TabIndex = 1;
+            this.rbPersonalContribute.Text = "Contribution";
+            this.rbPersonalContribute.UseVisualStyleBackColor = true;
+            // 
+            // rbPersonalMonetary
+            // 
+            this.rbPersonalMonetary.AutoSize = true;
+            this.rbPersonalMonetary.Checked = true;
+            this.rbPersonalMonetary.Location = new System.Drawing.Point(12, 2);
+            this.rbPersonalMonetary.Name = "rbPersonalMonetary";
+            this.rbPersonalMonetary.Size = new System.Drawing.Size(96, 22);
+            this.rbPersonalMonetary.TabIndex = 0;
+            this.rbPersonalMonetary.TabStop = true;
+            this.rbPersonalMonetary.Text = "Supporting";
+            this.rbPersonalMonetary.UseVisualStyleBackColor = true;
+            this.rbPersonalMonetary.CheckedChanged += new System.EventHandler(this.rbPersonalMonetary_CheckedChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Berlin Sans FB", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(175, 283);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(290, 30);
+            this.label1.TabIndex = 103;
+            this.label1.Text = "Click the button below to proceed your support!\r\nNote: You have to submit it at t" +
+    "he next step to finalize.";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.laterToolStripMenuItem,
+            this.neverWillBeSupportingThisToolToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(250, 92);
+            // 
+            // laterToolStripMenuItem
+            // 
+            this.laterToolStripMenuItem.Name = "laterToolStripMenuItem";
+            this.laterToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.laterToolStripMenuItem.Text = "Later";
+            this.laterToolStripMenuItem.Click += new System.EventHandler(this.laterToolStripMenuItem_Click);
+            // 
+            // neverWillBeSupportingThisToolToolStripMenuItem
+            // 
+            this.neverWillBeSupportingThisToolToolStripMenuItem.Name = "neverWillBeSupportingThisToolToolStripMenuItem";
+            this.neverWillBeSupportingThisToolToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.neverWillBeSupportingThisToolToolStripMenuItem.Text = "Never will be supporting this tool";
+            this.neverWillBeSupportingThisToolToolStripMenuItem.Click += new System.EventHandler(this.neverWillBeSupportingThisToolToolStripMenuItem_Click);
             // 
             // Supporting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(66)))), ((int)(((byte)(173)))));
-            this.ClientSize = new System.Drawing.Size(516, 429);
+            this.ClientSize = new System.Drawing.Size(516, 420);
             this.ControlBox = false;
-            this.Controls.Add(this.lblAlready);
             this.Controls.Add(this.btnInfo);
             this.Controls.Add(this.panInfo);
             this.Controls.Add(this.panPersonal);
-            this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.btnSubmit);
             this.Controls.Add(this.panCorp);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.lblHeader);
             this.Controls.Add(this.lblLater);
+            this.Controls.Add(this.lblAlready);
+            this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Berlin Sans FB", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.Yellow;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -480,6 +561,7 @@
             this.Text = "We Support Tools";
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Supporting_FormClosing);
+            this.Shown += new System.EventHandler(this.Supporting_Shown);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panCorp.ResumeLayout(false);
@@ -489,6 +571,9 @@
             this.panInfo.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -510,7 +595,7 @@
         private System.Windows.Forms.Label lblSize;
         private System.Windows.Forms.TextBox txtCountry;
         private System.Windows.Forms.Label lblCountry;
-        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Button btnSubmit;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Panel panPersonal;
         private System.Windows.Forms.TextBox txtILast;
@@ -530,5 +615,12 @@
         private System.Windows.Forms.Label lblLater;
         private System.Windows.Forms.Label lblAlready;
         private System.Windows.Forms.ImageList pics;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.RadioButton rbPersonalContribute;
+        private System.Windows.Forms.RadioButton rbPersonalMonetary;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem laterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem neverWillBeSupportingThisToolToolStripMenuItem;
     }
 }

@@ -884,7 +884,8 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void tsbSupport_Click(object sender, EventArgs e)
         {
-            Supporting.MayShow(this);
+            var force = MessageBoxEx.Show("Force it?", "Supporting", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+            Supporting.MayShow(this, force);
         }
     }
 }
