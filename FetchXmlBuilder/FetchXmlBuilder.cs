@@ -381,17 +381,6 @@ namespace Rappen.XTB.FetchXmlBuilder
                 dockControlBuilder.Init(connectionsettings.FetchXML, connectionsettings.LayoutXML, false, "loaded from last session", false);
             }
             dockControlBuilder.lblQAExpander.GroupBoxSetState(null, settings.QueryOptions.ShowQuickActions);
-            var ass = Assembly.GetExecutingAssembly().GetName();
-            var version = ass.Version.ToString();
-            if (!version.Equals(settings.CurrentVersion))
-            {
-                // Reset some settings when new version is deployed
-                var oldversion = settings.CurrentVersion;
-                settings.CurrentVersion = version;
-                SaveSetting();
-                LogUse("ShowWelcome", ai2: true);
-                Welcome.ShowWelcome(this, oldversion);
-            }
         }
 
         /// <summary>Repopulate the entire tree from the xml document containing the FetchXML</summary>
@@ -553,6 +542,21 @@ namespace Rappen.XTB.FetchXmlBuilder
             CheckIntegrationTools();
             SetupDockControls();
             ApplySettings(true);
+            var ass = Assembly.GetExecutingAssembly().GetName();
+            var version = ass.Version.ToString();
+            if (!version.Equals(settings.CurrentVersion))
+            {
+                // Reset some settings when new version is deployed
+                var oldversion = settings.CurrentVersion;
+                settings.CurrentVersion = version;
+                SaveSetting();
+                LogUse("ShowWelcome", ai2: true);
+                Welcome.ShowWelcome(this, oldversion);
+            }
+            else
+            {
+                ToolSupporting.ShowIfNeeded(this, false, true);
+            }
             RebuildRepositoryMenu(null);
             TreeNodeHelper.AddContextMenu(null, dockControlBuilder, settings.QueryOptions);
             EnableControls(true);
@@ -880,12 +884,11 @@ namespace Rappen.XTB.FetchXmlBuilder
             ShareLink.Open(this, dockControlBuilder.GetFetchString(false, false));
         }
 
-        #endregion Private Event Handlers
-
-        private void tsbSupport_Click(object sender, EventArgs e)
+        private void tsbSupporting_Click(object sender, EventArgs e)
         {
-            var force = MessageBoxEx.Show("Force it?", "Supporting", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
-            Supporting.MayShow(this, force);
+            ToolSupporting.ShowIfNeeded(this, true, false);
         }
+
+        #endregion Private Event Handlers
     }
 }

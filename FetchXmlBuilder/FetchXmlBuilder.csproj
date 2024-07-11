@@ -672,6 +672,18 @@
   <ItemGroup>
     <None Include="Resources\icons8-close-16-yellow.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\We Support Tools narrow 32h.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\We are Supporting Tools 32h.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Supporting Tools 32h.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Supporting Tools 32h frame.png" />
+  </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />
   <Import Project="..\MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutoComplete.projitems" Label="Shared" />

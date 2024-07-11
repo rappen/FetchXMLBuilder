@@ -6,11 +6,11 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Cache;
 using System.Net.Mail;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Serialization;
 using XrmToolBox.AppCode.AppInsights;
 using XrmToolBox.Extensibility;
 using XrmToolBox.ToolLibrary.AppCode;
@@ -59,96 +59,27 @@ namespace Rappen.XTB
             "&{formid}_32={version}" +
             "&{formid}_33={instid}";
 
-        private readonly string toolname;
-        private readonly bool force;
-        private Version version;
-        private RappenXTBTools tools;
+        private readonly ToolSettings settings;
+        private readonly RappenXTBTools tools;
         private readonly Tool tool;
-        private bool display = true;
-        private Supporters supporters;
 
         #region Constructors
 
-        public static void MayShow(PluginControlBase plugin, bool force)
-        {
-            using (var form = new Supporting(plugin.ToolName, force))
-            {
-                if (form.display)
-                {
-                    form.PopulateTool();
-                    form.ShowDialog();
-                }
-            }
-        }
-
-        private Supporting(string toolname, bool force)
+        internal Supporting(RappenXTBTools tools, Tool tool, ToolSettings settings, bool alreadysupported)
         {
             InitializeComponent();
-            this.toolname = toolname;
-            this.force = force;
-            version = Assembly.GetExecutingAssembly().GetName().Version;
-            tools = RappenXTBTools.Load();
-            tool = tools[toolname];
-            if (tool.Version != version)
+            this.settings = settings;
+            this.tools = tools;
+            this.tool = tool;
+            if (alreadysupported)
             {
-                tool.VersionStr = version.ToString();
-                tool.InstallVersionDate = DateTime.Now;
-                tools.Save();
-            }
-            var settings = SupporterSettings.Get();
-            supporters = Supporters.DownloadMy(tools.InstallationId, toolname, settings.ContributionCounts);
-            if (!force)
-            {
-                if (supporters.Count > 0)
-                {   // I have supportings!
-                    display = false;
-                }
-                else if (settings.ShowOnlyManual)
-                {   // Centerally stopping showing automatically
-                    display = false;
-                }
-                else if (tool.SupportType == SupportType.Never)
-                {   // You will never want to support this tool
-                    display = false;
-                }
-                else if (tool.InstallDate.AddHours(settings.ShowHoursAfterInstall) > DateTime.Now)
-                {   // Installed it too soon
-                    display = false;
-                }
-                else if (tool.InstallVersionDate > tool.InstallDate && tool.InstallVersionDate.AddHours(settings.ShowHoursAfterNewVersion) > DateTime.Now)
-                {   // Installed this version too soon
-                    display = false;
-                }
-                else if (tool.OpenedSupportingLastDate.AddHours(settings.ShowRepeatMinHours) > DateTime.Now)
-                {   // Seen this form to soon
-                    display = false;
-                }
-                else if (tool.OpenSupportingCount >= settings.ShowRepeatTimes)
-                {   // Seen this too many times
-                    display = false;
-                }
-                else if (tool.SubmittedDate.AddHours(settings.ShowRepeatAfterSubmittingButNowFinishedHours) > DateTime.Now)
-                {   // Submitted too soon for JR to handle it
-                    display = false;
-                }
-            }
-        }
-
-        #endregion Constructors
-
-        #region Private Methods
-
-        private void PopulateTool()
-        {
-            if (supporters.Any())
-            {
+                lblAlready.Text = lblAlready.Text.Replace("{tool}", tool.ToolName);
                 lblAlready.Visible = true;
-                lblLater.Text = "Close";
                 toolTip1.SetToolTip(lblLater, "Close this window.");
             }
             txtCompany.Text = tools.Company;
             txtEmail.Text = tools.InvoiceEmail;
-            cmbSize.SelectedIndex = tool.UserIndex;
+            cmbSize.SelectedIndex = tool.UsersIndex;
             txtCountry.Text = tools.Country;
             txtIFirst.Text = tools.FirstName;
             txtILast.Text = tools.LastName;
@@ -164,12 +95,16 @@ namespace Rappen.XTB
             }
         }
 
+        #endregion Constructors
+
+        #region Private Methods
+
         private string GetUrlCorp()
         {
             if (string.IsNullOrEmpty(tools.Company) ||
                 string.IsNullOrEmpty(tools.InvoiceEmail) ||
                 string.IsNullOrEmpty(tools.Country) ||
-                tool.UserIndex < 1)
+                tool.UsersIndex < 1)
             {
                 return null;
             }
@@ -198,7 +133,7 @@ namespace Rappen.XTB
                 .Replace("{country}", tools.Country)
                 .Replace("{email}", tools.Email)
                 .Replace("{invoiceemail}", tools.InvoiceEmail)
-                .Replace("{size}", cmbSize.Items[tool.UserIndex].ToString())
+                .Replace("{size}", cmbSize.Items[tool.UsersIndex].ToString())
                 .Replace("{amount}", tool.Amount)
                 .Replace("{tool}", tool.ToolName)
                 .Replace("{version}", tool.Version.ToString())
@@ -211,16 +146,11 @@ namespace Rappen.XTB
 
         private void Supporting_Shown(object sender, EventArgs e)
         {
-            tool.OpenedSupportingLastDate = DateTime.Now;
+            tool.DisplayDate = DateTime.Now;
         }
 
         private void Supporting_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!force)
-            {
-                tool.OpenSupportingCount++;
-            }
-            tools.Save();
             if (DialogResult != DialogResult.Yes && DialogResult != DialogResult.OK && DialogResult != DialogResult.Retry)
             {
                 e.Cancel = true;
@@ -229,11 +159,14 @@ namespace Rappen.XTB
 
         private void btnSubmit_Click(object sender, EventArgs e)
         {
+            ctrl_Validating();
             var url = rbPersonal.Checked ? GetUrlPersonal(rbPersonalContribute.Checked) : GetUrlCorp();
 
             if (!string.IsNullOrEmpty(url))
             {
-                if (MessageBoxEx.Show(this, "You are now redirected to the website form to finish the support.", "Supporting", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) != DialogResult.OK)
+                if (MessageBoxEx.Show(this, @"You will now be redirected to the website form
+to finish your support.
+Remember, it has to be submitted at the next step!", "Supporting", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) != DialogResult.OK)
                 {
                     return;
                 }
@@ -244,27 +177,81 @@ namespace Rappen.XTB
             }
         }
 
+        private void ctrl_Validating(object sender = null, System.ComponentModel.CancelEventArgs e = null)
+        {
+            if (sender == null || sender == txtCompany)
+            {
+                tools.Company = txtCompany.Text.Trim().Length >= 3 ? txtCompany.Text.Trim() : "";
+                txtCompany.BackColor = string.IsNullOrEmpty(tools.Company) ? settings.clrBgInvalid : settings.clrBgNormal;
+            }
+            if (sender == null || sender == txtEmail)
+            {
+                try
+                {
+                    tools.InvoiceEmail = new MailAddress(txtEmail.Text).Address.Trim();
+                }
+                catch { }
+                txtEmail.BackColor = string.IsNullOrEmpty(tools.InvoiceEmail) ? settings.clrBgInvalid : settings.clrBgNormal;
+            }
+            if (sender == null || sender == txtCountry)
+            {
+                tools.Country = txtCountry.Text.Trim().Length >= 2 ? txtCountry.Text.Trim() : "";
+                txtCountry.BackColor = string.IsNullOrEmpty(tools.Country) ? settings.clrBgInvalid : settings.clrBgNormal;
+            }
+            if (sender == null || sender == cmbSize)
+            {
+                tool.UsersIndex = cmbSize.SelectedIndex;
+                tool.UsersCount = cmbSize.Text;
+                cmbSize.BackColor = tool.UsersIndex < 1 ? settings.clrBgInvalid : settings.clrBgNormal;
+            }
+            if (sender == null || sender == txtIFirst)
+            {
+                tools.FirstName = txtIFirst.Text.Trim().Length >= 1 ? txtIFirst.Text.Trim() : "";
+                txtIFirst.BackColor = string.IsNullOrEmpty(tools.FirstName) || string.IsNullOrEmpty(tools.LastName) ? settings.clrBgInvalid : settings.clrBgNormal;
+            }
+            if (sender == null || sender == txtILast)
+            {
+                tools.LastName = txtILast.Text.Trim().Length >= 2 ? txtILast.Text.Trim() : "";
+                txtILast.BackColor = string.IsNullOrEmpty(tools.FirstName) || string.IsNullOrEmpty(tools.LastName) ? settings.clrBgInvalid : settings.clrBgNormal;
+            }
+            if (sender == null || sender == txtIEmail)
+            {
+                try
+                {
+                    tools.Email = new MailAddress(txtIEmail.Text).Address.Trim();
+                }
+                catch { }
+                txtIEmail.BackColor = string.IsNullOrEmpty(tools.Email) ? settings.clrBgInvalid : settings.clrBgNormal;
+            }
+            if (sender == null || sender == txtICountry)
+            {
+                tools.Country = txtICountry.Text.Trim().Length >= 2 ? txtICountry.Text.Trim() : "";
+                txtICountry.BackColor = string.IsNullOrEmpty(tools.Country) ? settings.clrBgInvalid : settings.clrBgNormal;
+            }
+        }
+
         private void lblLater_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Retry;
         }
 
-        private void lblAlready_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.OK;
-        }
-
         private void rbType_CheckedChanged(object sender, EventArgs e)
         {
+            SuspendLayout();
+            rbCompany.ForeColor = rbPersonal.Checked ? settings.clrFgUnfocus : settings.clrFgNormal;
+            rbPersonal.ForeColor = rbPersonal.Checked ? settings.clrFgNormal : settings.clrFgUnfocus;
             panPersonal.Left = panCorp.Left;
             panPersonal.Top = panCorp.Top;
             panPersonal.Visible = rbPersonal.Checked;
             panCorp.Visible = !panPersonal.Visible;
             btnSubmit.ImageIndex = rbPersonal.Checked ? rbPersonalContribute.Checked ? 2 : 1 : 0;
+            ResumeLayout();
         }
 
         private void rbPersonalMonetary_CheckedChanged(object sender, EventArgs e)
         {
+            rbPersonalMonetary.ForeColor = rbPersonalContribute.Checked ? settings.clrFgUnfocus : settings.clrFgNormal;
+            rbPersonalContribute.ForeColor = rbPersonalContribute.Checked ? settings.clrFgNormal : settings.clrFgUnfocus;
             btnSubmit.ImageIndex = rbPersonalContribute.Checked ? 2 : 1;
         }
 
@@ -285,60 +272,6 @@ namespace Rappen.XTB
             panInfo.Visible = false;
         }
 
-        private void txtCompany_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            tools.Company = txtCompany.Text.Trim().Length >= 3 ? txtCompany.Text.Trim() : "";
-            lblCompany.ForeColor = string.IsNullOrEmpty(tools.Company) ? Color.DeepPink : Color.Yellow;
-        }
-
-        private void txtEmail_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            try
-            {
-                tools.InvoiceEmail = new MailAddress(txtEmail.Text).Address.Trim();
-            }
-            catch { }
-            lblInvoiceemail.ForeColor = string.IsNullOrEmpty(tools.InvoiceEmail) ? Color.DeepPink : Color.Yellow;
-        }
-
-        private void txtCountry_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            tools.Country = txtCountry.Text.Trim().Length >= 2 ? txtCountry.Text.Trim() : "";
-            lblCountry.ForeColor = string.IsNullOrEmpty(tools.Country) ? Color.DeepPink : Color.Yellow;
-        }
-
-        private void cmbSize_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            tool.UserIndex = cmbSize.SelectedIndex;
-            tool.UserCount = cmbSize.Text;
-            lblSize.ForeColor = tool.UserIndex < 1 ? Color.DeepPink : Color.Yellow;
-        }
-
-        private void txtIFirst_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            tools.FirstName = txtIFirst.Text.Trim().Length >= 1 ? txtIFirst.Text.Trim() : "";
-            tools.LastName = txtILast.Text.Trim().Length >= 2 ? txtILast.Text.Trim() : "";
-            lblIName.ForeColor = string.IsNullOrEmpty(tools.FirstName) || string.IsNullOrEmpty(tools.LastName) ? Color.DeepPink : Color.Yellow;
-        }
-
-        private void txtIEmail_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            try
-            {
-                tools.Email = new MailAddress(txtIEmail.Text).Address.Trim();
-            }
-            catch { }
-            lblIEmail.ForeColor = string.IsNullOrEmpty(tools.Email) ? Color.DeepPink : Color.Yellow;
-        }
-
-        private void txtICountry_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            tools.Country = txtICountry.Text.Trim().Length >= 2 ? txtICountry.Text.Trim() : "";
-            lblICountry.ForeColor = string.IsNullOrEmpty(tools.Country) ? Color.DeepPink : Color.Yellow;
-        }
-
-        #endregion Private Event Methods
-
         private void laterToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Retry;
@@ -349,56 +282,148 @@ namespace Rappen.XTB
             tool.SupportType = SupportType.Never;
             DialogResult = DialogResult.Yes;
         }
+
+        private void lbl_MouseEnter(object sender, EventArgs e)
+        {
+            if (sender is RadioButton rb)
+            {
+                rb.ForeColor = settings.clrFgNormal;
+            }
+            if (sender is Label lbl)
+            {
+                lbl.ForeColor = settings.clrFgNormal;
+            }
+        }
+
+        private void lbl_MouseLeave(object sender, EventArgs e)
+        {
+            if (sender is RadioButton rb)
+            {
+                if (!rb.Checked)
+                {
+                    rb.ForeColor = settings.clrFgUnfocus;
+                }
+            }
+            else if (sender is Label lbl)
+            {
+                lbl.ForeColor = settings.clrFgUnfocus;
+            }
+        }
+
+        private void lblAlready_Click(object sender, EventArgs e)
+        {
+            MessageBoxEx.Show("Thanks! ❤️", "Supporting");
+        }
+
+        #endregion Private Event Methods
     }
 
-    public class SupporterSettings
+    public class ToolSupporting
+    {
+        private static ToolSettings settings;
+        private static ToolSupporting toolsupporting;
+
+        private int alreadysupporting;
+        private bool display;
+        private RappenXTBTools tools;
+        private Tool tool;
+
+        public static void ShowIfNeeded(PluginControlBase plugin, bool manual, bool reload)
+        {
+            if (reload || toolsupporting == null)
+            {
+                settings = ToolSettings.Get();
+                toolsupporting = new ToolSupporting(settings, plugin.ToolName);
+            }
+            if (manual || toolsupporting.display)
+            {
+                new Supporting(toolsupporting.tools, toolsupporting.tool, settings, toolsupporting.alreadysupporting > 0).ShowDialog();
+                if (!manual)
+                {
+                    toolsupporting.tool.DisplayCount++;
+                }
+                toolsupporting.tools.Save();
+            }
+        }
+
+        private ToolSupporting(ToolSettings settings, string toolname)
+        {
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            tools = RappenXTBTools.Load();
+            tool = tools[toolname];
+            if (tool.Version != version)
+            {
+                tool.Version = version;
+                tool.VersionRunDate = DateTime.Now;
+                tools.Save();
+            }
+            var supporters = Supporters.DownloadMy(tools.InstallationId, toolname, settings.ContributionCounts);
+            alreadysupporting = supporters.Count;
+            if (supporters.Count > 0)
+            {   // I have supportings!
+                display = false;
+            }
+            else if (settings.ShowOnlyManual)
+            {   // Centerally stopping showing automatically
+                display = false;
+            }
+            else if (tool.SupportType == SupportType.Never)
+            {   // You will never want to support this tool
+                display = false;
+            }
+            else if (tool.FirstRunDate.AddMinutes(settings.ShowMinutesAfterInstall) > DateTime.Now)
+            {   // Installed it too soon
+                display = false;
+            }
+            else if (tool.VersionRunDate > tool.FirstRunDate && tool.VersionRunDate.AddMinutes(settings.ShowMinutesAfterNewVersion) > DateTime.Now)
+            {   // Installed this version too soon
+                display = false;
+            }
+            else if (tool.DisplayDate.AddMinutes(settings.ShowMinutesAfterShown) > DateTime.Now)
+            {   // Seen this form to soon
+                display = false;
+            }
+            else if (tool.DisplayCount >= settings.ShowAutoRepeatTimes)
+            {   // Seen this too many times
+                display = false;
+            }
+            else if (tool.SubmittedDate.AddMinutes(settings.ShowMinutesAfterSubmittingButNotCompleted) > DateTime.Now)
+            {   // Submitted too soon for JR to handle it
+                display = false;
+            }
+        }
+    }
+
+    public class ToolSettings
     {
         public bool ShowOnlyManual = true;  // false
-        public int ShowHoursAfterInstall = int.MaxValue;    // 1
-        public int ShowHoursAfterNewVersion = int.MaxValue; // 2
-        public int ShowRepeatMinHours = int.MaxValue; // 48
-        public int ShowRepeatTimes = 0; // 10
-        public int ShowRepeatAfterSubmittingButNowFinishedHours = int.MaxValue; // 24
         public bool ContributionCounts = true;  // false
+        public int ShowMinutesAfterInstall = int.MaxValue;    // 60
+        public int ShowMinutesAfterNewVersion = int.MaxValue; // 120
+        public int ShowMinutesAfterShown = int.MaxValue; // 2880m / 48h / 2d
+        public int ShowMinutesAfterSubmittingButNotCompleted = int.MaxValue; // 2880m / 48h / 2d
+        public int ShowAutoRepeatTimes = 0; // 10
 
-        public static SupporterSettings Get() => Supporters.Download<SupporterSettings>("https://jonasr.app/xtb/supportersettings.xml") ?? new SupporterSettings();
+        public Color clrFgNormal = Color.Yellow;
+        public Color clrFgUnfocus = Color.Tan;
+        public Color clrBgNormal = Color.FromArgb(0, 99, 255);
+        public Color clrBgInvalid = Color.CornflowerBlue;
+
+        public static ToolSettings Get() => new Uri("https://jonasr.app/xtb/toolsettings.xml").DownloadXml(new ToolSettings());
     }
 
     public class Supporters : List<Supporter>
     {
-        private const string guidregex = @"([a-z0-9]{8}[-][a-z0-9]{4}[-][a-z0-9]{4}[-][a-z0-9]{4}[-][a-z0-9]{12})";
-
         public static Supporters DownloadMy(Guid InstallationId, string toolname, bool contributionCounts)
         {
-            var result = Download<Supporters>("https://jonasr.app/xtb/supporters.xml") ?? new Supporters();
+            var result = new Uri("https://jonasr.app/xtb/supporters.xml").DownloadXml(new Supporters());
             result.Where(s =>
                 s.InstallationId != InstallationId ||
                 s.ToolName != toolname ||
+                s.SupportType == SupportType.None ||
                 (!contributionCounts && s.SupportType == SupportType.Contribute))
                 .ToList().ForEach(s => result.Remove(s));
             return result;
-        }
-
-        internal static T Download<T>(string url)
-        {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            var webRequestXml = HttpWebRequest.Create(url) as HttpWebRequest;
-            //       webRequestXml.CachePolicy = new RequestCachePolicy(RequestCacheLevel.Revalidate);
-            webRequestXml.Accept = "text/html, application/xhtml+xml, */*";
-            try
-            {
-                using (var response = webRequestXml.GetResponse())
-                using (var content = response.GetResponseStream())
-                using (var reader = new StreamReader(content))
-                {
-                    var strContent = reader.ReadToEnd();
-                    return (T)XmlSerializerHelper.Deserialize(strContent, typeof(T));
-                }
-            }
-            catch
-            {
-                return default(T);
-            }
         }
     }
 
@@ -466,22 +491,44 @@ namespace Rappen.XTB
 
     public class Tool
     {
+        private Version version;
+
         public string ToolName { get; set; }
-        public DateTime InstallDate { get; set; } = DateTime.Now;
-        public string VersionStr { get; set; }
-        public DateTime InstallVersionDate { get; set; } = DateTime.Now;
-        public DateTime OpenedSupportingLastDate { get; set; } = DateTime.MinValue;
-        public int OpenSupportingCount { get; set; } = 0;
+
+        [XmlIgnore]
+        public Version Version
+        {
+            get => version;
+            set
+            {
+                if (value != version)
+                {
+                    DisplayCount = 0;
+                }
+                version = value;
+            }
+        }
+
+        public string VersionStr
+        {
+            get => version.ToString();
+            set { version = new Version(value ?? "0.0.0.0"); }
+        }
+
+        public DateTime FirstRunDate { get; set; } = DateTime.Now;
+        public DateTime VersionRunDate { get; set; }
+        public DateTime DisplayDate { get; set; } = DateTime.MinValue;
+        public int DisplayCount { get; set; } = 0;
         public DateTime SubmittedDate { get; set; }
         public SupportType SupportType { get; set; } = SupportType.None;
-        public int UserIndex { get; set; }
-        public string UserCount { get; set; }
+        public int UsersIndex { get; set; }
+        public string UsersCount { get; set; }
 
         public string Amount
         {
             get
             {
-                switch (UserIndex)
+                switch (UsersIndex)
                 {
                     case 1: return "X-Small";
                     case 2: return "Small";
@@ -491,8 +538,6 @@ namespace Rappen.XTB
                 }
             }
         }
-
-        public Version Version => new Version(VersionStr ?? "0.0.0.0");
     }
 
     public enum SupportType

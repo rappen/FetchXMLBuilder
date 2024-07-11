@@ -449,5 +449,45 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Supporting_Tools_32h {
+            get {
+                object obj = ResourceManager.GetObject("Supporting Tools 32h", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Supporting_Tools_32h_frame {
+            get {
+                object obj = ResourceManager.GetObject("Supporting Tools 32h frame", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap We_are_Supporting_Tools_32h {
+            get {
+                object obj = ResourceManager.GetObject("We are Supporting Tools 32h", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap We_Support_Tools_narrow_32h {
+            get {
+                object obj = ResourceManager.GetObject("We Support Tools narrow 32h", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

@@ -120,9 +120,6 @@
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <metadata name="pics.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>114, 17</value>
   </metadata>
@@ -131,7 +128,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAAw
-        /gMAAk1TRnQBSQFMAgEBAwEAASABAAEgAQAByAEAAToBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAEg
+        /gMAAk1TRnQBSQFMAgEBAwEAAYgBAAGIAQAByAEAAToBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAEg
         AQMCAAE6AwABAQEAASAGAAHVAQIRAAGtAUIBAAH/Aa0BQgEAAf8BrQFCAQAB/wGtAUIBAAH/Aa0BQgEA
         Af8BrQFCAQAB/wGtAUIBAAH/Aa0BQgEAAf8BrQFCAQAB/wGtAUIBAAH/Aa0BQgEAAf8BrQFCAQAB/wGt
         AUIBAAH/Aa0BQgEAAf8BrQFCAQAB/wGtAUIBAAH/Aa0BQgEAAf8BrQFCAQAB/wGtAUIBAAH/Aa0BQgEA
@@ -4499,7 +4496,7 @@
   <data name="btnInfoClose.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DgAACw4BQL7hQQAAAAd0SU1FB+gHBg01It4BoIIAAAD4SURBVDhPY/j//z9FGMGQr+dgcN+zkMFlFT+y
+        DAAACwwBP0AiyAAAAAd0SU1FB+gHBg01It4BoIIAAAD4SURBVDhPY/j//z9FGMGQr+dgcN+zkMFlFT+y
         AnTM4LpZh8Fj70Q4H0yoTGRn8D62DSTG4HviGIPFKiGYAmTM4L5RmyHw0lUQl8Hr8GywGJiwWqfMEHj5
         BlTdfwafk0fRXcLgsluXIejqNYSaE0cZjGdyIRQgmQ5W4HvqGIPNFkHsckBXwuTAIlCM1RCXdTa4NIP1
         wBhwAZBTA65eRxMGY6xeQ+bABUEuCbhyGVmYwRdTMwijcOCClBhAkRewB+ImG4YAtEA0XSgM1wNnYNOM
@@ -4522,7 +4519,7 @@ If you want to read about my thoughts, click the link below!</value>
   <data name="btnInfo.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DgAACw4BQL7hQQAAAqhJREFUSEu9VUtrFEEQLgXFgzn5A9SLoldPKhhn1ohK0N3AaiJixnjydZS9qGtu
+        DAAACwwBP0AiyAAAAqhJREFUSEu9VUtrFEEQLgXFgzn5A9SLoldPKhhn1ohK0N3AaiJixnjydZS9qGtu
         XoLnnHyAqMtM54GIKApqQAiK7xx8nCLqSYIJapbdaevr7qyzm9rN7MUPvp1huvur7uqqb6kpOq+sIj/K
         kRdd5ecU8wezTJ76Qr56zO8FyqgNbnYbKBaXs+gxFvnKIpoy4xXqfqYp+0pT7q2m/c817XlYNWNeFPPz
         BnWOrHOrl8C20Q7ywztm8d5HVer7rul4zNSLGfzW1PNekz9a5UBzfJpup9IERjx6w4wp/1kWlRj8sifC
