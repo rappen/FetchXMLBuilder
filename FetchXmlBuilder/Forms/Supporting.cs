@@ -238,8 +238,8 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
         private void rbType_CheckedChanged(object sender, EventArgs e)
         {
             SuspendLayout();
-            rbCompany.ForeColor = rbPersonal.Checked ? settings.clrFgUnfocus : settings.clrFgNormal;
-            rbPersonal.ForeColor = rbPersonal.Checked ? settings.clrFgNormal : settings.clrFgUnfocus;
+            rbCompany.ForeColor = rbPersonal.Checked ? settings.clrFgDimmed : settings.clrFgNormal;
+            rbPersonal.ForeColor = rbPersonal.Checked ? settings.clrFgNormal : settings.clrFgDimmed;
             panPersonal.Left = panCorp.Left;
             panPersonal.Top = panCorp.Top;
             panPersonal.Visible = rbPersonal.Checked;
@@ -250,8 +250,8 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
 
         private void rbPersonalMonetary_CheckedChanged(object sender, EventArgs e)
         {
-            rbPersonalMonetary.ForeColor = rbPersonalContribute.Checked ? settings.clrFgUnfocus : settings.clrFgNormal;
-            rbPersonalContribute.ForeColor = rbPersonalContribute.Checked ? settings.clrFgNormal : settings.clrFgUnfocus;
+            rbPersonalMonetary.ForeColor = rbPersonalContribute.Checked ? settings.clrFgDimmed : settings.clrFgNormal;
+            rbPersonalContribute.ForeColor = rbPersonalContribute.Checked ? settings.clrFgNormal : settings.clrFgDimmed;
             btnSubmit.ImageIndex = rbPersonalContribute.Checked ? 2 : 1;
         }
 
@@ -301,12 +301,12 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
             {
                 if (!rb.Checked)
                 {
-                    rb.ForeColor = settings.clrFgUnfocus;
+                    rb.ForeColor = settings.clrFgDimmed;
                 }
             }
             else if (sender is Label lbl)
             {
-                lbl.ForeColor = settings.clrFgUnfocus;
+                lbl.ForeColor = settings.clrFgDimmed;
             }
         }
 
@@ -403,11 +403,15 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
         public int ShowMinutesAfterShown = int.MaxValue; // 2880m / 48h / 2d
         public int ShowMinutesAfterSubmittingButNotCompleted = int.MaxValue; // 2880m / 48h / 2d
         public int ShowAutoRepeatTimes = 0; // 10
+        public string ColorFgNormal { get; set; } = "FFFF00";
+        public string ColorFgDimmed { get; set; } = "D2B48C";
+        public string ColorBgNormal { get; set; } = "0063AD";
+        public string ColorBgInvalid { get; set; } = "6495ED";
 
-        public Color clrFgNormal = Color.Yellow;
-        public Color clrFgUnfocus = Color.Tan;
-        public Color clrBgNormal = Color.FromArgb(0, 99, 255);
-        public Color clrBgInvalid = Color.CornflowerBlue;
+        public Color clrFgNormal => Color.FromArgb(int.Parse(ColorFgNormal, System.Globalization.NumberStyles.HexNumber));
+        public Color clrFgDimmed => Color.FromArgb(int.Parse(ColorFgDimmed, System.Globalization.NumberStyles.HexNumber));
+        public Color clrBgNormal => Color.FromArgb(int.Parse(ColorBgNormal, System.Globalization.NumberStyles.HexNumber));
+        public Color clrBgInvalid => Color.FromArgb(int.Parse(ColorBgInvalid, System.Globalization.NumberStyles.HexNumber));
 
         public static ToolSettings Get() => new Uri("https://jonasr.app/xtb/toolsettings.xml").DownloadXml(new ToolSettings());
     }
