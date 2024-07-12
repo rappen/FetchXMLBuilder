@@ -555,7 +555,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             else
             {
-                ToolSupporting.ShowIfNeeded(this, false, true);
+                ToolSupporting.ShowIfNeeded(this, false, true, ai2);
             }
             RebuildRepositoryMenu(null);
             TreeNodeHelper.AddContextMenu(null, dockControlBuilder, settings.QueryOptions);
@@ -886,7 +886,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void tsbSupporting_Click(object sender, EventArgs e)
         {
-            ToolSupporting.ShowIfNeeded(this, true, false);
+            ToolSupporting.ShowIfNeeded(this, true, false, ai2);
         }
 
         #endregion Private Event Handlers

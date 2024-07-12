@@ -55,6 +55,10 @@
             this.rbPersonalMonetary = new System.Windows.Forms.RadioButton();
             this.txtICountry = new System.Windows.Forms.TextBox();
             this.txtIEmail = new System.Windows.Forms.TextBox();
+            this.btnInfo = new System.Windows.Forms.Button();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.laterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.neverWillBeSupportingThisToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panPersonal = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.lblICountry = new System.Windows.Forms.Label();
@@ -63,32 +67,29 @@
             this.panInfo = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnInfoClose = new System.Windows.Forms.Button();
-            this.linkHelping = new System.Windows.Forms.LinkLabel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.helpLink = new System.Windows.Forms.LinkLabel();
+            this.helpText = new System.Windows.Forms.TextBox();
+            this.helpTitle = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.laterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.neverWillBeSupportingThisToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnInfo = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panCorp.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.panPersonal.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panInfo.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblHeader
             // 
             this.lblHeader.Font = new System.Drawing.Font("Berlin Sans FB", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHeader.ForeColor = System.Drawing.Color.Yellow;
-            this.lblHeader.Location = new System.Drawing.Point(49, 38);
+            this.lblHeader.Location = new System.Drawing.Point(48, 50);
             this.lblHeader.Name = "lblHeader";
             this.lblHeader.Size = new System.Drawing.Size(421, 38);
             this.lblHeader.TabIndex = 0;
-            this.lblHeader.Text = "We Support Tools!";
+            this.lblHeader.Text = "[tool name]";
             this.lblHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblCompany
@@ -220,9 +221,9 @@
             this.lblSize.AutoSize = true;
             this.lblSize.Location = new System.Drawing.Point(16, 112);
             this.lblSize.Name = "lblSize";
-            this.lblSize.Size = new System.Drawing.Size(91, 18);
+            this.lblSize.Size = new System.Drawing.Size(73, 18);
             this.lblSize.TabIndex = 5;
-            this.lblSize.Text = "Users of FXB";
+            this.lblSize.Text = "Tool Users";
             // 
             // txtEmail
             // 
@@ -271,7 +272,7 @@
             this.lblLater.AutoSize = true;
             this.lblLater.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblLater.ForeColor = System.Drawing.Color.Tan;
-            this.lblLater.Location = new System.Drawing.Point(463, 365);
+            this.lblLater.Location = new System.Drawing.Point(463, 379);
             this.lblLater.Name = "lblLater";
             this.lblLater.Size = new System.Drawing.Size(41, 18);
             this.lblLater.TabIndex = 101;
@@ -375,6 +376,42 @@
             this.toolTip1.SetToolTip(this.txtIEmail, "Email for any contact");
             this.txtIEmail.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
             // 
+            // btnInfo
+            // 
+            this.btnInfo.ContextMenuStrip = this.contextMenuStrip1;
+            this.btnInfo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.btnInfo.Image = ((System.Drawing.Image)(resources.GetObject("btnInfo.Image")));
+            this.btnInfo.Location = new System.Drawing.Point(12, 12);
+            this.btnInfo.Name = "btnInfo";
+            this.btnInfo.Size = new System.Drawing.Size(30, 30);
+            this.btnInfo.TabIndex = 12;
+            this.toolTip1.SetToolTip(this.btnInfo, "Information about Why we should ");
+            this.btnInfo.UseVisualStyleBackColor = true;
+            this.btnInfo.Click += new System.EventHandler(this.btnInfo_Click);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.laterToolStripMenuItem,
+            this.neverWillBeSupportingThisToolToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(250, 48);
+            // 
+            // laterToolStripMenuItem
+            // 
+            this.laterToolStripMenuItem.Name = "laterToolStripMenuItem";
+            this.laterToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.laterToolStripMenuItem.Text = "Later";
+            this.laterToolStripMenuItem.Click += new System.EventHandler(this.laterToolStripMenuItem_Click);
+            // 
+            // neverWillBeSupportingThisToolToolStripMenuItem
+            // 
+            this.neverWillBeSupportingThisToolToolStripMenuItem.Name = "neverWillBeSupportingThisToolToolStripMenuItem";
+            this.neverWillBeSupportingThisToolToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.neverWillBeSupportingThisToolToolStripMenuItem.Text = "Never will be supporting this tool";
+            this.neverWillBeSupportingThisToolToolStripMenuItem.Click += new System.EventHandler(this.neverWillBeSupportingThisToolToolStripMenuItem_Click);
+            // 
             // panPersonal
             // 
             this.panPersonal.Controls.Add(this.panel3);
@@ -432,9 +469,9 @@
             this.panInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
             this.panInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panInfo.Controls.Add(this.panel2);
-            this.panInfo.Location = new System.Drawing.Point(33, 678);
+            this.panInfo.Location = new System.Drawing.Point(30, 678);
             this.panInfo.Name = "panInfo";
-            this.panInfo.Size = new System.Drawing.Size(437, 390);
+            this.panInfo.Size = new System.Drawing.Size(456, 390);
             this.panInfo.TabIndex = 11;
             this.panInfo.Visible = false;
             // 
@@ -446,12 +483,12 @@
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(66)))), ((int)(((byte)(173)))));
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.btnInfoClose);
-            this.panel2.Controls.Add(this.linkHelping);
-            this.panel2.Controls.Add(this.textBox1);
-            this.panel2.Controls.Add(this.label2);
+            this.panel2.Controls.Add(this.helpLink);
+            this.panel2.Controls.Add(this.helpText);
+            this.panel2.Controls.Add(this.helpTitle);
             this.panel2.Location = new System.Drawing.Point(5, 5);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(425, 378);
+            this.panel2.Size = new System.Drawing.Size(444, 378);
             this.panel2.TabIndex = 0;
             // 
             // btnInfoClose
@@ -460,54 +497,56 @@
             this.btnInfoClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnInfoClose.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
             this.btnInfoClose.Image = ((System.Drawing.Image)(resources.GetObject("btnInfoClose.Image")));
-            this.btnInfoClose.Location = new System.Drawing.Point(390, 3);
+            this.btnInfoClose.Location = new System.Drawing.Point(409, 3);
             this.btnInfoClose.Name = "btnInfoClose";
             this.btnInfoClose.Size = new System.Drawing.Size(30, 30);
             this.btnInfoClose.TabIndex = 13;
             this.btnInfoClose.UseVisualStyleBackColor = true;
             this.btnInfoClose.Click += new System.EventHandler(this.btnInfoClose_Click);
             // 
-            // linkHelping
+            // helpLink
             // 
-            this.linkHelping.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.linkHelping.AutoSize = true;
-            this.linkHelping.LinkColor = System.Drawing.Color.Yellow;
-            this.linkHelping.Location = new System.Drawing.Point(94, 348);
-            this.linkHelping.Name = "linkHelping";
-            this.linkHelping.Size = new System.Drawing.Size(179, 18);
-            this.linkHelping.TabIndex = 2;
-            this.linkHelping.TabStop = true;
-            this.linkHelping.Tag = "https://jonasr.app/helping/";
-            this.linkHelping.Text = "https://jonasr.app/helping/";
-            this.linkHelping.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkHelping_LinkClicked);
+            this.helpLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.helpLink.LinkColor = System.Drawing.Color.Yellow;
+            this.helpLink.Location = new System.Drawing.Point(16, 348);
+            this.helpLink.Name = "helpLink";
+            this.helpLink.Size = new System.Drawing.Size(363, 18);
+            this.helpLink.TabIndex = 2;
+            this.helpLink.TabStop = true;
+            this.helpLink.Tag = "https://jonasr.app/helping/";
+            this.helpLink.Text = "https://jonasr.app/helping/";
+            this.helpLink.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.helpLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkHelping_LinkClicked);
             // 
-            // textBox1
+            // helpText
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.helpText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(66)))), ((int)(((byte)(173)))));
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.ForeColor = System.Drawing.Color.Yellow;
-            this.textBox1.Location = new System.Drawing.Point(16, 53);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(391, 296);
-            this.textBox1.TabIndex = 1;
-            this.textBox1.Text = resources.GetString("textBox1.Text");
+            this.helpText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(66)))), ((int)(((byte)(173)))));
+            this.helpText.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.helpText.Font = new System.Drawing.Font("Berlin Sans FB", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.helpText.ForeColor = System.Drawing.Color.Yellow;
+            this.helpText.Location = new System.Drawing.Point(16, 53);
+            this.helpText.Multiline = true;
+            this.helpText.Name = "helpText";
+            this.helpText.ReadOnly = true;
+            this.helpText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.helpText.Size = new System.Drawing.Size(410, 290);
+            this.helpText.TabIndex = 1;
+            this.helpText.Text = resources.GetString("helpText.Text");
             // 
-            // label2
+            // helpTitle
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.helpTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.Font = new System.Drawing.Font("Berlin Sans FB", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(12, 10);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(411, 35);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "How and Why do we support?";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.helpTitle.Font = new System.Drawing.Font("Berlin Sans FB", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.helpTitle.Location = new System.Drawing.Point(12, 10);
+            this.helpTitle.Name = "helpTitle";
+            this.helpTitle.Size = new System.Drawing.Size(430, 35);
+            this.helpTitle.TabIndex = 0;
+            this.helpTitle.Text = "How and Why do we support?";
+            this.helpTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label1
             // 
@@ -521,47 +560,23 @@
     "he next step to finalize.";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // contextMenuStrip1
+            // label2
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.laterToolStripMenuItem,
-            this.neverWillBeSupportingThisToolToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(250, 48);
-            // 
-            // laterToolStripMenuItem
-            // 
-            this.laterToolStripMenuItem.Name = "laterToolStripMenuItem";
-            this.laterToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
-            this.laterToolStripMenuItem.Text = "Later";
-            this.laterToolStripMenuItem.Click += new System.EventHandler(this.laterToolStripMenuItem_Click);
-            // 
-            // neverWillBeSupportingThisToolToolStripMenuItem
-            // 
-            this.neverWillBeSupportingThisToolToolStripMenuItem.Name = "neverWillBeSupportingThisToolToolStripMenuItem";
-            this.neverWillBeSupportingThisToolToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
-            this.neverWillBeSupportingThisToolToolStripMenuItem.Text = "Never will be supporting this tool";
-            this.neverWillBeSupportingThisToolToolStripMenuItem.Click += new System.EventHandler(this.neverWillBeSupportingThisToolToolStripMenuItem_Click);
-            // 
-            // btnInfo
-            // 
-            this.btnInfo.ContextMenuStrip = this.contextMenuStrip1;
-            this.btnInfo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
-            this.btnInfo.Image = ((System.Drawing.Image)(resources.GetObject("btnInfo.Image")));
-            this.btnInfo.Location = new System.Drawing.Point(12, 12);
-            this.btnInfo.Name = "btnInfo";
-            this.btnInfo.Size = new System.Drawing.Size(30, 30);
-            this.btnInfo.TabIndex = 12;
-            this.btnInfo.UseVisualStyleBackColor = true;
-            this.btnInfo.Click += new System.EventHandler(this.btnInfo_Click);
+            this.label2.Font = new System.Drawing.Font("Berlin Sans FB", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.Yellow;
+            this.label2.Location = new System.Drawing.Point(48, 12);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(421, 38);
+            this.label2.TabIndex = 104;
+            this.label2.Text = "We Support";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Supporting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(66)))), ((int)(((byte)(173)))));
-            this.ClientSize = new System.Drawing.Size(516, 420);
+            this.ClientSize = new System.Drawing.Size(516, 421);
             this.ControlBox = false;
             this.Controls.Add(this.panInfo);
             this.Controls.Add(this.btnInfo);
@@ -574,6 +589,7 @@
             this.Controls.Add(this.lblLater);
             this.Controls.Add(this.lblAlready);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.label2);
             this.Font = new System.Drawing.Font("Berlin Sans FB", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.Yellow;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -590,6 +606,7 @@
             this.panel1.PerformLayout();
             this.panCorp.ResumeLayout(false);
             this.panCorp.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.panPersonal.ResumeLayout(false);
             this.panPersonal.PerformLayout();
             this.panel3.ResumeLayout(false);
@@ -597,7 +614,6 @@
             this.panInfo.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
-            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -631,9 +647,9 @@
         private System.Windows.Forms.TextBox txtIFirst;
         private System.Windows.Forms.Panel panInfo;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.LinkLabel linkHelping;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.LinkLabel helpLink;
+        private System.Windows.Forms.TextBox helpText;
+        private System.Windows.Forms.Label helpTitle;
         private System.Windows.Forms.Button btnInfo;
         private System.Windows.Forms.Button btnInfoClose;
         private System.Windows.Forms.Label lblLater;
@@ -646,5 +662,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem laterToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem neverWillBeSupportingThisToolToolStripMenuItem;
+        private System.Windows.Forms.Label label2;
     }
 }

@@ -128,7 +128,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAAw
-        /gMAAk1TRnQBSQFMAgEBAwEAAYgBAAGIAQAByAEAAToBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAEg
+        /gMAAk1TRnQBSQFMAgEBAwEAAcABAAHAAQAByAEAAToBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAEg
         AQMCAAE6AwABAQEAASAGAAHVAQIRAAGtAUIBAAH/Aa0BQgEAAf8BrQFCAQAB/wGtAUIBAAH/Aa0BQgEA
         Af8BrQFCAQAB/wGtAUIBAAH/Aa0BQgEAAf8BrQFCAQAB/wGtAUIBAAH/Aa0BQgEAAf8BrQFCAQAB/wGt
         AUIBAAH/Aa0BQgEAAf8BrQFCAQAB/wGtAUIBAAH/Aa0BQgEAAf8BrQFCAQAB/wGtAUIBAAH/Aa0BQgEA
@@ -4492,30 +4492,10 @@
         /wD/AP8A/wD/AP8A/wD/AP8A/wD/AL8ACw==
 </value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="btnInfoClose.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DAAACwwBP0AiyAAAAAd0SU1FB+gHBg01It4BoIIAAAD4SURBVDhPY/j//z9FGMGQr+dgcN+zkMFlFT+y
-        AnTM4LpZh8Fj70Q4H0yoTGRn8D62DSTG4HviGIPFKiGYAmTM4L5RmyHw0lUQl8Hr8GywGJiwWqfMEHj5
-        BlTdfwafk0fRXcLgsluXIejqNYSaE0cZjGdyIRQgmQ5W4HvqGIPNFkHsckBXwuTAIlCM1RCXdTa4NIP1
-        wBhwAZBTA65eRxMGY6xeQ+bABUEuCbhyGVmYwRdTMwijcOCClBhAkRewB+ImG4YAtEA0XSgM1wNnYNOM
-        HI04DIFopjQhMYSuYkNJykjxjIyhLrkC4jJ4HJ4FFoNLUpKZyMf/GQCDgHmSofTQlAAAAABJRU5ErkJg
-        gg==
-</value>
-  </data>
-  <data name="textBox1.Text" xml:space="preserve">
-    <value>You and your company can support tools more formally rather than just donating via PayPal or 'Buy Me a Coffee.'
-
-Supporting is not just giving money; it means that you or your company know you have gained in time and improved your quality by using these tools. If you get something and want to give back—support the development and maintenance of the tools.
-
-You will receive an official receipt automatically and, if needed, an invoice. Supporting can be done with a credit card. Other options will be available depending on your location. Stripe handles the payment.
-
-If you want to read about my thoughts, click the link below!</value>
-  </data>
   <metadata name="contextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>189, 17</value>
   </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="btnInfo.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
@@ -4532,6 +4512,26 @@ If you want to read about my thoughts, click the link below!</value>
         tGC5cEVUgySWJHKefWl37kdPeZNrnFILwM9huVgE44K3oP2DP9xEVVvnCI5qwYWanHNaalWTBjgmLBeu
         aHcnkEsR1bLoQtuFF65lX8nyTs/w+1mTRjRRy1z/NxD9BWc/svgXUPR2AAAAAElFTkSuQmCC
 </value>
+  </data>
+  <data name="btnInfoClose.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
+        DAAACwwBP0AiyAAAAAd0SU1FB+gHBg01It4BoIIAAAD4SURBVDhPY/j//z9FGMGQr+dgcN+zkMFlFT+y
+        AnTM4LpZh8Fj70Q4H0yoTGRn8D62DSTG4HviGIPFKiGYAmTM4L5RmyHw0lUQl8Hr8GywGJiwWqfMEHj5
+        BlTdfwafk0fRXcLgsluXIejqNYSaE0cZjGdyIRQgmQ5W4HvqGIPNFkHsckBXwuTAIlCM1RCXdTa4NIP1
+        wBhwAZBTA65eRxMGY6xeQ+bABUEuCbhyGVmYwRdTMwijcOCClBhAkRewB+ImG4YAtEA0XSgM1wNnYNOM
+        HI04DIFopjQhMYSuYkNJykjxjIyhLrkC4jJ4HJ4FFoNLUpKZyMf/GQCDgHmSofTQlAAAAABJRU5ErkJg
+        gg==
+</value>
+  </data>
+  <data name="helpText.Text" xml:space="preserve">
+    <value>You and your company can support tools more formally rather than just donating via PayPal or 'Buy Me a Coffee.'
+
+Supporting is not just giving money; it means that you or your company know you have gained in time and improved your quality by using these tools. If you get something and want to give back—support the development and maintenance of the tools.
+
+You will receive an official receipt automatically and, if needed, an invoice. Supporting can be done with a credit card. Other options will be available depending on your location. Stripe handles the payment.
+
+If you want to read about my thoughts, click the link below!</value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>37</value>

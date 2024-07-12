@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Mail;
 using System.Reflection;
 using System.Windows.Forms;
@@ -60,17 +59,26 @@ namespace Rappen.XTB
             "&{formid}_33={instid}";
 
         private readonly ToolSettings settings;
+        private readonly AppInsights appinsights;
         private readonly RappenXTBTools tools;
         private readonly Tool tool;
+        private Stopwatch sw = new Stopwatch();
+        private Stopwatch swInfo = new Stopwatch();
 
         #region Constructors
 
-        internal Supporting(RappenXTBTools tools, Tool tool, ToolSettings settings, bool alreadysupported)
+        internal Supporting(RappenXTBTools tools, Tool tool, ToolSettings settings, AppInsights appinsights, bool alreadysupported, bool manual)
         {
             InitializeComponent();
             this.settings = settings;
+            this.appinsights = appinsights;
             this.tools = tools;
             this.tool = tool;
+            lblHeader.Text = tool.ToolName;
+            helpTitle.Text = settings.HelpTitle;
+            helpText.Text = settings.HelpText;
+            helpLink.Text = settings.HelpLink;
+            helpLink.Tag = settings.HelpLink;
             if (alreadysupported)
             {
                 lblAlready.Text = lblAlready.Text.Replace("{tool}", tool.ToolName);
@@ -93,6 +101,7 @@ namespace Rappen.XTB
             {
                 rbCompany.Checked = true;
             }
+            appinsights.WriteEvent($"Supporting-Open-{(manual ? "Manual" : "Auto")}");
         }
 
         #endregion Constructors
@@ -146,7 +155,7 @@ namespace Rappen.XTB
 
         private void Supporting_Shown(object sender, EventArgs e)
         {
-            tool.DisplayDate = DateTime.Now;
+            sw.Restart();
         }
 
         private void Supporting_FormClosing(object sender, FormClosingEventArgs e)
@@ -154,6 +163,11 @@ namespace Rappen.XTB
             if (DialogResult != DialogResult.Yes && DialogResult != DialogResult.OK && DialogResult != DialogResult.Retry)
             {
                 e.Cancel = true;
+            }
+            else
+            {
+                sw.Stop();
+                appinsights?.WriteEvent("Supporting-Close", duration: sw.ElapsedMilliseconds);
             }
         }
 
@@ -170,9 +184,10 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
                 {
                     return;
                 }
-                Process.Start(url);
                 tool.SupportType = rbPersonal.Checked ? rbPersonalContribute.Checked ? SupportType.Contribute : SupportType.Personal : SupportType.Company;
                 tool.SubmittedDate = DateTime.Now;
+                appinsights?.WriteEvent($"Supporting-{tool.SupportType}");
+                Process.Start(url);
                 DialogResult = DialogResult.Yes;
             }
         }
@@ -207,12 +222,12 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
             if (sender == null || sender == txtIFirst)
             {
                 tools.FirstName = txtIFirst.Text.Trim().Length >= 1 ? txtIFirst.Text.Trim() : "";
-                txtIFirst.BackColor = string.IsNullOrEmpty(tools.FirstName) || string.IsNullOrEmpty(tools.LastName) ? settings.clrBgInvalid : settings.clrBgNormal;
+                txtIFirst.BackColor = string.IsNullOrEmpty(tools.FirstName) ? settings.clrBgInvalid : settings.clrBgNormal;
             }
             if (sender == null || sender == txtILast)
             {
                 tools.LastName = txtILast.Text.Trim().Length >= 2 ? txtILast.Text.Trim() : "";
-                txtILast.BackColor = string.IsNullOrEmpty(tools.FirstName) || string.IsNullOrEmpty(tools.LastName) ? settings.clrBgInvalid : settings.clrBgNormal;
+                txtILast.BackColor = string.IsNullOrEmpty(tools.LastName) ? settings.clrBgInvalid : settings.clrBgNormal;
             }
             if (sender == null || sender == txtIEmail)
             {
@@ -262,9 +277,18 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
 
         private void btnInfo_Click(object sender, EventArgs e)
         {
-            panInfo.Visible = !panInfo.Visible;
             panInfo.Left = 50;
             panInfo.Top = 10;
+            panInfo.Visible = !panInfo.Visible;
+            if (panInfo.Visible)
+            {
+                swInfo.Restart();
+            }
+            else
+            {
+                sw.Stop();
+                appinsights?.WriteEvent("Supporting-Info", duration: swInfo.ElapsedMilliseconds);
+            }
         }
 
         private void btnInfoClose_Click(object sender, EventArgs e)
@@ -322,13 +346,14 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
     {
         private static ToolSettings settings;
         private static ToolSupporting toolsupporting;
+        private static Random random = new Random();
 
         private int alreadysupporting;
-        private bool display;
+        private bool display = true;
         private RappenXTBTools tools;
         private Tool tool;
 
-        public static void ShowIfNeeded(PluginControlBase plugin, bool manual, bool reload)
+        public static void ShowIfNeeded(PluginControlBase plugin, bool manual, bool reload, AppInsights appinsights)
         {
             if (reload || toolsupporting == null)
             {
@@ -337,9 +362,10 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
             }
             if (manual || toolsupporting.display)
             {
-                new Supporting(toolsupporting.tools, toolsupporting.tool, settings, toolsupporting.alreadysupporting > 0).ShowDialog();
+                new Supporting(toolsupporting.tools, toolsupporting.tool, settings, appinsights, toolsupporting.alreadysupporting > 0, manual).ShowDialog(plugin);
                 if (!manual)
                 {
+                    toolsupporting.tool.DisplayDate = DateTime.Now;
                     toolsupporting.tool.DisplayCount++;
                 }
                 toolsupporting.tools.Save();
@@ -391,6 +417,15 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
             {   // Submitted too soon for JR to handle it
                 display = false;
             }
+            else if (settings.ShowAutoPercentChance < 1)
+            {
+                display = false;
+            }
+            else
+            {
+                var rand = random.Next(1, 100);
+                display = rand <= settings.ShowAutoPercentChance;
+            }
         }
     }
 
@@ -402,16 +437,41 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
         public int ShowMinutesAfterNewVersion = int.MaxValue; // 120
         public int ShowMinutesAfterShown = int.MaxValue; // 2880m / 48h / 2d
         public int ShowMinutesAfterSubmittingButNotCompleted = int.MaxValue; // 2880m / 48h / 2d
+        public int ShowAutoPercentChance = 0;   // 25 (0-100)
         public int ShowAutoRepeatTimes = 0; // 10
-        public string ColorFgNormal { get; set; } = "FFFF00";
-        public string ColorFgDimmed { get; set; } = "D2B48C";
-        public string ColorBgNormal { get; set; } = "0063AD";
-        public string ColorBgInvalid { get; set; } = "6495ED";
+        public string ColorFgNormal { get; set; } = "FFFFFF00";
+        public string ColorFgDimmed { get; set; } = "FFD2B48C";
+        public string ColorBgNormal { get; set; } = "FF0063FF";
+        public string ColorBgInvalid { get; set; } = "FF6495ED";
 
         public Color clrFgNormal => Color.FromArgb(int.Parse(ColorFgNormal, System.Globalization.NumberStyles.HexNumber));
         public Color clrFgDimmed => Color.FromArgb(int.Parse(ColorFgDimmed, System.Globalization.NumberStyles.HexNumber));
         public Color clrBgNormal => Color.FromArgb(int.Parse(ColorBgNormal, System.Globalization.NumberStyles.HexNumber));
         public Color clrBgInvalid => Color.FromArgb(int.Parse(ColorBgInvalid, System.Globalization.NumberStyles.HexNumber));
+
+        public string HelpTitle { get; set; } = "This is a Community Thing.";
+        public string HelpLink { get; set; } = "https://jonasr.app/helping/";
+
+        public string HelpText { get; set; } = @"Some of us in the community are creating tools. Some contribute by sharing new ideas, finding and reporting problems, and solving our problems; some are documentation for us.
+Thousands and thousands in this community are only consumers. It's very similar to just watching TV. Do you pay for channels, Netflix, Amazon Prime etc...?
+To be part of the community, you can now pay instead.
+
+Especially when you work in a big corporation, exploiting free tools only to increase your income, you have a responsibility to participate actively in the community - or pay.
+It's good to be able to sleep with a good conscience. Right?
+
+There should be a license called ""Conscienceware"".
+But technically, it is simply free to use them.
+
+If you say that you are not part of the community, that is incorrect—just using these tools makes you a part of it.
+
+You and your company can now more formally support tools rather than just donating via PayPal or 'Buy Me a Coffee.'
+
+Supporting is not just giving money; it means that you or your company know you have gained in time and improved your quality by using these tools. If you get something and want to give back—support the development and maintenance of the tools.
+
+You will receive an official receipt immediately and, if needed, an invoice. Supporting can be done with a credit card. Other options will be available depending on your location. Stripe handles the payment.
+
+To read more about my thoughts, click the link below!
+";
 
         public static ToolSettings Get() => new Uri("https://jonasr.app/xtb/toolsettings.xml").DownloadXml(new ToolSettings());
     }
