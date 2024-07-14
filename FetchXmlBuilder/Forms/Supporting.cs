@@ -355,20 +355,27 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
 
         public static void ShowIfNeeded(PluginControlBase plugin, bool manual, bool reload, AppInsights appinsights)
         {
-            if (reload || toolsupporting == null)
+            try
             {
-                settings = ToolSettings.Get();
-                toolsupporting = new ToolSupporting(settings, plugin.ToolName);
-            }
-            if (manual || toolsupporting.display)
-            {
-                new Supporting(toolsupporting.tools, toolsupporting.tool, settings, appinsights, toolsupporting.alreadysupporting > 0, manual).ShowDialog(plugin);
-                if (!manual)
+                if (reload || settings == null || toolsupporting == null)
                 {
-                    toolsupporting.tool.DisplayDate = DateTime.Now;
-                    toolsupporting.tool.DisplayCount++;
+                    settings = ToolSettings.Get();
+                    toolsupporting = new ToolSupporting(settings, plugin.ToolName);
                 }
-                toolsupporting.tools.Save();
+                if (manual || toolsupporting.display)
+                {
+                    new Supporting(toolsupporting.tools, toolsupporting.tool, settings, appinsights, toolsupporting.alreadysupporting > 0, manual).ShowDialog(plugin);
+                    if (!manual)
+                    {
+                        toolsupporting.tool.DisplayDate = DateTime.Now;
+                        toolsupporting.tool.DisplayCount++;
+                    }
+                    toolsupporting.tools.Save();
+                }
+            }
+            catch (Exception ex)
+            {
+                plugin.LogError($"ToolSupporting error:\n{ex}");
             }
         }
 
