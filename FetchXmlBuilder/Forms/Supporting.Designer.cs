@@ -60,6 +60,7 @@
             this.laterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.neverWillBeSupportingThisToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panPersonal = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.lblICountry = new System.Windows.Forms.Label();
             this.lblIEmail = new System.Windows.Forms.Label();
@@ -327,7 +328,7 @@
             // 
             this.rbPersonalContributing.AutoSize = true;
             this.rbPersonalContributing.ForeColor = System.Drawing.Color.Tan;
-            this.rbPersonalContributing.Location = new System.Drawing.Point(145, 2);
+            this.rbPersonalContributing.Location = new System.Drawing.Point(145, 3);
             this.rbPersonalContributing.Name = "rbPersonalContributing";
             this.rbPersonalContributing.Size = new System.Drawing.Size(105, 22);
             this.rbPersonalContributing.TabIndex = 1;
@@ -342,7 +343,7 @@
             // 
             this.rbPersonalSupporting.AutoSize = true;
             this.rbPersonalSupporting.Checked = true;
-            this.rbPersonalSupporting.Location = new System.Drawing.Point(12, 2);
+            this.rbPersonalSupporting.Location = new System.Drawing.Point(12, 3);
             this.rbPersonalSupporting.Name = "rbPersonalSupporting";
             this.rbPersonalSupporting.Size = new System.Drawing.Size(96, 22);
             this.rbPersonalSupporting.TabIndex = 0;
@@ -414,6 +415,7 @@
             // 
             // panPersonal
             // 
+            this.panPersonal.Controls.Add(this.label4);
             this.panPersonal.Controls.Add(this.panel3);
             this.panPersonal.Controls.Add(this.txtPersonalLast);
             this.panPersonal.Controls.Add(this.txtPersonalCountry);
@@ -427,6 +429,15 @@
             this.panPersonal.Size = new System.Drawing.Size(456, 148);
             this.panPersonal.TabIndex = 3;
             this.panPersonal.Visible = false;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(16, 112);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(41, 18);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "Type";
             // 
             // panel3
             // 
@@ -469,11 +480,12 @@
             this.panInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
             this.panInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panInfo.Controls.Add(this.panel2);
-            this.panInfo.Location = new System.Drawing.Point(30, 678);
+            this.panInfo.Location = new System.Drawing.Point(30, 663);
             this.panInfo.Name = "panInfo";
-            this.panInfo.Size = new System.Drawing.Size(456, 390);
+            this.panInfo.Size = new System.Drawing.Size(456, 376);
             this.panInfo.TabIndex = 11;
             this.panInfo.Visible = false;
+            this.panInfo.VisibleChanged += new System.EventHandler(this.panInfo_VisibleChanged);
             // 
             // panel2
             // 
@@ -488,7 +500,7 @@
             this.panel2.Controls.Add(this.helpTitle);
             this.panel2.Location = new System.Drawing.Point(5, 5);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(444, 378);
+            this.panel2.Size = new System.Drawing.Size(444, 364);
             this.panel2.TabIndex = 0;
             // 
             // btnInfoClose
@@ -508,7 +520,7 @@
             // 
             this.helpLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.helpLink.LinkColor = System.Drawing.Color.Yellow;
-            this.helpLink.Location = new System.Drawing.Point(16, 348);
+            this.helpLink.Location = new System.Drawing.Point(16, 334);
             this.helpLink.Name = "helpLink";
             this.helpLink.Size = new System.Drawing.Size(363, 18);
             this.helpLink.TabIndex = 2;
@@ -532,7 +544,7 @@
             this.helpText.Name = "helpText";
             this.helpText.ReadOnly = true;
             this.helpText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.helpText.Size = new System.Drawing.Size(410, 290);
+            this.helpText.Size = new System.Drawing.Size(410, 276);
             this.helpText.TabIndex = 1;
             this.helpText.Text = resources.GetString("helpText.Text");
             // 
@@ -663,5 +675,6 @@
         private System.Windows.Forms.ToolStripMenuItem laterToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem neverWillBeSupportingThisToolToolStripMenuItem;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label4;
     }
 }

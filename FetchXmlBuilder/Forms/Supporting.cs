@@ -107,9 +107,10 @@ namespace Rappen.XTB
             InitializeComponent();
             lblHeader.Text = tool.ToolName;
             helpTitle.Text = settings.HelpTitle;
-            helpText.Text = settings.HelpText;
+            helpText.Text = settings.HelpText.Replace("\r\n", "\n").Replace("\n", "\r\n");
             helpLink.Text = settings.HelpLink;
             helpLink.Tag = settings.HelpLink;
+            helpLink.Visible = !string.IsNullOrEmpty(settings.HelpLink);
             if (supporters.Any())
             {
                 lblAlready.Text = lblAlready.Text.Replace("{tool}", tool.ToolName);
@@ -150,7 +151,7 @@ namespace Rappen.XTB
                 tool.VersionRunDate = DateTime.Now;
                 tools.Save();
             }
-            var supporters = Supporters.DownloadMy(tools.InstallationId, toolname, settings.ContributionCounts);
+            supporters = Supporters.DownloadMy(tools.InstallationId, toolname, settings.ContributionCounts);
             if (supporters.Count > 0)
             {   // I have supportings!
                 return false;
@@ -365,22 +366,26 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
         private void btnInfo_Click(object sender, EventArgs e)
         {
             panInfo.Left = 50;
-            panInfo.Top = 10;
+            panInfo.Top = 25;
             panInfo.Visible = !panInfo.Visible;
+        }
+
+        private void btnInfoClose_Click(object sender, EventArgs e)
+        {
+            panInfo.Visible = false;
+        }
+
+        private void panInfo_VisibleChanged(object sender, EventArgs e)
+        {
             if (panInfo.Visible)
             {
                 swInfo.Restart();
             }
             else
             {
-                sw.Stop();
+                swInfo.Stop();
                 appinsights?.WriteEvent("Supporting-Info", duration: swInfo.ElapsedMilliseconds);
             }
-        }
-
-        private void btnInfoClose_Click(object sender, EventArgs e)
-        {
-            panInfo.Visible = false;
         }
 
         private void laterToolStripMenuItem_Click(object sender, EventArgs e)
@@ -454,8 +459,9 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
         public string HelpTitle { get; set; } = "This is a Community Thing.";
         public string HelpLink { get; set; } = "https://jonasr.app/helping/";
 
-        public string HelpText { get; set; } = @"Some of us in the community are creating tools. Some contribute by sharing new ideas, finding and reporting problems, and solving our problems; some are documentation for us.
-Thousands and thousands in this community are only consumers. It's very similar to just watching TV. Do you pay for channels, Netflix, Amazon Prime etc...?
+        public string HelpText { get; set; } = @"Some of us in the Power Platform Community are creating tools.
+Some contribute by sharing new ideas, finding problems, and documenting; some are even solving our bugs.
+Thousands and thousands in this community are only consumers. Just using open-source tools. It's very similar to just watching TV. Do you pay for channels, Netflix, Amazon Prime, Spotify etc...?
 To be part of the community, you can now pay instead.
 
 Especially when you work in a big corporation, exploiting free tools only to increase your income, you have a responsibility to participate actively in the community - or pay.
@@ -472,8 +478,7 @@ Supporting is not just giving money; it means that you or your company know you 
 
 You will receive an official receipt immediately and, if needed, an invoice. Supporting can be done with a credit card. Other options will be available depending on your location. Stripe handles the payment.
 
-To read more about my thoughts, click the link below!
-";
+To read more about my thoughts, click the link below!";
 
         private ToolSettings()
         { }

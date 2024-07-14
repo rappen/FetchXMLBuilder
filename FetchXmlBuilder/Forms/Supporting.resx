@@ -128,7 +128,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAAw
-        /gMAAk1TRnQBSQFMAgEBAwEAAcgBAAHIAQAByAEAAToBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAEg
+        /gMAAk1TRnQBSQFMAgEBAwEAAeABAAHgAQAByAEAAToBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAEg
         AQMCAAE6AwABAQEAASAGAAHVAQIRAAGtAUIBAAH/Aa0BQgEAAf8BrQFCAQAB/wGtAUIBAAH/Aa0BQgEA
         Af8BrQFCAQAB/wGtAUIBAAH/Aa0BQgEAAf8BrQFCAQAB/wGtAUIBAAH/Aa0BQgEAAf8BrQFCAQAB/wGt
         AUIBAAH/Aa0BQgEAAf8BrQFCAQAB/wGtAUIBAAH/Aa0BQgEAAf8BrQFCAQAB/wGtAUIBAAH/Aa0BQgEA
@@ -4525,13 +4525,25 @@
 </value>
   </data>
   <data name="helpText.Text" xml:space="preserve">
-    <value>You and your company can support tools more formally rather than just donating via PayPal or 'Buy Me a Coffee.'
+    <value>Some of us in the community are creating tools. Some contribute by sharing new ideas, finding and reporting problems, and solving our problems; some are documentation for us.
+Thousands and thousands in this community are only consumers. It's very similar to just watching TV. Do you pay for channels, Netflix, Amazon Prime etc...?
+To be part of the community, you can now pay instead.
+
+Especially when you work in a big corporation, exploiting free tools only to increase your income, you have a responsibility to participate actively in the community - or pay.
+It's good to be able to sleep with a good conscience. Right?
+
+There should be a license called ""Conscienceware"".
+But technically, it is simply free to use them.
+
+If you say that you are not part of the community, that is incorrect—just using these tools makes you a part of it.
+
+You and your company can now more formally support tools rather than just donating via PayPal or 'Buy Me a Coffee.'
 
 Supporting is not just giving money; it means that you or your company know you have gained in time and improved your quality by using these tools. If you get something and want to give back—support the development and maintenance of the tools.
 
-You will receive an official receipt automatically and, if needed, an invoice. Supporting can be done with a credit card. Other options will be available depending on your location. Stripe handles the payment.
+You will receive an official receipt immediately and, if needed, an invoice. Supporting can be done with a credit card. Other options will be available depending on your location. Stripe handles the payment.
 
-If you want to read about my thoughts, click the link below!</value>
+To read more about my thoughts, click the link below!</value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>37</value>
