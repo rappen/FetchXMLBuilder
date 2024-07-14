@@ -116,14 +116,14 @@ namespace Rappen.XTB
                 lblAlready.Visible = true;
                 toolTip1.SetToolTip(lblLater, "Close this window.");
             }
-            txtCompany.Text = tools.Company;
-            txtEmail.Text = tools.InvoiceEmail;
-            cmbSize.SelectedIndex = tool.UsersIndex;
-            txtCountry.Text = tools.CompanyCountry;
-            txtIFirst.Text = tools.FirstName;
-            txtILast.Text = tools.LastName;
-            txtIEmail.Text = tools.Email;
-            txtICountry.Text = tools.Country;
+            txtCompanyName.Text = tools.CompanyName;
+            txtCompanyEmail.Text = tools.CompanyEmail;
+            cmbCompanyUsers.SelectedIndex = tool.UsersIndex;
+            txtCompanyCountry.Text = tools.CompanyCountry;
+            txtPersonalFirst.Text = tools.PersonalFirstName;
+            txtPersonalLast.Text = tools.PersonalLastName;
+            txtPersonalEmail.Text = tools.PersonalEmail;
+            txtPersonalCountry.Text = tools.PersonalCountry;
             if (tool.SupportType == SupportType.Personal)
             {
                 rbPersonal.Checked = true;
@@ -196,8 +196,8 @@ namespace Rappen.XTB
 
         private string GetUrlCorp()
         {
-            if (string.IsNullOrEmpty(tools.Company) ||
-                string.IsNullOrEmpty(tools.InvoiceEmail) ||
+            if (string.IsNullOrEmpty(tools.CompanyName) ||
+                string.IsNullOrEmpty(tools.CompanyEmail) ||
                 string.IsNullOrEmpty(tools.CompanyCountry) ||
                 tool.UsersIndex < 1)
             {
@@ -208,10 +208,10 @@ namespace Rappen.XTB
 
         private string GetUrlPersonal(bool contribute)
         {
-            if (string.IsNullOrEmpty(tools.FirstName) ||
-                string.IsNullOrEmpty(tools.LastName) ||
-                string.IsNullOrEmpty(tools.Email) ||
-                string.IsNullOrEmpty(tools.Country))
+            if (string.IsNullOrEmpty(tools.PersonalFirstName) ||
+                string.IsNullOrEmpty(tools.PersonalLastName) ||
+                string.IsNullOrEmpty(tools.PersonalEmail) ||
+                string.IsNullOrEmpty(tools.PersonalCountry))
             {
                 return null;
             }
@@ -222,15 +222,15 @@ namespace Rappen.XTB
         {
             return template
                 .Replace("{formid}", form)
-                .Replace("{firstname}", tools.FirstName)
-                .Replace("{lastname}", tools.LastName)
-                .Replace("{company}", tools.Company)
-                .Replace("{country}", tools.Country)
+                .Replace("{company}", tools.CompanyName)
+                .Replace("{invoiceemail}", tools.CompanyEmail)
                 .Replace("{companycountry}", tools.CompanyCountry)
-                .Replace("{email}", tools.Email)
-                .Replace("{invoiceemail}", tools.InvoiceEmail)
-                .Replace("{size}", cmbSize.Items[tool.UsersIndex].ToString())
                 .Replace("{amount}", tool.Amount)
+                .Replace("{size}", cmbCompanyUsers.Items[tool.UsersIndex].ToString())
+                .Replace("{firstname}", tools.PersonalFirstName)
+                .Replace("{lastname}", tools.PersonalLastName)
+                .Replace("{email}", tools.PersonalEmail)
+                .Replace("{country}", tools.PersonalCountry)
                 .Replace("{tool}", tool.ToolName)
                 .Replace("{version}", tool.Version.ToString())
                 .Replace("{instid}", tools.InstallationId.ToString());
@@ -261,7 +261,7 @@ namespace Rappen.XTB
         private void btnSubmit_Click(object sender, EventArgs e)
         {
             ctrl_Validating();
-            var url = rbPersonal.Checked ? GetUrlPersonal(rbPersonalContribute.Checked) : GetUrlCorp();
+            var url = rbPersonal.Checked ? GetUrlPersonal(rbPersonalContributing.Checked) : GetUrlCorp();
 
             if (!string.IsNullOrEmpty(url))
             {
@@ -271,7 +271,7 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
                 {
                     return;
                 }
-                tool.SupportType = rbPersonal.Checked ? rbPersonalContribute.Checked ? SupportType.Contribute : SupportType.Personal : SupportType.Company;
+                tool.SupportType = rbPersonal.Checked ? rbPersonalContributing.Checked ? SupportType.Contribute : SupportType.Personal : SupportType.Company;
                 tool.SubmittedDate = DateTime.Now;
                 appinsights?.WriteEvent($"Supporting-{tool.SupportType}");
                 Process.Start(url);
@@ -281,54 +281,54 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
 
         private void ctrl_Validating(object sender = null, System.ComponentModel.CancelEventArgs e = null)
         {
-            if (sender == null || sender == txtCompany)
+            if (sender == null || sender == txtCompanyName)
             {
-                tools.Company = txtCompany.Text.Trim().Length >= 3 ? txtCompany.Text.Trim() : "";
-                txtCompany.BackColor = string.IsNullOrEmpty(tools.Company) ? settings.clrBgInvalid : settings.clrBgNormal;
+                tools.CompanyName = txtCompanyName.Text.Trim().Length >= 3 ? txtCompanyName.Text.Trim() : "";
+                txtCompanyName.BackColor = string.IsNullOrEmpty(tools.CompanyName) ? settings.clrBgInvalid : settings.clrBgNormal;
             }
-            if (sender == null || sender == txtEmail)
+            if (sender == null || sender == txtCompanyEmail)
             {
                 try
                 {
-                    tools.InvoiceEmail = new MailAddress(txtEmail.Text).Address.Trim();
+                    tools.CompanyEmail = new MailAddress(txtCompanyEmail.Text).Address.Trim();
                 }
                 catch { }
-                txtEmail.BackColor = string.IsNullOrEmpty(tools.InvoiceEmail) ? settings.clrBgInvalid : settings.clrBgNormal;
+                txtCompanyEmail.BackColor = string.IsNullOrEmpty(tools.CompanyEmail) ? settings.clrBgInvalid : settings.clrBgNormal;
             }
-            if (sender == null || sender == txtCountry)
+            if (sender == null || sender == txtCompanyCountry)
             {
-                tools.CompanyCountry = txtCountry.Text.Trim().Length >= 2 ? txtCountry.Text.Trim() : "";
-                txtCountry.BackColor = string.IsNullOrEmpty(tools.CompanyCountry) ? settings.clrBgInvalid : settings.clrBgNormal;
+                tools.CompanyCountry = txtCompanyCountry.Text.Trim().Length >= 2 ? txtCompanyCountry.Text.Trim() : "";
+                txtCompanyCountry.BackColor = string.IsNullOrEmpty(tools.CompanyCountry) ? settings.clrBgInvalid : settings.clrBgNormal;
             }
-            if (sender == null || sender == cmbSize)
+            if (sender == null || sender == cmbCompanyUsers)
             {
-                tool.UsersIndex = cmbSize.SelectedIndex;
-                tool.UsersCount = cmbSize.Text;
-                cmbSize.BackColor = tool.UsersIndex < 1 ? settings.clrBgInvalid : settings.clrBgNormal;
+                tool.UsersIndex = cmbCompanyUsers.SelectedIndex;
+                tool.UsersCount = cmbCompanyUsers.Text;
+                cmbCompanyUsers.BackColor = tool.UsersIndex < 1 ? settings.clrBgInvalid : settings.clrBgNormal;
             }
-            if (sender == null || sender == txtIFirst)
+            if (sender == null || sender == txtPersonalFirst)
             {
-                tools.FirstName = txtIFirst.Text.Trim().Length >= 1 ? txtIFirst.Text.Trim() : "";
-                txtIFirst.BackColor = string.IsNullOrEmpty(tools.FirstName) ? settings.clrBgInvalid : settings.clrBgNormal;
+                tools.PersonalFirstName = txtPersonalFirst.Text.Trim().Length >= 1 ? txtPersonalFirst.Text.Trim() : "";
+                txtPersonalFirst.BackColor = string.IsNullOrEmpty(tools.PersonalFirstName) ? settings.clrBgInvalid : settings.clrBgNormal;
             }
-            if (sender == null || sender == txtILast)
+            if (sender == null || sender == txtPersonalLast)
             {
-                tools.LastName = txtILast.Text.Trim().Length >= 2 ? txtILast.Text.Trim() : "";
-                txtILast.BackColor = string.IsNullOrEmpty(tools.LastName) ? settings.clrBgInvalid : settings.clrBgNormal;
+                tools.PersonalLastName = txtPersonalLast.Text.Trim().Length >= 2 ? txtPersonalLast.Text.Trim() : "";
+                txtPersonalLast.BackColor = string.IsNullOrEmpty(tools.PersonalLastName) ? settings.clrBgInvalid : settings.clrBgNormal;
             }
-            if (sender == null || sender == txtIEmail)
+            if (sender == null || sender == txtPersonalEmail)
             {
                 try
                 {
-                    tools.Email = new MailAddress(txtIEmail.Text).Address.Trim();
+                    tools.PersonalEmail = new MailAddress(txtPersonalEmail.Text).Address.Trim();
                 }
                 catch { }
-                txtIEmail.BackColor = string.IsNullOrEmpty(tools.Email) ? settings.clrBgInvalid : settings.clrBgNormal;
+                txtPersonalEmail.BackColor = string.IsNullOrEmpty(tools.PersonalEmail) ? settings.clrBgInvalid : settings.clrBgNormal;
             }
-            if (sender == null || sender == txtICountry)
+            if (sender == null || sender == txtPersonalCountry)
             {
-                tools.Country = txtICountry.Text.Trim().Length >= 2 ? txtICountry.Text.Trim() : "";
-                txtICountry.BackColor = string.IsNullOrEmpty(tools.Country) ? settings.clrBgInvalid : settings.clrBgNormal;
+                tools.PersonalCountry = txtPersonalCountry.Text.Trim().Length >= 2 ? txtPersonalCountry.Text.Trim() : "";
+                txtPersonalCountry.BackColor = string.IsNullOrEmpty(tools.PersonalCountry) ? settings.clrBgInvalid : settings.clrBgNormal;
             }
         }
 
@@ -346,15 +346,15 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
             panPersonal.Top = panCorp.Top;
             panPersonal.Visible = rbPersonal.Checked;
             panCorp.Visible = !panPersonal.Visible;
-            btnSubmit.ImageIndex = rbPersonal.Checked ? rbPersonalContribute.Checked ? 2 : 1 : 0;
+            btnSubmit.ImageIndex = rbPersonal.Checked ? rbPersonalContributing.Checked ? 2 : 1 : 0;
             ResumeLayout();
         }
 
         private void rbPersonalMonetary_CheckedChanged(object sender, EventArgs e)
         {
-            rbPersonalMonetary.ForeColor = rbPersonalContribute.Checked ? settings.clrFgDimmed : settings.clrFgNormal;
-            rbPersonalContribute.ForeColor = rbPersonalContribute.Checked ? settings.clrFgNormal : settings.clrFgDimmed;
-            btnSubmit.ImageIndex = rbPersonalContribute.Checked ? 2 : 1;
+            rbPersonalSupporting.ForeColor = rbPersonalContributing.Checked ? settings.clrFgDimmed : settings.clrFgNormal;
+            rbPersonalContributing.ForeColor = rbPersonalContributing.Checked ? settings.clrFgNormal : settings.clrFgDimmed;
+            btnSubmit.ImageIndex = rbPersonalContributing.Checked ? 2 : 1;
         }
 
         private void linkHelping_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -512,12 +512,12 @@ To read more about my thoughts, click the link below!
     {
         public Guid InstallationId { get; set; } = Guid.Empty;
         public List<Tool> Tools { get; set; } = new List<Tool>();
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string Country { get; set; }
-        public string Company { get; set; }
-        public string InvoiceEmail { get; set; }
+        public string PersonalFirstName { get; set; }
+        public string PersonalLastName { get; set; }
+        public string PersonalEmail { get; set; }
+        public string PersonalCountry { get; set; }
+        public string CompanyName { get; set; }
+        public string CompanyEmail { get; set; }
         public string CompanyCountry { get; set; }
 
         private RappenXTB()

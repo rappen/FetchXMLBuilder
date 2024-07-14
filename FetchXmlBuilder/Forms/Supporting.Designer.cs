@@ -32,29 +32,29 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Supporting));
             this.lblHeader = new System.Windows.Forms.Label();
             this.lblCompany = new System.Windows.Forms.Label();
-            this.txtCompany = new System.Windows.Forms.TextBox();
+            this.txtCompanyName = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.rbPersonal = new System.Windows.Forms.RadioButton();
             this.rbCompany = new System.Windows.Forms.RadioButton();
             this.panCorp = new System.Windows.Forms.Panel();
-            this.txtCountry = new System.Windows.Forms.TextBox();
+            this.txtCompanyCountry = new System.Windows.Forms.TextBox();
             this.lblCountry = new System.Windows.Forms.Label();
-            this.cmbSize = new System.Windows.Forms.ComboBox();
+            this.cmbCompanyUsers = new System.Windows.Forms.ComboBox();
             this.lblSize = new System.Windows.Forms.Label();
-            this.txtEmail = new System.Windows.Forms.TextBox();
+            this.txtCompanyEmail = new System.Windows.Forms.TextBox();
             this.lblInvoiceemail = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.txtIFirst = new System.Windows.Forms.TextBox();
-            this.txtILast = new System.Windows.Forms.TextBox();
+            this.txtPersonalFirst = new System.Windows.Forms.TextBox();
+            this.txtPersonalLast = new System.Windows.Forms.TextBox();
             this.lblLater = new System.Windows.Forms.Label();
             this.lblAlready = new System.Windows.Forms.Label();
             this.btnSubmit = new System.Windows.Forms.Button();
             this.pics = new System.Windows.Forms.ImageList(this.components);
-            this.rbPersonalContribute = new System.Windows.Forms.RadioButton();
-            this.rbPersonalMonetary = new System.Windows.Forms.RadioButton();
-            this.txtICountry = new System.Windows.Forms.TextBox();
-            this.txtIEmail = new System.Windows.Forms.TextBox();
+            this.rbPersonalContributing = new System.Windows.Forms.RadioButton();
+            this.rbPersonalSupporting = new System.Windows.Forms.RadioButton();
+            this.txtPersonalCountry = new System.Windows.Forms.TextBox();
+            this.txtPersonalEmail = new System.Windows.Forms.TextBox();
             this.btnInfo = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.laterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -101,16 +101,16 @@
             this.lblCompany.TabIndex = 1;
             this.lblCompany.Text = "Company";
             // 
-            // txtCompany
+            // txtCompanyName
             // 
-            this.txtCompany.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
-            this.txtCompany.ForeColor = System.Drawing.Color.Yellow;
-            this.txtCompany.Location = new System.Drawing.Point(148, 16);
-            this.txtCompany.Name = "txtCompany";
-            this.txtCompany.Size = new System.Drawing.Size(292, 25);
-            this.txtCompany.TabIndex = 1;
-            this.toolTip1.SetToolTip(this.txtCompany, "Name of your company");
-            this.txtCompany.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
+            this.txtCompanyName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.txtCompanyName.ForeColor = System.Drawing.Color.Yellow;
+            this.txtCompanyName.Location = new System.Drawing.Point(148, 16);
+            this.txtCompanyName.Name = "txtCompanyName";
+            this.txtCompanyName.Size = new System.Drawing.Size(292, 25);
+            this.txtCompanyName.TabIndex = 1;
+            this.toolTip1.SetToolTip(this.txtCompanyName, "Name of your company");
+            this.txtCompanyName.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
             // 
             // label3
             // 
@@ -164,28 +164,28 @@
             // 
             // panCorp
             // 
-            this.panCorp.Controls.Add(this.txtCountry);
+            this.panCorp.Controls.Add(this.txtCompanyCountry);
             this.panCorp.Controls.Add(this.lblCountry);
-            this.panCorp.Controls.Add(this.cmbSize);
+            this.panCorp.Controls.Add(this.cmbCompanyUsers);
             this.panCorp.Controls.Add(this.lblSize);
-            this.panCorp.Controls.Add(this.txtEmail);
+            this.panCorp.Controls.Add(this.txtCompanyEmail);
             this.panCorp.Controls.Add(this.lblInvoiceemail);
             this.panCorp.Controls.Add(this.lblCompany);
-            this.panCorp.Controls.Add(this.txtCompany);
+            this.panCorp.Controls.Add(this.txtCompanyName);
             this.panCorp.Location = new System.Drawing.Point(30, 132);
             this.panCorp.Name = "panCorp";
             this.panCorp.Size = new System.Drawing.Size(456, 148);
             this.panCorp.TabIndex = 2;
             // 
-            // txtCountry
+            // txtCompanyCountry
             // 
-            this.txtCountry.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
-            this.txtCountry.ForeColor = System.Drawing.Color.Yellow;
-            this.txtCountry.Location = new System.Drawing.Point(148, 78);
-            this.txtCountry.Name = "txtCountry";
-            this.txtCountry.Size = new System.Drawing.Size(292, 25);
-            this.txtCountry.TabIndex = 3;
-            this.txtCountry.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
+            this.txtCompanyCountry.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.txtCompanyCountry.ForeColor = System.Drawing.Color.Yellow;
+            this.txtCompanyCountry.Location = new System.Drawing.Point(148, 78);
+            this.txtCompanyCountry.Name = "txtCompanyCountry";
+            this.txtCompanyCountry.Size = new System.Drawing.Size(292, 25);
+            this.txtCompanyCountry.TabIndex = 3;
+            this.txtCompanyCountry.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
             // 
             // lblCountry
             // 
@@ -196,25 +196,25 @@
             this.lblCountry.TabIndex = 7;
             this.lblCountry.Text = "Country";
             // 
-            // cmbSize
+            // cmbCompanyUsers
             // 
-            this.cmbSize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
-            this.cmbSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbSize.ForeColor = System.Drawing.Color.Yellow;
-            this.cmbSize.FormattingEnabled = true;
-            this.cmbSize.Items.AddRange(new object[] {
+            this.cmbCompanyUsers.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.cmbCompanyUsers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCompanyUsers.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbCompanyUsers.ForeColor = System.Drawing.Color.Yellow;
+            this.cmbCompanyUsers.FormattingEnabled = true;
+            this.cmbCompanyUsers.Items.AddRange(new object[] {
             "",
             "1",
             "2-10",
             "11-50",
             "51-100",
             "101+"});
-            this.cmbSize.Location = new System.Drawing.Point(148, 109);
-            this.cmbSize.Name = "cmbSize";
-            this.cmbSize.Size = new System.Drawing.Size(292, 26);
-            this.cmbSize.TabIndex = 4;
-            this.cmbSize.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
+            this.cmbCompanyUsers.Location = new System.Drawing.Point(148, 109);
+            this.cmbCompanyUsers.Name = "cmbCompanyUsers";
+            this.cmbCompanyUsers.Size = new System.Drawing.Size(292, 26);
+            this.cmbCompanyUsers.TabIndex = 4;
+            this.cmbCompanyUsers.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
             // 
             // lblSize
             // 
@@ -225,15 +225,15 @@
             this.lblSize.TabIndex = 5;
             this.lblSize.Text = "Tool Users";
             // 
-            // txtEmail
+            // txtCompanyEmail
             // 
-            this.txtEmail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
-            this.txtEmail.ForeColor = System.Drawing.Color.Yellow;
-            this.txtEmail.Location = new System.Drawing.Point(148, 47);
-            this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(292, 25);
-            this.txtEmail.TabIndex = 2;
-            this.txtEmail.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
+            this.txtCompanyEmail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.txtCompanyEmail.ForeColor = System.Drawing.Color.Yellow;
+            this.txtCompanyEmail.Location = new System.Drawing.Point(148, 47);
+            this.txtCompanyEmail.Name = "txtCompanyEmail";
+            this.txtCompanyEmail.Size = new System.Drawing.Size(292, 25);
+            this.txtCompanyEmail.TabIndex = 2;
+            this.txtCompanyEmail.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
             // 
             // lblInvoiceemail
             // 
@@ -244,27 +244,27 @@
             this.lblInvoiceemail.TabIndex = 3;
             this.lblInvoiceemail.Text = "Email";
             // 
-            // txtIFirst
+            // txtPersonalFirst
             // 
-            this.txtIFirst.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
-            this.txtIFirst.ForeColor = System.Drawing.Color.Yellow;
-            this.txtIFirst.Location = new System.Drawing.Point(148, 16);
-            this.txtIFirst.Name = "txtIFirst";
-            this.txtIFirst.Size = new System.Drawing.Size(141, 25);
-            this.txtIFirst.TabIndex = 1;
-            this.toolTip1.SetToolTip(this.txtIFirst, "First Name");
-            this.txtIFirst.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
+            this.txtPersonalFirst.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.txtPersonalFirst.ForeColor = System.Drawing.Color.Yellow;
+            this.txtPersonalFirst.Location = new System.Drawing.Point(148, 16);
+            this.txtPersonalFirst.Name = "txtPersonalFirst";
+            this.txtPersonalFirst.Size = new System.Drawing.Size(141, 25);
+            this.txtPersonalFirst.TabIndex = 1;
+            this.toolTip1.SetToolTip(this.txtPersonalFirst, "First Name");
+            this.txtPersonalFirst.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
             // 
-            // txtILast
+            // txtPersonalLast
             // 
-            this.txtILast.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
-            this.txtILast.ForeColor = System.Drawing.Color.Yellow;
-            this.txtILast.Location = new System.Drawing.Point(295, 16);
-            this.txtILast.Name = "txtILast";
-            this.txtILast.Size = new System.Drawing.Size(145, 25);
-            this.txtILast.TabIndex = 2;
-            this.toolTip1.SetToolTip(this.txtILast, "Last Name");
-            this.txtILast.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
+            this.txtPersonalLast.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.txtPersonalLast.ForeColor = System.Drawing.Color.Yellow;
+            this.txtPersonalLast.Location = new System.Drawing.Point(295, 16);
+            this.txtPersonalLast.Name = "txtPersonalLast";
+            this.txtPersonalLast.Size = new System.Drawing.Size(145, 25);
+            this.txtPersonalLast.TabIndex = 2;
+            this.toolTip1.SetToolTip(this.txtPersonalLast, "Last Name");
+            this.txtPersonalLast.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
             // 
             // lblLater
             // 
@@ -323,58 +323,58 @@
             this.pics.Images.SetKeyName(1, "I Support Tools narrow 200.png");
             this.pics.Images.SetKeyName(2, "I Contribute Tools narrow 200.png");
             // 
-            // rbPersonalContribute
+            // rbPersonalContributing
             // 
-            this.rbPersonalContribute.AutoSize = true;
-            this.rbPersonalContribute.ForeColor = System.Drawing.Color.Tan;
-            this.rbPersonalContribute.Location = new System.Drawing.Point(145, 2);
-            this.rbPersonalContribute.Name = "rbPersonalContribute";
-            this.rbPersonalContribute.Size = new System.Drawing.Size(105, 22);
-            this.rbPersonalContribute.TabIndex = 1;
-            this.rbPersonalContribute.Text = "Contribution";
-            this.toolTip1.SetToolTip(this.rbPersonalContribute, "If you don\'t want to do any proper support, you can help Jonas\r\nwith development," +
+            this.rbPersonalContributing.AutoSize = true;
+            this.rbPersonalContributing.ForeColor = System.Drawing.Color.Tan;
+            this.rbPersonalContributing.Location = new System.Drawing.Point(145, 2);
+            this.rbPersonalContributing.Name = "rbPersonalContributing";
+            this.rbPersonalContributing.Size = new System.Drawing.Size(105, 22);
+            this.rbPersonalContributing.TabIndex = 1;
+            this.rbPersonalContributing.Text = "Contribution";
+            this.toolTip1.SetToolTip(this.rbPersonalContributing, "If you don\'t want to do any proper support, you can help Jonas\r\nwith development," +
         " fixing bugs, having new ideas, documentation, etc.");
-            this.rbPersonalContribute.UseVisualStyleBackColor = true;
-            this.rbPersonalContribute.MouseEnter += new System.EventHandler(this.lbl_MouseEnter);
-            this.rbPersonalContribute.MouseLeave += new System.EventHandler(this.lbl_MouseLeave);
+            this.rbPersonalContributing.UseVisualStyleBackColor = true;
+            this.rbPersonalContributing.MouseEnter += new System.EventHandler(this.lbl_MouseEnter);
+            this.rbPersonalContributing.MouseLeave += new System.EventHandler(this.lbl_MouseLeave);
             // 
-            // rbPersonalMonetary
+            // rbPersonalSupporting
             // 
-            this.rbPersonalMonetary.AutoSize = true;
-            this.rbPersonalMonetary.Checked = true;
-            this.rbPersonalMonetary.Location = new System.Drawing.Point(12, 2);
-            this.rbPersonalMonetary.Name = "rbPersonalMonetary";
-            this.rbPersonalMonetary.Size = new System.Drawing.Size(96, 22);
-            this.rbPersonalMonetary.TabIndex = 0;
-            this.rbPersonalMonetary.TabStop = true;
-            this.rbPersonalMonetary.Text = "Supporting";
-            this.toolTip1.SetToolTip(this.rbPersonalMonetary, "Sharing is Caring ❤️\r\nHere, you can pay it forward!");
-            this.rbPersonalMonetary.UseVisualStyleBackColor = true;
-            this.rbPersonalMonetary.CheckedChanged += new System.EventHandler(this.rbPersonalMonetary_CheckedChanged);
-            this.rbPersonalMonetary.MouseEnter += new System.EventHandler(this.lbl_MouseEnter);
-            this.rbPersonalMonetary.MouseLeave += new System.EventHandler(this.lbl_MouseLeave);
+            this.rbPersonalSupporting.AutoSize = true;
+            this.rbPersonalSupporting.Checked = true;
+            this.rbPersonalSupporting.Location = new System.Drawing.Point(12, 2);
+            this.rbPersonalSupporting.Name = "rbPersonalSupporting";
+            this.rbPersonalSupporting.Size = new System.Drawing.Size(96, 22);
+            this.rbPersonalSupporting.TabIndex = 0;
+            this.rbPersonalSupporting.TabStop = true;
+            this.rbPersonalSupporting.Text = "Supporting";
+            this.toolTip1.SetToolTip(this.rbPersonalSupporting, "Sharing is Caring ❤️\r\nHere, you can pay it forward!");
+            this.rbPersonalSupporting.UseVisualStyleBackColor = true;
+            this.rbPersonalSupporting.CheckedChanged += new System.EventHandler(this.rbPersonalMonetary_CheckedChanged);
+            this.rbPersonalSupporting.MouseEnter += new System.EventHandler(this.lbl_MouseEnter);
+            this.rbPersonalSupporting.MouseLeave += new System.EventHandler(this.lbl_MouseLeave);
             // 
-            // txtICountry
+            // txtPersonalCountry
             // 
-            this.txtICountry.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
-            this.txtICountry.ForeColor = System.Drawing.Color.Yellow;
-            this.txtICountry.Location = new System.Drawing.Point(148, 78);
-            this.txtICountry.Name = "txtICountry";
-            this.txtICountry.Size = new System.Drawing.Size(292, 25);
-            this.txtICountry.TabIndex = 4;
-            this.toolTip1.SetToolTip(this.txtICountry, "Where are you from? Name or contry code.");
-            this.txtICountry.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
+            this.txtPersonalCountry.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.txtPersonalCountry.ForeColor = System.Drawing.Color.Yellow;
+            this.txtPersonalCountry.Location = new System.Drawing.Point(148, 78);
+            this.txtPersonalCountry.Name = "txtPersonalCountry";
+            this.txtPersonalCountry.Size = new System.Drawing.Size(292, 25);
+            this.txtPersonalCountry.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.txtPersonalCountry, "Where are you from? Name or contry code.");
+            this.txtPersonalCountry.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
             // 
-            // txtIEmail
+            // txtPersonalEmail
             // 
-            this.txtIEmail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
-            this.txtIEmail.ForeColor = System.Drawing.Color.Yellow;
-            this.txtIEmail.Location = new System.Drawing.Point(148, 47);
-            this.txtIEmail.Name = "txtIEmail";
-            this.txtIEmail.Size = new System.Drawing.Size(292, 25);
-            this.txtIEmail.TabIndex = 3;
-            this.toolTip1.SetToolTip(this.txtIEmail, "Email for any contact");
-            this.txtIEmail.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
+            this.txtPersonalEmail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.txtPersonalEmail.ForeColor = System.Drawing.Color.Yellow;
+            this.txtPersonalEmail.Location = new System.Drawing.Point(148, 47);
+            this.txtPersonalEmail.Name = "txtPersonalEmail";
+            this.txtPersonalEmail.Size = new System.Drawing.Size(292, 25);
+            this.txtPersonalEmail.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.txtPersonalEmail, "Email for any contact");
+            this.txtPersonalEmail.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
             // 
             // btnInfo
             // 
@@ -415,13 +415,13 @@
             // panPersonal
             // 
             this.panPersonal.Controls.Add(this.panel3);
-            this.panPersonal.Controls.Add(this.txtILast);
-            this.panPersonal.Controls.Add(this.txtICountry);
+            this.panPersonal.Controls.Add(this.txtPersonalLast);
+            this.panPersonal.Controls.Add(this.txtPersonalCountry);
             this.panPersonal.Controls.Add(this.lblICountry);
-            this.panPersonal.Controls.Add(this.txtIEmail);
+            this.panPersonal.Controls.Add(this.txtPersonalEmail);
             this.panPersonal.Controls.Add(this.lblIEmail);
             this.panPersonal.Controls.Add(this.lblIName);
-            this.panPersonal.Controls.Add(this.txtIFirst);
+            this.panPersonal.Controls.Add(this.txtPersonalFirst);
             this.panPersonal.Location = new System.Drawing.Point(30, 492);
             this.panPersonal.Name = "panPersonal";
             this.panPersonal.Size = new System.Drawing.Size(456, 148);
@@ -430,8 +430,8 @@
             // 
             // panel3
             // 
-            this.panel3.Controls.Add(this.rbPersonalContribute);
-            this.panel3.Controls.Add(this.rbPersonalMonetary);
+            this.panel3.Controls.Add(this.rbPersonalContributing);
+            this.panel3.Controls.Add(this.rbPersonalSupporting);
             this.panel3.Location = new System.Drawing.Point(139, 107);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(301, 26);
@@ -623,28 +623,28 @@
 
         private System.Windows.Forms.Label lblHeader;
         private System.Windows.Forms.Label lblCompany;
-        private System.Windows.Forms.TextBox txtCompany;
+        private System.Windows.Forms.TextBox txtCompanyName;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.RadioButton rbPersonal;
         private System.Windows.Forms.RadioButton rbCompany;
         private System.Windows.Forms.Panel panCorp;
-        private System.Windows.Forms.TextBox txtEmail;
+        private System.Windows.Forms.TextBox txtCompanyEmail;
         private System.Windows.Forms.Label lblInvoiceemail;
-        private System.Windows.Forms.ComboBox cmbSize;
+        private System.Windows.Forms.ComboBox cmbCompanyUsers;
         private System.Windows.Forms.Label lblSize;
-        private System.Windows.Forms.TextBox txtCountry;
+        private System.Windows.Forms.TextBox txtCompanyCountry;
         private System.Windows.Forms.Label lblCountry;
         private System.Windows.Forms.Button btnSubmit;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Panel panPersonal;
-        private System.Windows.Forms.TextBox txtILast;
-        private System.Windows.Forms.TextBox txtICountry;
+        private System.Windows.Forms.TextBox txtPersonalLast;
+        private System.Windows.Forms.TextBox txtPersonalCountry;
         private System.Windows.Forms.Label lblICountry;
-        private System.Windows.Forms.TextBox txtIEmail;
+        private System.Windows.Forms.TextBox txtPersonalEmail;
         private System.Windows.Forms.Label lblIEmail;
         private System.Windows.Forms.Label lblIName;
-        private System.Windows.Forms.TextBox txtIFirst;
+        private System.Windows.Forms.TextBox txtPersonalFirst;
         private System.Windows.Forms.Panel panInfo;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.LinkLabel helpLink;
@@ -656,8 +656,8 @@
         private System.Windows.Forms.Label lblAlready;
         private System.Windows.Forms.ImageList pics;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.RadioButton rbPersonalContribute;
-        private System.Windows.Forms.RadioButton rbPersonalMonetary;
+        private System.Windows.Forms.RadioButton rbPersonalContributing;
+        private System.Windows.Forms.RadioButton rbPersonalSupporting;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem laterToolStripMenuItem;
