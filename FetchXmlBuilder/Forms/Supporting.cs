@@ -27,7 +27,7 @@ namespace Rappen.XTB
             "?{formid}_1_first={firstname}" +
             "&{formid}_1_last={lastname}" +
             "&{formid}_27={company}" +
-            "&{formid}_3={country}" +
+            "&{formid}_3={companycountry}" +
             "&{formid}_4={invoiceemail}" +
             "&{formid}_19={size}" +
             "&{formid}_24={amount}" +
@@ -58,28 +58,59 @@ namespace Rappen.XTB
             "&{formid}_32={version}" +
             "&{formid}_33={instid}";
 
-        private readonly ToolSettings settings;
+        private static RappenXTB tools;
+        private static Tool tool;
+        private static Supporters supporters;
+        private static ToolSettings settings;
+        private static Random random = new Random();
+
         private readonly AppInsights appinsights;
-        private readonly RappenXTBTools tools;
-        private readonly Tool tool;
-        private Stopwatch sw = new Stopwatch();
-        private Stopwatch swInfo = new Stopwatch();
+        private readonly Stopwatch sw = new Stopwatch();
+        private readonly Stopwatch swInfo = new Stopwatch();
+
+        #region Static Public Methods
+
+        public static void ShowIf(PluginControlBase plugin, bool manual, bool reload, AppInsights appinsights)
+        {
+            try
+            {
+                var display = manual;
+                if (reload || settings == null)
+                {
+                    settings = ToolSettings.Get();
+                    display = ShowSupporting(plugin.ToolName);
+                }
+                if (!display)
+                {
+                    return;
+                }
+                new Supporting(appinsights, manual).ShowDialog(plugin);
+                if (!manual)
+                {
+                    tool.DisplayDate = DateTime.Now;
+                    tool.DisplayCount++;
+                }
+                tools.Save();
+            }
+            catch (Exception ex)
+            {
+                plugin.LogError($"ToolSupporting error:\n{ex}");
+            }
+        }
+
+        #endregion Static Public Methods
 
         #region Constructors
 
-        internal Supporting(RappenXTBTools tools, Tool tool, ToolSettings settings, AppInsights appinsights, bool alreadysupported, bool manual)
+        private Supporting(AppInsights appinsights, bool manual)
         {
             InitializeComponent();
-            this.settings = settings;
-            this.appinsights = appinsights;
-            this.tools = tools;
-            this.tool = tool;
             lblHeader.Text = tool.ToolName;
             helpTitle.Text = settings.HelpTitle;
             helpText.Text = settings.HelpText;
             helpLink.Text = settings.HelpLink;
             helpLink.Tag = settings.HelpLink;
-            if (alreadysupported)
+            if (supporters.Any())
             {
                 lblAlready.Text = lblAlready.Text.Replace("{tool}", tool.ToolName);
                 lblAlready.Visible = true;
@@ -88,7 +119,7 @@ namespace Rappen.XTB
             txtCompany.Text = tools.Company;
             txtEmail.Text = tools.InvoiceEmail;
             cmbSize.SelectedIndex = tool.UsersIndex;
-            txtCountry.Text = tools.Country;
+            txtCountry.Text = tools.CompanyCountry;
             txtIFirst.Text = tools.FirstName;
             txtILast.Text = tools.LastName;
             txtIEmail.Text = tools.Email;
@@ -101,18 +132,73 @@ namespace Rappen.XTB
             {
                 rbCompany.Checked = true;
             }
-            appinsights.WriteEvent($"Supporting-Open-{(manual ? "Manual" : "Auto")}");
+            appinsights?.WriteEvent($"Supporting-Open-{(manual ? "Manual" : "Auto")}");
         }
 
         #endregion Constructors
 
         #region Private Methods
 
+        private static bool ShowSupporting(string toolname)
+        {
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            tools = RappenXTB.Load();
+            tool = tools[toolname];
+            if (tool.Version != version)
+            {
+                tool.Version = version;
+                tool.VersionRunDate = DateTime.Now;
+                tools.Save();
+            }
+            var supporters = Supporters.DownloadMy(tools.InstallationId, toolname, settings.ContributionCounts);
+            if (supporters.Count > 0)
+            {   // I have supportings!
+                return false;
+            }
+            else if (settings.ShowOnlyManual)
+            {   // Centerally stopping showing automatically
+                return false;
+            }
+            else if (tool.SupportType == SupportType.Never)
+            {   // You will never want to support this tool
+                return false;
+            }
+            else if (tool.FirstRunDate.AddMinutes(settings.ShowMinutesAfterInstall) > DateTime.Now)
+            {   // Installed it too soon
+                return false;
+            }
+            else if (tool.VersionRunDate > tool.FirstRunDate && tool.VersionRunDate.AddMinutes(settings.ShowMinutesAfterNewVersion) > DateTime.Now)
+            {   // Installed this version too soon
+                return false;
+            }
+            else if (tool.DisplayDate.AddMinutes(settings.ShowMinutesAfterShown) > DateTime.Now)
+            {   // Seen this form to soon
+                return false;
+            }
+            else if (tool.DisplayCount >= settings.ShowAutoRepeatTimes)
+            {   // Seen this too many times
+                return false;
+            }
+            else if (tool.SubmittedDate.AddMinutes(settings.ShowMinutesAfterSubmittingButNotCompleted) > DateTime.Now)
+            {   // Submitted too soon for JR to handle it
+                return false;
+            }
+            else if (settings.ShowAutoPercentChance < 1)
+            {
+                return false;
+            }
+            else
+            {
+                var rand = random.Next(1, 100);
+                return rand <= settings.ShowAutoPercentChance;
+            }
+        }
+
         private string GetUrlCorp()
         {
             if (string.IsNullOrEmpty(tools.Company) ||
                 string.IsNullOrEmpty(tools.InvoiceEmail) ||
-                string.IsNullOrEmpty(tools.Country) ||
+                string.IsNullOrEmpty(tools.CompanyCountry) ||
                 tool.UsersIndex < 1)
             {
                 return null;
@@ -140,6 +226,7 @@ namespace Rappen.XTB
                 .Replace("{lastname}", tools.LastName)
                 .Replace("{company}", tools.Company)
                 .Replace("{country}", tools.Country)
+                .Replace("{companycountry}", tools.CompanyCountry)
                 .Replace("{email}", tools.Email)
                 .Replace("{invoiceemail}", tools.InvoiceEmail)
                 .Replace("{size}", cmbSize.Items[tool.UsersIndex].ToString())
@@ -210,8 +297,8 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
             }
             if (sender == null || sender == txtCountry)
             {
-                tools.Country = txtCountry.Text.Trim().Length >= 2 ? txtCountry.Text.Trim() : "";
-                txtCountry.BackColor = string.IsNullOrEmpty(tools.Country) ? settings.clrBgInvalid : settings.clrBgNormal;
+                tools.CompanyCountry = txtCountry.Text.Trim().Length >= 2 ? txtCountry.Text.Trim() : "";
+                txtCountry.BackColor = string.IsNullOrEmpty(tools.CompanyCountry) ? settings.clrBgInvalid : settings.clrBgNormal;
             }
             if (sender == null || sender == cmbSize)
             {
@@ -342,102 +429,10 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
         #endregion Private Event Methods
     }
 
-    public class ToolSupporting
-    {
-        private static ToolSettings settings;
-        private static ToolSupporting toolsupporting;
-        private static Random random = new Random();
-
-        private int alreadysupporting;
-        private bool display = true;
-        private RappenXTBTools tools;
-        private Tool tool;
-
-        public static void ShowIfNeeded(PluginControlBase plugin, bool manual, bool reload, AppInsights appinsights)
-        {
-            try
-            {
-                if (reload || settings == null || toolsupporting == null)
-                {
-                    settings = ToolSettings.Get();
-                    toolsupporting = new ToolSupporting(settings, plugin.ToolName);
-                }
-                if (manual || toolsupporting.display)
-                {
-                    new Supporting(toolsupporting.tools, toolsupporting.tool, settings, appinsights, toolsupporting.alreadysupporting > 0, manual).ShowDialog(plugin);
-                    if (!manual)
-                    {
-                        toolsupporting.tool.DisplayDate = DateTime.Now;
-                        toolsupporting.tool.DisplayCount++;
-                    }
-                    toolsupporting.tools.Save();
-                }
-            }
-            catch (Exception ex)
-            {
-                plugin.LogError($"ToolSupporting error:\n{ex}");
-            }
-        }
-
-        private ToolSupporting(ToolSettings settings, string toolname)
-        {
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
-            tools = RappenXTBTools.Load();
-            tool = tools[toolname];
-            if (tool.Version != version)
-            {
-                tool.Version = version;
-                tool.VersionRunDate = DateTime.Now;
-                tools.Save();
-            }
-            var supporters = Supporters.DownloadMy(tools.InstallationId, toolname, settings.ContributionCounts);
-            alreadysupporting = supporters.Count;
-            if (supporters.Count > 0)
-            {   // I have supportings!
-                display = false;
-            }
-            else if (settings.ShowOnlyManual)
-            {   // Centerally stopping showing automatically
-                display = false;
-            }
-            else if (tool.SupportType == SupportType.Never)
-            {   // You will never want to support this tool
-                display = false;
-            }
-            else if (tool.FirstRunDate.AddMinutes(settings.ShowMinutesAfterInstall) > DateTime.Now)
-            {   // Installed it too soon
-                display = false;
-            }
-            else if (tool.VersionRunDate > tool.FirstRunDate && tool.VersionRunDate.AddMinutes(settings.ShowMinutesAfterNewVersion) > DateTime.Now)
-            {   // Installed this version too soon
-                display = false;
-            }
-            else if (tool.DisplayDate.AddMinutes(settings.ShowMinutesAfterShown) > DateTime.Now)
-            {   // Seen this form to soon
-                display = false;
-            }
-            else if (tool.DisplayCount >= settings.ShowAutoRepeatTimes)
-            {   // Seen this too many times
-                display = false;
-            }
-            else if (tool.SubmittedDate.AddMinutes(settings.ShowMinutesAfterSubmittingButNotCompleted) > DateTime.Now)
-            {   // Submitted too soon for JR to handle it
-                display = false;
-            }
-            else if (settings.ShowAutoPercentChance < 1)
-            {
-                display = false;
-            }
-            else
-            {
-                var rand = random.Next(1, 100);
-                display = rand <= settings.ShowAutoPercentChance;
-            }
-        }
-    }
-
     public class ToolSettings
     {
+        private const string ToolSettingsURL = "https://jonasr.app/xtb/toolsettings.xml";
+
         public bool ShowOnlyManual = true;  // false
         public bool ContributionCounts = true;  // false
         public int ShowMinutesAfterInstall = int.MaxValue;    // 60
@@ -480,14 +475,22 @@ You will receive an official receipt immediately and, if needed, an invoice. Sup
 To read more about my thoughts, click the link below!
 ";
 
-        public static ToolSettings Get() => new Uri("https://jonasr.app/xtb/toolsettings.xml").DownloadXml(new ToolSettings());
+        private ToolSettings()
+        { }
+
+        public static ToolSettings Get() => new Uri(ToolSettingsURL).DownloadXml(new ToolSettings());
     }
 
     public class Supporters : List<Supporter>
     {
+        private const string SupportersURL = "https://jonasr.app/xtb/supporters.xml";
+
+        private Supporters()
+        { }
+
         public static Supporters DownloadMy(Guid InstallationId, string toolname, bool contributionCounts)
         {
-            var result = new Uri("https://jonasr.app/xtb/supporters.xml").DownloadXml(new Supporters());
+            var result = new Uri(SupportersURL).DownloadXml(new Supporters());
             result.Where(s =>
                 s.InstallationId != InstallationId ||
                 s.ToolName != toolname ||
@@ -505,7 +508,7 @@ To read more about my thoughts, click the link below!
         public SupportType SupportType { get; set; }
     }
 
-    public class RappenXTBTools
+    public class RappenXTB
     {
         public Guid InstallationId { get; set; } = Guid.Empty;
         public List<Tool> Tools { get; set; } = new List<Tool>();
@@ -515,18 +518,22 @@ To read more about my thoughts, click the link below!
         public string Country { get; set; }
         public string Company { get; set; }
         public string InvoiceEmail { get; set; }
+        public string CompanyCountry { get; set; }
 
-        public static RappenXTBTools Load()
+        private RappenXTB()
+        { }
+
+        public static RappenXTB Load()
         {
             string path = Path.Combine(Paths.SettingsPath, "Rappen.XTB.Tools.xml");
-            var result = new RappenXTBTools();
+            var result = new RappenXTB();
             if (File.Exists(path))
             {
                 try
                 {
                     XmlDocument xmlDocument = new XmlDocument();
                     xmlDocument.Load(path);
-                    result = (RappenXTBTools)XmlSerializerHelper.Deserialize(xmlDocument.OuterXml, typeof(RappenXTBTools));
+                    result = (RappenXTB)XmlSerializerHelper.Deserialize(xmlDocument.OuterXml, typeof(RappenXTB));
                 }
                 catch { }
             }
