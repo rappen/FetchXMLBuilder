@@ -143,7 +143,7 @@ namespace Rappen.XTB
         private static bool ShowSupporting(string toolname)
         {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            tools = RappenXTB.Load();
+            tools = RappenXTB.Load(settings);
             tool = tools[toolname];
             if (tool.Version != version)
             {
@@ -438,6 +438,7 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
     {
         private const string ToolSettingsURL = "https://jonasr.app/xtb/toolsettings.xml";
 
+        public int SettingsVersion { get; set; } = 1;
         public bool ShowOnlyManual = true;  // false
         public bool ContributionCounts = true;  // false
         public int ShowMinutesAfterInstall = int.MaxValue;    // 60
@@ -456,27 +457,30 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
         public Color clrBgNormal => Color.FromArgb(int.Parse(ColorBgNormal, System.Globalization.NumberStyles.HexNumber));
         public Color clrBgInvalid => Color.FromArgb(int.Parse(ColorBgInvalid, System.Globalization.NumberStyles.HexNumber));
 
-        public string HelpTitle { get; set; } = "This is a Community Thing.";
+        public string HelpTitle { get; set; } = "Community Tools are Consciencewares.";
         public string HelpLink { get; set; } = "https://jonasr.app/helping/";
 
-        public string HelpText { get; set; } = @"Some of us in the Power Platform Community are creating tools.
-Some contribute by sharing new ideas, finding problems, and documenting; some are even solving our bugs.
-Thousands and thousands in this community are only consumers. Just using open-source tools. It's very similar to just watching TV. Do you pay for channels, Netflix, Amazon Prime, Spotify etc...?
-To be part of the community, you can now pay instead.
+        public string HelpText { get; set; } = @"Some in the Power Platform Community are creating tools.
+Some contribute to the community with new ideas, find problems, write documentation, and even solve our bugs.
+Thousands and thousands in this community are mostly 'consumers'—only using open-source tools.
+To me, it's very similar to watching TV. Do you pay for channels, Netflix, Amazon Prime, Spotify, etc.?
+To be part of the community, but without the examples above, you can simply pay instead.
 
-Especially when you work in a big corporation, exploiting free tools only to increase your income, you have a responsibility to participate actively in the community - or pay.
+Especially when you work in a big corporation, exploiting free tools - only to increase your income - you have a responsibility to participate actively in the community - or pay.
 It's good to be able to sleep with a good conscience. Right?
 
 There should be a license called ""Conscienceware"".
 But technically, it is simply free to use them.
 
-If you say that you are not part of the community, that is incorrect—just using these tools makes you a part of it.
+If you say you are not part of the community, that is incorrect—just using these tools makes you a part of it.
 
 You and your company can now more formally support tools rather than just donating via PayPal or 'Buy Me a Coffee.'
 
 Supporting is not just giving money; it means that you or your company know you have gained in time and improved your quality by using these tools. If you get something and want to give back—support the development and maintenance of the tools.
 
 You will receive an official receipt immediately and, if needed, an invoice. Supporting can be done with a credit card. Other options will be available depending on your location. Stripe handles the payment.
+
+- Jonas Rapp
 
 To read more about my thoughts, click the link below!";
 
@@ -515,6 +519,21 @@ To read more about my thoughts, click the link below!";
 
     public class RappenXTB
     {
+        private int settingversion;
+
+        public int SettingsVersion
+        {
+            get => settingversion;
+            set
+            {
+                if (value != settingversion && Tools?.Count() > 0)
+                {
+                    Tools.ForEach(s => s.DisplayCount = 0);
+                }
+                settingversion = value;
+            }
+        }
+
         public Guid InstallationId { get; set; } = Guid.Empty;
         public List<Tool> Tools { get; set; } = new List<Tool>();
         public string PersonalFirstName { get; set; }
@@ -528,7 +547,7 @@ To read more about my thoughts, click the link below!";
         private RappenXTB()
         { }
 
-        public static RappenXTB Load()
+        public static RappenXTB Load(ToolSettings settings)
         {
             string path = Path.Combine(Paths.SettingsPath, "Rappen.XTB.Tools.xml");
             var result = new RappenXTB();
@@ -545,6 +564,10 @@ To read more about my thoughts, click the link below!";
             if (result.InstallationId.Equals(Guid.Empty))
             {
                 result.InstallationId = InstallationInfo.Instance.InstallationId;
+            }
+            if (settings.SettingsVersion != result.settingversion)
+            {
+                result.SettingsVersion = settings.SettingsVersion;
             }
             return result;
         }
