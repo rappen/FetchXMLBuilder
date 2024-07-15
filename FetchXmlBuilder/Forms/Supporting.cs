@@ -84,6 +84,10 @@ namespace Rappen.XTB
                 {
                     return;
                 }
+                if (manual && tool?.SupportType == SupportType.Never)
+                {
+                    tool.SupportType = SupportType.None;
+                }
                 new Supporting(appinsights, manual).ShowDialog(plugin);
                 if (!manual)
                 {
@@ -450,7 +454,7 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
         public string ColorFgNormal { get; set; } = "FFFFFF00";
         public string ColorFgDimmed { get; set; } = "FFD2B48C";
         public string ColorBgNormal { get; set; } = "FF0063FF";
-        public string ColorBgInvalid { get; set; } = "FF6495ED";
+        public string ColorBgInvalid { get; set; } = "FFF06565";
 
         public Color clrFgNormal => Color.FromArgb(int.Parse(ColorFgNormal, System.Globalization.NumberStyles.HexNumber));
         public Color clrFgDimmed => Color.FromArgb(int.Parse(ColorFgDimmed, System.Globalization.NumberStyles.HexNumber));
@@ -478,7 +482,9 @@ You and your company can now more formally support tools rather than just donati
 
 Supporting is not just giving money; it means that you or your company know you have gained in time and improved your quality by using these tools. If you get something and want to give back—support the development and maintenance of the tools.
 
+Technicality:
 You will receive an official receipt immediately and, if needed, an invoice. Supporting can be done with a credit card. Other options will be available depending on your location. Stripe handles the payment.
+The internal ID for your XrmToolBox installation is stored server-side, and the tool name is only to prevent this window from popping up. No identifying information is stored on any online service. For questions, contact me at jonasr.app/contact.
 
 - Jonas Rapp
 

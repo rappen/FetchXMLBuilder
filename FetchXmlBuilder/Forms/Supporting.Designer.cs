@@ -73,6 +73,8 @@
             this.helpTitle = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.panBgYellow = new System.Windows.Forms.Panel();
+            this.panBgBlue = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.panCorp.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -80,6 +82,8 @@
             this.panel3.SuspendLayout();
             this.panInfo.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panBgYellow.SuspendLayout();
+            this.panBgBlue.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblHeader
@@ -128,7 +132,7 @@
             this.panel1.Controls.Add(this.rbCompany);
             this.panel1.Location = new System.Drawing.Point(169, 104);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(317, 24);
+            this.panel1.Size = new System.Drawing.Size(317, 26);
             this.panel1.TabIndex = 1;
             // 
             // rbPersonal
@@ -156,8 +160,7 @@
             this.rbCompany.TabIndex = 0;
             this.rbCompany.TabStop = true;
             this.rbCompany.Text = "Corporate";
-            this.toolTip1.SetToolTip(this.rbCompany, "Our company wants to support the developers,\r\nthe sharing, all improvement - just" +
-        " doing more!");
+            this.toolTip1.SetToolTip(this.rbCompany, "Our company wants to support the developers,");
             this.rbCompany.UseVisualStyleBackColor = true;
             this.rbCompany.CheckedChanged += new System.EventHandler(this.rbType_CheckedChanged);
             this.rbCompany.MouseEnter += new System.EventHandler(this.lbl_MouseEnter);
@@ -186,6 +189,7 @@
             this.txtCompanyCountry.Name = "txtCompanyCountry";
             this.txtCompanyCountry.Size = new System.Drawing.Size(292, 25);
             this.txtCompanyCountry.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.txtCompanyCountry, "Where is your company based?");
             this.txtCompanyCountry.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
             // 
             // lblCountry
@@ -215,6 +219,7 @@
             this.cmbCompanyUsers.Name = "cmbCompanyUsers";
             this.cmbCompanyUsers.Size = new System.Drawing.Size(292, 26);
             this.cmbCompanyUsers.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.cmbCompanyUsers, "How many at your company are using this tool?");
             this.cmbCompanyUsers.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
             // 
             // lblSize
@@ -234,6 +239,7 @@
             this.txtCompanyEmail.Name = "txtCompanyEmail";
             this.txtCompanyEmail.Size = new System.Drawing.Size(292, 25);
             this.txtCompanyEmail.TabIndex = 2;
+            this.toolTip1.SetToolTip(this.txtCompanyEmail, "Email address for communication and where the receipt will be sent.");
             this.txtCompanyEmail.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
             // 
             // lblInvoiceemail
@@ -273,7 +279,7 @@
             this.lblLater.AutoSize = true;
             this.lblLater.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblLater.ForeColor = System.Drawing.Color.Tan;
-            this.lblLater.Location = new System.Drawing.Point(463, 379);
+            this.lblLater.Location = new System.Drawing.Point(463, 380);
             this.lblLater.Name = "lblLater";
             this.lblLater.Size = new System.Drawing.Size(41, 18);
             this.lblLater.TabIndex = 101;
@@ -286,14 +292,15 @@
             // 
             // lblAlready
             // 
+            this.lblAlready.AutoSize = true;
             this.lblAlready.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblAlready.ForeColor = System.Drawing.Color.Tan;
-            this.lblAlready.Location = new System.Drawing.Point(12, 333);
+            this.lblAlready.Location = new System.Drawing.Point(9, 344);
             this.lblAlready.Name = "lblAlready";
-            this.lblAlready.Size = new System.Drawing.Size(160, 77);
+            this.lblAlready.Size = new System.Drawing.Size(82, 54);
             this.lblAlready.TabIndex = 102;
             this.lblAlready.Text = "I\'m already\r\nsupporting\r\n{tool}!";
-            this.toolTip1.SetToolTip(this.lblAlready, "I have already supported in one way!");
+            this.toolTip1.SetToolTip(this.lblAlready, "I have already supported this tool in one way or another!");
             this.lblAlready.Visible = false;
             this.lblAlready.Click += new System.EventHandler(this.lblAlready_Click);
             this.lblAlready.MouseEnter += new System.EventHandler(this.lbl_MouseEnter);
@@ -363,7 +370,7 @@
             this.txtPersonalCountry.Name = "txtPersonalCountry";
             this.txtPersonalCountry.Size = new System.Drawing.Size(292, 25);
             this.txtPersonalCountry.TabIndex = 4;
-            this.toolTip1.SetToolTip(this.txtPersonalCountry, "Where are you from? Name or contry code.");
+            this.toolTip1.SetToolTip(this.txtPersonalCountry, "Where are you from? Country name or country code.");
             this.txtPersonalCountry.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
             // 
             // txtPersonalEmail
@@ -387,7 +394,7 @@
             this.btnInfo.Name = "btnInfo";
             this.btnInfo.Size = new System.Drawing.Size(30, 30);
             this.btnInfo.TabIndex = 12;
-            this.toolTip1.SetToolTip(this.btnInfo, "Information about Why we should ");
+            this.toolTip1.SetToolTip(this.btnInfo, "Information about WHY we should support tools - read my thoughts!");
             this.btnInfo.UseVisualStyleBackColor = true;
             this.btnInfo.Click += new System.EventHandler(this.btnInfo_Click);
             // 
@@ -566,10 +573,10 @@
             this.label1.Font = new System.Drawing.Font("Berlin Sans FB", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(175, 283);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(290, 30);
+            this.label1.Size = new System.Drawing.Size(299, 30);
             this.label1.TabIndex = 103;
             this.label1.Text = "Click the button below to proceed your support!\r\nNote: You have to submit it at t" +
-    "he next step to finalize.";
+    "he next step to finalize it.";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label2
@@ -583,32 +590,54 @@
             this.label2.Text = "We Support";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // panBgYellow
+            // 
+            this.panBgYellow.BackColor = System.Drawing.Color.Yellow;
+            this.panBgYellow.Controls.Add(this.panBgBlue);
+            this.panBgYellow.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panBgYellow.Location = new System.Drawing.Point(2, 2);
+            this.panBgYellow.Name = "panBgYellow";
+            this.panBgYellow.Padding = new System.Windows.Forms.Padding(4);
+            this.panBgYellow.Size = new System.Drawing.Size(529, 426);
+            this.panBgYellow.TabIndex = 105;
+            // 
+            // panBgBlue
+            // 
+            this.panBgBlue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(66)))), ((int)(((byte)(173)))));
+            this.panBgBlue.Controls.Add(this.panInfo);
+            this.panBgBlue.Controls.Add(this.btnInfo);
+            this.panBgBlue.Controls.Add(this.panPersonal);
+            this.panBgBlue.Controls.Add(this.btnSubmit);
+            this.panBgBlue.Controls.Add(this.panCorp);
+            this.panBgBlue.Controls.Add(this.panel1);
+            this.panBgBlue.Controls.Add(this.label3);
+            this.panBgBlue.Controls.Add(this.lblHeader);
+            this.panBgBlue.Controls.Add(this.lblLater);
+            this.panBgBlue.Controls.Add(this.label1);
+            this.panBgBlue.Controls.Add(this.label2);
+            this.panBgBlue.Controls.Add(this.lblAlready);
+            this.panBgBlue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panBgBlue.Location = new System.Drawing.Point(4, 4);
+            this.panBgBlue.Name = "panBgBlue";
+            this.panBgBlue.Size = new System.Drawing.Size(521, 418);
+            this.panBgBlue.TabIndex = 0;
+            // 
             // Supporting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(66)))), ((int)(((byte)(173)))));
-            this.ClientSize = new System.Drawing.Size(516, 421);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.ClientSize = new System.Drawing.Size(533, 430);
             this.ControlBox = false;
-            this.Controls.Add(this.panInfo);
-            this.Controls.Add(this.btnInfo);
-            this.Controls.Add(this.panPersonal);
-            this.Controls.Add(this.btnSubmit);
-            this.Controls.Add(this.panCorp);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.lblHeader);
-            this.Controls.Add(this.lblLater);
-            this.Controls.Add(this.lblAlready);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.panBgYellow);
             this.Font = new System.Drawing.Font("Berlin Sans FB", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.Yellow;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Supporting";
+            this.Padding = new System.Windows.Forms.Padding(2);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "We Support Tools";
             this.TopMost = true;
@@ -626,8 +655,10 @@
             this.panInfo.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panBgYellow.ResumeLayout(false);
+            this.panBgBlue.ResumeLayout(false);
+            this.panBgBlue.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -676,5 +707,7 @@
         private System.Windows.Forms.ToolStripMenuItem neverWillBeSupportingThisToolToolStripMenuItem;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Panel panBgYellow;
+        private System.Windows.Forms.Panel panBgBlue;
     }
 }
