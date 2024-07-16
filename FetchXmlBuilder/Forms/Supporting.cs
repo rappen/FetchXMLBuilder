@@ -18,46 +18,6 @@ namespace Rappen.XTB
 {
     public partial class Supporting : Form
     {
-        private const string formidcorporate = "wpf17273";
-        private const string formidpersonal = "wpf17612";
-        private const string formidcontribute = "wpf17677";
-
-        private const string urlcorp =
-            "https://jonasr.app/supporting-prefilled/" +
-            "?{formid}_1_first={firstname}" +
-            "&{formid}_1_last={lastname}" +
-            "&{formid}_27={company}" +
-            "&{formid}_3={companycountry}" +
-            "&{formid}_4={invoiceemail}" +
-            "&{formid}_19={size}" +
-            "&{formid}_24={amount}" +
-            "&{formid}_13={tool}" +
-            "&{formid}_31={tool}" +
-            "&{formid}_32={version}" +
-            "&{formid}_33={instid}";
-
-        private const string urlpersmonetary =
-            "https://jonasr.app/supporting/personal-prefilled/" +
-            "?{formid}_1_first={firstname}" +
-            "&{formid}_1_last={lastname}" +
-            "&{formid}_3={country}" +
-            "&{formid}_4={email}" +
-            "&{formid}_13={tool}" +
-            "&{formid}_31={tool}" +
-            "&{formid}_32={version}" +
-            "&{formid}_33={instid}";
-
-        private const string urlperscontr =
-            "https://jonasr.app/supporting/contribute-prefilled/" +
-            "?{formid}_1_first={firstname}" +
-            "&{formid}_1_last={lastname}" +
-            "&{formid}_3={country}" +
-            "&{formid}_4={email}" +
-            "&{formid}_13={tool}" +
-            "&{formid}_31={tool}" +
-            "&{formid}_32={version}" +
-            "&{formid}_33={instid}";
-
         private static RappenXTB tools;
         private static Tool tool;
         private static Supporters supporters;
@@ -78,6 +38,7 @@ namespace Rappen.XTB
                 if (reload || settings == null)
                 {
                     settings = ToolSettings.Get();
+                    // settings.Save();
                     display = ShowSupporting(plugin.ToolName);
                 }
                 if (!display)
@@ -199,48 +160,6 @@ namespace Rappen.XTB
             }
         }
 
-        private string GetUrlCorp()
-        {
-            if (string.IsNullOrEmpty(tools.CompanyName) ||
-                string.IsNullOrEmpty(tools.CompanyEmail) ||
-                string.IsNullOrEmpty(tools.CompanyCountry) ||
-                tool.UsersIndex < 1)
-            {
-                return null;
-            }
-            return GenerateUrl(urlcorp, formidcorporate);
-        }
-
-        private string GetUrlPersonal(bool contribute)
-        {
-            if (string.IsNullOrEmpty(tools.PersonalFirstName) ||
-                string.IsNullOrEmpty(tools.PersonalLastName) ||
-                string.IsNullOrEmpty(tools.PersonalEmail) ||
-                string.IsNullOrEmpty(tools.PersonalCountry))
-            {
-                return null;
-            }
-            return GenerateUrl(contribute ? urlperscontr : urlpersmonetary, contribute ? formidcontribute : formidpersonal);
-        }
-
-        private string GenerateUrl(string template, string form)
-        {
-            return template
-                .Replace("{formid}", form)
-                .Replace("{company}", tools.CompanyName)
-                .Replace("{invoiceemail}", tools.CompanyEmail)
-                .Replace("{companycountry}", tools.CompanyCountry)
-                .Replace("{amount}", tool.Amount)
-                .Replace("{size}", cmbCompanyUsers.Items[tool.UsersIndex].ToString())
-                .Replace("{firstname}", tools.PersonalFirstName)
-                .Replace("{lastname}", tools.PersonalLastName)
-                .Replace("{email}", tools.PersonalEmail)
-                .Replace("{country}", tools.PersonalCountry)
-                .Replace("{tool}", tool.ToolName)
-                .Replace("{version}", tool.Version.ToString())
-                .Replace("{instid}", tools.InstallationId.ToString());
-        }
-
         #endregion Private Methods
 
         #region Private Event Methods
@@ -266,22 +185,30 @@ namespace Rappen.XTB
         private void btnSubmit_Click(object sender, EventArgs e)
         {
             ctrl_Validating();
-            var url = rbPersonal.Checked ? GetUrlPersonal(rbPersonalContributing.Checked) : GetUrlCorp();
+            var url = rbPersonal.Checked ? tool.GetUrlPersonal(rbPersonalContributing.Checked) : tool.GetUrlCorp();
+            if (CallingWebForm(url))
+            {
+                DialogResult = DialogResult.Yes;
+            }
+        }
 
+        private bool CallingWebForm(string url)
+        {
             if (!string.IsNullOrEmpty(url))
             {
                 if (MessageBoxEx.Show(this, @"You will now be redirected to the website form
 to finish your support.
-Remember, it has to be submitted at the next step!", "Supporting", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) != DialogResult.OK)
+
+Remember, it has to be submitted at the next step!", "Supporting", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
                 {
-                    return;
+                    tool.SupportType = rbPersonal.Checked ? rbPersonalContributing.Checked ? SupportType.Contribute : SupportType.Personal : SupportType.Company;
+                    tool.SubmittedDate = DateTime.Now;
+                    appinsights?.WriteEvent($"Supporting-{tool.SupportType}");
+                    Process.Start(url);
+                    return true;
                 }
-                tool.SupportType = rbPersonal.Checked ? rbPersonalContributing.Checked ? SupportType.Contribute : SupportType.Personal : SupportType.Company;
-                tool.SubmittedDate = DateTime.Now;
-                appinsights?.WriteEvent($"Supporting-{tool.SupportType}");
-                Process.Start(url);
-                DialogResult = DialogResult.Yes;
             }
+            return false;
         }
 
         private void ctrl_Validating(object sender = null, System.ComponentModel.CancelEventArgs e = null)
@@ -392,12 +319,21 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
             }
         }
 
-        private void laterToolStripMenuItem_Click(object sender, EventArgs e)
+        private void tsmiLater_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Retry;
         }
 
-        private void neverWillBeSupportingThisToolToolStripMenuItem_Click(object sender, EventArgs e)
+        private void tsmiAlready_Click(object sender, EventArgs e)
+        {
+            if (CallingWebForm(tool.GetUrlAlready()))
+            {
+                tool.SupportType = SupportType.Already;
+                DialogResult = DialogResult.Yes;
+            }
+        }
+
+        private void tsmiNever_Click(object sender, EventArgs e)
         {
             tool.SupportType = SupportType.Never;
             DialogResult = DialogResult.Yes;
@@ -442,7 +378,7 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
     {
         private const string ToolSettingsURL = "https://jonasr.app/xtb/toolsettings.xml";
 
-        public int SettingsVersion { get; set; } = 1;
+        public int SettingsVersion = 1;
         public bool ShowOnlyManual = true;  // false
         public bool ContributionCounts = true;  // false
         public int ShowMinutesAfterInstall = int.MaxValue;    // 60
@@ -451,20 +387,73 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
         public int ShowMinutesAfterSubmittingButNotCompleted = int.MaxValue; // 2880m / 48h / 2d
         public int ShowAutoPercentChance = 0;   // 25 (0-100)
         public int ShowAutoRepeatTimes = 0; // 10
-        public string ColorFgNormal { get; set; } = "FFFFFF00";
-        public string ColorFgDimmed { get; set; } = "FFD2B48C";
-        public string ColorBgNormal { get; set; } = "FF0063FF";
-        public string ColorBgInvalid { get; set; } = "FFF06565";
+
+        public string FormIdCorporate = "wpf17273";
+        public string FormIdPersonal = "wpf17612";
+        public string FormIdContribute = "wpf17677";
+        public string FormIdAlready = "wpf17761";
+
+        public string FormUrlCorporate =
+            "https://jonasr.app/supporting-prefilled/" +
+            "?{formid}_1_first={firstname}" +
+            "&{formid}_1_last={lastname}" +
+            "&{formid}_3={companycountry}" +
+            "&{formid}_4={invoiceemail}" +
+            "&{formid}_13={tool}" +
+            "&{formid}_19={size}" +
+            "&{formid}_24={amount}" +
+            "&{formid}_27={company}" +
+            "&{formid}_31={tool}" +
+            "&{formid}_32={version}" +
+            "&{formid}_33={instid}";
+
+        public string FormUrlSupporting =
+            "https://jonasr.app/supporting/personal-prefilled/" +
+            "?{formid}_1_first={firstname}" +
+            "&{formid}_1_last={lastname}" +
+            "&{formid}_3={country}" +
+            "&{formid}_4={email}" +
+            "&{formid}_13={tool}" +
+            "&{formid}_31={tool}" +
+            "&{formid}_32={version}" +
+            "&{formid}_33={instid}";
+
+        public string FormUrlContribute =
+            "https://jonasr.app/supporting/contribute-prefilled/" +
+            "?{formid}_1_first={firstname}" +
+            "&{formid}_1_last={lastname}" +
+            "&{formid}_3={country}" +
+            "&{formid}_4={email}" +
+            "&{formid}_13={tool}" +
+            "&{formid}_31={tool}" +
+            "&{formid}_32={version}" +
+            "&{formid}_33={instid}";
+
+        public string FormUrlAlready =
+            "https://jonasr.app/supporting/already/" +
+            "?{formid}_1_first={firstname}" +
+            "&{formid}_1_last={lastname}" +
+            "&{formid}_3={country}" +
+            "&{formid}_4={email}" +
+            "&{formid}_13={tool}" +
+            "&{formid}_31={tool}" +
+            "&{formid}_32={version}" +
+            "&{formid}_33={instid}";
+
+        public string ColorFgNormal = "FFFFFF00";
+        public string ColorFgDimmed = "FFD2B48C";
+        public string ColorBgNormal = "FF0063FF";
+        public string ColorBgInvalid = "FFF06565";
 
         public Color clrFgNormal => Color.FromArgb(int.Parse(ColorFgNormal, System.Globalization.NumberStyles.HexNumber));
         public Color clrFgDimmed => Color.FromArgb(int.Parse(ColorFgDimmed, System.Globalization.NumberStyles.HexNumber));
         public Color clrBgNormal => Color.FromArgb(int.Parse(ColorBgNormal, System.Globalization.NumberStyles.HexNumber));
         public Color clrBgInvalid => Color.FromArgb(int.Parse(ColorBgInvalid, System.Globalization.NumberStyles.HexNumber));
 
-        public string HelpTitle { get; set; } = "Community Tools are Consciencewares.";
-        public string HelpLink { get; set; } = "https://jonasr.app/helping/";
+        public string HelpTitle = "Community Tool is Conscienceware.";
+        public string HelpLink = "https://jonasr.app/helping/";
 
-        public string HelpText { get; set; } = @"Some in the Power Platform Community are creating tools.
+        public string HelpText = @"Some in the Power Platform Community are creating tools.
 Some contribute to the community with new ideas, find problems, write documentation, and even solve our bugs.
 Thousands and thousands in this community are mostly 'consumers'—only using open-source tools.
 To me, it's very similar to watching TV. Do you pay for channels, Netflix, Amazon Prime, Spotify, etc.?
@@ -494,6 +483,16 @@ To read more about my thoughts, click the link below!";
         { }
 
         public static ToolSettings Get() => new Uri(ToolSettingsURL).DownloadXml(new ToolSettings());
+
+        public void Save()
+        {
+            if (!Directory.Exists(Paths.SettingsPath))
+            {
+                Directory.CreateDirectory(Paths.SettingsPath);
+            }
+            string path = Path.Combine(Paths.SettingsPath, "Rappen.XTB.ToolSettings.xml");
+            XmlSerializerHelper.SerializeToFile(this, path);
+        }
     }
 
     public class Supporters : List<Supporter>
@@ -526,6 +525,7 @@ To read more about my thoughts, click the link below!";
     public class RappenXTB
     {
         private int settingversion;
+        internal ToolSettings toolsettings;
 
         public int SettingsVersion
         {
@@ -567,6 +567,7 @@ To read more about my thoughts, click the link below!";
                 }
                 catch { }
             }
+            result.toolsettings = settings;
             if (result.InstallationId.Equals(Guid.Empty))
             {
                 result.InstallationId = InstallationInfo.Instance.InstallationId;
@@ -575,6 +576,7 @@ To read more about my thoughts, click the link below!";
             {
                 result.SettingsVersion = settings.SettingsVersion;
             }
+            result.Tools.ForEach(t => t.RappenXTB = result);
             return result;
         }
 
@@ -594,7 +596,7 @@ To read more about my thoughts, click the link below!";
             {
                 if (!Tools.Any(t => t.ToolName == name))
                 {
-                    Tools.Add(new Tool { ToolName = name });
+                    Tools.Add(new Tool { ToolName = name, RappenXTB = this });
                 }
                 return Tools.FirstOrDefault(t => t.ToolName == name);
             }
@@ -604,6 +606,7 @@ To read more about my thoughts, click the link below!";
     public class Tool
     {
         private Version version;
+        internal RappenXTB RappenXTB;
 
         public string ToolName { get; set; }
 
@@ -650,6 +653,53 @@ To read more about my thoughts, click the link below!";
                 }
             }
         }
+
+        public string GetUrlCorp()
+        {
+            if (string.IsNullOrEmpty(RappenXTB.CompanyName) ||
+                string.IsNullOrEmpty(RappenXTB.CompanyEmail) ||
+                string.IsNullOrEmpty(RappenXTB.CompanyCountry) ||
+                UsersIndex < 1)
+            {
+                return null;
+            }
+            return GenerateUrl(RappenXTB.toolsettings.FormUrlCorporate, RappenXTB.toolsettings.FormIdCorporate);
+        }
+
+        public string GetUrlPersonal(bool contribute)
+        {
+            if (string.IsNullOrEmpty(RappenXTB.PersonalFirstName) ||
+                string.IsNullOrEmpty(RappenXTB.PersonalLastName) ||
+                string.IsNullOrEmpty(RappenXTB.PersonalEmail) ||
+                string.IsNullOrEmpty(RappenXTB.PersonalCountry))
+            {
+                return null;
+            }
+            return GenerateUrl(contribute ? RappenXTB.toolsettings.FormUrlContribute : RappenXTB.toolsettings.FormUrlSupporting, contribute ? RappenXTB.toolsettings.FormIdContribute : RappenXTB.toolsettings.FormIdPersonal);
+        }
+
+        public string GetUrlAlready()
+        {
+            return GenerateUrl(RappenXTB.toolsettings.FormUrlAlready, RappenXTB.toolsettings.FormIdAlready);
+        }
+
+        private string GenerateUrl(string template, string form)
+        {
+            return template
+                .Replace("{formid}", form)
+                .Replace("{company}", RappenXTB.CompanyName)
+                .Replace("{invoiceemail}", RappenXTB.CompanyEmail)
+                .Replace("{companycountry}", RappenXTB.CompanyCountry)
+                .Replace("{amount}", Amount)
+                .Replace("{size}", UsersCount)
+                .Replace("{firstname}", RappenXTB.PersonalFirstName)
+                .Replace("{lastname}", RappenXTB.PersonalLastName)
+                .Replace("{email}", RappenXTB.PersonalEmail)
+                .Replace("{country}", RappenXTB.PersonalCountry)
+                .Replace("{tool}", ToolName)
+                .Replace("{version}", Version.ToString())
+                .Replace("{instid}", RappenXTB.InstallationId.ToString());
+        }
     }
 
     public enum SupportType
@@ -658,6 +708,7 @@ To read more about my thoughts, click the link below!";
         Personal,
         Company,
         Contribute,
+        Already,
         Never
     }
 }

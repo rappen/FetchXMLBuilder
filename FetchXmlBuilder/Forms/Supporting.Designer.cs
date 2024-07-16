@@ -57,8 +57,8 @@
             this.txtPersonalEmail = new System.Windows.Forms.TextBox();
             this.btnInfo = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.laterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.neverWillBeSupportingThisToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiLater = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiNever = new System.Windows.Forms.ToolStripMenuItem();
             this.panPersonal = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -75,6 +75,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.panBgYellow = new System.Windows.Forms.Panel();
             this.panBgBlue = new System.Windows.Forms.Panel();
+            this.iveAlreadySupportedThisToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiAlready = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.panel1.SuspendLayout();
             this.panCorp.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -401,24 +404,27 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.laterToolStripMenuItem,
-            this.neverWillBeSupportingThisToolToolStripMenuItem});
+            this.tsmiLater,
+            this.tsmiAlready,
+            this.toolStripMenuItem1,
+            this.tsmiNever,
+            this.iveAlreadySupportedThisToolToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(250, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(250, 98);
             // 
-            // laterToolStripMenuItem
+            // tsmiLater
             // 
-            this.laterToolStripMenuItem.Name = "laterToolStripMenuItem";
-            this.laterToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
-            this.laterToolStripMenuItem.Text = "Later";
-            this.laterToolStripMenuItem.Click += new System.EventHandler(this.laterToolStripMenuItem_Click);
+            this.tsmiLater.Name = "tsmiLater";
+            this.tsmiLater.Size = new System.Drawing.Size(249, 22);
+            this.tsmiLater.Text = "Later";
+            this.tsmiLater.Click += new System.EventHandler(this.tsmiLater_Click);
             // 
-            // neverWillBeSupportingThisToolToolStripMenuItem
+            // tsmiNever
             // 
-            this.neverWillBeSupportingThisToolToolStripMenuItem.Name = "neverWillBeSupportingThisToolToolStripMenuItem";
-            this.neverWillBeSupportingThisToolToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
-            this.neverWillBeSupportingThisToolToolStripMenuItem.Text = "Never will be supporting this tool";
-            this.neverWillBeSupportingThisToolToolStripMenuItem.Click += new System.EventHandler(this.neverWillBeSupportingThisToolToolStripMenuItem_Click);
+            this.tsmiNever.Name = "tsmiNever";
+            this.tsmiNever.Size = new System.Drawing.Size(249, 22);
+            this.tsmiNever.Text = "Never will be supporting this tool";
+            this.tsmiNever.Click += new System.EventHandler(this.tsmiNever_Click);
             // 
             // panPersonal
             // 
@@ -622,6 +628,24 @@
             this.panBgBlue.Size = new System.Drawing.Size(521, 418);
             this.panBgBlue.TabIndex = 0;
             // 
+            // iveAlreadySupportedThisToolToolStripMenuItem
+            // 
+            this.iveAlreadySupportedThisToolToolStripMenuItem.Name = "iveAlreadySupportedThisToolToolStripMenuItem";
+            this.iveAlreadySupportedThisToolToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.iveAlreadySupportedThisToolToolStripMenuItem.Text = "I have already supported this tool";
+            // 
+            // tsmiAlready
+            // 
+            this.tsmiAlready.Name = "tsmiAlready";
+            this.tsmiAlready.Size = new System.Drawing.Size(249, 22);
+            this.tsmiAlready.Text = "I have already supported this tool";
+            this.tsmiAlready.Click += new System.EventHandler(this.tsmiAlready_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(246, 6);
+            // 
             // Supporting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
@@ -703,11 +727,14 @@
         private System.Windows.Forms.RadioButton rbPersonalSupporting;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem laterToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem neverWillBeSupportingThisToolToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmiLater;
+        private System.Windows.Forms.ToolStripMenuItem tsmiNever;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel panBgYellow;
         private System.Windows.Forms.Panel panBgBlue;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAlready;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem iveAlreadySupportedThisToolToolStripMenuItem;
     }
 }
