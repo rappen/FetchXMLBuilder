@@ -35,7 +35,7 @@ namespace Rappen.XTB
             try
             {
                 var display = manual;
-                if (reload || settings == null)
+                if (reload || settings == null || tools == null || tool == null)
                 {
                     settings = ToolSettings.Get();
                     // settings.Save();
@@ -45,15 +45,15 @@ namespace Rappen.XTB
                 {
                     return;
                 }
-                if (manual && tool?.SupportType == SupportType.Never)
+                if (manual && tool?.Support?.Type == SupportType.Never)
                 {
-                    tool.SupportType = SupportType.None;
+                    tool.Support.Type = SupportType.None;
                 }
                 new Supporting(appinsights, manual).ShowDialog(plugin);
                 if (!manual)
                 {
-                    tool.DisplayDate = DateTime.Now;
-                    tool.DisplayCount++;
+                    tool.Support.DisplayDate = DateTime.Now;
+                    tool.Support.DisplayCount++;
                 }
                 tools.Save();
             }
@@ -70,7 +70,7 @@ namespace Rappen.XTB
         private Supporting(AppInsights appinsights, bool manual)
         {
             InitializeComponent();
-            lblHeader.Text = tool.ToolName;
+            lblHeader.Text = tool.Name;
             helpTitle.Text = settings.HelpTitle;
             helpText.Text = settings.HelpText.Replace("\r\n", "\n").Replace("\n", "\r\n");
             helpLink.Text = settings.HelpLink;
@@ -78,19 +78,19 @@ namespace Rappen.XTB
             helpLink.Visible = !string.IsNullOrEmpty(settings.HelpLink);
             if (supporters.Any())
             {
-                lblAlready.Text = lblAlready.Text.Replace("{tool}", tool.ToolName);
+                lblAlready.Text = lblAlready.Text.Replace("{tool}", tool.Name);
                 lblAlready.Visible = true;
                 toolTip1.SetToolTip(lblLater, "Close this window.");
             }
             txtCompanyName.Text = tools.CompanyName;
             txtCompanyEmail.Text = tools.CompanyEmail;
-            cmbCompanyUsers.SelectedIndex = tool.UsersIndex;
+            cmbCompanyUsers.SelectedIndex = tool.Support.UsersIndex;
             txtCompanyCountry.Text = tools.CompanyCountry;
             txtPersonalFirst.Text = tools.PersonalFirstName;
             txtPersonalLast.Text = tools.PersonalLastName;
             txtPersonalEmail.Text = tools.PersonalEmail;
             txtPersonalCountry.Text = tools.PersonalCountry;
-            if (tool.SupportType == SupportType.Personal)
+            if (tool.Support.Type == SupportType.Personal)
             {
                 rbPersonal.Checked = true;
             }
@@ -110,9 +110,13 @@ namespace Rappen.XTB
             var version = Assembly.GetExecutingAssembly().GetName().Version;
             tools = RappenXTB.Load(settings);
             tool = tools[toolname];
-            if (tool.Version != version)
+            if (tool.Support == null)
             {
-                tool.Version = version;
+                tool.Support = new Support();
+            }
+            if (tool.version != version)
+            {
+                tool.version = version;
                 tool.VersionRunDate = DateTime.Now;
                 tools.Save();
             }
@@ -125,7 +129,7 @@ namespace Rappen.XTB
             {   // Centerally stopping showing automatically
                 return false;
             }
-            else if (tool.SupportType == SupportType.Never)
+            else if (tool.Support.Type == SupportType.Never)
             {   // You will never want to support this tool
                 return false;
             }
@@ -137,15 +141,15 @@ namespace Rappen.XTB
             {   // Installed this version too soon
                 return false;
             }
-            else if (tool.DisplayDate.AddMinutes(settings.ShowMinutesAfterShown) > DateTime.Now)
+            else if (tool.Support.DisplayDate.AddMinutes(settings.ShowMinutesAfterShown) > DateTime.Now)
             {   // Seen this form to soon
                 return false;
             }
-            else if (tool.DisplayCount >= settings.ShowAutoRepeatTimes)
+            else if (tool.Support.DisplayCount >= settings.ShowAutoRepeatTimes)
             {   // Seen this too many times
                 return false;
             }
-            else if (tool.SubmittedDate.AddMinutes(settings.ShowMinutesAfterSubmittingButNotCompleted) > DateTime.Now)
+            else if (tool.Support.SubmittedDate.AddMinutes(settings.ShowMinutesAfterSubmittingButNotCompleted) > DateTime.Now)
             {   // Submitted too soon for JR to handle it
                 return false;
             }
@@ -177,6 +181,7 @@ namespace Rappen.XTB
             }
             else
             {
+                lblLater.Focus();
                 sw.Stop();
                 appinsights?.WriteEvent("Supporting-Close", duration: sw.ElapsedMilliseconds);
             }
@@ -201,9 +206,9 @@ to finish your support.
 
 Remember, it has to be submitted at the next step!", "Supporting", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
                 {
-                    tool.SupportType = rbPersonal.Checked ? rbPersonalContributing.Checked ? SupportType.Contribute : SupportType.Personal : SupportType.Company;
-                    tool.SubmittedDate = DateTime.Now;
-                    appinsights?.WriteEvent($"Supporting-{tool.SupportType}");
+                    tool.Support.Type = rbPersonal.Checked ? rbPersonalContributing.Checked ? SupportType.Contribute : SupportType.Personal : SupportType.Company;
+                    tool.Support.SubmittedDate = DateTime.Now;
+                    appinsights?.WriteEvent($"Supporting-{tool.Support.Type}");
                     Process.Start(url);
                     return true;
                 }
@@ -234,9 +239,9 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
             }
             if (sender == null || sender == cmbCompanyUsers)
             {
-                tool.UsersIndex = cmbCompanyUsers.SelectedIndex;
-                tool.UsersCount = cmbCompanyUsers.Text;
-                cmbCompanyUsers.BackColor = tool.UsersIndex < 1 ? settings.clrBgInvalid : settings.clrBgNormal;
+                tool.Support.UsersIndex = cmbCompanyUsers.SelectedIndex;
+                tool.Support.UsersCount = cmbCompanyUsers.Text;
+                cmbCompanyUsers.BackColor = tool.Support.UsersIndex < 1 ? settings.clrBgInvalid : settings.clrBgNormal;
             }
             if (sender == null || sender == txtPersonalFirst)
             {
@@ -328,14 +333,14 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
         {
             if (CallingWebForm(tool.GetUrlAlready()))
             {
-                tool.SupportType = SupportType.Already;
+                tool.Support.Type = SupportType.Already;
                 DialogResult = DialogResult.Yes;
             }
         }
 
         private void tsmiNever_Click(object sender, EventArgs e)
         {
-            tool.SupportType = SupportType.Never;
+            tool.Support.Type = SupportType.Never;
             DialogResult = DialogResult.Yes;
         }
 
@@ -499,27 +504,28 @@ To read more about my thoughts, click the link below!";
     {
         private const string SupportersURL = "https://jonasr.app/xtb/supporters.xml";
 
-        private Supporters()
-        { }
-
         public static Supporters DownloadMy(Guid InstallationId, string toolname, bool contributionCounts)
         {
             var result = new Uri(SupportersURL).DownloadXml(new Supporters());
             result.Where(s =>
                 s.InstallationId != InstallationId ||
                 s.ToolName != toolname ||
-                s.SupportType == SupportType.None ||
-                (!contributionCounts && s.SupportType == SupportType.Contribute))
+                s.Type == SupportType.None ||
+                (!contributionCounts && s.Type == SupportType.Contribute))
                 .ToList().ForEach(s => result.Remove(s));
             return result;
         }
+
+        public override string ToString() => $"{Count} Supporters";
     }
 
     public class Supporter
     {
-        public Guid InstallationId { get; set; }
-        public string ToolName { get; set; }
-        public SupportType SupportType { get; set; }
+        public Guid InstallationId;
+        public string ToolName;
+        public SupportType Type;
+
+        public override string ToString() => $"{Type} {ToolName}";
     }
 
     public class RappenXTB
@@ -534,24 +540,21 @@ To read more about my thoughts, click the link below!";
             {
                 if (value != settingversion && Tools?.Count() > 0)
                 {
-                    Tools.ForEach(s => s.DisplayCount = 0);
+                    Tools.ForEach(s => s.Support.DisplayCount = 0);
                 }
                 settingversion = value;
             }
         }
 
-        public Guid InstallationId { get; set; } = Guid.Empty;
-        public List<Tool> Tools { get; set; } = new List<Tool>();
-        public string PersonalFirstName { get; set; }
-        public string PersonalLastName { get; set; }
-        public string PersonalEmail { get; set; }
-        public string PersonalCountry { get; set; }
-        public string CompanyName { get; set; }
-        public string CompanyEmail { get; set; }
-        public string CompanyCountry { get; set; }
-
-        private RappenXTB()
-        { }
+        public Guid InstallationId = Guid.Empty;
+        public string CompanyName;
+        public string CompanyEmail;
+        public string CompanyCountry;
+        public string PersonalFirstName;
+        public string PersonalLastName;
+        public string PersonalEmail;
+        public string PersonalCountry;
+        public List<Tool> Tools = new List<Tool>();
 
         public static RappenXTB Load(ToolSettings settings)
         {
@@ -594,64 +597,54 @@ To read more about my thoughts, click the link below!";
         {
             get
             {
-                if (!Tools.Any(t => t.ToolName == name))
+                if (!Tools.Any(t => t.Name == name))
                 {
-                    Tools.Add(new Tool { ToolName = name, RappenXTB = this });
+                    Tools.Add(new Tool(this, name));
                 }
-                return Tools.FirstOrDefault(t => t.ToolName == name);
+                return Tools.FirstOrDefault(t => t.Name == name);
             }
         }
+
+        public override string ToString() => $"{CompanyName} {PersonalFirstName} {PersonalLastName} {Tools.Count}".Trim().Replace("  ", " ");
     }
 
     public class Tool
     {
-        private Version version;
+        private Version _version;
         internal RappenXTB RappenXTB;
 
-        public string ToolName { get; set; }
-
-        [XmlIgnore]
-        public Version Version
+        internal Version version
         {
-            get => version;
+            get => _version;
             set
             {
-                if (value != version)
+                if (value != _version)
                 {
-                    DisplayCount = 0;
+                    Support.DisplayCount = 0;
                 }
-                version = value;
+                _version = value;
             }
         }
 
-        public string VersionStr
+        public string Name;
+
+        public string Version
         {
-            get => version.ToString();
-            set { version = new Version(value ?? "0.0.0.0"); }
+            get => _version.ToString();
+            set { _version = new Version(value ?? "0.0.0.0"); }
         }
 
-        public DateTime FirstRunDate { get; set; } = DateTime.Now;
-        public DateTime VersionRunDate { get; set; }
-        public DateTime DisplayDate { get; set; } = DateTime.MinValue;
-        public int DisplayCount { get; set; } = 0;
-        public DateTime SubmittedDate { get; set; }
-        public SupportType SupportType { get; set; } = SupportType.None;
-        public int UsersIndex { get; set; }
-        public string UsersCount { get; set; }
+        public DateTime FirstRunDate = DateTime.Now;
+        public DateTime VersionRunDate;
+        public Support Support = new Support();
 
-        public string Amount
+        private Tool()
+        { }
+
+        internal Tool(RappenXTB rappen, string name)
         {
-            get
-            {
-                switch (UsersIndex)
-                {
-                    case 1: return "X-Small";
-                    case 2: return "Small";
-                    case 4: return "Large";
-                    case 5: return "X-Large";
-                    default: return "Medium";
-                }
-            }
+            RappenXTB = rappen;
+            Name = name;
         }
 
         public string GetUrlCorp()
@@ -659,7 +652,7 @@ To read more about my thoughts, click the link below!";
             if (string.IsNullOrEmpty(RappenXTB.CompanyName) ||
                 string.IsNullOrEmpty(RappenXTB.CompanyEmail) ||
                 string.IsNullOrEmpty(RappenXTB.CompanyCountry) ||
-                UsersIndex < 1)
+              Support.UsersIndex < 1)
             {
                 return null;
             }
@@ -690,16 +683,45 @@ To read more about my thoughts, click the link below!";
                 .Replace("{company}", RappenXTB.CompanyName)
                 .Replace("{invoiceemail}", RappenXTB.CompanyEmail)
                 .Replace("{companycountry}", RappenXTB.CompanyCountry)
-                .Replace("{amount}", Amount)
-                .Replace("{size}", UsersCount)
+                .Replace("{amount}", Support.Amount)
+                .Replace("{size}", Support.UsersCount)
                 .Replace("{firstname}", RappenXTB.PersonalFirstName)
                 .Replace("{lastname}", RappenXTB.PersonalLastName)
                 .Replace("{email}", RappenXTB.PersonalEmail)
                 .Replace("{country}", RappenXTB.PersonalCountry)
-                .Replace("{tool}", ToolName)
-                .Replace("{version}", Version.ToString())
+                .Replace("{tool}", Name)
+                .Replace("{version}", version.ToString())
                 .Replace("{instid}", RappenXTB.InstallationId.ToString());
         }
+
+        public override string ToString() => $"{Name} {version}";
+    }
+
+    public class Support
+    {
+        public DateTime DisplayDate = DateTime.MinValue;
+        public int DisplayCount = 0;
+        public DateTime SubmittedDate;
+        public SupportType Type = SupportType.None;
+        public int UsersIndex;
+        public string UsersCount;
+
+        public string Amount
+        {
+            get
+            {
+                switch (UsersIndex)
+                {
+                    case 1: return "X-Small";
+                    case 2: return "Small";
+                    case 4: return "Large";
+                    case 5: return "X-Large";
+                    default: return "Medium";
+                }
+            }
+        }
+
+        public override string ToString() => $"{Type}";
     }
 
     public enum SupportType
