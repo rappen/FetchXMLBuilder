@@ -9,7 +9,6 @@ using System.Net.Mail;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Serialization;
 using XrmToolBox.AppCode.AppInsights;
 using XrmToolBox.Extensibility;
 using XrmToolBox.ToolLibrary.AppCode;
