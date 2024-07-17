@@ -83,7 +83,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             dockControlBuilder.Init(fetchXml, layoutxml, fromview, $"called from {message.SourcePlugin}", false);
             attributesChecksum = dockControlBuilder.GetAttributesSignature();
-            tsbReturnToCaller.Text = callerArgs.SourcePlugin == URLcaller ? "FetchXML from an URL" : "Return FetchXML";
+            //tsbReturnToCaller.Text = callerArgs.SourcePlugin == URLcaller ? "FetchXML from an URL" : "Return FetchXML";
             tsbReturnToCaller.Image =
                 callerArgs.SourcePlugin == "Bulk Data Updater" ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.BDU_2019_032_tsp :
                 callerArgs.SourcePlugin == URLcaller ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_web :
@@ -233,7 +233,10 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private bool CallerWantsResults()
         {
-            return callerArgs != null;
+            return
+                callerArgs != null &&
+                callerArgs.SourcePlugin != "Plugin Trace Viewer" &&
+                callerArgs.SourcePlugin != URLcaller;
         }
 
         private void ReturnToCaller()
