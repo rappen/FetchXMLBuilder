@@ -38,7 +38,7 @@ namespace Rappen.XTB
                 {
                     settings = ToolSettings.Get();
                     // settings.Save();
-                    display = ShowSupporting(plugin.ToolName);
+                    display = ShowSupporting(plugin.ToolName) || manual;
                 }
                 if (!display)
                 {
