@@ -596,9 +596,6 @@
     <None Include="Resources\Dataverse_scalable_32.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Dataverse_scalable gray bg 32.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\PowerAutomate_scalable gray bg 32.png" />
   </ItemGroup>
   <ItemGroup>
@@ -654,21 +651,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Microsoft_logo.32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\view.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\I Support Tools narrow 200.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\We Support Tools narrow 32h.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\We are Supporting Tools 32h.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Supporting Tools 32h.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Supporting Tools 32h frame.png" />

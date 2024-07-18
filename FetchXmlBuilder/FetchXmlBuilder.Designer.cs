@@ -466,7 +466,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             // tsbBDU
             // 
-            this.tsbBDU.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.BDU_2019_032_tsp;
+            this.tsbBDU.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.logo_BDU;
             this.tsbBDU.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbBDU.Name = "tsbBDU";
             this.tsbBDU.Size = new System.Drawing.Size(66, 36);
@@ -682,7 +682,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // tslAbout
             // 
             this.tslAbout.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tslAbout.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.FXB_2019_2_032_tsp;
+            this.tslAbout.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.logo_FXB;
             this.tslAbout.IsLink = true;
             this.tslAbout.Name = "tslAbout";
             this.tslAbout.Size = new System.Drawing.Size(114, 36);
@@ -693,7 +693,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // tsbLearnFetchXml
             // 
             this.tsbLearnFetchXml.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tsbLearnFetchXml.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.Microsoft_logo_32;
+            this.tsbLearnFetchXml.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.logo_Microsoft;
             this.tsbLearnFetchXml.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbLearnFetchXml.Name = "tsbLearnFetchXml";
             this.tsbLearnFetchXml.Size = new System.Drawing.Size(36, 36);
@@ -706,7 +706,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsbSupporting.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.tsbSupporting.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbSupporting.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.Supporting_Tools_32h_frame;
+            this.tsbSupporting.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.supporting;
             this.tsbSupporting.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tsbSupporting.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSupporting.Name = "tsbSupporting";

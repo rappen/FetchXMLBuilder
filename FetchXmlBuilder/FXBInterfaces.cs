@@ -85,7 +85,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             attributesChecksum = dockControlBuilder.GetAttributesSignature();
             //tsbReturnToCaller.Text = callerArgs.SourcePlugin == URLcaller ? "FetchXML from an URL" : "Return FetchXML";
             tsbReturnToCaller.Image =
-                callerArgs.SourcePlugin == "Bulk Data Updater" ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.BDU_2019_032_tsp :
+                callerArgs.SourcePlugin == "Bulk Data Updater" ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.logo_BDU :
                 callerArgs.SourcePlugin == URLcaller ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_web :
                 Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_return;
             tsbReturnToCaller.ToolTipText = callerArgs.SourcePlugin == URLcaller ? "Show 'Sharing Queries' on my website." : "Return " + requestedType + " to " + callerArgs.SourcePlugin;
