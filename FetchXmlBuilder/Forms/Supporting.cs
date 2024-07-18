@@ -309,6 +309,7 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
             if (visible)
             {
                 helpTitle.Text = settings.HelpWhyTitle;
+                helpText.Text = string.Empty;
                 helpText.Text = settings.HelpWhyText.Replace("\r\n", "\n").Replace("\n", "\r\n");
             }
             panInfo.Visible = visible;
@@ -321,6 +322,7 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
             if (visible)
             {
                 helpTitle.Text = settings.HelpInfoTitle;
+                helpText.Text = string.Empty;
                 helpText.Text = settings.HelpInfoText.Replace("\r\n", "\n").Replace("\n", "\r\n");
             }
             panInfo.Visible = visible;
@@ -512,7 +514,7 @@ Since I would like to be very clear and honest, we store your XrmToolBox Install
 
 The button in the top-right corner opens this info. You can also right-click on it and find more options, especially:
 * I have already supported this tool — use this to tell me that you already support this tool in some way so that this prompt will not ask you again.
-* I will never support this tool — use it if you think it is a bad idea, and you will never use it again; it won't ask you again.
+* I will never support this tool — use it if you think it is a bad idea, and you probably won't use it again; it won't ask you again.
 
 For questions, contact me at https://jonasr.app/contact.";
 
@@ -543,6 +545,7 @@ For questions, contact me at https://jonasr.app/contact.";
                 s.InstallationId != InstallationId ||
                 s.ToolName != toolname ||
                 s.Type == SupportType.None ||
+                s.Type == SupportType.Never ||
                 (!contributionCounts && s.Type == SupportType.Contribute))
                 .ToList().ForEach(s => result.Remove(s));
             return result;

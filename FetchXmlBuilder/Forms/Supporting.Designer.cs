@@ -53,7 +53,10 @@
             this.rbPersonalSupporting = new System.Windows.Forms.RadioButton();
             this.txtPersonalCountry = new System.Windows.Forms.TextBox();
             this.txtPersonalEmail = new System.Windows.Forms.TextBox();
+            this.btnWhatWhy = new System.Windows.Forms.Button();
+            this.btnSubmit = new System.Windows.Forms.Button();
             this.pics = new System.Windows.Forms.ImageList(this.components);
+            this.btnInfo = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiLater = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiAlready = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,16 +70,13 @@
             this.lblIName = new System.Windows.Forms.Label();
             this.panInfo = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btnInfoClose = new System.Windows.Forms.Button();
             this.helpText = new System.Windows.Forms.RichTextBox();
             this.helpTitle = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panBgYellow = new System.Windows.Forms.Panel();
             this.panBgBlue = new System.Windows.Forms.Panel();
-            this.btnInfoClose = new System.Windows.Forms.Button();
-            this.btnWhatWhy = new System.Windows.Forms.Button();
-            this.btnSubmit = new System.Windows.Forms.Button();
-            this.btnInfo = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panCorp.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -361,6 +361,36 @@
             this.toolTip1.SetToolTip(this.txtPersonalEmail, "Email for any contact");
             this.txtPersonalEmail.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
             // 
+            // btnWhatWhy
+            // 
+            this.btnWhatWhy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnWhatWhy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.btnWhatWhy.Image = ((System.Drawing.Image)(resources.GetObject("btnWhatWhy.Image")));
+            this.btnWhatWhy.Location = new System.Drawing.Point(12, 12);
+            this.btnWhatWhy.Name = "btnWhatWhy";
+            this.btnWhatWhy.Size = new System.Drawing.Size(30, 30);
+            this.btnWhatWhy.TabIndex = 12;
+            this.toolTip1.SetToolTip(this.btnWhatWhy, "Information about WHY we should support tools - read my thoughts!");
+            this.btnWhatWhy.UseVisualStyleBackColor = true;
+            this.btnWhatWhy.Click += new System.EventHandler(this.btnWhatWhy_Click);
+            // 
+            // btnSubmit
+            // 
+            this.btnSubmit.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSubmit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSubmit.ImageIndex = 0;
+            this.btnSubmit.ImageList = this.pics;
+            this.btnSubmit.Location = new System.Drawing.Point(178, 330);
+            this.btnSubmit.Margin = new System.Windows.Forms.Padding(8);
+            this.btnSubmit.Name = "btnSubmit";
+            this.btnSubmit.Padding = new System.Windows.Forms.Padding(8);
+            this.btnSubmit.Size = new System.Drawing.Size(210, 68);
+            this.btnSubmit.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.btnSubmit, "Click to forward you to the supporting form on JonasR.app.\r\nSubmitting will bring" +
+        " the information here into the following step online.");
+            this.btnSubmit.UseVisualStyleBackColor = true;
+            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
+            // 
             // pics
             // 
             this.pics.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("pics.ImageStream")));
@@ -368,6 +398,21 @@
             this.pics.Images.SetKeyName(0, "Corporate Supports Tools 2 narrow 200.png");
             this.pics.Images.SetKeyName(1, "I Support Tools narrow 200.png");
             this.pics.Images.SetKeyName(2, "I Contribute Tools narrow 200.png");
+            // 
+            // btnInfo
+            // 
+            this.btnInfo.ContextMenuStrip = this.contextMenuStrip1;
+            this.btnInfo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.btnInfo.Image = ((System.Drawing.Image)(resources.GetObject("btnInfo.Image")));
+            this.btnInfo.Location = new System.Drawing.Point(475, 12);
+            this.btnInfo.Name = "btnInfo";
+            this.btnInfo.Size = new System.Drawing.Size(30, 30);
+            this.btnInfo.TabIndex = 105;
+            this.toolTip1.SetToolTip(this.btnInfo, "Technical information about how this works,\r\nwhat is stored, where it is stored, " +
+        "how to stop\r\npromping about supporting, etc.");
+            this.btnInfo.UseVisualStyleBackColor = true;
+            this.btnInfo.Click += new System.EventHandler(this.btnInfo_Click);
             // 
             // contextMenuStrip1
             // 
@@ -383,7 +428,7 @@
             // 
             this.tsmiLater.Name = "tsmiLater";
             this.tsmiLater.Size = new System.Drawing.Size(249, 22);
-            this.tsmiLater.Text = "Not now, try later";
+            this.tsmiLater.Text = "Not now, maybe later";
             this.tsmiLater.Click += new System.EventHandler(this.tsmiLater_Click);
             // 
             // tsmiAlready
@@ -494,6 +539,19 @@
             this.panel2.Size = new System.Drawing.Size(446, 368);
             this.panel2.TabIndex = 0;
             // 
+            // btnInfoClose
+            // 
+            this.btnInfoClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnInfoClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnInfoClose.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.btnInfoClose.Image = ((System.Drawing.Image)(resources.GetObject("btnInfoClose.Image")));
+            this.btnInfoClose.Location = new System.Drawing.Point(411, 3);
+            this.btnInfoClose.Name = "btnInfoClose";
+            this.btnInfoClose.Size = new System.Drawing.Size(30, 30);
+            this.btnInfoClose.TabIndex = 13;
+            this.btnInfoClose.UseVisualStyleBackColor = true;
+            this.btnInfoClose.Click += new System.EventHandler(this.btnInfoClose_Click);
+            // 
             // helpText
             // 
             this.helpText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -579,64 +637,6 @@
             this.panBgBlue.Name = "panBgBlue";
             this.panBgBlue.Size = new System.Drawing.Size(521, 418);
             this.panBgBlue.TabIndex = 0;
-            // 
-            // btnInfoClose
-            // 
-            this.btnInfoClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnInfoClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnInfoClose.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
-            this.btnInfoClose.Image = ((System.Drawing.Image)(resources.GetObject("btnInfoClose.Image")));
-            this.btnInfoClose.Location = new System.Drawing.Point(411, 3);
-            this.btnInfoClose.Name = "btnInfoClose";
-            this.btnInfoClose.Size = new System.Drawing.Size(30, 30);
-            this.btnInfoClose.TabIndex = 13;
-            this.btnInfoClose.UseVisualStyleBackColor = true;
-            this.btnInfoClose.Click += new System.EventHandler(this.btnInfoClose_Click);
-            // 
-            // btnWhatWhy
-            // 
-            this.btnWhatWhy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnWhatWhy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
-            this.btnWhatWhy.Image = ((System.Drawing.Image)(resources.GetObject("btnWhatWhy.Image")));
-            this.btnWhatWhy.Location = new System.Drawing.Point(12, 12);
-            this.btnWhatWhy.Name = "btnWhatWhy";
-            this.btnWhatWhy.Size = new System.Drawing.Size(30, 30);
-            this.btnWhatWhy.TabIndex = 12;
-            this.toolTip1.SetToolTip(this.btnWhatWhy, "Information about WHY we should support tools - read my thoughts!");
-            this.btnWhatWhy.UseVisualStyleBackColor = true;
-            this.btnWhatWhy.Click += new System.EventHandler(this.btnWhatWhy_Click);
-            // 
-            // btnSubmit
-            // 
-            this.btnSubmit.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSubmit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSubmit.ImageIndex = 0;
-            this.btnSubmit.ImageList = this.pics;
-            this.btnSubmit.Location = new System.Drawing.Point(178, 330);
-            this.btnSubmit.Margin = new System.Windows.Forms.Padding(8);
-            this.btnSubmit.Name = "btnSubmit";
-            this.btnSubmit.Padding = new System.Windows.Forms.Padding(8);
-            this.btnSubmit.Size = new System.Drawing.Size(210, 68);
-            this.btnSubmit.TabIndex = 4;
-            this.toolTip1.SetToolTip(this.btnSubmit, "Click to forward you to the supporting form on JonasR.app.\r\nSubmitting will bring" +
-        " the information here into the following step online.");
-            this.btnSubmit.UseVisualStyleBackColor = true;
-            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
-            // 
-            // btnInfo
-            // 
-            this.btnInfo.ContextMenuStrip = this.contextMenuStrip1;
-            this.btnInfo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
-            this.btnInfo.Image = ((System.Drawing.Image)(resources.GetObject("btnInfo.Image")));
-            this.btnInfo.Location = new System.Drawing.Point(475, 12);
-            this.btnInfo.Name = "btnInfo";
-            this.btnInfo.Size = new System.Drawing.Size(30, 30);
-            this.btnInfo.TabIndex = 105;
-            this.toolTip1.SetToolTip(this.btnInfo, "Technical information about how this works,\r\nwhat is stored, where it is stored, " +
-        "how to stop\r\npromping about supporting, etc.");
-            this.btnInfo.UseVisualStyleBackColor = true;
-            this.btnInfo.Click += new System.EventHandler(this.btnInfo_Click);
             // 
             // Supporting
             // 
