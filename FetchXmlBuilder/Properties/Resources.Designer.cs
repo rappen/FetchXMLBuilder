@@ -73,39 +73,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap bmc_32 {
-            get {
-                object obj = ResourceManager.GetObject("bmc-32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Corporate_Supports_Tools_2_narrow_200 {
-            get {
-                object obj = ResourceManager.GetObject("Corporate Supports Tools 2 narrow 200", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap FXB_2019_2_032_tsp {
             get {
                 object obj = ResourceManager.GetObject("FXB-2019-2-032-tsp", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap I_Support_Tools_narrow_200 {
-            get {
-                object obj = ResourceManager.GetObject("I Support Tools narrow 200", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -413,36 +383,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_close_16 {
-            get {
-                object obj = ResourceManager.GetObject("icons8-close-16", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icons8_close_16_yellow {
-            get {
-                object obj = ResourceManager.GetObject("icons8-close-16-yellow", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icons8_info_24__1_ {
-            get {
-                object obj = ResourceManager.GetObject("icons8-info-24 (1)", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Microsoft_logo_32 {
             get {
                 object obj = ResourceManager.GetObject("Microsoft_logo.32", resourceCulture);
@@ -453,39 +393,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Supporting_Tools_32h {
-            get {
-                object obj = ResourceManager.GetObject("Supporting Tools 32h", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Supporting_Tools_32h_frame {
             get {
                 object obj = ResourceManager.GetObject("Supporting Tools 32h frame", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap We_are_Supporting_Tools_32h {
-            get {
-                object obj = ResourceManager.GetObject("We are Supporting Tools 32h", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap We_Support_Tools_narrow_32h {
-            get {
-                object obj = ResourceManager.GetObject("We Support Tools narrow 32h", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

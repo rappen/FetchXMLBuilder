@@ -70,11 +70,8 @@ namespace Rappen.XTB
         {
             InitializeComponent();
             lblHeader.Text = tool.Name;
-            helpTitle.Text = settings.HelpTitle;
-            helpText.Text = settings.HelpText.Replace("\r\n", "\n").Replace("\n", "\r\n");
-            helpLink.Text = settings.HelpLink;
-            helpLink.Tag = settings.HelpLink;
-            helpLink.Visible = !string.IsNullOrEmpty(settings.HelpLink);
+            panInfo.Left = 32;
+            panInfo.Top = 25;
             if (supporters.Any())
             {
                 lblAlready.Text = lblAlready.Text.Replace("{tool}", tool.Name);
@@ -295,14 +292,38 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
 
         private void linkHelping_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            TopMost = false;
             UrlUtils.OpenUrl(sender);
+        }
+
+        private void helpText_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            TopMost = false;
+            UrlUtils.OpenUrl(e.LinkText);
+        }
+
+        private void btnWhatWhy_Click(object sender, EventArgs e)
+        {
+            var visible = panInfo.Tag != sender || !panInfo.Visible;
+            panInfo.Tag = sender;
+            if (visible)
+            {
+                helpTitle.Text = settings.HelpWhyTitle;
+                helpText.Text = settings.HelpWhyText.Replace("\r\n", "\n").Replace("\n", "\r\n");
+            }
+            panInfo.Visible = visible;
         }
 
         private void btnInfo_Click(object sender, EventArgs e)
         {
-            panInfo.Left = 50;
-            panInfo.Top = 25;
-            panInfo.Visible = !panInfo.Visible;
+            var visible = panInfo.Tag != sender || !panInfo.Visible;
+            panInfo.Tag = sender;
+            if (visible)
+            {
+                helpTitle.Text = settings.HelpInfoTitle;
+                helpText.Text = settings.HelpInfoText.Replace("\r\n", "\n").Replace("\n", "\r\n");
+            }
+            panInfo.Visible = visible;
         }
 
         private void btnInfoClose_Click(object sender, EventArgs e)
@@ -454,10 +475,9 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
         public Color clrBgNormal => Color.FromArgb(int.Parse(ColorBgNormal, System.Globalization.NumberStyles.HexNumber));
         public Color clrBgInvalid => Color.FromArgb(int.Parse(ColorBgInvalid, System.Globalization.NumberStyles.HexNumber));
 
-        public string HelpTitle = "Community Tool is Conscienceware.";
-        public string HelpLink = "https://jonasr.app/helping/";
+        public string HelpWhyTitle = "Community Tool is Conscienceware.";
 
-        public string HelpText = @"Some in the Power Platform Community are creating tools.
+        public string HelpWhyText = @"Some in the Power Platform Community are creating tools.
 Some contribute to the community with new ideas, find problems, write documentation, and even solve our bugs.
 Thousands and thousands in this community are mostly 'consumers'—only using open-source tools.
 To me, it's very similar to watching TV. Do you pay for channels, Netflix, Amazon Prime, Spotify, etc.?
@@ -475,13 +495,26 @@ You and your company can now more formally support tools rather than just donati
 
 Supporting is not just giving money; it means that you or your company know you have gained in time and improved your quality by using these tools. If you get something and want to give back—support the development and maintenance of the tools.
 
-Technicality:
+To read more about my thoughts, click here: https://jonasr.app/helping/
+
+- Jonas Rapp";
+
+        public string HelpInfoTitle = "Technical Information";
+
+        public string HelpInfoText = @"Your entered name, company, country, email, and amount will not be stored in any system. The information will be saved in my personal Excel file. I do this to ensure you can get an invoice, and if so, we need to communicate if necessary.
+The email you share with me, only to me, will never be sold to any company.
+
 You will receive an official receipt immediately and, if needed, an invoice. Supporting can be done with a credit card. Other options will be available depending on your location. Stripe handles the payment.
-The internal ID for your XrmToolBox installation is stored server-side, and the tool name is only to prevent this window from popping up. No identifying information is stored on any online service. For questions, contact me at jonasr.app/contact.
 
-- Jonas Rapp
+When you click the big button here, the information you entered here will be included in the form on my website, jonasr.app, and a few hidden info: tool name, version, and your XrmToolBox 'InstallationId' (a random Guid generated the first time you use the toolbox). If you are curious, you can find your ID here: https://jonasr.app/xtb-finding-installationid.
 
-To read more about my thoughts, click the link below!";
+Since I would like to be very clear and honest, we store your XrmToolBox InstallationId on a server to be able to know that you are supporting it in some way. There is nothing about the amount or contribution; I am not interested in hacking this info.
+
+The button in the top-right corner opens this info. You can also right-click on it and find more options, especially:
+* I have already supported this tool — use this to tell me that you already support this tool in some way so that this prompt will not ask you again.
+* I will never support this tool — use it if you think it is a bad idea, and you will never use it again; it won't ask you again.
+
+For questions, contact me at https://jonasr.app/contact.";
 
         private ToolSettings()
         { }

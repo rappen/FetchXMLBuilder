@@ -49,15 +49,15 @@
             this.txtPersonalLast = new System.Windows.Forms.TextBox();
             this.lblLater = new System.Windows.Forms.Label();
             this.lblAlready = new System.Windows.Forms.Label();
-            this.btnSubmit = new System.Windows.Forms.Button();
-            this.pics = new System.Windows.Forms.ImageList(this.components);
             this.rbPersonalContributing = new System.Windows.Forms.RadioButton();
             this.rbPersonalSupporting = new System.Windows.Forms.RadioButton();
             this.txtPersonalCountry = new System.Windows.Forms.TextBox();
             this.txtPersonalEmail = new System.Windows.Forms.TextBox();
-            this.btnInfo = new System.Windows.Forms.Button();
+            this.pics = new System.Windows.Forms.ImageList(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiLater = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiAlready = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiNever = new System.Windows.Forms.ToolStripMenuItem();
             this.panPersonal = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
@@ -67,17 +67,16 @@
             this.lblIName = new System.Windows.Forms.Label();
             this.panInfo = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.btnInfoClose = new System.Windows.Forms.Button();
-            this.helpLink = new System.Windows.Forms.LinkLabel();
-            this.helpText = new System.Windows.Forms.TextBox();
+            this.helpText = new System.Windows.Forms.RichTextBox();
             this.helpTitle = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panBgYellow = new System.Windows.Forms.Panel();
             this.panBgBlue = new System.Windows.Forms.Panel();
-            this.iveAlreadySupportedThisToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiAlready = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnInfoClose = new System.Windows.Forms.Button();
+            this.btnWhatWhy = new System.Windows.Forms.Button();
+            this.btnSubmit = new System.Windows.Forms.Button();
+            this.btnInfo = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panCorp.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -309,31 +308,6 @@
             this.lblAlready.MouseEnter += new System.EventHandler(this.lbl_MouseEnter);
             this.lblAlready.MouseLeave += new System.EventHandler(this.lbl_MouseLeave);
             // 
-            // btnSubmit
-            // 
-            this.btnSubmit.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSubmit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSubmit.ImageIndex = 0;
-            this.btnSubmit.ImageList = this.pics;
-            this.btnSubmit.Location = new System.Drawing.Point(178, 330);
-            this.btnSubmit.Margin = new System.Windows.Forms.Padding(8);
-            this.btnSubmit.Name = "btnSubmit";
-            this.btnSubmit.Padding = new System.Windows.Forms.Padding(8);
-            this.btnSubmit.Size = new System.Drawing.Size(210, 68);
-            this.btnSubmit.TabIndex = 4;
-            this.toolTip1.SetToolTip(this.btnSubmit, "Click to forward you to the supporting form on JonasR.app.\r\nSubmitting will bring" +
-        " the information here into the following step online.");
-            this.btnSubmit.UseVisualStyleBackColor = true;
-            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
-            // 
-            // pics
-            // 
-            this.pics.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("pics.ImageStream")));
-            this.pics.TransparentColor = System.Drawing.Color.Transparent;
-            this.pics.Images.SetKeyName(0, "Corporate Supports Tools 2 narrow 200.png");
-            this.pics.Images.SetKeyName(1, "I Support Tools narrow 200.png");
-            this.pics.Images.SetKeyName(2, "I Contribute Tools narrow 200.png");
-            // 
             // rbPersonalContributing
             // 
             this.rbPersonalContributing.AutoSize = true;
@@ -387,19 +361,13 @@
             this.toolTip1.SetToolTip(this.txtPersonalEmail, "Email for any contact");
             this.txtPersonalEmail.Validating += new System.ComponentModel.CancelEventHandler(this.ctrl_Validating);
             // 
-            // btnInfo
+            // pics
             // 
-            this.btnInfo.ContextMenuStrip = this.contextMenuStrip1;
-            this.btnInfo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
-            this.btnInfo.Image = ((System.Drawing.Image)(resources.GetObject("btnInfo.Image")));
-            this.btnInfo.Location = new System.Drawing.Point(12, 12);
-            this.btnInfo.Name = "btnInfo";
-            this.btnInfo.Size = new System.Drawing.Size(30, 30);
-            this.btnInfo.TabIndex = 12;
-            this.toolTip1.SetToolTip(this.btnInfo, "Information about WHY we should support tools - read my thoughts!");
-            this.btnInfo.UseVisualStyleBackColor = true;
-            this.btnInfo.Click += new System.EventHandler(this.btnInfo_Click);
+            this.pics.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("pics.ImageStream")));
+            this.pics.TransparentColor = System.Drawing.Color.Transparent;
+            this.pics.Images.SetKeyName(0, "Corporate Supports Tools 2 narrow 200.png");
+            this.pics.Images.SetKeyName(1, "I Support Tools narrow 200.png");
+            this.pics.Images.SetKeyName(2, "I Contribute Tools narrow 200.png");
             // 
             // contextMenuStrip1
             // 
@@ -407,23 +375,34 @@
             this.tsmiLater,
             this.tsmiAlready,
             this.toolStripMenuItem1,
-            this.tsmiNever,
-            this.iveAlreadySupportedThisToolToolStripMenuItem});
+            this.tsmiNever});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(250, 98);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(250, 76);
             // 
             // tsmiLater
             // 
             this.tsmiLater.Name = "tsmiLater";
             this.tsmiLater.Size = new System.Drawing.Size(249, 22);
-            this.tsmiLater.Text = "Later";
+            this.tsmiLater.Text = "Not now, try later";
             this.tsmiLater.Click += new System.EventHandler(this.tsmiLater_Click);
+            // 
+            // tsmiAlready
+            // 
+            this.tsmiAlready.Name = "tsmiAlready";
+            this.tsmiAlready.Size = new System.Drawing.Size(249, 22);
+            this.tsmiAlready.Text = "I have already supported this tool";
+            this.tsmiAlready.Click += new System.EventHandler(this.tsmiAlready_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(246, 6);
             // 
             // tsmiNever
             // 
             this.tsmiNever.Name = "tsmiNever";
             this.tsmiNever.Size = new System.Drawing.Size(249, 22);
-            this.tsmiNever.Text = "Never will be supporting this tool";
+            this.tsmiNever.Text = "I will never support this tool";
             this.tsmiNever.Click += new System.EventHandler(this.tsmiNever_Click);
             // 
             // panPersonal
@@ -490,12 +469,12 @@
             // 
             // panInfo
             // 
-            this.panInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.panInfo.BackColor = System.Drawing.Color.Yellow;
             this.panInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panInfo.Controls.Add(this.panel2);
             this.panInfo.Location = new System.Drawing.Point(30, 663);
             this.panInfo.Name = "panInfo";
-            this.panInfo.Size = new System.Drawing.Size(456, 376);
+            this.panInfo.Size = new System.Drawing.Size(454, 376);
             this.panInfo.TabIndex = 11;
             this.panInfo.Visible = false;
             this.panInfo.VisibleChanged += new System.EventHandler(this.panInfo_VisibleChanged);
@@ -508,40 +487,12 @@
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(66)))), ((int)(((byte)(173)))));
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.btnInfoClose);
-            this.panel2.Controls.Add(this.helpLink);
             this.panel2.Controls.Add(this.helpText);
             this.panel2.Controls.Add(this.helpTitle);
-            this.panel2.Location = new System.Drawing.Point(5, 5);
+            this.panel2.Location = new System.Drawing.Point(3, 3);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(444, 364);
+            this.panel2.Size = new System.Drawing.Size(446, 368);
             this.panel2.TabIndex = 0;
-            // 
-            // btnInfoClose
-            // 
-            this.btnInfoClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnInfoClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnInfoClose.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
-            this.btnInfoClose.Image = ((System.Drawing.Image)(resources.GetObject("btnInfoClose.Image")));
-            this.btnInfoClose.Location = new System.Drawing.Point(409, 3);
-            this.btnInfoClose.Name = "btnInfoClose";
-            this.btnInfoClose.Size = new System.Drawing.Size(30, 30);
-            this.btnInfoClose.TabIndex = 13;
-            this.btnInfoClose.UseVisualStyleBackColor = true;
-            this.btnInfoClose.Click += new System.EventHandler(this.btnInfoClose_Click);
-            // 
-            // helpLink
-            // 
-            this.helpLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.helpLink.LinkColor = System.Drawing.Color.Yellow;
-            this.helpLink.Location = new System.Drawing.Point(16, 334);
-            this.helpLink.Name = "helpLink";
-            this.helpLink.Size = new System.Drawing.Size(363, 18);
-            this.helpLink.TabIndex = 2;
-            this.helpLink.TabStop = true;
-            this.helpLink.Tag = "https://jonasr.app/helping/";
-            this.helpLink.Text = "https://jonasr.app/helping/";
-            this.helpLink.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.helpLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkHelping_LinkClicked);
             // 
             // helpText
             // 
@@ -553,13 +504,13 @@
             this.helpText.Font = new System.Drawing.Font("Berlin Sans FB", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.helpText.ForeColor = System.Drawing.Color.Yellow;
             this.helpText.Location = new System.Drawing.Point(16, 53);
-            this.helpText.Multiline = true;
             this.helpText.Name = "helpText";
             this.helpText.ReadOnly = true;
-            this.helpText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.helpText.Size = new System.Drawing.Size(410, 276);
+            this.helpText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.helpText.Size = new System.Drawing.Size(416, 302);
             this.helpText.TabIndex = 1;
             this.helpText.Text = resources.GetString("helpText.Text");
+            this.helpText.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.helpText_LinkClicked);
             // 
             // helpTitle
             // 
@@ -568,7 +519,7 @@
             this.helpTitle.Font = new System.Drawing.Font("Berlin Sans FB", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.helpTitle.Location = new System.Drawing.Point(12, 10);
             this.helpTitle.Name = "helpTitle";
-            this.helpTitle.Size = new System.Drawing.Size(430, 35);
+            this.helpTitle.Size = new System.Drawing.Size(406, 35);
             this.helpTitle.TabIndex = 0;
             this.helpTitle.Text = "How and Why do we support?";
             this.helpTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -611,7 +562,7 @@
             // 
             this.panBgBlue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(66)))), ((int)(((byte)(173)))));
             this.panBgBlue.Controls.Add(this.panInfo);
-            this.panBgBlue.Controls.Add(this.btnInfo);
+            this.panBgBlue.Controls.Add(this.btnWhatWhy);
             this.panBgBlue.Controls.Add(this.panPersonal);
             this.panBgBlue.Controls.Add(this.btnSubmit);
             this.panBgBlue.Controls.Add(this.panCorp);
@@ -622,29 +573,70 @@
             this.panBgBlue.Controls.Add(this.label1);
             this.panBgBlue.Controls.Add(this.label2);
             this.panBgBlue.Controls.Add(this.lblAlready);
+            this.panBgBlue.Controls.Add(this.btnInfo);
             this.panBgBlue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panBgBlue.Location = new System.Drawing.Point(4, 4);
             this.panBgBlue.Name = "panBgBlue";
             this.panBgBlue.Size = new System.Drawing.Size(521, 418);
             this.panBgBlue.TabIndex = 0;
             // 
-            // iveAlreadySupportedThisToolToolStripMenuItem
+            // btnInfoClose
             // 
-            this.iveAlreadySupportedThisToolToolStripMenuItem.Name = "iveAlreadySupportedThisToolToolStripMenuItem";
-            this.iveAlreadySupportedThisToolToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
-            this.iveAlreadySupportedThisToolToolStripMenuItem.Text = "I have already supported this tool";
+            this.btnInfoClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnInfoClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnInfoClose.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.btnInfoClose.Image = ((System.Drawing.Image)(resources.GetObject("btnInfoClose.Image")));
+            this.btnInfoClose.Location = new System.Drawing.Point(411, 3);
+            this.btnInfoClose.Name = "btnInfoClose";
+            this.btnInfoClose.Size = new System.Drawing.Size(30, 30);
+            this.btnInfoClose.TabIndex = 13;
+            this.btnInfoClose.UseVisualStyleBackColor = true;
+            this.btnInfoClose.Click += new System.EventHandler(this.btnInfoClose_Click);
             // 
-            // tsmiAlready
+            // btnWhatWhy
             // 
-            this.tsmiAlready.Name = "tsmiAlready";
-            this.tsmiAlready.Size = new System.Drawing.Size(249, 22);
-            this.tsmiAlready.Text = "I have already supported this tool";
-            this.tsmiAlready.Click += new System.EventHandler(this.tsmiAlready_Click);
+            this.btnWhatWhy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnWhatWhy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.btnWhatWhy.Image = ((System.Drawing.Image)(resources.GetObject("btnWhatWhy.Image")));
+            this.btnWhatWhy.Location = new System.Drawing.Point(12, 12);
+            this.btnWhatWhy.Name = "btnWhatWhy";
+            this.btnWhatWhy.Size = new System.Drawing.Size(30, 30);
+            this.btnWhatWhy.TabIndex = 12;
+            this.toolTip1.SetToolTip(this.btnWhatWhy, "Information about WHY we should support tools - read my thoughts!");
+            this.btnWhatWhy.UseVisualStyleBackColor = true;
+            this.btnWhatWhy.Click += new System.EventHandler(this.btnWhatWhy_Click);
             // 
-            // toolStripMenuItem1
+            // btnSubmit
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(246, 6);
+            this.btnSubmit.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSubmit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSubmit.ImageIndex = 0;
+            this.btnSubmit.ImageList = this.pics;
+            this.btnSubmit.Location = new System.Drawing.Point(178, 330);
+            this.btnSubmit.Margin = new System.Windows.Forms.Padding(8);
+            this.btnSubmit.Name = "btnSubmit";
+            this.btnSubmit.Padding = new System.Windows.Forms.Padding(8);
+            this.btnSubmit.Size = new System.Drawing.Size(210, 68);
+            this.btnSubmit.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.btnSubmit, "Click to forward you to the supporting form on JonasR.app.\r\nSubmitting will bring" +
+        " the information here into the following step online.");
+            this.btnSubmit.UseVisualStyleBackColor = true;
+            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
+            // 
+            // btnInfo
+            // 
+            this.btnInfo.ContextMenuStrip = this.contextMenuStrip1;
+            this.btnInfo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(99)))), ((int)(((byte)(255)))));
+            this.btnInfo.Image = ((System.Drawing.Image)(resources.GetObject("btnInfo.Image")));
+            this.btnInfo.Location = new System.Drawing.Point(475, 12);
+            this.btnInfo.Name = "btnInfo";
+            this.btnInfo.Size = new System.Drawing.Size(30, 30);
+            this.btnInfo.TabIndex = 105;
+            this.toolTip1.SetToolTip(this.btnInfo, "Technical information about how this works,\r\nwhat is stored, where it is stored, " +
+        "how to stop\r\npromping about supporting, etc.");
+            this.btnInfo.UseVisualStyleBackColor = true;
+            this.btnInfo.Click += new System.EventHandler(this.btnInfo_Click);
             // 
             // Supporting
             // 
@@ -678,7 +670,6 @@
             this.panel3.PerformLayout();
             this.panInfo.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
             this.panBgYellow.ResumeLayout(false);
             this.panBgBlue.ResumeLayout(false);
             this.panBgBlue.PerformLayout();
@@ -714,10 +705,9 @@
         private System.Windows.Forms.TextBox txtPersonalFirst;
         private System.Windows.Forms.Panel panInfo;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.LinkLabel helpLink;
-        private System.Windows.Forms.TextBox helpText;
+        private System.Windows.Forms.RichTextBox helpText;
         private System.Windows.Forms.Label helpTitle;
-        private System.Windows.Forms.Button btnInfo;
+        private System.Windows.Forms.Button btnWhatWhy;
         private System.Windows.Forms.Button btnInfoClose;
         private System.Windows.Forms.Label lblLater;
         private System.Windows.Forms.Label lblAlready;
@@ -735,6 +725,6 @@
         private System.Windows.Forms.Panel panBgBlue;
         private System.Windows.Forms.ToolStripMenuItem tsmiAlready;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem iveAlreadySupportedThisToolToolStripMenuItem;
+        private System.Windows.Forms.Button btnInfo;
     }
 }
