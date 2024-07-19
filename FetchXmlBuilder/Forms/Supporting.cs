@@ -48,7 +48,7 @@ namespace Rappen.XTB
                         tool.VersionRunDate = DateTime.Now;
                         tools.Save();
                     }
-                    settings.Save();    // this is only to get a correct format of the tool settings file
+                    //settings.Save();    // this is only to get a correct format of the tool settings file
                 }
                 if (settings?[toolname]?.Enabled != true)
                 {
