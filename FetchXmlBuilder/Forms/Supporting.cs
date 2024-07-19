@@ -81,11 +81,11 @@ namespace Rappen.XTB
                     {   // Installed this version too soon
                         return;
                     }
-                    else if (tool.Support.DisplayDate.AddMinutes(settings.ShowMinutesAfterShown) > DateTime.Now)
+                    else if (tool.Support.AutoDisplayDate.AddMinutes(settings.ShowMinutesAfterShown) > DateTime.Now)
                     {   // Seen this form to soon
                         return;
                     }
-                    else if (tool.Support.DisplayCount >= settings.ShowAutoRepeatTimes)
+                    else if (tool.Support.AutoDisplayCount >= settings.ShowAutoRepeatTimes)
                     {   // Seen this too many times
                         return;
                     }
@@ -106,8 +106,8 @@ namespace Rappen.XTB
                 new Supporting(appinsights, manual).ShowDialog(plugin);
                 if (!manual)
                 {
-                    tool.Support.DisplayDate = DateTime.Now;
-                    tool.Support.DisplayCount++;
+                    tool.Support.AutoDisplayDate = DateTime.Now;
+                    tool.Support.AutoDisplayCount++;
                 }
                 tools.Save();
             }
@@ -584,9 +584,9 @@ For questions, contact me at https://jonasr.app/contact.";
             get => settingversion;
             set
             {
-                if (value != settingversion && Tools?.Count() > 0)
+                if (settingversion != 0 && value != settingversion && Tools?.Count() > 0)
                 {
-                    Tools.ForEach(s => s.Support.DisplayCount = 0);
+                    Tools.ForEach(s => s.Support.AutoDisplayCount = 0);
                 }
                 settingversion = value;
             }
@@ -666,7 +666,7 @@ For questions, contact me at https://jonasr.app/contact.";
             {
                 if (value != _version)
                 {
-                    Support.DisplayCount = 0;
+                    Support.AutoDisplayCount = 0;
                 }
                 _version = value;
             }
@@ -745,8 +745,8 @@ For questions, contact me at https://jonasr.app/contact.";
 
     public class Support
     {
-        public DateTime DisplayDate = DateTime.MinValue;
-        public int DisplayCount = 0;
+        public DateTime AutoDisplayDate = DateTime.MinValue;
+        public int AutoDisplayCount;
         public DateTime SubmittedDate;
         public SupportType Type = SupportType.None;
         public int UsersIndex;
