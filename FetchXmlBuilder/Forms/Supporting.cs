@@ -21,6 +21,7 @@ namespace Rappen.XTB
         private static Tool tool;
         private static Supporters supporters;
         private static ToolSettings settings;
+        private static SupportableTool supportabletool;
         private static Random random = new Random();
 
         private readonly AppInsights appinsights;
@@ -31,18 +32,72 @@ namespace Rappen.XTB
 
         public static void ShowIf(PluginControlBase plugin, bool manual, bool reload, AppInsights appinsights)
         {
+            var toolname = plugin?.ToolName;
             try
             {
-                var display = manual;
-                if (reload || settings == null || tools == null || tool == null)
+                if (reload || settings == null || supportabletool == null || tools == null || tool == null)
                 {
                     settings = ToolSettings.Get();
-                    // settings.Save();
-                    display = ShowSupporting(plugin.ToolName) || manual;
+                    supportabletool = settings[toolname];
+                    tools = RappenXTB.Load(settings);
+                    tool = tools[toolname];
+                    var version = Assembly.GetExecutingAssembly().GetName().Version;
+                    if (tool.version != version)
+                    {
+                        tool.version = version;
+                        tool.VersionRunDate = DateTime.Now;
+                        tools.Save();
+                    }
+                    settings.Save();    // this is only to get a correct format of the tool settings file
                 }
-                if (!display)
+                if (settings?[toolname]?.Enabled != true)
                 {
                     return;
+                }
+                if (reload || supporters == null)
+                {
+                    supporters = Supporters.DownloadMy(tools.InstallationId, toolname, settings.ContributionCounts);
+                }
+                if (!manual)
+                {
+                    if (supporters.Count > 0)
+                    {   // I have supportings!
+                        return;
+                    }
+                    else if (supportabletool.ShowOnlyManual)
+                    {   // Centerally stopping showing automatically
+                        return;
+                    }
+                    else if (tool.Support.Type == SupportType.Never)
+                    {   // You will never want to support this tool
+                        return;
+                    }
+                    else if (tool.FirstRunDate.AddMinutes(settings.ShowMinutesAfterInstall) > DateTime.Now)
+                    {   // Installed it too soon
+                        return;
+                    }
+                    else if (tool.VersionRunDate > tool.FirstRunDate &&
+                        tool.VersionRunDate.AddMinutes(settings.ShowMinutesAfterNewVersion) > DateTime.Now)
+                    {   // Installed this version too soon
+                        return;
+                    }
+                    else if (tool.Support.DisplayDate.AddMinutes(settings.ShowMinutesAfterShown) > DateTime.Now)
+                    {   // Seen this form to soon
+                        return;
+                    }
+                    else if (tool.Support.DisplayCount >= settings.ShowAutoRepeatTimes)
+                    {   // Seen this too many times
+                        return;
+                    }
+                    else if (tool.Support.SubmittedDate.AddMinutes(settings.ShowMinutesAfterSubmittingButNotCompleted) > DateTime.Now)
+                    {   // Submitted too soon for JR to handle it
+                        return;
+                    }
+                    else if (settings.ShowAutoPercentChance < 1 ||
+                        settings.ShowAutoPercentChance <= random.Next(1, 100))
+                    {
+                        return;
+                    }
                 }
                 if (manual && tool?.Support?.Type == SupportType.Never)
                 {
@@ -98,69 +153,6 @@ namespace Rappen.XTB
         }
 
         #endregion Constructors
-
-        #region Private Methods
-
-        private static bool ShowSupporting(string toolname)
-        {
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
-            tools = RappenXTB.Load(settings);
-            tool = tools[toolname];
-            if (tool.Support == null)
-            {
-                tool.Support = new Support();
-            }
-            if (tool.version != version)
-            {
-                tool.version = version;
-                tool.VersionRunDate = DateTime.Now;
-                tools.Save();
-            }
-            supporters = Supporters.DownloadMy(tools.InstallationId, toolname, settings.ContributionCounts);
-            if (supporters.Count > 0)
-            {   // I have supportings!
-                return false;
-            }
-            else if (settings.ShowOnlyManual)
-            {   // Centerally stopping showing automatically
-                return false;
-            }
-            else if (tool.Support.Type == SupportType.Never)
-            {   // You will never want to support this tool
-                return false;
-            }
-            else if (tool.FirstRunDate.AddMinutes(settings.ShowMinutesAfterInstall) > DateTime.Now)
-            {   // Installed it too soon
-                return false;
-            }
-            else if (tool.VersionRunDate > tool.FirstRunDate && tool.VersionRunDate.AddMinutes(settings.ShowMinutesAfterNewVersion) > DateTime.Now)
-            {   // Installed this version too soon
-                return false;
-            }
-            else if (tool.Support.DisplayDate.AddMinutes(settings.ShowMinutesAfterShown) > DateTime.Now)
-            {   // Seen this form to soon
-                return false;
-            }
-            else if (tool.Support.DisplayCount >= settings.ShowAutoRepeatTimes)
-            {   // Seen this too many times
-                return false;
-            }
-            else if (tool.Support.SubmittedDate.AddMinutes(settings.ShowMinutesAfterSubmittingButNotCompleted) > DateTime.Now)
-            {   // Submitted too soon for JR to handle it
-                return false;
-            }
-            else if (settings.ShowAutoPercentChance < 1)
-            {
-                return false;
-            }
-            else
-            {
-                var rand = random.Next(1, 100);
-                return rand <= settings.ShowAutoPercentChance;
-            }
-        }
-
-        #endregion Private Methods
 
         #region Private Event Methods
 
@@ -406,7 +398,7 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
         private const string ToolSettingsURL = "https://jonasr.app/xtb/toolsettings.xml";
 
         public int SettingsVersion = 1;
-        public bool ShowOnlyManual = true;  // false
+        public List<SupportableTool> SupportableTools = new List<SupportableTool>();
         public bool ContributionCounts = true;  // false
         public int ShowMinutesAfterInstall = int.MaxValue;    // 60
         public int ShowMinutesAfterNewVersion = int.MaxValue; // 120
@@ -477,9 +469,9 @@ Remember, it has to be submitted at the next step!", "Supporting", MessageBoxBut
         public Color clrBgNormal => Color.FromArgb(int.Parse(ColorBgNormal, System.Globalization.NumberStyles.HexNumber));
         public Color clrBgInvalid => Color.FromArgb(int.Parse(ColorBgInvalid, System.Globalization.NumberStyles.HexNumber));
 
-        public string HelpWhyTitle = "Community Tool is Conscienceware.";
+        public string HelpWhyTitle = "Community Tools are Conscienceware.";
 
-        public string HelpWhyText = @"Some in the Power Platform Community are creating tools.
+        public string HelpWhyText = @"Some of us in the Power Platform Community are creating tools.
 Some contribute to the community with new ideas, find problems, write documentation, and even solve our bugs.
 Thousands and thousands in this community are mostly 'consumers'—only using open-source tools.
 To me, it's very similar to watching TV. Do you pay for channels, Netflix, Amazon Prime, Spotify, etc.?
@@ -523,6 +515,18 @@ For questions, contact me at https://jonasr.app/contact.";
 
         public static ToolSettings Get() => new Uri(ToolSettingsURL).DownloadXml(new ToolSettings());
 
+        public SupportableTool this[string name]
+        {
+            get
+            {
+                if (!SupportableTools.Any(st => st.Name == name))
+                {
+                    SupportableTools.Add(new SupportableTool { Name = name });
+                }
+                return SupportableTools.FirstOrDefault(st => st.Name == name);
+            }
+        }
+
         public void Save()
         {
             if (!Directory.Exists(Paths.SettingsPath))
@@ -532,6 +536,13 @@ For questions, contact me at https://jonasr.app/contact.";
             string path = Path.Combine(Paths.SettingsPath, "Rappen.XTB.ToolSettings.xml");
             XmlSerializerHelper.SerializeToFile(this, path);
         }
+    }
+
+    public class SupportableTool
+    {
+        public string Name;
+        public bool Enabled = false;
+        public bool ShowOnlyManual = true;
     }
 
     public class Supporters : List<Supporter>
