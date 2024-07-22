@@ -213,6 +213,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Rappen.XTB.Supporting\Forms\Supporting.cs">
+      <Link>Forms\Supporting.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\Rappen.XTB.Supporting\Forms\Supporting.Designer.cs">
+      <Link>Forms\Supporting.Designer.cs</Link>
+      <DependentUpon>Supporting.cs</DependentUpon>
+    </Compile>
     <Compile Include="AppCode\Utils.cs" />
     <Compile Include="Converters\LCG\CommonSettings.cs" />
     <Compile Include="Converters\LCG\ConfigurationUtils.cs" />
@@ -236,12 +244,6 @@
     </Compile>
     <Compile Include="Forms\ShareLink.Designer.cs">
       <DependentUpon>ShareLink.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Supporting.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Supporting.Designer.cs">
-      <DependentUpon>Supporting.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -442,6 +444,10 @@
     <Compile Include="AppCode\WebAPIMetadataProvider.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\Rappen.XTB.Supporting\Forms\Supporting.resx">
+      <Link>Forms\Supporting.resx</Link>
+      <DependentUpon>Supporting.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\commentControl.resx">
       <DependentUpon>commentControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -519,9 +525,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ShowMetadataOptions.resx">
       <DependentUpon>ShowMetadataOptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Supporting.resx">
-      <DependentUpon>Supporting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Welcome.resx">
       <DependentUpon>Welcome.cs</DependentUpon>

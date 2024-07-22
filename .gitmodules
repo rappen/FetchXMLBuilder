@@ -12,3 +12,6 @@
 [submodule "MsCrmTools.MetadataBrowser"]
 	path = MsCrmTools.MetadataBrowser
 	url = https://github.com/MscrmTools/MsCrmTools.MetadataBrowser
+[submodule "Rappen.XTB.Supporting"]
+	path = Rappen.XTB.Supporting
+	url = https://github.com/rappen/Rappen.XTB.Supporting
