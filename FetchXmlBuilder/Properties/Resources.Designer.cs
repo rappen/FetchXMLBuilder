@@ -63,36 +63,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap BDU_2019_032_tsp {
-            get {
-                object obj = ResourceManager.GetObject("BDU-2019-032-tsp", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap bmc_32 {
-            get {
-                object obj = ResourceManager.GetObject("bmc-32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap FXB_2019_2_032_tsp {
-            get {
-                object obj = ResourceManager.GetObject("FXB-2019-2-032-tsp", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap icon_convert {
             get {
                 object obj = ResourceManager.GetObject("icon-convert", resourceCulture);
@@ -393,9 +363,39 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Microsoft_logo_32 {
+        internal static System.Drawing.Bitmap logo_BDU {
             get {
-                object obj = ResourceManager.GetObject("Microsoft_logo.32", resourceCulture);
+                object obj = ResourceManager.GetObject("logo-BDU", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap logo_FXB {
+            get {
+                object obj = ResourceManager.GetObject("logo-FXB", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap logo_Microsoft {
+            get {
+                object obj = ResourceManager.GetObject("logo-Microsoft", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap supporting {
+            get {
+                object obj = ResourceManager.GetObject("supporting", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

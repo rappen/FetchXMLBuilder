@@ -92,7 +92,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbReturnToCaller = new System.Windows.Forms.ToolStripButton();
             this.tslAbout = new System.Windows.Forms.ToolStripLabel();
             this.tsbLearnFetchXml = new System.Windows.Forms.ToolStripButton();
-            this.tsbBymeacoffee = new System.Windows.Forms.ToolStripButton();
+            this.tsbSupporting = new System.Windows.Forms.ToolStripButton();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.dockContainer = new WeifenLuo.WinFormsUI.Docking.DockPanel();
@@ -124,11 +124,11 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbReturnToCaller,
             this.tslAbout,
             this.tsbLearnFetchXml,
-            this.tsbBymeacoffee});
+            this.tsbSupporting});
             this.toolStripMain.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolStripMain.Location = new System.Drawing.Point(0, 0);
             this.toolStripMain.Name = "toolStripMain";
-            this.toolStripMain.Size = new System.Drawing.Size(1298, 39);
+            this.toolStripMain.Size = new System.Drawing.Size(1714, 39);
             this.toolStripMain.TabIndex = 22;
             this.toolStripMain.Text = "toolStrip1";
             this.toolStripMain.Click += new System.EventHandler(this.toolStripMain_Click);
@@ -466,12 +466,12 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             // tsbBDU
             // 
-            this.tsbBDU.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.BDU_2019_032_tsp;
+            this.tsbBDU.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.logo_BDU;
             this.tsbBDU.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbBDU.Name = "tsbBDU";
-            this.tsbBDU.Size = new System.Drawing.Size(138, 36);
+            this.tsbBDU.Size = new System.Drawing.Size(66, 36);
             this.tsbBDU.Tag = "";
-            this.tsbBDU.Text = "Bulk Data Updater";
+            this.tsbBDU.Text = "BDU";
             this.tsbBDU.ToolTipText = "Open current query in Bulk Data Updater to update the records";
             this.tsbBDU.Click += new System.EventHandler(this.tsbBDU_Click);
             // 
@@ -673,44 +673,47 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbReturnToCaller.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_return;
             this.tsbReturnToCaller.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbReturnToCaller.Name = "tsbReturnToCaller";
-            this.tsbReturnToCaller.Size = new System.Drawing.Size(134, 36);
-            this.tsbReturnToCaller.Text = "Return FetchXML";
+            this.tsbReturnToCaller.Size = new System.Drawing.Size(78, 36);
+            this.tsbReturnToCaller.Text = "Return";
+            this.tsbReturnToCaller.ToolTipText = "Return FetchXML";
             this.tsbReturnToCaller.Visible = false;
             this.tsbReturnToCaller.Click += new System.EventHandler(this.tsbReturnToCaller_Click);
             // 
             // tslAbout
             // 
             this.tslAbout.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tslAbout.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.FXB_2019_2_032_tsp;
+            this.tslAbout.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.logo_FXB;
             this.tslAbout.IsLink = true;
             this.tslAbout.Name = "tslAbout";
             this.tslAbout.Size = new System.Drawing.Size(114, 36);
             this.tslAbout.Text = "by Jonas Rapp";
+            this.tslAbout.ToolTipText = "About FetchXML Builder";
             this.tslAbout.Click += new System.EventHandler(this.tslAbout_Click);
             // 
             // tsbLearnFetchXml
             // 
             this.tsbLearnFetchXml.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tsbLearnFetchXml.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.Microsoft_logo_32;
+            this.tsbLearnFetchXml.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.logo_Microsoft;
             this.tsbLearnFetchXml.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbLearnFetchXml.Name = "tsbLearnFetchXml";
-            this.tsbLearnFetchXml.Size = new System.Drawing.Size(125, 36);
+            this.tsbLearnFetchXml.Size = new System.Drawing.Size(36, 36);
             this.tsbLearnFetchXml.Tag = "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/overview";
-            this.tsbLearnFetchXml.Text = "Learn FetchXml";
-            this.tsbLearnFetchXml.ToolTipText = "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/overview";
+            this.tsbLearnFetchXml.ToolTipText = "Learn Fetch Xml by Microsoft Learn!\r\n\r\nhttps://learn.microsoft.com/power-apps/dev" +
+    "eloper/data-platform/fetchxml/overview";
             this.tsbLearnFetchXml.Click += new System.EventHandler(this.HelpClick);
             // 
-            // tsbBymeacoffee
+            // tsbSupporting
             // 
-            this.tsbBymeacoffee.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tsbBymeacoffee.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbBymeacoffee.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.bmc_32;
-            this.tsbBymeacoffee.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbBymeacoffee.Name = "tsbBymeacoffee";
-            this.tsbBymeacoffee.Size = new System.Drawing.Size(36, 36);
-            this.tsbBymeacoffee.Tag = "https://www.buymeacoffee.com/rappen";
-            this.tsbBymeacoffee.ToolTipText = "By Me A Coffee!";
-            this.tsbBymeacoffee.Click += new System.EventHandler(this.HelpClick);
+            this.tsbSupporting.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.tsbSupporting.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbSupporting.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.supporting;
+            this.tsbSupporting.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsbSupporting.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbSupporting.Name = "tsbSupporting";
+            this.tsbSupporting.Size = new System.Drawing.Size(56, 36);
+            this.tsbSupporting.ToolTipText = "We all support these free, open-source tools - either\r\nas a company, personally, " +
+    "or by contribution.";
+            this.tsbSupporting.Click += new System.EventHandler(this.tsbSupporting_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -722,7 +725,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.splitter2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.splitter2.Location = new System.Drawing.Point(0, 397);
             this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(1298, 3);
+            this.splitter2.Size = new System.Drawing.Size(1714, 3);
             this.splitter2.TabIndex = 4;
             this.splitter2.TabStop = false;
             // 
@@ -736,7 +739,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.dockContainer.DocumentStyle = WeifenLuo.WinFormsUI.Docking.DocumentStyle.DockingWindow;
             this.dockContainer.Location = new System.Drawing.Point(0, 39);
             this.dockContainer.Name = "dockContainer";
-            this.dockContainer.Size = new System.Drawing.Size(1298, 360);
+            this.dockContainer.Size = new System.Drawing.Size(1714, 360);
             this.dockContainer.TabIndex = 33;
             // 
             // FetchXmlBuilder
@@ -750,7 +753,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "FetchXmlBuilder";
             this.PluginIcon = ((System.Drawing.Icon)(resources.GetObject("$this.PluginIcon")));
-            this.Size = new System.Drawing.Size(1298, 400);
+            this.Size = new System.Drawing.Size(1714, 400);
             this.TabIcon = ((System.Drawing.Image)(resources.GetObject("$this.TabIcon")));
             this.ConnectionUpdated += new XrmToolBox.Extensibility.PluginControlBase.ConnectionUpdatedHandler(this.FetchXmlBuilder_ConnectionUpdated);
             this.Load += new System.EventHandler(this.FetchXmlBuilder_Load);
@@ -828,7 +831,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         private System.Windows.Forms.ToolStripButton tsbShare;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowPowerPlatformCLI;
-        private System.Windows.Forms.ToolStripButton tsbBymeacoffee;
         private System.Windows.Forms.ToolStripButton tsbLearnFetchXml;
+        private System.Windows.Forms.ToolStripButton tsbSupporting;
     }
 }
