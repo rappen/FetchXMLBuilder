@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Jonas Rapp, Sweden")]
 [assembly: AssemblyProduct("FetchXML Builder")]
-[assembly: AssemblyCopyright("Copyright © Jonas Rapp 2014-2023")]
+[assembly: AssemblyCopyright("Copyright © Jonas Rapp 2014-2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
