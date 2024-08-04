@@ -557,6 +557,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 Supporting.ShowIf(this, false, true, ai2);
             }
+            tsbSupporting.Visible = Supporting.IsEnabled(this);
             RebuildRepositoryMenu(null);
             TreeNodeHelper.AddContextMenu(null, dockControlBuilder, settings.QueryOptions);
             EnableControls(true);
