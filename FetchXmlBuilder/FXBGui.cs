@@ -230,7 +230,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void CheckIntegrationTools()
         {
-            bduexists = PluginManagerExtended.Instance.Plugins.Any(p =>
+            bduexists = PluginManagerExtended.Instance.PluginsExt.Any(p =>
                 p.Metadata.Name == "Bulk Data Updater" && new Version(p.Value.GetVersion()) > new Version(1, 2020, 12, 4));
         }
 
