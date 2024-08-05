@@ -1,4 +1,5 @@
 ﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.Helpers;
 using System;
 using System.Reflection;
 using System.Windows.Forms;
@@ -7,6 +8,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
     public partial class Welcome : Form
     {
+        private Control caller;
+
+        public bool WebView2Success { get; private set; }
+
         public static void ShowWelcome(Control owner, string oldversion = null)
         {
             var assembly = Assembly.GetExecutingAssembly();
@@ -20,11 +25,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             var releasenotes = GetReleaseNotesUrl(version);
             try
             {
-                new Welcome(showversion, releasenotes).ShowDialog(owner);
+                var form = new Welcome();
+                form.caller = owner;
+                form.lblVersion.Text = showversion;
+                form.webRelease.Source = new Uri(releasenotes);
+                form.ShowDialog(owner);
             }
             catch
             {
-                FetchXmlBuilder.OpenURL(releasenotes);
+                UrlUtils.OpenUrl(releasenotes);
             }
         }
 
@@ -36,26 +45,24 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             return releasenotes;
         }
 
-        private Welcome(string version, string releasenotes)
+        private Welcome()
         {
             InitializeComponent();
-            lblVersion.Text = version;
-            webRelease.Source = new Uri(releasenotes);
         }
 
         private void llTwitter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FetchXmlBuilder.OpenURL("http://twitter.com/FetchXMLBuilder");
+            UrlUtils.OpenUrl("http://twitter.com/FetchXMLBuilder");
         }
 
         private void llWeb_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FetchXmlBuilder.OpenURL("https://fetchxmlbuilder.com");
+            UrlUtils.OpenUrl("https://fetchxmlbuilder.com");
         }
 
         private void llStats_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            MessageBox.Show(@"The evolution of FetchXML Builder is based on feedback issues and anonymous statistics collected about usage.
+            MessageBoxEx.Show(this, @"The evolution of FetchXML Builder is based on feedback issues and anonymous statistics collected about usage.
 The statistics are a valuable source of information for continuing the development to make the tool even easier to use and improve the most popular features.
 
 Thank You,
@@ -64,13 +71,24 @@ Jonas", "Anonymous statistics", MessageBoxButtons.OK, MessageBoxIcon.Information
 
         private void webRelease_NavigationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs e)
         {
-            lblLoading.Visible = false;
+            panLoading.Visible = false;
+            webRelease.Visible = true;
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FetchXmlBuilder.OpenURL(webRelease.Source.ToString());
+            UrlUtils.OpenUrl(webRelease.Source);
             Close();
+        }
+
+        private void Welcome_Shown(object sender, EventArgs e)
+        {
+            timerLoading.Enabled = true;
+        }
+
+        private void timerLoading_Tick(object sender, EventArgs e)
+        {
+            linkCantLoad.Visible = panLoading.Visible;
         }
     }
 }

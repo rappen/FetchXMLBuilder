@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Welcome));
             this.llTwitter = new System.Windows.Forms.LinkLabel();
             this.label4 = new System.Windows.Forms.Label();
@@ -41,8 +42,12 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.btnClose = new System.Windows.Forms.Button();
             this.lblVersion = new System.Windows.Forms.Label();
+            this.panLoading = new System.Windows.Forms.Panel();
+            this.linkCantLoad = new System.Windows.Forms.LinkLabel();
+            this.timerLoading = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.webRelease)).BeginInit();
+            this.panLoading.SuspendLayout();
             this.SuspendLayout();
             // 
             // llTwitter
@@ -128,6 +133,7 @@
             // 
             // webRelease
             // 
+            this.webRelease.AllowExternalDrop = true;
             this.webRelease.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -136,8 +142,8 @@
             this.webRelease.Location = new System.Drawing.Point(425, 12);
             this.webRelease.Name = "webRelease";
             this.webRelease.Size = new System.Drawing.Size(738, 604);
-            this.webRelease.Source = new System.Uri("https://jonasr.app/fxb/releases/1-2021-10-002/", System.UriKind.Absolute);
             this.webRelease.TabIndex = 36;
+            this.webRelease.Visible = false;
             this.webRelease.ZoomFactor = 1D;
             this.webRelease.NavigationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs>(this.webRelease_NavigationCompleted);
             // 
@@ -145,9 +151,9 @@
             // 
             this.lblLoading.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblLoading.AutoSize = true;
-            this.lblLoading.Location = new System.Drawing.Point(743, 280);
+            this.lblLoading.Location = new System.Drawing.Point(89, 48);
             this.lblLoading.Name = "lblLoading";
-            this.lblLoading.Size = new System.Drawing.Size(91, 13);
+            this.lblLoading.Size = new System.Drawing.Size(114, 16);
             this.lblLoading.TabIndex = 37;
             this.lblLoading.Text = "Loading release...";
             // 
@@ -188,6 +194,36 @@
             this.lblVersion.Text = "1.2022.x.x";
             this.lblVersion.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // panLoading
+            // 
+            this.panLoading.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panLoading.Controls.Add(this.linkCantLoad);
+            this.panLoading.Controls.Add(this.lblLoading);
+            this.panLoading.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panLoading.Location = new System.Drawing.Point(630, 243);
+            this.panLoading.Name = "panLoading";
+            this.panLoading.Size = new System.Drawing.Size(293, 142);
+            this.panLoading.TabIndex = 41;
+            // 
+            // linkCantLoad
+            // 
+            this.linkCantLoad.AutoSize = true;
+            this.linkCantLoad.LinkArea = new System.Windows.Forms.LinkArea(19, 10);
+            this.linkCantLoad.Location = new System.Drawing.Point(70, 84);
+            this.linkCantLoad.Name = "linkCantLoad";
+            this.linkCantLoad.Size = new System.Drawing.Size(161, 20);
+            this.linkCantLoad.TabIndex = 38;
+            this.linkCantLoad.TabStop = true;
+            this.linkCantLoad.Text = "...if not loaded - click here!";
+            this.linkCantLoad.UseCompatibleTextRendering = true;
+            this.linkCantLoad.Visible = false;
+            this.linkCantLoad.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // timerLoading
+            // 
+            this.timerLoading.Interval = 4000;
+            this.timerLoading.Tick += new System.EventHandler(this.timerLoading_Tick);
+            // 
             // Welcome
             // 
             this.AcceptButton = this.btnClose;
@@ -196,11 +232,11 @@
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.btnClose;
             this.ClientSize = new System.Drawing.Size(1175, 653);
+            this.Controls.Add(this.webRelease);
+            this.Controls.Add(this.panLoading);
             this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.linkLabel1);
-            this.Controls.Add(this.lblLoading);
-            this.Controls.Add(this.webRelease);
             this.Controls.Add(this.llStats);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -217,8 +253,11 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FetchXML Builder - Release Notes";
             this.TopMost = true;
+            this.Shown += new System.EventHandler(this.Welcome_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.webRelease)).EndInit();
+            this.panLoading.ResumeLayout(false);
+            this.panLoading.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -237,5 +276,8 @@
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Label lblVersion;
+        private System.Windows.Forms.Panel panLoading;
+        private System.Windows.Forms.LinkLabel linkCantLoad;
+        private System.Windows.Forms.Timer timerLoading;
     }
 }
