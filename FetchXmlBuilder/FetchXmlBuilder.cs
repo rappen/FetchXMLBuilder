@@ -96,6 +96,28 @@ namespace Rappen.XTB.FetchXmlBuilder
                 "EntityLogicalName"
             }).ToArray();
             LoadSetting();
+
+            CheckIntegrationTools();
+            SetupDockControls();
+            ApplySettings(true);
+            var ass = Assembly.GetExecutingAssembly().GetName();
+            var version = ass.Version.ToString();
+            if (!version.Equals(settings.CurrentVersion))
+            {
+                // Reset some settings when new version is deployed
+                var oldversion = settings.CurrentVersion;
+                settings.CurrentVersion = version;
+                SaveSetting();
+                LogUse("ShowWelcome", ai2: true);
+                Welcome.ShowWelcome(this, oldversion);
+            }
+            else
+            {
+                Supporting.ShowIf(this, false, true, ai2);
+            }
+            tsbSupporting.Visible = Supporting.IsEnabled(this);
+            RebuildRepositoryMenu(null);
+            TreeNodeHelper.AddContextMenu(null, dockControlBuilder, settings.QueryOptions);
         }
 
         private void Error_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -376,10 +398,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             tsbRepo.Visible = settings.ShowRepository;
             tsbBDU.Visible = settings.ShowBDU;
             tsmiShowOData.Visible = settings.ShowOData2;
-            if (reloadquery && connectionsettings != null && !string.IsNullOrWhiteSpace(connectionsettings.FetchXML))
-            {
-                dockControlBuilder.Init(connectionsettings.FetchXML, connectionsettings.LayoutXML, false, "loaded from last session", false);
-            }
             dockControlBuilder.lblQAExpander.GroupBoxSetState(null, settings.QueryOptions.ShowQuickActions);
         }
 
@@ -525,6 +543,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 if (!working)
                 {
                     LoadEntities();
+                    dockControlBuilder.Init(connectionsettings.FetchXML, connectionsettings.LayoutXML, false, "loaded from last session", false);
                 }
             }
             else
@@ -539,27 +558,6 @@ namespace Rappen.XTB.FetchXmlBuilder
         private void FetchXmlBuilder_Load(object sender, EventArgs e)
         {
             LogUse("Load", ai2: true);
-            CheckIntegrationTools();
-            SetupDockControls();
-            ApplySettings(true);
-            var ass = Assembly.GetExecutingAssembly().GetName();
-            var version = ass.Version.ToString();
-            if (!version.Equals(settings.CurrentVersion))
-            {
-                // Reset some settings when new version is deployed
-                var oldversion = settings.CurrentVersion;
-                settings.CurrentVersion = version;
-                SaveSetting();
-                LogUse("ShowWelcome", ai2: true);
-                Welcome.ShowWelcome(this, oldversion);
-            }
-            else
-            {
-                Supporting.ShowIf(this, false, true, ai2);
-            }
-            tsbSupporting.Visible = Supporting.IsEnabled(this);
-            RebuildRepositoryMenu(null);
-            TreeNodeHelper.AddContextMenu(null, dockControlBuilder, settings.QueryOptions);
             EnableControls(true);
         }
 
