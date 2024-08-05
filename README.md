@@ -1,12 +1,15 @@
-# ![FXB](https://fetchxmlbuilder.com/origdocs/fxb150) FetchXML Builder for XrmToolBox
+![FXB](https://fetchxmlbuilder.com/fxbbanner)
 
 
-## Build queries for Microsoft Dataverse and the Power Platform. Investigate data. Get code. Empower yourself to achieve more.
-Works well with Microsoft Dynamics CRM 2011-2016 and Microsoft Dynamics 365 and Power Platform, online and onprem.
+## Build queries for Microsoft Dataverse and the Power Platform.<br/>Investigate data. <br/>Get code. <br/>Empower yourself to achieve more.
 
-*Written by [Jonas Rapp](https://twitter.com/rappen), Stockholm, Sweden.*
+---
 
-Follow [FetchXML Builder on Twitter](https://twitter.com/FetchXMLBuilder)!
+Works well with Microsoft Dataverse, Microsoft Dynamics 365, Dynamics CRM 2011-2016 and Power Platform, both online and onprem.
+
+*Written by [Jonas Rapp](https://x.com/rappen), Stockholm, Sweden.*
+
+Follow [FetchXML Builder on X](https://x.com/FetchXMLBuilder)!
 
 ---
 
