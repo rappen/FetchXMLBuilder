@@ -1,5 +1,4 @@
 ﻿using MarkMpn.FetchXmlToWebAPI;
-using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
 using System;

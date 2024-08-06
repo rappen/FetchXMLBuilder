@@ -56,7 +56,7 @@ public static class IdentifierExtensions
     public static bool IsValidIdentifier(this string identifier)
     {
         if (String.IsNullOrWhiteSpace(identifier)) return false;
-        
+
         var normalizedIdentifier = identifier.Normalize();
 
         // 1. check that the identifier match the validIdentifer regex and it's not a C# keyword

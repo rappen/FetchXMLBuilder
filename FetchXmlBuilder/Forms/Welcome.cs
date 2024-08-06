@@ -1,5 +1,4 @@
-﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
-using Rappen.XTB.Helpers;
+﻿using Rappen.XTB.Helpers;
 using System;
 using System.Reflection;
 using System.Windows.Forms;

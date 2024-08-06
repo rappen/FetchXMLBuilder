@@ -11,7 +11,6 @@ using Rappen.XTB.Helpers;
 using Rappen.XTB.Helpers.ControlItems;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.ServiceModel;

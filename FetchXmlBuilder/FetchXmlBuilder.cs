@@ -1,7 +1,6 @@
 ﻿using McTools.Xrm.Connection;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.FetchXML;
-using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Builder;
 using Rappen.XTB.FetchXmlBuilder.Converters;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
@@ -12,7 +11,6 @@ using Rappen.XTB.Helpers;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
