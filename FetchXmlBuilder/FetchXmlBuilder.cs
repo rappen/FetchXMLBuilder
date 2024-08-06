@@ -348,21 +348,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
         }
 
-        internal void OpenURLProfile(string url, bool addparameters)
-        {
-            if (addparameters)
-            {
-                url = Utils.ProcessURL(url);
-            }
-            ConnectionDetail.OpenUrlWithBrowserProfile(new Uri(url));
-        }
-
-        internal static void OpenURL(string url)
-        {
-            url = Utils.ProcessURL(url);
-            Process.Start(url);
-        }
-
         internal string GetCSharpCode()
         {
             switch (settings.CodeGenerators.QExStyle)
@@ -875,7 +860,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         private void tmsiShowReleaseNotes_Click(object sender, EventArgs e)
         {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            OpenURL(Welcome.GetReleaseNotesUrl(version));
+            UrlUtils.OpenUrl(Welcome.GetReleaseNotesUrl(version));
         }
 
         private void tsbShare_Click(object sender, EventArgs e)

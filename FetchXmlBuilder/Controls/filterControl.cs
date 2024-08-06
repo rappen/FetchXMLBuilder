@@ -1,4 +1,5 @@
 ﻿using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.Helpers;
 using System.Collections.Generic;
 
 namespace Rappen.XTB.FetchXmlBuilder.Controls
@@ -42,7 +43,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private void helpIcon_Click(object sender, System.EventArgs e)
         {
-            FetchXmlBuilder.HelpClick(sender);
+            UrlUtils.OpenUrl(sender);
         }
     }
 }

@@ -5,6 +5,7 @@ using Rappen.XRM.Helpers.Extensions;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Views;
+using Rappen.XTB.Helpers;
 using System;
 using System.Linq;
 using System.Windows.Forms;
@@ -223,15 +224,15 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 return;
             }
-            if (e.Value is EntityReference entref && form.ConnectionDetail.GetEntityReferenceUrl(entref) is string urlref && !string.IsNullOrEmpty(urlref))
+            if (e.Value is EntityReference entref)
             {
                 form.LogUse("OpenParentRecord");
-                form.OpenURLProfile(urlref, false);
+                UrlUtils.OpenUrl(entref, form.ConnectionDetail);
             }
-            else if (e.Entity != null && form.ConnectionDetail.GetEntityUrl(e.Entity) is string urlentity && !string.IsNullOrEmpty(urlentity))
+            else if (e.Entity != null)
             {
                 form.LogUse("OpenRecord");
-                form.OpenURLProfile(urlentity, false);
+                UrlUtils.OpenUrl(e.Entity);
             }
         }
 
@@ -321,18 +322,17 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void crmGridView1_RecordEnter(object sender, Rappen.XTB.Helpers.Controls.XRMRecordEventArgs e)
         {
-            ctxRecordOpen.Tag = form.ConnectionDetail.GetEntityUrl(e.Entity);
+            ctxRecordOpen.Tag = UrlUtils.GetEntityUrl(e.Entity, form.ConnectionDetail);
             ctxRecordCopy.Tag = ctxRecordOpen.Tag;
-            ctxColumnOpen.Tag = form.ConnectionDetail.GetEntityReferenceUrl(e.Value as EntityReference);
+            ctxColumnOpen.Tag = UrlUtils.GetEntityUrl(e.Value as EntityReference, form.ConnectionDetail);
             ctxColumnCopy.Tag = ctxColumnOpen.Tag;
         }
 
         private void ctxOpen_Click(object sender, EventArgs e)
         {
-            if (sender is ToolStripItem tool && tool.Tag is string url && !string.IsNullOrWhiteSpace(url))
+            if (UrlUtils.OpenUrl(sender))
             {
                 form.LogUse("OpenRecord");
-                form.OpenURLProfile(url, false);
             }
         }
 

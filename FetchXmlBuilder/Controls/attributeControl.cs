@@ -3,6 +3,7 @@ using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.Builder;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Views;
+using Rappen.XTB.Helpers;
 using Rappen.XTB.Helpers.ControlItems;
 using System;
 using System.Linq;
@@ -119,7 +120,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private void helpIcon_Click(object sender, EventArgs e)
         {
-            FetchXmlBuilder.HelpClick(sender);
+            UrlUtils.OpenUrl(sender);
         }
 
         private void cmbAttribute_SelectedIndexChanged(object sender, EventArgs e)

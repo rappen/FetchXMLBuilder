@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rappen.XTB.Helpers;
+using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
@@ -59,7 +60,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void linkInfo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FetchXmlBuilder.OpenURL("https://fetchxmlbuilder.com/sharing-queries/");
+            UrlUtils.OpenUrl("https://fetchxmlbuilder.com/sharing-queries/");
         }
 
         private void btnCopy_Click(object sender, EventArgs e)

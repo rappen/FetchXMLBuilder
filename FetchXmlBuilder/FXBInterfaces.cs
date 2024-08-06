@@ -1,6 +1,7 @@
 ﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Forms;
+using Rappen.XTB.Helpers;
 using System;
 using System.Reflection;
 using System.Windows.Forms;
@@ -94,7 +95,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 if (MessageBox.Show("Did you know you can work with the layouts too in the FetchXML Builder?\nClick the Help button to see how!\n\nDon't show again.",
                     "Called from View Designer", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2, 0,
-                    Utils.ProcessURL("https://jonasr.app/fxb-layout/")) == DialogResult.OK)
+                    "https://jonasr.app/fxb-layout/") == DialogResult.OK)
                 {
                     connectionsettings.TipsAgainstOrViewDesignerToolShown = true;
                 }
@@ -248,7 +249,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             LogUse("ReturnTo." + callerArgs.SourcePlugin, ai2: true);
             if (callerArgs.SourcePlugin == URLcaller)
             {
-                OpenURL("https://fetchxmlbuilder.com/sharing-queries/");
+                UrlUtils.OpenUrl("https://fetchxmlbuilder.com/sharing-queries/");
                 return;
             }
             var fetch = dockControlBuilder.GetFetchString(true, true);

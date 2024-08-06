@@ -2,6 +2,7 @@
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Settings;
+using Rappen.XTB.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -267,12 +268,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void helpIcon_Click(object sender, EventArgs e)
         {
-            FetchXmlBuilder.HelpClick(sender);
+            UrlUtils.OpenUrl(sender);
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FetchXmlBuilder.HelpClick(sender);
+            UrlUtils.OpenUrl(sender);
         }
 
         private void rbAllSolutions_CheckedChanged(object sender, EventArgs e)

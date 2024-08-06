@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rappen.XTB.Helpers;
+using System;
 using System.Windows.Forms;
 
 namespace Rappen.XTB.FetchXmlBuilder.DockControls
@@ -50,7 +51,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             if (linkOData.Links.Count > 0 && linkOData.Links[0].Enabled)
             {
-                fxb.OpenURLProfile(linkOData.Links[0].LinkData as string, false);
+                UrlUtils.OpenUrl(linkOData, fxb.ConnectionDetail);
                 fxb.LogUse("ExecuteOData" + version);
             }
             else
@@ -76,7 +77,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             if (e.Button == MouseButtons.Left && e.Link.Enabled)
             {
-                fxb.OpenURLProfile(e.Link.LinkData as string, false);
+                UrlUtils.OpenUrl(e.Link, fxb.ConnectionDetail);
                 fxb.LogUse("ExecuteOData" + version);
             }
         }

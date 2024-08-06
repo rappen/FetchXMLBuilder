@@ -40,9 +40,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         public static string GetReleaseNotesUrl(Version version)
         {
             var verurl = $"{version.Major}-{version.Minor}-{version.Build}";
-            var releasenotes = $"https://fetchxmlbuilder.com/releases/{verurl}#content";
-            releasenotes = Utils.ProcessURL(releasenotes);
-            return releasenotes;
+            return $"https://fetchxmlbuilder.com/releases/{verurl}#content";
         }
 
         private Welcome()

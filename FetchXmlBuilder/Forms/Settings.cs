@@ -1,5 +1,6 @@
 ﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Settings;
+using Rappen.XTB.Helpers;
 using System;
 using System.Windows.Forms;
 
@@ -226,12 +227,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void linkLayout_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FetchXmlBuilder.OpenURL("https://fetchxmlbuilder.com/features/layouts");
+            UrlUtils.OpenUrl("https://fetchxmlbuilder.com/features/layouts");
         }
 
         private void linkGeneral_Click(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FetchXmlBuilder.HelpClick(tt.GetToolTip(sender as Control));
+            UrlUtils.OpenUrl(tt.GetToolTip(sender as Control));
         }
 
         private void btnResetAll_Click(object sender, EventArgs e)

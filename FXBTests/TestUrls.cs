@@ -15,32 +15,32 @@ namespace FXBTests
         private const string randomUrl = "https://fetchxmlbuilder.com";
         private const string randomUrlResult = "https://fetchxmlbuilder.com/?utm_source=FetchXMLBuilder&utm_medium=XrmToolBox";
 
-        [TestMethod]
-        public void TestDocsUrl()
-        {
-            var result = Utils.ProcessURL(docsUrl);
-            Assert.AreEqual(docsUrlResult, result);
-        }
+        //[TestMethod]
+        //public void TestDocsUrl()
+        //{
+        //    var result = Utils.ProcessURL(docsUrl);
+        //    Assert.AreEqual(docsUrlResult, result);
+        //}
 
-        [TestMethod]
-        public void TestDocsUrlWithAnchor()
-        {
-            var result = Utils.ProcessURL(docsUrlWithAnchor);
-            Assert.AreEqual(docsUrlWithAnchorResult, result);
-        }
+        //[TestMethod]
+        //public void TestDocsUrlWithAnchor()
+        //{
+        //    var result = Utils.ProcessURL(docsUrlWithAnchor);
+        //    Assert.AreEqual(docsUrlWithAnchorResult, result);
+        //}
 
-        [TestMethod]
-        public void TestDocsUrlWithQueryAndAnchor()
-        {
-            var result = Utils.ProcessURL(docsUrlWithQueryAndAnchor);
-            Assert.AreEqual(docsUrlWithQueryAndAnchorResult, result);
-        }
+        //[TestMethod]
+        //public void TestDocsUrlWithQueryAndAnchor()
+        //{
+        //    var result = Utils.ProcessURL(docsUrlWithQueryAndAnchor);
+        //    Assert.AreEqual(docsUrlWithQueryAndAnchorResult, result);
+        //}
 
-        [TestMethod]
-        public void TestRandomUrl()
-        {
-            var result = Utils.ProcessURL(randomUrl);
-            Assert.AreEqual(randomUrlResult, result);
-        }
+        //[TestMethod]
+        //public void TestRandomUrl()
+        //{
+        //    var result = Utils.ProcessURL(randomUrl);
+        //    Assert.AreEqual(randomUrlResult, result);
+        //}
     }
 }

@@ -8,6 +8,7 @@ using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Forms;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using Rappen.XTB.FetchXmlBuilder.Views;
+using Rappen.XTB.Helpers;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
@@ -196,27 +197,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
         }
 
-        internal void HelpClick(object sender, EventArgs e) => HelpClick(sender);
-
-        internal static void HelpClick(object sender)
-        {
-            if (sender is Control control && control.Tag is string tag)
-            {
-                HelpClick(tag);
-            }
-            else if (sender is ToolStripItem tsi && tsi.Tag is string tsitag)
-            {
-                HelpClick(tsitag);
-            }
-        }
-
-        internal static void HelpClick(string url)
-        {
-            if (url.StartsWith("http"))
-            {
-                OpenURL(url);
-            }
-        }
+        internal void HelpClick(object sender, EventArgs e) => UrlUtils.OpenUrl(sender);
 
         internal void ShowMetadataControl()
         {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Rappen.XTB.Helpers;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
@@ -57,17 +58,17 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FetchXmlBuilder.OpenURL("https://fetchxmlbuilder.com");
+            UrlUtils.OpenUrl("https://fetchxmlbuilder.com");
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FetchXmlBuilder.OpenURL("https://jonasr.app");
+            UrlUtils.OpenUrl("https://jonasr.app");
         }
 
         private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FetchXmlBuilder.OpenURL("http://twitter.com/FetchXMLBuilder");
+            UrlUtils.OpenUrl("http://twitter.com/FetchXMLBuilder");
         }
 
         private void llShowWelcome_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -78,7 +79,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FetchXmlBuilder.OpenURL("https://icons8.com");
+            UrlUtils.OpenUrl("https://icons8.com");
         }
     }
 }

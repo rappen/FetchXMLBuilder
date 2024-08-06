@@ -3,12 +3,12 @@ using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XRM.Helpers.Interfaces;
-using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Builder;
 using Rappen.XTB.FetchXmlBuilder.Controls;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Forms;
 using Rappen.XTB.FetchXmlBuilder.Views;
+using Rappen.XTB.Helpers;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
@@ -1013,12 +1013,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void lblWarning_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            var url = lblWarning.Tag as string;
-            if (!string.IsNullOrWhiteSpace(url))
-            {
-                url = Utils.ProcessURL(url);
-                System.Diagnostics.Process.Start(url);
-            }
+            UrlUtils.OpenUrl(sender);
         }
     }
 }

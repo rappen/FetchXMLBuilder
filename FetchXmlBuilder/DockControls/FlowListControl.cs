@@ -1,4 +1,5 @@
 ﻿using Rappen.XTB.FetchXmlBuilder.Converters;
+using Rappen.XTB.Helpers;
 using System;
 using System.Linq;
 using System.Web;
@@ -94,17 +95,17 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void LinkHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FetchXmlBuilder.OpenURL("https://learn.microsoft.com/en-us/connectors/commondataserviceforapps/#list-rows");
+            UrlUtils.OpenUrl("https://learn.microsoft.com/en-us/connectors/commondataserviceforapps/#list-rows");
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            FetchXmlBuilder.OpenURL("https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/working-with-flows");
+            UrlUtils.OpenUrl("https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/working-with-flows");
         }
 
         private void helpIcon_Click(object sender, EventArgs e)
         {
-            FetchXmlBuilder.HelpClick(tt.GetToolTip(sender as Control));
+            UrlUtils.OpenUrl(tt.GetToolTip(sender as Control));
         }
     }
 }

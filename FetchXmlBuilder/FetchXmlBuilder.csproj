@@ -224,7 +224,6 @@
       <Link>Forms\Supporting.Designer.cs</Link>
       <DependentUpon>Supporting.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppCode\Utils.cs" />
     <Compile Include="Converters\LCG\CommonSettings.cs" />
     <Compile Include="Converters\LCG\ConfigurationUtils.cs" />
     <Compile Include="Converters\LCG\Extensions.cs" />
@@ -232,7 +231,6 @@
     <Compile Include="Converters\LCG\Settings.cs" />
     <Compile Include="Converters\LCG\UnicodeCharacterUtilities.cs" />
     <Compile Include="Converters\QExParse.cs" />
-    <Compile Include="Extensions\ConnectionExtensions.cs" />
     <Compile Include="ControlsClasses\EntityNameItem.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\GroupBoxExpanderExtensions.cs" />

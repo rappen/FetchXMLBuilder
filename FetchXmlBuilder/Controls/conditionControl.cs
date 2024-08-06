@@ -834,18 +834,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private void txtLookup_Click(object sender, EventArgs e)
         {
-            var url = fxb.ConnectionDetail.GetEntityUrl(xrmRecord.Record);
-            url = fxb.ConnectionDetail.GetEntityReferenceUrl(xrmRecord.Record.ToEntityReference());
-            if (!string.IsNullOrEmpty(url))
+            if (UrlUtils.OpenUrl(xrmRecord.Record, fxb.ConnectionDetail))
             {
                 fxb.LogUse("OpenRecord");
-                Process.Start(url);
             }
         }
 
         private void helpIcon_Click(object sender, EventArgs e)
         {
-            FetchXmlBuilder.HelpClick(sender);
+            UrlUtils.OpenUrl(sender);
         }
 
         private void cmbValue_KeyPress(object sender, KeyPressEventArgs e)
@@ -892,7 +889,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FetchXmlBuilder.HelpClick(sender);
+            UrlUtils.OpenUrl(sender);
         }
 
         #endregion Private Event Handlers

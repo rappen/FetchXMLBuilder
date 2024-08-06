@@ -1,5 +1,6 @@
 ﻿using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
+using Rappen.XTB.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,7 +61,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private void helpIcon_Click(object sender, EventArgs e)
         {
-            FetchXmlBuilder.HelpClick(sender);
+            UrlUtils.OpenUrl(sender);
         }
 
         public override void Focus()
