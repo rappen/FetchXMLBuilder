@@ -659,6 +659,15 @@
   <ItemGroup>
     <None Include="Resources\Supporting Tools 32h frame.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\I Contrbute 32h frame.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\I Support 32h frame.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\We Support 32h frame.png" />
+  </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />
   <Import Project="..\MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutoComplete.projitems" Label="Shared" />

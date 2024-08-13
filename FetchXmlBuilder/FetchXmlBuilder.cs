@@ -1,4 +1,5 @@
-﻿using McTools.Xrm.Connection;
+﻿using Cinteros.Xrm.FetchXmlBuilder.Properties;
+using McTools.Xrm.Connection;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.Builder;
@@ -543,7 +544,29 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 Supporting.ShowIf(this, false, true, ai2);
             }
-            tsbSupporting.Visible = Supporting.IsEnabled(this);
+            if (Supporting.IsEnabled(this))
+            {
+                tsbSupporting.Visible = true;
+                var supptype = Supporting.IsSupporting(this);
+                switch (supptype)
+                {
+                    case SupportType.Company:
+                        tsbSupporting.Image = Resources.wesupport;
+                        break;
+
+                    case SupportType.Personal:
+                        tsbSupporting.Image = Resources.isupport;
+                        break;
+
+                    case SupportType.Contribute:
+                        tsbSupporting.Image = Resources.icontribute;
+                        break;
+                }
+            }
+            else
+            {
+                tsbSupporting.Visible = false;
+            }
             RebuildRepositoryMenu(null);
             TreeNodeHelper.AddContextMenu(null, dockControlBuilder, settings.QueryOptions);
             if (connectionsettings != null && !string.IsNullOrWhiteSpace(connectionsettings.FetchXML))
