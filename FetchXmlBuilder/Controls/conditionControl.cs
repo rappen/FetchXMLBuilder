@@ -40,6 +40,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             valueOfSupported = fetchXmlBuilder.CDSVersion >= new Version(9, 1, 0, 19562);
             xrmRecord.Service = fetchXmlBuilder.Service;
             dlgLookup.Service = fetchXmlBuilder.Service;
+            rbDatePicker.Checked = fetchXmlBuilder.settings.UseDatePicker;
+            rbDateText.Checked = !rbDatePicker.Checked;
             rbUseLookup.Checked = fetchXmlBuilder.settings.UseLookup;
             rbEnterGuid.Checked = !rbUseLookup.Checked;
             InitializeFXB(null, fetchXmlBuilder, tree, node);
@@ -822,6 +824,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             RefreshValueOf();
         }
 
+        private void rbDatePicker_CheckedChanged(object sender, EventArgs e)
+        {
+            if (fxb?.settings != null)
+            {
+                fxb.settings.UseDatePicker = rbDatePicker.Checked;
+            }
+            UpdateValueField();
+        }
+
         private void rbUseLookup_CheckedChanged(object sender, EventArgs e)
         {
             if (fxb?.settings != null)
@@ -883,7 +894,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private void dtPicker_ValueChanged(object sender, EventArgs e)
         {
-            cmbValue.Text = dtPicker.Value.ToString();
+            cmbValue.Text = dtPicker.Value == dtPicker.Value.Date ? dtPicker.Value.ToShortDateString() : dtPicker.Text;
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

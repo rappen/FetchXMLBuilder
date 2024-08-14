@@ -698,7 +698,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.rbDatePicker.TabStop = true;
             this.rbDatePicker.Text = "Use DatePicker";
             this.rbDatePicker.UseVisualStyleBackColor = true;
-            this.rbDatePicker.CheckedChanged += new System.EventHandler(this.rbUseLookup_CheckedChanged);
+            this.rbDatePicker.CheckedChanged += new System.EventHandler(this.rbDatePicker_CheckedChanged);
             // 
             // panDatePicker
             // 
