@@ -63,6 +63,26 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap I_Contribute_icon {
+            get {
+                object obj = ResourceManager.GetObject("I_Contribute_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap I_Support_icon {
+            get {
+                object obj = ResourceManager.GetObject("I_Support_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icon_convert {
             get {
                 object obj = ResourceManager.GetObject("icon-convert", resourceCulture);
@@ -363,26 +383,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icontribute {
-            get {
-                object obj = ResourceManager.GetObject("icontribute", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap isupport {
-            get {
-                object obj = ResourceManager.GetObject("isupport", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap logo_BDU {
             get {
                 object obj = ResourceManager.GetObject("logo-BDU", resourceCulture);
@@ -423,9 +423,9 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap wesupport {
+        internal static System.Drawing.Bitmap We_Support_icon {
             get {
-                object obj = ResourceManager.GetObject("wesupport", resourceCulture);
+                object obj = ResourceManager.GetObject("We_Support_icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

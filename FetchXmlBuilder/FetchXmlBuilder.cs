@@ -551,15 +551,15 @@ namespace Rappen.XTB.FetchXmlBuilder
                 switch (supptype)
                 {
                     case SupportType.Company:
-                        tsbSupporting.Image = Resources.wesupport;
+                        tsbSupporting.Image = Resources.We_Support_icon;
                         break;
 
                     case SupportType.Personal:
-                        tsbSupporting.Image = Resources.isupport;
+                        tsbSupporting.Image = Resources.I_Support_icon;
                         break;
 
                     case SupportType.Contribute:
-                        tsbSupporting.Image = Resources.icontribute;
+                        tsbSupporting.Image = Resources.I_Contribute_icon;
                         break;
                 }
             }
