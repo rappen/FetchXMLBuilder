@@ -215,6 +215,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 {
                     throw new Exception($"No metadata for attribute: {entityname}.{condition.attribute}");
                 }
+                var value = condition.value;
                 switch (condition.@operator)
                 {
                     case @operator.eq:
@@ -260,9 +261,36 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     case @operator.notlike:
                         result.Append(" NOT LIKE ");
                         break;
-                    //case @operator.beginswith:
-                    //    result.Append(" LIKE \"{0}%\"");
-                    //    break;
+
+                    case @operator.beginswith:
+                        result.Append(" LIKE ");
+                        value = $"{value}%";
+                        break;
+
+                    case @operator.notbeginwith:
+                        result.Append(" NOT LIKE ");
+                        value = $"{value}%";
+                        break;
+
+                    case @operator.endswith:
+                        result.Append(" LIKE ");
+                        value = $"%{value}";
+                        break;
+
+                    case @operator.notendwith:
+                        result.Append(" NOT LIKE ");
+                        value = $"%{value}";
+                        break;
+
+                    case @operator.containvalues:
+                        result.Append(" LIKE ");
+                        value = $"%{value}%";
+                        break;
+
+                    case @operator.notcontainvalues:
+                        result.Append(" NOT LIKE ");
+                        value = $"%{value}%";
+                        break;
                     //case @operator.@in:
                     //    result.Append(" IN ");
                     //    break;
@@ -286,11 +314,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                         case AttributeTypeCode.State:
                         case AttributeTypeCode.Status:
                         case AttributeTypeCode.Picklist:
-                            result.Append(condition.value);
+                            result.Append(value);
                             break;
 
                         default:
-                            result.Append($"'{condition.value}'");
+                            result.Append($"'{value}'");
                             break;
                     }
                 }
