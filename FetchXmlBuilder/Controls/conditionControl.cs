@@ -120,7 +120,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                     {
                         return new ControlValidationResult(ControlValidationLevel.Info, "Attribute", ControlValidationMessage.NotShowingNow);
                     }
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute", ControlValidationMessage.InValid);
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute", ControlValidationMessage.NotInMetadata);
                 }
             }
             else if (control == cmbOperator || control == cmbValue)
