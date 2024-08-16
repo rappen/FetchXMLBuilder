@@ -24,6 +24,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private bool valueOfSupported = false;
         private bool valueOfEdited = false;
+        private string entityName;
 
         #endregion Private Properties
 
@@ -115,6 +116,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
                 if (fxb.entities != null && !cmbAttribute.Items.OfType<AttributeMetadataItem>().Any(i => i.ToString() == cmbAttribute.Text))
                 {
+                    if (fxb.GetAttribute(entityName, cmbAttribute.Text) != null)
+                    {
+                        return new ControlValidationResult(ControlValidationLevel.Info, "Attribute", ControlValidationMessage.NotShowingNow);
+                    }
                     return new ControlValidationResult(ControlValidationLevel.Warning, "Attribute", ControlValidationMessage.InValid);
                 }
             }
@@ -424,7 +429,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             {
                 return;
             }
-            var entityName = entityNode.EntityName;
+            entityName = entityNode.EntityName;
             if (fxb.NeedToLoadEntity(entityName))
             {
                 if (!fxb.working)
@@ -571,11 +576,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 return;
             }
             var valueType = oper.ValueType;
-            var attribute = cmbAttribute.SelectedItem as AttributeMetadataItem;
-            if (valueType == AttributeTypeCode.ManagedProperty && attribute != null)
+            var attributeMetadata = (cmbAttribute.SelectedItem as AttributeMetadataItem)?.Metadata ??
+                fxb.GetAttribute(entityName, cmbAttribute.Text);
+            if (valueType == AttributeTypeCode.ManagedProperty && attributeMetadata != null)
             {   // Indicates value type is determined by selected attribute
-                valueType = attribute.Metadata.AttributeType;
-                var managedProp = attribute.Metadata as ManagedPropertyAttributeMetadata;
+                valueType = attributeMetadata.AttributeType;
+                var managedProp = attributeMetadata as ManagedPropertyAttributeMetadata;
                 if (managedProp != null)
                 {
                     valueType = managedProp.ValueAttributeTypeCode;
@@ -592,9 +598,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                         valueType = null;
                     }
                 }
-                else if (attribute.Metadata is EnumAttributeMetadata enummeta &&
+                else if (attributeMetadata is EnumAttributeMetadata enummeta &&
                          enummeta.OptionSet is OptionSetMetadata options &&
-                         !(attribute.Metadata is EntityNameAttributeMetadata))
+                         !(attributeMetadata is EntityNameAttributeMetadata))
                 {
                     cmbValue.Items.Add("");
                     cmbValue.Items.AddRange(options.Options.Select(o => new OptionsetItem(o)).ToArray());
@@ -603,7 +609,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                     cmbValue.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                     cmbValue.SelectedItem = cmbValue.Items.OfType<OptionsetItem>().FirstOrDefault(i => i.GetValue() == value);
                 }
-                else if (attribute.Metadata is BooleanAttributeMetadata boolmeta)
+                else if (attributeMetadata is BooleanAttributeMetadata boolmeta)
                 {
                     cmbValue.Items.Add("");
                     cmbValue.Items.Add(new OptionsetItem(boolmeta.OptionSet.FalseOption));
@@ -613,7 +619,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                     cmbValue.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                     cmbValue.SelectedItem = cmbValue.Items.OfType<OptionsetItem>().FirstOrDefault(i => i.GetValue() == value);
                 }
-                else if (attribute.Metadata is EntityNameAttributeMetadata)
+                else if (attributeMetadata is EntityNameAttributeMetadata)
                 {
                     var entities = fxb.GetDisplayEntities();
                     if (entities != null)
@@ -627,8 +633,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                     }
                 }
                 else if (fxb.settings.UseLookup
-                    && (attribute.Metadata is LookupAttributeMetadata
-                        || attribute.Metadata.AttributeType == AttributeTypeCode.Uniqueidentifier)
+                    && (attributeMetadata is LookupAttributeMetadata
+                        || attributeMetadata.AttributeType == AttributeTypeCode.Uniqueidentifier)
                     && Guid.TryParse(cmbValue.Text, out Guid id) && !Guid.Empty.Equals(id))
                 {
                     var loookuptargets = new List<string>();
@@ -636,13 +642,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                     {
                         loookuptargets.Add(txtUitype.Text.Trim());
                     }
-                    else if (attribute.Metadata is LookupAttributeMetadata lookupmeta)
+                    else if (attributeMetadata is LookupAttributeMetadata lookupmeta)
                     {
                         loookuptargets.AddRange(lookupmeta.Targets);
                     }
-                    else if (attribute.Metadata.AttributeType == AttributeTypeCode.Uniqueidentifier)
+                    else if (attributeMetadata.AttributeType == AttributeTypeCode.Uniqueidentifier)
                     {
-                        loookuptargets.Add(attribute.Metadata.EntityLogicalName);
+                        loookuptargets.Add(attributeMetadata.EntityLogicalName);
                     }
                     foreach (var target in loookuptargets)
                     {
@@ -693,11 +699,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 valueType == AttributeTypeCode.Uniqueidentifier)
             {
                 dlgLookup.LogicalNames = null;
-                if (attribute?.Metadata is LookupAttributeMetadata lookupmeta)
+                if (attributeMetadata is LookupAttributeMetadata lookupmeta)
                 {
                     dlgLookup.LogicalNames = lookupmeta.Targets;
                 }
-                else if (attribute?.Metadata is AttributeMetadata attrmeta && attrmeta.IsPrimaryId == true)
+                else if (attributeMetadata is AttributeMetadata attrmeta && attrmeta.IsPrimaryId == true)
                 {
                     if (attrmeta.IsLogical == false)
                     {
