@@ -20,6 +20,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private bool reloaded;
         private DateTime lasterrormessage;
 
+        #region Public Constructor
+
         public ResultGrid(FetchXmlBuilder fetchXmlBuilder)
         {
             InitializeComponent();
@@ -27,6 +29,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             form = fetchXmlBuilder;
             ApplySettingsToGrid();
         }
+
+        #endregion Public Constructor
+
+        #region Internal Methods
 
         internal void SetData(QueryInfo queryinfo)
         {
@@ -118,6 +124,31 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             RefreshData();
         }
 
+        internal void SetQueryIfChangesDesign()
+        {
+            var changed = queryinfo?.QuerySignature != form.dockControlBuilder?.GetTreeChecksum(null);
+            Text = "Result View" + (changed ? " *" : "");
+            crmGridView1.DefaultCellStyle.BackColor = changed ? System.Drawing.Color.LightGray : System.Drawing.Color.White;
+            crmGridView1.DefaultCellStyle.ForeColor = changed ? System.Drawing.Color.Gray : System.Drawing.SystemColors.ControlText;
+        }
+
+        internal void SetLayoutToGrid()
+        {
+            if (!form.settings.Results.WorkWithLayout || form.dockControlBuilder?.LayoutXML?.Cells == null)
+            {
+                return;
+            }
+            var tmpreloaded = reloaded;
+            reloaded = true;
+            crmGridView1.LayoutXML = form.dockControlBuilder?.LayoutXML?.ToXML();
+            crmGridView1.Refresh();
+            reloaded = tmpreloaded;
+        }
+
+        #endregion Internal Methods
+
+        #region Private Methods
+
         private void UpdateSettingsFromSelectedOptions()
         {
             form.settings.Results.Friendly = mnuFriendly.Checked;
@@ -177,27 +208,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 .ForEach(c => c.Width = 100);
         }
 
-        internal void SetQueryIfChangesDesign()
-        {
-            var changed = queryinfo?.QuerySignature != form.dockControlBuilder?.GetTreeChecksum(null);
-            Text = "Result View" + (changed ? " *" : "");
-            crmGridView1.DefaultCellStyle.BackColor = changed ? System.Drawing.Color.LightGray : System.Drawing.Color.White;
-            crmGridView1.DefaultCellStyle.ForeColor = changed ? System.Drawing.Color.Gray : System.Drawing.SystemColors.ControlText;
-        }
-
-        internal void SetLayoutToGrid()
-        {
-            if (!form.settings.Results.WorkWithLayout || form.dockControlBuilder?.LayoutXML?.Cells == null)
-            {
-                return;
-            }
-            var tmpreloaded = reloaded;
-            reloaded = true;
-            crmGridView1.LayoutXML = form.dockControlBuilder?.LayoutXML?.ToXML();
-            crmGridView1.Refresh();
-            reloaded = tmpreloaded;
-        }
-
         private void GetLayoutFromGrid()
         {
             if (!form.settings.Results.WorkWithLayout ||
@@ -217,6 +227,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             form.dockControlBuilder.LayoutXML?.MakeSureAllCellsExistForColumns(columns);
             form.dockControlBuilder.UpdateLayoutXML();
         }
+
+        #endregion Private Methods
+
+        #region Private Event Handlers
 
         private void crmGridView1_RecordDoubleClick(object sender, Rappen.XTB.Helpers.Controls.XRMRecordEventArgs e)
         {
@@ -444,5 +458,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 GetLayoutFromGrid();
             }
         }
+
+        #endregion Private Event Handlers
     }
 }
