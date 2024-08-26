@@ -370,6 +370,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void mnuResetLayout_Click(object sender, EventArgs e)
         {
             form.dockControlBuilder.ResetLayout();
+            crmGridView1.LayoutXML = form.dockControlBuilder.LayoutXML?.ToXML();
             RefreshData();
         }
 

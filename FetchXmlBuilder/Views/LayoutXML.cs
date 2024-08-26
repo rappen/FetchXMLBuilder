@@ -137,7 +137,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             return result;
         }
 
-        public Cell GetCell(TreeNode node)
+        public Cell GetCell(TreeNode node, bool addifnotexists = true)
         {
             var cell = Cells.FirstOrDefault(c => c.Attribute == node);
             if (cell == null)
@@ -148,7 +148,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
                     cell.Attribute = node;
                 }
             }
-            if (cell == null)
+            if (cell == null && addifnotexists)
             {
                 cell = AddCell(node);
             }
@@ -157,17 +157,22 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
 
         private Cell AddCell(TreeNode attribute)
         {
-            if (EntityMeta?.Attributes?.Any(a => a.LogicalName.Equals(attribute.Value("name"))) != true)
-            {
-                return null;
-            }
             var cell = new Cell(this)
             {
                 Attribute = attribute,
                 Name = attribute.GetAttributeLayoutName(),
                 Width = createdfromaview ? 0 : 100
             };
-            Cells.Add(cell);
+            if (attribute.NextNode != null &&
+                attribute.NextNode.Name == "attribute" &&
+                GetCell(attribute.NextNode, false) is Cell nextcell)
+            {
+                Cells.Insert(Cells.IndexOf(nextcell), cell);
+            }
+            else
+            {
+                Cells.Add(cell);
+            }
             return cell;
         }
     }
