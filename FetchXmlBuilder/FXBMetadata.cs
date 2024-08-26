@@ -235,15 +235,9 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
         }
 
-        internal EntityMetadata GetEntity(string entityname)
-        {
-            return entities?.FirstOrDefault(e => e.LogicalName.Equals(entityname));
-        }
+        internal EntityMetadata GetEntity(string entityname) => entities?.FirstOrDefault(e => e.LogicalName.Equals(entityname));
 
-        internal EntityMetadata GetEntity(int objecttypecode)
-        {
-            return entities?.FirstOrDefault(e => e.ObjectTypeCode.Equals(objecttypecode));
-        }
+        internal EntityMetadata GetEntity(int objecttypecode) => entities?.FirstOrDefault(e => e.ObjectTypeCode.Equals(objecttypecode));
 
         internal bool NeedToLoadEntity(string entityName)
         {
@@ -274,10 +268,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             return true;
         }
 
-        private static bool CheckMetadata(CheckState checkstate, BooleanManagedProperty metafield)
-        {
-            return CheckMetadata(checkstate, metafield?.Value);
-        }
+        private static bool CheckMetadata(CheckState checkstate, BooleanManagedProperty metafield) => CheckMetadata(checkstate, metafield?.Value);
 
         private static bool CheckMetadata(OwnershipTypes[] options, OwnershipTypes? metafield)
         {
