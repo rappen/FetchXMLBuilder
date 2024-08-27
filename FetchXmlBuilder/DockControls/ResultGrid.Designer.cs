@@ -373,6 +373,7 @@
             this.mnuPagePlus.Size = new System.Drawing.Size(27, 23);
             this.mnuPagePlus.Tag = "1";
             this.mnuPagePlus.Text = ">";
+            this.mnuPagePlus.ToolTipText = "Move to next page";
             this.mnuPagePlus.Visible = false;
             this.mnuPagePlus.Click += new System.EventHandler(this.mnuPagePlusMinus_Click);
             // 
@@ -401,6 +402,7 @@
             this.mnuPageMinus.Size = new System.Drawing.Size(27, 23);
             this.mnuPageMinus.Tag = "-1";
             this.mnuPageMinus.Text = "<";
+            this.mnuPageMinus.ToolTipText = "Move to previous page";
             this.mnuPageMinus.Visible = false;
             this.mnuPageMinus.Click += new System.EventHandler(this.mnuPagePlusMinus_Click);
             // 
@@ -527,7 +529,7 @@
             this.crmGridView1.EnableHeadersVisualStyles = false;
             this.crmGridView1.EntityReferenceClickable = true;
             this.crmGridView1.FilterColumns = "";
-            this.crmGridView1.LayoutXML = null;
+            this.crmGridView1.LayoutXML = "";
             this.crmGridView1.Location = new System.Drawing.Point(0, 31);
             this.crmGridView1.Name = "crmGridView1";
             this.crmGridView1.ReadOnly = true;
