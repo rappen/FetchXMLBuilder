@@ -47,6 +47,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             ApplySettingsToGrid();
             SetQueryIfChangesDesign();
             txtPagingCookie.Text = queryinfo.Results.PagingCookie;
+
+            mnuRetrieveTime.Text = queryinfo.Elapsed.ToSmartString();
+            mnuRetrieveTime.Visible = form.settings.Results.ShowRetrieveTime;
+
             if (queryinfo.Query is FetchExpression && !form.settings.Results.RetrieveAllPages && (queryinfo.Results.MoreRecords || queryinfo.PageNo > 1))
             {
                 mnuPage.Text = (queryinfo.PageNo < 10 ? "Page " : "") + queryinfo.PageNo.ToString() + (queryinfo.Pages > 0 ? $"/{queryinfo.Pages}" : "");
@@ -96,6 +100,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             mnuCopyHeaders.Checked = form.settings.Results.CopyHeaders;
             mnuQuickFilter.Checked = form.settings.Results.QuickFilter;
             mnuPagingCookie.Checked = form.settings.Results.PagingCookie;
+            mnuShowElapsed.Checked = form.settings.Results.ShowRetrieveTime;
 
             mnuIdCol.Visible = !form.settings.Results.WorkWithLayout;
             mnuIndexCol.Visible = !form.settings.Results.WorkWithLayout;
@@ -121,6 +126,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             crmGridView1.Service = form.Service;
             panQuickFilter.Visible = mnuQuickFilter.Checked;
             gbPagingCookie.Visible = mnuPagingCookie.Checked;
+            mnuRetrieveTime.Visible = mnuShowElapsed.Checked;
             RefreshData();
         }
 
@@ -130,6 +136,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             Text = "Result View" + (changed ? " *" : "");
             crmGridView1.DefaultCellStyle.BackColor = changed ? System.Drawing.Color.LightGray : System.Drawing.Color.White;
             crmGridView1.DefaultCellStyle.ForeColor = changed ? System.Drawing.Color.Gray : System.Drawing.SystemColors.ControlText;
+            if (changed)
+            {
+                mnuRetrieveTime.Visible = false;
+                mnuPage.Visible = false;
+                mnuPageMinus.Visible = false;
+                mnuPagePlus.Visible = false;
+            }
         }
 
         internal void SetLayoutToGrid()
@@ -161,6 +174,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             form.settings.Results.CopyHeaders = mnuCopyHeaders.Checked;
             form.settings.Results.QuickFilter = mnuQuickFilter.Checked;
             form.settings.Results.PagingCookie = mnuPagingCookie.Checked;
+            form.settings.Results.ShowRetrieveTime = mnuShowElapsed.Checked;
             ApplySettingsToGrid();
         }
 
@@ -431,7 +445,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 e.KeyChar = (char)Keys.None;
                 e.Handled = true;
-                mnuRecordsNumbers.Focus();
+                crmGridView1.Focus();
             }
         }
 

@@ -16,6 +16,7 @@ namespace Rappen.XTB.FetchXmlBuilder.AppCode
         internal int Pages = -1;
         internal int RecordFrom = -1;
         internal int RecordTo = -1;
+        internal TimeSpan Elapsed = TimeSpan.Zero;
 
         public string QuerySignature;
         public string AttributesSignature;

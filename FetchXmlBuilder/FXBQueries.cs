@@ -10,6 +10,7 @@ using Rappen.XTB.FetchXmlBuilder.Settings;
 using Rappen.XTB.Helpers.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.ServiceModel;
 using System.Windows.Forms;
 using System.Xml;
@@ -293,11 +294,12 @@ namespace Rappen.XTB.FetchXmlBuilder
                     QueryBase query = new FetchExpression(fetch);
                     var querysignature = dockControlBuilder.GetTreeChecksum(null);
                     var attributessignature = dockControlBuilder.GetAttributesSignature();
-                    var start = DateTime.Now;
+                    var start = Stopwatch.StartNew();
                     var resultCollection = settings.Results.RetrieveAllPages ?
                         Service.RetrieveMultipleAll(query, worker, eventargs, "Executing FetchXML...\nRecords: {retrieving}\nPage: {page}\nTime: {time}", false) :
                         Service.RetrieveMultiple(query);
-                    LogUse($"RetrieveMultiple-{settings.Results.ResultOutput}", false, resultCollection?.Entities?.Count, (DateTime.Now - start).TotalMilliseconds);
+                    start.Stop();
+                    LogUse($"RetrieveMultiple-{settings.Results.ResultOutput}", false, resultCollection?.Entities?.Count, start.ElapsedMilliseconds);
                     if (settings.Results.ResultOutput == ResultOutput.JSON)
                     {
                         var json = EntityCollectionSerializer.ToJSONComplex(resultCollection, Formatting.Indented);
@@ -315,7 +317,8 @@ namespace Rappen.XTB.FetchXmlBuilder
                             Query = query,
                             QuerySignature = querysignature,
                             AttributesSignature = attributessignature,
-                            Results = resultCollection
+                            Results = resultCollection,
+                            Elapsed = start.Elapsed
                         };
                     }
                 },

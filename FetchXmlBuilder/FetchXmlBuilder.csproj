@@ -534,8 +534,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\fetch.xsd">
       <SubType>Designer</SubType>
@@ -667,6 +667,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\I-Contribute-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-stopwatch-20 %281%29.png" />
   </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />
