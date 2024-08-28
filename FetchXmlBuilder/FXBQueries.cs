@@ -333,9 +333,11 @@ namespace Rappen.XTB.FetchXmlBuilder
                     tsbExecute.Enabled = true;
                     Enabled = true;
                     Cursor = Cursors.Default;
+                    SendMessageToStatusBar(this, new StatusBarMessageEventArgs(""));
                     if (completedargs.Error != null)
                     {
-                        LogError("RetrieveMultiple error: {0}", completedargs.Error);
+                        LogError($"RetrieveMultiple error: {completedargs.Error}");
+                        SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Error: {completedargs.Error.Message}"));
                         ShowErrorDialog(completedargs.Error, "Executing FetchXML", fetch);
                     }
                     else if (completedargs.Cancelled)
