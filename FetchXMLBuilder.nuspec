@@ -57,7 +57,7 @@ https://fetchxmlbuilder.com/releases/#$versionnumber$
 Released for manual download:
 https://github.com/rappen/FetchXMLBuilder/releases/tag/$buildnumber$
 		</releaseNotes>
-		<copyright>Copyright Jonas Rapp 2014-2023</copyright>
+		<copyright>Copyright Jonas Rapp 2014-2024</copyright>
 		<tags>XrmToolBox Plugins FetchXML Builder</tags>
 		<dependencies>
 			<dependency id="XrmToolBox" version="1.2023.1.63" />
@@ -65,5 +65,6 @@ https://github.com/rappen/FetchXMLBuilder/releases/tag/$buildnumber$
 	</metadata>
 	<files>
 		<file src="FetchXMLBuilder\bin\Release\Rappen.XTB.FXB.dll" target="lib\net472\Plugins" />
+		<file src="FetchXMLBuilder\bin\Release\Microsoft.Office.*.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
 	</files>
 </package>

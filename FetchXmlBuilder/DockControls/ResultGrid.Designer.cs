@@ -68,6 +68,7 @@
             this.mnuPageMinus = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuRecordsNumbers = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuRetrieveTime = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuExcel = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
             this.panQuickFilter = new System.Windows.Forms.Panel();
@@ -218,12 +219,13 @@
             this.mnuPage,
             this.mnuPageMinus,
             this.mnuRecordsNumbers,
-            this.mnuRetrieveTime});
-            this.mnuOptions.Location = new System.Drawing.Point(3, 16);
+            this.mnuRetrieveTime,
+            this.mnuExcel});
+            this.mnuOptions.Location = new System.Drawing.Point(3, 12);
             this.mnuOptions.Name = "mnuOptions";
             this.mnuOptions.Padding = new System.Windows.Forms.Padding(4, 1, 0, 1);
             this.mnuOptions.ShowItemToolTips = true;
-            this.mnuOptions.Size = new System.Drawing.Size(646, 26);
+            this.mnuOptions.Size = new System.Drawing.Size(646, 30);
             this.mnuOptions.TabIndex = 61;
             this.mnuOptions.Text = "menuStrip1";
             // 
@@ -239,7 +241,7 @@
             this.mnuPagingCookie,
             this.mnuShowElapsed});
             this.mnuBehavior.Name = "mnuBehavior";
-            this.mnuBehavior.Size = new System.Drawing.Size(82, 24);
+            this.mnuBehavior.Size = new System.Drawing.Size(82, 28);
             this.mnuBehavior.Text = "Appearance";
             this.mnuBehavior.DropDownOpening += new System.EventHandler(this.mnuBehaviorColumns_DropDownOpening);
             // 
@@ -320,7 +322,7 @@
             this.mnuAutoSizeAll,
             this.mnuShowLayoutXML});
             this.mnuColumns.Name = "mnuColumns";
-            this.mnuColumns.Size = new System.Drawing.Size(67, 24);
+            this.mnuColumns.Size = new System.Drawing.Size(67, 28);
             this.mnuColumns.Text = "Columns";
             this.mnuColumns.DropDownOpening += new System.EventHandler(this.mnuBehaviorColumns_DropDownOpening);
             // 
@@ -389,7 +391,7 @@
             this.mnuPagePlus.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.mnuPagePlus.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.mnuPagePlus.Name = "mnuPagePlus";
-            this.mnuPagePlus.Size = new System.Drawing.Size(27, 24);
+            this.mnuPagePlus.Size = new System.Drawing.Size(27, 28);
             this.mnuPagePlus.Tag = "1";
             this.mnuPagePlus.Text = ">";
             this.mnuPagePlus.ToolTipText = "Move to next page";
@@ -401,7 +403,6 @@
             this.mnuPage.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.mnuPage.AutoSize = false;
             this.mnuPage.BackColor = System.Drawing.SystemColors.Window;
-            this.mnuPage.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.mnuPage.Name = "mnuPage";
             this.mnuPage.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.mnuPage.Size = new System.Drawing.Size(62, 23);
@@ -418,7 +419,7 @@
             this.mnuPageMinus.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.mnuPageMinus.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.mnuPageMinus.Name = "mnuPageMinus";
-            this.mnuPageMinus.Size = new System.Drawing.Size(27, 24);
+            this.mnuPageMinus.Size = new System.Drawing.Size(27, 28);
             this.mnuPageMinus.Tag = "-1";
             this.mnuPageMinus.Text = "<";
             this.mnuPageMinus.ToolTipText = "Move to previous page";
@@ -430,7 +431,7 @@
             this.mnuRecordsNumbers.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.mnuRecordsNumbers.BackColor = System.Drawing.SystemColors.Window;
             this.mnuRecordsNumbers.Name = "mnuRecordsNumbers";
-            this.mnuRecordsNumbers.Size = new System.Drawing.Size(61, 24);
+            this.mnuRecordsNumbers.Size = new System.Drawing.Size(61, 28);
             this.mnuRecordsNumbers.Text = "Records";
             this.mnuRecordsNumbers.Visible = false;
             // 
@@ -438,11 +439,20 @@
             // 
             this.mnuRetrieveTime.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.mnuRetrieveTime.BackColor = System.Drawing.SystemColors.Window;
-            this.mnuRetrieveTime.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icons8_stopwatch_20__1_;
+            this.mnuRetrieveTime.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_stopwatch_20;
             this.mnuRetrieveTime.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.mnuRetrieveTime.Name = "mnuRetrieveTime";
-            this.mnuRetrieveTime.Size = new System.Drawing.Size(32, 24);
+            this.mnuRetrieveTime.Size = new System.Drawing.Size(32, 28);
             this.mnuRetrieveTime.Visible = false;
+            // 
+            // mnuExcel
+            // 
+            this.mnuExcel.Enabled = false;
+            this.mnuExcel.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_excel_24;
+            this.mnuExcel.Name = "mnuExcel";
+            this.mnuExcel.Size = new System.Drawing.Size(70, 28);
+            this.mnuExcel.Text = "Excel";
+            this.mnuExcel.Click += new System.EventHandler(this.mnuExcel_Click);
             // 
             // panel1
             // 
@@ -557,6 +567,7 @@
             this.crmGridView1.Location = new System.Drawing.Point(0, 31);
             this.crmGridView1.Name = "crmGridView1";
             this.crmGridView1.ReadOnly = true;
+            this.crmGridView1.RowHeadersVisible = false;
             this.crmGridView1.RowHeadersWidth = 24;
             this.crmGridView1.Service = null;
             this.crmGridView1.ShowEditingIcon = false;
@@ -650,5 +661,6 @@
         private System.Windows.Forms.ToolStripMenuItem mnuRecordsNumbers;
         private System.Windows.Forms.ToolStripMenuItem mnuShowElapsed;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem mnuExcel;
     }
 }

@@ -47,6 +47,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             ApplySettingsToGrid();
             SetQueryIfChangesDesign();
             txtPagingCookie.Text = queryinfo.Results.PagingCookie;
+            mnuExcel.Enabled = queryinfo.Results?.Entities?.Count > 0;
 
             mnuRetrieveTime.Text = queryinfo.Elapsed.ToSmartString();
             mnuRetrieveTime.Visible = form.settings.Results.ShowRetrieveTime;
@@ -240,6 +241,47 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 .ToDictionary(c => c.Name, c => c.Width);
             form.dockControlBuilder.LayoutXML?.MakeSureAllCellsExistForColumns(columns);
             form.dockControlBuilder.UpdateLayoutXML();
+        }
+
+        private void OpenInExcel()
+        {
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+                mnuExcel.Enabled = false;
+                var tempCopyMode = crmGridView1.ClipboardCopyMode;
+                crmGridView1.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
+                crmGridView1.SelectAll();
+                var dataObj = crmGridView1.GetClipboardContent();
+                crmGridView1.ClearSelection();
+                if (dataObj == null)
+                {
+                    return;
+                }
+                Clipboard.SetDataObject(dataObj);
+                var xlexcel = new Microsoft.Office.Interop.Excel.Application();
+                xlexcel.Visible = true;
+                var xlWorkBook = xlexcel.Workbooks.Add(System.Reflection.Missing.Value);
+                var xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+                xlWorkSheet.Name = "FetchXML Builder";
+                Microsoft.Office.Interop.Excel.Range CR = (Microsoft.Office.Interop.Excel.Range)xlWorkSheet.Cells[1, 1];
+                CR.Select();
+                xlWorkSheet.PasteSpecial(CR, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, true);
+                xlWorkSheet.Columns.AutoFit();
+                var header = (Microsoft.Office.Interop.Excel.Range)xlWorkSheet.Rows[1];
+                header.Font.Bold = true;
+                header.Borders[Microsoft.Office.Interop.Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
+                header.Borders[Microsoft.Office.Interop.Excel.XlBordersIndex.xlEdgeBottom].Weight = Microsoft.Office.Interop.Excel.XlBorderWeight.xlThick;
+            }
+            catch (Exception ex)
+            {
+                form.ShowErrorDialog(ex, "Open Excel");
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+                mnuExcel.Enabled = true;
+            }
         }
 
         #endregion Private Methods
@@ -472,6 +514,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 GetLayoutFromGrid();
             }
+        }
+
+        private void mnuExcel_Click(object sender, EventArgs e)
+        {
+            OpenInExcel();
         }
 
         #endregion Private Event Handlers
