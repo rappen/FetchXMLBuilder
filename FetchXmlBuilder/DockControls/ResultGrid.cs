@@ -47,7 +47,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             ApplySettingsToGrid();
             SetQueryIfChangesDesign();
             txtPagingCookie.Text = queryinfo.Results.PagingCookie;
-            mnuExcel.Enabled = queryinfo.Results?.Entities?.Count > 0;
+            mnuExcel.Visible = queryinfo.Results?.Entities?.Count > 0;
 
             mnuRetrieveTime.Text = queryinfo.Elapsed.ToSmartString();
             mnuRetrieveTime.Visible = form.settings.Results.ShowRetrieveTime;
@@ -134,11 +134,17 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         internal void SetQueryIfChangesDesign()
         {
             var changed = queryinfo?.QuerySignature != form.dockControlBuilder?.GetTreeChecksum(null);
+            SetQueryChanged(changed);
+        }
+
+        internal void SetQueryChanged(bool changed)
+        {
             Text = "Result View" + (changed ? " *" : "");
             crmGridView1.DefaultCellStyle.BackColor = changed ? System.Drawing.Color.LightGray : System.Drawing.Color.White;
             crmGridView1.DefaultCellStyle.ForeColor = changed ? System.Drawing.Color.Gray : System.Drawing.SystemColors.ControlText;
             if (changed)
             {
+                mnuExcel.Visible = false;
                 mnuRetrieveTime.Visible = false;
                 mnuPage.Visible = false;
                 mnuPageMinus.Visible = false;
@@ -262,17 +268,42 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 var xlexcel = new Microsoft.Office.Interop.Excel.Application();
                 xlexcel.Visible = true;
                 var xlWorkBook = xlexcel.Workbooks.Add(System.Reflection.Missing.Value);
-                var xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
-                xlWorkSheet.Name = "FetchXML Builder";
-                Microsoft.Office.Interop.Excel.Range CR = (Microsoft.Office.Interop.Excel.Range)xlWorkSheet.Cells[1, 1];
-                CR.Select();
-                xlWorkSheet.PasteSpecial(CR, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, true);
-                xlWorkSheet.Columns.AutoFit();
-                var header = (Microsoft.Office.Interop.Excel.Range)xlWorkSheet.Rows[1];
+
+                // Create sheet for results
+                var xlResultSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+                xlResultSheet.Name = "FetchXML Builder - Result";
+                // Paste all data
+                var cellResultA1 = (Microsoft.Office.Interop.Excel.Range)xlResultSheet.Cells[1, 1];
+                cellResultA1.Select();
+                xlResultSheet.PasteSpecial(cellResultA1, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, true);
+                // Format width and headers
+                var header = (Microsoft.Office.Interop.Excel.Range)xlResultSheet.Rows[1];
                 header.Font.Bold = true;
                 header.Borders[Microsoft.Office.Interop.Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
                 header.Borders[Microsoft.Office.Interop.Excel.XlBordersIndex.xlEdgeBottom].Weight = Microsoft.Office.Interop.Excel.XlBorderWeight.xlThick;
-                xlWorkSheet.Range["A1", "A1"].Select();
+                header.AutoFilter(1, Type.Missing, Microsoft.Office.Interop.Excel.XlAutoFilterOperator.xlAnd, Type.Missing, true);
+                xlResultSheet.Activate();
+                xlResultSheet.Application.ActiveWindow.SplitRow = 1;
+                xlResultSheet.Application.ActiveWindow.FreezePanes = true;
+                xlResultSheet.Columns.AutoFit();
+
+                var xlSourceSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Sheets.Add(After: xlWorkBook.Sheets[xlWorkBook.Sheets.Count]);
+                xlSourceSheet.Name = "FetchXML Builder - Source";
+                ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[1, 1]).Value = "Connection";
+                ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[1, 2]).Value = form.ConnectionDetail.ConnectionName;
+                ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[2, 1]).Value = "URL";
+                ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[2, 2]).Value = form.ConnectionDetail.WebApplicationUrl;
+                ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[3, 1]).Value = "Query";
+                ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[3, 2]).Value = queryinfo.Query is FetchExpression fetchexpr ? fetchexpr.Query : queryinfo.Query.ToString();
+                var sourceheader = (Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Columns[1];
+                sourceheader.Font.Bold = true;
+                sourceheader.Cells.VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignTop;
+                ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[1, 1]).EntireColumn.AutoFit();
+                ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[1, 2]).EntireColumn.ColumnWidth = 150;
+                xlSourceSheet.Rows.AutoFit();
+
+                xlResultSheet.Activate();
+                xlResultSheet.Range["A1", "A1"].Select();
             }
             catch (Exception ex)
             {

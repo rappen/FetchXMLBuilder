@@ -285,6 +285,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             SendMessageToStatusBar(this, new StatusBarMessageEventArgs("Retrieving..."));
             tsbExecute.Enabled = false;
             tsbAbort.Enabled = true;
+            dockControlGrid?.SetQueryChanged(true);
             WorkAsync(new WorkAsyncInfo
             {
                 Message = "Executing FetchXML...",

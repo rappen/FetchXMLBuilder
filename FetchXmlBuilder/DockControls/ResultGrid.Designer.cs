@@ -403,6 +403,7 @@
             this.mnuPage.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.mnuPage.AutoSize = false;
             this.mnuPage.BackColor = System.Drawing.SystemColors.Window;
+            this.mnuPage.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.mnuPage.Name = "mnuPage";
             this.mnuPage.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.mnuPage.Size = new System.Drawing.Size(62, 23);
@@ -447,7 +448,6 @@
             // 
             // mnuExcel
             // 
-            this.mnuExcel.Enabled = false;
             this.mnuExcel.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_excel_24;
             this.mnuExcel.Name = "mnuExcel";
             this.mnuExcel.Size = new System.Drawing.Size(70, 28);
