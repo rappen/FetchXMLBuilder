@@ -272,6 +272,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 header.Font.Bold = true;
                 header.Borders[Microsoft.Office.Interop.Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
                 header.Borders[Microsoft.Office.Interop.Excel.XlBordersIndex.xlEdgeBottom].Weight = Microsoft.Office.Interop.Excel.XlBorderWeight.xlThick;
+                xlWorkSheet.Range["A1", "A1"].Select();
             }
             catch (Exception ex)
             {
