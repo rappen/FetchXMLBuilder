@@ -174,21 +174,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
     {
         public List<QueryDefinition> Queries { get; set; } = new List<QueryDefinition>();
 
-        public void SortQueries()
-        {
-            Queries = Queries.OrderBy(q => q.Name).ToList();
-        }
+        public void SortQueries() => Queries = Queries.OrderBy(q => q.Name).ToList();
     }
 
     public class QueryDefinition
     {
         public string Name { get; set; }
         public string Fetch { get; set; }
+        public string Layout { get; set; }
 
-        public override string ToString()
-        {
-            return Name;
-        }
+        public override string ToString() => Name;
     }
 
     public class XmlColors

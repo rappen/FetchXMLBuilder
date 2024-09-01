@@ -776,7 +776,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             if (sender is ToolStripMenuItem menu && menu.Tag is QueryDefinition query)
             {
-                dockControlBuilder.Init(query.Fetch, null, false, $"open repo {query.Name}", false);
+                dockControlBuilder.Init(query.Fetch, query.Layout, false, $"open repo {query.Name}", false);
                 tsbRepo.Tag = query;
                 dockControlBuilder.SetFetchName($"Repo: {query.Name}");
             }
@@ -789,6 +789,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 return;
             }
             query.Fetch = dockControlBuilder.GetFetchString(true, false);
+            query.Layout = dockControlBuilder.LayoutXML?.ToXML();
             SaveRepository();
             MessageBox.Show($"Query {query.Name} updated in repository", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -813,7 +814,8 @@ namespace Rappen.XTB.FetchXmlBuilder
                 repository.Queries.Remove(repository.Queries.FirstOrDefault(q => q.Name == queryname));
             }
             var fetch = dockControlBuilder.GetFetchString(true, false);
-            var query = new QueryDefinition { Name = queryname, Fetch = fetch };
+            var layout = dockControlBuilder.LayoutXML?.ToXML();
+            var query = new QueryDefinition { Name = queryname, Fetch = fetch, Layout = layout };
             repository.Queries.Add(query);
             repository.SortQueries();
             SaveRepository();
@@ -830,7 +832,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             };
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                McTools.Xrm.Connection.XmlSerializerHelper.SerializeToFile(repository, sfd.FileName);
+                XmlSerializerHelper.SerializeToFile(repository, sfd.FileName);
                 MessageBox.Show($"The entire repository has been saved to file\n{sfd.FileName}", "Export repository", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -849,7 +851,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 {
                     var document = new XmlDocument();
                     document.Load(ofd.FileName);
-                    var repo = (QueryRepository)McTools.Xrm.Connection.XmlSerializerHelper.Deserialize(document.OuterXml, typeof(QueryRepository));
+                    var repo = (QueryRepository)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(QueryRepository));
                     var reponame = Path.ChangeExtension(Path.GetFileName(ofd.FileName), "").Trim('.');
                     if (MessageBox.Show($"Confirm importing {repo.Queries.Count} queries into repository folder \"{reponame}\".", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
                     {
