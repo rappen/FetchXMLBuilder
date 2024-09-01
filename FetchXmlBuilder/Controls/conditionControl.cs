@@ -850,7 +850,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private void txtLookup_Click(object sender, EventArgs e)
         {
-            if (UrlUtils.OpenUrl(xrmRecord.Record, fxb.ConnectionDetail))
+            if (fxb.OpenUrl(xrmRecord.Record))
             {
                 fxb.LogUse("OpenRecord");
             }
@@ -858,7 +858,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private void helpIcon_Click(object sender, EventArgs e)
         {
-            UrlUtils.OpenUrl(sender);
+            fxb.OpenUrl(sender);
         }
 
         private void cmbValue_KeyPress(object sender, KeyPressEventArgs e)
@@ -905,7 +905,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            UrlUtils.OpenUrl(sender);
+            fxb.OpenUrl(sender);
         }
 
         #endregion Private Event Handlers

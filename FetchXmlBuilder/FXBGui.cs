@@ -197,7 +197,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
         }
 
-        internal void HelpClick(object sender, EventArgs e) => UrlUtils.OpenUrl(sender);
+        internal void HelpClick(object sender, EventArgs e) => OpenUrl(sender);
 
         internal void ShowMetadataControl()
         {

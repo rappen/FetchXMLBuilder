@@ -351,6 +351,8 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
         }
 
+        internal bool OpenUrl(object sender) => UrlUtils.OpenUrl(sender, ConnectionDetail);
+
         #endregion Internal Methods
 
         #region Private Methods
@@ -890,7 +892,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         private void tmsiShowReleaseNotes_Click(object sender, EventArgs e)
         {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            UrlUtils.OpenUrl(Welcome.GetReleaseNotesUrl(version));
+            OpenUrl(Welcome.GetReleaseNotesUrl(version));
         }
 
         private void tsbShare_Click(object sender, EventArgs e)

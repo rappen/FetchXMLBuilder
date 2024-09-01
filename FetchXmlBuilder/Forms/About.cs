@@ -68,7 +68,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            UrlUtils.OpenUrl("http://twitter.com/FetchXMLBuilder");
+            UrlUtils.OpenUrl("https://x.com/FetchXMLBuilder");
         }
 
         private void llShowWelcome_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

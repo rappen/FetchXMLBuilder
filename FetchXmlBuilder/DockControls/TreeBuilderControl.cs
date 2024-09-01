@@ -1013,7 +1013,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void lblWarning_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            UrlUtils.OpenUrl(sender);
+            fxb.OpenUrl(sender);
         }
     }
 }

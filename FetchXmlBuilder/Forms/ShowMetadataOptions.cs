@@ -268,12 +268,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void helpIcon_Click(object sender, EventArgs e)
         {
-            UrlUtils.OpenUrl(sender);
+            fxb.OpenUrl(sender);
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            UrlUtils.OpenUrl(sender);
+            fxb.OpenUrl(sender);
         }
 
         private void rbAllSolutions_CheckedChanged(object sender, EventArgs e)

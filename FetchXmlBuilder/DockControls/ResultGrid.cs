@@ -142,14 +142,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             Text = "Result View" + (changed ? " *" : "");
             crmGridView1.DefaultCellStyle.BackColor = changed ? System.Drawing.Color.LightGray : System.Drawing.Color.White;
             crmGridView1.DefaultCellStyle.ForeColor = changed ? System.Drawing.Color.Gray : System.Drawing.SystemColors.ControlText;
-            if (changed)
-            {
-                mnuExcel.Visible = false;
-                mnuRetrieveTime.Visible = false;
-                mnuPage.Visible = false;
-                mnuPageMinus.Visible = false;
-                mnuPagePlus.Visible = false;
-            }
+            mnuExcel.Enabled = !changed;
+            mnuRetrieveTime.Enabled = !changed;
+            mnuPage.Enabled = !changed;
+            mnuPageMinus.Enabled = !changed;
+            mnuPagePlus.Enabled = !changed;
         }
 
         internal void SetLayoutToGrid()
@@ -329,12 +326,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             if (e.Value is EntityReference entref)
             {
                 form.LogUse("OpenParentRecord");
-                UrlUtils.OpenUrl(entref, form.ConnectionDetail);
+                form.OpenUrl(entref);
             }
             else if (e.Entity != null)
             {
                 form.LogUse("OpenRecord");
-                UrlUtils.OpenUrl(e.Entity);
+                form.OpenUrl(e.Entity);
             }
         }
 
@@ -432,7 +429,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void ctxOpen_Click(object sender, EventArgs e)
         {
-            if (UrlUtils.OpenUrl(sender))
+            if (form.OpenUrl(sender))
             {
                 form.LogUse("OpenRecord");
             }

@@ -51,7 +51,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             if (linkOData.Links.Count > 0 && linkOData.Links[0].Enabled)
             {
-                UrlUtils.OpenUrl(linkOData, fxb.ConnectionDetail);
+                fxb.OpenUrl(linkOData);
                 fxb.LogUse("ExecuteOData" + version);
             }
             else
@@ -77,7 +77,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             if (e.Button == MouseButtons.Left && e.Link.Enabled)
             {
-                UrlUtils.OpenUrl(e.Link, fxb.ConnectionDetail);
+                fxb.OpenUrl(e.Link);
                 fxb.LogUse("ExecuteOData" + version);
             }
         }

@@ -278,7 +278,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                         "Would you like to submit an issue to FetchXML Builder to be able to handle this?",
                         "Decode " + Text, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
                     {
-                        UrlUtils.OpenUrl("https://github.com/rappen/FetchXMLBuilder/issues/new");
+                        fxb.OpenUrl("https://github.com/rappen/FetchXMLBuilder/issues/new");
                     }
                     return;
                 }
@@ -956,12 +956,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void linkEBG_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            UrlUtils.OpenUrl("https://www.xrmtoolbox.com/plugins/DLaB.Xrm.EarlyBoundGenerator/");
+            fxb.OpenUrl("https://www.xrmtoolbox.com/plugins/DLaB.Xrm.EarlyBoundGenerator/");
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            UrlUtils.OpenUrl("https://github.com/rappen/FetchXMLBuilder/issues/822");
+            fxb.OpenUrl("https://github.com/rappen/FetchXMLBuilder/issues/822");
         }
 
         private void cmbQExStyle_SelectedIndexChanged(object sender, EventArgs e)
@@ -1074,13 +1074,13 @@ More votes == released sooner.", "OrganizationServiceContext",
         private void linkFlavorHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             var url = (cmbQExFlavor.SelectedItem is QExFlavor flavor) ? flavor.HelpUrl : string.Empty;
-            UrlUtils.OpenUrl(url);
+            fxb.OpenUrl(url);
         }
 
         private void linkStyleHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             var url = (cmbQExStyle.SelectedItem is QExStyle style) ? style.HelpUrl : string.Empty;
-            UrlUtils.OpenUrl(url);
+            fxb.OpenUrl(url);
         }
 
         private void btnQExFlavorSettings_Click(object sender, EventArgs e)

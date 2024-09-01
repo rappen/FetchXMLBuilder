@@ -43,7 +43,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private void helpIcon_Click(object sender, System.EventArgs e)
         {
-            UrlUtils.OpenUrl(sender);
+            fxb.OpenUrl(sender);
         }
     }
 }

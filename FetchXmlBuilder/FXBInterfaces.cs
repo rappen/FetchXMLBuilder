@@ -249,7 +249,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             LogUse("ReturnTo." + callerArgs.SourcePlugin, ai2: true);
             if (callerArgs.SourcePlugin == URLcaller)
             {
-                UrlUtils.OpenUrl("https://fetchxmlbuilder.com/sharing-queries/");
+                OpenUrl("https://fetchxmlbuilder.com/sharing-queries/");
                 return;
             }
             var fetch = dockControlBuilder.GetFetchString(true, true);

@@ -227,12 +227,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void linkLayout_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            UrlUtils.OpenUrl("https://fetchxmlbuilder.com/features/layouts");
+            fxb.OpenUrl("https://fetchxmlbuilder.com/features/layouts");
         }
 
         private void linkGeneral_Click(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            UrlUtils.OpenUrl(tt.GetToolTip(sender as Control));
+            fxb.OpenUrl(tt.GetToolTip(sender as Control));
         }
 
         private void btnResetAll_Click(object sender, EventArgs e)

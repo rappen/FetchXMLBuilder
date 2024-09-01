@@ -95,17 +95,17 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void LinkHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            UrlUtils.OpenUrl("https://learn.microsoft.com/en-us/connectors/commondataserviceforapps/#list-rows");
+            fxb.OpenUrl("https://learn.microsoft.com/en-us/connectors/commondataserviceforapps/#list-rows");
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            UrlUtils.OpenUrl("https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/working-with-flows");
+            fxb.OpenUrl("https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/working-with-flows");
         }
 
         private void helpIcon_Click(object sender, EventArgs e)
         {
-            UrlUtils.OpenUrl(tt.GetToolTip(sender as Control));
+            fxb.OpenUrl(tt.GetToolTip(sender as Control));
         }
     }
 }

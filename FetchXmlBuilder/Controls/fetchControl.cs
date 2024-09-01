@@ -61,7 +61,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private void helpIcon_Click(object sender, EventArgs e)
         {
-            UrlUtils.OpenUrl(sender);
+            fxb.OpenUrl(sender);
         }
 
         public override void Focus()
