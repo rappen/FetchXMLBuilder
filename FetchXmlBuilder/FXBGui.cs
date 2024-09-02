@@ -141,7 +141,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 {
                     if (settings.Results.WorkWithLayout)
                     {
-                        dockControlLayoutXml.UpdateXML(dockControlBuilder.LayoutXML?.ToXML());
+                        dockControlLayoutXml.UpdateXML(dockControlBuilder.LayoutXML?.ToXMLString());
                     }
                     else
                     {
@@ -340,7 +340,23 @@ namespace Rappen.XTB.FetchXmlBuilder
                 FileName = ofd.FileName;
                 var fetchDoc = new XmlDocument();
                 fetchDoc.Load(ofd.FileName);
-                dockControlBuilder.Init(fetchDoc.OuterXml, null, false, "open file", true);
+                switch (fetchDoc.FirstChild?.Name)
+                {
+                    case "fetch":
+                        dockControlBuilder.Init(fetchDoc.OuterXml, null, false, "open file", true);
+                        break;
+
+                    case "view":
+                        var fetch = fetchDoc.SelectSingleNode("//fetch")?.InnerText;
+                        var layout = fetchDoc.SelectSingleNode("//grid")?.InnerText;
+                        dockControlBuilder.Init(fetch, layout, true, "open file", true);
+                        break;
+
+                    default:
+                        MessageBox.Show("The selected file does not contain FetchXML.\nPlease select another one.", "Open File",
+                            MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        break;
+                }
                 LogUse("OpenFile");
             }
             EnableControls(true);
@@ -682,7 +698,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 }
             }
             var fetch = dockControlBuilder.GetFetchString(false, false);
-            var layout = includelayout ? dockControlBuilder.LayoutXML.ToXML() : View?["layoutxml"].ToString();
+            var layout = includelayout ? dockControlBuilder.LayoutXML.ToXMLString() : View?["layoutxml"].ToString();
             var newView = new Entity(viewtype);
             newView["fetchxml"] = fetch;
             newView["returnedtypecode"] = entityname;

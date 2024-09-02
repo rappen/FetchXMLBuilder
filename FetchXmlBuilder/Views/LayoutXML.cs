@@ -127,7 +127,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             }
         }
 
-        public string ToXML()
+        public string ToXMLString()
         {
             var result = $@"<grid name='resultset' object='{EntityMeta?.ObjectTypeCode}' jump='{EntityMeta?.PrimaryNameAttribute}' select='1' icon='1' preview='1'>
   <row name='result' id='{EntityMeta?.PrimaryIdAttribute}'>

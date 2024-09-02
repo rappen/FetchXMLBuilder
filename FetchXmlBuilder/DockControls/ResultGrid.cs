@@ -157,7 +157,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             var tmpreloaded = reloaded;
             reloaded = true;
-            crmGridView1.LayoutXML = form.dockControlBuilder?.LayoutXML?.ToXML();
+            crmGridView1.LayoutXML = form.dockControlBuilder?.LayoutXML?.ToXMLString();
             crmGridView1.Refresh();
             reloaded = tmpreloaded;
         }
@@ -455,7 +455,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void mnuResetLayout_Click(object sender, EventArgs e)
         {
             form.dockControlBuilder.ResetLayout();
-            crmGridView1.LayoutXML = form.dockControlBuilder.LayoutXML?.ToXML();
+            crmGridView1.LayoutXML = form.dockControlBuilder.LayoutXML?.ToXMLString();
             RefreshData();
         }
 

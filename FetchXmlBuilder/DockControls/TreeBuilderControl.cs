@@ -1,6 +1,7 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XRM.Helpers.Interfaces;
 using Rappen.XTB.FetchXmlBuilder.Builder;
@@ -417,7 +418,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 return;
             }
-            fxb.dockControlLayoutXml?.UpdateXML(LayoutXML?.ToXML());
+            fxb.dockControlLayoutXml?.UpdateXML(LayoutXML?.ToXMLString());
             if (GetCurrentControl() is attributeControl attrcontrol)
             {
                 attrcontrol.UpdateUIFromCell();
@@ -516,16 +517,28 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             ManageMenuDisplay();
         }
 
-        private XmlDocument GetFetchDocument()
+        private XmlDocument GetFetchDocument(bool includelayout = false)
         {
             var doc = new XmlDocument();
             if (tvFetch.Nodes.Count > 0)
             {
                 XmlNode rootNode = doc.CreateElement("root");
                 doc.AppendChild(rootNode);
-                TreeNodeHelper.AddXmlNode(tvFetch.Nodes[0], rootNode);
-                var xmlbody = doc.SelectSingleNode("root/fetch").OuterXml;
-                doc.LoadXml(xmlbody);
+                if (includelayout && LayoutXML != null)
+                {
+                    //rootNode.AppendChild(new XmlNode("view"));
+                    //view.AppendChild(LayoutXML.ToXMLString().ToXmlNode());
+                    //view.AppendChild(GetFetchDocument(false));
+                    TreeNodeHelper.AddXmlNode(tvFetch.Nodes[0], rootNode);
+                    var xmlbody = doc.SelectSingleNode("root/view").OuterXml;
+                    doc.LoadXml(xmlbody);
+                }
+                else
+                {
+                    TreeNodeHelper.AddXmlNode(tvFetch.Nodes[0], rootNode);
+                    var xmlbody = doc.SelectSingleNode("root/fetch").OuterXml;
+                    doc.LoadXml(xmlbody);
+                }
             }
             return doc;
         }
