@@ -32,6 +32,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public Guid SolutionId { get; set; } = Guid.Empty;
         public Guid PublisherId { get; set; } = Guid.Empty;
         public bool FilterByMetadata { get; set; } = true;
+        public bool HideDeprecated { get; set; } = true;
         public bool AlwaysPrimary { get; set; } = true;
         public bool AlwaysAddresses { get; set; } = true;
 

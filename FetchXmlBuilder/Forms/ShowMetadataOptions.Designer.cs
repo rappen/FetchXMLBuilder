@@ -115,6 +115,7 @@
             this.rbAllSolutions = new System.Windows.Forms.RadioButton();
             this.chkFilterMetadata = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.chkHideDeprecated = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.gbEntities.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).BeginInit();
@@ -1363,7 +1364,7 @@
             // chkFilterMetadata
             // 
             this.chkFilterMetadata.AutoSize = true;
-            this.chkFilterMetadata.Location = new System.Drawing.Point(18, 29);
+            this.chkFilterMetadata.Location = new System.Drawing.Point(18, 19);
             this.chkFilterMetadata.Name = "chkFilterMetadata";
             this.chkFilterMetadata.Size = new System.Drawing.Size(132, 17);
             this.chkFilterMetadata.TabIndex = 0;
@@ -1373,6 +1374,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.chkHideDeprecated);
             this.groupBox3.Controls.Add(this.chkFilterMetadata);
             this.groupBox3.Controls.Add(this.gbAlwaysAttributes);
             this.groupBox3.Location = new System.Drawing.Point(12, 103);
@@ -1381,6 +1383,18 @@
             this.groupBox3.TabIndex = 20;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Filter by Metadata";
+            // 
+            // chkHideDeprecated
+            // 
+            this.chkHideDeprecated.AutoSize = true;
+            this.chkHideDeprecated.Location = new System.Drawing.Point(18, 42);
+            this.chkHideDeprecated.Name = "chkHideDeprecated";
+            this.chkHideDeprecated.Size = new System.Drawing.Size(107, 17);
+            this.chkHideDeprecated.TabIndex = 1;
+            this.chkHideDeprecated.Text = "Hide Deprecated";
+            this.toolTip1.SetToolTip(this.chkHideDeprecated, resources.GetString("chkHideDeprecated.ToolTip"));
+            this.chkHideDeprecated.UseVisualStyleBackColor = true;
+            this.chkHideDeprecated.CheckStateChanged += new System.EventHandler(this.UpdateSelections);
             // 
             // ShowMetadataOptions
             // 
@@ -1544,5 +1558,6 @@
         internal Helpers.Controls.TriCheckBox chkAAttributeOf;
         internal Helpers.Controls.TriCheckBox chkACalculationOf;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.CheckBox chkHideDeprecated;
     }
 }

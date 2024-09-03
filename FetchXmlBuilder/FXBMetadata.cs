@@ -3,6 +3,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Settings;
+using Rappen.XTB.FXB.Settings;
 using Rappen.XTB.Helpers.Extensions;
 using System;
 using System.Collections.Generic;
@@ -136,6 +137,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 {
                     continue;
                 }
+                if (selectedfilter.HideDeprecated && CheckIsDeprecated(attribute.DisplayName?.UserLocalizedLabel?.Label)) { continue; }
                 if (selectedfilter.FilterByMetadata)
                 {
                     if (!CheckMetadata(selectattributes.IsManaged, attribute.IsManaged)) { continue; }
@@ -156,10 +158,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             return result;
         }
 
-        internal string GetPrimaryIdAttribute(string entityName)
-        {
-            return GetEntity(entityName)?.PrimaryIdAttribute;
-        }
+        internal string GetPrimaryIdAttribute(string entityName) => GetEntity(entityName)?.PrimaryIdAttribute;
 
         internal List<EntityMetadata> GetDisplayEntities() => GetDisplayEntities(connectionsettings.FilterSetting, connectionsettings.ShowEntities);
 
@@ -176,6 +175,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             foreach (var entity in entities.Where(e => selectedfilter.ShowAllSolutions || solutionentities.Select(se => se["objectid"]).Contains((Guid)e.MetadataId)))
             {
+                if (selectedfilter.HideDeprecated && CheckIsDeprecated(entity.DisplayName?.UserLocalizedLabel?.Label)) { continue; }
                 if (selectedfilter.FilterByMetadata)
                 {
                     if (!CheckMetadata(selectentities.IsManaged, entity.IsManaged)) { continue; }
@@ -193,6 +193,38 @@ namespace Rappen.XTB.FetchXmlBuilder
                 result.Add(entity);
             }
             return result;
+        }
+
+        private bool CheckIsDeprecated(string label)
+        {
+            if (string.IsNullOrWhiteSpace(label))
+            {
+                return false;
+            }
+            label = label.ToLowerInvariant();
+            foreach (var deprecated in OnlineSettings.Instance.DeprecatedNames.Select(d => d.ToLowerInvariant()))
+            {
+                if (deprecated.StartsWith("*"))
+                {
+                    if (deprecated.EndsWith("*") && label.Contains(deprecated.Replace("*", "")))
+                    {
+                        return true;
+                    }
+                    else if (label.StartsWith(deprecated.Replace("*", "")))
+                    {
+                        return true;
+                    }
+                }
+                else if (deprecated.EndsWith("*") && label.EndsWith(deprecated.Replace("*", "")))
+                {
+                    return true;
+                }
+                else if (label.Equals(deprecated))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         internal void LoadEntityDetails(string entityName, Action detailsLoaded, bool async = true, bool update = true)

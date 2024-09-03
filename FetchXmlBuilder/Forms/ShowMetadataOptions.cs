@@ -2,7 +2,6 @@
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Settings;
-using Rappen.XTB.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,6 +71,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             selectedsolution = setting.SolutionId;
             selectedpublisher = setting.PublisherId;
             chkFilterMetadata.Checked = setting.FilterByMetadata;
+            chkHideDeprecated.Checked = setting.HideDeprecated;
             chkAShowPrimary.Checked = setting.AlwaysPrimary;
             chkAShowAddress.Checked = setting.AlwaysAddresses;
         }
@@ -118,6 +118,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 SolutionId = selectedsolution,
                 PublisherId = selectedpublisher,
                 FilterByMetadata = chkFilterMetadata.Checked,
+                HideDeprecated = chkHideDeprecated.Checked,
                 AlwaysPrimary = chkAShowPrimary.Checked,
                 AlwaysAddresses = chkAShowAddress.Checked
             };
