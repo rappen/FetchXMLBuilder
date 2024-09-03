@@ -1,27 +1,8 @@
-<Settings>
+<?xml version="1.0" encoding="utf-8"?>
+<OnlineSettings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SettingsVersion>1</SettingsVersion>
-  <SupportableTools>
-    <SupportableTool>
-      <Name>FetchXML Builder</Name>
-      <Enabled>true</Enabled>
-      <ShowAutomatically>true</ShowAutomatically>
-    </SupportableTool>
-    <SupportableTool>
-      <Name>Plugin Trace Viewer</Name>
-      <Enabled>true</Enabled>
-      <ShowAutomatically>false</ShowAutomatically>
-    </SupportableTool>
-    <SupportableTool>
-      <Name>Cool Tool</Name>
-      <Enabled>true</Enabled>
-      <ShowAutomatically>true</ShowAutomatically>
-    </SupportableTool>
-  </SupportableTools>
-  <ShowMinutesAfterToolInstall>60</ShowMinutesAfterToolInstall>
-  <ShowMinutesAfterToolNewVersion>120</ShowMinutesAfterToolNewVersion>
-  <ShowMinutesAfterSupportingShown>2880</ShowMinutesAfterSupportingShown>
-  <ShowMinutesAfterSubmitting>2880</ShowMinutesAfterSubmitting>
-  <ShowAutoPercentChance>50</ShowAutoPercentChance>
-  <ShowAutoRepeatTimes>10</ShowAutoRepeatTimes>
-  <ResetUnfinalizedSupportingAfterDays>7</ResetUnfinalizedSupportingAfterDays>
-</Settings>
+  <DeprecatedNames>
+    <string>*Deprecated*</string>
+    <string>*Inaktuell*</string>
+  </DeprecatedNames>
+</OnlineSettings>
