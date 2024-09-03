@@ -143,7 +143,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     querycode += ")";
                 }
                 querycode += $";{CRLF}";
-                querycode += string.Join(CRLF, GetQueryOptions(qex, qename, 0).Select(p => $"{qename}.{p};"));
+                var options = GetQueryOptions(qex, qename, 0);
+                if (options.Any())
+                {
+                    querycode += string.Join(CRLF, options.Select(p => $"{qename}.{p};")) + CRLF;
+                }
                 if (settings.QExStyle != QExStyleEnum.QueryExpressionFactory)
                 {
                     querycode += GetColumnsLbL(qex.EntityName, qex.ColumnSet, qename, OwnersType.Root);
@@ -1064,9 +1068,22 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 var topcount = settings.QExStyle == QExStyleEnum.FluentQueryExpression ? "Top" : "TopCount";
                 queryoptions.Add($"{Indent(indentslevel)}{pre}{topcount}{valuepre}{qex.TopCount}{valuepost}");
             }
+            var pageinfo = string.Empty;
+            if (qex.PageInfo.Count > 0)
+            {
+                pageinfo += $"{CRLF}{Indent(indentslevel + 1)}Count = {qex.PageInfo.Count},";
+            }
+            if (qex.PageInfo.PageNumber > 1)
+            {
+                pageinfo += $"{CRLF}{Indent(indentslevel + 1)}PageNumber = {qex.PageInfo.PageNumber},";
+            }
             if (!string.IsNullOrWhiteSpace(qex.PageInfo?.PagingCookie))
             {
-                queryoptions.Add($"{Indent(indentslevel)}{pre}PageInfo{valuepre}new PagingInfo{CRLF}{Indent(indentslevel + 1)}{{{CRLF}{Indent(indentslevel + 2)}PageNumber = {qex.PageInfo.PageNumber},{CRLF}{Indent(indentslevel + 2)}PagingCookie = \"{qex.PageInfo.PagingCookie}\"{CRLF}{Indent(indentslevel)}}}{valuepost}");
+                pageinfo += $"{CRLF}{Indent(indentslevel + 1)}PagingCookie = \"{qex.PageInfo.PagingCookie}\"";
+            }
+            if (!string.IsNullOrEmpty(pageinfo))
+            {
+                queryoptions.Add($"{Indent(indentslevel)}{pre}PageInfo{valuepre}new PagingInfo{CRLF}{Indent(indentslevel)}{{{pageinfo}{CRLF}{Indent(indentslevel)}}}{valuepost}");
             }
             return queryoptions;
         }
