@@ -257,6 +257,7 @@
     </Compile>
     <Compile Include="Settings\FXBConnectionSettings.cs" />
     <Compile Include="Builder\TreeNodeExtensions.cs" />
+    <Compile Include="Settings\OnlineSettings.cs" />
     <Compile Include="Views\Cell.cs" />
     <Compile Include="Views\LayoutXML.cs" />
     <Compile Include="FXBGui.cs">
