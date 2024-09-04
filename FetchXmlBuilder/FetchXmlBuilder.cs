@@ -538,7 +538,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 // Reset some settings when new version is deployed
                 var oldversion = settings.CurrentVersion;
                 settings.CurrentVersion = version;
-                SaveSetting();
+                SettingsManager.Instance.Save(typeof(FetchXmlBuilder), settings, "[Common]");
                 LogUse("ShowWelcome", ai2: true);
                 Welcome.ShowWelcome(this, oldversion);
             }
