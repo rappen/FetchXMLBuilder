@@ -10,7 +10,7 @@ namespace Rappen.XTB.FXB.Settings
     public class OnlineSettings
     {
         private const string FileName = "Rappen.XTB.FXB.Settings.xml";
-        private static readonly Uri ToolSettingsURLPath = new Uri("https://raw.githubusercontent.com/rappen/FetchXMLBuilder/master/Config/");
+        private static readonly Uri ToolSettingsURLPath = new Uri("https://rappen.github.io/Rappen.XTB.Supporting/Config/");
         private static OnlineSettings instance;
 
         public int SettingsVersion = 1;

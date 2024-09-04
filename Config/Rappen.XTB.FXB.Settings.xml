@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<OnlineSettings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SettingsVersion>1</SettingsVersion>
-  <DeprecatedNames>
-    <string>*Deprecated*</string>
-    <string>*Inaktuell*</string>
-  </DeprecatedNames>
-</OnlineSettings>
