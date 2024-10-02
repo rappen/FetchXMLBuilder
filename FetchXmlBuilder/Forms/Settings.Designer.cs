@@ -73,6 +73,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabAppearance = new System.Windows.Forms.TabPage();
             this.chkAppBothNamesResults = new System.Windows.Forms.CheckBox();
             this.tabLayout = new System.Windows.Forms.TabPage();
+            this.chkShowTreeviewAttributeTypes = new System.Windows.Forms.CheckBox();
             this.chkShowAttributeTypes = new System.Windows.Forms.CheckBox();
             this.chkShowBulkDataUpdater = new System.Windows.Forms.CheckBox();
             this.tabBehavior = new System.Windows.Forms.TabPage();
@@ -84,13 +85,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.label3 = new System.Windows.Forms.Label();
             this.tabXmlScheme = new System.Windows.Forms.TabPage();
             this.label4 = new System.Windows.Forms.Label();
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.tabAdvanced = new System.Windows.Forms.TabPage();
             this.btnForceReloadMetadata = new System.Windows.Forms.Button();
             this.btnResetAll = new System.Windows.Forms.Button();
             this.chkShowOData2 = new System.Windows.Forms.CheckBox();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
-            this.chkShowTreeviewAttributeTypes = new System.Windows.Forms.CheckBox();
-            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -110,11 +110,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.cmbResult.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbResult.FormattingEnabled = true;
             this.cmbResult.Items.AddRange(new object[] {
-            "View",
-            "XML (custom format)",
-            "JSON (custom format)",
+            "Grid View",
+            "XML (homemade format)",
+            "JSON (homemade format)",
             "JSON (web api format)",
-            "Raw result"});
+            "Raw result (deprecated)"});
             this.cmbResult.Location = new System.Drawing.Point(23, 36);
             this.cmbResult.Name = "cmbResult";
             this.cmbResult.Size = new System.Drawing.Size(192, 21);
@@ -599,6 +599,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabLayout.TabIndex = 1;
             this.tabLayout.Text = "Layout";
             // 
+            // chkShowTreeviewAttributeTypes
+            // 
+            this.chkShowTreeviewAttributeTypes.AutoSize = true;
+            this.chkShowTreeviewAttributeTypes.Location = new System.Drawing.Point(260, 43);
+            this.chkShowTreeviewAttributeTypes.Name = "chkShowTreeviewAttributeTypes";
+            this.chkShowTreeviewAttributeTypes.Size = new System.Drawing.Size(171, 17);
+            this.chkShowTreeviewAttributeTypes.TabIndex = 8;
+            this.chkShowTreeviewAttributeTypes.Text = "Show attribute type in treeview";
+            this.tt.SetToolTip(this.chkShowTreeviewAttributeTypes, "Buttons in the main menu can only be showing\r\ntheir icons, or also include their " +
+        "texts.");
+            this.chkShowTreeviewAttributeTypes.UseVisualStyleBackColor = true;
+            // 
             // chkShowAttributeTypes
             // 
             this.chkShowAttributeTypes.AutoSize = true;
@@ -729,6 +741,33 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.label4.TabIndex = 9;
             this.label4.Text = "XML colors for FetchXML";
             // 
+            // propXmlColors
+            // 
+            this.propXmlColors.CanShowVisualStyleGlyphs = false;
+            this.propXmlColors.HelpVisible = false;
+            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.Location = new System.Drawing.Point(4, 40);
+            this.propXmlColors.Name = "propXmlColors";
+            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            xmlColors1.AttributeKey = System.Drawing.Color.Red;
+            xmlColors1.AttributeKeyColor = "Red";
+            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
+            xmlColors1.AttributeValueColor = "Blue";
+            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            xmlColors1.CommentColor = "0";
+            xmlColors1.Element = System.Drawing.Color.DarkRed;
+            xmlColors1.ElementColor = "DarkRed";
+            xmlColors1.Tag = System.Drawing.Color.Blue;
+            xmlColors1.TagColor = "Blue";
+            xmlColors1.Value = System.Drawing.Color.Black;
+            xmlColors1.ValueColor = "Black";
+            this.propXmlColors.SelectedObject = xmlColors1;
+            this.propXmlColors.Size = new System.Drawing.Size(252, 97);
+            this.propXmlColors.TabIndex = 7;
+            this.propXmlColors.ToolbarVisible = false;
+            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
+            // 
             // tabAdvanced
             // 
             this.tabAdvanced.BackColor = System.Drawing.SystemColors.Window;
@@ -778,45 +817,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tt.SetToolTip(this.chkShowOData2, "OData v2.0 is deprecated and removed from the\r\nplatform at 2023-03-30.\r\nYou can s" +
         "how it anyway, if you which, but checking this one.");
             this.chkShowOData2.UseVisualStyleBackColor = true;
-            // 
-            // chkShowTreeviewAttributeTypes
-            // 
-            this.chkShowTreeviewAttributeTypes.AutoSize = true;
-            this.chkShowTreeviewAttributeTypes.Location = new System.Drawing.Point(260, 43);
-            this.chkShowTreeviewAttributeTypes.Name = "chkShowTreeviewAttributeTypes";
-            this.chkShowTreeviewAttributeTypes.Size = new System.Drawing.Size(171, 17);
-            this.chkShowTreeviewAttributeTypes.TabIndex = 8;
-            this.chkShowTreeviewAttributeTypes.Text = "Show attribute type in treeview";
-            this.tt.SetToolTip(this.chkShowTreeviewAttributeTypes, "Buttons in the main menu can only be showing\r\ntheir icons, or also include their " +
-        "texts.");
-            this.chkShowTreeviewAttributeTypes.UseVisualStyleBackColor = true;
-            // 
-            // propXmlColors
-            // 
-            this.propXmlColors.CanShowVisualStyleGlyphs = false;
-            this.propXmlColors.HelpVisible = false;
-            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.Location = new System.Drawing.Point(4, 40);
-            this.propXmlColors.Name = "propXmlColors";
-            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            xmlColors1.AttributeKey = System.Drawing.Color.Red;
-            xmlColors1.AttributeKeyColor = "Red";
-            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
-            xmlColors1.AttributeValueColor = "Blue";
-            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            xmlColors1.CommentColor = "0";
-            xmlColors1.Element = System.Drawing.Color.DarkRed;
-            xmlColors1.ElementColor = "DarkRed";
-            xmlColors1.Tag = System.Drawing.Color.Blue;
-            xmlColors1.TagColor = "Blue";
-            xmlColors1.Value = System.Drawing.Color.Black;
-            xmlColors1.ValueColor = "Black";
-            this.propXmlColors.SelectedObject = xmlColors1;
-            this.propXmlColors.Size = new System.Drawing.Size(252, 97);
-            this.propXmlColors.TabIndex = 7;
-            this.propXmlColors.ToolbarVisible = false;
-            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
             // 
             // Settings
             // 

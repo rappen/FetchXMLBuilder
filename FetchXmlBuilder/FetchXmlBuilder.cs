@@ -363,6 +363,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             tsbRepo.Visible = settings.ShowRepository;
             tsbBDU.Visible = settings.ShowBDU;
             tsmiShowOData.Visible = settings.ShowOData2;
+            SetResultTypeMenu(settings.Results.ResultOutput);
             dockControlBuilder.lblQAExpander.GroupBoxSetState(null, settings.QueryOptions.ShowQuickActions);
         }
 

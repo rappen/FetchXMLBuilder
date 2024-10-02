@@ -90,7 +90,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.QueryOptions.NewQueryTemplate = txtFetch.Text;
             settings.DoNotPromptToSave = chkAppNoSavePrompt.Checked;
             settings.Results.AlwaysNewWindow = chkAppResultsNewWindow.Checked;
-            settings.Results.ResultOutput = ResultItemToSettingResult(cmbResult.SelectedIndex);
+            settings.Results.ResultOutput = FetchXmlBuilder.ResultItemToSettingResult(cmbResult.SelectedIndex);
             settings.Results.RetrieveAllPages = chkResAllPages.Checked;
             settings.Results.ClickableLinks = chkClickableLinks.Checked;
             settings.Results.MaxColumnWidth = (int)numMaxColumnWidth.Value;
@@ -115,18 +115,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.WaitUntilMetadataLoaded = chkWaitUntilMetadataLoaded.Checked;
             settings.AlwaysShowAggregationProperties = chkAlwaysShowAggregateProperties.Checked;
             return settings;
-        }
-
-        private ResultOutput ResultItemToSettingResult(int selectedIndex)
-        {
-            switch (selectedIndex)
-            {
-                case 1: return ResultOutput.XML;
-                case 2: return ResultOutput.JSON;
-                case 3: return ResultOutput.JSONWebAPI;
-                case 4: return ResultOutput.Raw;
-                default: return ResultOutput.Grid;
-            }
         }
 
         private void llShowWelcome_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -220,7 +208,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void cmbResult_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var resulttype = ResultItemToSettingResult(cmbResult.SelectedIndex);
+            var resulttype = FetchXmlBuilder.ResultItemToSettingResult(cmbResult.SelectedIndex);
             panResultView.Enabled = resulttype == ResultOutput.Grid;
             linkDeprecatedExecFetchReq.Visible = resulttype == ResultOutput.Raw;
         }

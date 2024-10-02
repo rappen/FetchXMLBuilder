@@ -88,7 +88,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             tsbReturnToCaller.Image =
                 callerArgs.SourcePlugin == "Bulk Data Updater" ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.logo_BDU :
                 callerArgs.SourcePlugin == URLcaller ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_web :
-                Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_return;
+                Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_send_back;
             tsbReturnToCaller.ToolTipText = callerArgs.SourcePlugin == URLcaller ? "Show 'Sharing Queries' on my website." : "Return " + requestedType + " to " + callerArgs.SourcePlugin;
             LogUse("CalledBy." + callerArgs.SourcePlugin, ai2: true);
             if (callerArgs.SourcePlugin == "View Designer" && !connectionsettings.TipsAgainstOrViewDesignerToolShown)

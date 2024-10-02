@@ -917,5 +917,40 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             ShowContentControl(ref dockControlLayoutXml, ContentType.LayoutXML, SaveFormat.None, settings.DockStates.LayoutXML);
         }
+
+        internal static ResultOutput ResultItemToSettingResult(int selectedIndex)
+        {
+            switch (selectedIndex)
+            {
+                case 1: return ResultOutput.XML;
+                case 2: return ResultOutput.JSON;
+                case 3: return ResultOutput.JSONWebAPI;
+                case 4: return ResultOutput.Raw;
+                default: return ResultOutput.Grid;
+            }
+        }
+
+        private void SetResultTypeMenu(ResultOutput resultOutput)
+        {
+            tsmiResultXml.Checked = resultOutput == ResultOutput.XML;
+            tsmiResultJson.Checked = resultOutput == ResultOutput.JSON;
+            tsmiResultWebApi.Checked = resultOutput == ResultOutput.JSONWebAPI;
+            tsmiResultRaw.Checked = resultOutput == ResultOutput.Raw;
+            tsmiResultGridView.Checked = !tsmiResultXml.Checked && !tsmiResultJson.Checked && !tsmiResultWebApi.Checked && !tsmiResultRaw.Checked;
+        }
+
+        private void tsmiResultType_Click(object sender = null, EventArgs e = null)
+        {
+            var result =
+                sender is ToolStripMenuItem tsmi &&
+                tsmi.Tag is string strtag &&
+                int.TryParse(strtag, out int inttag) ? ResultItemToSettingResult(inttag) : ResultOutput.Grid;
+            SetResultTypeMenu(result);
+            if (settings.Results.ResultOutput != result)
+            {
+                settings.Results.ResultOutput = result;
+                FetchResults();
+            }
+        }
     }
 }

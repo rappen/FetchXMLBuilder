@@ -650,9 +650,6 @@
     <None Include="Resources\icons8-internet-32.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\icons8-share-32.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\icons8-settings-16.png" />
   </ItemGroup>
   <ItemGroup>
@@ -684,6 +681,33 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8-excel-24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Integration-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-send-32 %285%29 flip.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-share-32 %284%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-grid-view-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-xml-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-json-download-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-placeholder-thumbnail-json-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-raw-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-result-32.png" />
   </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />
