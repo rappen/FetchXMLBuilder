@@ -55,6 +55,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         private int resultpanecount = 0;
         private Entity view;
         private bool alreadyloaded;
+        private string lastconnection;
 
         #endregion Private Fields
 
@@ -508,8 +509,15 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 if (!working)
                 {
+                    var reinit = string.IsNullOrEmpty(lastconnection) ||
+                        (lastconnection != e.ConnectionDetail.ConnectionName &&
+                         MessageBoxEx.Show(this, $"Switching from connection \"{lastconnection}\" to \"{e.ConnectionDetail.ConnectionName}\".\n\nReload last used query for {e.ConnectionDetail.ConnectionName}?", "New Connection", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes);
+                    lastconnection = e.ConnectionDetail.ConnectionName;
                     LoadEntities();
-                    dockControlBuilder?.Init(connectionsettings.FetchXML, connectionsettings.LayoutXML, false, "loaded from last session", false);
+                    if (reinit)
+                    {
+                        dockControlBuilder?.Init(connectionsettings.FetchXML, connectionsettings.LayoutXML, false, "loaded from last session", false);
+                    }
                 }
             }
             else
