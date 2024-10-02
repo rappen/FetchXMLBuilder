@@ -301,6 +301,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[2, 2]).Value = form.ConnectionDetail.WebApplicationUrl;
                 ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[3, 1]).Value = "Query";
                 ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[3, 2]).Value = queryinfo.Query is FetchExpression fetchexpr ? fetchexpr.Query : queryinfo.Query.ToString();
+                if (form.settings.Results.WorkWithLayout)
+                {
+                    ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[4, 1]).Value = "Layout";
+                    ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[4, 2]).Value = form.dockControlBuilder?.LayoutXML?.ToXMLString();
+                }
                 var sourceheader = (Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Columns[1];
                 sourceheader.Font.Bold = true;
                 sourceheader.Cells.VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignTop;
