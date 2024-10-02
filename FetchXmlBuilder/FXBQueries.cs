@@ -74,7 +74,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             if (working)
             {
-                MessageBox.Show("FetchXML Builder is working as fast as possible but is still in progress.\n\nPlease wait until the current transaction is completed.\n\nTake a break, maybe get a cup of coffee?\nJonas likes coffee, too...\nClick the 'Help'-button to send me a cup virtually!", "Waiting...", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, "https://www.buymeacoffee.com/rappen");
+                MessageBox.Show("FetchXML Builder is working as fast as possible, but is still in progress.\n\nPlease wait until the current transaction is completed.\n\nTake a break, maybe get a cup of coffee?\nJonas likes coffee, too, you know...\nClick the 'Help'-button to send me a cup virtually!", "Waiting...", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, "https://www.buymeacoffee.com/rappen");
                 return;
             }
             if (string.IsNullOrEmpty(fetch))
