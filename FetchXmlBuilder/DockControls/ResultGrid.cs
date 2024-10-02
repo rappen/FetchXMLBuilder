@@ -49,6 +49,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             txtPagingCookie.Text = queryinfo.Results.PagingCookie;
             mnuExcel.Visible = queryinfo.Results?.Entities?.Count > 0;
 
+            mnuAllPages.Enabled = queryinfo.Results?.Entities?.Count > 0;
             mnuRetrieveTime.Text = queryinfo.Elapsed.ToSmartString();
             mnuRetrieveTime.Visible = form.settings.Results.ShowRetrieveTime;
 
@@ -102,6 +103,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             mnuQuickFilter.Checked = form.settings.Results.QuickFilter;
             mnuPagingCookie.Checked = form.settings.Results.PagingCookie;
             mnuShowElapsed.Checked = form.settings.Results.ShowRetrieveTime;
+            mnuAllPages.Checked = form.settings.Results.RetrieveAllPages;
 
             mnuIdCol.Visible = !form.settings.Results.WorkWithLayout;
             mnuIndexCol.Visible = !form.settings.Results.WorkWithLayout;
@@ -123,7 +125,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             crmGridView1.ShowColumnsNotInColumnOrder = mnuSysCol.Checked;
             crmGridView1.ShowLocalTimes = mnuLocalTime.Checked;
             crmGridView1.ClipboardCopyMode = mnuCopyHeaders.Checked ?
-                DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText : DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
+                DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText :
+                DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             crmGridView1.Service = form.Service;
             panQuickFilter.Visible = mnuQuickFilter.Checked;
             gbPagingCookie.Visible = mnuPagingCookie.Checked;
@@ -168,6 +171,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void UpdateSettingsFromSelectedOptions()
         {
+            var reload = form.settings.Results.RetrieveAllPages != mnuAllPages.Checked;
             form.settings.Results.Friendly = mnuFriendly.Checked;
             form.settings.Results.BothNames = mnuBothNames.Checked;
             form.settings.Results.Index = mnuIndexCol.Checked;
@@ -179,7 +183,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             form.settings.Results.QuickFilter = mnuQuickFilter.Checked;
             form.settings.Results.PagingCookie = mnuPagingCookie.Checked;
             form.settings.Results.ShowRetrieveTime = mnuShowElapsed.Checked;
+            form.settings.Results.RetrieveAllPages = mnuAllPages.Checked;
             ApplySettingsToGrid();
+            if (reload)
+            {
+                form.FetchResults();
+            }
         }
 
         private void RefreshData()

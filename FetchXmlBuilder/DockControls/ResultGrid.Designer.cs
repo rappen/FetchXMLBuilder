@@ -79,6 +79,8 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.gbPagingCookie = new System.Windows.Forms.GroupBox();
+            this.mnuAllPages = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.crmGridView1 = new Rappen.XTB.Helpers.Controls.XRMDataGridView();
             this.ctxmenuGrid.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -239,7 +241,9 @@
             this.toolStripMenuItem1,
             this.mnuQuickFilter,
             this.mnuPagingCookie,
-            this.mnuShowElapsed});
+            this.mnuShowElapsed,
+            this.toolStripMenuItem2,
+            this.mnuAllPages});
             this.mnuBehavior.Name = "mnuBehavior";
             this.mnuBehavior.Size = new System.Drawing.Size(82, 28);
             this.mnuBehavior.Text = "Appearance";
@@ -543,6 +547,20 @@
             this.gbPagingCookie.Text = "Paging Cookie";
             this.gbPagingCookie.Visible = false;
             // 
+            // mnuAllPages
+            // 
+            this.mnuAllPages.CheckOnClick = true;
+            this.mnuAllPages.Enabled = false;
+            this.mnuAllPages.Name = "mnuAllPages";
+            this.mnuAllPages.Size = new System.Drawing.Size(228, 22);
+            this.mnuAllPages.Text = "Retrieve all pages";
+            this.mnuAllPages.Click += new System.EventHandler(this.chkGridOptions_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(225, 6);
+            // 
             // crmGridView1
             // 
             this.crmGridView1.AllowUserToAddRows = false;
@@ -662,5 +680,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuShowElapsed;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem mnuExcel;
+        private System.Windows.Forms.ToolStripMenuItem mnuAllPages;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
     }
 }
