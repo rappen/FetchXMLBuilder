@@ -187,6 +187,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             ApplySettingsToGrid();
             if (reload)
             {
+                form.EnableControls();
                 form.FetchResults();
             }
         }
