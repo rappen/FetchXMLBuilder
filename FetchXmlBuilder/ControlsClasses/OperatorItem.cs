@@ -346,7 +346,6 @@ namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
                 valueType != AttributeTypeCode.Decimal &&
                 valueType != AttributeTypeCode.Double &&
                 valueType != AttributeTypeCode.Money &&
-                valueType != AttributeTypeCode.Money &&
                 valueType != AttributeTypeCode.Lookup &&
                 valueType != AttributeTypeCode.Customer &&
                 valueType != AttributeTypeCode.Owner &&
@@ -362,7 +361,8 @@ namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
                 validConditionsList.Add(new OperatorItem(ConditionOperator.Like));
                 validConditionsList.Add(new OperatorItem(ConditionOperator.NotLike));
             }
-            if (valueType == AttributeTypeCode.DateTime ||
+            if (valueType == AttributeTypeCode.String ||
+                valueType == AttributeTypeCode.DateTime ||
                 valueType == AttributeTypeCode.Integer ||
                 valueType == AttributeTypeCode.State ||
                 valueType == AttributeTypeCode.Status ||
