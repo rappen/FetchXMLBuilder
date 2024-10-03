@@ -290,7 +290,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 header.AutoFilter(1, Type.Missing, Microsoft.Office.Interop.Excel.XlAutoFilterOperator.xlAnd, Type.Missing, true);
                 xlResultSheet.Activate();
                 xlResultSheet.Application.ActiveWindow.SplitRow = 1;
-                xlResultSheet.Application.ActiveWindow.FreezePanes = true;
+                try { xlResultSheet.Application.ActiveWindow.FreezePanes = true; } catch { }
                 xlResultSheet.Columns.AutoFit();
 
                 var xlSourceSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Sheets.Add(After: xlWorkBook.Sheets[xlWorkBook.Sheets.Count]);
