@@ -233,6 +233,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icon_open_file {
+            get {
+                object obj = ResourceManager.GetObject("icon-open-file", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icon_options {
             get {
                 object obj = ResourceManager.GetObject("icon-options", resourceCulture);
@@ -336,6 +346,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         internal static System.Drawing.Bitmap icon_saveas {
             get {
                 object obj = ResourceManager.GetObject("icon-saveas", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icon_savefile {
+            get {
+                object obj = ResourceManager.GetObject("icon-savefile", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -456,16 +476,6 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         internal static System.Drawing.Bitmap icon_web {
             get {
                 object obj = ResourceManager.GetObject("icon-web", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icon_xml {
-            get {
-                object obj = ResourceManager.GetObject("icon-xml", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

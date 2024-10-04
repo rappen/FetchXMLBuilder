@@ -220,7 +220,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             // tsmiOpenFile
             // 
-            this.tsmiOpenFile.Image = ((System.Drawing.Image)(resources.GetObject("tsmiOpenFile.Image")));
+            this.tsmiOpenFile.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_open_file;
             this.tsmiOpenFile.Name = "tsmiOpenFile";
             this.tsmiOpenFile.ShortcutKeyDisplayString = "Ctrl+O";
             this.tsmiOpenFile.Size = new System.Drawing.Size(240, 22);
@@ -277,7 +277,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // tsmiSaveFile
             // 
             this.tsmiSaveFile.Enabled = false;
-            this.tsmiSaveFile.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_save;
+            this.tsmiSaveFile.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_savefile;
             this.tsmiSaveFile.Name = "tsmiSaveFile";
             this.tsmiSaveFile.ShortcutKeyDisplayString = "Ctrl+S";
             this.tsmiSaveFile.Size = new System.Drawing.Size(226, 22);
@@ -462,7 +462,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbExecuteOptions.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_execute_options;
             this.tsbExecuteOptions.Name = "tsbExecuteOptions";
             this.tsbExecuteOptions.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F5)));
-            this.tsbExecuteOptions.Size = new System.Drawing.Size(227, 38);
+            this.tsbExecuteOptions.Size = new System.Drawing.Size(211, 22);
             this.tsbExecuteOptions.Text = "Execute Options";
             this.tsbExecuteOptions.Click += new System.EventHandler(this.tsbExecuteOptions_Click);
             // 
@@ -689,7 +689,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             // tsmiShowFetchXML
             // 
-            this.tsmiShowFetchXML.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_xml;
+            this.tsmiShowFetchXML.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_xml_homemade;
             this.tsmiShowFetchXML.Name = "tsmiShowFetchXML";
             this.tsmiShowFetchXML.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
             this.tsmiShowFetchXML.Size = new System.Drawing.Size(183, 22);

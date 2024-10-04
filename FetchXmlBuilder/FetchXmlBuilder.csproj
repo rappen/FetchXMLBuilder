@@ -575,40 +575,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\icons8-create-order-32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-gear-32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-opened-folder-32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-play-32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-redo-32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-save-32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-save-as-32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-undo-32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-view-headline-32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-warehouse-32.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\icons8-stop-sign-32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-up-left-32.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\BDU-2019-032-tsp.png" />
@@ -623,16 +590,7 @@
     <None Include="Resources\PowerAutomate_scalable gray bg 32.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\icons8-placeholder-thumbnail-xml-32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-select-left-column-32.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\icons8-sql-32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-available-updates-32.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8-javascript-32.png" />
@@ -644,28 +602,13 @@
     <None Include="Resources\icons8-odata-32.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\icons8-translate-text-32.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\PowerApps_scalable trs 32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-announcement-32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-options-32.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8-internet-32.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8-settings-16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-adjust-32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-meat-grinder-32.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Power Platform Developer icon.png" />
@@ -690,9 +633,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8-excel-24.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Integration-32.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8-send-32 %285%29 flip.png" />
@@ -723,6 +663,54 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8-play-32 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-open-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-open-file-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-save-32 %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-save-32 %283%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-save-32 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-repository-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-undo-32 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-redo-32 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-options-32 %284%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-commercial-32 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-select-left-column-32 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-reset-32 %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-place-file-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-transfer-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-view-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-options-32 %285%29.png" />
   </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />
