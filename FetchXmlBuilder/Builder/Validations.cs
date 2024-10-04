@@ -129,10 +129,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "Link-entity under filter can't return any attributes.", "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/filter-rows#filter-on-values-in-related-records");
                 }
-                if (!parent.Value("type").Equals("or"))
-                {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "For filter link-entity it should by of type 'or'.", "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/filter-rows#filter-on-values-in-related-records");
-                }
             }
 
             if (node.Value("intersect") != "true" &&
