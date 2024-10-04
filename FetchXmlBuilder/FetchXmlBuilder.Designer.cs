@@ -70,7 +70,9 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbSend = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsbBDU = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsbSQL4CDS = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbReturnToCaller = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbShare = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbConvert = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiShowSQL = new System.Windows.Forms.ToolStripMenuItem();
@@ -485,7 +487,9 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsbSend.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbBDU,
+            this.tsbSQL4CDS,
             this.tsbReturnToCaller,
+            this.toolStripMenuItem5,
             this.tsbShare});
             this.tsbSend.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_send;
             this.tsbSend.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -498,26 +502,39 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsbBDU.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.logo_BDU;
             this.tsbBDU.Name = "tsbBDU";
-            this.tsbBDU.Size = new System.Drawing.Size(169, 22);
+            this.tsbBDU.Size = new System.Drawing.Size(196, 38);
             this.tsbBDU.Text = "Bulk Data Updater";
             this.tsbBDU.ToolTipText = "Open current query in Bulk Data Updater to update the records";
             this.tsbBDU.Click += new System.EventHandler(this.tsbBDU_Click);
+            // 
+            // tsbSQL4CDS
+            // 
+            this.tsbSQL4CDS.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.logo_SQL4CDS;
+            this.tsbSQL4CDS.Name = "tsbSQL4CDS";
+            this.tsbSQL4CDS.Size = new System.Drawing.Size(196, 38);
+            this.tsbSQL4CDS.Text = "SQL 4 CDS";
+            this.tsbSQL4CDS.Click += new System.EventHandler(this.tsbSQL4CDS_Click);
             // 
             // tsbReturnToCaller
             // 
             this.tsbReturnToCaller.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_send_back;
             this.tsbReturnToCaller.Name = "tsbReturnToCaller";
-            this.tsbReturnToCaller.Size = new System.Drawing.Size(169, 22);
+            this.tsbReturnToCaller.Size = new System.Drawing.Size(196, 38);
             this.tsbReturnToCaller.Text = "Return Fetch XML";
             this.tsbReturnToCaller.ToolTipText = "Return FetchXML";
             this.tsbReturnToCaller.Click += new System.EventHandler(this.tsbReturnToCaller_Click);
+            // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(193, 6);
             // 
             // tsbShare
             // 
             this.tsbShare.Image = ((System.Drawing.Image)(resources.GetObject("tsbShare.Image")));
             this.tsbShare.Name = "tsbShare";
-            this.tsbShare.Size = new System.Drawing.Size(169, 22);
-            this.tsbShare.Text = "Share Link";
+            this.tsbShare.Size = new System.Drawing.Size(196, 38);
+            this.tsbShare.Text = "Share Link...";
             this.tsbShare.Click += new System.EventHandler(this.tsbShare_Click);
             // 
             // tsbConvert
@@ -932,5 +949,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsbShare;
         private System.Windows.Forms.ToolStripSplitButton tsbExecute;
         private System.Windows.Forms.ToolStripMenuItem tsbExecuteOptions;
+        private System.Windows.Forms.ToolStripMenuItem tsbSQL4CDS;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
     }
 }

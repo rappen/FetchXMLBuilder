@@ -902,7 +902,11 @@ namespace Rappen.XTB.FetchXmlBuilder
         private void tsbBDU_Click(object sender, EventArgs e)
         {
             OnOutgoingMessage(this, new MessageBusEventArgs("Bulk Data Updater", true) { TargetArgument = dockControlBuilder.GetFetchString(true, true) });
-            //OnOutgoingMessage(this, new MessageBusEventArgs(XrmToolBoxToolIds.BulkDataUpdater.ToString(), true) { TargetArgument = dockControlBuilder.GetFetchString(true, true) });
+        }
+
+        private void tsbSQL4CDS_Click(object sender, EventArgs e)
+        {
+            OnOutgoingMessage(this, new MessageBusEventArgs("SQL 4 CDS", true) { TargetArgument = dockControlBuilder.GetFetchString(true, true) });
         }
 
         private void tsmiSelect_Click(object sender, EventArgs e)

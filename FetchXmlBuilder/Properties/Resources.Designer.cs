@@ -523,6 +523,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap logo_SQL4CDS {
+            get {
+                object obj = ResourceManager.GetObject("logo-SQL4CDS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap supporting {
             get {
                 object obj = ResourceManager.GetObject("supporting", resourceCulture);
