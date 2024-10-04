@@ -355,6 +355,19 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         internal bool OpenUrl(object sender) => UrlUtils.OpenUrl(sender, ConnectionDetail);
 
+        /// <summary>Saves various configurations to file for next session</summary>
+        internal void SaveSetting()
+        {
+            SettingsManager.Instance.Save(typeof(FetchXmlBuilder), settings, "[Common]");
+            if (connectionsettings == null)
+            {
+                connectionsettings = new FXBConnectionSettings();
+            }
+            connectionsettings.FetchXML = dockControlBuilder.GetFetchString(false, false);
+            connectionsettings.LayoutXML = dockControlBuilder.LayoutXML?.ToXMLString();
+            SettingsManager.Instance.Save(typeof(FetchXmlBuilder), connectionsettings, ConnectionDetail?.ConnectionName);
+        }
+
         #endregion Internal Methods
 
         #region Private Methods
@@ -474,19 +487,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 connectionsettings = new FXBConnectionSettings();
             }
-        }
-
-        /// <summary>Saves various configurations to file for next session</summary>
-        private void SaveSetting()
-        {
-            SettingsManager.Instance.Save(typeof(FetchXmlBuilder), settings, "[Common]");
-            if (connectionsettings == null)
-            {
-                connectionsettings = new FXBConnectionSettings();
-            }
-            connectionsettings.FetchXML = dockControlBuilder.GetFetchString(false, false);
-            connectionsettings.LayoutXML = dockControlBuilder.LayoutXML?.ToXMLString();
-            SettingsManager.Instance.Save(typeof(FetchXmlBuilder), connectionsettings, ConnectionDetail?.ConnectionName);
         }
 
         #endregion Private Methods

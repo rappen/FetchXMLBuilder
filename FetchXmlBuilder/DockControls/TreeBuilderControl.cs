@@ -303,6 +303,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             ResetLayout(layoutStr);
             fxb.UpdateLiveXML();
             ClearChanged();
+            fxb.SaveSetting();
             fxb.EnableControls(true);
             if (!string.IsNullOrWhiteSpace(action))
             {

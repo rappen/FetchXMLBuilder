@@ -68,6 +68,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         internal void FetchResults(string fetch = "")
         {
+            SaveSetting();
             if (!tsbExecute.Enabled)
             {
                 return;
