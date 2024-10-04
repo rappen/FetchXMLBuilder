@@ -27,6 +27,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool UseFriendlyAndRawEntities { get; set; }
 
         public QueryOptions QueryOptions { get; set; } = new QueryOptions();
+        public ExecuteOptions ExecuteOptions { get; set; } = new ExecuteOptions();
         public ResultOptions Results { get; set; } = new ResultOptions();
         public string CurrentVersion { get; set; }
         public string LastOpenedViewEntity { get; set; }
@@ -57,6 +58,42 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public CodeGenerators CodeGenerators { get; set; } = new CodeGenerators();
     }
 
+    public class ExecuteOptions
+    {
+        public int FormHeight { get; set; }
+        public int FormWidth { get; set; }
+        public bool AllPages { get; set; } = false;
+        public bool BypassCustom { get; set; } = false;
+        public bool BypassSync { get; set; } = false;
+        public bool BypassAsync { get; set; } = false;
+        public List<Guid> BypassSteps { get; set; } = new List<Guid>();
+        public bool ConfirmedOldBypass { get; set; } = false;
+        public bool ConfirmedBypass { get; set; } = false;
+        public bool CustomOptions => BypassCustom || BypassSync || BypassAsync || BypassSteps.Any();
+
+        public KeyValuePair<string, object>[] Parameters
+        {
+            get
+            {
+                var result = new Dictionary<string, object>();
+                if (BypassCustom)
+                {
+                    result.Add("BypassCustomPluginExecution", true);
+                }
+                if (BypassSync || BypassAsync)
+                {
+                    var syasy = new[] { BypassSync ? "CustomSync" : "", BypassAsync ? "CustomAsync" : "" }.Where(s => !string.IsNullOrEmpty(s));
+                    result.Add("BypassBusinessLogicExecution", string.Join(",", syasy));
+                }
+                if (BypassSteps != null && BypassSteps.Any())
+                {
+                    result.Add("BypassBusinessLogicExecutionStepIds", string.Join(",", BypassSteps.Select(i => i.ToString())));
+                }
+                return result.ToArray();
+            }
+        }
+    }
+
     public class ResultOptions
     {
         public bool Friendly { get; set; }
@@ -68,7 +105,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool LocalTime { get; set; }
         public bool CopyHeaders { get; set; } = true;
         public ResultOutput ResultOutput { get; set; }
-        public bool RetrieveAllPages { get; set; } = false;
         public bool AlwaysNewWindow { get; set; } = false;
         public bool QuickFilter { get; set; } = false;
         public bool PagingCookie { get; set; } = false;

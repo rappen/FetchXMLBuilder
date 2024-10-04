@@ -46,7 +46,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             chkShowAllAttributes.Checked = settings.QueryOptions.ShowAllAttributes;
             chkShowOData2.Checked = settings.ShowOData2;
             cmbResult.SelectedIndex = SettingResultToComboBoxItem(settings.Results.ResultOutput);
-            chkResAllPages.Checked = settings.Results.RetrieveAllPages;
+            chkResAllPages.Checked = settings.ExecuteOptions.AllPages;
             chkClickableLinks.Checked = settings.Results.ClickableLinks;
             numMaxColumnWidth.Value = settings.Results.MaxColumnWidth;
             chkWorkWithLayout.Checked = settings.Results.WorkWithLayout;
@@ -90,7 +90,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.DoNotPromptToSave = chkAppNoSavePrompt.Checked;
             settings.Results.AlwaysNewWindow = chkAppResultsNewWindow.Checked;
             settings.Results.ResultOutput = FetchXmlBuilder.ResultItemToSettingResult(cmbResult.SelectedIndex);
-            settings.Results.RetrieveAllPages = chkResAllPages.Checked;
+            settings.ExecuteOptions.AllPages = chkResAllPages.Checked;
             settings.Results.ClickableLinks = chkClickableLinks.Checked;
             settings.Results.MaxColumnWidth = (int)numMaxColumnWidth.Value;
             settings.Results.WorkWithLayout = chkWorkWithLayout.Checked;

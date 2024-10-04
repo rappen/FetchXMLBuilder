@@ -53,7 +53,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             mnuRetrieveTime.Text = queryinfo.Elapsed.ToSmartString();
             mnuRetrieveTime.Visible = form.settings.Results.ShowRetrieveTime;
 
-            if (queryinfo.Query is FetchExpression && !form.settings.Results.RetrieveAllPages && (queryinfo.Results.MoreRecords || queryinfo.PageNo > 1))
+            if (queryinfo.Query is FetchExpression && !form.settings.ExecuteOptions.AllPages && (queryinfo.Results.MoreRecords || queryinfo.PageNo > 1))
             {
                 mnuPage.Text = (queryinfo.PageNo < 10 ? "Page " : "") + queryinfo.PageNo.ToString() + (queryinfo.Pages > 0 ? $"/{queryinfo.Pages}" : "");
                 mnuPageMinus.Enabled = queryinfo.PageNo > 1;
@@ -70,7 +70,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             if (queryinfo.RecordFrom > -1 && queryinfo.RecordTo > -1)
             {
-                if (!form.settings.Results.RetrieveAllPages && (queryinfo.RecordFrom > 1 || queryinfo.Results.MoreRecords))
+                if (!form.settings.ExecuteOptions.AllPages && (queryinfo.RecordFrom > 1 || queryinfo.Results.MoreRecords))
                 {
                     mnuRecordsNumbers.Text = $"Records: {queryinfo.RecordFrom}-{queryinfo.RecordTo}";
                     if (queryinfo.Results.TotalRecordCount > 0 && queryinfo.Results.TotalRecordCount < 5000)
@@ -103,7 +103,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             mnuQuickFilter.Checked = form.settings.Results.QuickFilter;
             mnuPagingCookie.Checked = form.settings.Results.PagingCookie;
             mnuShowElapsed.Checked = form.settings.Results.ShowRetrieveTime;
-            mnuAllPages.Checked = form.settings.Results.RetrieveAllPages;
+            mnuAllPages.Checked = form.settings.ExecuteOptions.AllPages;
 
             mnuIdCol.Visible = !form.settings.Results.WorkWithLayout;
             mnuIndexCol.Visible = !form.settings.Results.WorkWithLayout;
@@ -171,7 +171,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void UpdateSettingsFromSelectedOptions()
         {
-            var reload = form.settings.Results.RetrieveAllPages != mnuAllPages.Checked;
+            var reload = form.settings.ExecuteOptions.AllPages != mnuAllPages.Checked;
             form.settings.Results.Friendly = mnuFriendly.Checked;
             form.settings.Results.BothNames = mnuBothNames.Checked;
             form.settings.Results.Index = mnuIndexCol.Checked;
@@ -183,7 +183,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             form.settings.Results.QuickFilter = mnuQuickFilter.Checked;
             form.settings.Results.PagingCookie = mnuPagingCookie.Checked;
             form.settings.Results.ShowRetrieveTime = mnuShowElapsed.Checked;
-            form.settings.Results.RetrieveAllPages = mnuAllPages.Checked;
+            form.settings.ExecuteOptions.AllPages = mnuAllPages.Checked;
             ApplySettingsToGrid();
             if (reload)
             {

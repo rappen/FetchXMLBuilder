@@ -8,7 +8,6 @@ using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Forms;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using Rappen.XTB.FetchXmlBuilder.Views;
-using Rappen.XTB.Helpers;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
@@ -65,7 +64,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
                     // Main menu items
                     tsbExecute.Enabled = enabled && Service != null;
-                    tsbAbort.Visible = settings.Results.RetrieveAllPages;
+                    tsbAbort.Visible = settings.ExecuteOptions.AllPages;
                     tsbBDU.Visible = settings.ShowBDU && bduexists && callerArgs?.SourcePlugin != "Bulk Data Updater";
                     tsbBDU.Enabled = enabled && (dockControlBuilder?.IsFetchAggregate() == false);
                     tsbReturnToCaller.Visible = CallerWantsResults();

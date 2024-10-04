@@ -46,6 +46,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         internal FXBConnectionSettings connectionsettings;
         internal bool working = false;
         internal Version CDSVersion = new Version();
+        internal readonly Version bypasspluginminversion = new Version(9, 3);
 
         #endregion Internal Fields
 
@@ -617,6 +618,15 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             dockControlBuilder?.tvFetch?.Focus();
             FetchResults();
+        }
+
+        private void tsbExecuteOptions_Click(object sender, EventArgs e)
+        {
+            if (Forms.Execute.Show(this) == DialogResult.OK)
+            {
+                EnableControls();
+                FetchResults();
+            }
         }
 
         private void tsbNew_Click(object sender, EventArgs e)

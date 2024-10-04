@@ -91,6 +91,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.btnResetAll = new System.Windows.Forms.Button();
             this.chkShowOData2 = new System.Windows.Forms.CheckBox();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -124,22 +125,22 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // chkResAllPages
             // 
             this.chkResAllPages.AutoSize = true;
-            this.chkResAllPages.Location = new System.Drawing.Point(23, 74);
+            this.chkResAllPages.Location = new System.Drawing.Point(23, 86);
             this.chkResAllPages.Name = "chkResAllPages";
             this.chkResAllPages.Size = new System.Drawing.Size(111, 17);
-            this.chkResAllPages.TabIndex = 10;
+            this.chkResAllPages.TabIndex = 3;
             this.chkResAllPages.Text = "Retrieve all pages";
-            this.tt.SetToolTip(this.chkResAllPages, "Check this to always retrieve and keep retrieving\r\nuntill all the data is now her" +
+            this.tt.SetToolTip(this.chkResAllPages, "Check this to always retrieve and keep retrieving\r\nuntil all the data is now her" +
         "e. But be careful...");
             this.chkResAllPages.UseVisualStyleBackColor = true;
             // 
             // chkAppResultsNewWindow
             // 
             this.chkAppResultsNewWindow.AutoSize = true;
-            this.chkAppResultsNewWindow.Location = new System.Drawing.Point(23, 97);
+            this.chkAppResultsNewWindow.Location = new System.Drawing.Point(23, 63);
             this.chkAppResultsNewWindow.Name = "chkAppResultsNewWindow";
             this.chkAppResultsNewWindow.Size = new System.Drawing.Size(192, 17);
-            this.chkAppResultsNewWindow.TabIndex = 12;
+            this.chkAppResultsNewWindow.TabIndex = 2;
             this.chkAppResultsNewWindow.Text = "Always open results in new window";
             this.tt.SetToolTip(this.chkAppResultsNewWindow, "To compare results it might be good to always\r\nget the result in a new window.");
             this.chkAppResultsNewWindow.UseVisualStyleBackColor = true;
@@ -201,7 +202,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkAlwaysShowAggregateProperties.Location = new System.Drawing.Point(20, 43);
             this.chkAlwaysShowAggregateProperties.Name = "chkAlwaysShowAggregateProperties";
             this.chkAlwaysShowAggregateProperties.Size = new System.Drawing.Size(195, 17);
-            this.chkAlwaysShowAggregateProperties.TabIndex = 9;
+            this.chkAlwaysShowAggregateProperties.TabIndex = 2;
             this.chkAlwaysShowAggregateProperties.Text = "Always show aggregating properties";
             this.tt.SetToolTip(this.chkAlwaysShowAggregateProperties, "Aggregation properties of the attributes are only\r\nshowing if the fetch says it s" +
         "hould aggregate.\r\nIf you check this one, they will always be shown.");
@@ -297,7 +298,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkAppAllowUncustViews.Location = new System.Drawing.Point(20, 20);
             this.chkAppAllowUncustViews.Name = "chkAppAllowUncustViews";
             this.chkAppAllowUncustViews.Size = new System.Drawing.Size(198, 17);
-            this.chkAppAllowUncustViews.TabIndex = 6;
+            this.chkAppAllowUncustViews.TabIndex = 1;
             this.chkAppAllowUncustViews.Text = "Allow opening uncustomizable views";
             this.tt.SetToolTip(this.chkAppAllowUncustViews, "Some views don\'t allow to change. But they can be\r\nopened. If you check this one." +
         "");
@@ -476,7 +477,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkShowAllAttributes.Location = new System.Drawing.Point(20, 66);
             this.chkShowAllAttributes.Name = "chkShowAllAttributes";
             this.chkShowAllAttributes.Size = new System.Drawing.Size(169, 17);
-            this.chkShowAllAttributes.TabIndex = 5;
+            this.chkShowAllAttributes.TabIndex = 3;
             this.chkShowAllAttributes.Text = "Show \"all-attributes\" (bad use)";
             this.tt.SetToolTip(this.chkShowAllAttributes, "all-attributes is a big no-no.\r\nBut you can, if you check this one.");
             this.chkShowAllAttributes.UseVisualStyleBackColor = true;
@@ -500,7 +501,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkWaitUntilMetadataLoaded.Location = new System.Drawing.Point(260, 43);
             this.chkWaitUntilMetadataLoaded.Name = "chkWaitUntilMetadataLoaded";
             this.chkWaitUntilMetadataLoaded.Size = new System.Drawing.Size(172, 17);
-            this.chkWaitUntilMetadataLoaded.TabIndex = 1;
+            this.chkWaitUntilMetadataLoaded.TabIndex = 6;
             this.chkWaitUntilMetadataLoaded.Text = "Wait until all entities are loaded";
             this.tt.SetToolTip(this.chkWaitUntilMetadataLoaded, "Unchecked it will load metadata in the background.\r\nChecked and it will load it e" +
         "verything, them the tool\r\ncan be used.");
@@ -512,7 +513,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkTryMetadataCache.Location = new System.Drawing.Point(260, 20);
             this.chkTryMetadataCache.Name = "chkTryMetadataCache";
             this.chkTryMetadataCache.Size = new System.Drawing.Size(202, 17);
-            this.chkTryMetadataCache.TabIndex = 0;
+            this.chkTryMetadataCache.TabIndex = 5;
             this.chkTryMetadataCache.Text = "Use cached metadata in XrmToolBox";
             this.tt.SetToolTip(this.chkTryMetadataCache, "XrmToolBox has a general cache for Dataverse metadata.\r\nMay be smart, may not. Tr" +
         "y it!");
@@ -652,6 +653,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // tabResults
             // 
             this.tabResults.BackColor = System.Drawing.SystemColors.Window;
+            this.tabResults.Controls.Add(this.label5);
             this.tabResults.Controls.Add(this.linkDeprecatedExecFetchReq);
             this.tabResults.Controls.Add(this.label2);
             this.tabResults.Controls.Add(this.panResultView);
@@ -801,7 +803,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.btnResetAll.Location = new System.Drawing.Point(280, 116);
             this.btnResetAll.Name = "btnResetAll";
             this.btnResetAll.Size = new System.Drawing.Size(177, 23);
-            this.btnResetAll.TabIndex = 11;
+            this.btnResetAll.TabIndex = 20;
             this.btnResetAll.Text = "Reset all settings to default";
             this.btnResetAll.UseVisualStyleBackColor = true;
             this.btnResetAll.Click += new System.EventHandler(this.btnResetAll_Click);
@@ -812,11 +814,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkShowOData2.Location = new System.Drawing.Point(20, 89);
             this.chkShowOData2.Name = "chkShowOData2";
             this.chkShowOData2.Size = new System.Drawing.Size(172, 17);
-            this.chkShowOData2.TabIndex = 10;
+            this.chkShowOData2.TabIndex = 4;
             this.chkShowOData2.Text = "Show deprecated \"OData 2.0\"";
             this.tt.SetToolTip(this.chkShowOData2, "OData v2.0 is deprecated and removed from the\r\nplatform at 2023-03-30.\r\nYou can s" +
         "how it anyway, if you which, but checking this one.");
             this.chkShowOData2.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(20, 103);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(209, 13);
+            this.label5.TabIndex = 22;
+            this.label5.Text = "More options by execute with <SHIFT>+F5";
             // 
             // Settings
             // 
@@ -919,5 +930,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.CheckBox chkAppBothNamesResults;
         private System.Windows.Forms.CheckBox chkShowAttributeTypes;
         private System.Windows.Forms.CheckBox chkShowTreeviewAttributeTypes;
+        private System.Windows.Forms.Label label5;
     }
 }
