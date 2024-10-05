@@ -54,6 +54,8 @@
             this.mnuQuickFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuPagingCookie = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuShowElapsed = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuAllPages = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuColumns = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuIndexCol = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuIdCol = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,8 +81,6 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.gbPagingCookie = new System.Windows.Forms.GroupBox();
-            this.mnuAllPages = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.crmGridView1 = new Rappen.XTB.Helpers.Controls.XRMDataGridView();
             this.ctxmenuGrid.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -314,6 +314,20 @@
             this.mnuShowElapsed.Text = "Show Elapsed Retrieve Time";
             this.mnuShowElapsed.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(225, 6);
+            // 
+            // mnuAllPages
+            // 
+            this.mnuAllPages.CheckOnClick = true;
+            this.mnuAllPages.Enabled = false;
+            this.mnuAllPages.Name = "mnuAllPages";
+            this.mnuAllPages.Size = new System.Drawing.Size(228, 22);
+            this.mnuAllPages.Text = "Retrieve all pages";
+            this.mnuAllPages.Click += new System.EventHandler(this.chkGridOptions_Click);
+            // 
             // mnuColumns
             // 
             this.mnuColumns.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -546,20 +560,6 @@
             this.gbPagingCookie.TabStop = false;
             this.gbPagingCookie.Text = "Paging Cookie";
             this.gbPagingCookie.Visible = false;
-            // 
-            // mnuAllPages
-            // 
-            this.mnuAllPages.CheckOnClick = true;
-            this.mnuAllPages.Enabled = false;
-            this.mnuAllPages.Name = "mnuAllPages";
-            this.mnuAllPages.Size = new System.Drawing.Size(228, 22);
-            this.mnuAllPages.Text = "Retrieve all pages";
-            this.mnuAllPages.Click += new System.EventHandler(this.chkGridOptions_Click);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(225, 6);
             // 
             // crmGridView1
             // 

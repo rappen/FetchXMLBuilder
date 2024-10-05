@@ -968,6 +968,9 @@ namespace Rappen.XTB.FetchXmlBuilder
             tsmiResultWebApi.Checked = resultOutput == ResultOutput.JSONWebAPI;
             tsmiResultRaw.Checked = resultOutput == ResultOutput.Raw;
             tsmiResultGridView.Checked = !tsmiResultXml.Checked && !tsmiResultJson.Checked && !tsmiResultWebApi.Checked && !tsmiResultRaw.Checked;
+            tsmiDisplayFriendly.Enabled = tsmiResultGridView.Checked;
+            tsmiDisplayRaw.Enabled = tsmiResultGridView.Checked;
+            tsmiDisplayBoth.Enabled = tsmiResultGridView.Checked;
         }
 
         private void tsmiResultType_Click(object sender = null, EventArgs e = null)
@@ -982,6 +985,26 @@ namespace Rappen.XTB.FetchXmlBuilder
                 settings.Results.ResultOutput = result;
                 FetchResults();
             }
+        }
+
+        private void SetDisplayFriendlyRaw()
+        {
+            tsmiDisplayFriendly.Checked = settings.Results.Friendly;
+            tsmiDisplayRaw.Checked = !tsmiDisplayFriendly.Checked;
+            tsmiDisplayBoth.Checked = settings.Results.BothNames;
+            dockControlGrid?.ApplySettingsToGrid();
+        }
+
+        private void tsmiDisplayType_Click(object sender = null, EventArgs e = null)
+        {
+            settings.Results.Friendly = sender == tsmiDisplayFriendly;
+            SetDisplayFriendlyRaw();
+        }
+
+        private void tsmiDisplayBoth_Click(object sender, EventArgs e)
+        {
+            settings.Results.BothNames = !tsmiDisplayBoth.Checked;
+            SetDisplayFriendlyRaw();
         }
     }
 }

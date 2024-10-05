@@ -83,6 +83,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icon_both {
+            get {
+                object obj = ResourceManager.GetObject("icon-both", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icon_convert {
             get {
                 object obj = ResourceManager.GetObject("icon-convert", resourceCulture);
@@ -146,6 +156,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         internal static System.Drawing.Bitmap icon_flow {
             get {
                 object obj = ResourceManager.GetObject("icon-flow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icon_friendly {
+            get {
+                object obj = ResourceManager.GetObject("icon-friendly", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -276,6 +296,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         internal static System.Drawing.Bitmap icon_raw {
             get {
                 object obj = ResourceManager.GetObject("icon-raw", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icon_raw_xml {
+            get {
+                object obj = ResourceManager.GetObject("icon-raw-xml", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
