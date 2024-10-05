@@ -1,8 +1,8 @@
 ﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Forms;
-using Rappen.XTB.Helpers;
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
@@ -50,6 +50,8 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
 
             callerArgs = message;
+            LogUse("CalledBy." + callerArgs?.SourcePlugin, ai2: true);
+
             var fetchXml = string.Empty;
             var layoutxml = string.Empty;
             var fromview = false;
@@ -84,13 +86,9 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             dockControlBuilder.Init(fetchXml, layoutxml, fromview, $"called from {message.SourcePlugin}", false);
             attributesChecksum = dockControlBuilder.GetAttributesSignature();
-            //tsbReturnToCaller.Text = callerArgs.SourcePlugin == URLcaller ? "FetchXML from an URL" : "Return FetchXML";
-            tsbReturnToCaller.Image =
-                callerArgs.SourcePlugin == "Bulk Data Updater" ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.logo_BDU :
-                callerArgs.SourcePlugin == URLcaller ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_web :
-                Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_send_back;
-            tsbReturnToCaller.ToolTipText = callerArgs.SourcePlugin == URLcaller ? "Show 'Sharing Queries' on my website." : "Return " + requestedType + " to " + callerArgs.SourcePlugin;
-            LogUse("CalledBy." + callerArgs.SourcePlugin, ai2: true);
+
+            FixReturnButton();
+
             if (callerArgs.SourcePlugin == "View Designer" && !connectionsettings.TipsAgainstOrViewDesignerToolShown)
             {
                 if (MessageBox.Show("Did you know you can work with the layouts too in the FetchXML Builder?\nClick the Help button to see how!\n\nDon't show again.",
@@ -101,6 +99,47 @@ namespace Rappen.XTB.FetchXmlBuilder
                 }
             }
             EnableControls(true);
+        }
+
+        private void FixReturnButton()
+        {
+            if (callerArgs == null ||
+                callerArgs.SourcePlugin == "Plugin Trace Viewer" ||
+                callerArgs.SourcePlugin == URLcaller)
+            {
+                tsbReturnToCaller.Visible = false;
+                tsmiSepReturn.Visible = tsbReturnToCaller.Visible;
+                return;
+            }
+            tsbReturnToCaller.Visible = true;
+            tsmiSepReturn.Visible = true;
+            tsbReturnToCaller.Text = $"Return to {callerArgs.SourcePlugin}";
+            tsbReturnToCaller.Image =
+                callerArgs.SourcePlugin == "Bulk Data Updater" ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.logo_BDU :
+                callerArgs.SourcePlugin == "SQL 4 CDS" ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.logo_SQL4CDS :
+                callerArgs.SourcePlugin == URLcaller ? Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_web :
+                Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_send_back;
+            tsbReturnToCaller.ToolTipText = "Return Fetch XML to the caller tool " + callerArgs.SourcePlugin;
+            foreach (var item in tsbSend.DropDownItems.Cast<ToolStripItem>().Where(i => i is ToolStripMenuItem))
+            {
+                if (item.Tag is string tag && !string.IsNullOrEmpty(tag))
+                {
+                    item.Visible = tag != callerArgs.SourcePlugin;
+                }
+            }
+        }
+
+        public void SendingToTool(string tool)
+        {
+            LogUse("Calling." + tool, ai2: true);
+            try
+            {
+                OnOutgoingMessage(this, new MessageBusEventArgs(tool, true) { TargetArgument = dockControlBuilder.GetFetchString(true, false) });
+            }
+            catch (Exception ex)
+            {
+                ShowErrorDialog(ex);
+            }
         }
 
         public void ReceiveKeyDownShortcut(KeyEventArgs e)

@@ -1,4 +1,5 @@
-﻿using Microsoft.Crm.Sdk.Messages;
+﻿using Cinteros.Xrm.FetchXmlBuilder.Properties;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
@@ -8,9 +9,11 @@ using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Forms;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using Rappen.XTB.FetchXmlBuilder.Views;
+using Rappen.XTB.FXB.Settings;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -65,9 +68,6 @@ namespace Rappen.XTB.FetchXmlBuilder
                     // Main menu items
                     tsbExecute.Enabled = enabled && Service != null;
                     tsbAbort.Visible = settings.ExecuteOptions.AllPages;
-                    tsbBDU.Visible = settings.ShowBDU && bduexists && callerArgs?.SourcePlugin != "Bulk Data Updater";
-                    tsbBDU.Enabled = enabled && (dockControlBuilder?.IsFetchAggregate() == false);
-                    tsbReturnToCaller.Visible = CallerWantsResults();
 
                     // Sub menu Open items
                     tsmiOpenView.Enabled = enabled && Service != null;
@@ -775,6 +775,38 @@ namespace Rappen.XTB.FetchXmlBuilder
                     }
                 }
             });
+        }
+
+        private void SetIntegrationsTo()
+        {
+            var pos = 2;
+            foreach (var integrationto in OnlineSettings.Instance.IntegratedToTools)
+            {
+                var name = integrationto;
+                Image image = Resources.icon_send;
+                var tool = PluginManagerExtended.Instance.PluginsExt.Where(t => t.Metadata.Name == integrationto).FirstOrDefault();
+                var enabled = tool != null;
+                if (enabled)
+                {
+                    var bytes = Convert.FromBase64String(tool.Metadata.SmallImageBase64);
+                    using (MemoryStream ms = new MemoryStream(bytes))
+                    {
+                        image = Image.FromStream(ms);
+                    }
+                }
+                else
+                {
+                    name += " (not installed)";
+                }
+                var menu = new ToolStripMenuItem(name)
+                {
+                    Tag = integrationto,
+                    Image = image,
+                    Enabled = enabled
+                };
+                menu.Click += SendToTool_Click;
+                tsbSend.DropDownItems.Insert(pos++, menu);
+            }
         }
 
         private void SetupDockControls()

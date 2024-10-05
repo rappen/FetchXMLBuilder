@@ -98,6 +98,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 "EntityLogicalName"
             }).ToArray();
             LoadSetting();
+            SetIntegrationsTo();
         }
 
         private void Error_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -375,8 +376,6 @@ namespace Rappen.XTB.FetchXmlBuilder
         private void ApplySettings(bool reloadquery)
         {
             toolStripMain.Items.OfType<ToolStripItem>().ToList().ForEach(i => i.DisplayStyle = settings.ShowButtonTexts ? ToolStripItemDisplayStyle.ImageAndText : ToolStripItemDisplayStyle.Image);
-            tsbRepo.Visible = settings.ShowRepository;
-            tsbBDU.Visible = settings.ShowBDU;
             tsmiShowOData.Visible = settings.ShowOData2;
             SetResultTypeMenu(settings.Results.ResultOutput);
             dockControlBuilder.lblQAExpander.GroupBoxSetState(null, settings.QueryOptions.ShowQuickActions);
@@ -441,11 +440,6 @@ namespace Rappen.XTB.FetchXmlBuilder
                 sql = "Failed to generate SQL Query.\n\n" + ex.Message;
             }
             return sql;
-        }
-
-        public void EditInSQL4CDS()
-        {
-            OnOutgoingMessage(this, new MessageBusEventArgs("SQL 4 CDS") { TargetArgument = dockControlBuilder.GetFetchString(false, false) });
         }
 
         /// <summary>Loads configurations from file</summary>
@@ -899,14 +893,13 @@ namespace Rappen.XTB.FetchXmlBuilder
             RebuildRepositoryMenu(null);
         }
 
-        private void tsbBDU_Click(object sender, EventArgs e)
+        private void SendToTool_Click(object sender, EventArgs e)
         {
-            OnOutgoingMessage(this, new MessageBusEventArgs("Bulk Data Updater", true) { TargetArgument = dockControlBuilder.GetFetchString(true, true) });
-        }
-
-        private void tsbSQL4CDS_Click(object sender, EventArgs e)
-        {
-            OnOutgoingMessage(this, new MessageBusEventArgs("SQL 4 CDS", true) { TargetArgument = dockControlBuilder.GetFetchString(true, true) });
+            if (!(sender is ToolStripMenuItem caller) || !(caller.Tag is string tag) || string.IsNullOrEmpty(tag))
+            {
+                return;
+            }
+            SendingToTool(tag);
         }
 
         private void tsmiSelect_Click(object sender, EventArgs e)

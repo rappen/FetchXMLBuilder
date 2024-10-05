@@ -520,7 +520,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void btnSQL4CDS_Click(object sender, EventArgs e)
         {
-            fxb.EditInSQL4CDS();
+            fxb.SendingToTool("SQL 4 CDS");
         }
 
         internal void ApplyCurrentSettings()
