@@ -262,6 +262,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         internal FetchType GetFetchType()
         {
             var fetchstr = GetFetchString(false, false);
+            if (string.IsNullOrEmpty(fetchstr))
+            {
+                return null;
+            }
             var serializer = new XmlSerializer(typeof(FetchType));
             object result;
             using (TextReader reader = new StringReader(fetchstr))
