@@ -39,8 +39,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             chkShowButtonTexts.Checked = settings.ShowButtonTexts;
             chkShowValidation.Checked = settings.ShowValidation;
             chkShowValidationInfo.Checked = settings.ShowValidationInfo;
-            chkShowRepository.Checked = settings.ShowRepository;
-            chkShowBulkDataUpdater.Checked = settings.ShowBDU;
             chkShowTreeviewAttributeTypes.Checked = settings.ShowTreeviewAttributeTypes;
             chkShowAttributeTypes.Checked = settings.ShowAttributeTypes;
             chkShowAllAttributes.Checked = settings.QueryOptions.ShowAllAttributes;
@@ -103,8 +101,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.ShowButtonTexts = chkShowButtonTexts.Checked;
             settings.ShowValidation = chkShowValidation.Checked;
             settings.ShowValidationInfo = settings.ShowValidation && chkShowValidationInfo.Checked;
-            settings.ShowRepository = chkShowRepository.Checked;
-            settings.ShowBDU = chkShowBulkDataUpdater.Checked;
             settings.ShowTreeviewAttributeTypes = chkShowTreeviewAttributeTypes.Checked;
             settings.ShowAttributeTypes = chkShowAttributeTypes.Checked;
             settings.QueryOptions.ShowAllAttributes = chkShowAllAttributes.Checked;

@@ -533,7 +533,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             alreadyloaded = true;
             LogUse("Load", ai2: true);
-            CheckIntegrationTools();
             SetupDockControls();
             ApplySettings(true);
             var ass = Assembly.GetExecutingAssembly().GetName();

@@ -47,7 +47,6 @@ namespace Rappen.XTB.FetchXmlBuilder
         private string fileName;
         private QueryRepository repository = new QueryRepository();
         private bool inSql4Cds;
-        private bool bduexists;
 
         internal void EnableControls()
         {
@@ -206,12 +205,6 @@ namespace Rappen.XTB.FetchXmlBuilder
         private static string GetDockFileName()
         {
             return Path.Combine(Paths.SettingsPath, "Rappen.XTB.FXB_[DockPanels].xml");
-        }
-
-        private void CheckIntegrationTools()
-        {
-            bduexists = PluginManagerExtended.Instance.PluginsExt.Any(p =>
-                p.Metadata.Name == "Bulk Data Updater" && new Version(p.Value.GetVersion()) > new Version(1, 2020, 12, 4));
         }
 
         private void CreateRepoMenuItem(QueryDefinition query)

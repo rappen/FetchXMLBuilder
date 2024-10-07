@@ -62,7 +62,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkShowValidationInfo = new System.Windows.Forms.CheckBox();
             this.chkShowValidation = new System.Windows.Forms.CheckBox();
             this.chkAddConditionToFilter = new System.Windows.Forms.CheckBox();
-            this.chkShowRepository = new System.Windows.Forms.CheckBox();
             this.chkShowAllAttributes = new System.Windows.Forms.CheckBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.chkWaitUntilMetadataLoaded = new System.Windows.Forms.CheckBox();
@@ -75,9 +74,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabLayout = new System.Windows.Forms.TabPage();
             this.chkShowTreeviewAttributeTypes = new System.Windows.Forms.CheckBox();
             this.chkShowAttributeTypes = new System.Windows.Forms.CheckBox();
-            this.chkShowBulkDataUpdater = new System.Windows.Forms.CheckBox();
             this.tabBehavior = new System.Windows.Forms.TabPage();
             this.tabResults = new System.Windows.Forms.TabPage();
+            this.label5 = new System.Windows.Forms.Label();
             this.linkDeprecatedExecFetchReq = new System.Windows.Forms.LinkLabel();
             this.label2 = new System.Windows.Forms.Label();
             this.panResultView = new System.Windows.Forms.Panel();
@@ -91,7 +90,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.btnResetAll = new System.Windows.Forms.Button();
             this.chkShowOData2 = new System.Windows.Forms.CheckBox();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
-            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -130,8 +128,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkResAllPages.Size = new System.Drawing.Size(111, 17);
             this.chkResAllPages.TabIndex = 3;
             this.chkResAllPages.Text = "Retrieve all pages";
-            this.tt.SetToolTip(this.chkResAllPages, "Check this to always retrieve and keep retrieving\r\nuntil all the data is now her" +
-        "e. But be careful...");
+            this.tt.SetToolTip(this.chkResAllPages, "Check this to always retrieve and keep retrieving\r\nuntil all the data is now here" +
+        ". But be careful...");
             this.chkResAllPages.UseVisualStyleBackColor = true;
             // 
             // chkAppResultsNewWindow
@@ -460,17 +458,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         " probably will always\r\nneed an Condition there...");
             this.chkAddConditionToFilter.UseVisualStyleBackColor = true;
             // 
-            // chkShowRepository
-            // 
-            this.chkShowRepository.AutoSize = true;
-            this.chkShowRepository.Location = new System.Drawing.Point(20, 66);
-            this.chkShowRepository.Name = "chkShowRepository";
-            this.chkShowRepository.Size = new System.Drawing.Size(135, 17);
-            this.chkShowRepository.TabIndex = 4;
-            this.chkShowRepository.Text = "Show Repository menu";
-            this.tt.SetToolTip(this.chkShowRepository, "Do you like to use Repository?\r\nCheck this to show it in the menu.");
-            this.chkShowRepository.UseVisualStyleBackColor = true;
-            // 
             // chkShowAllAttributes
             // 
             this.chkShowAllAttributes.AutoSize = true;
@@ -588,9 +575,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabLayout.BackColor = System.Drawing.SystemColors.Window;
             this.tabLayout.Controls.Add(this.chkShowTreeviewAttributeTypes);
             this.tabLayout.Controls.Add(this.chkShowAttributeTypes);
-            this.tabLayout.Controls.Add(this.chkShowBulkDataUpdater);
             this.tabLayout.Controls.Add(this.chkShowButtonTexts);
-            this.tabLayout.Controls.Add(this.chkShowRepository);
             this.tabLayout.Controls.Add(this.chkShowHelp);
             this.tabLayout.Controls.Add(this.chkShowNodeTypes);
             this.tabLayout.Location = new System.Drawing.Point(4, 22);
@@ -624,18 +609,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         "texts.");
             this.chkShowAttributeTypes.UseVisualStyleBackColor = true;
             // 
-            // chkShowBulkDataUpdater
-            // 
-            this.chkShowBulkDataUpdater.AutoSize = true;
-            this.chkShowBulkDataUpdater.Location = new System.Drawing.Point(20, 89);
-            this.chkShowBulkDataUpdater.Name = "chkShowBulkDataUpdater";
-            this.chkShowBulkDataUpdater.Size = new System.Drawing.Size(181, 17);
-            this.chkShowBulkDataUpdater.TabIndex = 5;
-            this.chkShowBulkDataUpdater.Text = "Integrate with Bulk Data Updater";
-            this.tt.SetToolTip(this.chkShowBulkDataUpdater, "Show or hide the Bulk Data Updater button to send\r\nthis query to BDU, to be able " +
-        "to update, delete, etc.");
-            this.chkShowBulkDataUpdater.UseVisualStyleBackColor = true;
-            // 
             // tabBehavior
             // 
             this.tabBehavior.BackColor = System.Drawing.SystemColors.Window;
@@ -665,6 +638,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabResults.Size = new System.Drawing.Size(505, 153);
             this.tabResults.TabIndex = 3;
             this.tabResults.Text = "Results";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(20, 103);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(209, 13);
+            this.label5.TabIndex = 22;
+            this.label5.Text = "More options by execute with <SHIFT>+F5";
             // 
             // linkDeprecatedExecFetchReq
             // 
@@ -820,15 +802,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         "how it anyway, if you which, but checking this one.");
             this.chkShowOData2.UseVisualStyleBackColor = true;
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(20, 103);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(209, 13);
-            this.label5.TabIndex = 22;
-            this.label5.Text = "More options by execute with <SHIFT>+F5";
-            // 
             // Settings
             // 
             this.AcceptButton = this.btnOK;
@@ -895,7 +868,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.CheckBox chkShowButtonTexts;
         private ScintillaNET.Scintilla txtFetch;
         private System.Windows.Forms.CheckBox chkShowValidation;
-        private System.Windows.Forms.CheckBox chkShowRepository;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.CheckBox chkShowValidationInfo;
         private System.Windows.Forms.CheckBox chkClickableLinks;
@@ -925,7 +897,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.ToolTip tt;
         private System.Windows.Forms.Button btnResetAll;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.CheckBox chkShowBulkDataUpdater;
         private System.Windows.Forms.Button btnForceReloadMetadata;
         private System.Windows.Forms.CheckBox chkAppBothNamesResults;
         private System.Windows.Forms.CheckBox chkShowAttributeTypes;
