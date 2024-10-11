@@ -48,9 +48,9 @@
             this.lblInfo = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.gbPages = new System.Windows.Forms.GroupBox();
-            this.rbPageByPage = new System.Windows.Forms.RadioButton();
-            this.rbAllPages = new System.Windows.Forms.RadioButton();
             this.label3 = new System.Windows.Forms.Label();
+            this.rbAllPages = new System.Windows.Forms.RadioButton();
+            this.rbPageByPage = new System.Windows.Forms.RadioButton();
             this.gbOldBypassCustom.SuspendLayout();
             this.gbBypassLogic.SuspendLayout();
             this.panButtons.SuspendLayout();
@@ -70,7 +70,7 @@
     "ness-logic#bypasscustompluginexecution";
             this.linkBypassPlugins.Text = "MS Learn: Bypass Custom";
             this.toolTip1.SetToolTip(this.linkBypassPlugins, "https://learn.microsoft.com/power-apps/developer/data-platform/bypass-custom-busi" +
-        "ness-logic");
+        "ness-logic#bypasscustompluginexecution");
             this.linkBypassPlugins.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_Click);
             // 
             // chkOldBypassCustom
@@ -135,8 +135,8 @@
             this.linkLabel3.Tag = "https://learn.microsoft.com/power-apps/developer/data-platform/bypass-custom-busi" +
     "ness-logic";
             this.linkLabel3.Text = "MS Learn: Bypass custom Dataverse logic";
-            this.toolTip1.SetToolTip(this.linkLabel3, "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/bypass-custo" +
-        "m-business-logic-preview");
+            this.toolTip1.SetToolTip(this.linkLabel3, "https://learn.microsoft.com/power-apps/developer/data-platform/bypass-custom-busi" +
+        "ness-logic");
             this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_Click);
             // 
             // gbBypassLogic
@@ -188,7 +188,7 @@
     "ness-logic#bypassbusinesslogicexecutionstepids";
             this.linkLabel2.Text = "MS Learn: Step Ids";
             this.toolTip1.SetToolTip(this.linkLabel2, "https://learn.microsoft.com/power-apps/developer/data-platform/bypass-custom-busi" +
-        "ness-logic-preview#bypassbusinesslogicexecutionstepids");
+        "ness-logic#bypassbusinesslogicexecutionstepids");
             this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_Click);
             // 
             // chkBypassSync
@@ -241,7 +241,7 @@
     "ness-logic#bypassbusinesslogicexecution";
             this.linkLabel1.Text = "MS Learn: Execution";
             this.toolTip1.SetToolTip(this.linkLabel1, "https://learn.microsoft.com/power-apps/developer/data-platform/bypass-custom-busi" +
-        "ness-logic-preview#bypassbusinesslogicexecution");
+        "ness-logic#bypassbusinesslogicexecution");
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_Click);
             // 
             // panButtons
@@ -287,16 +287,14 @@
             this.gbPages.TabStop = false;
             this.gbPages.Text = "Pages";
             // 
-            // rbPageByPage
+            // label3
             // 
-            this.rbPageByPage.AutoSize = true;
-            this.rbPageByPage.Location = new System.Drawing.Point(81, 25);
-            this.rbPageByPage.Name = "rbPageByPage";
-            this.rbPageByPage.Size = new System.Drawing.Size(92, 17);
-            this.rbPageByPage.TabIndex = 0;
-            this.rbPageByPage.TabStop = true;
-            this.rbPageByPage.Text = "Page by Page";
-            this.rbPageByPage.UseVisualStyleBackColor = true;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 26);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(55, 13);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Retrieving";
             // 
             // rbAllPages
             // 
@@ -309,14 +307,16 @@
             this.rbAllPages.Text = "All Pages";
             this.rbAllPages.UseVisualStyleBackColor = true;
             // 
-            // label3
+            // rbPageByPage
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 26);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(55, 13);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Retrieving";
+            this.rbPageByPage.AutoSize = true;
+            this.rbPageByPage.Location = new System.Drawing.Point(81, 25);
+            this.rbPageByPage.Name = "rbPageByPage";
+            this.rbPageByPage.Size = new System.Drawing.Size(92, 17);
+            this.rbPageByPage.TabIndex = 0;
+            this.rbPageByPage.TabStop = true;
+            this.rbPageByPage.Text = "Page by Page";
+            this.rbPageByPage.UseVisualStyleBackColor = true;
             // 
             // Execute
             // 
