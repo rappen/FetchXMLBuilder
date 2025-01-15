@@ -36,6 +36,8 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.panActions = new System.Windows.Forms.Panel();
             this.gbActions = new System.Windows.Forms.GroupBox();
+            this.panParseQE = new System.Windows.Forms.Panel();
+            this.btnParseQE = new System.Windows.Forms.Button();
             this.panCopy = new System.Windows.Forms.Panel();
             this.btnCopy = new System.Windows.Forms.Button();
             this.panSQL4CDS = new System.Windows.Forms.Panel();
@@ -79,11 +81,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.linkFlavorHelp = new System.Windows.Forms.LinkLabel();
-            this.panParseQE = new System.Windows.Forms.Panel();
-            this.btnParseQE = new System.Windows.Forms.Button();
             this.panCancel.SuspendLayout();
             this.panActions.SuspendLayout();
             this.gbActions.SuspendLayout();
+            this.panParseQE.SuspendLayout();
             this.panCopy.SuspendLayout();
             this.panSQL4CDS.SuspendLayout();
             this.panExecute.SuspendLayout();
@@ -98,7 +99,6 @@
             this.panQExOptions.SuspendLayout();
             this.panQExSmallerOptions.SuspendLayout();
             this.panQExStylFlavorOptions.SuspendLayout();
-            this.panParseQE.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSave
@@ -172,6 +172,26 @@
             this.gbActions.TabIndex = 4;
             this.gbActions.TabStop = false;
             this.gbActions.Text = "Actions";
+            // 
+            // panParseQE
+            // 
+            this.panParseQE.Controls.Add(this.btnParseQE);
+            this.panParseQE.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panParseQE.Location = new System.Drawing.Point(405, 16);
+            this.panParseQE.Name = "panParseQE";
+            this.panParseQE.Size = new System.Drawing.Size(91, 28);
+            this.panParseQE.TabIndex = 10;
+            // 
+            // btnParseQE
+            // 
+            this.btnParseQE.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnParseQE.Location = new System.Drawing.Point(6, 0);
+            this.btnParseQE.Name = "btnParseQE";
+            this.btnParseQE.Size = new System.Drawing.Size(75, 23);
+            this.btnParseQE.TabIndex = 6;
+            this.btnParseQE.Text = "Parse";
+            this.btnParseQE.UseVisualStyleBackColor = true;
+            this.btnParseQE.Click += new System.EventHandler(this.btnParseQE_Click);
             // 
             // panCopy
             // 
@@ -422,7 +442,7 @@
             // btnQExFlavorSettings
             // 
             this.btnQExFlavorSettings.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_settings_16;
-            this.btnQExFlavorSettings.Location = new System.Drawing.Point(218, 34);
+            this.btnQExFlavorSettings.Location = new System.Drawing.Point(220, 34);
             this.btnQExFlavorSettings.Name = "btnQExFlavorSettings";
             this.btnQExFlavorSettings.Size = new System.Drawing.Size(23, 23);
             this.btnQExFlavorSettings.TabIndex = 16;
@@ -437,7 +457,7 @@
             this.cmbQExFlavor.FormattingEnabled = true;
             this.cmbQExFlavor.Location = new System.Drawing.Point(55, 35);
             this.cmbQExFlavor.Name = "cmbQExFlavor";
-            this.cmbQExFlavor.Size = new System.Drawing.Size(157, 21);
+            this.cmbQExFlavor.Size = new System.Drawing.Size(161, 21);
             this.cmbQExFlavor.TabIndex = 1;
             this.tt.SetToolTip(this.cmbQExFlavor, "Choose flavor for texts, constants, or early bound.");
             this.cmbQExFlavor.SelectedIndexChanged += new System.EventHandler(this.cmbQExFlavor_SelectedIndexChanged);
@@ -448,7 +468,7 @@
             this.cmbQExStyle.FormattingEnabled = true;
             this.cmbQExStyle.Location = new System.Drawing.Point(55, 8);
             this.cmbQExStyle.Name = "cmbQExStyle";
-            this.cmbQExStyle.Size = new System.Drawing.Size(157, 21);
+            this.cmbQExStyle.Size = new System.Drawing.Size(161, 21);
             this.cmbQExStyle.TabIndex = 0;
             this.tt.SetToolTip(this.cmbQExStyle, "Select type of generated code for FetchXML.");
             this.cmbQExStyle.SelectedIndexChanged += new System.EventHandler(this.cmbQExStyle_SelectedIndexChanged);
@@ -456,7 +476,7 @@
             // linkStyleHelp
             // 
             this.linkStyleHelp.AutoSize = true;
-            this.linkStyleHelp.Location = new System.Drawing.Point(218, 11);
+            this.linkStyleHelp.Location = new System.Drawing.Point(220, 11);
             this.linkStyleHelp.Name = "linkStyleHelp";
             this.linkStyleHelp.Size = new System.Drawing.Size(55, 13);
             this.linkStyleHelp.TabIndex = 14;
@@ -651,26 +671,6 @@
             this.linkFlavorHelp.Text = "linkLabel2";
             this.linkFlavorHelp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkFlavorHelp_LinkClicked);
             // 
-            // panParseQE
-            // 
-            this.panParseQE.Controls.Add(this.btnParseQE);
-            this.panParseQE.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panParseQE.Location = new System.Drawing.Point(405, 16);
-            this.panParseQE.Name = "panParseQE";
-            this.panParseQE.Size = new System.Drawing.Size(91, 28);
-            this.panParseQE.TabIndex = 10;
-            // 
-            // btnParseQE
-            // 
-            this.btnParseQE.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnParseQE.Location = new System.Drawing.Point(6, 0);
-            this.btnParseQE.Name = "btnParseQE";
-            this.btnParseQE.Size = new System.Drawing.Size(75, 23);
-            this.btnParseQE.TabIndex = 6;
-            this.btnParseQE.Text = "Parse";
-            this.btnParseQE.UseVisualStyleBackColor = true;
-            this.btnParseQE.Click += new System.EventHandler(this.btnParseQE_Click);
-            // 
             // XmlContentControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -700,6 +700,7 @@
             this.panActions.ResumeLayout(false);
             this.gbActions.ResumeLayout(false);
             this.gbActions.PerformLayout();
+            this.panParseQE.ResumeLayout(false);
             this.panCopy.ResumeLayout(false);
             this.panSQL4CDS.ResumeLayout(false);
             this.panExecute.ResumeLayout(false);
@@ -718,7 +719,6 @@
             this.panQExSmallerOptions.PerformLayout();
             this.panQExStylFlavorOptions.ResumeLayout(false);
             this.panQExStylFlavorOptions.PerformLayout();
-            this.panParseQE.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

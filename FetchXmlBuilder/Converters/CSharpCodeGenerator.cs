@@ -1434,28 +1434,28 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             {
                 new QExFlavor
                 {
-                    Name = "Late Bound strings",
+                    Name = "Plain strings",
                     Tag = QExFlavorEnum.LateBound
                 },
                 new QExFlavor
                 {
-                    Name = "Late Bound EBG constants",
-                    Creator = "Daryl LaBar's tool EBG",
-                    HelpUrl = "https://github.com/daryllabar/DLaB.Xrm.XrmToolBoxTools/wiki/Early-Bound-Generator",
+                    Name = "Early Bound by EBG V2",
+                    Creator = "Daryl LaBar's tool EBG V2",
+                    HelpUrl = "https://youtu.be/imgpdO_MWdE",
                     Tag = QExFlavorEnum.EBGconstants
                 },
                 new QExFlavor
                 {
-                    Name = "Late Bound LCG constants",
+                    Name = "Late Bound by LCG",
                     Creator = "Jonas Rapp's tool LCG",
-                    HelpUrl = "https://github.com/rappen/LCG-UDG",
+                    HelpUrl = "https://jonasr.app/lcg/",
                     Tag = QExFlavorEnum.LCGconstants
                 },
                 new QExFlavor
                 {
-                    Name = "Early Bound",
+                    Name = "Early Bound with OrgSvcCntx",
                     Creator = "Microsoft's classes",
-                    HelpUrl = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/generate-early-bound-classes",
+                    HelpUrl = "https://learn.microsoft.com/power-apps/developer/data-platform/org-service/generate-early-bound-classes",
                     Tag = QExFlavorEnum.EarlyBound
                 }
             };

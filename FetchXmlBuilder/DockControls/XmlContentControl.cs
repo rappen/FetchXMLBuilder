@@ -1043,7 +1043,7 @@ More votes == released sooner.", "OrganizationServiceContext",
                 linkFlavorHelp.Text = flavor.Creator;
                 tt.SetToolTip(linkFlavorHelp, flavor.HelpUrl);
                 btnQExFlavorSettings.Visible = flavor.Tag == QExFlavorEnum.LCGconstants;
-                linkFlavorHelp.Left = btnQExFlavorSettings.Left + (flavor.Tag == QExFlavorEnum.LCGconstants ? btnQExFlavorSettings.Width + 6 : 0);
+                linkFlavorHelp.Left = btnQExFlavorSettings.Left + (flavor.Tag == QExFlavorEnum.LCGconstants ? btnQExFlavorSettings.Width + 2 : 0);
                 UpdateXML(initializating ? waitmessage : fxb.GetCSharpCode());
             }
             else
