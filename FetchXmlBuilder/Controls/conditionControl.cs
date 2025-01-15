@@ -900,7 +900,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         private void dtPicker_ValueChanged(object sender, EventArgs e)
         {
-            cmbValue.Text = dtPicker.Value == dtPicker.Value.Date ? dtPicker.Value.ToShortDateString() : dtPicker.Value.ToString(dtPicker.CustomFormat);
+            cmbValue.Text = dtPicker.Value == dtPicker.Value.Date ? dtPicker.Value.ToString("yyyy-MM-dd") : dtPicker.Value.ToString("yyyy-MM-dd HH:mm:ss");
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
