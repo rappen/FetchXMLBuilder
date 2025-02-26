@@ -68,9 +68,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 mnuPageMinus.Visible = false;
                 mnuPagePlus.Visible = false;
             }
-            if (queryinfo.RecordFrom > -1 && queryinfo.RecordTo > -1)
+            if (queryinfo.RecordFrom > -1)
             {
-                if (!form.settings.ExecuteOptions.AllPages && (queryinfo.RecordFrom > 1 || queryinfo.Results.MoreRecords))
+                if (!form.settings.ExecuteOptions.AllPages && queryinfo.RecordTo > queryinfo.RecordFrom && (queryinfo.RecordFrom > 1 || queryinfo.Results.MoreRecords))
                 {
                     mnuRecordsNumbers.Text = $"Records: {queryinfo.RecordFrom}-{queryinfo.RecordTo}";
                     if (queryinfo.Results.TotalRecordCount > 0 && queryinfo.Results.TotalRecordCount < 5000)
