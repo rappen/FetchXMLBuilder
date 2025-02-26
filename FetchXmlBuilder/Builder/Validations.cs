@@ -167,6 +167,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                     return new ControlValidationResult(ControlValidationLevel.Warning, $"Attribute '{name}' is not in the table '{parententity}'.");
                 }
             }
+            if (node.Parent.ParentNotEntity().Name == "filter")
+            {
+                return new ControlValidationResult(ControlValidationLevel.Error, "Attribute under filter is not allowed.");
+            }
             var alias = node.Value("alias");
             if (ValidateAlias(alias) is ControlValidationResult aliasresult)
             {

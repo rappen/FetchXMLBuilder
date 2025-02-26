@@ -4,7 +4,6 @@ using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.Builder;
 using Rappen.XTB.FetchXmlBuilder.ControlsClasses;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
-using Rappen.XTB.Helpers;
 using Rappen.XTB.Helpers.ControlItems;
 using System;
 using System.Collections.Generic;
@@ -375,13 +374,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
             if (control == cmbType)
             {
-                if (Node.Parent.Name == "filter")
+                var type = cmbType.Text;
+                var typebyfilter = type.Equals("any") || type.Equals("not any") || type.Equals("all") | type.Equals("not all");
+                if (Node.Parent.Name == "filter" && !typebyfilter)
                 {
-                    var type = cmbType.Text;
-                    if (!type.Equals("any") && !type.Equals("not any") && !type.Equals("all") && !type.Equals("not all"))
-                    {
-                        return new ControlValidationResult(ControlValidationLevel.Warning, "For filter link-entity has to be type any, not any, all, or not all");
-                    }
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "For filter link-entity has to be type any, not any, all, or not all");
+                }
+                if (Node.Parent.Name != "filter" && typebyfilter)
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "For link-entity type any, not any, all, or not all is only allowed in filter");
                 }
             }
 
@@ -391,7 +392,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 {
                     return aliasresult;
                 }
-                if (string.IsNullOrWhiteSpace(txtAlias.Text) && fxb.settings.Results.WorkWithLayout)
+                if (string.IsNullOrWhiteSpace(txtAlias.Text) && fxb.settings.Results.WorkWithLayout && Node.ParentNotEntity().Name != "filter")
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "Using Layout: Alias is needed to show these attributes");
                 }

@@ -432,13 +432,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                     tree.addOneMoreToolStripMenuItem.Tag = "MORE-" + nodecapabilities.Name;
                     AddLinkFromCapability(tree, "+" + nodecapabilities.Name, "MORE-" + nodecapabilities.Name);
                 }
-                if (nodecapabilities.Attributes && tree.selectAttributesToolStripMenuItem.Enabled)
+                var isunderfilter = node.ParentNotEntity()?.Name == "filter";
+                if (nodecapabilities.Attributes && tree.selectAttributesToolStripMenuItem.Enabled && !isunderfilter)
                 {
                     AddLinkFromCapability(tree, "Select Attributes", "SelectAttributes");
                 }
                 foreach (var childcapability in nodecapabilities.ChildTypes)
                 {
                     if (childcapability.Name == "all-attributes" && !options.ShowAllAttributes)
+                    {
+                        continue;
+                    }
+                    if ((childcapability.Name == "attribute" || childcapability.Name == "order") && isunderfilter)
                     {
                         continue;
                     }
@@ -459,7 +464,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                 }
 
                 tree.addOneMoreToolStripMenuItem.Visible = nodecapabilities.Multiple;
-                tree.selectAttributesToolStripMenuItem.Visible = nodecapabilities.Attributes;
+                tree.selectAttributesToolStripMenuItem.Visible = nodecapabilities.Attributes && !isunderfilter;
                 tree.deleteToolStripMenuItem.Enabled = nodecapabilities.Delete;
                 tree.commentToolStripMenuItem.Enabled = nodecapabilities.Comment;
                 tree.uncommentToolStripMenuItem.Enabled = nodecapabilities.Uncomment;
