@@ -110,7 +110,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                 string.IsNullOrWhiteSpace(node.Value("to")) ||
                 string.IsNullOrWhiteSpace(node.Value("from")))
             {
-                return new ControlValidationResult(ControlValidationLevel.Warning, "Link-Entity must include Name, To, From.");
+                return new ControlValidationResult(ControlValidationLevel.Warning, "Link-Entity must include Name, To, From");
             }
             if (fxb.settings.Results.WorkWithLayout &&
                 string.IsNullOrWhiteSpace(alias) &&
@@ -118,23 +118,29 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
             {
                 return new ControlValidationResult(ControlValidationLevel.Warning, "Using Layout: Alias is needed to show these attributes");
             }
-            if (node.ParentNotEntity() is TreeNode parent && parent.Name == "filter")
+            var type = node.Value("link-type");
+            if (node.Parent is TreeNode parent && parent.Name == "filter")
             {
-                var type = node.Value("link-type");
                 if (!type.Equals("any") && !type.Equals("not any") && !type.Equals("all") && !type.Equals("not all"))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Error, "Filter by link-entity has to be type any, not any, all, or not all", "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/filter-rows#filter-on-values-in-related-records");
                 }
                 if (node.Nodes.OfType<TreeNode>().Any(c => c.Name == "attribute"))
                 {
-                    return new ControlValidationResult(ControlValidationLevel.Warning, "Link-entity under filter can't return any attributes.", "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/filter-rows#filter-on-values-in-related-records");
+                    return new ControlValidationResult(ControlValidationLevel.Warning, "Link-entity under filter can't return any attributes", "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/filter-rows#filter-on-values-in-related-records");
                 }
             }
-
+            else
+            {
+                if (type.Equals("any") || type.Equals("not any") || type.Equals("all") || type.Equals("not all"))
+                {
+                    return new ControlValidationResult(ControlValidationLevel.Error, "Link-entity type any, not any, all, and not all can only be under a filter", "https://learn.microsoft.com/power-apps/developer/data-platform/fetchxml/filter-rows#filter-on-values-in-related-records");
+                }
+            }
             if (node.Value("intersect") != "true" &&
                 fxb.GetAttribute(name, node.Value("from")) is AttributeMetadata fromAttr && fromAttr.IsPrimaryId == false)
             {
-                return new ControlValidationResult(ControlValidationLevel.Info, "Links to records that aren't parents may cause paging issues.", "https://markcarrington.dev/2021/02/23/msdyn365-internals-paging-gotchas/#multiple_linked_entities");
+                return new ControlValidationResult(ControlValidationLevel.Info, "Links to records that aren't parents may cause paging issues", "https://markcarrington.dev/2021/02/23/msdyn365-internals-paging-gotchas/#multiple_linked_entities");
             }
             return null;
         }
