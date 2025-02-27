@@ -31,7 +31,7 @@ namespace Rappen.XTB.FetchXmlBuilder.AppCode
                 {
                     if (fetch.Query.ToXml().SelectSingleNode("fetch") is XmlElement fetchnode)
                     {
-                        PageSize = Math.Min(fetchnode.AttributeInt("count") ?? 5000, 5000);
+                        PageSize = Math.Min(fetchnode.AttributeInt("count") ?? 0, 5000);
                         PageNo = fetchnode.AttributeInt("page") ?? 1;
                     }
                 }
@@ -50,6 +50,17 @@ namespace Rappen.XTB.FetchXmlBuilder.AppCode
                         cookie.AttributeInt("page") is int page)
                     {
                         PageNo = page;
+                    }
+                }
+                if (PageSize == 0)
+                {
+                    if (result.MoreRecords)
+                    {
+                        PageSize = result.Entities.Count;
+                    }
+                    else
+                    {
+                        PageSize = 5000;
                     }
                 }
                 if (result.TotalRecordCount > -1 && result.TotalRecordCount < 5000 && PageSize > 0 && result.TotalRecordCount > PageSize)
