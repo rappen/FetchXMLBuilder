@@ -110,7 +110,7 @@
             this.gbOldBypassCustom.Location = new System.Drawing.Point(6, 182);
             this.gbOldBypassCustom.Name = "gbOldBypassCustom";
             this.gbOldBypassCustom.Size = new System.Drawing.Size(379, 57);
-            this.gbOldBypassCustom.TabIndex = 2;
+            this.gbOldBypassCustom.TabIndex = 3;
             this.gbOldBypassCustom.TabStop = false;
             this.gbOldBypassCustom.Text = "Old: Bypass Custom";
             // 
@@ -153,7 +153,7 @@
             this.gbBypassLogic.Location = new System.Drawing.Point(6, 63);
             this.gbBypassLogic.Name = "gbBypassLogic";
             this.gbBypassLogic.Size = new System.Drawing.Size(379, 119);
-            this.gbBypassLogic.TabIndex = 3;
+            this.gbBypassLogic.TabIndex = 2;
             this.gbBypassLogic.TabStop = false;
             this.gbBypassLogic.Text = "Bypass Logic";
             // 
