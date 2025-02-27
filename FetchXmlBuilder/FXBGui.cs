@@ -55,18 +55,26 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         /// <summary>Enables or disables all buttons on the form</summary>
         /// <param name="enabled"></param>
-        internal void EnableControls(bool enabled)
+        internal void EnableControls(bool enabled, bool toolstripmenuenabled = false)
         {
             MethodInvoker mi = delegate
             {
                 try
                 {
                     // Menus
-                    toolStripMain.Enabled = enabled;
+                    toolStripMain.Enabled = enabled || toolstripmenuenabled;
 
                     // Main menu items
+                    tsbNew.Enabled = enabled;
+                    tsbOpen.Enabled = enabled;
+                    tsbSave.Enabled = enabled;
+                    tsbRepo.Enabled = enabled;
                     tsbExecute.Enabled = enabled && Service != null;
                     tsbAbort.Visible = settings.ExecuteOptions.AllPages;
+                    tsbSend.Enabled = enabled;
+                    tsbConvert.Enabled = enabled;
+                    tsbView.Enabled = enabled;
+                    tsbOptions.Enabled = enabled;
 
                     // Sub menu Open items
                     tsmiOpenView.Enabled = enabled && Service != null;

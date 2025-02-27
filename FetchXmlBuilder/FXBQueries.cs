@@ -284,7 +284,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             working = true;
             SendMessageToStatusBar(this, new StatusBarMessageEventArgs("Retrieving..."));
-            tsbExecute.Enabled = false;
+            EnableControls(false, true);
             tsbAbort.Enabled = true;
             dockControlGrid?.SetQueryChanged(true);
             WorkAsync(new WorkAsyncInfo
@@ -330,7 +330,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 {
                     working = false;
                     tsbAbort.Enabled = false;
-                    tsbExecute.Enabled = true;
+                    EnableControls(true);
                     Enabled = true;
                     Cursor = Cursors.Default;
                     SendMessageToStatusBar(this, new StatusBarMessageEventArgs(""));
