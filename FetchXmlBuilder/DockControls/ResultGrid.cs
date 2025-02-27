@@ -296,12 +296,23 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
                 var xlSourceSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Sheets.Add(After: xlWorkBook.Sheets[xlWorkBook.Sheets.Count]);
                 xlSourceSheet.Name = "FetchXML Builder - Source";
+                var fetch = queryinfo.Query is FetchExpression fetchexpr ? fetchexpr.Query : queryinfo.Query.ToString();
+                if (form.settings.ExecuteOptions.AllPages)
+                {
+                    var fetchtype = XRM.Helpers.FetchXML.Fetch.FromString(fetch);
+                    if (fetchtype.PagingCookie != null || fetchtype.PageNumber != null)
+                    {
+                        fetchtype.PagingCookie = null;
+                        fetchtype.PageNumber = null;
+                        fetch = fetchtype.ToString();
+                    }
+                }
                 ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[1, 1]).Value = "Connection";
                 ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[1, 2]).Value = form.ConnectionDetail.ConnectionName;
                 ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[2, 1]).Value = "URL";
                 ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[2, 2]).Value = form.ConnectionDetail.WebApplicationUrl;
                 ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[3, 1]).Value = "Query";
-                ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[3, 2]).Value = queryinfo.Query is FetchExpression fetchexpr ? fetchexpr.Query : queryinfo.Query.ToString();
+                ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[3, 2]).Value = fetch;
                 if (form.settings.Results.WorkWithLayout)
                 {
                     ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[4, 1]).Value = "Layout";
