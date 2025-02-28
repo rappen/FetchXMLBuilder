@@ -686,11 +686,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             if (valueType == null)
             {
                 cmbValue.Text = "";
-                cmbValue.Enabled = false;
-            }
-            else
-            {
-                cmbValue.Enabled = true;
+                panValue.Visible = false;
             }
 
             if (valueType == AttributeTypeCode.Lookup ||
