@@ -323,7 +323,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                     result.Remove("value");
                 }
             }
-            else if (!result.ContainsKey("value") && cmbValue.Enabled && cmbValue.DropDownStyle == ComboBoxStyle.Simple)
+            else if (!result.ContainsKey("value") && panValue.Visible && cmbValue.Enabled && cmbValue.DropDownStyle == ComboBoxStyle.Simple)
             {
                 result.Add("value", "");
             }
