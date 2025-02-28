@@ -715,7 +715,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             // 
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(13, 21);
-            this.linkLabel1.Location = new System.Drawing.Point(4, 2);
+            this.linkLabel1.Location = new System.Drawing.Point(4, 3);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(121, 17);
             this.linkLabel1.TabIndex = 51;
