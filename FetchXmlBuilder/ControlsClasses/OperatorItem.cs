@@ -10,12 +10,10 @@ namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
         private ConditionOperator oper = ConditionOperator.Equal;
 
         /// <summary>Property that indicates what type the value must have for the condition to be valid</summary>
-        public AttributeTypeCode? ValueType
-        { get { return GetValueType(); } }
+        public AttributeTypeCode? ValueType => GetValueType();
 
         /// <summary>Property that indicates if operator allows "values" collection</summary>
-        public bool IsMultipleValuesType
-        { get { return GetIsMultipleValuesType(); } }
+        public bool IsMultipleValuesType => GetIsMultipleValuesType();
 
         /// <summary>Property that indicates if operator allows column comparison</summary>
         public bool SupportsColumnComparison
