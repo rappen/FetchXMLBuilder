@@ -208,7 +208,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
     {
         public List<QueryDefinition> Queries { get; set; } = new List<QueryDefinition>();
 
-        public void SortQueries() => Queries = Queries.OrderBy(q => q.Name).ToList();
+        public void SortQueries()
+        {
+            var tmp = Queries.Where(q => q.Name.Contains("\\")).OrderBy(q => q.Name).ToList();
+            Queries = tmp.Union(Queries.Where(q => !q.Name.Contains("\\")).OrderBy(q => q.Name)).ToList();
+        }
     }
 
     public class QueryDefinition
