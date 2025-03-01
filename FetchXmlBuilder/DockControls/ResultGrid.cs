@@ -7,6 +7,7 @@ using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Views;
 using Rappen.XTB.Helpers;
 using System;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
@@ -168,6 +169,53 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         #endregion Internal Methods
 
         #region Private Methods
+
+        private void SetSelectedDetails()
+        {
+            MethodInvoker mi = delegate
+            {
+                try
+                {
+                    panSelectedDetails.Visible = false;
+                    var details = crmGridView1.GetSelectedDetails();
+                    var visibleit = !string.IsNullOrWhiteSpace(string.Join("", details.Select(d => d.Value)));
+                    if (visibleit)
+                    {
+                        txtSelectedDetails.Text = string.Join(Environment.NewLine, details.Select(d => $"{d.Key}:\t{d.Value}"));
+
+                        using (Graphics g = this.CreateGraphics())
+                        {
+                            var textSize = g.MeasureString(txtSelectedDetails.Text, txtSelectedDetails.Font).ToSize();
+                            panSelectedDetails.Width = textSize.Width + 6;
+                            panSelectedDetails.Height = textSize.Height + 10;
+                            panSelectedDetails.Top = crmGridView1.Top;
+                            panSelectedDetails.Left = crmGridView1.Left + crmGridView1.Width - panSelectedDetails.Width;
+                            if (crmGridView1.Controls.OfType<VScrollBar>().First().Visible)
+                            {
+                                panSelectedDetails.Left -= SystemInformation.VerticalScrollBarWidth;
+                            }
+                            if (panSelectedDetails.Left - 10 < crmGridView1.Columns.GetColumnsWidth(DataGridViewElementStates.Visible))
+                            {
+                                panSelectedDetails.Top += crmGridView1.ColumnHeadersHeight;
+                            }
+                        }
+                        panSelectedDetails.Visible = true;
+                    }
+                }
+                catch
+                {
+                    // Now what?
+                }
+            };
+            if (InvokeRequired)
+            {
+                Invoke(mi);
+            }
+            else
+            {
+                mi();
+            }
+        }
 
         private void UpdateSettingsFromSelectedOptions()
         {
@@ -476,6 +524,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 GetLayoutFromGrid();
             }
+            SetSelectedDetails();
         }
 
         private void mnuResetLayout_Click(object sender, EventArgs e)
@@ -574,6 +623,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void mnuExcel_Click(object sender, EventArgs e)
         {
             OpenInExcel();
+        }
+
+        private void crmGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+            SetSelectedDetails();
+        }
+
+        private void crmGridView1_Resize(object sender, EventArgs e)
+        {
+            SetSelectedDetails();
         }
 
         #endregion Private Event Handlers

@@ -81,6 +81,8 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.gbPagingCookie = new System.Windows.Forms.GroupBox();
+            this.panSelectedDetails = new System.Windows.Forms.Panel();
+            this.txtSelectedDetails = new System.Windows.Forms.TextBox();
             this.crmGridView1 = new Rappen.XTB.Helpers.Controls.XRMDataGridView();
             this.ctxmenuGrid.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -89,6 +91,7 @@
             this.panQuickFilter.SuspendLayout();
             this.panel3.SuspendLayout();
             this.gbPagingCookie.SuspendLayout();
+            this.panSelectedDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -468,7 +471,7 @@
             // 
             this.mnuExcel.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_excel_24;
             this.mnuExcel.Name = "mnuExcel";
-            this.mnuExcel.Size = new System.Drawing.Size(70, 28);
+            this.mnuExcel.Size = new System.Drawing.Size(69, 28);
             this.mnuExcel.Text = "Excel";
             this.mnuExcel.Click += new System.EventHandler(this.mnuExcel_Click);
             // 
@@ -561,6 +564,33 @@
             this.gbPagingCookie.Text = "Paging Cookie";
             this.gbPagingCookie.Visible = false;
             // 
+            // panSelectedDetails
+            // 
+            this.panSelectedDetails.BackColor = System.Drawing.SystemColors.Info;
+            this.panSelectedDetails.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panSelectedDetails.Controls.Add(this.txtSelectedDetails);
+            this.panSelectedDetails.Location = new System.Drawing.Point(490, 37);
+            this.panSelectedDetails.Name = "panSelectedDetails";
+            this.panSelectedDetails.Size = new System.Drawing.Size(160, 105);
+            this.panSelectedDetails.TabIndex = 9;
+            this.panSelectedDetails.Visible = false;
+            // 
+            // txtSelectedDetails
+            // 
+            this.txtSelectedDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSelectedDetails.BackColor = System.Drawing.SystemColors.Info;
+            this.txtSelectedDetails.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtSelectedDetails.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtSelectedDetails.Location = new System.Drawing.Point(3, 3);
+            this.txtSelectedDetails.Multiline = true;
+            this.txtSelectedDetails.Name = "txtSelectedDetails";
+            this.txtSelectedDetails.Size = new System.Drawing.Size(154, 99);
+            this.txtSelectedDetails.TabIndex = 0;
+            this.txtSelectedDetails.Text = "Selected:";
+            this.txtSelectedDetails.WordWrap = false;
+            // 
             // crmGridView1
             // 
             this.crmGridView1.AllowUserToAddRows = false;
@@ -596,6 +626,8 @@
             this.crmGridView1.ColumnDisplayIndexChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.crmGridView1_LayoutChanged);
             this.crmGridView1.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.crmGridView1_ColumnHeaderMouseClick);
             this.crmGridView1.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.crmGridView1_LayoutChanged);
+            this.crmGridView1.SelectionChanged += new System.EventHandler(this.crmGridView1_SelectionChanged);
+            this.crmGridView1.Resize += new System.EventHandler(this.crmGridView1_Resize);
             // 
             // ResultGrid
             // 
@@ -603,6 +635,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(650, 273);
+            this.Controls.Add(this.panSelectedDetails);
             this.Controls.Add(this.crmGridView1);
             this.Controls.Add(this.gbPagingCookie);
             this.Controls.Add(this.panel1);
@@ -624,6 +657,8 @@
             this.panel3.PerformLayout();
             this.gbPagingCookie.ResumeLayout(false);
             this.gbPagingCookie.PerformLayout();
+            this.panSelectedDetails.ResumeLayout(false);
+            this.panSelectedDetails.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.crmGridView1)).EndInit();
             this.ResumeLayout(false);
 
@@ -682,5 +717,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuExcel;
         private System.Windows.Forms.ToolStripMenuItem mnuAllPages;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.Panel panSelectedDetails;
+        private System.Windows.Forms.TextBox txtSelectedDetails;
     }
 }
