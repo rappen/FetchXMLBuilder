@@ -144,6 +144,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal void SetQueryChanged(bool changed)
         {
+            if (IsDisposed)
+            {
+                return;
+            }
             Text = "Result View" + (changed ? " *" : "");
             crmGridView1.DefaultCellStyle.BackColor = changed ? System.Drawing.Color.LightGray : System.Drawing.Color.White;
             crmGridView1.DefaultCellStyle.ForeColor = changed ? System.Drawing.Color.Gray : System.Drawing.SystemColors.ControlText;
