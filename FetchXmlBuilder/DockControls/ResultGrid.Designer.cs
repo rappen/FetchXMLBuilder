@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.ctxmenuGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctxRecord = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxRecordOpen = new System.Windows.Forms.ToolStripMenuItem();
@@ -83,8 +83,8 @@
             this.gbPagingCookie = new System.Windows.Forms.GroupBox();
             this.panSelectedDetails = new System.Windows.Forms.Panel();
             this.txtSelectedDetails = new System.Windows.Forms.TextBox();
-            this.crmGridView1 = new Rappen.XTB.Helpers.Controls.XRMDataGridView();
             this.mnuExcelAdvanced = new System.Windows.Forms.ToolStripMenuItem();
+            this.crmGridView1 = new Rappen.XTB.Helpers.Controls.XRMDataGridView();
             this.ctxmenuGrid.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.mnuOptions.SuspendLayout();
@@ -198,7 +198,6 @@
             this.groupBox1.Size = new System.Drawing.Size(652, 45);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Options";
             // 
             // lblOptionsExpander
             // 
@@ -250,8 +249,8 @@
             this.toolStripMenuItem2,
             this.mnuAllPages});
             this.mnuBehavior.Name = "mnuBehavior";
-            this.mnuBehavior.Size = new System.Drawing.Size(82, 28);
-            this.mnuBehavior.Text = "Appearance";
+            this.mnuBehavior.Size = new System.Drawing.Size(61, 28);
+            this.mnuBehavior.Text = "Options";
             this.mnuBehavior.DropDownOpening += new System.EventHandler(this.mnuBehaviorColumns_DropDownOpening);
             // 
             // mnuFriendly
@@ -593,14 +592,23 @@
             this.txtSelectedDetails.Text = "Selected:";
             this.txtSelectedDetails.WordWrap = false;
             // 
+            // mnuExcelAdvanced
+            // 
+            this.mnuExcelAdvanced.CheckOnClick = true;
+            this.mnuExcelAdvanced.Name = "mnuExcelAdvanced";
+            this.mnuExcelAdvanced.Size = new System.Drawing.Size(228, 22);
+            this.mnuExcelAdvanced.Text = "Advanced export to Excel";
+            this.mnuExcelAdvanced.ToolTipText = "This is slower, but handles new-lines correctly";
+            this.mnuExcelAdvanced.Click += new System.EventHandler(this.chkGridOptions_Click);
+            // 
             // crmGridView1
             // 
             this.crmGridView1.AllowUserToAddRows = false;
             this.crmGridView1.AllowUserToDeleteRows = false;
             this.crmGridView1.AllowUserToOrderColumns = true;
             this.crmGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             this.crmGridView1.AutoRefresh = false;
             this.crmGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
             this.crmGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -630,15 +638,6 @@
             this.crmGridView1.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.crmGridView1_LayoutChanged);
             this.crmGridView1.SelectionChanged += new System.EventHandler(this.crmGridView1_SelectionChanged);
             this.crmGridView1.Resize += new System.EventHandler(this.crmGridView1_Resize);
-            // 
-            // mnuExcelAdvanced
-            // 
-            this.mnuExcelAdvanced.CheckOnClick = true;
-            this.mnuExcelAdvanced.Name = "mnuExcelAdvanced";
-            this.mnuExcelAdvanced.Size = new System.Drawing.Size(228, 22);
-            this.mnuExcelAdvanced.Text = "Advanced export to Excel";
-            this.mnuExcelAdvanced.ToolTipText = "This is slower, but handles new-lines correctly";
-            this.mnuExcelAdvanced.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
             // ResultGrid
             // 
