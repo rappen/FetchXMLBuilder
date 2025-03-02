@@ -60,6 +60,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
     {
         public int FormHeight { get; set; }
         public int FormWidth { get; set; }
+        public ResultOutput ResultOutput { get; set; }
         public bool AllPages { get; set; } = false;
         public bool BypassCustom { get; set; } = false;
         public bool BypassSync { get; set; } = false;
@@ -103,7 +104,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool LocalTime { get; set; }
         public bool CopyHeaders { get; set; } = true;
         public bool ExcelAdvanced { get; set; } = false;
-        public ResultOutput ResultOutput { get; set; }
         public bool AlwaysNewWindow { get; set; } = false;
         public bool QuickFilter { get; set; } = false;
         public bool PagingCookie { get; set; } = false;
@@ -272,6 +272,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
 
         public void ApplyToControl(Scintilla viewer)
         {
+            if (viewer == null)
+            {
+                return;
+            }
             viewer.Styles[Style.Default].ForeColor = Value;
             viewer.Styles[Style.Xml.Attribute].ForeColor = AttributeKey;
             viewer.Styles[Style.Xml.DoubleString].ForeColor = AttributeValue;

@@ -51,10 +51,16 @@
             this.label3 = new System.Windows.Forms.Label();
             this.rbAllPages = new System.Windows.Forms.RadioButton();
             this.rbPageByPage = new System.Windows.Forms.RadioButton();
+            this.grpResult = new System.Windows.Forms.GroupBox();
+            this.rbResultGrid = new System.Windows.Forms.RadioButton();
+            this.rbResultJSON = new System.Windows.Forms.RadioButton();
+            this.rbResultXML = new System.Windows.Forms.RadioButton();
+            this.label5 = new System.Windows.Forms.Label();
             this.gbOldBypassCustom.SuspendLayout();
             this.gbBypassLogic.SuspendLayout();
             this.panButtons.SuspendLayout();
             this.gbPages.SuspendLayout();
+            this.grpResult.SuspendLayout();
             this.SuspendLayout();
             // 
             // linkBypassPlugins
@@ -107,10 +113,10 @@
             this.gbOldBypassCustom.Controls.Add(this.chkOldBypassCustom);
             this.gbOldBypassCustom.Controls.Add(this.linkBypassPlugins);
             this.gbOldBypassCustom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.gbOldBypassCustom.Location = new System.Drawing.Point(6, 182);
+            this.gbOldBypassCustom.Location = new System.Drawing.Point(6, 246);
             this.gbOldBypassCustom.Name = "gbOldBypassCustom";
             this.gbOldBypassCustom.Size = new System.Drawing.Size(379, 57);
-            this.gbOldBypassCustom.TabIndex = 3;
+            this.gbOldBypassCustom.TabIndex = 4;
             this.gbOldBypassCustom.TabStop = false;
             this.gbOldBypassCustom.Text = "Old: Bypass Custom";
             // 
@@ -150,10 +156,10 @@
             this.gbBypassLogic.Controls.Add(this.chkBypassAsync);
             this.gbBypassLogic.Controls.Add(this.linkLabel1);
             this.gbBypassLogic.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gbBypassLogic.Location = new System.Drawing.Point(6, 63);
+            this.gbBypassLogic.Location = new System.Drawing.Point(6, 117);
             this.gbBypassLogic.Name = "gbBypassLogic";
-            this.gbBypassLogic.Size = new System.Drawing.Size(379, 119);
-            this.gbBypassLogic.TabIndex = 2;
+            this.gbBypassLogic.Size = new System.Drawing.Size(379, 129);
+            this.gbBypassLogic.TabIndex = 3;
             this.gbBypassLogic.TabStop = false;
             this.gbBypassLogic.Text = "Bypass Logic";
             // 
@@ -211,7 +217,7 @@
             this.txtBypassSteps.Location = new System.Drawing.Point(15, 71);
             this.txtBypassSteps.Multiline = true;
             this.txtBypassSteps.Name = "txtBypassSteps";
-            this.txtBypassSteps.Size = new System.Drawing.Size(358, 42);
+            this.txtBypassSteps.Size = new System.Drawing.Size(358, 52);
             this.txtBypassSteps.TabIndex = 6;
             this.toolTip1.SetToolTip(this.txtBypassSteps, "Add Guids separated by comma.\r\nGuids are found on Plugin Steps in Plugin Registra" +
         "ting Tool.");
@@ -250,10 +256,10 @@
             this.panButtons.Controls.Add(this.btnCancel);
             this.panButtons.Controls.Add(this.btnExecute);
             this.panButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panButtons.Location = new System.Drawing.Point(6, 239);
+            this.panButtons.Location = new System.Drawing.Point(6, 303);
             this.panButtons.Name = "panButtons";
             this.panButtons.Size = new System.Drawing.Size(379, 78);
-            this.panButtons.TabIndex = 4;
+            this.panButtons.TabIndex = 5;
             // 
             // lblInfo
             // 
@@ -280,17 +286,17 @@
             this.gbPages.Controls.Add(this.rbAllPages);
             this.gbPages.Controls.Add(this.rbPageByPage);
             this.gbPages.Dock = System.Windows.Forms.DockStyle.Top;
-            this.gbPages.Location = new System.Drawing.Point(6, 6);
+            this.gbPages.Location = new System.Drawing.Point(6, 60);
             this.gbPages.Name = "gbPages";
             this.gbPages.Size = new System.Drawing.Size(379, 57);
-            this.gbPages.TabIndex = 1;
+            this.gbPages.TabIndex = 2;
             this.gbPages.TabStop = false;
             this.gbPages.Text = "Pages";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 26);
+            this.label3.Location = new System.Drawing.Point(12, 27);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(55, 13);
             this.label3.TabIndex = 2;
@@ -318,6 +324,62 @@
             this.rbPageByPage.Text = "Page by Page";
             this.rbPageByPage.UseVisualStyleBackColor = true;
             // 
+            // grpResult
+            // 
+            this.grpResult.Controls.Add(this.label5);
+            this.grpResult.Controls.Add(this.rbResultXML);
+            this.grpResult.Controls.Add(this.rbResultJSON);
+            this.grpResult.Controls.Add(this.rbResultGrid);
+            this.grpResult.Dock = System.Windows.Forms.DockStyle.Top;
+            this.grpResult.Location = new System.Drawing.Point(6, 6);
+            this.grpResult.Name = "grpResult";
+            this.grpResult.Size = new System.Drawing.Size(379, 54);
+            this.grpResult.TabIndex = 5;
+            this.grpResult.TabStop = false;
+            this.grpResult.Text = "Retrieve && Format";
+            // 
+            // rbResultGrid
+            // 
+            this.rbResultGrid.AutoSize = true;
+            this.rbResultGrid.Location = new System.Drawing.Point(81, 25);
+            this.rbResultGrid.Name = "rbResultGrid";
+            this.rbResultGrid.Size = new System.Drawing.Size(70, 17);
+            this.rbResultGrid.TabIndex = 0;
+            this.rbResultGrid.TabStop = true;
+            this.rbResultGrid.Text = "Grid View";
+            this.rbResultGrid.UseVisualStyleBackColor = true;
+            // 
+            // rbResultJSON
+            // 
+            this.rbResultJSON.AutoSize = true;
+            this.rbResultJSON.Location = new System.Drawing.Point(157, 25);
+            this.rbResultJSON.Name = "rbResultJSON";
+            this.rbResultJSON.Size = new System.Drawing.Size(96, 17);
+            this.rbResultJSON.TabIndex = 1;
+            this.rbResultJSON.TabStop = true;
+            this.rbResultJSON.Text = "JSON WebAPI";
+            this.rbResultJSON.UseVisualStyleBackColor = true;
+            // 
+            // rbResultXML
+            // 
+            this.rbResultXML.AutoSize = true;
+            this.rbResultXML.Location = new System.Drawing.Point(259, 25);
+            this.rbResultXML.Name = "rbResultXML";
+            this.rbResultXML.Size = new System.Drawing.Size(110, 17);
+            this.rbResultXML.TabIndex = 2;
+            this.rbResultXML.TabStop = true;
+            this.rbResultXML.Text = "XML (deprecated)";
+            this.rbResultXML.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 27);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(37, 13);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "Result";
+            // 
             // Execute
             // 
             this.AcceptButton = this.btnExecute;
@@ -325,11 +387,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(391, 323);
+            this.ClientSize = new System.Drawing.Size(391, 387);
             this.Controls.Add(this.gbBypassLogic);
             this.Controls.Add(this.gbOldBypassCustom);
             this.Controls.Add(this.gbPages);
             this.Controls.Add(this.panButtons);
+            this.Controls.Add(this.grpResult);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -346,6 +409,8 @@
             this.panButtons.PerformLayout();
             this.gbPages.ResumeLayout(false);
             this.gbPages.PerformLayout();
+            this.grpResult.ResumeLayout(false);
+            this.grpResult.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -373,5 +438,10 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.RadioButton rbAllPages;
         private System.Windows.Forms.RadioButton rbPageByPage;
+        private System.Windows.Forms.GroupBox grpResult;
+        private System.Windows.Forms.RadioButton rbResultJSON;
+        private System.Windows.Forms.RadioButton rbResultGrid;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.RadioButton rbResultXML;
     }
 }

@@ -50,6 +50,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             {
                 FormHeight = Height,
                 FormWidth = Width,
+                ResultOutput = rbResultJSON.Checked ? ResultOutput.JSONWebAPI : rbResultXML.Checked ? ResultOutput.Raw : ResultOutput.Grid,
                 AllPages = rbAllPages.Checked,
                 BypassCustom = chkOldBypassCustom.Checked,
                 BypassSync = chkBypassSync.Checked,
@@ -61,6 +62,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void SetExecuteOptions(ExecuteOptions options)
         {
+            switch (options.ResultOutput)
+            {
+                case ResultOutput.JSONWebAPI:
+                    rbResultJSON.Checked = true;
+                    break;
+
+                case ResultOutput.Raw:
+                    rbResultXML.Checked = true;
+                    break;
+
+                default:
+                    rbResultGrid.Checked = true;
+                    break;
+            }
             rbAllPages.Checked = options.AllPages;
             rbPageByPage.Checked = !options.AllPages;
             chkOldBypassCustom.Checked = options.BypassCustom;

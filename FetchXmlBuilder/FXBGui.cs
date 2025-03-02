@@ -981,9 +981,9 @@ namespace Rappen.XTB.FetchXmlBuilder
                 tsmi.Tag is string strtag &&
                 int.TryParse(strtag, out int inttag) ? ResultItemToSettingResult(inttag) : ResultOutput.Grid;
             SetResultTypeMenu(result);
-            if (settings.Results.ResultOutput != result)
+            if (settings.ExecuteOptions.ResultOutput != result)
             {
-                settings.Results.ResultOutput = result;
+                settings.ExecuteOptions.ResultOutput = result;
                 FetchResults();
             }
         }

@@ -377,7 +377,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             toolStripMain.Items.OfType<ToolStripItem>().ToList().ForEach(i => i.DisplayStyle = settings.ShowButtonTexts ? ToolStripItemDisplayStyle.ImageAndText : ToolStripItemDisplayStyle.Image);
             tsmiShowOData.Visible = settings.ShowOData2;
-            SetResultTypeMenu(settings.Results.ResultOutput);
+            SetResultTypeMenu(settings.ExecuteOptions.ResultOutput);
             SetDisplayFriendlyRaw();
             dockControlBuilder.lblQAExpander.GroupBoxSetState(null, settings.QueryOptions.ShowQuickActions);
         }

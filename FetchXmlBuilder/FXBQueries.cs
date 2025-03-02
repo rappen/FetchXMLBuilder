@@ -86,7 +86,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 return;
             }
-            switch (settings.Results.ResultOutput)
+            switch (settings.ExecuteOptions.ResultOutput)
             {
                 case ResultOutput.Grid:
                 case ResultOutput.XML:
@@ -286,7 +286,10 @@ namespace Rappen.XTB.FetchXmlBuilder
             SendMessageToStatusBar(this, new StatusBarMessageEventArgs("Retrieving..."));
             EnableControls(false, true);
             tsbAbort.Enabled = true;
-            dockControlGrid?.SetQueryChanged(true);
+            if (settings.ExecuteOptions.ResultOutput == ResultOutput.Grid && dockControlGrid?.IsDisposed != false)
+            {
+                dockControlGrid?.SetQueryChanged(true);
+            }
             WorkAsync(new WorkAsyncInfo
             {
                 Message = "Executing FetchXML...",
@@ -299,13 +302,13 @@ namespace Rappen.XTB.FetchXmlBuilder
                     var start = Stopwatch.StartNew();
                     var resultCollection = Service.RetrieveMultiple(query, worker, eventargs, "Executing FetchXML...\nRecords: {retrieving}\nPage: {page}\nTime: {time}", false, settings.ExecuteOptions.AllPages, settings.ExecuteOptions.Parameters);
                     start.Stop();
-                    LogUse($"RetrieveMultiple-{settings.Results.ResultOutput}", false, resultCollection?.Entities?.Count, start.ElapsedMilliseconds);
-                    if (settings.Results.ResultOutput == ResultOutput.JSON)
+                    LogUse($"RetrieveMultiple-{settings.ExecuteOptions.ResultOutput}", false, resultCollection?.Entities?.Count, start.ElapsedMilliseconds);
+                    if (settings.ExecuteOptions.ResultOutput == ResultOutput.JSON)
                     {
                         var json = EntityCollectionSerializer.ToJSONComplex(resultCollection, Formatting.Indented);
                         eventargs.Result = json;
                     }
-                    else if (settings.Results.ResultOutput == ResultOutput.JSONWebAPI)
+                    else if (settings.ExecuteOptions.ResultOutput == ResultOutput.JSONWebAPI)
                     {
                         var json = EntityCollectionSerializer.ToJSONSimple(resultCollection, Formatting.Indented);
                         eventargs.Result = json;
@@ -346,7 +349,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     }
                     else if (completedargs.Result is QueryInfo queryinfo)
                     {
-                        switch (settings.Results.ResultOutput)
+                        switch (settings.ExecuteOptions.ResultOutput)
                         {
                             case ResultOutput.Grid:
                                 if (settings.Results.AlwaysNewWindow)
@@ -376,7 +379,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                         }
                         queryinfo.Results.Entities.WarnIf50kReturned(queryinfo.Query);
                     }
-                    else if ((settings.Results.ResultOutput == ResultOutput.JSON || settings.Results.ResultOutput == ResultOutput.JSONWebAPI) && completedargs.Result is string json)
+                    else if ((settings.ExecuteOptions.ResultOutput == ResultOutput.JSON || settings.ExecuteOptions.ResultOutput == ResultOutput.JSONWebAPI) && completedargs.Result is string json)
                     {
                         ShowResultControl(json, ContentType.Serialized_Result_JSON, SaveFormat.JSON, settings.DockStates.FetchResult);
                     }
