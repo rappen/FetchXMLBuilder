@@ -102,6 +102,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool SysColumns { get; set; } = true;
         public bool LocalTime { get; set; }
         public bool CopyHeaders { get; set; } = true;
+        public bool ExcelAdvanced { get; set; } = false;
         public ResultOutput ResultOutput { get; set; }
         public bool AlwaysNewWindow { get; set; } = false;
         public bool QuickFilter { get; set; } = false;

@@ -84,6 +84,7 @@
             this.panSelectedDetails = new System.Windows.Forms.Panel();
             this.txtSelectedDetails = new System.Windows.Forms.TextBox();
             this.crmGridView1 = new Rappen.XTB.Helpers.Controls.XRMDataGridView();
+            this.mnuExcelAdvanced = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxmenuGrid.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.mnuOptions.SuspendLayout();
@@ -241,6 +242,7 @@
             this.mnuBothNames,
             this.mnuLocalTime,
             this.mnuCopyHeaders,
+            this.mnuExcelAdvanced,
             this.toolStripMenuItem1,
             this.mnuQuickFilter,
             this.mnuPagingCookie,
@@ -629,6 +631,15 @@
             this.crmGridView1.SelectionChanged += new System.EventHandler(this.crmGridView1_SelectionChanged);
             this.crmGridView1.Resize += new System.EventHandler(this.crmGridView1_Resize);
             // 
+            // mnuExcelAdvanced
+            // 
+            this.mnuExcelAdvanced.CheckOnClick = true;
+            this.mnuExcelAdvanced.Name = "mnuExcelAdvanced";
+            this.mnuExcelAdvanced.Size = new System.Drawing.Size(228, 22);
+            this.mnuExcelAdvanced.Text = "Advanced export to Excel";
+            this.mnuExcelAdvanced.ToolTipText = "This is slower, but handles new-lines correctly";
+            this.mnuExcelAdvanced.Click += new System.EventHandler(this.chkGridOptions_Click);
+            // 
             // ResultGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -719,5 +730,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.Panel panSelectedDetails;
         private System.Windows.Forms.TextBox txtSelectedDetails;
+        private System.Windows.Forms.ToolStripMenuItem mnuExcelAdvanced;
     }
 }

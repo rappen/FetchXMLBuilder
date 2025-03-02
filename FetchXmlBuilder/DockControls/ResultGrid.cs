@@ -101,6 +101,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             mnuSysCol.Checked = form.settings.Results.WorkWithLayout ? false : form.settings.Results.SysColumns;
             mnuLocalTime.Checked = form.settings.Results.LocalTime;
             mnuCopyHeaders.Checked = form.settings.Results.CopyHeaders;
+            mnuExcelAdvanced.Checked = form.settings.Results.ExcelAdvanced;
             mnuQuickFilter.Checked = form.settings.Results.QuickFilter;
             mnuPagingCookie.Checked = form.settings.Results.PagingCookie;
             mnuShowElapsed.Checked = form.settings.Results.ShowRetrieveTime;
@@ -228,6 +229,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             form.settings.Results.Id = mnuIdCol.Checked;
             form.settings.Results.LocalTime = mnuLocalTime.Checked;
             form.settings.Results.CopyHeaders = mnuCopyHeaders.Checked;
+            form.settings.Results.ExcelAdvanced = mnuExcelAdvanced.Checked;
             form.settings.Results.QuickFilter = mnuQuickFilter.Checked;
             form.settings.Results.PagingCookie = mnuPagingCookie.Checked;
             form.settings.Results.ShowRetrieveTime = mnuShowElapsed.Checked;
@@ -306,75 +308,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void OpenInExcel()
         {
+            Cursor = Cursors.WaitCursor;
+            mnuExcel.Enabled = false;
+            var fetch = queryinfo.Query is FetchExpression fetchexpr ? fetchexpr.Query : queryinfo.Query.ToString();
+            var layout = form.dockControlBuilder?.LayoutXML?.ToXMLString();
             try
             {
-                Cursor = Cursors.WaitCursor;
-                mnuExcel.Enabled = false;
-                var tempCopyMode = crmGridView1.ClipboardCopyMode;
-                crmGridView1.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
-                crmGridView1.SelectAll();
-                var dataObj = crmGridView1.GetClipboardContent();
-                crmGridView1.ClearSelection();
-                if (dataObj == null)
-                {
-                    return;
-                }
-                Clipboard.SetDataObject(dataObj);
-                var xlexcel = new Microsoft.Office.Interop.Excel.Application();
-                xlexcel.Visible = true;
-                var xlWorkBook = xlexcel.Workbooks.Add(System.Reflection.Missing.Value);
-
-                // Create sheet for results
-                var xlResultSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
-                xlResultSheet.Name = "FetchXML Builder - Result";
-                // Paste all data
-                var cellResultA1 = (Microsoft.Office.Interop.Excel.Range)xlResultSheet.Cells[1, 1];
-                cellResultA1.Select();
-                xlResultSheet.PasteSpecial(cellResultA1, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, true);
-                // Format width and headers
-                var header = (Microsoft.Office.Interop.Excel.Range)xlResultSheet.Rows[1];
-                header.Font.Bold = true;
-                header.Borders[Microsoft.Office.Interop.Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
-                header.Borders[Microsoft.Office.Interop.Excel.XlBordersIndex.xlEdgeBottom].Weight = Microsoft.Office.Interop.Excel.XlBorderWeight.xlThick;
-                header.AutoFilter(1, Type.Missing, Microsoft.Office.Interop.Excel.XlAutoFilterOperator.xlAnd, Type.Missing, true);
-                xlResultSheet.Activate();
-                xlResultSheet.Application.ActiveWindow.SplitRow = 1;
-                try { xlResultSheet.Application.ActiveWindow.FreezePanes = true; } catch { }
-                xlResultSheet.Columns.AutoFit();
-
-                var xlSourceSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Sheets.Add(After: xlWorkBook.Sheets[xlWorkBook.Sheets.Count]);
-                xlSourceSheet.Name = "FetchXML Builder - Source";
-                var fetch = queryinfo.Query is FetchExpression fetchexpr ? fetchexpr.Query : queryinfo.Query.ToString();
-                if (form.settings.ExecuteOptions.AllPages)
-                {
-                    var fetchtype = XRM.Helpers.FetchXML.Fetch.FromString(fetch);
-                    if (fetchtype.PagingCookie != null || fetchtype.PageNumber != null)
-                    {
-                        fetchtype.PagingCookie = null;
-                        fetchtype.PageNumber = null;
-                        fetch = fetchtype.ToString();
-                    }
-                }
-                ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[1, 1]).Value = "Connection";
-                ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[1, 2]).Value = form.ConnectionDetail.ConnectionName;
-                ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[2, 1]).Value = "URL";
-                ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[2, 2]).Value = form.ConnectionDetail.WebApplicationUrl;
-                ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[3, 1]).Value = "Query";
-                ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[3, 2]).Value = fetch;
-                if (form.settings.Results.WorkWithLayout)
-                {
-                    ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[4, 1]).Value = "Layout";
-                    ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[4, 2]).Value = form.dockControlBuilder?.LayoutXML?.ToXMLString();
-                }
-                var sourceheader = (Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Columns[1];
-                sourceheader.Font.Bold = true;
-                sourceheader.Cells.VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignTop;
-                ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[1, 1]).EntireColumn.AutoFit();
-                ((Microsoft.Office.Interop.Excel.Range)xlSourceSheet.Cells[1, 2]).EntireColumn.ColumnWidth = 150;
-                xlSourceSheet.Rows.AutoFit();
-
-                xlResultSheet.Activate();
-                xlResultSheet.Range["A1", "A1"].Select();
+                ExcelHelper.ExportToExcel(crmGridView1, fetch, layout, form.settings, form.ConnectionDetail);
             }
             catch (Exception ex)
             {

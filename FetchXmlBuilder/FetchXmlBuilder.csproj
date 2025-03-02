@@ -234,6 +234,7 @@
       <Link>Forms\Supporting.Designer.cs</Link>
       <DependentUpon>Supporting.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppCode\ExcelHelper.cs" />
     <Compile Include="Converters\LCG\CommonSettings.cs" />
     <Compile Include="Converters\LCG\ConfigurationUtils.cs" />
     <Compile Include="Converters\LCG\Extensions.cs" />
