@@ -52,7 +52,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             qex = QEx;
             settings = fxbsettings.CodeGenerators;
             betweenchar = settings.QExStyle == QExStyleEnum.FluentQueryExpression ? "" : ",";
-            StoreLinkEntityAliases(qex.LinkEntities);
+            StoreLinkEntityAliases(qex);
         }
 
         #region General
@@ -212,11 +212,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
 
         private string GetFiltersLbL(string entity, FilterExpression filter, string ownerName)
         {
-            if (filter?.Filters?.Any() != true)
+            if (filter?.Filters?.Any() != true && filter?.AnyAllFilterLinkEntity == null)
             {
                 return string.Empty;
             }
-            var filters = filter.Filters.Where(f => f.Conditions.Any() || f.Filters.Any());
+            var filters = filter.Filters.Where(f => f.Conditions.Any() || f.Filters.Any() || f.AnyAllFilterLinkEntity != null);
             var several = filters.Count() > 1;
             var filtercodes = new List<string>();
             var rootfilters = filter.FilterHint.EndsWith("Criteria") || filter.FilterHint.EndsWith("Criteria.Filters");
@@ -229,11 +229,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
 
         private string GetFilterLbL(string entity, FilterExpression filter, string ownerName, OwnersType ownerType, bool several = false)
         {
-            if (filter == null || (!filter.Conditions.Any() && !filter.Filters.Any()))
+            if (filter == null || (!filter.Conditions.Any() && !filter.Filters.Any() && filter.AnyAllFilterLinkEntity == null))
             {
                 return string.Empty;
             }
-            if (filter.Filters.Count == 1 && !filter.Conditions.Any())
+            if (filter.Filters.Count == 1 && !filter.Conditions.Any() && filter.AnyAllFilterLinkEntity == null)
             {
                 return GetFilterLbL(entity, filter.Filters.First(), ownerName, ownerType, several);
             }
@@ -279,12 +279,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
 
         private string GetConditionsLbL(string entity, FilterExpression filter)
         {
-            if (filter?.Conditions?.Any() != true)
+            if (filter?.Conditions?.Any() != true && filter?.AnyAllFilterLinkEntity == null)
             {
                 return string.Empty;
             }
             var code = new StringBuilder();
-            if (settings.IncludeComments)
+            if (settings.IncludeComments && filter.Conditions.Any())
             {
                 code.AppendLine($"//{CRLF}// Add conditions to {filter.FilterHint}");
             }
@@ -325,13 +325,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                         break;
                 }
             }
-            code.Append(string.Join(CRLF, conditionscode.Select(f => f.Trim()).Where(f => !string.IsNullOrWhiteSpace(f))));
+            if (conditionscode.Count != 0)
+            {
+                code.Append(string.Join(CRLF, conditionscode.Select(f => f.Trim()).Where(f => !string.IsNullOrWhiteSpace(f))));
+            }
+            if (filter.AnyAllFilterLinkEntity != null)
+            {
+                code.Append(GetLinkEntitiesLbL(new List<LinkEntity> { filter.AnyAllFilterLinkEntity }, basedname, true).Trim());
+            }
             return code.ToString().TrimEnd() + CRLF;
         }
 
-        private string GetLinkEntitiesLbL(DataCollection<LinkEntity> linkEntities, string LineStart)
+        private string GetLinkEntitiesLbL(IEnumerable<LinkEntity> linkEntities, string LineStart, bool AnyAllFilterLinkEntity = false)
         {
-            if (linkEntities?.Count == 0)
+            if (linkEntities?.Count() == 0)
             {
                 return string.Empty;
             }
@@ -353,7 +360,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     link.LinkEntities.Count > 0 ||
                     link.Columns.Columns.Count > 0 ||
                     link.LinkCriteria.Conditions.Count > 0 ||
-                    link.Orders.Count > 0 ? $"var {linkname} = " : String.Empty;
+                    link.Orders.Count > 0 ||
+                    !string.IsNullOrWhiteSpace(link.EntityAlias) ||
+                    AnyAllFilterLinkEntity ? $"var {linkname} = " : String.Empty;
                 var fromattribute = GetCodeAttribute(link.LinkFromEntityName, link.LinkFromAttributeName);
                 var toattribute = GetCodeAttribute(link.LinkToEntityName, link.LinkToAttributeName);
                 switch (settings.QExStyle)
@@ -366,11 +375,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                         break;
                 }
                 var parms = GetCodeParametersMaxWidth(CODE_WIDTH_LIMIT - varstart.Length - LineStart.Length, 0, AroundBy.Parentheses,
+                    AnyAllFilterLinkEntity ? GetCodeEntity(link.LinkFromEntityName) : "",
                     GetCodeEntity(link.LinkToEntityName),
                     fromattribute,
                     toattribute,
                     join);
-                linkcode += $"{varstart}{LineStart}.AddLink{parms};{CRLF}";
+                if (AnyAllFilterLinkEntity)
+                {
+                    linkcode += $"var {linkname} = new LinkEntity{parms};{CRLF}";
+                    linkcode += $"{LineStart}.AnyAllFilterLinkEntity = {linkname};{CRLF}";
+                }
+                else
+                {
+                    linkcode += $"{varstart}{LineStart}.AddLink{parms};{CRLF}";
+                }
                 if (!string.IsNullOrWhiteSpace(link.EntityAlias))
                 {
                     linkcode += $"{linkname}.EntityAlias = \"{link.EntityAlias}\";{CRLF}";
@@ -499,67 +517,73 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
         private string GetFiltersOI(string entity, FilterExpression filter, string ownerName, int indentslevel, List<string> namestree = null)
 
         {
-            if (filter?.Filters?.Any() != true)
+            if (filter?.Filters?.Any() != true && filter?.AnyAllFilterLinkEntity == null)
             {
                 return string.Empty;
             }
             var filterscode = "";
-            var filters = filter.Filters.Where(f => f.Conditions.Any() || f.Filters.Any());
+            var filters = filter.Filters.Where(f => f.Conditions.Any() || f.Filters.Any() || f.AnyAllFilterLinkEntity != null);
             var filtercodes = new List<string>();
             var rootfilters = filter.FilterHint.EndsWith("Criteria") || filter.FilterHint.EndsWith("Criteria.Filters");
             var dlabrootfilters = settings.QExFlavor == QExFlavorEnum.EarlyBound && rootfilters;
             var comment = $"{Indent(indentslevel)}// Add {filters.Count()} filters to {entity}{CRLF}";
             // Before filters
-            switch (settings.QExStyle)
+            if (filters.Any(f => f.Conditions.Any() || f.Filters.Any() || f.AnyAllFilterLinkEntity != null))
             {
-                case QExStyleEnum.QueryExpressionFactory:
-                    if (!dlabrootfilters)
-                    {
+                switch (settings.QExStyle)
+                {
+                    case QExStyleEnum.QueryExpressionFactory:
+                        if (!dlabrootfilters)
+                        {
+                            filterscode += $"{Indent(indentslevel)}Filters ={CRLF}{Indent(indentslevel++)}{{{CRLF}";
+                        }
+                        break;
+
+                    case QExStyleEnum.FluentQueryExpression:
+                        break;
+
+                    default:
                         filterscode += $"{Indent(indentslevel)}Filters ={CRLF}{Indent(indentslevel++)}{{{CRLF}";
-                    }
-                    break;
-
-                case QExStyleEnum.FluentQueryExpression:
-                    break;
-
-                default:
-                    filterscode += $"{Indent(indentslevel)}Filters ={CRLF}{Indent(indentslevel++)}{{{CRLF}";
-                    break;
-            }
-            if (settings.IncludeComments && !string.IsNullOrWhiteSpace(filterscode))
-            {
-                filterscode = $"{comment}{filterscode}";
+                        break;
+                }
+                if (settings.IncludeComments && !string.IsNullOrWhiteSpace(filterscode))
+                {
+                    filterscode = $"{comment}{filterscode}";
+                }
             }
             // Add the filters
             filters.ToList().ForEach(f => filtercodes.Add(GetFilterOI(entity, f, filter.FilterHint ?? ownerName, OwnersType.Sub, indentslevel, namestree)));
             filterscode += string.Join($"{betweenchar}{CRLF}", filtercodes.Where(f => !string.IsNullOrWhiteSpace(f)));
             // After filters
-            switch (settings.QExStyle)
+            if (filters.Any(f => f.Conditions.Any() || f.Filters.Any() || f.AnyAllFilterLinkEntity != null))
             {
-                case QExStyleEnum.QueryExpressionFactory:
-                    if (!dlabrootfilters)
-                    {
+                switch (settings.QExStyle)
+                {
+                    case QExStyleEnum.QueryExpressionFactory:
+                        if (!dlabrootfilters)
+                        {
+                            filterscode += $"{CRLF}{Indent(--indentslevel)}}}";
+                        }
+                        break;
+
+                    case QExStyleEnum.FluentQueryExpression:
+                        break;
+
+                    default:
                         filterscode += $"{CRLF}{Indent(--indentslevel)}}}";
-                    }
-                    break;
-
-                case QExStyleEnum.FluentQueryExpression:
-                    break;
-
-                default:
-                    filterscode += $"{CRLF}{Indent(--indentslevel)}}}";
-                    break;
+                        break;
+                }
             }
             return filterscode;
         }
 
         private string GetFilterOI(string entity, FilterExpression filter, string ownerName, OwnersType ownerType, int indentslevel, List<string> namestree = null)
         {
-            if (filter == null || (!filter.Conditions.Any() && !filter.Filters.Any()))
+            if (filter == null || (!filter.Conditions.Any() && !filter.Filters.Any() && filter.AnyAllFilterLinkEntity == null))
             {
                 return string.Empty;
             }
-            if (filter.Filters.Count == 1 && !filter.Conditions.Any())
+            if (filter.Filters.Count == 1 && !filter.Conditions.Any() && filter.AnyAllFilterLinkEntity == null)
             {
                 return GetFilterOI(entity, filter.Filters.First(), ownerName, ownerType, indentslevel, namestree);
             }
@@ -644,6 +668,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 GetConditionsOI(entity, filter, indentslevel),
                 GetFiltersOI(entity, filter, ownerName, indentslevel, namestree)
             };
+            if (filter.AnyAllFilterLinkEntity != null)
+            {
+                filtercode.Add($"{Indent(indentslevel)}AnyAllFilterLinkEntity = " + GetLinkEntityOI(filter.AnyAllFilterLinkEntity, ownerName, indentslevel, ref namestree).Trim());
+            }
             code.Append(string.Join($"{betweenchar}{CRLF}", filtercode.Where(f => !string.IsNullOrEmpty(f))));
             switch (settings.QExStyle)
             {
@@ -974,16 +1002,44 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
 
         #region Helpers
 
+        private void StoreLinkEntityAliases(QueryExpression qex)
+        {
+            StoreLinkEntityAliases(qex.LinkEntities);
+            StoreLinkEntityAliases(qex.Criteria);
+        }
+
         private void StoreLinkEntityAliases(DataCollection<LinkEntity> linkEntities)
         {
             foreach (var link in linkEntities)
             {
-                if (!string.IsNullOrWhiteSpace(link.EntityAlias))
-                {
-                    entityaliases.Add(link.EntityAlias, link.LinkToEntityName);
-                }
-                StoreLinkEntityAliases(link.LinkEntities);
+                StoreLinkEntityAlias(link);
             }
+        }
+
+        private void StoreLinkEntityAliases(FilterExpression filter)
+        {
+            if (filter == null)
+            {
+                return;
+            }
+            StoreLinkEntityAlias(filter.AnyAllFilterLinkEntity);
+            foreach (var childfilter in filter.Filters)
+            {
+                StoreLinkEntityAliases(childfilter);
+            }
+        }
+
+        private void StoreLinkEntityAlias(LinkEntity link)
+        {
+            if (link == null)
+            {
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(link.EntityAlias))
+            {
+                entityaliases.Add(link.EntityAlias, link.LinkToEntityName);
+            }
+            StoreLinkEntityAliases(link.LinkEntities);
         }
 
         private string GetVarName(string requestedname, bool numberit = false, List<string> list = null)
