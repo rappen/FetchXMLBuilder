@@ -280,7 +280,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             return ctrl?.Metadata();
         }
 
-        internal QueryExpression GetQueryExpression(bool validate = true)
+        internal QueryExpression GetQueryExpression()
         {
             if (fxb.Service == null)
             {
