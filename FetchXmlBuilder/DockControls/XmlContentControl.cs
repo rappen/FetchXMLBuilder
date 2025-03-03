@@ -7,7 +7,6 @@ using Rappen.XTB.FetchXmlBuilder.Converters;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Forms;
 using Rappen.XTB.FetchXmlBuilder.Settings;
-using Rappen.XTB.Helpers;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
@@ -1012,6 +1011,7 @@ More votes == released sooner.", "OrganizationServiceContext",
                             "https://github.com/rappen/FetchXMLBuilder/issues/859");
                         break;
 
+                    case QExStyleEnum.FetchExpression:
                     case QExStyleEnum.FetchXML:
                         rbQExObjectinitializer.Enabled = false;
                         cmbQExFlavor.Enabled = false;
@@ -1022,8 +1022,6 @@ More votes == released sooner.", "OrganizationServiceContext",
                         {
                             cmbQExFlavor.SelectedIndex = 0;
                         }
-                        numQExIndent.Value = 0;
-                        numQExIndent.Enabled = false;
                         break;
                 }
                 UpdateXML(initializating ? waitmessage : fxb.GetCSharpCode());

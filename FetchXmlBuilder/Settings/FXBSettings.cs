@@ -312,6 +312,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
     public enum QExStyleEnum
     {
         QueryExpression,
+        FetchExpression,
         QueryByAttribute,
         OrganizationServiceContext,
         QueryExpressionFactory,

@@ -39,7 +39,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             }
 
             var coder = new CSharpCodeGenerator(QEx, entities, settings);
-            var result = coder.GetQueryCode();
+            var result = coder.GetQueryExpressionCode();
+            result = string.Join("\n", result.Split('\n').Select(l => Indent(settings.CodeGenerators.Indents) + l));
+            return result;
+        }
+
+        internal static string GetCSharpFetchExpression(string fetch, FXBSettings settings)
+        {
+            var result = $"var query = new FetchExpression(@\"{fetch.Replace("\"", "'")}\");";
             result = string.Join("\n", result.Split('\n').Select(l => Indent(settings.CodeGenerators.Indents) + l));
             return result;
         }
@@ -57,7 +64,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
 
         #region General
 
-        private string GetQueryCode()
+        private string GetQueryExpressionCode()
         {
             var qename = GetVarName(GetQueryObjectName(settings.QExStyle));
             var queryclass = QExStyle.StyleClassName(settings.QExStyle);
@@ -1423,6 +1430,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                     Creator = "Microsoft",
                     ClassName = "Microsoft.CrmSdk.CoreAssemblies",
                     HelpUrl = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/samples/retrieve-multiple-queryexpression-class",
+                },
+                new QExStyle {
+                    Tag = QExStyleEnum.FetchExpression,
+                    Creator = "Microsoft",
+                    ClassName = "Microsoft.CrmSdk.CoreAssemblies",
+                    HelpUrl = "https://learn.microsoft.com/power-apps/developer/data-platform/org-service/entity-operations-query-data",
                 },
                 new QExStyle
                 {

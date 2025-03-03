@@ -337,10 +337,19 @@ namespace Rappen.XTB.FetchXmlBuilder
                     var fetch = dockControlBuilder.GetFetchString(true, false);
                     return CSharpCodeGeneratorFetchXML.GetCSharpFetchXMLCode(fetch, settings.CodeGenerators);
 
+                case QExStyleEnum.FetchExpression:
+                    try
+                    {
+                        return CSharpCodeGenerator.GetCSharpFetchExpression(dockControlBuilder.GetFetchString(true, false), settings);
+                    }
+                    catch (Exception ex)
+                    {
+                        return $"/*\nFailed to generate C# FetchExpression code.\n\n{ex.Message}\n*/";
+                    }
                 default:
                     try
                     {
-                        var QEx = dockControlBuilder.GetQueryExpression(false);
+                        var QEx = dockControlBuilder.GetQueryExpression();
                         return CSharpCodeGenerator.GetCSharpQueryExpression(QEx, entities, settings);
                     }
                     catch (FetchIsAggregateException ex)
