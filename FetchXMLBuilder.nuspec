@@ -57,7 +57,7 @@ https://fetchxmlbuilder.com/releases/#$versionnumber$
 Released for manual download:
 https://github.com/rappen/FetchXMLBuilder/releases/tag/$buildnumber$
 		</releaseNotes>
-		<copyright>Copyright Jonas Rapp 2014-2024</copyright>
+		<copyright>Copyright Jonas Rapp 2014-2025</copyright>
 		<tags>XrmToolBox Plugins FetchXML Builder</tags>
 		<dependencies>
 			<dependency id="XrmToolBox" version="1.2023.1.63" />
