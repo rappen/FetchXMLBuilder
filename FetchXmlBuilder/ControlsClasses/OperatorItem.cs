@@ -167,8 +167,8 @@ namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
 
                 case ConditionOperator.Like:
                 case ConditionOperator.NotLike:
-                case ConditionOperator.Contains:
-                case ConditionOperator.DoesNotContain:
+                    //case ConditionOperator.Contains:
+                    //case ConditionOperator.DoesNotContain:
                     result = AttributeTypeCode.String;
                     break;
 
@@ -314,8 +314,8 @@ namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
 
                 case ConditionOperator.Like:
                 case ConditionOperator.NotLike:
-                case ConditionOperator.Contains:
-                case ConditionOperator.DoesNotContain:
+                    //case ConditionOperator.Contains:
+                    //case ConditionOperator.DoesNotContain:
                     result = AttributeTypeCode.String;
                     break;
             }
@@ -352,8 +352,8 @@ namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
             {
                 validConditionsList.Add(new OperatorItem(ConditionOperator.BeginsWith));
                 validConditionsList.Add(new OperatorItem(ConditionOperator.DoesNotBeginWith));
-                validConditionsList.Add(new OperatorItem(ConditionOperator.Contains));
-                validConditionsList.Add(new OperatorItem(ConditionOperator.DoesNotContain));
+                //validConditionsList.Add(new OperatorItem(ConditionOperator.Contains));
+                //validConditionsList.Add(new OperatorItem(ConditionOperator.DoesNotContain));
                 validConditionsList.Add(new OperatorItem(ConditionOperator.EndsWith));
                 validConditionsList.Add(new OperatorItem(ConditionOperator.DoesNotEndWith));
                 validConditionsList.Add(new OperatorItem(ConditionOperator.Like));
