@@ -57,6 +57,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         private Entity view;
         private bool alreadyloaded;
         private string lastconnection;
+        private bool warningaboutsdkversion = false;
 
         #endregion Private Fields
 
@@ -358,6 +359,15 @@ namespace Rappen.XTB.FetchXmlBuilder
                     }
                     catch (Exception ex)
                     {
+                        if (ex.Message.Contains("Method not found: 'Microsoft.Xrm"))
+                        {
+                            if (!warningaboutsdkversion)
+                            {
+                                warningaboutsdkversion = true;
+                                MessageBoxEx.Show(this, "Failed to generate C# code.\n\nIt seems that the SDK library is too old.\n\nPlease make sure you have the latest version of XrmToolBox or at least correct the version of the SDK 'Microsoft.Xrm.Sdk.dll'", "Convert to C#", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            }
+                            return $"/*\nFailed to generate C# code.\n\n{ex.Message}\n\nPlease make sure you have the latest version of XrmToolBox or at least correct the version of the SDK 'Microsoft.Xrm.Sdk.dll'\n*/";
+                        }
                         return $"/*\nFailed to generate C# {settings.CodeGenerators.QExStyle} with {settings.CodeGenerators.QExFlavor} code.\n\n{ex.Message}\n*/";
                     }
             }
