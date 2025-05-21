@@ -770,7 +770,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 throw new Exception("Only equal conditions are supported for QueryByAttribute. Use QueryExpression if you need it.");
             }
             var filterentity = entity;
-            var entityprefix = GetCodeEntityPrefix(entity);
             var entityalias = "";
             if (!string.IsNullOrWhiteSpace(cond.EntityName))
             {
@@ -779,7 +778,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             }
             var attributename = GetCodeAttribute(filterentity, cond.AttributeName, settings.QExFlavor == QExFlavorEnum.EarlyBound);
             var values = GetConditionValues(filterentity, cond, filtername);
-            var condcode = string.Empty;
             switch (settings.QExStyle)
             {
                 case QExStyleEnum.QueryByAttribute:
@@ -1215,9 +1213,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
 
         private string GetCodeEntityPrefix(string entityname)
         {
-            if (metas.FirstOrDefault(e => e.LogicalName.Equals(entityname)) is EntityMetadata entity)
+            if (metas.FirstOrDefault(e => e.LogicalName.Equals(entityname)) is EntityMetadata entity && entity.DisplayName?.UserLocalizedLabel?.Label is string label)
             {
-                return entity.DisplayName.UserLocalizedLabel.Label.Substring(0, 1).ToLowerInvariant();
+                return label.Substring(0, 1).ToLowerInvariant();
             }
             return entityname.Substring(0, 1).ToLowerInvariant();
         }
