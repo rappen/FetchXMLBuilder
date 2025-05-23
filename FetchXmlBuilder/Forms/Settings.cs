@@ -1,7 +1,9 @@
 ﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Settings;
+using Rappen.XTB.FXB.Settings;
 using System;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
@@ -15,6 +17,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         {
             InitializeComponent();
             this.fxb = fxb;
+            cmbAiSupplier.Items.Clear();
+            cmbAiSupplier.Items.AddRange(OnlineSettings.Instance.AiSuppliers.ToArray());
             PopulateSettings(fxb.settings);
         }
 
@@ -63,6 +67,17 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 chkWaitUntilMetadataLoaded.Enabled = false;
                 chkWaitUntilMetadataLoaded.Checked = false;
             }
+            chkAiActive.Checked = settings.AiSettings.Active;
+            if (OnlineSettings.Instance.AiSuppliers.FirstOrDefault(a => a.Name == settings.AiSettings.Supplier) is AiSupplier supplier)
+            {
+                cmbAiSupplier.SelectedItem = supplier;
+            }
+            else
+            {
+                cmbAiSupplier.SelectedIndex = -1;
+            }
+            txtAiApiKey.Text = settings.AiSettings.ApiKey;
+            panAiDetails.Enabled = chkAiActive.Checked;
         }
 
         private int SettingResultToComboBoxItem(ResultOutput resultOutput)
@@ -109,6 +124,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.TryMetadataCache = chkTryMetadataCache.Checked;
             settings.WaitUntilMetadataLoaded = chkWaitUntilMetadataLoaded.Checked;
             settings.AlwaysShowAggregationProperties = chkAlwaysShowAggregateProperties.Checked;
+            settings.AiSettings.Active = chkAiActive.Checked;
+            settings.AiSettings.Supplier = cmbAiSupplier.Text;
+            settings.AiSettings.Model = cmbAiModel.Text;
+            settings.AiSettings.ApiKey = txtAiApiKey.Text;
             return settings;
         }
 
@@ -233,6 +252,33 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 forcereloadingmetadata = true;
                 DialogResult = DialogResult.OK;
             }
+        }
+
+        private void chkAiActive_CheckedChanged(object sender, EventArgs e)
+        {
+            panAiDetails.Enabled = chkAiActive.Checked;
+        }
+
+        private void cmbAiSupplier_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            cmbAiModel.Items.Clear();
+            if (cmbAiSupplier.SelectedItem is AiSupplier supplier)
+            {
+                cmbAiModel.Items.AddRange(supplier.Models.ToArray());
+                if (supplier.Models.FirstOrDefault(m => m.Name == fxb.settings.AiSettings.Model) is AiModel model)
+                {
+                    cmbAiModel.SelectedItem = model;
+                }
+                else
+                {
+                    cmbAiModel.SelectedIndex = 0;
+                }
+            }
+        }
+
+        private void cmbAiModel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            txtAiUrl.Text = OnlineSettings.Instance.AiSuppliers.FirstOrDefault(a => a.Name == cmbAiSupplier.Text)?.Models.FirstOrDefault(m => m.Name == cmbAiModel.Text)?.Url;
         }
     }
 }

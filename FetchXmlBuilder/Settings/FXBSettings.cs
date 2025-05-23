@@ -54,6 +54,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool WaitUntilMetadataLoaded { get; set; } = false;
         public bool AlwaysShowAggregationProperties { get; set; } = false;
         public CodeGenerators CodeGenerators { get; set; } = new CodeGenerators();
+        public AiSettings AiSettings { get; set; } = new AiSettings();
     }
 
     public class ExecuteOptions
@@ -287,13 +288,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         }
     }
 
-    public enum ResultOutput
+    public class AiSettings
     {
-        Grid = 0,
-        XML = 1,
-        JSON = 2,
-        Raw = 3,
-        JSONWebAPI = 4
+        public bool Active { get; set; }
+        public string Supplier { get; set; }
+        public string Model { get; set; }
+        public string ApiKey { get; set; }
     }
 
     public class CodeGenerators
@@ -307,6 +307,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public string EBG_EntityLogicalNames { get; set; } = "EntityLogicalName";
         public string EBG_AttributeLogicalNameClass { get; set; } = "Fields.";
         public LCG.Settings LCG_Settings { get; set; } = new LCG.Settings();
+    }
+
+    public enum ResultOutput
+    {
+        Grid = 0,
+        XML = 1,
+        JSON = 2,
+        Raw = 3,
+        JSONWebAPI = 4
     }
 
     public enum QExStyleEnum

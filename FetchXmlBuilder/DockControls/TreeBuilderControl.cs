@@ -9,7 +9,7 @@ using Rappen.XTB.FetchXmlBuilder.Controls;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Forms;
 using Rappen.XTB.FetchXmlBuilder.Views;
-using Rappen.XTB.Helpers;
+using Rappen.XTB.FXB.Settings;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
@@ -62,12 +62,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal int SplitterPos
         {
-            get => splitContainer1.SplitterDistance;
+            get => splitQueryBuilder.SplitterDistance;
             set
             {
                 if (value > -1)
                 {
-                    splitContainer1.SplitterDistance = value;
+                    splitQueryBuilder.SplitterDistance = value;
                 }
             }
         }
@@ -99,6 +99,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 return;
             }
+            splitBuilderAndAi.Panel2Collapsed = !fxb.settings.AiSettings.Active;
             BuildAndValidateXml(false);
             DisplayDefinition(GetFetchDocument());
             HandleNodeSelection(tvFetch.SelectedNode);
@@ -994,7 +995,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void TreeBuilderControl_Load(object sender, EventArgs e)
         {
-            splitContainer1.SplitterDistance = splitContainer1.Height / 2;
+            splitQueryBuilder.SplitterDistance = splitQueryBuilder.Height / 2;
         }
 
         private void tvFetch_AfterSelect(object sender, TreeViewEventArgs e)
@@ -1033,5 +1034,43 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             fxb.OpenUrl(sender);
         }
+
+        #region AI Chat
+
+        private void btnAiChatAsk_Click(object sender, EventArgs e)
+        {
+            SendChatToAI(txtAiChatAsk.Text);
+        }
+
+        private void SendChatToAI(string text)
+        {
+            var supplier = OnlineSettings.Instance.AiSuppliers.FirstOrDefault(s => s.Name == fxb.settings.AiSettings.Supplier);
+            if (supplier == null)
+            {
+                MessageBoxEx.Show(this, "No AI supplier found", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            var model = supplier.Models.FirstOrDefault(m => m.Name == fxb.settings.AiSettings.Model);
+            if (model == null)
+            {
+                MessageBoxEx.Show(this, "No AI model found", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            MessageBoxEx.Show(this, $"Asking AI {supplier} {model} at\n{model.Url}", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            //
+
+            txtAiChatAnswer.Text = "Ms AI suggests...\nsomething...";
+
+            SetQueryFromAi("<fetch><entity>account</entity></fetch>");
+        }
+
+        private void SetQueryFromAi(string query)
+        {
+            Init(query, null, false, "Query from AI", true);
+        }
+
+        #endregion AI Chat
     }
 }

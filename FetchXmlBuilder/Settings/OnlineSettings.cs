@@ -16,6 +16,7 @@ namespace Rappen.XTB.FXB.Settings
         public int SettingsVersion = 1;
         public List<string> DeprecatedNames = new List<string>();
         public List<string> IntegratedToTools = new List<string>();
+        public List<AiSupplier> AiSuppliers = new List<AiSupplier>();
 
         private OnlineSettings()
         { }
@@ -27,6 +28,7 @@ namespace Rappen.XTB.FXB.Settings
                 if (instance == null)
                 {
                     instance = new Uri(ToolSettingsURLPath, FileName).DownloadXml<OnlineSettings>() ?? new OnlineSettings();
+                    //instance.Save();
                 }
                 return instance;
             }
@@ -41,5 +43,21 @@ namespace Rappen.XTB.FXB.Settings
             string path = Path.Combine(Paths.SettingsPath, FileName);
             XmlSerializerHelper.SerializeToFile(this, path);
         }
+    }
+
+    public class AiSupplier
+    {
+        public string Name { get; set; }
+        public List<AiModel> Models { get; set; } = new List<AiModel>();
+
+        public override string ToString() => Name;
+    }
+
+    public class AiModel
+    {
+        public string Name { get; set; }
+        public string Url { get; set; }
+
+        public override string ToString() => Name;
     }
 }
