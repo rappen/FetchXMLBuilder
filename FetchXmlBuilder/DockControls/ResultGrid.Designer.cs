@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.ctxmenuGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctxRecord = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxRecordOpen = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,6 +50,7 @@
             this.mnuBothNames = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuLocalTime = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuCopyHeaders = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuExcelAdvanced = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuQuickFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuPagingCookie = new System.Windows.Forms.ToolStripMenuItem();
@@ -83,7 +84,6 @@
             this.gbPagingCookie = new System.Windows.Forms.GroupBox();
             this.panSelectedDetails = new System.Windows.Forms.Panel();
             this.txtSelectedDetails = new System.Windows.Forms.TextBox();
-            this.mnuExcelAdvanced = new System.Windows.Forms.ToolStripMenuItem();
             this.crmGridView1 = new Rappen.XTB.Helpers.Controls.XRMDataGridView();
             this.ctxmenuGrid.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -288,6 +288,15 @@
             this.mnuCopyHeaders.Size = new System.Drawing.Size(228, 22);
             this.mnuCopyHeaders.Text = "Copy with Headers";
             this.mnuCopyHeaders.Click += new System.EventHandler(this.chkGridOptions_Click);
+            // 
+            // mnuExcelAdvanced
+            // 
+            this.mnuExcelAdvanced.CheckOnClick = true;
+            this.mnuExcelAdvanced.Name = "mnuExcelAdvanced";
+            this.mnuExcelAdvanced.Size = new System.Drawing.Size(228, 22);
+            this.mnuExcelAdvanced.Text = "Advanced export to Excel";
+            this.mnuExcelAdvanced.ToolTipText = "This is slower, but handles new-lines correctly";
+            this.mnuExcelAdvanced.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -592,23 +601,14 @@
             this.txtSelectedDetails.Text = "Selected:";
             this.txtSelectedDetails.WordWrap = false;
             // 
-            // mnuExcelAdvanced
-            // 
-            this.mnuExcelAdvanced.CheckOnClick = true;
-            this.mnuExcelAdvanced.Name = "mnuExcelAdvanced";
-            this.mnuExcelAdvanced.Size = new System.Drawing.Size(228, 22);
-            this.mnuExcelAdvanced.Text = "Advanced export to Excel";
-            this.mnuExcelAdvanced.ToolTipText = "This is slower, but handles new-lines correctly";
-            this.mnuExcelAdvanced.Click += new System.EventHandler(this.chkGridOptions_Click);
-            // 
             // crmGridView1
             // 
             this.crmGridView1.AllowUserToAddRows = false;
             this.crmGridView1.AllowUserToDeleteRows = false;
             this.crmGridView1.AllowUserToOrderColumns = true;
             this.crmGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.crmGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.crmGridView1.AutoRefresh = false;
             this.crmGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
             this.crmGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -621,6 +621,11 @@
             this.crmGridView1.EnableHeadersVisualStyles = false;
             this.crmGridView1.EntityReferenceClickable = true;
             this.crmGridView1.FilterColumns = "";
+            this.crmGridView1.Filtering.And = false;
+            this.crmGridView1.Filtering.Columns = "";
+            this.crmGridView1.Filtering.Not = false;
+            this.crmGridView1.Filtering.RegEx = false;
+            this.crmGridView1.Filtering.Text = "";
             this.crmGridView1.LayoutXML = "";
             this.crmGridView1.Location = new System.Drawing.Point(0, 31);
             this.crmGridView1.Name = "crmGridView1";
