@@ -1,4 +1,6 @@
-﻿namespace Rappen.XTB.FetchXmlBuilder.DockControls
+﻿using System.Windows.Forms;
+
+namespace Rappen.XTB.FetchXmlBuilder.DockControls
 {
     partial class TreeBuilderControl
     {
@@ -406,7 +408,7 @@
             this.txtAiChatAnswer.Name = "txtAiChatAnswer";
             this.txtAiChatAnswer.ReadOnly = true;
             this.txtAiChatAnswer.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAiChatAnswer.Size = new System.Drawing.Size(594, 53);
+            this.txtAiChatAnswer.Size = new System.Drawing.Size(594, 83);
             this.txtAiChatAnswer.TabIndex = 0;
             // 
             // panel1
@@ -435,8 +437,9 @@
             this.txtAiChatAsk.Multiline = true;
             this.txtAiChatAsk.Name = "txtAiChatAsk";
             this.txtAiChatAsk.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAiChatAsk.Size = new System.Drawing.Size(548, 82);
+            this.txtAiChatAsk.Size = new System.Drawing.Size(548, 42);
             this.txtAiChatAsk.TabIndex = 1;
+            this.txtAiChatAsk.KeyDown += TxtAiChatAsk_OnKeyDown;
             // 
             // splitBuilderAndAi
             // 
@@ -500,6 +503,14 @@
             this.splitBuilderAndAi.ResumeLayout(false);
             this.ResumeLayout(false);
 
+        }
+
+        private void TxtAiChatAsk_OnKeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.Enter)
+            {
+                btnAiChatAsk_Click(this, null);
+            }
         }
 
         #endregion
