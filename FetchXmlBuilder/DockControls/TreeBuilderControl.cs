@@ -1,4 +1,6 @@
-﻿using Microsoft.Crm.Sdk.Messages;
+﻿using Anthropic;
+using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Extensions.AI;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XRM.Helpers.Extensions;
@@ -15,10 +17,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Web.Services.Description;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using CSharpToJsonSchema;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace Rappen.XTB.FetchXmlBuilder.DockControls
 {
@@ -1042,8 +1050,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             SendChatToAI(txtAiChatAsk.Text);
         }
 
-        private void SendChatToAI(string text)
+        // The list of messages from the current AI chat session.
+        List<ChatMessage> chatHistory = new List<ChatMessage>();
+        
+        private async void SendChatToAI(string text)
         {
+            // Get the current FetchXml query.
+            string currentFetchXml = GetFetchString(true, false);
+
+            chatHistory.Add(new ChatMessage(ChatRole.System, "You are an agent that helps the user interact with Dataverse using FetchXml queries. The user describes the query he want to do in natural language, and you create a FetchXml query based on the users's description. Your answers are short and to the point. When asked to explain a query, you summarize the meaning of the query in a short text, don't talk about fields and operators. Don't execute the ExecuteFetchXmlRequest tool before asking the user if he wants to execute it. The current FetchXml we are working with is " + currentFetchXml));
+
             var supplier = OnlineSettings.Instance.AiSuppliers.FirstOrDefault(s => s.Name == fxb.settings.AiSettings.Supplier);
             if (supplier == null)
             {
@@ -1055,15 +1071,56 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 MessageBoxEx.Show(this, "No AI model found", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
+            }  
+
+            if (supplier.Name == "Anthropic")
+            {             
+                using (var client = new AnthropicClient(fxb.settings.AiSettings.ApiKey))
+                {
+                    IChatClient chatClient = client.AsBuilder().ConfigureOptions(options => {
+                        options.ModelId = "claude-3-5-haiku-20241022";  //TODO: Get model name from fxb.settings.AiSettings.Model as soon as https://github.com/rappen/Tools/pull/1 is merged.
+                        options.MaxOutputTokens = 4096;
+                    }).UseFunctionInvocation().Build();
+
+                    chatHistory.Add(new ChatMessage(ChatRole.User, text));
+
+                    List<ChatResponseUpdate> updates = new List<ChatResponseUpdate>();
+
+                    Func<string, string> executeFetchXmlRequestDelegate = ExecuteFetchXmlRequest;
+                    ChatOptions chatOptions = new ChatOptions { Tools = new List<AITool> { AIFunctionFactory.Create(executeFetchXmlRequestDelegate) } };
+
+                    var response = await chatClient.GetResponseAsync(chatHistory, chatOptions);
+                    chatHistory.AddMessages(response);
+
+                    foreach (ChatMessage message in response.Messages) {
+                        txtAiChatAnswer.Text = message.Text;
+                    }
+
+                    //Extract FetchXml from response
+                    string pattern = @"<fetch\b.*?</fetch>";
+                    var matches = Regex.Matches(string.Join("", response.Messages), pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase);
+
+                    if (matches.Count > 0)
+                    {
+                        var fetchXml = matches[0];
+
+                        SetQueryFromAi(fetchXml.Value);
+                    }
+                }     
             }
+            
+            txtAiChatAsk.Clear();
 
-            MessageBoxEx.Show(this, $"Asking AI {supplier} {model} at\n{model.Url}", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
 
-            //
+        [Description("Executes a FetchXmlRequest")]
+        string ExecuteFetchXmlRequest([Description("The FetchXmlRequest To Execute. This is the current FetchXml, as specified by the system prompt.")]string fetchXml)
+        {
+            SetQueryFromAi(fetchXml);
 
-            txtAiChatAnswer.Text = "Ms AI suggests...\nsomething...";
+            SendKeys.Send("{F5}");
 
-            SetQueryFromAi("<fetch><entity>account</entity></fetch>");
+            return "Query executed successfully";
         }
 
         private void SetQueryFromAi(string query)
@@ -1073,4 +1130,32 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         #endregion AI Chat
     }
+
+    public class InputSchema
+    {
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        [JsonProperty("properties")]
+        public Dictionary<string, SchemaProperty> Properties { get; set; }
+
+        [JsonProperty("required")]
+        public List<string> Required { get; set; }
+
+        public InputSchema()
+        {
+            Properties = new Dictionary<string, SchemaProperty>();
+            Required = new List<string>();
+        }
+    }
+
+    public class SchemaProperty
+    {
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+    }
 }
+
