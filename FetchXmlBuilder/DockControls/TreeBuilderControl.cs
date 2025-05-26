@@ -3,6 +3,7 @@ using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Extensions.AI;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using Newtonsoft.Json;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XRM.Helpers.Interfaces;
@@ -15,18 +16,15 @@ using Rappen.XTB.FXB.Settings;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web.Services.Description;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using CSharpToJsonSchema;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using System.ComponentModel;
+using XrmToolBox.Extensibility;
 
 namespace Rappen.XTB.FetchXmlBuilder.DockControls
 {
@@ -1051,8 +1049,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         }
 
         // The list of messages from the current AI chat session.
-        List<ChatMessage> chatHistory = new List<ChatMessage>();
-        
+        private List<ChatMessage> chatHistory = new List<ChatMessage>();
+
         private async void SendChatToAI(string text)
         {
             // Get the current FetchXml query.
@@ -1071,50 +1069,68 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 MessageBoxEx.Show(this, "No AI model found", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
-            }  
-
-            if (supplier.Name == "Anthropic")
-            {             
-                using (var client = new AnthropicClient(fxb.settings.AiSettings.ApiKey))
-                {
-                    IChatClient chatClient = client.AsBuilder().ConfigureOptions(options => {
-                        options.ModelId = "claude-3-5-haiku-20241022";  //TODO: Get model name from fxb.settings.AiSettings.Model as soon as https://github.com/rappen/Tools/pull/1 is merged.
-                        options.MaxOutputTokens = 4096;
-                    }).UseFunctionInvocation().Build();
-
-                    chatHistory.Add(new ChatMessage(ChatRole.User, text));
-
-                    List<ChatResponseUpdate> updates = new List<ChatResponseUpdate>();
-
-                    Func<string, string> executeFetchXmlRequestDelegate = ExecuteFetchXmlRequest;
-                    ChatOptions chatOptions = new ChatOptions { Tools = new List<AITool> { AIFunctionFactory.Create(executeFetchXmlRequestDelegate) } };
-
-                    var response = await chatClient.GetResponseAsync(chatHistory, chatOptions);
-                    chatHistory.AddMessages(response);
-
-                    foreach (ChatMessage message in response.Messages) {
-                        txtAiChatAnswer.Text = message.Text;
-                    }
-
-                    //Extract FetchXml from response
-                    string pattern = @"<fetch\b.*?</fetch>";
-                    var matches = Regex.Matches(string.Join("", response.Messages), pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase);
-
-                    if (matches.Count > 0)
-                    {
-                        var fetchXml = matches[0];
-
-                        SetQueryFromAi(fetchXml.Value);
-                    }
-                }     
             }
-            
-            txtAiChatAsk.Clear();
 
+            Cursor = Cursors.WaitCursor;
+            fxb.WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Asking miss AI...",
+                Work = async (w, a) =>
+                {
+                    if (supplier.Name == "Anthropic")
+                    {
+                        using (var client = new AnthropicClient(fxb.settings.AiSettings.ApiKey))
+                        {
+                            IChatClient chatClient = client.AsBuilder().ConfigureOptions(options =>
+                            {
+                                options.ModelId = "claude-3-5-haiku-20241022";  //TODO: Get model name from fxb.settings.AiSettings.Model as soon as https://github.com/rappen/Tools/pull/1 is merged.
+                                options.MaxOutputTokens = 4096;
+                            }).UseFunctionInvocation().Build();
+
+                            chatHistory.Add(new ChatMessage(ChatRole.User, text));
+
+                            List<ChatResponseUpdate> updates = new List<ChatResponseUpdate>();
+
+                            Func<string, string> executeFetchXmlRequestDelegate = ExecuteFetchXmlRequest;
+                            ChatOptions chatOptions = new ChatOptions { Tools = new List<AITool> { AIFunctionFactory.Create(executeFetchXmlRequestDelegate) } };
+
+                            var response = chatClient.GetResponseAsync(chatHistory, chatOptions);
+                            a.Result = response.Result;
+                        }
+                    }
+                },
+                PostWorkCallBack = (w) =>
+                {
+                    Cursor = Cursors.Default;
+                    if (w.Error != null)
+                    {
+                        fxb.ShowErrorDialog(w.Error);
+                    }
+                    else if (w.Result is ChatResponse response)
+                    {
+                        chatHistory.AddMessages(response);
+
+                        var fetch = string.Empty;
+                        var messages = string.Join(Environment.NewLine, response.Messages);
+                        var pattern = @"<fetch\b.*?</fetch>";
+
+                        if (Regex.Matches(messages, pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase) is MatchCollection matches && matches.Count > 0)
+                        {
+                            // Use the first match as the FetchXml
+                            fetch = matches[0].Value;
+                            SetQueryFromAi(fetch);
+                        }
+
+                        txtAiChatAnswer.Text = messages.Replace(fetch, " <query> ").Trim();
+                    }
+                }
+            });
+
+            txtAiChatAsk.Clear();
         }
 
         [Description("Executes a FetchXmlRequest")]
-        string ExecuteFetchXmlRequest([Description("The FetchXmlRequest To Execute. This is the current FetchXml, as specified by the system prompt.")]string fetchXml)
+        private string ExecuteFetchXmlRequest([Description("The FetchXmlRequest To Execute. This is the current FetchXml, as specified by the system prompt.")] string fetchXml)
         {
             SetQueryFromAi(fetchXml);
 
@@ -1158,4 +1174,3 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         public string Description { get; set; }
     }
 }
-
