@@ -4,6 +4,7 @@ using Rappen.XTB.FXB.Settings;
 using System;
 using System.Windows.Forms;
 using System.Linq;
+using Rappen.AI.WinForm;
 
 namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
@@ -18,7 +19,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             InitializeComponent();
             this.fxb = fxb;
             cmbAiSupplier.Items.Clear();
-            cmbAiSupplier.Items.AddRange(OnlineSettings.Instance.AiSuppliers.ToArray());
+            cmbAiSupplier.Items.AddRange(OnlineSettings.Instance.AiSupported.ToArray());
             PopulateSettings(fxb.settings);
         }
 
@@ -68,7 +69,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 chkWaitUntilMetadataLoaded.Checked = false;
             }
             chkAiActive.Checked = settings.AiSettings.Active;
-            if (OnlineSettings.Instance.AiSuppliers.FirstOrDefault(a => a.Name == settings.AiSettings.Supplier) is AiSupplier supplier)
+            if (OnlineSettings.Instance.AiSupported.FirstOrDefault(a => a.Name == settings.AiSettings.Supplier) is AiSupplier supplier)
             {
                 cmbAiSupplier.SelectedItem = supplier;
             }
@@ -278,7 +279,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void cmbAiModel_SelectedIndexChanged(object sender, EventArgs e)
         {
-            txtAiUrl.Text = OnlineSettings.Instance.AiSuppliers.FirstOrDefault(a => a.Name == cmbAiSupplier.Text)?.Models.FirstOrDefault(m => m.Name == cmbAiModel.Text)?.Url;
+            txtAiUrl.Text = OnlineSettings.Instance.AiSupported.FirstOrDefault(a => a.Name == cmbAiSupplier.Text)?.Models.FirstOrDefault(m => m.Name == cmbAiModel.Text)?.Url;
         }
     }
 }
