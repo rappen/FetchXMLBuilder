@@ -43,6 +43,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         private XmlContentControl dockControlCSharp;
         private XmlContentControl dockControlSQL;
         private MetadataControl dockControlMeta;
+        private AiChatControl dockControlAiChat;
         private Entity dynml;
         private string fileName;
         private QueryRepository repository = new QueryRepository();
@@ -270,6 +271,11 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 dockControlLayoutXml = new XmlContentControl(ContentType.LayoutXML, SaveFormat.None, this);
                 return dockControlLayoutXml;
+            }
+            else if (persistString == typeof(AiChatControl).ToString() && dockControlAiChat?.IsDisposed != false)
+            {
+                dockControlAiChat = new AiChatControl(this);
+                return dockControlAiChat;
             }
             return null;
         }
@@ -948,6 +954,20 @@ namespace Rappen.XTB.FetchXmlBuilder
         internal void ShowLayoutXML()
         {
             ShowContentControl(ref dockControlLayoutXml, ContentType.LayoutXML, SaveFormat.None, settings.DockStates.LayoutXML);
+        }
+
+        internal void ShowAiChatControl()
+        {
+            LogUse("Show-AiChat");
+            if (dockControlAiChat?.IsDisposed != false)
+            {
+                dockControlAiChat = new AiChatControl(this);
+                dockControlAiChat.Show(dockContainer, DockState.DockRight);
+            }
+            else
+            {
+                dockControlAiChat.EnsureVisible(dockContainer, DockState.DockRight);
+            }
         }
 
         internal static ResultOutput ResultItemToSettingResult(int selectedIndex)

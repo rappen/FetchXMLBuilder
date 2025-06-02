@@ -110,6 +110,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.dockContainer = new WeifenLuo.WinFormsUI.Docking.DockPanel();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -132,6 +133,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbSend,
             this.tsbConvert,
             this.tsbView,
+            this.toolStripButton1,
             this.tsbOptions,
             this.tslAbout,
             this.tsbLearnFetchXml,
@@ -457,7 +459,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbExecute.Image = ((System.Drawing.Image)(resources.GetObject("tsbExecute.Image")));
             this.tsbExecute.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbExecute.Name = "tsbExecute";
-            this.tsbExecute.Size = new System.Drawing.Size(119, 36);
+            this.tsbExecute.Size = new System.Drawing.Size(118, 36);
             this.tsbExecute.Text = "Execute (F5)";
             this.tsbExecute.ToolTipText = "Execute FetchXML (F5)";
             this.tsbExecute.ButtonClick += new System.EventHandler(this.tsbExecute_Click);
@@ -467,7 +469,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbExecuteOptions.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_execute_options;
             this.tsbExecuteOptions.Name = "tsbExecuteOptions";
             this.tsbExecuteOptions.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F5)));
-            this.tsbExecuteOptions.Size = new System.Drawing.Size(211, 22);
+            this.tsbExecuteOptions.Size = new System.Drawing.Size(210, 22);
             this.tsbExecuteOptions.Text = "Execute Options";
             this.tsbExecuteOptions.Click += new System.EventHandler(this.tsbExecuteOptions_Click);
             // 
@@ -653,7 +655,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiResultGridView.Name = "tsmiResultGridView";
             this.tsmiResultGridView.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.G)));
-            this.tsmiResultGridView.Size = new System.Drawing.Size(256, 38);
+            this.tsmiResultGridView.Size = new System.Drawing.Size(240, 22);
             this.tsmiResultGridView.Tag = "0";
             this.tsmiResultGridView.Text = "Grid View";
             this.tsmiResultGridView.Click += new System.EventHandler(this.tsmiResultType_Click);
@@ -664,7 +666,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiResultWebApi.Name = "tsmiResultWebApi";
             this.tsmiResultWebApi.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.W)));
-            this.tsmiResultWebApi.Size = new System.Drawing.Size(256, 38);
+            this.tsmiResultWebApi.Size = new System.Drawing.Size(240, 22);
             this.tsmiResultWebApi.Tag = "3";
             this.tsmiResultWebApi.Text = "WebAPI JSON";
             this.tsmiResultWebApi.Click += new System.EventHandler(this.tsmiResultType_Click);
@@ -673,7 +675,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsmiResultXml.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_xml_homemade;
             this.tsmiResultXml.Name = "tsmiResultXml";
-            this.tsmiResultXml.Size = new System.Drawing.Size(256, 38);
+            this.tsmiResultXml.Size = new System.Drawing.Size(240, 22);
             this.tsmiResultXml.Tag = "1";
             this.tsmiResultXml.Text = "Homemade XML";
             this.tsmiResultXml.Click += new System.EventHandler(this.tsmiResultType_Click);
@@ -682,7 +684,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsmiResultJson.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_json_homemade;
             this.tsmiResultJson.Name = "tsmiResultJson";
-            this.tsmiResultJson.Size = new System.Drawing.Size(256, 38);
+            this.tsmiResultJson.Size = new System.Drawing.Size(240, 22);
             this.tsmiResultJson.Tag = "2";
             this.tsmiResultJson.Text = "Homemade JSON";
             this.tsmiResultJson.Click += new System.EventHandler(this.tsmiResultType_Click);
@@ -691,7 +693,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsmiResultRaw.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_raw_xml;
             this.tsmiResultRaw.Name = "tsmiResultRaw";
-            this.tsmiResultRaw.Size = new System.Drawing.Size(256, 38);
+            this.tsmiResultRaw.Size = new System.Drawing.Size(240, 22);
             this.tsmiResultRaw.Tag = "4";
             this.tsmiResultRaw.Text = "Raw (deprecated)";
             this.tsmiResultRaw.Click += new System.EventHandler(this.tsmiResultType_Click);
@@ -699,7 +701,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // toolStripMenuItem6
             // 
             this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(253, 6);
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(237, 6);
             // 
             // tsmiDisplayFriendly
             // 
@@ -707,7 +709,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiDisplayFriendly.CheckState = System.Windows.Forms.CheckState.Checked;
             this.tsmiDisplayFriendly.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_friendly;
             this.tsmiDisplayFriendly.Name = "tsmiDisplayFriendly";
-            this.tsmiDisplayFriendly.Size = new System.Drawing.Size(256, 38);
+            this.tsmiDisplayFriendly.Size = new System.Drawing.Size(240, 22);
             this.tsmiDisplayFriendly.Text = "Friendly (display names/values)";
             this.tsmiDisplayFriendly.Click += new System.EventHandler(this.tsmiDisplayType_Click);
             // 
@@ -715,20 +717,20 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsmiDisplayRaw.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_raw;
             this.tsmiDisplayRaw.Name = "tsmiDisplayRaw";
-            this.tsmiDisplayRaw.Size = new System.Drawing.Size(256, 38);
+            this.tsmiDisplayRaw.Size = new System.Drawing.Size(240, 22);
             this.tsmiDisplayRaw.Text = "Raw (technical names/values)";
             this.tsmiDisplayRaw.Click += new System.EventHandler(this.tsmiDisplayType_Click);
             // 
             // toolStripMenuItem7
             // 
             this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-            this.toolStripMenuItem7.Size = new System.Drawing.Size(253, 6);
+            this.toolStripMenuItem7.Size = new System.Drawing.Size(237, 6);
             // 
             // tsmiDisplayBoth
             // 
             this.tsmiDisplayBoth.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_both;
             this.tsmiDisplayBoth.Name = "tsmiDisplayBoth";
-            this.tsmiDisplayBoth.Size = new System.Drawing.Size(256, 38);
+            this.tsmiDisplayBoth.Size = new System.Drawing.Size(240, 22);
             this.tsmiDisplayBoth.Text = "Both";
             this.tsmiDisplayBoth.Click += new System.EventHandler(this.tsmiDisplayBoth_Click);
             // 
@@ -883,6 +885,16 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.dockContainer.Size = new System.Drawing.Size(1180, 360);
             this.dockContainer.TabIndex = 33;
             // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 36);
+            this.toolStripButton1.Text = "AI";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
             // FetchXmlBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -988,5 +1000,6 @@ namespace Rappen.XTB.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiDisplayRaw;
         private System.Windows.Forms.ToolStripMenuItem tsmiDisplayBoth;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
     }
 }

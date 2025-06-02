@@ -277,6 +277,12 @@
     <Compile Include="Converters\LCG\UnicodeCharacterUtilities.cs" />
     <Compile Include="Converters\QExParse.cs" />
     <Compile Include="ControlsClasses\EntityNameItem.cs" />
+    <Compile Include="DockControls\AiChatControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DockControls\AiChatControl.Designer.cs">
+      <DependentUpon>AiChatControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\GroupBoxExpanderExtensions.cs" />
     <Compile Include="Forms\CSharpCodeGeneratedLCGSettings.cs">
@@ -538,6 +544,9 @@
     <EmbeddedResource Include="DockControls\MetadataControl.resx">
       <DependentUpon>MetadataControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="DockControls\AiChatControl.resx">
+      <DependentUpon>AiChatControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DockControls\ODataControl.resx">
       <DependentUpon>ODataControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -766,6 +775,7 @@
   <Import Project="..\MsCrmTools.MetadataBrowser\MsCrmTools.MetadataBrowser\MsCrmTools.MetadataBrowser.Shared.projitems" Label="Shared" />
   <Import Project="..\Rappen.XTB.Helper\Rappen.XRM.Helpers\Rappen.XRM.Helpers.projitems" Label="Shared" />
   <Import Project="..\Rappen.XTB.Helper\Rappen.XTB.Helpers\Rappen.XTB.Helpers.projitems" Label="Shared" />
+  <Import Project="..\Rappen.XTB.Helper\Rappen.AI.WinForm\Rappen.AI.WinForm.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Debug (

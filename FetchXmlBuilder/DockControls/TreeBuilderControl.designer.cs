@@ -33,6 +33,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TreeBuilderControl));
             this.splitQueryBuilder = new System.Windows.Forms.SplitContainer();
+            this.splitBuilderAndAi = new System.Windows.Forms.SplitContainer();
             this.tvFetch = new System.Windows.Forms.TreeView();
             this.imgFetch = new System.Windows.Forms.ImageList(this.components);
             this.lblWarning = new System.Windows.Forms.LinkLabel();
@@ -60,31 +61,19 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.showMetadataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
-            this.splitAiChat = new System.Windows.Forms.SplitContainer();
-            this.txtAiChatAnswer = new System.Windows.Forms.TextBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.btnAiChatAsk = new System.Windows.Forms.Button();
-            this.txtAiChatAsk = new System.Windows.Forms.TextBox();
-            this.splitBuilderAndAi = new System.Windows.Forms.SplitContainer();
             ((System.ComponentModel.ISupportInitialize)(this.splitQueryBuilder)).BeginInit();
             this.splitQueryBuilder.Panel1.SuspendLayout();
             this.splitQueryBuilder.Panel2.SuspendLayout();
             this.splitQueryBuilder.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitBuilderAndAi)).BeginInit();
+            this.splitBuilderAndAi.Panel1.SuspendLayout();
+            this.splitBuilderAndAi.SuspendLayout();
             this.panProperties.SuspendLayout();
             this.gbProperties.SuspendLayout();
             this.panQuickActions.SuspendLayout();
             this.gbQuickActions.SuspendLayout();
             this.addMenu.SuspendLayout();
             this.nodeMenu.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitAiChat)).BeginInit();
-            this.splitAiChat.Panel1.SuspendLayout();
-            this.splitAiChat.Panel2.SuspendLayout();
-            this.splitAiChat.SuspendLayout();
-            this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitBuilderAndAi)).BeginInit();
-            this.splitBuilderAndAi.Panel1.SuspendLayout();
-            this.splitBuilderAndAi.Panel2.SuspendLayout();
-            this.splitBuilderAndAi.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitQueryBuilder
@@ -110,6 +99,20 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             this.splitQueryBuilder.SplitterDistance = 378;
             this.splitQueryBuilder.SplitterWidth = 8;
             this.splitQueryBuilder.TabIndex = 0;
+            // 
+            // splitBuilderAndAi
+            // 
+            this.splitBuilderAndAi.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitBuilderAndAi.Location = new System.Drawing.Point(0, 0);
+            this.splitBuilderAndAi.Name = "splitBuilderAndAi";
+            this.splitBuilderAndAi.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitBuilderAndAi.Panel1
+            // 
+            this.splitBuilderAndAi.Panel1.Controls.Add(this.tvFetch);
+            this.splitBuilderAndAi.Size = new System.Drawing.Size(594, 350);
+            this.splitBuilderAndAi.SplitterDistance = 207;
+            this.splitBuilderAndAi.TabIndex = 3;
             // 
             // tvFetch
             // 
@@ -378,87 +381,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             this.showMetadataToolStripMenuItem.Text = "Show Metadata";
             this.showMetadataToolStripMenuItem.Click += new System.EventHandler(this.showMetadataToolStripMenuItem_Click);
             // 
-            // splitAiChat
-            // 
-            this.splitAiChat.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitAiChat.Location = new System.Drawing.Point(0, 0);
-            this.splitAiChat.Name = "splitAiChat";
-            this.splitAiChat.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitAiChat.Panel1
-            // 
-            this.splitAiChat.Panel1.BackColor = System.Drawing.SystemColors.Info;
-            this.splitAiChat.Panel1.Controls.Add(this.txtAiChatAnswer);
-            // 
-            // splitAiChat.Panel2
-            // 
-            this.splitAiChat.Panel2.Controls.Add(this.txtAiChatAsk);
-            this.splitAiChat.Panel2.Controls.Add(this.panel1);
-            this.splitAiChat.Size = new System.Drawing.Size(594, 139);
-            this.splitAiChat.SplitterDistance = 53;
-            this.splitAiChat.TabIndex = 12;
-            // 
-            // txtAiChatAnswer
-            // 
-            this.txtAiChatAnswer.BackColor = System.Drawing.SystemColors.Info;
-            this.txtAiChatAnswer.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtAiChatAnswer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtAiChatAnswer.Location = new System.Drawing.Point(0, 0);
-            this.txtAiChatAnswer.Multiline = true;
-            this.txtAiChatAnswer.Name = "txtAiChatAnswer";
-            this.txtAiChatAnswer.ReadOnly = true;
-            this.txtAiChatAnswer.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAiChatAnswer.Size = new System.Drawing.Size(594, 83);
-            this.txtAiChatAnswer.TabIndex = 0;
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.btnAiChatAsk);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel1.Location = new System.Drawing.Point(548, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(46, 82);
-            this.panel1.TabIndex = 0;
-            // 
-            // btnAiChatAsk
-            // 
-            this.btnAiChatAsk.Location = new System.Drawing.Point(3, 3);
-            this.btnAiChatAsk.Name = "btnAiChatAsk";
-            this.btnAiChatAsk.Size = new System.Drawing.Size(40, 23);
-            this.btnAiChatAsk.TabIndex = 0;
-            this.btnAiChatAsk.Text = "Ask!";
-            this.btnAiChatAsk.UseVisualStyleBackColor = true;
-            this.btnAiChatAsk.Click += new System.EventHandler(this.btnAiChatAsk_Click);
-            // 
-            // txtAiChatAsk
-            // 
-            this.txtAiChatAsk.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtAiChatAsk.Location = new System.Drawing.Point(0, 0);
-            this.txtAiChatAsk.Multiline = true;
-            this.txtAiChatAsk.Name = "txtAiChatAsk";
-            this.txtAiChatAsk.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAiChatAsk.Size = new System.Drawing.Size(548, 42);
-            this.txtAiChatAsk.TabIndex = 1;
-            this.txtAiChatAsk.KeyDown += TxtAiChatAsk_OnKeyDown;
-            // 
-            // splitBuilderAndAi
-            // 
-            this.splitBuilderAndAi.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitBuilderAndAi.Location = new System.Drawing.Point(0, 0);
-            this.splitBuilderAndAi.Name = "splitBuilderAndAi";
-            this.splitBuilderAndAi.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitBuilderAndAi.Panel1
-            // 
-            this.splitBuilderAndAi.Panel1.Controls.Add(this.tvFetch);
-            // 
-            // splitBuilderAndAi.Panel2
-            // 
-            this.splitBuilderAndAi.Panel2.Controls.Add(this.splitAiChat);
-            this.splitBuilderAndAi.Size = new System.Drawing.Size(594, 350);
-            this.splitBuilderAndAi.SplitterDistance = 207;
-            this.splitBuilderAndAi.TabIndex = 3;
-            // 
             // TreeBuilderControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -483,6 +405,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             this.splitQueryBuilder.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitQueryBuilder)).EndInit();
             this.splitQueryBuilder.ResumeLayout(false);
+            this.splitBuilderAndAi.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitBuilderAndAi)).EndInit();
+            this.splitBuilderAndAi.ResumeLayout(false);
             this.panProperties.ResumeLayout(false);
             this.gbProperties.ResumeLayout(false);
             this.panQuickActions.ResumeLayout(false);
@@ -490,27 +415,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             this.gbQuickActions.PerformLayout();
             this.addMenu.ResumeLayout(false);
             this.nodeMenu.ResumeLayout(false);
-            this.splitAiChat.Panel1.ResumeLayout(false);
-            this.splitAiChat.Panel1.PerformLayout();
-            this.splitAiChat.Panel2.ResumeLayout(false);
-            this.splitAiChat.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitAiChat)).EndInit();
-            this.splitAiChat.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.splitBuilderAndAi.Panel1.ResumeLayout(false);
-            this.splitBuilderAndAi.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitBuilderAndAi)).EndInit();
-            this.splitBuilderAndAi.ResumeLayout(false);
             this.ResumeLayout(false);
 
-        }
-
-        private void TxtAiChatAsk_OnKeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
-        {
-            if (e.Control && e.KeyCode == Keys.Enter)
-            {
-                btnAiChatAsk_Click(this, null);
-            }
         }
 
         #endregion
@@ -543,11 +449,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         internal System.Windows.Forms.ToolStripMenuItem addOneMoreToolStripMenuItem;
         private System.Windows.Forms.ImageList imgFetch;
         private System.Windows.Forms.LinkLabel lblWarning;
-        private System.Windows.Forms.SplitContainer splitAiChat;
-        private System.Windows.Forms.TextBox txtAiChatAnswer;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button btnAiChatAsk;
-        private System.Windows.Forms.TextBox txtAiChatAsk;
         private System.Windows.Forms.SplitContainer splitBuilderAndAi;
     }
 }

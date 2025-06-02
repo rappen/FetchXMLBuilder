@@ -1116,7 +1116,8 @@ More votes == released sooner.", "OrganizationServiceContext",
         CSharp_Code,
         SQL_Query,
         JavaScript_Query,
-        Power_Platform_CLI
+        Power_Platform_CLI,
+        AiChat
     }
 
     internal enum SaveFormat
