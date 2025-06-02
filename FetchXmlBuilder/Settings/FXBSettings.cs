@@ -1,3 +1,4 @@
+using Rappen.AI.WinForm;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using ScintillaNET;
 using System;
@@ -125,6 +126,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public DockState SQLQuery { get; set; } = DockState.DockRight;
         public DockState FlowList { get; set; } = DockState.Float;
         public DockState PowerPlatformCLI { get; set; } = DockState.DockRight;
+        public DockState AiChat { get; set; } = DockState.Float;
     }
 
     public class ContentWindow
@@ -144,6 +146,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public ContentWindow FetchXmlJsWindow { get; set; } = new ContentWindow();
         public ContentWindow CSharpWindow { get; set; } = new ContentWindow();
         public ContentWindow PowerPlatformCLI { get; set; } = new ContentWindow();
+        public ContentWindow AiChat { get; set; } = new ContentWindow();
 
         internal ContentWindow GetContentWindow(ContentType type)
         {
@@ -171,6 +174,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
 
                 case ContentType.Power_Platform_CLI:
                     return PowerPlatformCLI;
+
+                case ContentType.AiChat:
+                    return AiChat;
             }
             return new ContentWindow();
         }
@@ -201,6 +207,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
 
                 case ContentType.Power_Platform_CLI:
                     PowerPlatformCLI = windowSettings;
+                    break;
+
+                case ContentType.AiChat:
+                    AiChat = windowSettings;
                     break;
             }
         }
@@ -286,15 +296,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
             viewer.Styles[Style.Xml.Tag].ForeColor = Element;
             viewer.Styles[Style.Xml.TagEnd].ForeColor = Element;
         }
-    }
-
-    public class AiSettings
-    {
-        public bool Active { get; set; }
-        public string Supplier { get; set; }
-        public string Model { get; set; }
-        public string ApiKey { get; set; }
-        public string Url { get; set; }
     }
 
     public class CodeGenerators

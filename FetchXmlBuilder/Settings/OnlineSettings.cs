@@ -1,6 +1,8 @@
-﻿using Rappen.XTB.Helpers;
+﻿using Rappen.AI.WinForm;
+using Rappen.XTB.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using XrmToolBox.Extensibility;
 using XrmToolBox.ToolLibrary.AppCode;
@@ -16,7 +18,8 @@ namespace Rappen.XTB.FXB.Settings
         public int SettingsVersion = 1;
         public List<string> DeprecatedNames = new List<string>();
         public List<string> IntegratedToTools = new List<string>();
-        public List<AiSupplier> AiSuppliers = new List<AiSupplier>();
+        public AiSupported AiSupported = new AiSupported();
+        public ToolColors Colors = new ToolColors();
 
         private OnlineSettings()
         { }
@@ -45,19 +48,10 @@ namespace Rappen.XTB.FXB.Settings
         }
     }
 
-    public class AiSupplier
+    public class ToolColors
     {
-        public string Name { get; set; }
-        public List<AiModel> Models { get; set; } = new List<AiModel>();
-
-        public override string ToString() => Name;
-    }
-
-    public class AiModel
-    {
-        public string Name { get; set; }
-        public string Url { get; set; }
-
-        public override string ToString() => Name;
+        public Color Dark { get; set; } = Color.FromArgb(0, 66, 173);
+        public Color Medium { get; set; } = Color.FromArgb(0, 99, 255);
+        public Color Bright { get; set; } = Color.FromArgb(255, 255, 0);
     }
 }
