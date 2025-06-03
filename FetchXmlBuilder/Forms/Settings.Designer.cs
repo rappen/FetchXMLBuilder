@@ -717,6 +717,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             this.txtAiApiKey.Location = new System.Drawing.Point(75, 59);
             this.txtAiApiKey.Name = "txtAiApiKey";
+            this.txtAiApiKey.PasswordChar = '*';
             this.txtAiApiKey.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtAiApiKey.Size = new System.Drawing.Size(409, 20);
             this.txtAiApiKey.TabIndex = 6;

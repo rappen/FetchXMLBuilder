@@ -33,7 +33,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TreeBuilderControl));
             this.splitQueryBuilder = new System.Windows.Forms.SplitContainer();
-            this.splitBuilderAndAi = new System.Windows.Forms.SplitContainer();
             this.tvFetch = new System.Windows.Forms.TreeView();
             this.imgFetch = new System.Windows.Forms.ImageList(this.components);
             this.lblWarning = new System.Windows.Forms.LinkLabel();
@@ -65,9 +64,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             this.splitQueryBuilder.Panel1.SuspendLayout();
             this.splitQueryBuilder.Panel2.SuspendLayout();
             this.splitQueryBuilder.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitBuilderAndAi)).BeginInit();
-            this.splitBuilderAndAi.Panel1.SuspendLayout();
-            this.splitBuilderAndAi.SuspendLayout();
             this.panProperties.SuspendLayout();
             this.gbProperties.SuspendLayout();
             this.panQuickActions.SuspendLayout();
@@ -87,7 +83,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             // 
             // splitQueryBuilder.Panel1
             // 
-            this.splitQueryBuilder.Panel1.Controls.Add(this.splitBuilderAndAi);
+            this.splitQueryBuilder.Panel1.Controls.Add(this.tvFetch);
             this.splitQueryBuilder.Panel1.Controls.Add(this.lblWarning);
             // 
             // splitQueryBuilder.Panel2
@@ -99,20 +95,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             this.splitQueryBuilder.SplitterDistance = 378;
             this.splitQueryBuilder.SplitterWidth = 8;
             this.splitQueryBuilder.TabIndex = 0;
-            // 
-            // splitBuilderAndAi
-            // 
-            this.splitBuilderAndAi.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitBuilderAndAi.Location = new System.Drawing.Point(0, 0);
-            this.splitBuilderAndAi.Name = "splitBuilderAndAi";
-            this.splitBuilderAndAi.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitBuilderAndAi.Panel1
-            // 
-            this.splitBuilderAndAi.Panel1.Controls.Add(this.tvFetch);
-            this.splitBuilderAndAi.Size = new System.Drawing.Size(594, 350);
-            this.splitBuilderAndAi.SplitterDistance = 207;
-            this.splitBuilderAndAi.TabIndex = 3;
             // 
             // tvFetch
             // 
@@ -126,7 +108,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             this.tvFetch.Name = "tvFetch";
             this.tvFetch.SelectedImageIndex = 0;
             this.tvFetch.ShowNodeToolTips = true;
-            this.tvFetch.Size = new System.Drawing.Size(594, 207);
+            this.tvFetch.Size = new System.Drawing.Size(594, 350);
             this.tvFetch.TabIndex = 0;
             this.tvFetch.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvFetch_AfterSelect);
             this.tvFetch.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvFetch_NodeMouseClick);
@@ -405,9 +387,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             this.splitQueryBuilder.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitQueryBuilder)).EndInit();
             this.splitQueryBuilder.ResumeLayout(false);
-            this.splitBuilderAndAi.Panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitBuilderAndAi)).EndInit();
-            this.splitBuilderAndAi.ResumeLayout(false);
             this.panProperties.ResumeLayout(false);
             this.gbProperties.ResumeLayout(false);
             this.panQuickActions.ResumeLayout(false);
@@ -449,6 +428,5 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         internal System.Windows.Forms.ToolStripMenuItem addOneMoreToolStripMenuItem;
         private System.Windows.Forms.ImageList imgFetch;
         private System.Windows.Forms.LinkLabel lblWarning;
-        private System.Windows.Forms.SplitContainer splitBuilderAndAi;
     }
 }
