@@ -70,7 +70,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
 
             var intro = "You are an agent that helps the user interact with Dataverse using FetchXml queries. The user describes the query he want to do in natural language, and you create a FetchXml query based on the users's description. Your answers are short and to the point. When asked to explain a query, you summarize the meaning of the query in a short text, don't talk about fields and operators. Don't execute the ExecuteFetchXmlRequest tool before asking the user if he wants to execute it. The current FetchXml we are working with is " + currentFetchXml;
-            AiCommunication.CallingAI(text, intro, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, SetQueryFromAi, ExecuteFetchXmlRequest);
+
+            AiCommunication.CallingAI(text, intro, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXmlRequest, SetQueryFromAi);
 
             txtAiChatAsk.Clear();
         }
@@ -79,8 +80,26 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private string ExecuteFetchXmlRequest([Description("The FetchXmlRequest To Execute. This is the current FetchXml, as specified by the system prompt.")] string fetchXml)
         {
             // Mysko... hjälp av Adner tack!
-            //       SetQueryFromAi(fetchXml);
-            //     SendKeys.Send("{F5}");
+            MethodInvoker mi = delegate
+            {
+                try
+                {
+                    SetQueryFromAi(fetchXml);
+                    SendKeys.Send("{F5}");
+                }
+                catch
+                {
+                    // Now what?
+                }
+            };
+            if (InvokeRequired)
+            {
+                Invoke(mi);
+            }
+            else
+            {
+                mi();
+            }
 
             return "Query executed successfully";
         }
