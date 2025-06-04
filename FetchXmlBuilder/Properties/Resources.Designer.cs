@@ -83,6 +83,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icon_bot_32 {
+            get {
+                object obj = ResourceManager.GetObject("icon-bot-32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icon_both {
             get {
                 object obj = ResourceManager.GetObject("icon-both", resourceCulture);
@@ -183,6 +193,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icon_info_16 {
+            get {
+                object obj = ResourceManager.GetObject("icon-info-16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icon_javascript {
             get {
                 object obj = ResourceManager.GetObject("icon-javascript", resourceCulture);
@@ -226,6 +246,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         internal static System.Drawing.Bitmap icon_new {
             get {
                 object obj = ResourceManager.GetObject("icon-new", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icon_no_16 {
+            get {
+                object obj = ResourceManager.GetObject("icon-no-16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -516,6 +546,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         internal static System.Drawing.Bitmap icon_xml_homemade {
             get {
                 object obj = ResourceManager.GetObject("icon-xml-homemade", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icon_yes_16 {
+            get {
+                object obj = ResourceManager.GetObject("icon-yes-16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

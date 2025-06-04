@@ -112,6 +112,29 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 fxb.dockControlBuilder.Init(matches[0].Value, null, false, "Query from AI", true);
             }
         }
+
+        private void picBtnYes_Click(object sender, EventArgs e)
+        {
+            SendChatToAI("Yes please!");
+        }
+
+        private void picBtnNo_Click(object sender, EventArgs e)
+        {
+            SendChatToAI("Thanks, but no.");
+        }
+
+        private void picBtnSettings_Click(object sender, EventArgs e)
+        {
+            fxb.ShowSettings("tabAiChat");
+        }
+
+        private void txtAiChatAsk_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && e.Control)
+            {
+                SendChatToAI(txtAiChatAsk.Text);
+            }
+        }
     }
 
     public class InputSchema
