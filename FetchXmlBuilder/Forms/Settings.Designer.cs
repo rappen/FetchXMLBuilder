@@ -58,12 +58,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnDefaultQuery = new System.Windows.Forms.Button();
             this.btnFormatQuery = new System.Windows.Forms.Button();
-            this.btnResetXmlColors = new System.Windows.Forms.Button();
             this.chkShowValidationInfo = new System.Windows.Forms.CheckBox();
             this.chkShowValidation = new System.Windows.Forms.CheckBox();
             this.chkAddConditionToFilter = new System.Windows.Forms.CheckBox();
             this.chkShowAllAttributes = new System.Windows.Forms.CheckBox();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.chkWaitUntilMetadataLoaded = new System.Windows.Forms.CheckBox();
             this.chkTryMetadataCache = new System.Windows.Forms.CheckBox();
             this.linkLayout = new System.Windows.Forms.LinkLabel();
@@ -95,12 +93,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.label3 = new System.Windows.Forms.Label();
             this.tabXmlScheme = new System.Windows.Forms.TabPage();
             this.label4 = new System.Windows.Forms.Label();
-            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.tabAdvanced = new System.Windows.Forms.TabPage();
             this.btnForceReloadMetadata = new System.Windows.Forms.Button();
             this.btnResetAll = new System.Windows.Forms.Button();
             this.chkShowOData2 = new System.Windows.Forms.CheckBox();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
+            this.picAiSupplier = new System.Windows.Forms.PictureBox();
+            this.btnResetXmlColors = new System.Windows.Forms.Button();
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -115,6 +115,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabDefaultQuery.SuspendLayout();
             this.tabXmlScheme.SuspendLayout();
             this.tabAdvanced.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picAiSupplier)).BeginInit();
             this.SuspendLayout();
             // 
             // cmbResult
@@ -346,7 +347,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.panel1.Controls.Add(this.llShowWelcome);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
-            this.panel1.Location = new System.Drawing.Point(12, 224);
+            this.panel1.Location = new System.Drawing.Point(12, 197);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(509, 53);
             this.panel1.TabIndex = 100;
@@ -422,18 +423,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.btnFormatQuery.UseVisualStyleBackColor = true;
             this.btnFormatQuery.Click += new System.EventHandler(this.btnFormatQuery_Click);
             // 
-            // btnResetXmlColors
-            // 
-            this.btnResetXmlColors.Image = ((System.Drawing.Image)(resources.GetObject("btnResetXmlColors.Image")));
-            this.btnResetXmlColors.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnResetXmlColors.Location = new System.Drawing.Point(239, 101);
-            this.btnResetXmlColors.Name = "btnResetXmlColors";
-            this.btnResetXmlColors.Size = new System.Drawing.Size(92, 23);
-            this.btnResetXmlColors.TabIndex = 8;
-            this.btnResetXmlColors.Text = "Reset";
-            this.btnResetXmlColors.UseVisualStyleBackColor = true;
-            this.btnResetXmlColors.Click += new System.EventHandler(this.btnResetXmlColors_Click);
-            // 
             // chkShowValidationInfo
             // 
             this.chkShowValidationInfo.AutoSize = true;
@@ -481,19 +470,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkShowAllAttributes.Text = "Show \"all-attributes\" (bad use)";
             this.tt.SetToolTip(this.chkShowAllAttributes, "all-attributes is a big no-no.\r\nBut you can, if you check this one.");
             this.chkShowAllAttributes.UseVisualStyleBackColor = true;
-            // 
-            // linkLabel1
-            // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(48, 15);
-            this.linkLabel1.Location = new System.Drawing.Point(216, 208);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(305, 17);
-            this.linkLabel1.TabIndex = 102;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Missing the Entities and Attributes selections? Click here -->";
-            this.linkLabel1.UseCompatibleTextRendering = true;
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // chkWaitUntilMetadataLoaded
             // 
@@ -650,6 +626,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             // panAiDetails
             // 
+            this.panAiDetails.Controls.Add(this.picAiSupplier);
             this.panAiDetails.Controls.Add(this.label6);
             this.panAiDetails.Controls.Add(this.txtAiUrl);
             this.panAiDetails.Controls.Add(this.cmbAiSupplier);
@@ -691,7 +668,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             "Azure OpenAI"});
             this.cmbAiSupplier.Location = new System.Drawing.Point(75, 6);
             this.cmbAiSupplier.Name = "cmbAiSupplier";
-            this.cmbAiSupplier.Size = new System.Drawing.Size(200, 21);
+            this.cmbAiSupplier.Size = new System.Drawing.Size(180, 21);
             this.cmbAiSupplier.TabIndex = 1;
             this.cmbAiSupplier.SelectedIndexChanged += new System.EventHandler(this.cmbAiSupplier_SelectedIndexChanged);
             // 
@@ -858,33 +835,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.label4.TabIndex = 9;
             this.label4.Text = "XML colors for FetchXML";
             // 
-            // propXmlColors
-            // 
-            this.propXmlColors.CanShowVisualStyleGlyphs = false;
-            this.propXmlColors.HelpVisible = false;
-            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.Location = new System.Drawing.Point(4, 40);
-            this.propXmlColors.Name = "propXmlColors";
-            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            xmlColors1.AttributeKey = System.Drawing.Color.Red;
-            xmlColors1.AttributeKeyColor = "Red";
-            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
-            xmlColors1.AttributeValueColor = "Blue";
-            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            xmlColors1.CommentColor = "0";
-            xmlColors1.Element = System.Drawing.Color.DarkRed;
-            xmlColors1.ElementColor = "DarkRed";
-            xmlColors1.Tag = System.Drawing.Color.Blue;
-            xmlColors1.TagColor = "Blue";
-            xmlColors1.Value = System.Drawing.Color.Black;
-            xmlColors1.ValueColor = "Black";
-            this.propXmlColors.SelectedObject = xmlColors1;
-            this.propXmlColors.Size = new System.Drawing.Size(252, 97);
-            this.propXmlColors.TabIndex = 7;
-            this.propXmlColors.ToolbarVisible = false;
-            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
-            // 
             // tabAdvanced
             // 
             this.tabAdvanced.BackColor = System.Drawing.SystemColors.Window;
@@ -935,6 +885,57 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         "how it anyway, if you which, but checking this one.");
             this.chkShowOData2.UseVisualStyleBackColor = true;
             // 
+            // picAiSupplier
+            // 
+            this.picAiSupplier.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picAiSupplier.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_info_16;
+            this.picAiSupplier.Location = new System.Drawing.Point(259, 8);
+            this.picAiSupplier.Name = "picAiSupplier";
+            this.picAiSupplier.Size = new System.Drawing.Size(16, 16);
+            this.picAiSupplier.TabIndex = 9;
+            this.picAiSupplier.TabStop = false;
+            this.tt.SetToolTip(this.picAiSupplier, "Read more");
+            this.picAiSupplier.Click += new System.EventHandler(this.picAiSupplier_Click);
+            // 
+            // btnResetXmlColors
+            // 
+            this.btnResetXmlColors.Image = ((System.Drawing.Image)(resources.GetObject("btnResetXmlColors.Image")));
+            this.btnResetXmlColors.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnResetXmlColors.Location = new System.Drawing.Point(239, 101);
+            this.btnResetXmlColors.Name = "btnResetXmlColors";
+            this.btnResetXmlColors.Size = new System.Drawing.Size(92, 23);
+            this.btnResetXmlColors.TabIndex = 8;
+            this.btnResetXmlColors.Text = "Reset";
+            this.btnResetXmlColors.UseVisualStyleBackColor = true;
+            this.btnResetXmlColors.Click += new System.EventHandler(this.btnResetXmlColors_Click);
+            // 
+            // propXmlColors
+            // 
+            this.propXmlColors.CanShowVisualStyleGlyphs = false;
+            this.propXmlColors.HelpVisible = false;
+            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.Location = new System.Drawing.Point(4, 40);
+            this.propXmlColors.Name = "propXmlColors";
+            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            xmlColors1.AttributeKey = System.Drawing.Color.Red;
+            xmlColors1.AttributeKeyColor = "Red";
+            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
+            xmlColors1.AttributeValueColor = "Blue";
+            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            xmlColors1.CommentColor = "0";
+            xmlColors1.Element = System.Drawing.Color.DarkRed;
+            xmlColors1.ElementColor = "DarkRed";
+            xmlColors1.Tag = System.Drawing.Color.Blue;
+            xmlColors1.TagColor = "Blue";
+            xmlColors1.Value = System.Drawing.Color.Black;
+            xmlColors1.ValueColor = "Black";
+            this.propXmlColors.SelectedObject = xmlColors1;
+            this.propXmlColors.Size = new System.Drawing.Size(252, 97);
+            this.propXmlColors.TabIndex = 7;
+            this.propXmlColors.ToolbarVisible = false;
+            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
+            // 
             // Settings
             // 
             this.AcceptButton = this.btnOK;
@@ -942,15 +943,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(535, 289);
+            this.ClientSize = new System.Drawing.Size(535, 262);
             this.Controls.Add(this.tabSettings);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.linkLabel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Settings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FetchXML Builder - Settings";
+            this.Load += new System.EventHandler(this.Settings_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -976,8 +977,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabXmlScheme.PerformLayout();
             this.tabAdvanced.ResumeLayout(false);
             this.tabAdvanced.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picAiSupplier)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -1005,7 +1006,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.CheckBox chkShowButtonTexts;
         private ScintillaNET.Scintilla txtFetch;
         private System.Windows.Forms.CheckBox chkShowValidation;
-        private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.CheckBox chkShowValidationInfo;
         private System.Windows.Forms.CheckBox chkClickableLinks;
         private System.Windows.Forms.ComboBox cmbResult;
@@ -1039,7 +1039,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.CheckBox chkShowAttributeTypes;
         private System.Windows.Forms.CheckBox chkShowTreeviewAttributeTypes;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TabPage tabAiChat;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox cmbAiSupplier;
         private System.Windows.Forms.CheckBox chkAiActive;
@@ -1050,5 +1049,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.Panel panAiDetails;
         private System.Windows.Forms.TextBox txtAiUrl;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.PictureBox picAiSupplier;
+        private System.Windows.Forms.TabPage tabAiChat;
     }
 }
