@@ -79,7 +79,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         [Description("Executes a FetchXmlRequest")]
         private string ExecuteFetchXmlRequest([Description("The FetchXmlRequest To Execute. This is the current FetchXml, as specified by the system prompt.")] string fetchXml)
         {
-            // Mysko... hjälp av Adner tack!
             MethodInvoker mi = delegate
             {
                 try
@@ -106,6 +105,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void SetQueryFromAi(string response)
         {
+            txtAiChatAsk.Clear();
             var pattern = @"<fetch\b.*?</fetch>";
             if (Regex.Matches(response, pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase) is MatchCollection matches && matches.Count > 0)
             {

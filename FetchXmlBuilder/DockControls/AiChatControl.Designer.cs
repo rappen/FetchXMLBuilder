@@ -90,6 +90,8 @@
             // panAiConversation
             // 
             this.panAiConversation.AutoScroll = true;
+            this.panAiConversation.AutoScrollMinSize = new System.Drawing.Size(16, 0);
+            this.panAiConversation.AutoSize = true;
             this.panAiConversation.BackColor = System.Drawing.SystemColors.Window;
             this.panAiConversation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panAiConversation.Location = new System.Drawing.Point(0, 0);
@@ -180,6 +182,7 @@
             this.DockStateChanged += new System.EventHandler(this.AiChatControl_DockStateChanged);
             this.panOData.ResumeLayout(false);
             this.splitAiChat.Panel1.ResumeLayout(false);
+            this.splitAiChat.Panel1.PerformLayout();
             this.splitAiChat.Panel2.ResumeLayout(false);
             this.splitAiChat.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitAiChat)).EndInit();
