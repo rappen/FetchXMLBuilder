@@ -195,6 +195,7 @@
             this.TabText = "AI Chat";
             this.Text = "AI Chat";
             this.DockStateChanged += new System.EventHandler(this.AiChatControl_DockStateChanged);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AiChatControl_FormClosing);
             this.panOData.ResumeLayout(false);
             this.splitAiChat.Panel1.ResumeLayout(false);
             this.splitAiChat.Panel1.PerformLayout();

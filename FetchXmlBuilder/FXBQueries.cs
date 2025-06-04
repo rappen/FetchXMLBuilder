@@ -66,7 +66,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             return result;
         }
 
-        internal void FetchResults(string fetch = "")
+        internal void FetchResults(string fetch = "", bool CallFromAi = false)
         {
             SaveSetting();
             if (!tsbExecute.Enabled)
@@ -92,7 +92,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 case ResultOutput.XML:
                 case ResultOutput.JSON:
                 case ResultOutput.JSONWebAPI:
-                    RetrieveMultiple(fetch);
+                    RetrieveMultiple(fetch, CallFromAi);
                     break;
 
                 case ResultOutput.Raw:
@@ -280,7 +280,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             return feed;
         }
 
-        private void RetrieveMultiple(string fetch)
+        private void RetrieveMultiple(string fetch, bool CallFromAi)
         {
             working = true;
             SendMessageToStatusBar(this, new StatusBarMessageEventArgs("Retrieving..."));
@@ -341,7 +341,14 @@ namespace Rappen.XTB.FetchXmlBuilder
                     {
                         LogError($"RetrieveMultiple error: {completedargs.Error}");
                         SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Error: {completedargs.Error.Message}"));
-                        ShowErrorDialog(completedargs.Error, "Executing FetchXML", fetch);
+                        if (CallFromAi)
+                        {
+                            dockControlAiChat?.SetExecuteResponse(completedargs.Error);
+                        }
+                        else
+                        {
+                            ShowErrorDialog(completedargs.Error, "Executing FetchXML", fetch);
+                        }
                     }
                     else if (completedargs.Cancelled)
                     {

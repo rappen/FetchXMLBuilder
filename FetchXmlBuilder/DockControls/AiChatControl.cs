@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.AI;
+using Newtonsoft.Json;
 using Rappen.AI.WinForm;
 using Rappen.XTB.FXB.Settings;
 using System;
@@ -28,6 +29,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             chatHistory = new ChatMessageHistory(panAiConversation);
         }
 
+        public void SetExecuteResponse(Exception ex)
+        {
+            chatHistory.Add(ChatRole.User, $"An error occured, please solve it:{Environment.NewLine}{ex.Message}", false);
+        }
+
         private void AiChatControl_DockStateChanged(object sender, EventArgs e)
         {
             if (!IsHidden)
@@ -38,14 +44,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 DockState != WeifenLuo.WinFormsUI.Docking.DockState.Hidden)
             {
                 fxb.settings.DockStates.AiChat = DockState;
-            }
-        }
-
-        private void TxtAiChatAsk_OnKeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
-        {
-            if (e.Control && e.KeyCode == Keys.Enter)
-            {
-                btnAiChatAsk_Click(this, null);
             }
         }
 
@@ -86,8 +84,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 try
                 {
                     SetQueryFromAi(fetchXml);
-                    fxb.FetchResults();
-                    //    SendKeys.Send("{F5}");
+                    fxb.FetchResults(fetchXml, true);
                 }
                 catch
                 {
@@ -145,9 +142,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void picBtnCopy_Click(object sender, EventArgs e)
         {
-            var chat = string.Join(Environment.NewLine, chatHistory.Messages);
+            var chat = chatHistory.ToString();
             Clipboard.SetText(chat);
             fxb.WorkAsync(new WorkAsyncInfo { Message = "Copying!", Work = (w, a) => { Thread.Sleep(500); } });
+        }
+
+        private void AiChatControl_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            chatHistory.Save(Paths.LogsPath, "FXB");
         }
     }
 
