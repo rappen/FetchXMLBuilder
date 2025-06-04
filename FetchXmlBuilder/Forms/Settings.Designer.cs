@@ -951,7 +951,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.Name = "Settings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FetchXML Builder - Settings";
-            this.Load += new System.EventHandler(this.Settings_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

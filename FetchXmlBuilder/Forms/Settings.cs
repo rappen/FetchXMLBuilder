@@ -5,6 +5,7 @@ using System;
 using System.Windows.Forms;
 using System.Linq;
 using Rappen.AI.WinForm;
+using Rappen.XTB.Helpers;
 
 namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
@@ -14,13 +15,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private bool validateinfo;
         internal bool forcereloadingmetadata = false;
 
-        public Settings(FetchXmlBuilder fxb)
+        public Settings(FetchXmlBuilder fxb, string tab)
         {
             InitializeComponent();
             this.fxb = fxb;
             cmbAiSupplier.Items.Clear();
             cmbAiSupplier.Items.AddRange(OnlineSettings.Instance.AiSupported.ToArray());
             PopulateSettings(fxb.settings);
+            tabSettings.SelectedTab = tabSettings.TabPages
+                .Cast<TabPage>()
+                .FirstOrDefault(t => t.Name == tab)
+                ?? tabSettings.TabPages
+                .Cast<TabPage>()
+                .FirstOrDefault(t => t.Text == tab)
+                ?? tabAppearance;
         }
 
         private void PopulateSettings(FXBSettings settings)
@@ -263,8 +271,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private void cmbAiSupplier_SelectedIndexChanged(object sender, EventArgs e)
         {
             cmbAiModel.Items.Clear();
+            tt.SetToolTip(picAiSupplier, "");
+            picAiSupplier.Tag = null;
             if (cmbAiSupplier.SelectedItem is AiSupplier supplier)
             {
+                tt.SetToolTip(picAiSupplier, $"Read about {supplier.Name} at {supplier.Url}");
+                picAiSupplier.Tag = supplier.Url;
                 cmbAiModel.Items.AddRange(supplier.Models.ToArray());
                 if (supplier.Models.FirstOrDefault(m => m.Name == fxb.settings.AiSettings.Model) is AiModel model)
                 {
@@ -280,6 +292,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private void cmbAiModel_SelectedIndexChanged(object sender, EventArgs e)
         {
             txtAiUrl.Text = OnlineSettings.Instance.AiSupported.FirstOrDefault(a => a.Name == cmbAiSupplier.Text)?.Models.FirstOrDefault(m => m.Name == cmbAiModel.Text)?.Url;
+        }
+
+        private void picAiSupplier_Click(object sender, EventArgs e)
+        {
+            UrlUtils.OpenUrl(picAiSupplier);
         }
     }
 }
