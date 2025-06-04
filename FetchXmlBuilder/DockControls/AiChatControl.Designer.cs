@@ -35,19 +35,21 @@
             this.txtAiChatAsk = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.picBtnCopy = new System.Windows.Forms.PictureBox();
+            this.picBtnSettings = new System.Windows.Forms.PictureBox();
             this.picBtnNo = new System.Windows.Forms.PictureBox();
             this.picBtnYes = new System.Windows.Forms.PictureBox();
             this.btnAiChatAsk = new System.Windows.Forms.Button();
-            this.picBtnSettings = new System.Windows.Forms.PictureBox();
             this.panOData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitAiChat)).BeginInit();
             this.splitAiChat.Panel1.SuspendLayout();
             this.splitAiChat.Panel2.SuspendLayout();
             this.splitAiChat.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picBtnCopy)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBtnSettings)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBtnNo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBtnYes)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picBtnSettings)).BeginInit();
             this.SuspendLayout();
             // 
             // panOData
@@ -112,6 +114,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.picBtnCopy);
             this.panel1.Controls.Add(this.picBtnSettings);
             this.panel1.Controls.Add(this.picBtnNo);
             this.panel1.Controls.Add(this.picBtnYes);
@@ -121,6 +124,30 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(46, 115);
             this.panel1.TabIndex = 0;
+            // 
+            // picBtnCopy
+            // 
+            this.picBtnCopy.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picBtnCopy.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_copy_16;
+            this.picBtnCopy.Location = new System.Drawing.Point(25, 73);
+            this.picBtnCopy.Name = "picBtnCopy";
+            this.picBtnCopy.Size = new System.Drawing.Size(16, 16);
+            this.picBtnCopy.TabIndex = 4;
+            this.picBtnCopy.TabStop = false;
+            this.toolTip1.SetToolTip(this.picBtnCopy, "Copy all our chat dialog!");
+            this.picBtnCopy.Click += new System.EventHandler(this.picBtnCopy_Click);
+            // 
+            // picBtnSettings
+            // 
+            this.picBtnSettings.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picBtnSettings.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_settings_16;
+            this.picBtnSettings.Location = new System.Drawing.Point(6, 73);
+            this.picBtnSettings.Name = "picBtnSettings";
+            this.picBtnSettings.Size = new System.Drawing.Size(16, 16);
+            this.picBtnSettings.TabIndex = 3;
+            this.picBtnSettings.TabStop = false;
+            this.toolTip1.SetToolTip(this.picBtnSettings, "Open Settings about AI Chat.");
+            this.picBtnSettings.Click += new System.EventHandler(this.picBtnSettings_Click);
             // 
             // picBtnNo
             // 
@@ -142,7 +169,7 @@
             this.picBtnYes.Size = new System.Drawing.Size(16, 16);
             this.picBtnYes.TabIndex = 1;
             this.picBtnYes.TabStop = false;
-            this.toolTip1.SetToolTip(this.picBtnYes, "Yes please!\r\nClick to accept immediately.");
+            this.toolTip1.SetToolTip(this.picBtnYes, "Yes please! <CTRL>+Y\r\nClick to accept immediately.");
             this.picBtnYes.Click += new System.EventHandler(this.picBtnYes_Click);
             // 
             // btnAiChatAsk
@@ -155,18 +182,6 @@
             this.toolTip1.SetToolTip(this.btnAiChatAsk, "<CTRL>+Enter\r\nSend the query to the AI");
             this.btnAiChatAsk.UseVisualStyleBackColor = true;
             this.btnAiChatAsk.Click += new System.EventHandler(this.btnAiChatAsk_Click);
-            // 
-            // picBtnSettings
-            // 
-            this.picBtnSettings.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picBtnSettings.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_settings_16;
-            this.picBtnSettings.Location = new System.Drawing.Point(6, 73);
-            this.picBtnSettings.Name = "picBtnSettings";
-            this.picBtnSettings.Size = new System.Drawing.Size(16, 16);
-            this.picBtnSettings.TabIndex = 3;
-            this.picBtnSettings.TabStop = false;
-            this.toolTip1.SetToolTip(this.picBtnSettings, "Open Settings about AI Chat.");
-            this.picBtnSettings.Click += new System.EventHandler(this.picBtnSettings_Click);
             // 
             // AiChatControl
             // 
@@ -188,9 +203,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitAiChat)).EndInit();
             this.splitAiChat.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picBtnCopy)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBtnSettings)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBtnNo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBtnYes)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picBtnSettings)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -207,5 +223,6 @@
         private System.Windows.Forms.PictureBox picBtnNo;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.PictureBox picBtnSettings;
+        private System.Windows.Forms.PictureBox picBtnCopy;
     }
 }

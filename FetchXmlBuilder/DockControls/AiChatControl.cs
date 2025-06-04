@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
+using XrmToolBox.Extensibility;
 
 namespace Rappen.XTB.FetchXmlBuilder.DockControls
 {
@@ -84,7 +86,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 try
                 {
                     SetQueryFromAi(fetchXml);
-                    SendKeys.Send("{F5}");
+                    fxb.FetchResults();
+                    //    SendKeys.Send("{F5}");
                 }
                 catch
                 {
@@ -134,6 +137,17 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 SendChatToAI(txtAiChatAsk.Text);
             }
+            else if (e.KeyCode == Keys.Y && e.Control)
+            {
+                SendChatToAI("Yes please!");
+            }
+        }
+
+        private void picBtnCopy_Click(object sender, EventArgs e)
+        {
+            var chat = string.Join(Environment.NewLine, chatHistory.Messages);
+            Clipboard.SetText(chat);
+            fxb.WorkAsync(new WorkAsyncInfo { Message = "Copying!", Work = (w, a) => { Thread.Sleep(500); } });
         }
     }
 
