@@ -34,12 +34,12 @@
             this.panAiConversation = new System.Windows.Forms.Panel();
             this.txtAiChatAsk = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.picBtnCopy = new System.Windows.Forms.PictureBox();
             this.picBtnSettings = new System.Windows.Forms.PictureBox();
             this.picBtnNo = new System.Windows.Forms.PictureBox();
             this.picBtnYes = new System.Windows.Forms.PictureBox();
             this.btnAiChatAsk = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panOData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitAiChat)).BeginInit();
             this.splitAiChat.Panel1.SuspendLayout();
@@ -85,7 +85,7 @@
             this.splitAiChat.Panel2.Controls.Add(this.panel1);
             this.splitAiChat.Panel2MinSize = 40;
             this.splitAiChat.Size = new System.Drawing.Size(497, 470);
-            this.splitAiChat.SplitterDistance = 347;
+            this.splitAiChat.SplitterDistance = 343;
             this.splitAiChat.SplitterWidth = 8;
             this.splitAiChat.TabIndex = 13;
             // 
@@ -98,7 +98,7 @@
             this.panAiConversation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panAiConversation.Location = new System.Drawing.Point(0, 0);
             this.panAiConversation.Name = "panAiConversation";
-            this.panAiConversation.Size = new System.Drawing.Size(497, 347);
+            this.panAiConversation.Size = new System.Drawing.Size(497, 343);
             this.panAiConversation.TabIndex = 0;
             // 
             // txtAiChatAsk
@@ -108,7 +108,7 @@
             this.txtAiChatAsk.Multiline = true;
             this.txtAiChatAsk.Name = "txtAiChatAsk";
             this.txtAiChatAsk.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAiChatAsk.Size = new System.Drawing.Size(451, 115);
+            this.txtAiChatAsk.Size = new System.Drawing.Size(451, 119);
             this.txtAiChatAsk.TabIndex = 1;
             this.txtAiChatAsk.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtAiChatAsk_KeyDown);
             // 
@@ -122,7 +122,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel1.Location = new System.Drawing.Point(451, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(46, 115);
+            this.panel1.Size = new System.Drawing.Size(46, 119);
             this.panel1.TabIndex = 0;
             // 
             // picBtnCopy

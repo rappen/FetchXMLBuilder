@@ -31,7 +31,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         public void SetExecuteResponse(Exception ex)
         {
-            chatHistory.Add(ChatRole.User, $"An error occured, please solve it:{Environment.NewLine}{ex.Message}", false);
+            chatHistory.Add(ChatRole.System, $"I got an error, please solve it:{Environment.NewLine}{ex.Message}", false);
         }
 
         private void AiChatControl_DockStateChanged(object sender, EventArgs e)
