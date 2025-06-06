@@ -29,6 +29,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             chatHistory = new ChatMessageHistory(panAiConversation);
         }
 
+        private void AiChatControl_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            chatHistory.Save(Paths.LogsPath, "FXB");
+        }
+
         public void SetExecuteResponse(Exception ex)
         {
             chatHistory.Add(ChatRole.System, $"I got an error, please solve it:{Environment.NewLine}{ex.Message}", false);
@@ -52,10 +57,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             SendChatToAI(txtAiChatAsk.Text);
         }
 
-        private async void SendChatToAI(string text)
+        private void SendChatToAI(string text)
         {
-            // Get the current FetchXml query.
-            string currentFetchXml = fxb.dockControlBuilder?.GetFetchString(true, false);
             var supplier = OnlineSettings.Instance.AiSupported.Supplier(fxb.settings.AiSettings.Supplier);
             if (supplier == null)
             {
@@ -69,6 +72,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 return;
             }
 
+            var currentFetchXml = fxb.dockControlBuilder?.GetFetchString(true, false);
             var intro = "You are an agent that helps the user interact with Dataverse using FetchXml queries. The user describes the query he want to do in natural language, and you create a FetchXml query based on the users's description. Your answers are short and to the point. When asked to explain a query, you summarize the meaning of the query in a short text, don't talk about fields and operators. Don't execute the ExecuteFetchXmlRequest tool before asking the user if he wants to execute it. The current FetchXml we are working with is " + currentFetchXml;
 
             AiCommunication.CallingAI(text, intro, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXmlRequest, SetQueryFromAi);
@@ -113,14 +117,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        private void picBtnYes_Click(object sender, EventArgs e)
+        private void picBtnYes_Click(object sender = null, EventArgs e = null)
         {
-            SendChatToAI("Yes please!");
-        }
-
-        private void picBtnNo_Click(object sender, EventArgs e)
-        {
-            SendChatToAI("Thanks, but no.");
+            SendChatToAI("Please execute my Fetch XML query!");
         }
 
         private void picBtnSettings_Click(object sender, EventArgs e)
@@ -132,11 +131,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             if (e.KeyCode == Keys.Enter && e.Control)
             {
+                e.Handled = true;
                 SendChatToAI(txtAiChatAsk.Text);
             }
             else if (e.KeyCode == Keys.Y && e.Control)
             {
-                SendChatToAI("Yes please!");
+                e.Handled = true;
+                picBtnYes_Click();
             }
         }
 
@@ -147,9 +148,27 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             fxb.WorkAsync(new WorkAsyncInfo { Message = "Copying!", Work = (w, a) => { Thread.Sleep(500); } });
         }
 
-        private void AiChatControl_FormClosing(object sender, FormClosingEventArgs e)
+        private void picBtnReset_Click(object sender, EventArgs e)
         {
-            chatHistory.Save(Paths.LogsPath, "FXB");
+            if (MessageBoxEx.Show(this, "Are you sure you want to clear the AI chat history?\nIt won't know your name anymore...", "Reset AI Chat", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                chatHistory.Save(Paths.LogsPath, "FXB");
+                chatHistory.Restart();
+            }
+        }
+
+        private void picBtnSave_Click(object sender, EventArgs e)
+        {
+            var sfd = new SaveFileDialog
+            {
+                Title = "Select a location to save your dialog",
+                Filter = "Text file (*.txt)|*.txt",
+            };
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                chatHistory.Save(sfd.FileName);
+                MessageBoxEx.Show(this, $"Chat history saved to {sfd.FileName}", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 

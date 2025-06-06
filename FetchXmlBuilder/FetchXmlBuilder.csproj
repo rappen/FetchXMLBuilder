@@ -786,6 +786,18 @@
   <ItemGroup>
     <None Include="Resources\icon-copy-16.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon-send-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon-send2-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon-reset-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon-paste-16.png" />
+  </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />
   <Import Project="..\MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutoComplete.projitems" Label="Shared" />

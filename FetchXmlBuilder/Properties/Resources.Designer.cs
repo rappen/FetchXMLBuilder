@@ -313,6 +313,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icon_paste_16 {
+            get {
+                object obj = ResourceManager.GetObject("icon-paste-16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icon_powerplatform {
             get {
                 object obj = ResourceManager.GetObject("icon-powerplatform", resourceCulture);
@@ -393,6 +403,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icon_reset_16 {
+            get {
+                object obj = ResourceManager.GetObject("icon-reset-16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icon_result {
             get {
                 object obj = ResourceManager.GetObject("icon-result", resourceCulture);
@@ -453,9 +473,29 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icon_send_32 {
+            get {
+                object obj = ResourceManager.GetObject("icon-send-32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icon_send_back {
             get {
                 object obj = ResourceManager.GetObject("icon-send-back", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icon_send2_32 {
+            get {
+                object obj = ResourceManager.GetObject("icon-send2-32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
