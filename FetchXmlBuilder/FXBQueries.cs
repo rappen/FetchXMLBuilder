@@ -343,6 +343,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                         SendMessageToStatusBar(this, new StatusBarMessageEventArgs($"Error: {completedargs.Error.Message}"));
                         if (CallFromAi)
                         {
+                            //throw completedargs.Error;
                             dockControlAiChat?.SetExecuteResponse(completedargs.Error);
                         }
                         else
