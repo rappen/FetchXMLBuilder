@@ -27,6 +27,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             ChatMessageHistory.AssistansTextColor = OnlineSettings.Instance.Colors.Dark;
             ChatMessageHistory.AssistansBackgroundColor = OnlineSettings.Instance.Colors.Bright;
             chatHistory = new ChatMessageHistory(panAiConversation);
+            EnableButtons();
         }
 
         private void AiChatControl_FormClosing(object sender, FormClosingEventArgs e)
@@ -52,13 +53,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        private void btnAiChatAsk_Click(object sender, EventArgs e)
-        {
-            SendChatToAI(txtAiChatAsk.Text);
-        }
-
         private void SendChatToAI(string text)
         {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                MessageBoxEx.Show(this, "Please enter a question or request.", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
             var supplier = OnlineSettings.Instance.AiSupported.Supplier(fxb.settings.AiSettings.Supplier);
             if (supplier == null)
             {
@@ -78,6 +79,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             AiCommunication.CallingAI(text, intro, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXmlRequest, SetQueryFromAi);
 
             txtAiChatAsk.Clear();
+            EnableButtons();
+        }
+
+        private void EnableButtons()
+        {
+            btnAiChatAsk.Enabled = !string.IsNullOrWhiteSpace(txtAiChatAsk.Text);
+            btnCopy.Enabled = chatHistory.Messages.Count > 0;
+            btnSave.Enabled = chatHistory.Messages.Count > 0;
         }
 
         [Description("Executes a FetchXmlRequest")]
@@ -117,19 +126,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        private void picBtnYes_Click(object sender = null, EventArgs e = null)
+        private void txtAiChatAsk_TextChanged(object sender, EventArgs e)
         {
-            SendChatToAI("Please execute my Fetch XML query!");
-        }
-
-        private void picBtnSettings_Click(object sender, EventArgs e)
-        {
-            fxb.ShowSettings("tabAiChat");
+            EnableButtons();
         }
 
         private void txtAiChatAsk_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter && e.Control)
+            if (e.KeyCode == Keys.Enter && e.Control && !string.IsNullOrWhiteSpace(txtAiChatAsk.Text))
             {
                 e.Handled = true;
                 SendChatToAI(txtAiChatAsk.Text);
@@ -137,27 +141,38 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             else if (e.KeyCode == Keys.Y && e.Control)
             {
                 e.Handled = true;
-                picBtnYes_Click();
+                btnYes_Click();
             }
         }
 
-        private void picBtnCopy_Click(object sender, EventArgs e)
+        private void btnAiChatAsk_Click(object sender, EventArgs e)
+        {
+            SendChatToAI(txtAiChatAsk.Text);
+        }
+
+        private void btnYes_Click(object sender = null, EventArgs e = null)
+        {
+            SendChatToAI("Please execute the FetchXml query!");
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            if (MessageBoxEx.Show(this, "Are you sure you want to clear the AI chat history?\nIt won't know your name anymore...", "Reset AI Chat", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                chatHistory.Save(Paths.LogsPath, "FXB");
+                chatHistory.Restart();
+                EnableButtons();
+            }
+        }
+
+        private void btnCopy_Click(object sender, EventArgs e)
         {
             var chat = chatHistory.ToString();
             Clipboard.SetText(chat);
             fxb.WorkAsync(new WorkAsyncInfo { Message = "Copying!", Work = (w, a) => { Thread.Sleep(500); } });
         }
 
-        private void picBtnReset_Click(object sender, EventArgs e)
-        {
-            if (MessageBoxEx.Show(this, "Are you sure you want to clear the AI chat history?\nIt won't know your name anymore...", "Reset AI Chat", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                chatHistory.Save(Paths.LogsPath, "FXB");
-                chatHistory.Restart();
-            }
-        }
-
-        private void picBtnSave_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
             var sfd = new SaveFileDialog
             {
@@ -169,6 +184,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 chatHistory.Save(sfd.FileName);
                 MessageBoxEx.Show(this, $"Chat history saved to {sfd.FileName}", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            fxb.ShowSettings("tabAiChat");
         }
     }
 
