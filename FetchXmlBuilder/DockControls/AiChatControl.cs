@@ -68,7 +68,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
 
             var currentFetchXml = fxb.dockControlBuilder?.GetFetchString(true, false);
-            var intro = "You are an agent that helps the user interact with Dataverse using FetchXML queries. The user describes the query he want to do in natural language, and you create a FetchXML query based on the users's description. Your answers are short and to the point. When asked to explain a query, you summarize the meaning of the query in a short text, don't talk about fields and operators. Don't execute the Executes FetchXML Query tool before asking the user if he wants to execute it. The current FetchXML we are working with is:\n" + currentFetchXml;
+            var intro = "You are an agent that helps the user interact with Dataverse using FetchXML queries. The user describes the query he want to do in natural language, and you create a FetchXML query based on the users's description. Your answers are short and to the point. When asked to explain a query, you summarize the meaning of the query in a short text, don't talk about fields and operators. Don't execute the Executes FetchXML Query tool before asking the user if he wants to execute it. When the Executes FetchXML Query tool is executed, the result will be show in the UI if there were no errors. The current FetchXML we are working with is:\n" + currentFetchXml;
 
             AiCommunication.CallingAI(text, intro, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXMLQuery, SetQueryFromAi);
 
