@@ -35,6 +35,7 @@
             this.txtAiChatAsk = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.btnExecute = new System.Windows.Forms.Button();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCopy = new System.Windows.Forms.Button();
@@ -82,7 +83,7 @@
             this.splitAiChat.Panel2.Controls.Add(this.panel1);
             this.splitAiChat.Panel2MinSize = 40;
             this.splitAiChat.Size = new System.Drawing.Size(497, 470);
-            this.splitAiChat.SplitterDistance = 340;
+            this.splitAiChat.SplitterDistance = 336;
             this.splitAiChat.SplitterWidth = 8;
             this.splitAiChat.TabIndex = 13;
             // 
@@ -95,7 +96,7 @@
             this.panAiConversation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panAiConversation.Location = new System.Drawing.Point(0, 0);
             this.panAiConversation.Name = "panAiConversation";
-            this.panAiConversation.Size = new System.Drawing.Size(497, 340);
+            this.panAiConversation.Size = new System.Drawing.Size(497, 336);
             this.panAiConversation.TabIndex = 0;
             // 
             // txtAiChatAsk
@@ -105,7 +106,7 @@
             this.txtAiChatAsk.Multiline = true;
             this.txtAiChatAsk.Name = "txtAiChatAsk";
             this.txtAiChatAsk.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAiChatAsk.Size = new System.Drawing.Size(445, 122);
+            this.txtAiChatAsk.Size = new System.Drawing.Size(445, 126);
             this.txtAiChatAsk.TabIndex = 1;
             this.txtAiChatAsk.TextChanged += new System.EventHandler(this.txtAiChatAsk_TextChanged);
             this.txtAiChatAsk.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtAiChatAsk_KeyDown);
@@ -113,6 +114,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.Window;
+            this.panel1.Controls.Add(this.btnExecute);
             this.panel1.Controls.Add(this.btnSettings);
             this.panel1.Controls.Add(this.btnSave);
             this.panel1.Controls.Add(this.btnCopy);
@@ -122,8 +124,19 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel1.Location = new System.Drawing.Point(445, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(52, 122);
+            this.panel1.Size = new System.Drawing.Size(52, 126);
             this.panel1.TabIndex = 0;
+            // 
+            // btnExecute
+            // 
+            this.btnExecute.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_play_16;
+            this.btnExecute.Location = new System.Drawing.Point(25, 51);
+            this.btnExecute.Name = "btnExecute";
+            this.btnExecute.Size = new System.Drawing.Size(22, 22);
+            this.btnExecute.TabIndex = 2;
+            this.toolTip1.SetToolTip(this.btnExecute, "Execute the query!");
+            this.btnExecute.UseVisualStyleBackColor = true;
+            this.btnExecute.Click += new System.EventHandler(this.btnExecute_Click);
             // 
             // btnSettings
             // 
@@ -131,7 +144,7 @@
             this.btnSettings.Location = new System.Drawing.Point(25, 95);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(22, 22);
-            this.btnSettings.TabIndex = 4;
+            this.btnSettings.TabIndex = 6;
             this.toolTip1.SetToolTip(this.btnSettings, "Open Settings regarding the AI Chat");
             this.btnSettings.UseVisualStyleBackColor = true;
             this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
@@ -142,7 +155,7 @@
             this.btnSave.Location = new System.Drawing.Point(25, 73);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(22, 22);
-            this.btnSave.TabIndex = 3;
+            this.btnSave.TabIndex = 4;
             this.toolTip1.SetToolTip(this.btnSave, "Save all communication with the robot");
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -153,7 +166,7 @@
             this.btnCopy.Location = new System.Drawing.Point(3, 73);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(22, 22);
-            this.btnCopy.TabIndex = 2;
+            this.btnCopy.TabIndex = 3;
             this.toolTip1.SetToolTip(this.btnCopy, "Copy all conversation with the robot");
             this.btnCopy.UseVisualStyleBackColor = true;
             this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
@@ -161,10 +174,10 @@
             // btnReset
             // 
             this.btnReset.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_reset_16;
-            this.btnReset.Location = new System.Drawing.Point(25, 51);
+            this.btnReset.Location = new System.Drawing.Point(3, 95);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(22, 22);
-            this.btnReset.TabIndex = 1;
+            this.btnReset.TabIndex = 5;
             this.toolTip1.SetToolTip(this.btnReset, "Reset all chat dialog");
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
@@ -175,7 +188,7 @@
             this.btnYes.Location = new System.Drawing.Point(3, 51);
             this.btnYes.Name = "btnYes";
             this.btnYes.Size = new System.Drawing.Size(22, 22);
-            this.btnYes.TabIndex = 0;
+            this.btnYes.TabIndex = 1;
             this.toolTip1.SetToolTip(this.btnYes, "Yes please!\r\n<CTRL>+Y");
             this.btnYes.UseVisualStyleBackColor = true;
             this.btnYes.Click += new System.EventHandler(this.btnYes_Click);
@@ -231,5 +244,6 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCopy;
         private System.Windows.Forms.Button btnReset;
+        private System.Windows.Forms.Button btnExecute;
     }
 }

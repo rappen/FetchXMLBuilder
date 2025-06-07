@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.AI;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Rappen.AI.WinForm;
 using Rappen.XTB.FXB.Settings;
 using System;
@@ -33,11 +32,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void AiChatControl_FormClosing(object sender, FormClosingEventArgs e)
         {
             chatHistory.Save(Paths.LogsPath, "FXB");
-        }
-
-        public void SetExecuteResponse(Exception ex)
-        {
-            chatHistory.Add(ChatRole.System, $"I got an error, please solve it:{Environment.NewLine}{ex.Message}", false);
         }
 
         private void AiChatControl_DockStateChanged(object sender, EventArgs e)
@@ -74,9 +68,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
 
             var currentFetchXml = fxb.dockControlBuilder?.GetFetchString(true, false);
-            var intro = "You are an agent that helps the user interact with Dataverse using FetchXml queries. The user describes the query he want to do in natural language, and you create a FetchXml query based on the users's description. Your answers are short and to the point. When asked to explain a query, you summarize the meaning of the query in a short text, don't talk about fields and operators. Don't execute the ExecuteFetchXmlRequest tool before asking the user if he wants to execute it. The current FetchXml we are working with is " + currentFetchXml;
+            var intro = "You are an agent that helps the user interact with Dataverse using FetchXML queries. The user describes the query he want to do in natural language, and you create a FetchXML query based on the users's description. Your answers are short and to the point. When asked to explain a query, you summarize the meaning of the query in a short text, don't talk about fields and operators. Don't execute the Executes FetchXML Query tool before asking the user if he wants to execute it. The current FetchXML we are working with is:\n" + currentFetchXml;
 
-            AiCommunication.CallingAI(text, intro, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXmlRequest, SetQueryFromAi);
+            AiCommunication.CallingAI(text, intro, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXMLQuery, SetQueryFromAi);
 
             txtAiChatAsk.Clear();
             EnableButtons();
@@ -89,19 +83,31 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             btnSave.Enabled = chatHistory.Messages.Count > 0;
         }
 
-        [Description("Executes a FetchXmlRequest")]
-        private string ExecuteFetchXmlRequest([Description("The FetchXmlRequest To Execute. This is the current FetchXml, as specified by the system prompt.")] string fetchXml)
+        [Description("Executes FetchXML Query")]
+        private string ExecuteFetchXMLQuery([Description("The FetchXML Query to be Executed. This is the current FetchXML, as specified by the system prompt.")] string fetchXml)
         {
-            MethodInvoker mi = delegate
+            try
             {
-                try
+                SetQueryFromAi(fetchXml);
+                var result = fxb.RetrieveMultipleSync(fetchXml, null, null);
+                fxb.HandleRetrieveMultipleResult(result);
+                return "Query executed successfully";
+            }
+            catch (Exception ex)
+            {
+                return $"Error executing query: {ex.Message}";
+            }
+        }
+
+        private void SetQueryFromAi(string response)
+        {
+            MethodInvoker mi = () =>
+            {
+                txtAiChatAsk.Clear();
+                var pattern = @"<fetch\b.*?</fetch>";
+                if (Regex.Matches(response, pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase) is MatchCollection matches && matches.Count > 0)
                 {
-                    SetQueryFromAi(fetchXml);
-                    fxb.FetchResults(fetchXml, true);
-                }
-                catch
-                {
-                    // Now what?
+                    fxb.dockControlBuilder.Init(matches[0].Value, null, false, "Query from AI", true);
                 }
             };
             if (InvokeRequired)
@@ -111,18 +117,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             else
             {
                 mi();
-            }
-
-            return "Query executed successfully";
-        }
-
-        private void SetQueryFromAi(string response)
-        {
-            txtAiChatAsk.Clear();
-            var pattern = @"<fetch\b.*?</fetch>";
-            if (Regex.Matches(response, pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase) is MatchCollection matches && matches.Count > 0)
-            {
-                fxb.dockControlBuilder.Init(matches[0].Value, null, false, "Query from AI", true);
             }
         }
 
@@ -152,17 +146,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void btnYes_Click(object sender = null, EventArgs e = null)
         {
-            SendChatToAI("Please execute the FetchXml query!");
+            SendChatToAI("Yes please!");
         }
 
-        private void btnReset_Click(object sender, EventArgs e)
+        private void btnExecute_Click(object sender, EventArgs e)
         {
-            if (MessageBoxEx.Show(this, "Are you sure you want to clear the AI chat history?\nIt won't know your name anymore...", "Reset AI Chat", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                chatHistory.Save(Paths.LogsPath, "FXB");
-                chatHistory.Restart();
-                EnableButtons();
-            }
+            SendChatToAI("Please execute the FetchXML query!");
         }
 
         private void btnCopy_Click(object sender, EventArgs e)
@@ -183,6 +172,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 chatHistory.Save(sfd.FileName);
                 MessageBoxEx.Show(this, $"Chat history saved to {sfd.FileName}", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            if (MessageBoxEx.Show(this, "Are you sure you want to clear the AI chat history?\nIt won't know your name anymore...", "Reset AI Chat", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                chatHistory.Save(Paths.LogsPath, "FXB");
+                chatHistory.Restart();
+                EnableButtons();
             }
         }
 
