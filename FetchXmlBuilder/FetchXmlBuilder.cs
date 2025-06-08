@@ -781,7 +781,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             ShowContentControl(ref dockControlSQL, ContentType.SQL_Query, SaveFormat.SQL, settings.DockStates.SQLQuery);
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
+        private void tsmiAiChat_Click(object sender, EventArgs e)
         {
             ShowAiChatControl();
         }

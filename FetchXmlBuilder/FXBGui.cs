@@ -956,17 +956,31 @@ namespace Rappen.XTB.FetchXmlBuilder
             ShowContentControl(ref dockControlLayoutXml, ContentType.LayoutXML, SaveFormat.None, settings.DockStates.LayoutXML);
         }
 
-        internal void ShowAiChatControl()
+        internal void ShowAiChatControl(bool dontask = false)
         {
-            LogUse("Show-AiChat");
-            if (dockControlAiChat?.IsDisposed != false)
+            if ((string.IsNullOrEmpty(settings.AiSettings?.Supplier) ||
+                 string.IsNullOrEmpty(settings.AiSettings?.Model)) &&
+                 !dontask)
             {
-                dockControlAiChat = new AiChatControl(this);
-                dockControlAiChat.Show(dockContainer, DockState.DockRight);
+                if (MessageBoxEx.Show(this, "AI Chat is missing some setting, please add them!", "AI Chat", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                {
+                    ShowSettings("tabAiChat");
+                    ShowAiChatControl(true);
+                }
             }
-            else
+            if (!string.IsNullOrEmpty(settings.AiSettings?.Supplier) &&
+                !string.IsNullOrEmpty(settings.AiSettings?.Model))
             {
-                dockControlAiChat.EnsureVisible(dockContainer, DockState.DockRight);
+                LogUse("Show-AiChat");
+                if (dockControlAiChat?.IsDisposed != false)
+                {
+                    dockControlAiChat = new AiChatControl(this);
+                    dockControlAiChat.Show(dockContainer, DockState.DockRight);
+                }
+                else
+                {
+                    dockControlAiChat.EnsureVisible(dockContainer, DockState.DockRight);
+                }
             }
         }
 
