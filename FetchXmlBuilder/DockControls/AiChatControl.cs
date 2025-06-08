@@ -20,7 +20,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             fxb = fetchXmlBuilder;
             InitializeComponent();
-            TabText = Text;
+            SetTitle();
             ChatMessageHistory.UserTextColor = OnlineSettings.Instance.Colors.Bright;
             ChatMessageHistory.UserBackgroundColor = OnlineSettings.Instance.Colors.Medium;
             ChatMessageHistory.AssistansTextColor = OnlineSettings.Instance.Colors.Dark;
@@ -34,7 +34,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             chatHistory.Save(Paths.LogsPath, "FXB");
             chatHistory = new ChatMessageHistory(panAiConversation, fxb.settings.AiSettings.Supplier, "");
             chatHistory.Restart();
+            SetTitle();
             EnableButtons();
+        }
+
+        private void SetTitle()
+        {
+            Text = $"AI Chat - {fxb.settings.AiSettings.Supplier} - {fxb.settings.AiSettings.Model}";
+            TabText = Text;
         }
 
         private void AiChatControl_FormClosing(object sender, FormClosingEventArgs e)
