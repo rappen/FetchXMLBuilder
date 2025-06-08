@@ -231,6 +231,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 LogUse("SaveOptions");
                 var oldtrycachemetadata = settings.TryMetadataCache;
+                var oldaisetting = settings.AiSettings.Supplier + settings.AiSettings.Model;
                 settings = settingDlg.GetSettings();
                 if (Service != null)
                 {
@@ -266,6 +267,10 @@ namespace Rappen.XTB.FetchXmlBuilder
                 if (dockControlLayoutXml?.Visible == true && !settings.Results.WorkWithLayout)
                 {
                     dockControlLayoutXml.PanelPane?.CloseActiveContent();
+                }
+                if (oldaisetting != settings.AiSettings.Supplier + settings.AiSettings.Model)
+                {
+                    dockControlAiChat?.Reset();
                 }
                 EnableControls();
             }

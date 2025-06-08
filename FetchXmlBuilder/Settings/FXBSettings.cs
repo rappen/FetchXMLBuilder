@@ -56,6 +56,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool AlwaysShowAggregationProperties { get; set; } = false;
         public CodeGenerators CodeGenerators { get; set; } = new CodeGenerators();
         public AiSettings AiSettings { get; set; } = new AiSettings();
+        public List<AiSettings> AiSettingsList { get; set; } = new List<AiSettings>();
     }
 
     public class ExecuteOptions
