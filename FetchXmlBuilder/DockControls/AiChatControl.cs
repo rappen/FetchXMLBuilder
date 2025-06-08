@@ -25,13 +25,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             ChatMessageHistory.UserBackgroundColor = OnlineSettings.Instance.Colors.Medium;
             ChatMessageHistory.AssistansTextColor = OnlineSettings.Instance.Colors.Dark;
             ChatMessageHistory.AssistansBackgroundColor = OnlineSettings.Instance.Colors.Bright;
-            chatHistory = new ChatMessageHistory(panAiConversation);
+            chatHistory = new ChatMessageHistory(panAiConversation, fxb.settings.AiSettings.Supplier, fxb.settings.AiSettings.CallMe);
             EnableButtons();
         }
 
         internal void Reset()
         {
             chatHistory.Save(Paths.LogsPath, "FXB");
+            chatHistory = new ChatMessageHistory(panAiConversation, fxb.settings.AiSettings.Supplier, "");
             chatHistory.Restart();
             EnableButtons();
         }
@@ -58,25 +59,35 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             if (string.IsNullOrWhiteSpace(text))
             {
-                MessageBoxEx.Show(this, "Please enter a question or request.", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBoxEx.Show(fxb, "Please enter a question or request.", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            var supplier = OnlineSettings.Instance.AiSupported.Supplier(fxb.settings.AiSettings.Supplier);
+            var supplier = OnlineSettings.Instance.AiSuppliers.Supplier(fxb.settings.AiSettings.Supplier);
             if (supplier == null)
             {
-                MessageBoxEx.Show(this, "No AI supplier found", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (MessageBoxEx.Show(fxb, "No AI supplier found.\nAdd it in the setting!", "AI Chat", MessageBoxButtons.OKCancel, MessageBoxIcon.Error) == DialogResult.OK)
+                {
+                    fxb.ShowSettings("tabAiChat");
+                }
                 return;
             }
             var model = supplier.Model(fxb.settings.AiSettings.Model);
             if (model == null)
             {
-                MessageBoxEx.Show(this, "No AI model found", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (MessageBoxEx.Show(fxb, "No AI model found", "AI Chat", MessageBoxButtons.OKCancel, MessageBoxIcon.Error) == DialogResult.OK)
+                {
+                    fxb.ShowSettings("tabAiChat");
+                }
                 return;
             }
 
             var currentFetchXml = fxb.dockControlBuilder?.GetFetchString(true, false);
             var intro = "You are an agent that helps the user interact with Dataverse using FetchXML queries. The user describes the query he want to do in natural language, and you create a FetchXML query based on the users's description. Your answers are short and to the point. When asked to explain a query, you summarize the meaning of the query in a short text, don't talk about fields and operators. Don't execute the Executes FetchXML Query tool before asking the user if he wants to execute it. When the Executes FetchXML Query tool is executed, the result will be show in the UI if there were no errors. The current FetchXML we are working with is:\n" + currentFetchXml;
 
+            if (!string.IsNullOrWhiteSpace(fxb.settings.AiSettings.CallMe))
+            {
+                intro += $"{Environment.NewLine}Please always call me '{fxb.settings.AiSettings.CallMe}'.";
+            }
             AiCommunication.CallingAI(text, intro, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXMLQuery, SetQueryFromAi);
 
             txtAiChatAsk.Clear();
@@ -180,13 +191,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 chatHistory.Save(sfd.FileName);
-                MessageBoxEx.Show(this, $"Chat history saved to {sfd.FileName}", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBoxEx.Show(fxb, $"Chat history saved to {sfd.FileName}", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         private void btnReset_Click(object sender, EventArgs e)
         {
-            if (MessageBoxEx.Show(this, "Are you sure you want to clear the AI chat history?\nIt won't know your name anymore...", "Reset AI Chat", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBoxEx.Show(fxb, "Are you sure you want to clear the AI chat history?\nIt won't know your name anymore...", "Reset AI Chat", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 chatHistory.Save(Paths.LogsPath, "FXB");
                 chatHistory.Restart();
