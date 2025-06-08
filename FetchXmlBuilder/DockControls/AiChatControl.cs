@@ -29,6 +29,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             EnableButtons();
         }
 
+        internal void Reset()
+        {
+            chatHistory.Save(Paths.LogsPath, "FXB");
+            chatHistory.Restart();
+            EnableButtons();
+        }
+
         private void AiChatControl_FormClosing(object sender, FormClosingEventArgs e)
         {
             chatHistory.Save(Paths.LogsPath, "FXB");
@@ -79,8 +86,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void EnableButtons()
         {
             btnAiChatAsk.Enabled = !string.IsNullOrWhiteSpace(txtAiChatAsk.Text);
+            btnYes.Enabled = chatHistory.Messages.Count > 0;
             btnCopy.Enabled = chatHistory.Messages.Count > 0;
             btnSave.Enabled = chatHistory.Messages.Count > 0;
+            btnReset.Enabled = chatHistory.Messages.Count > 0;
         }
 
         [Description("Executes FetchXML Query")]
