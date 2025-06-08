@@ -400,11 +400,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             SetResultTypeMenu(settings.ExecuteOptions.ResultOutput);
             SetDisplayFriendlyRaw();
             dockControlBuilder.lblQAExpander.GroupBoxSetState(null, settings.QueryOptions.ShowQuickActions);
-            tsbAI.Visible = settings.AiSettings.Active;
-            if (!settings.AiSettings.Active)
-            {
-                dockControlAiChat?.Close();
-            }
         }
 
         /// <summary>Repopulate the entire tree from the xml document containing the FetchXML</summary>

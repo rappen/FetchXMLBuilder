@@ -644,7 +644,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiDisplayBoth});
             this.tsmiResultType.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_result;
             this.tsmiResultType.Name = "tsmiResultType";
-            this.tsmiResultType.Size = new System.Drawing.Size(199, 38);
+            this.tsmiResultType.Size = new System.Drawing.Size(183, 22);
             this.tsmiResultType.Text = "Result Type";
             // 
             // tsmiResultGridView
@@ -737,14 +737,14 @@ namespace Rappen.XTB.FetchXmlBuilder
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(196, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(180, 6);
             // 
             // tsmiShowFetchXML
             // 
             this.tsmiShowFetchXML.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_xml_homemade;
             this.tsmiShowFetchXML.Name = "tsmiShowFetchXML";
             this.tsmiShowFetchXML.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-            this.tsmiShowFetchXML.Size = new System.Drawing.Size(199, 38);
+            this.tsmiShowFetchXML.Size = new System.Drawing.Size(183, 22);
             this.tsmiShowFetchXML.Text = "FetchXML";
             this.tsmiShowFetchXML.Click += new System.EventHandler(this.tsmiShowFetchXML_Click);
             // 
@@ -753,7 +753,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowLayoutXML.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowLayoutXML.Image")));
             this.tsmiShowLayoutXML.Name = "tsmiShowLayoutXML";
             this.tsmiShowLayoutXML.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
-            this.tsmiShowLayoutXML.Size = new System.Drawing.Size(199, 38);
+            this.tsmiShowLayoutXML.Size = new System.Drawing.Size(183, 22);
             this.tsmiShowLayoutXML.Text = "LayoutXML";
             this.tsmiShowLayoutXML.Click += new System.EventHandler(this.tsmiShowLayoutXML_Click);
             // 
@@ -763,20 +763,20 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowMetadata.Name = "tsmiShowMetadata";
             this.tsmiShowMetadata.ShortcutKeyDisplayString = "";
             this.tsmiShowMetadata.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
-            this.tsmiShowMetadata.Size = new System.Drawing.Size(199, 38);
+            this.tsmiShowMetadata.Size = new System.Drawing.Size(183, 22);
             this.tsmiShowMetadata.Text = "Metadata";
             this.tsmiShowMetadata.Click += new System.EventHandler(this.tsmiShowMetadata_Click);
             // 
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(196, 6);
+            this.toolStripSeparator9.Size = new System.Drawing.Size(180, 6);
             // 
             // tsmiResetWindowLayout
             // 
             this.tsmiResetWindowLayout.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_reset;
             this.tsmiResetWindowLayout.Name = "tsmiResetWindowLayout";
-            this.tsmiResetWindowLayout.Size = new System.Drawing.Size(199, 38);
+            this.tsmiResetWindowLayout.Size = new System.Drawing.Size(183, 22);
             this.tsmiResetWindowLayout.Text = "Reset window layout";
             this.tsmiResetWindowLayout.Click += new System.EventHandler(this.tsmiResetWindowLayout_Click);
             // 
@@ -789,7 +789,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbAI.Size = new System.Drawing.Size(36, 36);
             this.tsbAI.Text = "AI";
             this.tsbAI.ToolTipText = "Open the AI Chat!";
-            this.tsbAI.Visible = false;
             this.tsbAI.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // tsbOptions
