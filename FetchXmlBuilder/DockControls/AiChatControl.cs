@@ -25,16 +25,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             ChatMessageHistory.UserBackgroundColor = OnlineSettings.Instance.Colors.Medium;
             ChatMessageHistory.AssistansTextColor = OnlineSettings.Instance.Colors.Dark;
             ChatMessageHistory.AssistansBackgroundColor = OnlineSettings.Instance.Colors.Bright;
-            chatHistory = new ChatMessageHistory(panAiConversation, fxb.settings.AiSettings.Supplier, fxb.settings.AiSettings.CallMe);
-            EnableButtons();
+            Initialize();
         }
 
-        internal void Reset()
+        internal void Initialize()
         {
-            chatHistory.Save(Paths.LogsPath, "FXB");
-            chatHistory = new ChatMessageHistory(panAiConversation, fxb.settings.AiSettings.Supplier, "");
-            chatHistory.Restart();
+            chatHistory?.Save(Paths.LogsPath, "FXB");
             SetTitle();
+            chatHistory = new ChatMessageHistory(panAiConversation, fxb.settings.AiSettings.Supplier, fxb.settings.AiSettings.CallMe);
             EnableButtons();
         }
 
@@ -89,14 +87,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
 
             var currentFetchXml = fxb.dockControlBuilder?.GetFetchString(true, false);
-            var intro = "You are an agent that helps the user interact with Dataverse using FetchXML queries. The user describes the query he want to do in natural language, and you create a FetchXML query based on the users's description. Your answers are short and to the point. When asked to explain a query, you summarize the meaning of the query in a short text, don't talk about fields and operators. Don't execute the Executes FetchXML Query tool before asking the user if he wants to execute it. When the Executes FetchXML Query tool is executed, the result will be show in the UI if there were no errors. The current FetchXML we are working with is:\n" + currentFetchXml;
+            var intro = supplier.GetSystemPrompt(currentFetchXml) + Environment.NewLine + supplier.GetCallMe(fxb.settings.AiSettings.CallMe).Trim();
 
-            if (!string.IsNullOrWhiteSpace(fxb.settings.AiSettings.CallMe))
-            {
-                intro += $"{Environment.NewLine}Please always call me '{fxb.settings.AiSettings.CallMe}'.";
-            }
             AiCommunication.CallingAI(text, intro, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXMLQuery, SetQueryFromAi);
 
+            txtUsage.Text = chatHistory.Usages.ToString();
             txtAiChatAsk.Clear();
             EnableButtons();
         }
@@ -204,11 +199,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void btnReset_Click(object sender, EventArgs e)
         {
-            if (MessageBoxEx.Show(fxb, "Are you sure you want to clear the AI chat history?\nIt won't know your name anymore...", "Reset AI Chat", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBoxEx.Show(fxb, "Are you sure you want to clear the AI chat history?", "Reset AI Chat", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                chatHistory.Save(Paths.LogsPath, "FXB");
-                chatHistory.Restart();
-                EnableButtons();
+                Initialize();
             }
         }
 
@@ -216,32 +209,5 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             fxb.ShowSettings("tabAiChat");
         }
-    }
-
-    public class InputSchema
-    {
-        [JsonProperty("type")]
-        public string Type { get; set; }
-
-        [JsonProperty("properties")]
-        public Dictionary<string, SchemaProperty> Properties { get; set; }
-
-        [JsonProperty("required")]
-        public List<string> Required { get; set; }
-
-        public InputSchema()
-        {
-            Properties = new Dictionary<string, SchemaProperty>();
-            Required = new List<string>();
-        }
-    }
-
-    public class SchemaProperty
-    {
-        [JsonProperty("type")]
-        public string Type { get; set; }
-
-        [JsonProperty("description")]
-        public string Description { get; set; }
     }
 }

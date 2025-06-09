@@ -34,7 +34,6 @@
             this.panAiConversation = new System.Windows.Forms.Panel();
             this.txtAiChatAsk = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnExecute = new System.Windows.Forms.Button();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
@@ -42,6 +41,8 @@
             this.btnReset = new System.Windows.Forms.Button();
             this.btnYes = new System.Windows.Forms.Button();
             this.btnAiChatAsk = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.txtUsage = new System.Windows.Forms.TextBox();
             this.panOData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitAiChat)).BeginInit();
             this.splitAiChat.Panel1.SuspendLayout();
@@ -80,10 +81,11 @@
             // 
             this.splitAiChat.Panel2.AutoScroll = true;
             this.splitAiChat.Panel2.Controls.Add(this.txtAiChatAsk);
+            this.splitAiChat.Panel2.Controls.Add(this.txtUsage);
             this.splitAiChat.Panel2.Controls.Add(this.panel1);
             this.splitAiChat.Panel2MinSize = 40;
             this.splitAiChat.Size = new System.Drawing.Size(497, 470);
-            this.splitAiChat.SplitterDistance = 336;
+            this.splitAiChat.SplitterDistance = 332;
             this.splitAiChat.SplitterWidth = 8;
             this.splitAiChat.TabIndex = 13;
             // 
@@ -96,7 +98,7 @@
             this.panAiConversation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panAiConversation.Location = new System.Drawing.Point(0, 0);
             this.panAiConversation.Name = "panAiConversation";
-            this.panAiConversation.Size = new System.Drawing.Size(497, 336);
+            this.panAiConversation.Size = new System.Drawing.Size(497, 332);
             this.panAiConversation.TabIndex = 0;
             // 
             // txtAiChatAsk
@@ -106,7 +108,7 @@
             this.txtAiChatAsk.Multiline = true;
             this.txtAiChatAsk.Name = "txtAiChatAsk";
             this.txtAiChatAsk.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAiChatAsk.Size = new System.Drawing.Size(445, 126);
+            this.txtAiChatAsk.Size = new System.Drawing.Size(445, 117);
             this.txtAiChatAsk.TabIndex = 1;
             this.txtAiChatAsk.TextChanged += new System.EventHandler(this.txtAiChatAsk_TextChanged);
             this.txtAiChatAsk.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtAiChatAsk_KeyDown);
@@ -124,7 +126,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel1.Location = new System.Drawing.Point(445, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(52, 126);
+            this.panel1.Size = new System.Drawing.Size(52, 130);
             this.panel1.TabIndex = 0;
             // 
             // btnExecute
@@ -205,6 +207,17 @@
             this.btnAiChatAsk.UseVisualStyleBackColor = true;
             this.btnAiChatAsk.Click += new System.EventHandler(this.btnAiChatAsk_Click);
             // 
+            // txtUsage
+            // 
+            this.txtUsage.BackColor = System.Drawing.SystemColors.Window;
+            this.txtUsage.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtUsage.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.txtUsage.Location = new System.Drawing.Point(0, 117);
+            this.txtUsage.Name = "txtUsage";
+            this.txtUsage.ReadOnly = true;
+            this.txtUsage.Size = new System.Drawing.Size(445, 13);
+            this.txtUsage.TabIndex = 2;
+            // 
             // AiChatControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -245,5 +258,6 @@
         private System.Windows.Forms.Button btnCopy;
         private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.Button btnExecute;
+        private System.Windows.Forms.TextBox txtUsage;
     }
 }

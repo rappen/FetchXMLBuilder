@@ -270,7 +270,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 }
                 if (oldaisetting != settings.AiSettings.Supplier + settings.AiSettings.Model)
                 {
-                    dockControlAiChat?.Reset();
+                    dockControlAiChat?.Initialize();
                 }
                 EnableControls();
             }
