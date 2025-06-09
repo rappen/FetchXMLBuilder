@@ -14,11 +14,15 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
     {
         private FetchXmlBuilder fxb;
         private ChatMessageHistory chatHistory;
+        private AiSupplier supplier;
+        private AiModel model;
 
         public AiChatControl(FetchXmlBuilder fetchXmlBuilder)
         {
             fxb = fetchXmlBuilder;
             InitializeComponent();
+            supplier = OnlineSettings.Instance.AiSuppliers.Supplier(fxb.settings.AiSettings.Supplier);
+            model = supplier.Model(fxb.settings.AiSettings.Model);
             SetTitle();
             ChatMessageHistory.UserTextColor = OnlineSettings.Instance.Colors.Bright;
             ChatMessageHistory.UserBackgroundColor = OnlineSettings.Instance.Colors.Medium;
@@ -31,7 +35,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             chatHistory?.Save(Paths.LogsPath, "FXB");
             SetTitle();
-            chatHistory = new ChatMessageHistory(panAiConversation, fxb.settings.AiSettings.Supplier, fxb.settings.AiSettings.CallMe);
+            chatHistory = new ChatMessageHistory(panAiConversation, supplier, model, fxb.settings.AiSettings.CallMe);
             EnableButtons();
         }
 
@@ -66,7 +70,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 MessageBoxEx.Show(fxb, "Please enter a question or request.", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            var supplier = OnlineSettings.Instance.AiSuppliers.Supplier(fxb.settings.AiSettings.Supplier);
             if (supplier == null)
             {
                 if (MessageBoxEx.Show(fxb, "No AI supplier found.\nAdd it in the setting!", "AI Chat", MessageBoxButtons.OKCancel, MessageBoxIcon.Error) == DialogResult.OK)
@@ -75,7 +78,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
                 return;
             }
-            var model = supplier.Model(fxb.settings.AiSettings.Model);
             if (model == null)
             {
                 if (MessageBoxEx.Show(fxb, "No AI model found", "AI Chat", MessageBoxButtons.OKCancel, MessageBoxIcon.Error) == DialogResult.OK)
