@@ -1,8 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.AI;
 using Rappen.AI.WinForm;
 using Rappen.XTB.FXB.Settings;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -89,10 +88,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var currentFetchXml = fxb.dockControlBuilder?.GetFetchString(true, false);
             var intro = supplier.GetSystemPrompt(currentFetchXml) + Environment.NewLine + supplier.GetCallMe(fxb.settings.AiSettings.CallMe).Trim();
 
-            AiCommunication.CallingAI(text, intro, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXMLQuery, SetQueryFromAi);
+            AiCommunication.CallingAI(text, intro, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXMLQuery, HandlingResponseFromAi);
 
-            txtUsage.Text = chatHistory.Usages.ToString();
-            txtAiChatAsk.Clear();
             EnableButtons();
         }
 
@@ -121,15 +118,28 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        private void SetQueryFromAi(string response)
+        private void HandlingResponseFromAi(ChatResponse response)
+        {
+            txtAiChatAsk.Clear();
+            txtUsage.Text = chatHistory.Responses.UsageToString();
+            var responseText = response.ToString();
+
+            var pattern = @"<fetch\b.*?</fetch>";
+            if (Regex.Matches(responseText, pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase) is MatchCollection matches && matches.Count > 0)
+            {
+                SetQueryFromAi(matches[0].Value);
+            }
+        }
+
+        private void SetQueryFromAi(string fetch)
         {
             MethodInvoker mi = () =>
             {
-                txtAiChatAsk.Clear();
-                var pattern = @"<fetch\b.*?</fetch>";
-                if (Regex.Matches(response, pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase) is MatchCollection matches && matches.Count > 0)
+                var currentfetch = Regex.Replace(fxb.dockControlBuilder?.GetFetchString(true, false), @"\s+", " ");
+                var newfetch = Regex.Replace(fetch, @"\s+", " ");
+                if (!currentfetch.Equals(newfetch))
                 {
-                    fxb.dockControlBuilder.Init(matches[0].Value, null, false, "Query from AI", true);
+                    fxb.dockControlBuilder.Init(fetch, null, false, "Query from AI", true);
                 }
             };
             if (InvokeRequired)
