@@ -19,29 +19,28 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         public AiChatControl(FetchXmlBuilder fetchXmlBuilder)
         {
-            fxb = fetchXmlBuilder;
-            InitializeComponent();
-            supplier = OnlineSettings.Instance.AiSuppliers.Supplier(fxb.settings.AiSettings.Supplier);
-            model = supplier.Model(fxb.settings.AiSettings.Model);
-            SetTitle();
             ChatMessageHistory.UserTextColor = OnlineSettings.Instance.Colors.Bright;
             ChatMessageHistory.UserBackgroundColor = OnlineSettings.Instance.Colors.Medium;
             ChatMessageHistory.AssistansTextColor = OnlineSettings.Instance.Colors.Dark;
             ChatMessageHistory.AssistansBackgroundColor = OnlineSettings.Instance.Colors.Bright;
+            fxb = fetchXmlBuilder;
+            InitializeComponent();
             Initialize();
         }
 
         internal void Initialize()
         {
             chatHistory?.Save(Paths.LogsPath, "FXB");
-            SetTitle();
+            supplier = OnlineSettings.Instance.AiSuppliers.Supplier(fxb.settings.AiSettings.Supplier);
+            model = supplier.Model(fxb.settings.AiSettings.Model);
             chatHistory = new ChatMessageHistory(panAiConversation, supplier, model, fxb.settings.AiSettings.CallMe);
+            SetTitle();
             EnableButtons();
         }
 
         private void SetTitle()
         {
-            Text = $"AI Chat - {fxb.settings.AiSettings.Supplier} - {fxb.settings.AiSettings.Model}";
+            Text = $"AI Chat - {fxb.settings.AiSettings.Supplier}";
             TabText = Text;
         }
 
