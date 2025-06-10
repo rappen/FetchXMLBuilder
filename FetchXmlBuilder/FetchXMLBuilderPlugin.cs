@@ -1,5 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using XrmToolBox.Constants;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
@@ -23,5 +28,246 @@ namespace Rappen.XTB.FetchXmlBuilder
         public override IXrmToolBoxPluginControl GetControl() => new FetchXmlBuilder();
 
         public override Guid GetId() => XrmToolBoxToolIds.FetchXMLBuilder;
+
+        public FetchXMLBuilderPlugin()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(AssemblyResolveEventHandler);
+        }
+
+        private Assembly AssemblyResolveEventHandler(object sender, ResolveEventArgs args)
+        {
+            Assembly loadAssembly = null;
+            Assembly currAssembly = Assembly.GetExecutingAssembly();
+
+            // Parse the assembly name to get individual components
+            var requestedAssemblyName = new AssemblyName(args.Name);
+            var assemblyName = requestedAssemblyName.Name;
+            var requestedVersion = requestedAssemblyName.Version;
+
+            Console.WriteLine($"Resolving: {assemblyName}, Version: {requestedVersion}");
+
+            // Define your binding redirects programmatically
+            var bindingRedirects = new Dictionary<string, BindingRedirect>
+    {
+        {
+            "Microsoft.Bcl.AsyncInterfaces",
+            new BindingRedirect
+            {
+                AssemblyName = "Microsoft.Bcl.AsyncInterfaces",
+                PublicKeyToken = "cc7b13ffcd2ddd51",
+                OldVersionMin = new Version("0.0.0.0"),
+                OldVersionMax = new Version("9.0.0.2"),
+                NewVersion = new Version("9.0.0.2")
+            }
+        },
+         {
+            "System.Text.Json",
+            new BindingRedirect
+            {
+                AssemblyName = "System.Text.Json",
+                PublicKeyToken = "cc7b13ffcd2ddd51",
+                OldVersionMin = new Version("0.0.0.0"),
+                OldVersionMax = new Version("9.0.0.2"),
+                NewVersion = new Version("9.0.0.2")
+            }
+        },
+         {
+            "System.Memory.Data",
+            new BindingRedirect
+            {
+                AssemblyName = "System.Memory.Data",
+                PublicKeyToken = "cc7b13ffcd2ddd51",
+                OldVersionMin = new Version("0.0.0.0"),
+                OldVersionMax = new Version("8.0.0.1"),
+                NewVersion = new Version("8.0.0.1")
+            }
+        },
+         {
+            "System.Diagnostics.DiagnosticSource",
+            new BindingRedirect
+            {
+                AssemblyName = "System.Diagnostics.DiagnosticSource",
+                PublicKeyToken = "cc7b13ffcd2ddd51",
+                OldVersionMin = new Version("0.0.0.0"),
+                OldVersionMax = new Version("8.0.0.1"),
+                NewVersion = new Version("8.0.0.1")
+            }
+        },
+         {
+            "System.Text.Encodings.Web",
+            new BindingRedirect
+            {
+                AssemblyName = "System.Text.Encodings.Web",
+                PublicKeyToken = "cc7b13ffcd2ddd51",
+                OldVersionMin = new Version("0.0.0.0"),
+                OldVersionMax = new Version("9.0.0.2"),
+                NewVersion = new Version("9.0.0.2")
+            }
+        },
+         {
+            "System.Buffers",
+            new BindingRedirect
+            {
+                AssemblyName = "System.Buffers",
+                PublicKeyToken = "cc7b13ffcd2ddd51",
+                OldVersionMin = new Version("0.0.0.0"),
+                OldVersionMax = new Version("4.0.3.0"),
+                NewVersion = new Version("4.0.3.0")
+            }
+        }
+        // Add more binding redirects as needed
+    };
+
+            // Check if this assembly needs a binding redirect
+            if (bindingRedirects.ContainsKey(assemblyName))
+            {
+                var redirect = bindingRedirects[assemblyName];
+
+                // Verify public key token matches (if specified)
+                if (!string.IsNullOrEmpty(redirect.PublicKeyToken))
+                {
+                    var requestedToken = BitConverter.ToString(requestedAssemblyName.GetPublicKeyToken() ?? new byte[0]).Replace("-", "").ToLower();
+                    if (requestedToken != redirect.PublicKeyToken.ToLower())
+                    {
+                        Console.WriteLine($"Public key token mismatch for {assemblyName}");
+                        return null;
+                    }
+                }
+
+                // Check if the requested version falls within the redirect range
+                if (requestedVersion >= redirect.OldVersionMin && requestedVersion <= redirect.OldVersionMax)
+                {
+                    Console.WriteLine($"Applying binding redirect: {assemblyName} {requestedVersion} -> {redirect.NewVersion}");
+
+                    // Try to load the redirected version
+                    loadAssembly = TryLoadAssemblyVersion(assemblyName, redirect.NewVersion, redirect.PublicKeyToken);
+
+                    if (loadAssembly != null)
+                    {
+                        Console.WriteLine($"Successfully loaded redirected assembly: {loadAssembly.FullName}");
+                        return loadAssembly;
+                    }
+                }
+            }
+
+            // Fall back to original logic if no binding redirect applies
+            List<AssemblyName> refAssemblies = currAssembly.GetReferencedAssemblies().ToList();
+            var refAssembly = refAssemblies.Where(a => a.Name == assemblyName).FirstOrDefault();
+
+            if (refAssembly != null)
+            {
+                string dir = Path.GetDirectoryName(currAssembly.Location).ToLower();
+                string folder = Path.GetFileNameWithoutExtension(currAssembly.Location);
+                dir = Path.Combine(dir, folder);
+                var assmbPath = Path.Combine(dir, $"{assemblyName}.dll");
+
+                if (File.Exists(assmbPath))
+                {
+                    loadAssembly = Assembly.LoadFrom(assmbPath);
+                    Console.WriteLine($"Loaded from fallback path: {assmbPath}");
+                }
+                else
+                {
+                    throw new FileNotFoundException($"Unable to locate dependency: {assmbPath}");
+                }
+            }
+
+            return loadAssembly;
+        }
+
+        private Assembly TryLoadAssemblyVersion(string assemblyName, Version targetVersion, string publicKeyToken)
+        {
+            try
+            {
+                // Method 1: Try to load from GAC or current context first
+                var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+                var existingAssembly = assemblies.FirstOrDefault(a =>
+                    a.GetName().Name == assemblyName &&
+                    a.GetName().Version >= targetVersion);
+
+                if (existingAssembly != null)
+                {
+                    return existingAssembly;
+                }
+
+                // Method 2: Try to construct full assembly name and load
+                var fullName = $"{assemblyName}, Version={targetVersion}, Culture=neutral";
+                if (!string.IsNullOrEmpty(publicKeyToken))
+                {
+                    fullName += $", PublicKeyToken={publicKeyToken}";
+                }
+
+                try
+                {
+                    return Assembly.Load(fullName);
+                }
+                catch (FileNotFoundException)
+                {
+                    // Method 3: Try loading from application directory
+                    Assembly currAssembly = Assembly.GetExecutingAssembly();
+                    string dir = Path.GetDirectoryName(currAssembly.Location);
+                    string folder = Path.GetFileNameWithoutExtension(currAssembly.Location);
+                    dir = Path.Combine(dir, folder);
+                    var assmbPath = Path.Combine(dir, $"{assemblyName}.dll");
+
+                    if (File.Exists(assmbPath))
+                    {
+                        var loadedAssembly = Assembly.LoadFrom(assmbPath);
+
+                        // Verify the loaded assembly version is compatible
+                        var loadedVersion = loadedAssembly.GetName().Version;
+                        if (loadedVersion >= targetVersion)
+                        {
+                            return loadedAssembly;
+                        }
+                    }
+
+                    // Method 4: Try common framework locations
+                    var frameworkPaths = new[]
+                    {
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet", "shared"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "dotnet", "shared"),
+                RuntimeEnvironment.GetRuntimeDirectory()
+            };
+
+                    foreach (var frameworkPath in frameworkPaths.Where(Directory.Exists))
+                    {
+                        var potentialPaths = Directory.GetFiles(frameworkPath, $"{assemblyName}.dll", SearchOption.AllDirectories);
+                        foreach (var path in potentialPaths)
+                        {
+                            try
+                            {
+                                var testAssembly = Assembly.LoadFrom(path);
+                                if (testAssembly.GetName().Version >= targetVersion)
+                                {
+                                    return testAssembly;
+                                }
+                            }
+                            catch
+                            {
+                                // Continue searching
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading assembly {assemblyName} version {targetVersion}: {ex.Message}");
+            }
+
+            return null;
+        }
+
+        // Helper class to define binding redirects
+        public class BindingRedirect
+        {
+            public string AssemblyName { get; set; }
+            public string PublicKeyToken { get; set; }
+            public Version OldVersionMin { get; set; }
+            public Version OldVersionMax { get; set; }
+            public Version NewVersion { get; set; }
+        }
+
     }
 }
