@@ -943,5 +943,16 @@ namespace Rappen.XTB.FetchXmlBuilder
         }
 
         #endregion Private Event Handlers
+
+        private void tsmiReloadMetadata_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Shall we reload all metadata?\n\nYes or No...", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+            {
+                if (MessageBox.Show("Reloading all metadata.\nIt may take a while... (10-300 secs)", "Reload metadata", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
+                {
+                    LoadEntities(true);
+                }
+            }
+        }
     }
 }
