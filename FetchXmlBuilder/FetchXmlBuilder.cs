@@ -1,6 +1,5 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.Properties;
 using McTools.Xrm.Connection;
-using Rappen.Xrm.FetchXmlBuilder.Models;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.Builder;
@@ -959,8 +958,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             RefreshMetadataOptions.Show(this, (bool ok, FilterSetting filter) =>
             {
                 if (!ok) return;
-                else if (filter.ShowAllSolutions && showConfirmBox()) LoadEntities(true);
-                else RefreshEntities(filter);
+                RefreshEntities(filter);
             });
         }
 
@@ -972,6 +970,22 @@ namespace Rappen.XTB.FetchXmlBuilder
                 {
                     LoadEntities(true);
                 }
+            }
+        }
+
+        private void tsmiReloadMetadata_Click(object sender, EventArgs e)
+        {
+            if (BaseCacheLoaded)
+            {
+                reloadBySolutionToolStripMenuItem.Enabled = true;
+                reloadBySolutionToolStripMenuItem.ToolTipText =
+                    "Refresh a subset of entities by unmanaged solutions, a specific solution, or a publisher. Much faster than a full cache refresh.";
+            }
+            else
+            {
+                reloadBySolutionToolStripMenuItem.Enabled = false;
+                reloadBySolutionToolStripMenuItem.ToolTipText =
+                    "No metadata loaded. Please refresh the full cache first to enable subset refresh.";
             }
         }
     }

@@ -103,6 +103,8 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSelect = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiReloadMetadata = new System.Windows.Forms.ToolStripMenuItem();
+            this.reloadAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reloadBySolutionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.tmsiShowReleaseNotes = new System.Windows.Forms.ToolStripMenuItem();
             this.tslAbout = new System.Windows.Forms.ToolStripLabel();
@@ -111,8 +113,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.dockContainer = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.reloadAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.reloadBySolutionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -820,6 +820,24 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiReloadMetadata.Name = "tsmiReloadMetadata";
             this.tsmiReloadMetadata.Size = new System.Drawing.Size(269, 38);
             this.tsmiReloadMetadata.Text = "Reload Metadata";
+            this.tsmiReloadMetadata.Click += new System.EventHandler(this.tsmiReloadMetadata_Click);
+            // 
+            // reloadAllToolStripMenuItem
+            // 
+            this.reloadAllToolStripMenuItem.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_dataverse;
+            this.reloadAllToolStripMenuItem.Name = "reloadAllToolStripMenuItem";
+            this.reloadAllToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
+            this.reloadAllToolStripMenuItem.Text = "Reload all";
+            this.reloadAllToolStripMenuItem.Click += new System.EventHandler(this.reloadAllToolStripMenuItem_Click);
+            // 
+            // reloadBySolutionToolStripMenuItem
+            // 
+            this.reloadBySolutionToolStripMenuItem.Enabled = false;
+            this.reloadBySolutionToolStripMenuItem.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_dataverse;
+            this.reloadBySolutionToolStripMenuItem.Name = "reloadBySolutionToolStripMenuItem";
+            this.reloadBySolutionToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
+            this.reloadBySolutionToolStripMenuItem.Text = "Reload by Solution";
+            this.reloadBySolutionToolStripMenuItem.Click += new System.EventHandler(this.reloadBySolutionToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
@@ -896,22 +914,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.dockContainer.Name = "dockContainer";
             this.dockContainer.Size = new System.Drawing.Size(1180, 360);
             this.dockContainer.TabIndex = 33;
-            // 
-            // reloadAllToolStripMenuItem
-            // 
-            this.reloadAllToolStripMenuItem.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_dataverse;
-            this.reloadAllToolStripMenuItem.Name = "reloadAllToolStripMenuItem";
-            this.reloadAllToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
-            this.reloadAllToolStripMenuItem.Text = "Reload all";
-            this.reloadAllToolStripMenuItem.Click += new System.EventHandler(this.reloadAllToolStripMenuItem_Click);
-            // 
-            // reloadBySolutionToolStripMenuItem
-            // 
-            this.reloadBySolutionToolStripMenuItem.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_dataverse;
-            this.reloadBySolutionToolStripMenuItem.Name = "reloadBySolutionToolStripMenuItem";
-            this.reloadBySolutionToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
-            this.reloadBySolutionToolStripMenuItem.Text = "Reload by Solution";
-            this.reloadBySolutionToolStripMenuItem.Click += new System.EventHandler(this.reloadBySolutionToolStripMenuItem_Click);
             // 
             // FetchXmlBuilder
             // 

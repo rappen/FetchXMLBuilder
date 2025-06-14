@@ -269,7 +269,6 @@
     <Compile Include="Forms\RefreshMetadataDialog.Designer.cs">
       <DependentUpon>RefreshMetadataDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\MetadataFilterOptions.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -2,7 +2,6 @@
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Metadata.Query;
-using Microsoft.Xrm.Sdk.Organization;
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Settings;
@@ -13,7 +12,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Windows.Forms;
-using System.Xml.Linq;
 using XrmToolBox.Extensibility;
 
 namespace Rappen.XTB.FetchXmlBuilder
@@ -24,6 +22,8 @@ namespace Rappen.XTB.FetchXmlBuilder
         private static List<string> entityShitList = new List<string>();
         internal List<Entity> solutionentities;
         internal List<Guid> solutionattributes;
+
+        internal bool BaseCacheLoaded => entities?.Count > 0;
 
         #region Internal Methods
 

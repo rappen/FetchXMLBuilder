@@ -33,6 +33,9 @@
             this.lblEntities = new System.Windows.Forms.Label();
             this.lblAttributes = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnOK = new System.Windows.Forms.Button();
             this.panSelectSolution = new System.Windows.Forms.Panel();
             this.chkShowAllSolutions = new System.Windows.Forms.CheckBox();
             this.xrmSolution = new Rappen.XTB.Helpers.Controls.XRMColumnLookup();
@@ -40,15 +43,11 @@
             this.rbSpecificPublisher = new System.Windows.Forms.RadioButton();
             this.rbSpecificSolution = new System.Windows.Forms.RadioButton();
             this.rbUnmanagedSolution = new System.Windows.Forms.RadioButton();
-            this.rbAllSolutions = new System.Windows.Forms.RadioButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.btnOK = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.panSelectSolution.SuspendLayout();
             this.panSolutions.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblEntities
@@ -81,6 +80,38 @@
             this.groupBox2.TabIndex = 10;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Filter by Solution";
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.btnCancel);
+            this.panel1.Controls.Add(this.btnOK);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(3, 85);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(471, 49);
+            this.panel1.TabIndex = 101;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(392, 19);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 1;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            // 
+            // btnOK
+            // 
+            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnOK.Location = new System.Drawing.Point(311, 19);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.TabIndex = 0;
+            this.btnOK.Text = "OK";
+            this.btnOK.UseVisualStyleBackColor = true;
             // 
             // panSelectSolution
             // 
@@ -125,7 +156,6 @@
             this.panSolutions.Controls.Add(this.rbSpecificPublisher);
             this.panSolutions.Controls.Add(this.rbSpecificSolution);
             this.panSolutions.Controls.Add(this.rbUnmanagedSolution);
-            this.panSolutions.Controls.Add(this.rbAllSolutions);
             this.panSolutions.Location = new System.Drawing.Point(6, 19);
             this.panSolutions.Name = "panSolutions";
             this.panSolutions.Size = new System.Drawing.Size(465, 26);
@@ -134,7 +164,7 @@
             // rbSpecificPublisher
             // 
             this.rbSpecificPublisher.AutoSize = true;
-            this.rbSpecificPublisher.Location = new System.Drawing.Point(313, 3);
+            this.rbSpecificPublisher.Location = new System.Drawing.Point(225, 3);
             this.rbSpecificPublisher.Name = "rbSpecificPublisher";
             this.rbSpecificPublisher.Size = new System.Drawing.Size(109, 17);
             this.rbSpecificPublisher.TabIndex = 3;
@@ -145,7 +175,7 @@
             // rbSpecificSolution
             // 
             this.rbSpecificSolution.AutoSize = true;
-            this.rbSpecificSolution.Location = new System.Drawing.Point(203, 3);
+            this.rbSpecificSolution.Location = new System.Drawing.Point(115, 3);
             this.rbSpecificSolution.Name = "rbSpecificSolution";
             this.rbSpecificSolution.Size = new System.Drawing.Size(104, 17);
             this.rbSpecificSolution.TabIndex = 2;
@@ -156,58 +186,15 @@
             // rbUnmanagedSolution
             // 
             this.rbUnmanagedSolution.AutoSize = true;
-            this.rbUnmanagedSolution.Location = new System.Drawing.Point(100, 3);
+            this.rbUnmanagedSolution.Checked = true;
+            this.rbUnmanagedSolution.Location = new System.Drawing.Point(12, 3);
             this.rbUnmanagedSolution.Name = "rbUnmanagedSolution";
             this.rbUnmanagedSolution.Size = new System.Drawing.Size(97, 17);
             this.rbUnmanagedSolution.TabIndex = 1;
+            this.rbUnmanagedSolution.TabStop = true;
             this.rbUnmanagedSolution.Text = "All Unmanaged";
             this.rbUnmanagedSolution.UseVisualStyleBackColor = true;
             this.rbUnmanagedSolution.CheckedChanged += new System.EventHandler(this.rbAllSolutions_CheckedChanged);
-            // 
-            // rbAllSolutions
-            // 
-            this.rbAllSolutions.AutoSize = true;
-            this.rbAllSolutions.Checked = true;
-            this.rbAllSolutions.Location = new System.Drawing.Point(12, 3);
-            this.rbAllSolutions.Name = "rbAllSolutions";
-            this.rbAllSolutions.Size = new System.Drawing.Size(82, 17);
-            this.rbAllSolutions.TabIndex = 0;
-            this.rbAllSolutions.TabStop = true;
-            this.rbAllSolutions.Text = "All Solutions";
-            this.rbAllSolutions.UseVisualStyleBackColor = true;
-            this.rbAllSolutions.CheckedChanged += new System.EventHandler(this.rbAllSolutions_CheckedChanged);
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.btnCancel);
-            this.panel1.Controls.Add(this.btnOK);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(3, 85);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(471, 49);
-            this.panel1.TabIndex = 101;
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(392, 19);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 1;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            // 
-            // btnOK
-            // 
-            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(311, 19);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 0;
-            this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
             // 
             // RefreshMetadataOptions
             // 
@@ -227,11 +214,11 @@
             this.Text = "Refresh Metadata filterd by Solution";
             this.Load += new System.EventHandler(this.ShowMetadataOptions_Load);
             this.groupBox2.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.panSelectSolution.ResumeLayout(false);
             this.panSelectSolution.PerformLayout();
             this.panSolutions.ResumeLayout(false);
             this.panSolutions.PerformLayout();
-            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -244,7 +231,6 @@
         private System.Windows.Forms.Panel panSolutions;
         private System.Windows.Forms.RadioButton rbSpecificSolution;
         private System.Windows.Forms.RadioButton rbUnmanagedSolution;
-        private System.Windows.Forms.RadioButton rbAllSolutions;
         private System.Windows.Forms.Panel panSelectSolution;
         private System.Windows.Forms.CheckBox chkShowAllSolutions;
         private System.Windows.Forms.RadioButton rbSpecificPublisher;

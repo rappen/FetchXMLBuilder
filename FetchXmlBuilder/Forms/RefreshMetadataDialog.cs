@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
-using Rappen.Xrm.FetchXmlBuilder.Models;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using System;
 using System.Collections.Generic;
@@ -52,7 +51,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         {
             return new FilterSetting
             {
-                ShowAllSolutions = rbAllSolutions.Checked,
+                ShowAllSolutions = false,
                 ShowUnmanagedSolutions = rbUnmanagedSolution.Checked,
                 ShowSolution = rbSpecificSolution.Checked,
                 ShowPublisher = rbSpecificPublisher.Checked,
