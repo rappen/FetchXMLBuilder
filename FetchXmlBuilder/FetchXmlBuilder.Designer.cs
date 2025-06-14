@@ -111,6 +111,8 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.dockContainer = new WeifenLuo.WinFormsUI.Docking.DockPanel();
+            this.reloadAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reloadBySolutionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -811,11 +813,13 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             // tsmiReloadMetadata
             // 
+            this.tsmiReloadMetadata.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.reloadAllToolStripMenuItem,
+            this.reloadBySolutionToolStripMenuItem});
             this.tsmiReloadMetadata.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_reset;
             this.tsmiReloadMetadata.Name = "tsmiReloadMetadata";
             this.tsmiReloadMetadata.Size = new System.Drawing.Size(269, 38);
             this.tsmiReloadMetadata.Text = "Reload Metadata";
-            this.tsmiReloadMetadata.Click += new System.EventHandler(this.tsmiReloadMetadata_Click);
             // 
             // toolStripMenuItem3
             // 
@@ -892,6 +896,22 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.dockContainer.Name = "dockContainer";
             this.dockContainer.Size = new System.Drawing.Size(1180, 360);
             this.dockContainer.TabIndex = 33;
+            // 
+            // reloadAllToolStripMenuItem
+            // 
+            this.reloadAllToolStripMenuItem.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_dataverse;
+            this.reloadAllToolStripMenuItem.Name = "reloadAllToolStripMenuItem";
+            this.reloadAllToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
+            this.reloadAllToolStripMenuItem.Text = "Reload all";
+            this.reloadAllToolStripMenuItem.Click += new System.EventHandler(this.reloadAllToolStripMenuItem_Click);
+            // 
+            // reloadBySolutionToolStripMenuItem
+            // 
+            this.reloadBySolutionToolStripMenuItem.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_dataverse;
+            this.reloadBySolutionToolStripMenuItem.Name = "reloadBySolutionToolStripMenuItem";
+            this.reloadBySolutionToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
+            this.reloadBySolutionToolStripMenuItem.Text = "Reload by Solution";
+            this.reloadBySolutionToolStripMenuItem.Click += new System.EventHandler(this.reloadBySolutionToolStripMenuItem_Click);
             // 
             // FetchXmlBuilder
             // 
@@ -999,5 +1019,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiDisplayBoth;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
         private System.Windows.Forms.ToolStripMenuItem tsmiReloadMetadata;
+        private System.Windows.Forms.ToolStripMenuItem reloadAllToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem reloadBySolutionToolStripMenuItem;
     }
 }

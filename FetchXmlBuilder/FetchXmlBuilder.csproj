@@ -263,6 +263,13 @@
     <Compile Include="Forms\ShareLink.Designer.cs">
       <DependentUpon>ShareLink.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\RefreshMetadataDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RefreshMetadataDialog.Designer.cs">
+      <DependentUpon>RefreshMetadataDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MetadataFilterOptions.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -544,6 +551,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ShareLink.resx">
       <DependentUpon>ShareLink.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RefreshMetadataDialog.resx">
+      <DependentUpon>RefreshMetadataDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ShowMetadataOptions.resx">
       <DependentUpon>ShowMetadataOptions.cs</DependentUpon>

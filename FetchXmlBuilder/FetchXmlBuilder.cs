@@ -1,5 +1,6 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.Properties;
 using McTools.Xrm.Connection;
+using Rappen.Xrm.FetchXmlBuilder.Models;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.Builder;
@@ -18,6 +19,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 using WeifenLuo.WinFormsUI.Docking;
+using XrmToolBox;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using Entity = Microsoft.Xrm.Sdk.Entity;
@@ -944,7 +946,25 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         #endregion Private Event Handlers
 
-        private void tsmiReloadMetadata_Click(object sender, EventArgs e)
+        private void reloadBySolutionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bool showConfirmBox() =>
+                MessageBox.Show(
+                    "Reloading all metadata may take a while  (10-300 secs) .\n\nDo you want to continue?",
+                    "Reload Metadata",
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Exclamation
+                ) == DialogResult.OK;
+
+            RefreshMetadataOptions.Show(this, (bool ok, FilterSetting filter) =>
+            {
+                if (!ok) return;
+                else if (filter.ShowAllSolutions && showConfirmBox()) LoadEntities(true);
+                else RefreshEntities(filter);
+            });
+        }
+
+        private void reloadAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Shall we reload all metadata?\n\nYes or No...", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
             {
