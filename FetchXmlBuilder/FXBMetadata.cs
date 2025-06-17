@@ -370,7 +370,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                             else
                             {
                                 // Failed to load
-                                LogWarning($"Could not load mnetadta for {refreshMetadataId}");
+                                LogWarning($"Could not load metadata for {refreshMetadataId}");
                                 continue;
                             }
                         }

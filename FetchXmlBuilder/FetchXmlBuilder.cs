@@ -948,7 +948,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         private void reloadBySolutionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             bool showConfirmBox() =>
-                MessageBox.Show(
+                MessageBoxEx.Show(this,
                     "Reloading all metadata may take a while  (10-300 secs) .\n\nDo you want to continue?",
                     "Reload Metadata",
                     MessageBoxButtons.OKCancel,
@@ -964,9 +964,9 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void reloadAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Shall we reload all metadata?\n\nYes or No...", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+            if (MessageBoxEx.Show(this, "Shall we reload all metadata?\n\nYes or No...", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
             {
-                if (MessageBox.Show("Reloading all metadata.\nIt may take a while... (10-300 secs)", "Reload metadata", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
+                if (MessageBoxEx.Show(this, "Reloading all metadata.\nIt may take a while... (10-300 secs)", "Reload metadata", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
                 {
                     LoadEntities(true);
                 }
