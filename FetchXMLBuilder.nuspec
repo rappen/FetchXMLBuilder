@@ -11,19 +11,13 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>Build queries for Microsoft Dataverse and the Power Platform. Investigate data. Fix the layouts. Get code. Empower yourself to achieve more.</summary>
 		<description>
-Build queries for Microsoft Dataverse and the Power Platform. Investigate data. Fix the layouts. Get code. Empower yourself to achieve more.
+Build queries for Microsoft Dataverse and the Power Platform. Investigate data. Fix the layouts. Get code. Let AI fix what you can't. Empower yourself to achieve more.
 
 Read more: https://fetchxmlbuilder.com/
 
 FetchXML Builder is used to create and execute queries against Microsoft Dataverse / Power Apps / Dynamics 365.
-The Power Platform includes technologies we know as:
-- Microsoft Dynamics 365
-- Dynamics CRM
-- XRM
-- Power Apps (Model Driven)
-- Power Apps (Canvas connected to Dataverse)
-- PowerBI (connected to Dataverse)
-- Microsoft Teams for Dataverse
+What you don't know about Dataverse this morning, you'll know this afternoon.
+If you can't solve it, ask in the integrated AI Chat.
 
 The tool will assist in three major areas:
 
@@ -51,6 +45,9 @@ The tool reads metadata from Microsoft Dataverse and Dynamics 365 / CRM to assis
 To make it even more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.
 		</description>
 		<releaseNotes>
+FetchXML Builder (can now be) driven by AI!
+Open the "AI Chat" tab and ask questions about your data, queries, or how to use the tool.
+
 Full release notes:
 https://fetchxmlbuilder.com/releases/#$versionnumber$
 
