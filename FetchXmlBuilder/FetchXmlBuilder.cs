@@ -18,6 +18,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 using WeifenLuo.WinFormsUI.Docking;
+using XrmToolBox;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using Entity = Microsoft.Xrm.Sdk.Entity;
@@ -943,5 +944,49 @@ namespace Rappen.XTB.FetchXmlBuilder
         }
 
         #endregion Private Event Handlers
+
+        private void reloadBySolutionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bool showConfirmBox() =>
+                MessageBoxEx.Show(this,
+                    "Reloading all metadata may take a while  (10-300 secs) .\n\nDo you want to continue?",
+                    "Reload Metadata",
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Exclamation
+                ) == DialogResult.OK;
+
+            RefreshMetadataOptions.Show(this, (bool ok, FilterSetting filter) =>
+            {
+                if (!ok) return;
+                RefreshEntities(filter);
+            });
+        }
+
+        private void reloadAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBoxEx.Show(this, "Shall we reload all metadata?\n\nYes or No...", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+            {
+                if (MessageBoxEx.Show(this, "Reloading all metadata.\nIt may take a while... (10-300 secs)", "Reload metadata", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
+                {
+                    LoadEntities(true);
+                }
+            }
+        }
+
+        private void tsmiReloadMetadata_Click(object sender, EventArgs e)
+        {
+            if (BaseCacheLoaded)
+            {
+                reloadBySolutionToolStripMenuItem.Enabled = true;
+                reloadBySolutionToolStripMenuItem.ToolTipText =
+                    "Refresh a subset of entities by unmanaged solutions, a specific solution, or a publisher. Much faster than a full cache refresh.";
+            }
+            else
+            {
+                reloadBySolutionToolStripMenuItem.Enabled = false;
+                reloadBySolutionToolStripMenuItem.ToolTipText =
+                    "No metadata loaded. Please refresh the full cache first to enable subset refresh.";
+            }
+        }
     }
 }

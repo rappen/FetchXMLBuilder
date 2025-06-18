@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Settings;
@@ -20,6 +22,8 @@ namespace Rappen.XTB.FetchXmlBuilder
         private static List<string> entityShitList = new List<string>();
         internal List<Entity> solutionentities;
         internal List<Guid> solutionattributes;
+
+        internal bool BaseCacheLoaded => entities?.Count > 0;
 
         #region Internal Methods
 
@@ -284,6 +288,141 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         #region Private Methods
 
+        /// <summary>
+        /// Retrieve a single EntityMetadata record by its MetadataId.
+        /// </summary>
+        private EntityMetadata RetrieveEntityMetadataById(Guid metadataId)
+        {
+            var filter = new MetadataFilterExpression(LogicalOperator.And)
+            {
+                Conditions = { new MetadataConditionExpression("MetadataId", MetadataConditionOperator.Equals, metadataId) }
+            };
+
+            var query = new EntityQueryExpression
+            {
+                Criteria = filter,
+                Properties = new MetadataPropertiesExpression { AllProperties = true }
+            };
+
+            var req = new RetrieveMetadataChangesRequest
+            {
+                Query = query
+            };
+
+            var resp = (RetrieveMetadataChangesResponse)Service.Execute(req);
+            return resp.EntityMetadata.FirstOrDefault();
+        }
+
+        private void MergeSolutionComponents(List<Entity> entities, List<Guid> attrs)
+        {
+            foreach (var attr in attrs)
+            {
+                if (!solutionattributes.Contains(attr))
+                {
+                    solutionattributes.Add(attr);
+                }
+            }
+
+            foreach (var entity in entities)
+            {
+                var compId = entity.GetAttributeValue<Guid>("solutioncomponentid");
+
+                if (!solutionentities.Any(e => e.GetAttributeValue<Guid>("solutioncomponentid") == compId))
+                {
+                    solutionentities.Add(entity);
+                }
+            }
+
+            // We need to flatten this list by objectid
+            var toLoad = entities.Where(c => c.GetAttributeValue<OptionSetValue>("componenttype").Value == 1).GroupBy(c => c.GetAttributeValue<Guid>("objectid")).Select(g => g.FirstOrDefault().GetAttributeValue<Guid>("objectid")).ToList();
+
+            var total = toLoad.Count;
+            if (total == 0) return;
+
+            // 3) Kick off ONE WorkAsync to fetch them all
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = $"Loading metadata for {total} entities…",
+
+                Work = (worker, args) =>
+                {
+                    var newlyLoaded = new List<EntityMetadata>();
+                    for (var i = 0; i < total; i++)
+                    {
+                        var refreshMetadataId = toLoad[i];
+
+                        // Obtain the logical name if we happen to have it already
+                        var meta = this.entities.FirstOrDefault(e => e.MetadataId == refreshMetadataId);
+                        string logicalName;
+
+                        if (meta != null)
+                        {
+                            logicalName = meta.LogicalName;
+                        }
+                        else
+                        {
+                            meta = RetrieveEntityMetadataById(refreshMetadataId);
+                            if (meta != null)
+                            {
+                                logicalName = meta.LogicalName;
+                                this.entities.Add(meta);
+                            }
+                            else
+                            {
+                                // Failed to load
+                                LogWarning($"Could not load metadata for {refreshMetadataId}");
+                                continue;
+                            }
+                        }
+                        var percent = (i + 1) * 100 / total;
+                        worker.ReportProgress(percent, logicalName);
+
+                        LoadEntityDetails(meta.LogicalName, detailsLoaded: null, async: false, update: false);
+                    }
+                    args.Result = newlyLoaded;
+                },
+
+                ProgressChanged = e =>
+                {
+                    // e.ProgressPercentage = 1..100
+                    // e.UserState is the logicalName string
+                    var name = (string)e.UserState;
+                    // Update spinner text
+                    SetWorkingMessage($"[{e.ProgressPercentage}%] Loading metadata for {name}…");
+                    // And status bar if you like
+                    SendMessageToStatusBar?.Invoke(
+                        this,
+                        new XrmToolBox.Extensibility.Args.StatusBarMessageEventArgs(
+                            $"[{e.ProgressPercentage}%] {name}"
+                        )
+                    );
+                },
+
+                PostWorkCallBack = e =>
+                {
+                    if (e.Error != null)
+                    {
+                        ShowErrorDialog(e.Error, "Lazy-loading metadata");
+                        return;
+                    }
+
+                    // Merge all the newly fetched EntityMetadata into your cache
+                    var loaded = (List<EntityMetadata>)e.Result;
+                    foreach (var meta in loaded)
+                    {
+                        this.entities.Add(meta);
+                    }
+                    SendMessageToStatusBar?.Invoke(
+                        this,
+                        new XrmToolBox.Extensibility.Args.StatusBarMessageEventArgs($"{total} entites refreshed.")
+                    );
+                    // Finally refresh your UI
+                    dockControlBuilder?.ApplyCurrentSettings();
+                    UpdateLiveXML();
+                }
+            });
+        }
+
         private static bool CheckMetadata(CheckState checkstate, bool? metafield)
         {
             if (metafield != null & metafield.HasValue)
@@ -321,6 +460,17 @@ namespace Rappen.XTB.FetchXmlBuilder
             entities = null;
             entityShitList = new List<string>();
             this.GetAllEntityMetadatas(SetAfterEntitiesLoaded, settings.TryMetadataCache, settings.WaitUntilMetadataLoaded || forcereload, forcereload);
+        }
+
+        private void RefreshEntities(FilterSetting filter)
+        {
+            if (SendMessageToStatusBar != null)
+            {
+                SendMessageToStatusBar(this, new XrmToolBox.Extensibility.Args.StatusBarMessageEventArgs($"Refreshing entities..."));
+            }
+            working = true;
+            var (e, a) = LoadSolutionsComponents(filter);
+            MergeSolutionComponents(e, a);
         }
 
         private void SetAfterEntitiesLoaded(IEnumerable<EntityMetadata> newEntityMetadata, bool manually)
@@ -402,13 +552,13 @@ namespace Rappen.XTB.FetchXmlBuilder
             working = false;
         }
 
-        private void LoadSolutionsComponents(FilterSetting selectedfilter)
+        private (List<Entity>, List<Guid>) LoadSolutionsComponents(FilterSetting selectedfilter, bool storeResults = true)
         {
             if (Service == null || selectedfilter.NoneEntitiesSelected || selectedfilter.ShowAllSolutions)
             {
                 solutionentities = new List<Entity>();
                 solutionattributes = new List<Guid>();
-                return;
+                return (solutionentities, solutionattributes);
             }
             solutionentities = null;
             solutionattributes = null;
@@ -439,21 +589,27 @@ namespace Rappen.XTB.FetchXmlBuilder
             filtertype.FilterOperator = LogicalOperator.Or;
             filtertype.AddCondition("componenttype", ConditionOperator.Equal, 1);
             filtertype.AddCondition("componenttype", ConditionOperator.Equal, 2);
-            try
+
+            if (storeResults)
             {
-                var result = RetrieveMultiple(query);
-                solutionentities = result.Entities
-                    .Where(c => c.GetAttributeValue<OptionSetValue>("componenttype").Value == 1).ToList();
-                solutionattributes = result.Entities
-                    .Where(c => c.GetAttributeValue<OptionSetValue>("componenttype").Value == 2)
-                    .Select(c => c.GetAttributeValue<Guid>("objectid")).ToList();
+                try
+                {
+                    var result = RetrieveMultiple(query);
+                    solutionentities = result.Entities
+                        .Where(c => c.GetAttributeValue<OptionSetValue>("componenttype").Value == 1).ToList();
+                    solutionattributes = result.Entities
+                        .Where(c => c.GetAttributeValue<OptionSetValue>("componenttype").Value == 2)
+                        .Select(c => c.GetAttributeValue<Guid>("objectid")).ToList();
+                }
+                catch (Exception ex)
+                {
+                    solutionentities = null;
+                    solutionattributes = null;
+                    ShowErrorDialog(ex, "Loading Solutions Components");
+                }
             }
-            catch (Exception ex)
-            {
-                solutionentities = null;
-                solutionattributes = null;
-                ShowErrorDialog(ex, "Loading Solutions Components");
-            }
+
+            return (solutionentities, solutionattributes);
         }
 
         #endregion Private Methods
