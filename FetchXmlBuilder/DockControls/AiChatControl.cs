@@ -16,6 +16,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private ChatMessageHistory chatHistory;
         private AiSupplier supplier;
         private AiModel model;
+        private string lastquery;
+
+        #region Public Constructor
 
         public AiChatControl(FetchXmlBuilder fetchXmlBuilder)
         {
@@ -28,6 +31,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             Initialize();
         }
 
+        #endregion Public Constructor
+
+        #region Internal Methods
+
         internal void Initialize()
         {
             chatHistory?.Save(Paths.LogsPath, "FXB");
@@ -38,28 +45,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             EnableButtons();
         }
 
+        #endregion Internal Methods
+
+        #region Private Methods
+
         private void SetTitle()
         {
             Text = $"AI Chat - {fxb.settings.AiSettings.Supplier}";
             TabText = Text;
-        }
-
-        private void AiChatControl_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            chatHistory.Save(Paths.LogsPath, "FXB");
-        }
-
-        private void AiChatControl_DockStateChanged(object sender, EventArgs e)
-        {
-            if (!IsHidden)
-            {
-                Height = 400;
-            }
-            if (DockState != WeifenLuo.WinFormsUI.Docking.DockState.Unknown &&
-                DockState != WeifenLuo.WinFormsUI.Docking.DockState.Hidden)
-            {
-                fxb.settings.DockStates.AiChat = DockState;
-            }
         }
 
         private void SendChatToAI(string text)
@@ -86,10 +79,19 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 return;
             }
 
-            var currentFetchXml = fxb.dockControlBuilder?.GetFetchString(true, false);
-            var intro = supplier.GetSystemPrompt(currentFetchXml) + Environment.NewLine + supplier.GetCallMe(fxb.settings.AiSettings.CallMe).Trim();
-
-            AiCommunication.CallingAI(text, intro, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXMLQuery, HandlingResponseFromAi);
+            if (!chatHistory.Initialized)
+            {
+                chatHistory.Initialize(supplier.SystemPrompt.Replace("{fetchxml}", fxb.dockControlBuilder?.GetFetchString(true, false)) + Environment.NewLine + supplier.GetCallMe(fxb.settings.AiSettings.CallMe).Trim());
+            }
+            if (fxb.ManualChanges)
+            {
+                var newfetch = fxb.dockControlBuilder?.GetFetchString(true, false);
+                if (newfetch != lastquery)
+                {
+                    chatHistory.Add(ChatRole.User, supplier.UpdatePrompt.Replace("{fetchxml}", newfetch), true);
+                }
+            }
+            AiCommunication.CallingAI(text, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXMLQuery, HandlingResponseFromAi);
 
             EnableButtons();
         }
@@ -150,6 +152,28 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             else
             {
                 mi();
+            }
+        }
+
+        #endregion Private Methods
+
+        #region Private Event Handlers
+
+        private void AiChatControl_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            chatHistory.Save(Paths.LogsPath, "FXB");
+        }
+
+        private void AiChatControl_DockStateChanged(object sender, EventArgs e)
+        {
+            if (!IsHidden)
+            {
+                Height = 400;
+            }
+            if (DockState != WeifenLuo.WinFormsUI.Docking.DockState.Unknown &&
+                DockState != WeifenLuo.WinFormsUI.Docking.DockState.Hidden)
+            {
+                fxb.settings.DockStates.AiChat = DockState;
             }
         }
 
@@ -220,5 +244,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             fxb.ShowSettings("tabAiChat");
         }
+
+        #endregion Private Event Handlers
     }
 }
