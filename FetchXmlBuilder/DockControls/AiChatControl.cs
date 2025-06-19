@@ -3,6 +3,7 @@ using Rappen.AI.WinForm;
 using Rappen.XTB.FXB.Settings;
 using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
@@ -91,7 +92,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     chatHistory.Add(ChatRole.User, supplier.UpdatePrompt.Replace("{fetchxml}", newfetch), true);
                 }
             }
+            picWaiting.Visible = true;
+            txtAiChatAsk.Enabled = false;
+            txtAiChatAsk.BackColor = SystemColors.Window;
             AiCommunication.CallingAI(text, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXMLQuery, HandlingResponseFromAi);
+            txtAiChatAsk.Clear();
 
             EnableButtons();
         }
@@ -132,6 +137,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 SetQueryFromAi(matches[0].Value);
             }
+            picWaiting.Visible = false;
+            txtAiChatAsk.Enabled = true;
+            txtAiChatAsk.Focus();
+            EnableButtons();
         }
 
         private void SetQueryFromAi(string fetch)

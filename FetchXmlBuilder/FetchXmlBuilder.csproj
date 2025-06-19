@@ -823,6 +823,9 @@
   <ItemGroup>
     <None Include="Resources\icon-link-16.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-waiting.gif" />
+  </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />
   <Import Project="..\MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutoComplete.projitems" Label="Shared" />
