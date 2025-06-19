@@ -84,7 +84,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 chatHistory.Initialize(supplier.SystemPrompt.Replace("{fetchxml}", fxb.dockControlBuilder?.GetFetchString(true, false)) + Environment.NewLine + supplier.GetCallMe(fxb.settings.AiSettings.CallMe).Trim());
             }
-            if (fxb.ManualChanges)
+            else
             {
                 var newfetch = fxb.dockControlBuilder?.GetFetchString(true, false);
                 if (newfetch != lastquery)
@@ -137,6 +137,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 SetQueryFromAi(matches[0].Value);
             }
+            lastquery = fxb.dockControlBuilder?.GetFetchString(true, false);
             picWaiting.Visible = false;
             txtAiChatAsk.Enabled = true;
             txtAiChatAsk.Focus();

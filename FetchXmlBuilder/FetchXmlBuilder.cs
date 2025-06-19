@@ -47,7 +47,6 @@ namespace Rappen.XTB.FetchXmlBuilder
         internal bool working = false;
         internal Version CDSVersion = new Version();
         internal readonly Version bypasspluginminversion = new Version(9, 2);
-        internal bool ManualChanges => tsbUndo.Enabled;
 
         #endregion Internal Fields
 
