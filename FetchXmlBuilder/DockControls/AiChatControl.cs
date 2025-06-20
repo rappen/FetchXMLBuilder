@@ -95,7 +95,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             picWaiting.Visible = true;
             txtAiChatAsk.Enabled = false;
             txtAiChatAsk.BackColor = SystemColors.Window;
-            AiCommunication.CallingAI(text, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXMLQuery, HandlingResponseFromAi);
+            AiCommunication.CallingAI(text, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXMLQuery, UpdateCurrentFetchXmlQuery, HandlingResponseFromAi);
             txtAiChatAsk.Clear();
 
             EnableButtons();
@@ -111,7 +111,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         }
 
         [Description("Executes FetchXML Query")]
-        private string ExecuteFetchXMLQuery([Description("The FetchXML Query to be Executed. This is the current FetchXML, as specified by the system prompt.")] string fetchXml)
+        private string ExecuteFetchXMLQuery([Description("The FetchXML Query to be Executed. This is the current FetchXML, as specified in the conversation with the assistant.")] string fetchXml)
         {
             try
             {
@@ -126,17 +126,31 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
+        [Description("Updates the current FetchXML Query that we are working on. The assistant should call this tool every time the assistant makes a change to the FetchXml query.")]
+        private string UpdateCurrentFetchXmlQuery([Description("A well formed FetchXml query that is the current query that has been updated by the assistant.")] string fetchXml)
+        {
+            try
+            {
+                // Informs the assistant that a change has been made to the current FetchXml.
+                chatHistory.Add(ChatRole.User, supplier.UpdatePrompt.Replace("{fetchxml}", fetchXml), true);
+
+                // Sets the current query, so that the query is updated in the FXB GUI.
+                SetQueryFromAi(fetchXml);
+
+                return "Current query updated successfully";
+            }
+            catch (Exception ex)
+            {
+                return $"Error updating current query: {ex.Message}";
+            }
+        }
+
         private void HandlingResponseFromAi(ChatResponse response)
         {
             txtAiChatAsk.Clear();
             txtUsage.Text = chatHistory.Responses.UsageToString();
             var responseText = response.ToString();
 
-            var pattern = @"<fetch\b.*?</fetch>";
-            if (Regex.Matches(responseText, pattern, RegexOptions.Singleline | RegexOptions.IgnoreCase) is MatchCollection matches && matches.Count > 0)
-            {
-                SetQueryFromAi(matches[0].Value);
-            }
             lastquery = fxb.dockControlBuilder?.GetFetchString(true, false);
             picWaiting.Visible = false;
             txtAiChatAsk.Enabled = true;
