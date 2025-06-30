@@ -35,8 +35,6 @@
             this.txtAiChatAsk = new System.Windows.Forms.TextBox();
             this.txtUsage = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.picWaiting = new System.Windows.Forms.PictureBox();
             this.btnExecute = new System.Windows.Forms.Button();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
@@ -44,13 +42,13 @@
             this.btnReset = new System.Windows.Forms.Button();
             this.btnYes = new System.Windows.Forms.Button();
             this.btnAiChatAsk = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panOData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitAiChat)).BeginInit();
             this.splitAiChat.Panel1.SuspendLayout();
             this.splitAiChat.Panel2.SuspendLayout();
             this.splitAiChat.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picWaiting)).BeginInit();
             this.SuspendLayout();
             // 
             // panOData
@@ -62,7 +60,7 @@
             this.panOData.Location = new System.Drawing.Point(0, 0);
             this.panOData.Name = "panOData";
             this.panOData.Padding = new System.Windows.Forms.Padding(4);
-            this.panOData.Size = new System.Drawing.Size(507, 480);
+            this.panOData.Size = new System.Drawing.Size(438, 373);
             this.panOData.TabIndex = 28;
             // 
             // splitAiChat
@@ -82,13 +80,12 @@
             // splitAiChat.Panel2
             // 
             this.splitAiChat.Panel2.AutoScroll = true;
-            this.splitAiChat.Panel2.Controls.Add(this.picWaiting);
             this.splitAiChat.Panel2.Controls.Add(this.txtAiChatAsk);
             this.splitAiChat.Panel2.Controls.Add(this.txtUsage);
             this.splitAiChat.Panel2.Controls.Add(this.panel1);
             this.splitAiChat.Panel2MinSize = 40;
-            this.splitAiChat.Size = new System.Drawing.Size(497, 470);
-            this.splitAiChat.SplitterDistance = 328;
+            this.splitAiChat.Size = new System.Drawing.Size(428, 363);
+            this.splitAiChat.SplitterDistance = 209;
             this.splitAiChat.SplitterWidth = 8;
             this.splitAiChat.TabIndex = 13;
             // 
@@ -101,7 +98,7 @@
             this.panAiConversation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panAiConversation.Location = new System.Drawing.Point(0, 0);
             this.panAiConversation.Name = "panAiConversation";
-            this.panAiConversation.Size = new System.Drawing.Size(497, 328);
+            this.panAiConversation.Size = new System.Drawing.Size(428, 209);
             this.panAiConversation.TabIndex = 0;
             // 
             // txtAiChatAsk
@@ -111,7 +108,7 @@
             this.txtAiChatAsk.Multiline = true;
             this.txtAiChatAsk.Name = "txtAiChatAsk";
             this.txtAiChatAsk.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAiChatAsk.Size = new System.Drawing.Size(445, 121);
+            this.txtAiChatAsk.Size = new System.Drawing.Size(376, 133);
             this.txtAiChatAsk.TabIndex = 1;
             this.txtAiChatAsk.TextChanged += new System.EventHandler(this.txtAiChatAsk_TextChanged);
             this.txtAiChatAsk.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtAiChatAsk_KeyDown);
@@ -121,10 +118,10 @@
             this.txtUsage.BackColor = System.Drawing.SystemColors.Window;
             this.txtUsage.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtUsage.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.txtUsage.Location = new System.Drawing.Point(0, 121);
+            this.txtUsage.Location = new System.Drawing.Point(0, 133);
             this.txtUsage.Name = "txtUsage";
             this.txtUsage.ReadOnly = true;
-            this.txtUsage.Size = new System.Drawing.Size(445, 13);
+            this.txtUsage.Size = new System.Drawing.Size(376, 13);
             this.txtUsage.TabIndex = 2;
             // 
             // panel1
@@ -138,20 +135,10 @@
             this.panel1.Controls.Add(this.btnYes);
             this.panel1.Controls.Add(this.btnAiChatAsk);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel1.Location = new System.Drawing.Point(445, 0);
+            this.panel1.Location = new System.Drawing.Point(376, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(52, 134);
+            this.panel1.Size = new System.Drawing.Size(52, 146);
             this.panel1.TabIndex = 0;
-            // 
-            // picWaiting
-            // 
-            this.picWaiting.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icons8_waiting;
-            this.picWaiting.Location = new System.Drawing.Point(18, 9);
-            this.picWaiting.Name = "picWaiting";
-            this.picWaiting.Size = new System.Drawing.Size(32, 32);
-            this.picWaiting.TabIndex = 3;
-            this.picWaiting.TabStop = false;
-            this.picWaiting.Visible = false;
             // 
             // btnExecute
             // 
@@ -235,7 +222,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(507, 480);
+            this.ClientSize = new System.Drawing.Size(438, 373);
             this.Controls.Add(this.panOData);
             this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight)));
@@ -252,7 +239,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitAiChat)).EndInit();
             this.splitAiChat.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picWaiting)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -273,6 +259,5 @@
         private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.Button btnExecute;
         private System.Windows.Forms.TextBox txtUsage;
-        private System.Windows.Forms.PictureBox picWaiting;
     }
 }

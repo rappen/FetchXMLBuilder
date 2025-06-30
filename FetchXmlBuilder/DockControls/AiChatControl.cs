@@ -23,10 +23,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         public AiChatControl(FetchXmlBuilder fetchXmlBuilder)
         {
-            ChatMessageHistory.UserTextColor = OnlineSettings.Instance.Colors.Bright;
-            ChatMessageHistory.UserBackgroundColor = OnlineSettings.Instance.Colors.Medium;
-            ChatMessageHistory.AssistansTextColor = OnlineSettings.Instance.Colors.Dark;
-            ChatMessageHistory.AssistansBackgroundColor = OnlineSettings.Instance.Colors.Bright;
             fxb = fetchXmlBuilder;
             InitializeComponent();
             Initialize();
@@ -38,6 +34,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal void Initialize()
         {
+            ChatMessageHistory.UserTextColor = OnlineSettings.Instance.Colors.Bright;
+            ChatMessageHistory.UserBackgroundColor = OnlineSettings.Instance.Colors.Medium;
+            ChatMessageHistory.AssistansTextColor = OnlineSettings.Instance.Colors.Dark;
+            ChatMessageHistory.AssistansBackgroundColor = OnlineSettings.Instance.Colors.Bright;
+            ChatMessageHistory.WaitingBackColor = Color.FromArgb(240, 240, 240);
             chatHistory?.Save(Paths.LogsPath, "FXB");
             supplier = OnlineSettings.Instance.AiSuppliers.Supplier(fxb.settings.AiSettings.Supplier);
             model = supplier.Model(fxb.settings.AiSettings.Model);
@@ -92,7 +93,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     chatHistory.Add(ChatRole.User, supplier.UpdatePrompt.Replace("{fetchxml}", newfetch), true);
                 }
             }
-            picWaiting.Visible = true;
             txtAiChatAsk.Enabled = false;
             txtAiChatAsk.BackColor = SystemColors.Window;
             AiCommunication.CallingAI(text, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXMLQuery, UpdateCurrentFetchXmlQuery, HandlingResponseFromAi);
@@ -152,7 +152,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var responseText = response.ToString();
 
             lastquery = fxb.dockControlBuilder?.GetFetchString(true, false);
-            picWaiting.Visible = false;
             txtAiChatAsk.Enabled = true;
             txtAiChatAsk.Focus();
             EnableButtons();
