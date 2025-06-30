@@ -93,21 +93,22 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     chatHistory.Add(ChatRole.User, supplier.UpdatePrompt.Replace("{fetchxml}", newfetch), true);
                 }
             }
-            txtAiChatAsk.Enabled = false;
-            txtAiChatAsk.BackColor = SystemColors.Window;
-            AiCommunication.CallingAI(text, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXMLQuery, UpdateCurrentFetchXmlQuery, HandlingResponseFromAi);
-            txtAiChatAsk.Clear();
-
+            chatHistory.IsRunning = true;
             EnableButtons();
+            AiCommunication.CallingAI(text, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXMLQuery, UpdateCurrentFetchXmlQuery, HandlingResponseFromAi);
+            txtAiChat.Clear();
         }
 
         private void EnableButtons()
         {
-            btnAiChatAsk.Enabled = !string.IsNullOrWhiteSpace(txtAiChatAsk.Text);
-            btnYes.Enabled = chatHistory.Messages.Count > 0;
-            btnCopy.Enabled = chatHistory.Messages.Count > 0;
-            btnSave.Enabled = chatHistory.Messages.Count > 0;
-            btnReset.Enabled = chatHistory.Messages.Count > 0;
+            btnAiChatAsk.Enabled = !string.IsNullOrWhiteSpace(txtAiChat.Text);
+            btnYes.Enabled = chatHistory.HasDialog;
+            btnCopy.Enabled = chatHistory.HasDialog;
+            btnSave.Enabled = chatHistory.HasDialog;
+            btnReset.Enabled = chatHistory.HasDialog;
+            splitAiChat.Panel2.Enabled = !chatHistory.IsRunning;
+            txtAiChat.BackColor = chatHistory.IsRunning ? ChatMessageHistory.WaitingBackColor : ChatMessageHistory.BackColor;
+            txtAiChat.Enabled = !chatHistory.IsRunning;
         }
 
         [Description("Executes FetchXML Query")]
@@ -147,14 +148,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void HandlingResponseFromAi(ChatResponse response)
         {
-            txtAiChatAsk.Clear();
+            txtAiChat.Clear();
             txtUsage.Text = chatHistory.Responses.UsageToString();
-            var responseText = response.ToString();
-
-            lastquery = fxb.dockControlBuilder?.GetFetchString(true, false);
-            txtAiChatAsk.Enabled = true;
-            txtAiChatAsk.Focus();
             EnableButtons();
+            txtAiChat.Focus();
         }
 
         private void SetQueryFromAi(string fetch)
@@ -207,10 +204,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void txtAiChatAsk_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter && e.Control && !string.IsNullOrWhiteSpace(txtAiChatAsk.Text))
+            if (e.KeyCode == Keys.Enter && e.Control && !string.IsNullOrWhiteSpace(txtAiChat.Text))
             {
                 e.Handled = true;
-                SendChatToAI(txtAiChatAsk.Text);
+                SendChatToAI(txtAiChat.Text);
             }
             else if (e.KeyCode == Keys.Y && e.Control)
             {
@@ -221,7 +218,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void btnAiChatAsk_Click(object sender, EventArgs e)
         {
-            SendChatToAI(txtAiChatAsk.Text);
+            SendChatToAI(txtAiChat.Text);
         }
 
         private void btnYes_Click(object sender = null, EventArgs e = null)
