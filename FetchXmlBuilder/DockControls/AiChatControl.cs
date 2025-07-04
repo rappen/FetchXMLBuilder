@@ -42,7 +42,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             chatHistory?.Save(Paths.LogsPath, "FXB");
             supplier = OnlineSettings.Instance.AiSuppliers.Supplier(fxb.settings.AiSettings.Supplier);
             model = supplier.Model(fxb.settings.AiSettings.Model);
-            chatHistory = new ChatMessageHistory(panAiConversation, supplier, model, fxb.settings.AiSettings.CallMe);
+            chatHistory = new ChatMessageHistory(panAiConversation, supplier?.Name, model?.Name, fxb.settings.AiSettings.CallMe);
             SetTitle();
             EnableButtons();
         }
@@ -80,6 +80,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
                 return;
             }
+            if (string.IsNullOrWhiteSpace(fxb.settings.AiSettings.ApiKey))
+            {
+                if (MessageBoxEx.Show(fxb, "No API Key found.\nAdd it in the setting!", "AI Chat", MessageBoxButtons.OKCancel, MessageBoxIcon.Error) == DialogResult.OK)
+                {
+                    fxb.ShowSettings("tabAiChat");
+                }
+                return;
+            }
 
             if (!chatHistory.Initialized)
             {
@@ -95,7 +103,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             chatHistory.IsRunning = true;
             EnableButtons();
-            AiCommunication.CallingAI(text, supplier, model, fxb.settings.AiSettings.ApiKey, chatHistory, fxb, ExecuteFetchXMLQuery, UpdateCurrentFetchXmlQuery, HandlingResponseFromAi);
+            AiCommunication.CallingAI(
+                prompt: text,
+                supplier: supplier,
+                model: model,
+                apikey: fxb.settings.AiSettings.ApiKey,
+                chatMessageHistory: chatHistory,
+                tool: fxb,
+                executeRequest: ExecuteFetchXMLQuery,
+                updateRequest: UpdateCurrentFetchXmlQuery,
+                handleResponse: HandlingResponseFromAi);
             txtAiChat.Clear();
         }
 
