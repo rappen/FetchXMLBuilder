@@ -105,8 +105,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             EnableButtons();
             AiCommunication.CallingAI(
                 text,
-                supplier,
-                model,
+                supplier.Name,
+                model.Name,
                 fxb.settings.AiSettings.ApiKey,
                 chatHistory,
                 fxb,
