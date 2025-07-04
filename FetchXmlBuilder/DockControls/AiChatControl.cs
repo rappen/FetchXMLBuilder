@@ -104,15 +104,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             chatHistory.IsRunning = true;
             EnableButtons();
             AiCommunication.CallingAI(
-                prompt: text,
-                supplier: supplier,
-                model: model,
-                apikey: fxb.settings.AiSettings.ApiKey,
-                chatMessageHistory: chatHistory,
-                tool: fxb,
-                executeRequest: ExecuteFetchXMLQuery,
-                updateRequest: UpdateCurrentFetchXmlQuery,
-                handleResponse: HandlingResponseFromAi);
+                text,
+                supplier,
+                model,
+                fxb.settings.AiSettings.ApiKey,
+                chatHistory,
+                fxb,
+                HandlingResponseFromAi,
+                ExecuteFetchXMLQuery,
+                UpdateCurrentFetchXmlQuery
+                );
             txtAiChat.Clear();
         }
 
