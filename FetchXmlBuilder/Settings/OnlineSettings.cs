@@ -18,7 +18,7 @@ namespace Rappen.XTB.FXB.Settings
         public int SettingsVersion = 1;
         public List<string> DeprecatedNames = new List<string>();
         public List<string> IntegratedToTools = new List<string>();
-        public AiSuppliers AiSuppliers = new AiSuppliers();
+        public AiSupport AiSupport = new AiSupport();
         public ToolColors Colors = new ToolColors();
 
         private OnlineSettings()

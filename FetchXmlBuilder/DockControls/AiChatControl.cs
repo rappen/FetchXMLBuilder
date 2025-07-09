@@ -4,6 +4,7 @@ using Rappen.XTB.FXB.Settings;
 using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
@@ -26,6 +27,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             fxb = fetchXmlBuilder;
             InitializeComponent();
             Initialize();
+            EnableButtons();
         }
 
         #endregion Public Constructor
@@ -39,10 +41,23 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             ChatMessageHistory.AssistansTextColor = OnlineSettings.Instance.Colors.Dark;
             ChatMessageHistory.AssistansBackgroundColor = OnlineSettings.Instance.Colors.Bright;
             ChatMessageHistory.WaitingBackColor = Color.FromArgb(240, 240, 240);
+
             chatHistory?.Save(Paths.LogsPath, "FXB");
-            supplier = OnlineSettings.Instance.AiSuppliers.Supplier(fxb.settings.AiSettings.Supplier);
+            supplier = OnlineSettings.Instance.AiSupport.Supplier(fxb.settings.AiSettings.Supplier);
+            if (supplier == null)
+            {
+                MessageBoxEx.Show(fxb, "The AI supplier is not available (yet).\nGo check the setting!", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                fxb.ShowSettings("tabAiChat");
+                return;
+            }
             model = supplier.Model(fxb.settings.AiSettings.Model);
-            chatHistory = new ChatMessageHistory(panAiConversation, supplier?.Name, model?.Name, fxb.settings.AiSettings.CallMe);
+            if (model == null)
+            {
+                MessageBoxEx.Show(fxb, "The AI model is not available (yet).\nGo check the setting!", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                fxb.ShowSettings("tabAiChat");
+                return;
+            }
+            chatHistory = new ChatMessageHistory(panAiConversation, supplier?.Name, model?.Name, fxb.settings.AiSettings.MyName);
             SetTitle();
             EnableButtons();
         }
@@ -50,6 +65,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         #endregion Internal Methods
 
         #region Private Methods
+
+        private string PromptSystem => supplier?.Prompts?.System ?? OnlineSettings.Instance.AiSupport.Prompts.System;
+        private string PromptMyName => supplier?.Prompts?.CallMe ?? OnlineSettings.Instance.AiSupport.Prompts.CallMe;
+        private string PromptUpdate => supplier?.Prompts?.Update ?? OnlineSettings.Instance.AiSupport.Prompts.Update;
+        private string PromptEntityMeta => supplier?.Prompts?.EntityMeta ?? OnlineSettings.Instance.AiSupport.Prompts.EntityMeta;
+        private string PromptAttributeMeta => supplier?.Prompts?.AttributeMeta ?? OnlineSettings.Instance.AiSupport.Prompts.AttributeMeta;
 
         private void SetTitle()
         {
@@ -88,17 +109,24 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
                 return;
             }
+            if (chatHistory == null)
+            {
+                MessageBoxEx.Show(fxb, "Chat history is not initialized. Please try to close and open the AI chat again.", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             if (!chatHistory.Initialized)
             {
-                chatHistory.Initialize(supplier.SystemPrompt.Replace("{fetchxml}", fxb.dockControlBuilder?.GetFetchString(true, false)) + Environment.NewLine + supplier.GetCallMe(fxb.settings.AiSettings.CallMe).Trim());
+                chatHistory.Initialize(PromptSystem.Replace("{fetchxml}", fxb.dockControlBuilder?.GetFetchString(true, false))
+                    + Environment.NewLine
+                    + PromptMyName.Replace("{callme}", fxb.settings.AiSettings.MyName).Trim());
             }
             else
             {
                 var newfetch = fxb.dockControlBuilder?.GetFetchString(true, false);
                 if (newfetch != lastquery)
                 {
-                    chatHistory.Add(ChatRole.User, supplier.UpdatePrompt.Replace("{fetchxml}", newfetch), true);
+                    chatHistory.Add(ChatRole.User, PromptUpdate.Replace("{fetchxml}", newfetch), true);
                 }
             }
             chatHistory.IsRunning = true;
@@ -112,21 +140,24 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 fxb,
                 HandlingResponseFromAi,
                 ExecuteFetchXMLQuery,
-                UpdateCurrentFetchXmlQuery
+                UpdateCurrentFetchXmlQuery,
+                GetMetadataForUnknownEntity,
+                GetMetadataForUnknownAttribute
                 );
             txtAiChat.Clear();
         }
 
         private void EnableButtons()
         {
-            btnAiChatAsk.Enabled = !string.IsNullOrWhiteSpace(txtAiChat.Text);
-            btnYes.Enabled = chatHistory.HasDialog;
-            btnCopy.Enabled = chatHistory.HasDialog;
-            btnSave.Enabled = chatHistory.HasDialog;
-            btnReset.Enabled = chatHistory.HasDialog;
-            splitAiChat.Panel2.Enabled = !chatHistory.IsRunning;
-            txtAiChat.BackColor = chatHistory.IsRunning ? ChatMessageHistory.WaitingBackColor : ChatMessageHistory.BackColor;
-            txtAiChat.Enabled = !chatHistory.IsRunning;
+            btnAiChatAsk.Enabled = chatHistory != null && !string.IsNullOrWhiteSpace(txtAiChat.Text);
+            btnYes.Enabled = chatHistory?.HasDialog == true;
+            btnExecute.Enabled = chatHistory != null;
+            btnCopy.Enabled = btnYes.Enabled;
+            btnSave.Enabled = btnYes.Enabled;
+            btnReset.Enabled = btnYes.Enabled;
+            splitAiChat.Panel2.Enabled = chatHistory?.IsRunning != true;
+            txtAiChat.BackColor = chatHistory?.IsRunning == true ? ChatMessageHistory.WaitingBackColor : ChatMessageHistory.BackColor;
+            txtAiChat.Enabled = chatHistory?.IsRunning == true;
         }
 
         [Description("Executes FetchXML Query")]
@@ -150,17 +181,59 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             try
             {
+                var currentfetch = Regex.Replace(fxb.dockControlBuilder?.GetFetchString(true, false), @"\s+", " ");
+                var newfetch = Regex.Replace(fetchXml, @"\s+", " ");
+                if (currentfetch.Equals(newfetch))
+                {
+                    return "No changes made to the current query.";
+                }
                 // Informs the assistant that a change has been made to the current FetchXml.
-                chatHistory.Add(ChatRole.User, supplier.UpdatePrompt.Replace("{fetchxml}", fetchXml), true);
-
+                //chatHistory.Add(ChatRole.User, PromptUpdate.Replace("{fetchxml}", fetchXml), true);
                 // Sets the current query, so that the query is updated in the FXB GUI.
                 SetQueryFromAi(fetchXml);
-
                 return "Current query updated successfully";
             }
             catch (Exception ex)
             {
                 return $"Error updating current query: {ex.Message}";
+            }
+        }
+
+        [Description("Retrieves the metadata of the entity/table in the current environmemnt. This is used to help the assistant understand the entities display names and logical names.")]
+        private string GetMetadataForUnknownEntity([Description("The name of the unknown table that the assistant has mentioned.")] string entityName)
+        {
+            try
+            {
+                var aimeta = fxb.EntitiesToAiJson();
+                if (aimeta.Count() == 0)
+                {
+                    return $"No entities found in the current solution. Please ensure that you have entities defined in your solution.";
+                }
+                chatHistory.Add(ChatRole.User, PromptEntityMeta.Replace("{entityname}", entityName).Replace("{metadata}", aimeta), true);
+                return $"Tried to retrieve the missing tables.";
+            }
+            catch (Exception ex)
+            {
+                return $"Error retrieving entity metadata: {ex.Message}";
+            }
+        }
+
+        [Description("Retrieves the attributes of the entity/table in the current environment. This is used to help the assistant understand the attributes of the entity and their display names and logical names.")]
+        private string GetMetadataForUnknownAttribute([Description("The name of the attribute on the entity the assistant has mentioned is unknown.")] string entityName)
+        {
+            try
+            {
+                var aimeta = fxb.AttributesToAiJson(entityName);
+                if (aimeta.Count() == 0)
+                {
+                    return $"No attributes found for the entity '{entityName}'. Please ensure that the entity exists and has attributes defined.";
+                }
+                chatHistory.Add(ChatRole.User, PromptAttributeMeta.Replace("{entityname}", entityName).Replace("{metadata}", aimeta), true);
+                return $"Tried to retrieve attributes for the entity.";
+            }
+            catch (Exception ex)
+            {
+                return $"Error retrieving attribute metadata: {ex.Message}";
             }
         }
 
@@ -183,14 +256,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     fxb.dockControlBuilder.Init(fetch, null, false, "Query from AI", true);
                 }
             };
-            if (InvokeRequired)
-            {
-                Invoke(mi);
-            }
-            else
-            {
-                mi();
-            }
+            if (InvokeRequired) Invoke(mi); else mi();
         }
 
         #endregion Private Methods
@@ -199,7 +265,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void AiChatControl_FormClosing(object sender, FormClosingEventArgs e)
         {
-            chatHistory.Save(Paths.LogsPath, "FXB");
+            chatHistory?.Save(Paths.LogsPath, "FXB");
         }
 
         private void AiChatControl_DockStateChanged(object sender, EventArgs e)

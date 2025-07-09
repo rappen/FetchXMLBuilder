@@ -22,7 +22,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             InitializeComponent();
             this.fxb = fxb;
             cmbAiSupplier.Items.Clear();
-            cmbAiSupplier.Items.AddRange(OnlineSettings.Instance.AiSuppliers.ToArray());
+            cmbAiSupplier.Items.AddRange(OnlineSettings.Instance.AiSupport.AiSuppliers.ToArray());
             PopulateSettings(fxb.settings);
             tabSettings.SelectedTab = tabSettings.TabPages
                 .Cast<TabPage>()
@@ -80,7 +80,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
             aisettingslist = fxb.settings.AiSettingsList ?? new List<AiSettings>();
             UpdateAiSettingsList();
-            if (OnlineSettings.Instance.AiSuppliers.FirstOrDefault(a => a.Name == settings.AiSettings.Supplier) is AiSupplier supplier)
+            if (OnlineSettings.Instance.AiSupport.Supplier(settings.AiSettings.Supplier) is AiSupplier supplier)
             {
                 cmbAiSupplier.SelectedItem = supplier;
             }
@@ -89,7 +89,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 cmbAiSupplier.SelectedIndex = -1;
             }
             txtAiApiKey.Text = settings.AiSettings.ApiKey;
-            txtAiCallMe.Text = settings.AiSettings.CallMe;
+            txtAiCallMe.Text = settings.AiSettings.MyName;
         }
 
         private int SettingResultToComboBoxItem(ResultOutput resultOutput)
@@ -139,7 +139,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.AiSettings.Supplier = cmbAiSupplier.Text;
             settings.AiSettings.Model = cmbAiModel.Text;
             settings.AiSettings.ApiKey = txtAiApiKey.Text;
-            settings.AiSettings.CallMe = txtAiCallMe.Text;
+            settings.AiSettings.MyName = txtAiCallMe.Text;
             UpdateAiSettingsList();
             settings.AiSettingsList = aisettingslist;
             return settings;
@@ -327,7 +327,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void cmbAiModel_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var aimodelurl = OnlineSettings.Instance.AiSuppliers.FirstOrDefault(a => a.Name == cmbAiSupplier.Text)?.Models.FirstOrDefault(m => m.Name == cmbAiModel.Text)?.Url;
+            var aimodelurl = OnlineSettings.Instance.AiSupport.Supplier(cmbAiSupplier.Text)?.Models.FirstOrDefault(m => m.Name == cmbAiModel.Text)?.Url;
             picAiUrl.Tag = aimodelurl;
             picAiUrl.Visible = !string.IsNullOrWhiteSpace(aimodelurl);
             LoadAiSettingsKey();
