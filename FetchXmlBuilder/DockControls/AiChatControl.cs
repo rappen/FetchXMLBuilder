@@ -2,6 +2,7 @@
 using Rappen.AI.WinForm;
 using Rappen.XTB.FXB.Settings;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private AiSupplier supplier;
         private AiModel model;
         private string lastquery;
+        private bool sentMetaEntities = false;
+        private List<string> sentMetaAttributes = new List<string>();
 
         #region Public Constructor
 
@@ -58,6 +61,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 return;
             }
             chatHistory = new ChatMessageHistory(panAiConversation, supplier?.Name, model?.Name, fxb.settings.AiSettings.MyName);
+            sentMetaEntities = false;
+            sentMetaAttributes.Clear();
             SetTitle();
             EnableButtons();
         }
@@ -202,6 +207,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         [Description("Retrieves the metadata of the entity/table in the current environmemnt. This is used to help the assistant understand the entities display names and logical names.")]
         private string GetMetadataForUnknownEntity([Description("The name of the unknown table that the assistant has mentioned.")] string entityName)
         {
+            if (sentMetaEntities)
+            {
+                return $"Metadata for entities has already been sent. Please read the json I sent you earlier.";
+            }
             try
             {
                 var aimeta = fxb.EntitiesToAiJson();
@@ -210,6 +219,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     return $"No entities found in the current solution. Please ensure that you have entities defined in your solution.";
                 }
                 chatHistory.Add(ChatRole.User, PromptEntityMeta.Replace("{entityname}", entityName).Replace("{metadata}", aimeta), true);
+                sentMetaEntities = true;
                 return $"Tried to retrieve the missing tables.";
             }
             catch (Exception ex)
@@ -221,6 +231,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         [Description("Retrieves the attributes of the entity/table in the current environment. This is used to help the assistant understand the attributes of the entity and their display names and logical names.")]
         private string GetMetadataForUnknownAttribute([Description("The name of the attribute on the entity the assistant has mentioned is unknown.")] string entityName)
         {
+            if (sentMetaAttributes.Contains(entityName))
+            {
+                return $"Metadata for attributes of the entity '{entityName}' has already been sent. Please read the json I sent you earlier.";
+            }
             try
             {
                 var aimeta = fxb.AttributesToAiJson(entityName);
@@ -229,6 +243,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     return $"No attributes found for the entity '{entityName}'. Please ensure that the entity exists and has attributes defined.";
                 }
                 chatHistory.Add(ChatRole.User, PromptAttributeMeta.Replace("{entityname}", entityName).Replace("{metadata}", aimeta), true);
+                sentMetaAttributes.Add(entityName);
                 return $"Tried to retrieve attributes for the entity.";
             }
             catch (Exception ex)
