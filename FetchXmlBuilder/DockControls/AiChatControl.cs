@@ -157,7 +157,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             btnReset.Enabled = btnYes.Enabled;
             splitAiChat.Panel2.Enabled = chatHistory?.IsRunning != true;
             txtAiChat.BackColor = chatHistory?.IsRunning == true ? ChatMessageHistory.WaitingBackColor : ChatMessageHistory.BackColor;
-            txtAiChat.Enabled = chatHistory?.IsRunning == true;
+            txtAiChat.Enabled = chatHistory?.IsRunning != true;
         }
 
         [Description("Executes FetchXML Query")]
