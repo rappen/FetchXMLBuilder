@@ -148,8 +148,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 ExecuteFetchXMLQuery,
                 UpdateCurrentFetchXmlQuery,
                 GetMetadataForUnknownEntity,
-                GetMetadataForUnknownAttribute
-                );
+                GetMetadataForUnknownAttribute);
             txtAiChat.Clear();
         }
 
@@ -208,14 +207,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         [Description("Retrieves the logical name and display name of tables/entity that matches a description. The result is returned in a JSON list with entries of the format {\"LN\":\"[logical name of entity]\",\"DN\":\"[display name of entity]\"}. There may be many results, if a unique table cannot be found.")]
         private string GetMetadataForUnknownEntity([Description("The name/description of a table.")] string tableDescription)
         {
-
-            string result = AiCommunication.AiSamplingRequest(
-                "You are an agent that is given a list of table metadata in the format {\"LN\":\"[logical name of entity]\",\"DN\":\"[display name of entity]\"}. You help the user find one or many entries that matches a description supplied by the user. You return the found items as a JSON array with entries in the format {\"LN\":\"[logical name of entity]\",\"DN\":\"[display name of entity]\"}. If nothing is found, return an empty array. Here is the list of metadata:\n\n" + fxb.EntitiesToAiJson(),
-                $"Please find entries that match the description {tableDescription}", supplier.Name, model.Name, fxb.settings.AiSettings.ApiKey
-                );
-
+            var result = AiCommunication.AiSamplingRequest(PromptEntityMeta.Replace("{metadata}", fxb.EntitiesToAiJson()),
+                $"Please find entries that match the description {tableDescription}", supplier.Name, model.Name, fxb.settings.AiSettings.ApiKey);
             return result;
-                
         }
 
         [Description("Returns attributes of a table/entity that matches a description. Information about attributes is returned in a JSON list with entries of the format {\"LN\":\"[logical name of attribute]\",\"DN\":\"[display name of attribute]\"}. There may be many results, if a unique attribute cannot be found.")]
@@ -239,13 +233,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
             }
 
-            string result = AiCommunication.AiSamplingRequest(
-              "You are an agent that is given a list of attribute metadata in the format {\"LN\":\"[logical name of attribute]\",\"DN\":\"[display name of attribute]\"}. You help the user find one or many entries that matches a description supplied by the user, and you inspect both the logical names and display names for potential matches, using fuzzy matching. You return all the matching items as a JSON array with entries in the format {\"LN\":\"[logical name of attribute]\",\"DN\":\"[display name of attribute]\"}. If nothing is found, return an empty array. Here is the list of attribute metadata for the entity:\n\n" + metaAttributes[entityName],
-              $"Please find entries that match the description {attributeDescription}", supplier.Name, model.Name, fxb.settings.AiSettings.ApiKey
-              );
-
+            var result = AiCommunication.AiSamplingRequest(PromptAttributeMeta.Replace("{metadata}", metaAttributes[entityName]),
+                $"Please find attributes that match the description {attributeDescription}", supplier.Name, model.Name, fxb.settings.AiSettings.ApiKey);
             return result;
-
         }
 
         private void HandlingResponseFromAi(ChatResponse response)
