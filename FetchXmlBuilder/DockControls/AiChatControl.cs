@@ -79,7 +79,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void SetTitle()
         {
-            Text = $"AI Chat - {fxb.settings.AiSettings.Supplier}";
+            Text = $"AI Chat - {supplier}";
             TabText = Text;
         }
 
