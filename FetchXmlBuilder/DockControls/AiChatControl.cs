@@ -21,7 +21,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private AiModel model;
         private string lastquery;
         private bool sentMetaEntities = false;
-        private List<string> sentMetaAttributes = new List<string>();
+        private Dictionary<string, string> metaAttributes = new Dictionary<string, string>();
 
         #region Public Constructor
 
@@ -47,6 +47,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
             chatHistory?.Save(Paths.LogsPath, "FXB");
             supplier = OnlineSettings.Instance.AiSupport.Supplier(fxb.settings.AiSettings.Supplier);
+
             if (supplier == null)
             {
                 MessageBoxEx.Show(fxb, "The AI supplier is not available (yet).\nGo check the setting!", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -62,7 +63,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             chatHistory = new ChatMessageHistory(panAiConversation, supplier?.Name, model?.Name, fxb.settings.AiSettings.MyName);
             sentMetaEntities = false;
-            sentMetaAttributes.Clear();
+            metaAttributes.Clear();
             SetTitle();
             EnableButtons();
         }
@@ -204,52 +205,47 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        [Description("Retrieves the metadata of the entity/table in the current environmemnt. This is used to help the assistant understand the entities display names and logical names.")]
-        private string GetMetadataForUnknownEntity([Description("The name of the unknown table that the assistant has mentioned.")] string entityName)
+        [Description("Retrieves the logical name and display name of tables/entity that matches a description. The result is returned in a JSON list with entries of the format {\"LN\":\"[logical name of entity]\",\"DN\":\"[display name of entity]\"}. There may be many results, if a unique table cannot be found.")]
+        private string GetMetadataForUnknownEntity([Description("The name/description of a table.")] string tableDescription)
         {
-            if (sentMetaEntities)
-            {
-                return $"Metadata for entities has already been sent. Please read the json I sent you earlier.";
-            }
-            try
-            {
-                var aimeta = fxb.EntitiesToAiJson();
-                if (aimeta.Count() == 0)
-                {
-                    return $"No entities found in the current solution. Please ensure that you have entities defined in your solution.";
-                }
-                chatHistory.Add(ChatRole.User, PromptEntityMeta.Replace("{entityname}", entityName).Replace("{metadata}", aimeta), true);
-                sentMetaEntities = true;
-                return $"Tried to retrieve the missing tables.";
-            }
-            catch (Exception ex)
-            {
-                return $"Error retrieving entity metadata: {ex.Message}";
-            }
+
+            string result = AiCommunication.AiSamplingRequest(
+                "You are an agent that is given a list of table metadata in the format {\"LN\":\"[logical name of entity]\",\"DN\":\"[display name of entity]\"}. You help the user find one or many entries that matches a description supplied by the user. You return the found items as a JSON array with entries in the format {\"LN\":\"[logical name of entity]\",\"DN\":\"[display name of entity]\"}. If nothing is found, return an empty array. Here is the list of metadata:\n\n" + fxb.EntitiesToAiJson(),
+                $"Please find entries that match the description {tableDescription}", supplier.Name, model.Name, fxb.settings.AiSettings.ApiKey
+                );
+
+            return result;
+                
         }
 
-        [Description("Retrieves the attributes of the entity/table in the current environment. This is used to help the assistant understand the attributes of the entity and their display names and logical names.")]
-        private string GetMetadataForUnknownAttribute([Description("The name of the attribute on the entity the assistant has mentioned is unknown.")] string entityName)
+        [Description("Returns attributes of a table/entity that matches a description. Information about attributes is returned in a JSON list with entries of the format {\"LN\":\"[logical name of attribute]\",\"DN\":\"[display name of attribute]\"}. There may be many results, if a unique attribute cannot be found.")]
+        private string GetMetadataForUnknownAttribute([Description("The logical name of the entity and a name/description of an attribute, separated by '@@'. Example: 'logical name of table@@a description of an attribute'")] string entityNameAndAttributeDescription)
         {
-            if (sentMetaAttributes.Contains(entityName))
+            string[] parts = entityNameAndAttributeDescription.Split(new[] { "@@" }, 2, StringSplitOptions.None);
+
+            var entityName = parts[0];
+            var attributeDescription = parts[1];
+
+            if (!metaAttributes.ContainsKey(entityName))
             {
-                return $"Metadata for attributes of the entity '{entityName}' has already been sent. Please read the json I sent you earlier.";
-            }
-            try
-            {
-                var aimeta = fxb.AttributesToAiJson(entityName);
-                if (aimeta.Count() == 0)
+                try
                 {
-                    return $"No attributes found for the entity '{entityName}'. Please ensure that the entity exists and has attributes defined.";
+                    var aimeta = fxb.AttributesToAiJson(entityName);
+                    metaAttributes[entityName] = aimeta;
                 }
-                chatHistory.Add(ChatRole.User, PromptAttributeMeta.Replace("{entityname}", entityName).Replace("{metadata}", aimeta), true);
-                sentMetaAttributes.Add(entityName);
-                return $"Tried to retrieve attributes for the entity.";
+                catch (Exception ex)
+                {
+                    return $"Error retrieving attribute metadata: {ex.Message}";
+                }
             }
-            catch (Exception ex)
-            {
-                return $"Error retrieving attribute metadata: {ex.Message}";
-            }
+
+            string result = AiCommunication.AiSamplingRequest(
+              "You are an agent that is given a list of attribute metadata in the format {\"LN\":\"[logical name of attribute]\",\"DN\":\"[display name of attribute]\"}. You help the user find one or many entries that matches a description supplied by the user, and you inspect both the logical names and display names for potential matches, using fuzzy matching. You return all the matching items as a JSON array with entries in the format {\"LN\":\"[logical name of attribute]\",\"DN\":\"[display name of attribute]\"}. If nothing is found, return an empty array. Here is the list of attribute metadata for the entity:\n\n" + metaAttributes[entityName],
+              $"Please find entries that match the description {attributeDescription}", supplier.Name, model.Name, fxb.settings.AiSettings.ApiKey
+              );
+
+            return result;
+
         }
 
         private void HandlingResponseFromAi(ChatResponse response)
