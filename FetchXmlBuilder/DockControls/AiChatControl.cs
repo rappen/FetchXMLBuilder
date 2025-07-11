@@ -1,12 +1,11 @@
 ﻿using Microsoft.Extensions.AI;
 using Rappen.AI.WinForm;
+using Rappen.XRM.Helpers.Extensions;
 using Rappen.XTB.FXB.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
@@ -121,20 +120,23 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 return;
             }
 
+            var manualquery = fxb.dockControlBuilder?.GetFetchString(true, false);
+            if (string.IsNullOrEmpty(lastquery))
+            {
+                lastquery = manualquery;
+            }
             if (!chatHistory.Initialized)
             {
                 chatHistory.Initialize(PromptSystem.Replace("{fetchxml}", fxb.dockControlBuilder?.GetFetchString(true, false))
                     + Environment.NewLine
                     + PromptMyName.Replace("{callme}", fxb.settings.AiSettings.MyName).Trim());
             }
-            else
+            else if (!XmlExtensions.EqualXml(manualquery, lastquery))
             {
-                var newfetch = fxb.dockControlBuilder?.GetFetchString(true, false);
-                if (newfetch != lastquery)
-                {
-                    chatHistory.Add(ChatRole.User, PromptUpdate.Replace("{fetchxml}", newfetch), true);
-                }
+                lastquery = manualquery;
+                chatHistory.Add(ChatRole.User, PromptUpdate.Replace("{fetchxml}", manualquery), true);
             }
+
             chatHistory.IsRunning = true;
             EnableButtons();
             AiCommunication.CallingAI(
@@ -186,9 +188,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             try
             {
-                var currentfetch = Regex.Replace(fxb.dockControlBuilder?.GetFetchString(true, false), @"\s+", " ");
-                var newfetch = Regex.Replace(fetchXml, @"\s+", " ");
-                if (currentfetch.Equals(newfetch))
+                if (XmlExtensions.EqualXml(fxb.dockControlBuilder?.GetFetchString(true, false), fetchXml))
                 {
                     return "No changes made to the current query.";
                 }
@@ -248,15 +248,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void SetQueryFromAi(string fetch)
         {
-            MethodInvoker mi = () =>
-            {
-                var currentfetch = Regex.Replace(fxb.dockControlBuilder?.GetFetchString(true, false), @"\s+", " ");
-                var newfetch = Regex.Replace(fetch, @"\s+", " ");
-                if (!currentfetch.Equals(newfetch))
-                {
-                    fxb.dockControlBuilder.Init(fetch, null, false, "Query from AI", true);
-                }
-            };
+            lastquery = fetch;
+            MethodInvoker mi = () => { fxb.dockControlBuilder.Init(fetch, null, false, "Query from AI", true); };
             if (InvokeRequired) Invoke(mi); else mi();
         }
 
