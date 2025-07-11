@@ -207,7 +207,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         [Description("Retrieves the logical name and display name of tables/entity that matches a description. The result is returned in a JSON list with entries of the format {\"LN\":\"[logical name of entity]\",\"DN\":\"[display name of entity]\"}. There may be many results, if a unique table cannot be found.")]
         private string GetMetadataForUnknownEntity([Description("The name/description of a table.")] string tableDescription)
         {
-            var result = AiCommunication.AiSamplingRequest(PromptEntityMeta.Replace("{metadata}", fxb.EntitiesToAiJson()),
+            var result = AiCommunication.SamplingAI(PromptEntityMeta.Replace("{metadata}", fxb.EntitiesToAiJson()),
                 $"Please find entries that match the description {tableDescription}", supplier.Name, model.Name, fxb.settings.AiSettings.ApiKey);
             return result;
         }
@@ -233,7 +233,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
             }
 
-            var result = AiCommunication.AiSamplingRequest(PromptAttributeMeta.Replace("{metadata}", metaAttributes[entityName]),
+            var result = AiCommunication.SamplingAI(PromptAttributeMeta.Replace("{metadata}", metaAttributes[entityName]),
                 $"Please find attributes that match the description {attributeDescription}", supplier.Name, model.Name, fxb.settings.AiSettings.ApiKey);
             return result;
         }
