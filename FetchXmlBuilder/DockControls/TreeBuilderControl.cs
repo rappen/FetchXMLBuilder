@@ -299,6 +299,35 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             return query;
         }
 
+        internal string GetTreeChecksum(TreeNode node)
+        {
+            if (node == null)
+            {
+                if (tvFetch.Nodes.Count > 0)
+                {
+                    node = tvFetch.Nodes[0];
+                }
+                else
+                {
+                    return "";
+                }
+            }
+            var result = "$" + node.Name;
+            if (node.Tag is Dictionary<string, string>)
+            {
+                var coll = (Dictionary<string, string>)node.Tag;
+                foreach (var key in coll.Keys)
+                {
+                    result += "@" + key + "=" + coll[key];
+                }
+            }
+            foreach (TreeNode subnode in node.Nodes)
+            {
+                result += GetTreeChecksum(subnode);
+            }
+            return result;
+        }
+
         internal void Init(string fetchStr, string layoutStr, bool layoutisfromview, string action, bool validate)
         {
             ParseXML(fetchStr, validate);
@@ -545,35 +574,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
             }
             return doc;
-        }
-
-        internal string GetTreeChecksum(TreeNode node)
-        {
-            if (node == null)
-            {
-                if (tvFetch.Nodes.Count > 0)
-                {
-                    node = tvFetch.Nodes[0];
-                }
-                else
-                {
-                    return "";
-                }
-            }
-            var result = "$" + node.Name;
-            if (node.Tag is Dictionary<string, string>)
-            {
-                var coll = (Dictionary<string, string>)node.Tag;
-                foreach (var key in coll.Keys)
-                {
-                    result += "@" + key + "=" + coll[key];
-                }
-            }
-            foreach (TreeNode subnode in node.Nodes)
-            {
-                result += GetTreeChecksum(subnode);
-            }
-            return result;
         }
 
         private void HandleNodeMenuClick(string ClickedTag)
@@ -1020,8 +1020,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             fxb.ShowMetadataControl();
         }
 
-        #endregion Control Event Handlers
-
         private void TreeBuilderControl_Enter(object sender, EventArgs e)
         {
             fxb.historyisavailable = true;
@@ -1032,5 +1030,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             fxb.OpenUrl(sender);
         }
+
+        #endregion Control Event Handlers
     }
 }
