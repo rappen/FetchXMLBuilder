@@ -131,7 +131,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     + Environment.NewLine
                     + PromptMyName.Replace("{callme}", fxb.settings.AiSettings.MyName).Trim());
             }
-            else if (!XmlExtensions.EqualXml(manualquery, lastquery))
+            else if (!manualquery.EqualXml(lastquery))
             {
                 lastquery = manualquery;
                 chatHistory.Add(ChatRole.User, PromptUpdate.Replace("{fetchxml}", manualquery), true);
@@ -188,7 +188,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             try
             {
-                if (XmlExtensions.EqualXml(fxb.dockControlBuilder?.GetFetchString(true, false), fetchXml))
+                if (fetchXml.EqualXml(fxb.dockControlBuilder?.GetFetchString(true, false)))
                 {
                     return "No changes made to the current query.";
                 }
