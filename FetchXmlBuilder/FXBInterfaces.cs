@@ -221,14 +221,17 @@ namespace Rappen.XTB.FetchXmlBuilder
             about.ShowDialog();
         }
 
-        public void ShowSettings()
+        public void ShowSettings() => ShowSettings(null);
+
+        public void ShowSettings(string tab)
         {
-            var settingDlg = new Forms.Settings(this);
+            var settingDlg = new Forms.Settings(this, tab);
             LogUse("ShowOptions");
             if (settingDlg.ShowDialog(this) == DialogResult.OK)
             {
                 LogUse("SaveOptions");
                 var oldtrycachemetadata = settings.TryMetadataCache;
+                var oldaisetting = settings.AiSettings.Supplier + settings.AiSettings.Model;
                 settings = settingDlg.GetSettings();
                 if (Service != null)
                 {
@@ -264,6 +267,10 @@ namespace Rappen.XTB.FetchXmlBuilder
                 if (dockControlLayoutXml?.Visible == true && !settings.Results.WorkWithLayout)
                 {
                     dockControlLayoutXml.PanelPane?.CloseActiveContent();
+                }
+                if (oldaisetting != settings.AiSettings.Supplier + settings.AiSettings.Model)
+                {
+                    dockControlAiChat?.Initialize();
                 }
                 EnableControls();
             }

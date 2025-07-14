@@ -249,6 +249,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             dockControlCSharp?.Close();
             dockControlSQL?.Close();
             dockControlMeta?.Close();
+            dockControlAiChat?.Close();
             SaveSetting();
             LogUse("Close", ai2: true);
         }
@@ -779,6 +780,11 @@ namespace Rappen.XTB.FetchXmlBuilder
         private void tsmiShowSQL_Click(object sender, EventArgs e)
         {
             ShowContentControl(ref dockControlSQL, ContentType.SQL_Query, SaveFormat.SQL, settings.DockStates.SQLQuery);
+        }
+
+        private void tsmiAiChat_Click(object sender, EventArgs e)
+        {
+            ShowAiChatControl();
         }
 
         private void tsbRepo_DropDownOpening(object sender, EventArgs e)

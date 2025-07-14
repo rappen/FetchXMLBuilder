@@ -37,7 +37,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.lblVersion = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.listAssemblies = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -45,8 +44,11 @@
             this.llShowWelcome = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.linkLabel3 = new System.Windows.Forms.LinkLabel();
-            this.groupBox1.SuspendLayout();
+            this.chkAllAssemblies = new System.Windows.Forms.CheckBox();
+            this.lnkCopyAssemblyinfo = new System.Windows.Forms.LinkLabel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // linkLabel1
@@ -132,15 +134,6 @@
             this.lblVersion.TabIndex = 11;
             this.lblVersion.Text = "1.0";
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.listAssemblies);
-            this.groupBox1.Location = new System.Drawing.Point(444, 274);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(392, 235);
-            this.groupBox1.TabIndex = 16;
-            this.groupBox1.TabStop = false;
-            // 
             // listAssemblies
             // 
             this.listAssemblies.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -154,7 +147,7 @@
             this.listAssemblies.Location = new System.Drawing.Point(3, 16);
             this.listAssemblies.Name = "listAssemblies";
             this.listAssemblies.ShowGroups = false;
-            this.listAssemblies.Size = new System.Drawing.Size(386, 216);
+            this.listAssemblies.Size = new System.Drawing.Size(380, 206);
             this.listAssemblies.TabIndex = 0;
             this.listAssemblies.UseCompatibleStateImageBehavior = false;
             this.listAssemblies.View = System.Windows.Forms.View.Details;
@@ -209,6 +202,37 @@
             this.linkLabel3.Text = "icons8.com";
             this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel3_LinkClicked);
             // 
+            // chkAllAssemblies
+            // 
+            this.chkAllAssemblies.AutoSize = true;
+            this.chkAllAssemblies.Location = new System.Drawing.Point(447, 499);
+            this.chkAllAssemblies.Name = "chkAllAssemblies";
+            this.chkAllAssemblies.Size = new System.Drawing.Size(91, 17);
+            this.chkAllAssemblies.TabIndex = 20;
+            this.chkAllAssemblies.Text = "All assemblies";
+            this.chkAllAssemblies.UseVisualStyleBackColor = true;
+            this.chkAllAssemblies.CheckedChanged += new System.EventHandler(this.chkAllAssemblies_CheckedChanged);
+            // 
+            // lnkCopyAssemblyinfo
+            // 
+            this.lnkCopyAssemblyinfo.AutoSize = true;
+            this.lnkCopyAssemblyinfo.Location = new System.Drawing.Point(736, 500);
+            this.lnkCopyAssemblyinfo.Name = "lnkCopyAssemblyinfo";
+            this.lnkCopyAssemblyinfo.Size = new System.Drawing.Size(94, 13);
+            this.lnkCopyAssemblyinfo.TabIndex = 21;
+            this.lnkCopyAssemblyinfo.TabStop = true;
+            this.lnkCopyAssemblyinfo.Text = "Copy assemblyinfo";
+            this.lnkCopyAssemblyinfo.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkCopyAssemblyinfo_LinkClicked);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.listAssemblies);
+            this.groupBox1.Location = new System.Drawing.Point(444, 268);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(386, 225);
+            this.groupBox1.TabIndex = 22;
+            this.groupBox1.TabStop = false;
+            // 
             // About
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -216,10 +240,11 @@
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.button1;
             this.ClientSize = new System.Drawing.Size(857, 524);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.lnkCopyAssemblyinfo);
             this.Controls.Add(this.linkLabel3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.llShowWelcome);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.label5);
@@ -229,14 +254,15 @@
             this.Controls.Add(this.linkLabel2);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.linkLabel1);
+            this.Controls.Add(this.chkAllAssemblies);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(500, 400);
             this.Name = "About";
             this.Text = "About";
-            this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -252,12 +278,14 @@
         private System.Windows.Forms.Label label5;
         internal System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ListView listAssemblies;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.LinkLabel llShowWelcome;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel linkLabel3;
+        private System.Windows.Forms.CheckBox chkAllAssemblies;
+        private System.Windows.Forms.LinkLabel lnkCopyAssemblyinfo;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }

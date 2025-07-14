@@ -5,6 +5,7 @@ using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Settings;
+using Rappen.XTB.FXB.AppCode;
 using Rappen.XTB.FXB.Settings;
 using Rappen.XTB.Helpers.Extensions;
 using System;
@@ -282,6 +283,33 @@ namespace Rappen.XTB.FetchXmlBuilder
                 !entityShitList.Contains(entityName) &&
                 Service != null &&
                 GetEntity(entityName)?.Attributes == null;
+        }
+
+        internal string EntitiesToAiJson() => EntitiesToAiJson(GetDisplayEntities());
+
+        internal string EntitiesToAiJson(List<EntityMetadata> entities)
+        {
+            if (entities == null || !entities.Any())
+            {
+                return string.Empty;
+            }
+            var aimeta = SimpleAiMeta.FromEntities(entities);
+            return System.Text.Json.JsonSerializer.Serialize(aimeta, new System.Text.Json.JsonSerializerOptions());
+        }
+
+        internal string AttributesToAiJson(string entityName)
+        {
+            if (string.IsNullOrEmpty(entityName))
+            {
+                return string.Empty;
+            }
+            var attributes = GetDisplayAttributes(entityName).ToList();
+            if (attributes == null || !attributes.Any())
+            {
+                return string.Empty;
+            }
+            var aimeta = SimpleAiMeta.FromAttributes(attributes);
+            return System.Text.Json.JsonSerializer.Serialize(aimeta, new System.Text.Json.JsonSerializerOptions());
         }
 
         #endregion Internal Methods

@@ -82,6 +82,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowFetchXMLjs = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowPowerPlatformCLI = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbView = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsmiAiChat = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiResultType = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiResultGridView = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiResultWebApi = new System.Windows.Forms.ToolStripMenuItem();
@@ -142,7 +143,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.toolStripMain.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolStripMain.Location = new System.Drawing.Point(0, 0);
             this.toolStripMain.Name = "toolStripMain";
-            this.toolStripMain.Size = new System.Drawing.Size(1180, 39);
+            this.toolStripMain.Size = new System.Drawing.Size(1359, 39);
             this.toolStripMain.TabIndex = 22;
             this.toolStripMain.Text = "toolStrip1";
             this.toolStripMain.Click += new System.EventHandler(this.toolStripMain_Click);
@@ -232,14 +233,14 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiOpenFile.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_open_file;
             this.tsmiOpenFile.Name = "tsmiOpenFile";
             this.tsmiOpenFile.ShortcutKeyDisplayString = "Ctrl+O";
-            this.tsmiOpenFile.Size = new System.Drawing.Size(240, 22);
+            this.tsmiOpenFile.Size = new System.Drawing.Size(256, 38);
             this.tsmiOpenFile.Text = "Open File...";
             this.tsmiOpenFile.Click += new System.EventHandler(this.tsmiOpenFile_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(237, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(253, 6);
             // 
             // tsmiOpenView
             // 
@@ -247,7 +248,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiOpenView.Name = "tsmiOpenView";
             this.tsmiOpenView.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.O)));
-            this.tsmiOpenView.Size = new System.Drawing.Size(240, 22);
+            this.tsmiOpenView.Size = new System.Drawing.Size(256, 38);
             this.tsmiOpenView.Text = "Open View...";
             this.tsmiOpenView.Click += new System.EventHandler(this.tsmiOpenView_Click);
             // 
@@ -255,14 +256,14 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsmiOpenML.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_dataverse;
             this.tsmiOpenML.Name = "tsmiOpenML";
-            this.tsmiOpenML.Size = new System.Drawing.Size(240, 22);
+            this.tsmiOpenML.Size = new System.Drawing.Size(256, 38);
             this.tsmiOpenML.Text = "Open Dynamic Marketing List...";
             this.tsmiOpenML.Click += new System.EventHandler(this.tsmiOpenML_Click);
             // 
             // tsmiOpenCWP
             // 
             this.tsmiOpenCWP.Name = "tsmiOpenCWP";
-            this.tsmiOpenCWP.Size = new System.Drawing.Size(240, 22);
+            this.tsmiOpenCWP.Size = new System.Drawing.Size(256, 38);
             this.tsmiOpenCWP.Text = "Open CWP Feed...";
             this.tsmiOpenCWP.Click += new System.EventHandler(this.tsmiOpenCWP_Click);
             // 
@@ -289,7 +290,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiSaveFile.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_savefile;
             this.tsmiSaveFile.Name = "tsmiSaveFile";
             this.tsmiSaveFile.ShortcutKeyDisplayString = "Ctrl+S";
-            this.tsmiSaveFile.Size = new System.Drawing.Size(226, 22);
+            this.tsmiSaveFile.Size = new System.Drawing.Size(242, 38);
             this.tsmiSaveFile.Text = "Save File";
             this.tsmiSaveFile.Click += new System.EventHandler(this.tsmiSaveFile_Click);
             // 
@@ -298,14 +299,14 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiSaveFileAs.Image = ((System.Drawing.Image)(resources.GetObject("tsmiSaveFileAs.Image")));
             this.tsmiSaveFileAs.Name = "tsmiSaveFileAs";
             this.tsmiSaveFileAs.ShortcutKeyDisplayString = "F12";
-            this.tsmiSaveFileAs.Size = new System.Drawing.Size(226, 22);
+            this.tsmiSaveFileAs.Size = new System.Drawing.Size(242, 38);
             this.tsmiSaveFileAs.Text = "Save File as...";
             this.tsmiSaveFileAs.Click += new System.EventHandler(this.tsmiSaveFileAs_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(223, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(239, 6);
             // 
             // tsmiSaveView
             // 
@@ -314,7 +315,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiSaveView.Name = "tsmiSaveView";
             this.tsmiSaveView.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.S)));
-            this.tsmiSaveView.Size = new System.Drawing.Size(226, 22);
+            this.tsmiSaveView.Size = new System.Drawing.Size(242, 38);
             this.tsmiSaveView.Text = "Save View";
             this.tsmiSaveView.Click += new System.EventHandler(this.tsmiSaveView_Click);
             // 
@@ -323,7 +324,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiSaveViewAs.Enabled = false;
             this.tsmiSaveViewAs.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_dataverse;
             this.tsmiSaveViewAs.Name = "tsmiSaveViewAs";
-            this.tsmiSaveViewAs.Size = new System.Drawing.Size(226, 22);
+            this.tsmiSaveViewAs.Size = new System.Drawing.Size(242, 38);
             this.tsmiSaveViewAs.Text = "Save View as...";
             this.tsmiSaveViewAs.Click += new System.EventHandler(this.tsmiSaveView_Click);
             // 
@@ -332,7 +333,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiSaveML.Enabled = false;
             this.tsmiSaveML.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_dataverse;
             this.tsmiSaveML.Name = "tsmiSaveML";
-            this.tsmiSaveML.Size = new System.Drawing.Size(226, 22);
+            this.tsmiSaveML.Size = new System.Drawing.Size(242, 38);
             this.tsmiSaveML.Text = "Save Dynamic Marketing List";
             this.tsmiSaveML.Click += new System.EventHandler(this.tsmiSaveML_Click);
             // 
@@ -340,7 +341,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsmiSaveCWP.Enabled = false;
             this.tsmiSaveCWP.Name = "tsmiSaveCWP";
-            this.tsmiSaveCWP.Size = new System.Drawing.Size(226, 22);
+            this.tsmiSaveCWP.Size = new System.Drawing.Size(242, 38);
             this.tsmiSaveCWP.Text = "Save as CWP Feed...";
             this.tsmiSaveCWP.Click += new System.EventHandler(this.tsmiSaveCWP_Click);
             // 
@@ -470,7 +471,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbExecuteOptions.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_execute_options;
             this.tsbExecuteOptions.Name = "tsbExecuteOptions";
             this.tsbExecuteOptions.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F5)));
-            this.tsbExecuteOptions.Size = new System.Drawing.Size(210, 22);
+            this.tsbExecuteOptions.Size = new System.Drawing.Size(226, 38);
             this.tsbExecuteOptions.Text = "Execute Options";
             this.tsbExecuteOptions.Click += new System.EventHandler(this.tsbExecuteOptions_Click);
             // 
@@ -507,7 +508,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsbReturnToCaller.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_send_back;
             this.tsbReturnToCaller.Name = "tsbReturnToCaller";
-            this.tsbReturnToCaller.Size = new System.Drawing.Size(168, 22);
+            this.tsbReturnToCaller.Size = new System.Drawing.Size(196, 38);
             this.tsbReturnToCaller.Text = "Return Fetch XML";
             this.tsbReturnToCaller.ToolTipText = "Return FetchXML";
             this.tsbReturnToCaller.Visible = false;
@@ -516,19 +517,19 @@ namespace Rappen.XTB.FetchXmlBuilder
             // tsmiSepReturn
             // 
             this.tsmiSepReturn.Name = "tsmiSepReturn";
-            this.tsmiSepReturn.Size = new System.Drawing.Size(165, 6);
+            this.tsmiSepReturn.Size = new System.Drawing.Size(193, 6);
             this.tsmiSepReturn.Visible = false;
             // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(165, 6);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(193, 6);
             // 
             // tsbShare
             // 
             this.tsbShare.Image = ((System.Drawing.Image)(resources.GetObject("tsbShare.Image")));
             this.tsbShare.Name = "tsbShare";
-            this.tsbShare.Size = new System.Drawing.Size(168, 22);
+            this.tsbShare.Size = new System.Drawing.Size(196, 38);
             this.tsbShare.Text = "Share Link...";
             this.tsbShare.Click += new System.EventHandler(this.tsbShare_Click);
             // 
@@ -554,7 +555,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowSQL.Name = "tsmiShowSQL";
             this.tsmiShowSQL.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.S)));
-            this.tsmiShowSQL.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowSQL.Size = new System.Drawing.Size(305, 38);
             this.tsmiShowSQL.Text = "SQL Query";
             this.tsmiShowSQL.Click += new System.EventHandler(this.tsmiShowSQL_Click);
             // 
@@ -564,7 +565,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowFlow.Name = "tsmiShowFlow";
             this.tsmiShowFlow.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.P)));
-            this.tsmiShowFlow.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowFlow.Size = new System.Drawing.Size(305, 38);
             this.tsmiShowFlow.Text = "Power Automate Parameters";
             this.tsmiShowFlow.Click += new System.EventHandler(this.tsmiShowFlow_Click);
             // 
@@ -574,7 +575,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowOData4.Name = "tsmiShowOData4";
             this.tsmiShowOData4.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.O)));
-            this.tsmiShowOData4.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowOData4.Size = new System.Drawing.Size(305, 38);
             this.tsmiShowOData4.Text = "OData 4.0 (WebAPI)";
             this.tsmiShowOData4.Click += new System.EventHandler(this.tsmiShowOData4_Click);
             // 
@@ -582,7 +583,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsmiShowOData.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_odata;
             this.tsmiShowOData.Name = "tsmiShowOData";
-            this.tsmiShowOData.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowOData.Size = new System.Drawing.Size(305, 38);
             this.tsmiShowOData.Text = "OData 2.0 (Deprecated)";
             this.tsmiShowOData.Click += new System.EventHandler(this.tsmiShowOData_Click);
             // 
@@ -592,7 +593,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowCSharpCode.Name = "tsmiShowCSharpCode";
             this.tsmiShowCSharpCode.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.C)));
-            this.tsmiShowCSharpCode.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowCSharpCode.Size = new System.Drawing.Size(305, 38);
             this.tsmiShowCSharpCode.Text = "C# code";
             this.tsmiShowCSharpCode.Click += new System.EventHandler(this.tsmiShowCSharpCode_Click);
             // 
@@ -602,7 +603,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowFetchXMLjs.Name = "tsmiShowFetchXMLjs";
             this.tsmiShowFetchXMLjs.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.J)));
-            this.tsmiShowFetchXMLjs.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowFetchXMLjs.Size = new System.Drawing.Size(305, 38);
             this.tsmiShowFetchXMLjs.Text = "JavaScript code";
             this.tsmiShowFetchXMLjs.Click += new System.EventHandler(this.tsmiShowFetchXMLjs_Click);
             // 
@@ -610,13 +611,14 @@ namespace Rappen.XTB.FetchXmlBuilder
             // 
             this.tsmiShowPowerPlatformCLI.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_powerplatformdeveloper;
             this.tsmiShowPowerPlatformCLI.Name = "tsmiShowPowerPlatformCLI";
-            this.tsmiShowPowerPlatformCLI.Size = new System.Drawing.Size(289, 22);
+            this.tsmiShowPowerPlatformCLI.Size = new System.Drawing.Size(305, 38);
             this.tsmiShowPowerPlatformCLI.Text = "Power Platform CLI";
             this.tsmiShowPowerPlatformCLI.Click += new System.EventHandler(this.tsmiShowPowerPlatformCLI_Click);
             // 
             // tsbView
             // 
             this.tsbView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiAiChat,
             this.tsmiResultType,
             this.toolStripMenuItem4,
             this.tsmiShowFetchXML,
@@ -629,6 +631,17 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsbView.Name = "tsbView";
             this.tsbView.Size = new System.Drawing.Size(77, 36);
             this.tsbView.Text = "View";
+            // 
+            // tsmiAiChat
+            // 
+            this.tsmiAiChat.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_bot_32;
+            this.tsmiAiChat.Name = "tsmiAiChat";
+            this.tsmiAiChat.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.A)));
+            this.tsmiAiChat.Size = new System.Drawing.Size(203, 38);
+            this.tsmiAiChat.Text = "AI Chat";
+            this.tsmiAiChat.ToolTipText = "Open the AI Chat!";
+            this.tsmiAiChat.Click += new System.EventHandler(this.tsmiAiChat_Click);
             // 
             // tsmiResultType
             // 
@@ -645,7 +658,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiDisplayBoth});
             this.tsmiResultType.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_result;
             this.tsmiResultType.Name = "tsmiResultType";
-            this.tsmiResultType.Size = new System.Drawing.Size(183, 22);
+            this.tsmiResultType.Size = new System.Drawing.Size(203, 38);
             this.tsmiResultType.Text = "Result Type";
             // 
             // tsmiResultGridView
@@ -738,14 +751,14 @@ namespace Rappen.XTB.FetchXmlBuilder
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(180, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(200, 6);
             // 
             // tsmiShowFetchXML
             // 
             this.tsmiShowFetchXML.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_xml_homemade;
             this.tsmiShowFetchXML.Name = "tsmiShowFetchXML";
             this.tsmiShowFetchXML.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-            this.tsmiShowFetchXML.Size = new System.Drawing.Size(183, 22);
+            this.tsmiShowFetchXML.Size = new System.Drawing.Size(203, 38);
             this.tsmiShowFetchXML.Text = "FetchXML";
             this.tsmiShowFetchXML.Click += new System.EventHandler(this.tsmiShowFetchXML_Click);
             // 
@@ -754,7 +767,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowLayoutXML.Image = ((System.Drawing.Image)(resources.GetObject("tsmiShowLayoutXML.Image")));
             this.tsmiShowLayoutXML.Name = "tsmiShowLayoutXML";
             this.tsmiShowLayoutXML.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
-            this.tsmiShowLayoutXML.Size = new System.Drawing.Size(183, 22);
+            this.tsmiShowLayoutXML.Size = new System.Drawing.Size(203, 38);
             this.tsmiShowLayoutXML.Text = "LayoutXML";
             this.tsmiShowLayoutXML.Click += new System.EventHandler(this.tsmiShowLayoutXML_Click);
             // 
@@ -764,20 +777,20 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.tsmiShowMetadata.Name = "tsmiShowMetadata";
             this.tsmiShowMetadata.ShortcutKeyDisplayString = "";
             this.tsmiShowMetadata.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
-            this.tsmiShowMetadata.Size = new System.Drawing.Size(183, 22);
+            this.tsmiShowMetadata.Size = new System.Drawing.Size(203, 38);
             this.tsmiShowMetadata.Text = "Metadata";
             this.tsmiShowMetadata.Click += new System.EventHandler(this.tsmiShowMetadata_Click);
             // 
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(180, 6);
+            this.toolStripSeparator9.Size = new System.Drawing.Size(200, 6);
             // 
             // tsmiResetWindowLayout
             // 
             this.tsmiResetWindowLayout.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_reset;
             this.tsmiResetWindowLayout.Name = "tsmiResetWindowLayout";
-            this.tsmiResetWindowLayout.Size = new System.Drawing.Size(183, 22);
+            this.tsmiResetWindowLayout.Size = new System.Drawing.Size(203, 38);
             this.tsmiResetWindowLayout.Text = "Reset window layout";
             this.tsmiResetWindowLayout.Click += new System.EventHandler(this.tsmiResetWindowLayout_Click);
             // 
@@ -898,7 +911,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.splitter2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.splitter2.Location = new System.Drawing.Point(0, 397);
             this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(1180, 3);
+            this.splitter2.Size = new System.Drawing.Size(1359, 3);
             this.splitter2.TabIndex = 4;
             this.splitter2.TabStop = false;
             // 
@@ -912,7 +925,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.dockContainer.DocumentStyle = WeifenLuo.WinFormsUI.Docking.DocumentStyle.DockingWindow;
             this.dockContainer.Location = new System.Drawing.Point(0, 37);
             this.dockContainer.Name = "dockContainer";
-            this.dockContainer.Size = new System.Drawing.Size(1180, 360);
+            this.dockContainer.Size = new System.Drawing.Size(1359, 360);
             this.dockContainer.TabIndex = 33;
             // 
             // FetchXmlBuilder
@@ -926,7 +939,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "FetchXmlBuilder";
             this.PluginIcon = ((System.Drawing.Icon)(resources.GetObject("$this.PluginIcon")));
-            this.Size = new System.Drawing.Size(1180, 400);
+            this.Size = new System.Drawing.Size(1359, 400);
             this.TabIcon = ((System.Drawing.Image)(resources.GetObject("$this.TabIcon")));
             this.ConnectionUpdated += new XrmToolBox.Extensibility.PluginControlBase.ConnectionUpdatedHandler(this.FetchXmlBuilder_ConnectionUpdated);
             this.Load += new System.EventHandler(this.FetchXmlBuilder_Load);
@@ -1020,6 +1033,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         private System.Windows.Forms.ToolStripMenuItem tsmiDisplayRaw;
         private System.Windows.Forms.ToolStripMenuItem tsmiDisplayBoth;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAiChat;
         private System.Windows.Forms.ToolStripMenuItem tsmiReloadMetadata;
         private System.Windows.Forms.ToolStripMenuItem reloadAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reloadBySolutionToolStripMenuItem;

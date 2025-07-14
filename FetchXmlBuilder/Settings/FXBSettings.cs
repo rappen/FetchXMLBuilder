@@ -1,3 +1,4 @@
+using Rappen.AI.WinForm;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using ScintillaNET;
 using System;
@@ -54,6 +55,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool WaitUntilMetadataLoaded { get; set; } = false;
         public bool AlwaysShowAggregationProperties { get; set; } = false;
         public CodeGenerators CodeGenerators { get; set; } = new CodeGenerators();
+        public AiSettings AiSettings { get; set; } = new AiSettings();
+        public List<AiSettings> AiSettingsList { get; set; } = new List<AiSettings>();
     }
 
     public class ExecuteOptions
@@ -124,6 +127,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public DockState SQLQuery { get; set; } = DockState.DockRight;
         public DockState FlowList { get; set; } = DockState.Float;
         public DockState PowerPlatformCLI { get; set; } = DockState.DockRight;
+        public DockState AiChat { get; set; } = DockState.Float;
     }
 
     public class ContentWindow
@@ -143,6 +147,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public ContentWindow FetchXmlJsWindow { get; set; } = new ContentWindow();
         public ContentWindow CSharpWindow { get; set; } = new ContentWindow();
         public ContentWindow PowerPlatformCLI { get; set; } = new ContentWindow();
+        public ContentWindow AiChat { get; set; } = new ContentWindow();
 
         internal ContentWindow GetContentWindow(ContentType type)
         {
@@ -170,6 +175,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
 
                 case ContentType.Power_Platform_CLI:
                     return PowerPlatformCLI;
+
+                case ContentType.AiChat:
+                    return AiChat;
             }
             return new ContentWindow();
         }
@@ -200,6 +208,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
 
                 case ContentType.Power_Platform_CLI:
                     PowerPlatformCLI = windowSettings;
+                    break;
+
+                case ContentType.AiChat:
+                    AiChat = windowSettings;
                     break;
             }
         }
@@ -287,15 +299,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         }
     }
 
-    public enum ResultOutput
-    {
-        Grid = 0,
-        XML = 1,
-        JSON = 2,
-        Raw = 3,
-        JSONWebAPI = 4
-    }
-
     public class CodeGenerators
     {
         public QExStyleEnum QExStyle { get; set; } = QExStyleEnum.QueryExpression;
@@ -307,6 +310,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public string EBG_EntityLogicalNames { get; set; } = "EntityLogicalName";
         public string EBG_AttributeLogicalNameClass { get; set; } = "Fields.";
         public LCG.Settings LCG_Settings { get; set; } = new LCG.Settings();
+    }
+
+    public enum ResultOutput
+    {
+        Grid = 0,
+        XML = 1,
+        JSON = 2,
+        Raw = 3,
+        JSONWebAPI = 4
     }
 
     public enum QExStyleEnum

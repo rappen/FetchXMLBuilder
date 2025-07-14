@@ -9,7 +9,6 @@ using Rappen.XTB.FetchXmlBuilder.Controls;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Forms;
 using Rappen.XTB.FetchXmlBuilder.Views;
-using Rappen.XTB.Helpers;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
@@ -62,12 +61,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal int SplitterPos
         {
-            get => splitContainer1.SplitterDistance;
+            get => splitQueryBuilder.SplitterDistance;
             set
             {
                 if (value > -1)
                 {
-                    splitContainer1.SplitterDistance = value;
+                    splitQueryBuilder.SplitterDistance = value;
                 }
             }
         }
@@ -298,6 +297,35 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 query.NoLock = true;
             }
             return query;
+        }
+
+        internal string GetTreeChecksum(TreeNode node)
+        {
+            if (node == null)
+            {
+                if (tvFetch.Nodes.Count > 0)
+                {
+                    node = tvFetch.Nodes[0];
+                }
+                else
+                {
+                    return "";
+                }
+            }
+            var result = "$" + node.Name;
+            if (node.Tag is Dictionary<string, string>)
+            {
+                var coll = (Dictionary<string, string>)node.Tag;
+                foreach (var key in coll.Keys)
+                {
+                    result += "@" + key + "=" + coll[key];
+                }
+            }
+            foreach (TreeNode subnode in node.Nodes)
+            {
+                result += GetTreeChecksum(subnode);
+            }
+            return result;
         }
 
         internal void Init(string fetchStr, string layoutStr, bool layoutisfromview, string action, bool validate)
@@ -546,35 +574,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
             }
             return doc;
-        }
-
-        internal string GetTreeChecksum(TreeNode node)
-        {
-            if (node == null)
-            {
-                if (tvFetch.Nodes.Count > 0)
-                {
-                    node = tvFetch.Nodes[0];
-                }
-                else
-                {
-                    return "";
-                }
-            }
-            var result = "$" + node.Name;
-            if (node.Tag is Dictionary<string, string>)
-            {
-                var coll = (Dictionary<string, string>)node.Tag;
-                foreach (var key in coll.Keys)
-                {
-                    result += "@" + key + "=" + coll[key];
-                }
-            }
-            foreach (TreeNode subnode in node.Nodes)
-            {
-                result += GetTreeChecksum(subnode);
-            }
-            return result;
         }
 
         private void HandleNodeMenuClick(string ClickedTag)
@@ -994,7 +993,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void TreeBuilderControl_Load(object sender, EventArgs e)
         {
-            splitContainer1.SplitterDistance = splitContainer1.Height / 2;
+            splitQueryBuilder.SplitterDistance = splitQueryBuilder.Height / 2;
         }
 
         private void tvFetch_AfterSelect(object sender, TreeViewEventArgs e)
@@ -1021,8 +1020,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             fxb.ShowMetadataControl();
         }
 
-        #endregion Control Event Handlers
-
         private void TreeBuilderControl_Enter(object sender, EventArgs e)
         {
             fxb.historyisavailable = true;
@@ -1033,5 +1030,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             fxb.OpenUrl(sender);
         }
+
+        #endregion Control Event Handlers
     }
 }

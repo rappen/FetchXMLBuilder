@@ -58,12 +58,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnDefaultQuery = new System.Windows.Forms.Button();
             this.btnFormatQuery = new System.Windows.Forms.Button();
-            this.btnResetXmlColors = new System.Windows.Forms.Button();
             this.chkShowValidationInfo = new System.Windows.Forms.CheckBox();
             this.chkShowValidation = new System.Windows.Forms.CheckBox();
             this.chkAddConditionToFilter = new System.Windows.Forms.CheckBox();
             this.chkShowAllAttributes = new System.Windows.Forms.CheckBox();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.chkWaitUntilMetadataLoaded = new System.Windows.Forms.CheckBox();
             this.chkTryMetadataCache = new System.Windows.Forms.CheckBox();
             this.linkLayout = new System.Windows.Forms.LinkLabel();
@@ -75,6 +73,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkShowTreeviewAttributeTypes = new System.Windows.Forms.CheckBox();
             this.chkShowAttributeTypes = new System.Windows.Forms.CheckBox();
             this.tabBehavior = new System.Windows.Forms.TabPage();
+            this.tabAiChat = new System.Windows.Forms.TabPage();
+            this.label6 = new System.Windows.Forms.Label();
+            this.cmbAiSupplier = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.txtAiApiKey = new System.Windows.Forms.TextBox();
+            this.cmbAiModel = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.tabResults = new System.Windows.Forms.TabPage();
             this.label5 = new System.Windows.Forms.Label();
             this.linkDeprecatedExecFetchReq = new System.Windows.Forms.LinkLabel();
@@ -84,12 +89,17 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.label3 = new System.Windows.Forms.Label();
             this.tabXmlScheme = new System.Windows.Forms.TabPage();
             this.label4 = new System.Windows.Forms.Label();
-            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.tabAdvanced = new System.Windows.Forms.TabPage();
             this.btnForceReloadMetadata = new System.Windows.Forms.Button();
             this.btnResetAll = new System.Windows.Forms.Button();
             this.chkShowOData2 = new System.Windows.Forms.CheckBox();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
+            this.picAiUrl = new System.Windows.Forms.PictureBox();
+            this.picAiSupplier = new System.Windows.Forms.PictureBox();
+            this.btnResetXmlColors = new System.Windows.Forms.Button();
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
+            this.label9 = new System.Windows.Forms.Label();
+            this.txtAiCallMe = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -97,11 +107,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabAppearance.SuspendLayout();
             this.tabLayout.SuspendLayout();
             this.tabBehavior.SuspendLayout();
+            this.tabAiChat.SuspendLayout();
             this.tabResults.SuspendLayout();
             this.panResultView.SuspendLayout();
             this.tabDefaultQuery.SuspendLayout();
             this.tabXmlScheme.SuspendLayout();
             this.tabAdvanced.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picAiUrl)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picAiSupplier)).BeginInit();
             this.SuspendLayout();
             // 
             // cmbResult
@@ -333,7 +346,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.panel1.Controls.Add(this.llShowWelcome);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
-            this.panel1.Location = new System.Drawing.Point(12, 224);
+            this.panel1.Location = new System.Drawing.Point(12, 197);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(509, 53);
             this.panel1.TabIndex = 100;
@@ -409,18 +422,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.btnFormatQuery.UseVisualStyleBackColor = true;
             this.btnFormatQuery.Click += new System.EventHandler(this.btnFormatQuery_Click);
             // 
-            // btnResetXmlColors
-            // 
-            this.btnResetXmlColors.Image = ((System.Drawing.Image)(resources.GetObject("btnResetXmlColors.Image")));
-            this.btnResetXmlColors.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnResetXmlColors.Location = new System.Drawing.Point(239, 101);
-            this.btnResetXmlColors.Name = "btnResetXmlColors";
-            this.btnResetXmlColors.Size = new System.Drawing.Size(92, 23);
-            this.btnResetXmlColors.TabIndex = 8;
-            this.btnResetXmlColors.Text = "Reset";
-            this.btnResetXmlColors.UseVisualStyleBackColor = true;
-            this.btnResetXmlColors.Click += new System.EventHandler(this.btnResetXmlColors_Click);
-            // 
             // chkShowValidationInfo
             // 
             this.chkShowValidationInfo.AutoSize = true;
@@ -469,19 +470,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tt.SetToolTip(this.chkShowAllAttributes, "all-attributes is a big no-no.\r\nBut you can, if you check this one.");
             this.chkShowAllAttributes.UseVisualStyleBackColor = true;
             // 
-            // linkLabel1
-            // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(48, 15);
-            this.linkLabel1.Location = new System.Drawing.Point(216, 208);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(305, 17);
-            this.linkLabel1.TabIndex = 102;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Missing the Entities and Attributes selections? Click here -->";
-            this.linkLabel1.UseCompatibleTextRendering = true;
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
-            // 
             // chkWaitUntilMetadataLoaded
             // 
             this.chkWaitUntilMetadataLoaded.AutoSize = true;
@@ -515,6 +503,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.linkLayout.Size = new System.Drawing.Size(62, 13);
             this.linkLayout.TabIndex = 18;
             this.linkLayout.TabStop = true;
+            this.linkLayout.Tag = "https://fetchxmlbuilder.com/features/layouts";
             this.linkLayout.Text = "Read docs!";
             this.tt.SetToolTip(this.linkLayout, "https://fetchxmlbuilder.com/features/layouts");
             this.linkLayout.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkGeneral_Click);
@@ -535,6 +524,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabSettings.Controls.Add(this.tabAppearance);
             this.tabSettings.Controls.Add(this.tabLayout);
             this.tabSettings.Controls.Add(this.tabBehavior);
+            this.tabSettings.Controls.Add(this.tabAiChat);
             this.tabSettings.Controls.Add(this.tabResults);
             this.tabSettings.Controls.Add(this.tabDefaultQuery);
             this.tabSettings.Controls.Add(this.tabXmlScheme);
@@ -622,6 +612,89 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabBehavior.Size = new System.Drawing.Size(505, 153);
             this.tabBehavior.TabIndex = 2;
             this.tabBehavior.Text = "Behavior";
+            // 
+            // tabAiChat
+            // 
+            this.tabAiChat.BackColor = System.Drawing.SystemColors.Window;
+            this.tabAiChat.Controls.Add(this.txtAiCallMe);
+            this.tabAiChat.Controls.Add(this.label9);
+            this.tabAiChat.Controls.Add(this.picAiUrl);
+            this.tabAiChat.Controls.Add(this.picAiSupplier);
+            this.tabAiChat.Controls.Add(this.label6);
+            this.tabAiChat.Controls.Add(this.cmbAiSupplier);
+            this.tabAiChat.Controls.Add(this.label8);
+            this.tabAiChat.Controls.Add(this.cmbAiModel);
+            this.tabAiChat.Controls.Add(this.txtAiApiKey);
+            this.tabAiChat.Controls.Add(this.label7);
+            this.tabAiChat.Location = new System.Drawing.Point(4, 22);
+            this.tabAiChat.Name = "tabAiChat";
+            this.tabAiChat.Size = new System.Drawing.Size(505, 153);
+            this.tabAiChat.TabIndex = 7;
+            this.tabAiChat.Text = "AI Chat";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(20, 20);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(58, 13);
+            this.label6.TabIndex = 2;
+            this.label6.Text = "AI Supplier";
+            // 
+            // cmbAiSupplier
+            // 
+            this.cmbAiSupplier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbAiSupplier.FormattingEnabled = true;
+            this.cmbAiSupplier.Items.AddRange(new object[] {
+            "Anthropic",
+            "OpenAI",
+            "Azure OpenAI"});
+            this.cmbAiSupplier.Location = new System.Drawing.Point(84, 17);
+            this.cmbAiSupplier.Name = "cmbAiSupplier";
+            this.cmbAiSupplier.Size = new System.Drawing.Size(387, 21);
+            this.cmbAiSupplier.TabIndex = 1;
+            this.cmbAiSupplier.SelectedIndexChanged += new System.EventHandler(this.cmbAiSupplier_SelectedIndexChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(20, 47);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(36, 13);
+            this.label7.TabIndex = 3;
+            this.label7.Text = "Model";
+            // 
+            // txtAiApiKey
+            // 
+            this.txtAiApiKey.Location = new System.Drawing.Point(84, 71);
+            this.txtAiApiKey.Multiline = true;
+            this.txtAiApiKey.Name = "txtAiApiKey";
+            this.txtAiApiKey.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtAiApiKey.Size = new System.Drawing.Size(409, 50);
+            this.txtAiApiKey.TabIndex = 6;
+            // 
+            // cmbAiModel
+            // 
+            this.cmbAiModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbAiModel.FormattingEnabled = true;
+            this.cmbAiModel.Items.AddRange(new object[] {
+            "Anthropic",
+            "ChatGTP",
+            "xyz"});
+            this.cmbAiModel.Location = new System.Drawing.Point(84, 44);
+            this.cmbAiModel.Name = "cmbAiModel";
+            this.cmbAiModel.Size = new System.Drawing.Size(387, 21);
+            this.cmbAiModel.TabIndex = 4;
+            this.cmbAiModel.SelectedIndexChanged += new System.EventHandler(this.cmbAiModel_SelectedIndexChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(20, 74);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(45, 13);
+            this.label8.TabIndex = 5;
+            this.label8.Text = "API Key";
             // 
             // tabResults
             // 
@@ -725,33 +798,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.label4.TabIndex = 9;
             this.label4.Text = "XML colors for FetchXML";
             // 
-            // propXmlColors
-            // 
-            this.propXmlColors.CanShowVisualStyleGlyphs = false;
-            this.propXmlColors.HelpVisible = false;
-            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.Location = new System.Drawing.Point(4, 40);
-            this.propXmlColors.Name = "propXmlColors";
-            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            xmlColors1.AttributeKey = System.Drawing.Color.Red;
-            xmlColors1.AttributeKeyColor = "Red";
-            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
-            xmlColors1.AttributeValueColor = "Blue";
-            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            xmlColors1.CommentColor = "0";
-            xmlColors1.Element = System.Drawing.Color.DarkRed;
-            xmlColors1.ElementColor = "DarkRed";
-            xmlColors1.Tag = System.Drawing.Color.Blue;
-            xmlColors1.TagColor = "Blue";
-            xmlColors1.Value = System.Drawing.Color.Black;
-            xmlColors1.ValueColor = "Black";
-            this.propXmlColors.SelectedObject = xmlColors1;
-            this.propXmlColors.Size = new System.Drawing.Size(252, 97);
-            this.propXmlColors.TabIndex = 7;
-            this.propXmlColors.ToolbarVisible = false;
-            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
-            // 
             // tabAdvanced
             // 
             this.tabAdvanced.BackColor = System.Drawing.SystemColors.Window;
@@ -802,6 +848,85 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         "how it anyway, if you which, but checking this one.");
             this.chkShowOData2.UseVisualStyleBackColor = true;
             // 
+            // picAiUrl
+            // 
+            this.picAiUrl.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picAiUrl.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_link_16;
+            this.picAiUrl.Location = new System.Drawing.Point(477, 46);
+            this.picAiUrl.Name = "picAiUrl";
+            this.picAiUrl.Size = new System.Drawing.Size(16, 16);
+            this.picAiUrl.TabIndex = 10;
+            this.picAiUrl.TabStop = false;
+            this.tt.SetToolTip(this.picAiUrl, "Browse to the api endpoint");
+            this.picAiUrl.Click += new System.EventHandler(this.picAiSupplier_Click);
+            // 
+            // picAiSupplier
+            // 
+            this.picAiSupplier.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picAiSupplier.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_info_16;
+            this.picAiSupplier.Location = new System.Drawing.Point(477, 19);
+            this.picAiSupplier.Name = "picAiSupplier";
+            this.picAiSupplier.Size = new System.Drawing.Size(16, 16);
+            this.picAiSupplier.TabIndex = 9;
+            this.picAiSupplier.TabStop = false;
+            this.tt.SetToolTip(this.picAiSupplier, "Read more");
+            this.picAiSupplier.Click += new System.EventHandler(this.picAiSupplier_Click);
+            // 
+            // btnResetXmlColors
+            // 
+            this.btnResetXmlColors.Image = ((System.Drawing.Image)(resources.GetObject("btnResetXmlColors.Image")));
+            this.btnResetXmlColors.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnResetXmlColors.Location = new System.Drawing.Point(239, 101);
+            this.btnResetXmlColors.Name = "btnResetXmlColors";
+            this.btnResetXmlColors.Size = new System.Drawing.Size(92, 23);
+            this.btnResetXmlColors.TabIndex = 8;
+            this.btnResetXmlColors.Text = "Reset";
+            this.btnResetXmlColors.UseVisualStyleBackColor = true;
+            this.btnResetXmlColors.Click += new System.EventHandler(this.btnResetXmlColors_Click);
+            // 
+            // propXmlColors
+            // 
+            this.propXmlColors.CanShowVisualStyleGlyphs = false;
+            this.propXmlColors.HelpVisible = false;
+            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.Location = new System.Drawing.Point(4, 40);
+            this.propXmlColors.Name = "propXmlColors";
+            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            xmlColors1.AttributeKey = System.Drawing.Color.Red;
+            xmlColors1.AttributeKeyColor = "Red";
+            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
+            xmlColors1.AttributeValueColor = "Blue";
+            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            xmlColors1.CommentColor = "0";
+            xmlColors1.Element = System.Drawing.Color.DarkRed;
+            xmlColors1.ElementColor = "DarkRed";
+            xmlColors1.Tag = System.Drawing.Color.Blue;
+            xmlColors1.TagColor = "Blue";
+            xmlColors1.Value = System.Drawing.Color.Black;
+            xmlColors1.ValueColor = "Black";
+            this.propXmlColors.SelectedObject = xmlColors1;
+            this.propXmlColors.Size = new System.Drawing.Size(252, 97);
+            this.propXmlColors.TabIndex = 7;
+            this.propXmlColors.ToolbarVisible = false;
+            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(20, 130);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(145, 13);
+            this.label9.TabIndex = 11;
+            this.label9.Text = "Please always mention me as";
+            // 
+            // txtAiCallMe
+            // 
+            this.txtAiCallMe.Location = new System.Drawing.Point(171, 127);
+            this.txtAiCallMe.Name = "txtAiCallMe";
+            this.txtAiCallMe.Size = new System.Drawing.Size(322, 20);
+            this.txtAiCallMe.TabIndex = 12;
+            // 
             // Settings
             // 
             this.AcceptButton = this.btnOK;
@@ -809,10 +934,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(535, 289);
+            this.ClientSize = new System.Drawing.Size(535, 262);
             this.Controls.Add(this.tabSettings);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.linkLabel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Settings";
@@ -829,6 +953,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabLayout.PerformLayout();
             this.tabBehavior.ResumeLayout(false);
             this.tabBehavior.PerformLayout();
+            this.tabAiChat.ResumeLayout(false);
+            this.tabAiChat.PerformLayout();
             this.tabResults.ResumeLayout(false);
             this.tabResults.PerformLayout();
             this.panResultView.ResumeLayout(false);
@@ -839,8 +965,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabXmlScheme.PerformLayout();
             this.tabAdvanced.ResumeLayout(false);
             this.tabAdvanced.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picAiUrl)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picAiSupplier)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -868,7 +995,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.CheckBox chkShowButtonTexts;
         private ScintillaNET.Scintilla txtFetch;
         private System.Windows.Forms.CheckBox chkShowValidation;
-        private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.CheckBox chkShowValidationInfo;
         private System.Windows.Forms.CheckBox chkClickableLinks;
         private System.Windows.Forms.ComboBox cmbResult;
@@ -902,5 +1028,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.CheckBox chkShowAttributeTypes;
         private System.Windows.Forms.CheckBox chkShowTreeviewAttributeTypes;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox cmbAiSupplier;
+        private System.Windows.Forms.TextBox txtAiApiKey;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ComboBox cmbAiModel;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.PictureBox picAiSupplier;
+        private System.Windows.Forms.TabPage tabAiChat;
+        private System.Windows.Forms.PictureBox picAiUrl;
+        private System.Windows.Forms.TextBox txtAiCallMe;
+        private System.Windows.Forms.Label label9;
     }
 }

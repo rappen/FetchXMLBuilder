@@ -1,4 +1,6 @@
-﻿namespace Rappen.XTB.FetchXmlBuilder.DockControls
+﻿using System.Windows.Forms;
+
+namespace Rappen.XTB.FetchXmlBuilder.DockControls
 {
     partial class TreeBuilderControl
     {
@@ -30,7 +32,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TreeBuilderControl));
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitQueryBuilder = new System.Windows.Forms.SplitContainer();
             this.tvFetch = new System.Windows.Forms.TreeView();
             this.imgFetch = new System.Windows.Forms.ImageList(this.components);
             this.lblWarning = new System.Windows.Forms.LinkLabel();
@@ -58,10 +60,10 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.showMetadataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitQueryBuilder)).BeginInit();
+            this.splitQueryBuilder.Panel1.SuspendLayout();
+            this.splitQueryBuilder.Panel2.SuspendLayout();
+            this.splitQueryBuilder.SuspendLayout();
             this.panProperties.SuspendLayout();
             this.gbProperties.SuspendLayout();
             this.panQuickActions.SuspendLayout();
@@ -70,29 +72,29 @@
             this.nodeMenu.SuspendLayout();
             this.SuspendLayout();
             // 
-            // splitContainer1
+            // splitQueryBuilder
             // 
-            this.splitContainer1.BackColor = System.Drawing.SystemColors.Window;
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.splitQueryBuilder.BackColor = System.Drawing.SystemColors.Window;
+            this.splitQueryBuilder.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitQueryBuilder.Location = new System.Drawing.Point(0, 0);
+            this.splitQueryBuilder.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.splitQueryBuilder.Name = "splitQueryBuilder";
+            this.splitQueryBuilder.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // splitContainer1.Panel1
+            // splitQueryBuilder.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.tvFetch);
-            this.splitContainer1.Panel1.Controls.Add(this.lblWarning);
+            this.splitQueryBuilder.Panel1.Controls.Add(this.tvFetch);
+            this.splitQueryBuilder.Panel1.Controls.Add(this.lblWarning);
             // 
-            // splitContainer1.Panel2
+            // splitQueryBuilder.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.panProperties);
-            this.splitContainer1.Panel2.Controls.Add(this.panQuickActions);
-            this.splitContainer1.Panel2.Controls.Add(this.panTreeSplitter);
-            this.splitContainer1.Size = new System.Drawing.Size(594, 438);
-            this.splitContainer1.SplitterDistance = 248;
-            this.splitContainer1.SplitterWidth = 8;
-            this.splitContainer1.TabIndex = 0;
+            this.splitQueryBuilder.Panel2.Controls.Add(this.panProperties);
+            this.splitQueryBuilder.Panel2.Controls.Add(this.panQuickActions);
+            this.splitQueryBuilder.Panel2.Controls.Add(this.panTreeSplitter);
+            this.splitQueryBuilder.Size = new System.Drawing.Size(594, 668);
+            this.splitQueryBuilder.SplitterDistance = 378;
+            this.splitQueryBuilder.SplitterWidth = 8;
+            this.splitQueryBuilder.TabIndex = 0;
             // 
             // tvFetch
             // 
@@ -106,7 +108,7 @@
             this.tvFetch.Name = "tvFetch";
             this.tvFetch.SelectedImageIndex = 0;
             this.tvFetch.ShowNodeToolTips = true;
-            this.tvFetch.Size = new System.Drawing.Size(594, 220);
+            this.tvFetch.Size = new System.Drawing.Size(594, 350);
             this.tvFetch.TabIndex = 0;
             this.tvFetch.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvFetch_AfterSelect);
             this.tvFetch.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvFetch_NodeMouseClick);
@@ -138,7 +140,7 @@
             this.lblWarning.ImageIndex = 11;
             this.lblWarning.ImageList = this.imgFetch;
             this.lblWarning.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-            this.lblWarning.Location = new System.Drawing.Point(0, 220);
+            this.lblWarning.Location = new System.Drawing.Point(0, 350);
             this.lblWarning.Name = "lblWarning";
             this.lblWarning.Padding = new System.Windows.Forms.Padding(4, 4, 0, 0);
             this.lblWarning.Size = new System.Drawing.Size(594, 28);
@@ -153,7 +155,7 @@
             this.panProperties.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panProperties.Location = new System.Drawing.Point(0, 56);
             this.panProperties.Name = "panProperties";
-            this.panProperties.Size = new System.Drawing.Size(594, 128);
+            this.panProperties.Size = new System.Drawing.Size(594, 226);
             this.panProperties.TabIndex = 36;
             // 
             // gbProperties
@@ -167,7 +169,7 @@
             this.gbProperties.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.gbProperties.Name = "gbProperties";
             this.gbProperties.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.gbProperties.Size = new System.Drawing.Size(596, 122);
+            this.gbProperties.Size = new System.Drawing.Size(596, 220);
             this.gbProperties.TabIndex = 34;
             this.gbProperties.TabStop = false;
             this.gbProperties.Text = "Node Properties";
@@ -180,7 +182,7 @@
             this.panelContainer.Location = new System.Drawing.Point(2, 16);
             this.panelContainer.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.panelContainer.Name = "panelContainer";
-            this.panelContainer.Size = new System.Drawing.Size(592, 103);
+            this.panelContainer.Size = new System.Drawing.Size(592, 201);
             this.panelContainer.TabIndex = 14;
             // 
             // panQuickActions
@@ -366,10 +368,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(594, 438);
+            this.ClientSize = new System.Drawing.Size(594, 668);
             this.CloseButton = false;
             this.CloseButtonVisible = false;
-            this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.splitQueryBuilder);
             this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight) 
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockTop) 
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockBottom) 
@@ -381,10 +383,10 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TreeBuilderControl_FormClosing);
             this.Load += new System.EventHandler(this.TreeBuilderControl_Load);
             this.Enter += new System.EventHandler(this.TreeBuilderControl_Enter);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
+            this.splitQueryBuilder.Panel1.ResumeLayout(false);
+            this.splitQueryBuilder.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitQueryBuilder)).EndInit();
+            this.splitQueryBuilder.ResumeLayout(false);
             this.panProperties.ResumeLayout(false);
             this.gbProperties.ResumeLayout(false);
             this.panQuickActions.ResumeLayout(false);
@@ -398,7 +400,7 @@
 
         #endregion
 
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer splitQueryBuilder;
         internal System.Windows.Forms.TreeView tvFetch;
         internal System.Windows.Forms.GroupBox gbProperties;
         internal System.Windows.Forms.Panel panelContainer;

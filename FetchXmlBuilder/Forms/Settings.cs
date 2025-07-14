@@ -1,7 +1,12 @@
 ﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.Settings;
+using Rappen.XTB.FXB.Settings;
 using System;
 using System.Windows.Forms;
+using System.Linq;
+using Rappen.AI.WinForm;
+using Rappen.XTB.Helpers;
+using System.Collections.Generic;
 
 namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
@@ -10,12 +15,22 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private FetchXmlBuilder fxb;
         private bool validateinfo;
         internal bool forcereloadingmetadata = false;
+        private List<AiSettings> aisettingslist;
 
-        public Settings(FetchXmlBuilder fxb)
+        public Settings(FetchXmlBuilder fxb, string tab)
         {
             InitializeComponent();
             this.fxb = fxb;
+            cmbAiSupplier.Items.Clear();
+            cmbAiSupplier.Items.AddRange(OnlineSettings.Instance.AiSupport.AiSuppliers.ToArray());
             PopulateSettings(fxb.settings);
+            tabSettings.SelectedTab = tabSettings.TabPages
+                .Cast<TabPage>()
+                .FirstOrDefault(t => t.Name == tab)
+                ?? tabSettings.TabPages
+                .Cast<TabPage>()
+                .FirstOrDefault(t => t.Text == tab)
+                ?? tabAppearance;
         }
 
         private void PopulateSettings(FXBSettings settings)
@@ -63,6 +78,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 chkWaitUntilMetadataLoaded.Enabled = false;
                 chkWaitUntilMetadataLoaded.Checked = false;
             }
+            aisettingslist = fxb.settings.AiSettingsList ?? new List<AiSettings>();
+            UpdateAiSettingsList();
+            if (OnlineSettings.Instance.AiSupport.Supplier(settings.AiSettings.Supplier) is AiSupplier supplier)
+            {
+                cmbAiSupplier.SelectedItem = supplier;
+            }
+            else
+            {
+                cmbAiSupplier.SelectedIndex = -1;
+            }
+            txtAiApiKey.Text = settings.AiSettings.ApiKey;
+            txtAiCallMe.Text = settings.AiSettings.MyName;
         }
 
         private int SettingResultToComboBoxItem(ResultOutput resultOutput)
@@ -109,6 +136,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.TryMetadataCache = chkTryMetadataCache.Checked;
             settings.WaitUntilMetadataLoaded = chkWaitUntilMetadataLoaded.Checked;
             settings.AlwaysShowAggregationProperties = chkAlwaysShowAggregateProperties.Checked;
+            settings.AiSettings.Supplier = cmbAiSupplier.Text;
+            settings.AiSettings.Model = cmbAiModel.Text;
+            settings.AiSettings.ApiKey = txtAiApiKey.Text;
+            settings.AiSettings.MyName = txtAiCallMe.Text;
+            UpdateAiSettingsList();
+            settings.AiSettingsList = aisettingslist;
             return settings;
         }
 
@@ -208,11 +241,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             linkDeprecatedExecFetchReq.Visible = resulttype == ResultOutput.Raw;
         }
 
-        private void linkLayout_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            fxb.OpenUrl("https://fetchxmlbuilder.com/features/layouts");
-        }
-
         private void linkGeneral_Click(object sender, LinkLabelLinkClickedEventArgs e)
         {
             fxb.OpenUrl(tt.GetToolTip(sender as Control));
@@ -233,6 +261,81 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 forcereloadingmetadata = true;
                 DialogResult = DialogResult.OK;
             }
+        }
+
+        private void LoadAiSettingsKey()
+        {
+            if (string.IsNullOrWhiteSpace(cmbAiSupplier.Text) || string.IsNullOrWhiteSpace(cmbAiModel.Text))
+            {
+                return;
+            }
+            var setting = aisettingslist.FirstOrDefault(a => a.Supplier == cmbAiSupplier.Text && a.Model == cmbAiModel.Text);
+            if (string.IsNullOrEmpty(setting?.ApiKey))
+            {
+                return;
+            }
+            txtAiApiKey.Text = setting.ApiKey;
+        }
+
+        private void UpdateAiSettingsList()
+        {
+            if (aisettingslist == null)
+            {
+                aisettingslist = new List<AiSettings>();
+            }
+            if (cmbAiSupplier.SelectedItem is AiSupplier supplier &&
+                cmbAiModel.SelectedItem is AiModel model &&
+                !string.IsNullOrWhiteSpace(txtAiApiKey.Text))
+            {
+                if (aisettingslist.FirstOrDefault(a => a.Supplier == supplier.Name && a.Model == model.Name) is AiSettings existing)
+                {
+                    existing.ApiKey = txtAiApiKey.Text;
+                }
+                else
+                {
+                    aisettingslist.Add(new AiSettings
+                    {
+                        Supplier = supplier.Name,
+                        Model = model.Name,
+                        ApiKey = txtAiApiKey.Text
+                    });
+                }
+            }
+        }
+
+        private void cmbAiSupplier_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            cmbAiModel.Items.Clear();
+            picAiSupplier.Tag = null;
+            if (cmbAiSupplier.SelectedItem is AiSupplier supplier)
+            {
+                tt.SetToolTip(picAiSupplier, $"Read about {supplier.Name} at {supplier.Url}");
+                picAiSupplier.Tag = supplier.Url;
+                cmbAiModel.Items.AddRange(supplier.Models.ToArray());
+                if (supplier.Models.FirstOrDefault(m => m.Name == fxb.settings.AiSettings.Model) is AiModel model)
+                {
+                    cmbAiModel.SelectedItem = model;
+                }
+                else
+                {
+                    cmbAiModel.SelectedIndex = 0;
+                }
+            }
+            picAiSupplier.Visible = !string.IsNullOrWhiteSpace(picAiSupplier.Tag as string);
+            LoadAiSettingsKey();
+        }
+
+        private void cmbAiModel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var aimodelurl = OnlineSettings.Instance.AiSupport.Supplier(cmbAiSupplier.Text)?.Models.FirstOrDefault(m => m.Name == cmbAiModel.Text)?.Url;
+            picAiUrl.Tag = aimodelurl;
+            picAiUrl.Visible = !string.IsNullOrWhiteSpace(aimodelurl);
+            LoadAiSettingsKey();
+        }
+
+        private void picAiSupplier_Click(object sender, EventArgs e)
+        {
+            UrlUtils.OpenUrl(sender);
         }
     }
 }

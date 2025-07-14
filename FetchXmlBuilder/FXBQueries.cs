@@ -296,34 +296,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 IsCancelable = true,
                 Work = (worker, eventargs) =>
                 {
-                    QueryBase query = new FetchExpression(fetch);
-                    var querysignature = dockControlBuilder.GetTreeChecksum(null);
-                    var attributessignature = dockControlBuilder.GetAttributesSignature();
-                    var start = Stopwatch.StartNew();
-                    var resultCollection = Service.RetrieveMultiple(query, worker, eventargs, "Executing FetchXML...\nRecords: {retrieving}\nPage: {page}\nTime: {time}", false, settings.ExecuteOptions.AllPages, settings.ExecuteOptions.Parameters);
-                    start.Stop();
-                    LogUse($"RetrieveMultiple-{settings.ExecuteOptions.ResultOutput}", false, resultCollection?.Entities?.Count, start.ElapsedMilliseconds);
-                    if (settings.ExecuteOptions.ResultOutput == ResultOutput.JSON)
-                    {
-                        var json = EntityCollectionSerializer.ToJSONComplex(resultCollection, Formatting.Indented);
-                        eventargs.Result = json;
-                    }
-                    else if (settings.ExecuteOptions.ResultOutput == ResultOutput.JSONWebAPI)
-                    {
-                        var json = EntityCollectionSerializer.ToJSONSimple(resultCollection, Formatting.Indented);
-                        eventargs.Result = json;
-                    }
-                    else
-                    {
-                        eventargs.Result = new QueryInfo
-                        {
-                            Query = query,
-                            QuerySignature = querysignature,
-                            AttributesSignature = attributessignature,
-                            Results = resultCollection,
-                            Elapsed = start.Elapsed
-                        };
-                    }
+                    eventargs.Result = RetrieveMultipleSync(fetch, worker, eventargs);
                 },
                 ProgressChanged = (changeargs) =>
                 {
@@ -347,44 +320,92 @@ namespace Rappen.XTB.FetchXmlBuilder
                     {
                         MessageBox.Show($"Manual abort.", "Execute", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
-                    else if (completedargs.Result is QueryInfo queryinfo)
+                    else
                     {
-                        switch (settings.ExecuteOptions.ResultOutput)
-                        {
-                            case ResultOutput.Grid:
-                                if (settings.Results.AlwaysNewWindow)
-                                {
-                                    var newresults = new ResultGrid(this);
-                                    resultpanecount++;
-                                    newresults.Text = $"Results ({resultpanecount})";
-                                    newresults.Show(dockContainer, settings.DockStates.ResultView);
-                                    newresults.SetData(queryinfo);
-                                }
-                                else
-                                {
-                                    if (dockControlGrid?.IsDisposed != false)
-                                    {
-                                        dockControlGrid = new ResultGrid(this);
-                                        dockControlGrid.Show(dockContainer, settings.DockStates.ResultView);
-                                    }
-                                    dockControlGrid.SetData(queryinfo);
-                                    dockControlGrid.Activate();
-                                }
-                                break;
-
-                            case ResultOutput.XML:
-                                var serialized = EntityCollectionSerializer.Serialize(queryinfo.Results, SerializationStyle.Explicit);
-                                ShowResultControl(serialized.OuterXml, ContentType.Serialized_Result_XML, SaveFormat.XML, settings.DockStates.FetchResult);
-                                break;
-                        }
-                        queryinfo.Results.Entities.WarnIf50kReturned(queryinfo.Query);
-                    }
-                    else if ((settings.ExecuteOptions.ResultOutput == ResultOutput.JSON || settings.ExecuteOptions.ResultOutput == ResultOutput.JSONWebAPI) && completedargs.Result is string json)
-                    {
-                        ShowResultControl(json, ContentType.Serialized_Result_JSON, SaveFormat.JSON, settings.DockStates.FetchResult);
+                        HandleRetrieveMultipleResult(completedargs.Result);
                     }
                 }
             });
+        }
+
+        internal object RetrieveMultipleSync(string fetch, System.ComponentModel.BackgroundWorker worker, System.ComponentModel.DoWorkEventArgs eventargs)
+        {
+            QueryBase query = new FetchExpression(fetch);
+            var querysignature = dockControlBuilder.GetTreeChecksum(null);
+            var attributessignature = dockControlBuilder.GetAttributesSignature();
+            var start = Stopwatch.StartNew();
+            var resultCollection = Service.RetrieveMultiple(query, worker, eventargs, "Executing FetchXML...\nRecords: {retrieving}\nPage: {page}\nTime: {time}", false, settings.ExecuteOptions.AllPages, settings.ExecuteOptions.Parameters);
+            start.Stop();
+            LogUse($"RetrieveMultiple-{settings.ExecuteOptions.ResultOutput}", false, resultCollection?.Entities?.Count, start.ElapsedMilliseconds);
+            switch (settings.ExecuteOptions.ResultOutput)
+            {
+                case ResultOutput.JSON:
+                    return EntityCollectionSerializer.ToJSONComplex(resultCollection, Formatting.Indented);
+
+                case ResultOutput.JSONWebAPI:
+                    return EntityCollectionSerializer.ToJSONSimple(resultCollection, Formatting.Indented);
+
+                default:
+                    return new QueryInfo
+                    {
+                        Query = query,
+                        QuerySignature = querysignature,
+                        AttributesSignature = attributessignature,
+                        Results = resultCollection,
+                        Elapsed = start.Elapsed
+                    };
+            }
+        }
+
+        internal void HandleRetrieveMultipleResult(object result)
+        {
+            MethodInvoker mi = delegate
+            {
+                if (result is QueryInfo queryinfo)
+                {
+                    switch (settings.ExecuteOptions.ResultOutput)
+                    {
+                        case ResultOutput.Grid:
+                            if (settings.Results.AlwaysNewWindow)
+                            {
+                                var newresults = new ResultGrid(this);
+                                resultpanecount++;
+                                newresults.Text = $"Results ({resultpanecount})";
+                                newresults.Show(dockContainer, settings.DockStates.ResultView);
+                                newresults.SetData(queryinfo);
+                            }
+                            else
+                            {
+                                if (dockControlGrid?.IsDisposed != false)
+                                {
+                                    dockControlGrid = new ResultGrid(this);
+                                    dockControlGrid.Show(dockContainer, settings.DockStates.ResultView);
+                                }
+                                dockControlGrid.SetData(queryinfo);
+                                dockControlGrid.Activate();
+                            }
+                            break;
+
+                        case ResultOutput.XML:
+                            var serialized = EntityCollectionSerializer.Serialize(queryinfo.Results, SerializationStyle.Explicit);
+                            ShowResultControl(serialized.OuterXml, ContentType.Serialized_Result_XML, SaveFormat.XML, settings.DockStates.FetchResult);
+                            break;
+                    }
+                    queryinfo.Results.Entities.WarnIf50kReturned(queryinfo.Query);
+                }
+                else if ((settings.ExecuteOptions.ResultOutput == ResultOutput.JSON || settings.ExecuteOptions.ResultOutput == ResultOutput.JSONWebAPI) && result is string json)
+                {
+                    ShowResultControl(json, ContentType.Serialized_Result_JSON, SaveFormat.JSON, settings.DockStates.FetchResult);
+                }
+            };
+            if (InvokeRequired)
+            {
+                Invoke(mi);
+            }
+            else
+            {
+                mi();
+            }
         }
     }
 }
