@@ -5,6 +5,7 @@ using Rappen.XTB.FXB.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
@@ -19,7 +20,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private AiSupplier supplier;
         private AiModel model;
         private string lastquery;
-        private bool sentMetaEntities = false;
+        private Stopwatch callingstopwatch;
         private Dictionary<string, string> metaAttributes = new Dictionary<string, string>();
 
         #region Public Constructor
@@ -61,7 +62,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 return;
             }
             chatHistory = new ChatMessageHistory(panAiConversation, supplier?.Name, model?.Name, fxb.settings.AiSettings.MyName);
-            sentMetaEntities = false;
             metaAttributes.Clear();
             SetTitle();
             EnableButtons();
@@ -127,9 +127,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             if (!chatHistory.Initialized)
             {
-                chatHistory.Initialize(PromptSystem.Replace("{fetchxml}", fxb.dockControlBuilder?.GetFetchString(true, false))
+                var intro = PromptSystem.Replace("{fetchxml}", fxb.dockControlBuilder?.GetFetchString(true, false))
                     + Environment.NewLine
-                    + PromptMyName.Replace("{callme}", fxb.settings.AiSettings.MyName).Trim());
+                    + PromptMyName.Replace("{callme}", fxb.settings.AiSettings.MyName).Trim();
+                chatHistory.Initialize(intro);
+                fxb.LogUse(action: "AI-Init", count: intro.Length, ai2: true, ai1: false);
             }
             else if (!manualquery.EqualXml(lastquery))
             {
@@ -139,6 +141,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
             chatHistory.IsRunning = true;
             EnableButtons();
+            callingstopwatch = Stopwatch.StartNew();
             AiCommunication.CallingAI(
                 text,
                 supplier.Name,
@@ -207,8 +210,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         [Description("Retrieves the logical name and display name of tables/entity that matches a description. The result is returned in a JSON list with entries of the format {\"LN\":\"[logical name of entity]\",\"DN\":\"[display name of entity]\"}. There may be many results, if a unique table cannot be found.")]
         private string GetMetadataForUnknownEntity([Description("The name/description of a table.")] string tableDescription)
         {
+            var sw = Stopwatch.StartNew();
             var result = AiCommunication.SamplingAI(PromptEntityMeta.Replace("{metadata}", fxb.EntitiesToAiJson()),
                 $"Please find entries that match the description {tableDescription}", supplier.Name, model.Name, fxb.settings.AiSettings.ApiKey);
+            sw.Stop();
+            fxb.LogUse(action: $"AI-Entity-{tableDescription}", count: result.Length, duration: sw.ElapsedMilliseconds, ai2: true, ai1: false);
             return result;
         }
 
@@ -233,13 +239,18 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
             }
 
+            var sw = Stopwatch.StartNew();
             var result = AiCommunication.SamplingAI(PromptAttributeMeta.Replace("{metadata}", metaAttributes[entityName]),
                 $"Please find attributes that match the description {attributeDescription}", supplier.Name, model.Name, fxb.settings.AiSettings.ApiKey);
+            sw.Stop();
+            fxb.LogUse(action: $"AI-Attribute-{entityName}", count: result.Length, duration: sw.ElapsedMilliseconds, ai2: true, ai1: false);
             return result;
         }
 
         private void HandlingResponseFromAi(ChatResponse response)
         {
+            callingstopwatch?.Stop();
+            fxb.LogUse(action: "AI-Response", count: response.ToString().Length, duration: callingstopwatch?.ElapsedMilliseconds, ai2: true, ai1: false);
             txtAiChat.Clear();
             txtUsage.Text = chatHistory.Responses.UsageToString();
             EnableButtons();
@@ -248,9 +259,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void SetQueryFromAi(string fetch)
         {
+            if (lastquery.EqualXml(fetch))
+            {
+                return;
+            }
             lastquery = fetch;
             MethodInvoker mi = () => { fxb.dockControlBuilder.Init(fetch, null, false, "Query from AI", true); };
             if (InvokeRequired) Invoke(mi); else mi();
+            fxb.LogUse("AI-ChangingQuery", ai2: true, ai1: false);
         }
 
         #endregion Private Methods
