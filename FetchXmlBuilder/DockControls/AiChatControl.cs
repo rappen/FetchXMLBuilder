@@ -75,11 +75,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         #region Private Methods
 
-        private string PromptSystem => supplier?.Prompts?.System ?? OnlineSettings.Instance.AiSupport.Prompts.System;
-        private string PromptMyName => supplier?.Prompts?.CallMe ?? OnlineSettings.Instance.AiSupport.Prompts.CallMe;
-        private string PromptUpdate => supplier?.Prompts?.Update ?? OnlineSettings.Instance.AiSupport.Prompts.Update;
-        private string PromptEntityMeta => supplier?.Prompts?.EntityMeta ?? OnlineSettings.Instance.AiSupport.Prompts.EntityMeta;
-        private string PromptAttributeMeta => supplier?.Prompts?.AttributeMeta ?? OnlineSettings.Instance.AiSupport.Prompts.AttributeMeta;
+        private string PromptSystem => model?.Prompts?.System ?? supplier?.Prompts?.System ?? OnlineSettings.Instance.AiSupport.Prompts.System;
+        private string PromptMyName => model?.Prompts?.CallMe ?? supplier?.Prompts?.CallMe ?? OnlineSettings.Instance.AiSupport.Prompts.CallMe;
+        private string PromptUpdate => model?.Prompts?.Update ?? supplier?.Prompts?.Update ?? OnlineSettings.Instance.AiSupport.Prompts.Update;
+        private string PromptEntityMeta => model?.Prompts?.EntityMeta ?? supplier?.Prompts?.EntityMeta ?? OnlineSettings.Instance.AiSupport.Prompts.EntityMeta;
+        private string PromptAttributeMeta => model?.Prompts?.AttributeMeta ?? supplier?.Prompts?.AttributeMeta ?? OnlineSettings.Instance.AiSupport.Prompts.AttributeMeta;
 
         private void SetTitle()
         {
@@ -149,9 +149,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             if (!chatHistory.Initialized)
             {
-                var intro = PromptSystem.Replace("{fetchxml}", fxb.dockControlBuilder?.GetFetchString(true, false))
-                    + Environment.NewLine
-                    + PromptMyName.Replace("{callme}", fxb.settings.AiSettings.MyName).Trim();
+                var intro = PromptSystem.Replace("{fetchxml}", fxb.dockControlBuilder?.GetFetchString(true, false));
+                if (!string.IsNullOrEmpty(fxb.settings.AiSettings.MyName))
+                {
+                    intro += Environment.NewLine + PromptMyName.Replace("{callme}", fxb.settings.AiSettings.MyName).Trim();
+                }
                 chatHistory.Initialize(intro);
                 fxb.LogUse($"{logname}-Init", count: intro.Length, ai2: true, ai1: false);
             }
@@ -270,7 +272,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     if (aimeta.Count == 0) return $"There is no table called '{entityName}'. Call the GetMetadataForUnknownEntity tool first to get the correct table name.";
 
                     metaAttributes[entityName] = aimeta;
-
                 }
                 catch (Exception ex)
                 {
@@ -296,7 +297,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void HandlingResponseFromAi(ChatResponse response)
         {
             callingstopwatch?.Stop();
-            fxb.LogUse($"{logname}-Response", count: response.ToString().Length, duration: callingstopwatch?.ElapsedMilliseconds, ai2: true, ai1: false);
+            fxb.LogUse($"{logname}-Response", count: response?.ToString()?.Length, duration: callingstopwatch?.ElapsedMilliseconds, ai2: true, ai1: false);
             txtAiChat.Clear();
             txtUsage.Text = chatHistory.Responses.UsageToString();
             EnableButtons();
