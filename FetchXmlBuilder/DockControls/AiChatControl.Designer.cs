@@ -85,7 +85,7 @@
             this.splitAiChat.Panel2.Controls.Add(this.panel1);
             this.splitAiChat.Panel2MinSize = 40;
             this.splitAiChat.Size = new System.Drawing.Size(428, 363);
-            this.splitAiChat.SplitterDistance = 205;
+            this.splitAiChat.SplitterDistance = 201;
             this.splitAiChat.SplitterWidth = 8;
             this.splitAiChat.TabIndex = 13;
             // 
@@ -98,7 +98,7 @@
             this.panAiConversation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panAiConversation.Location = new System.Drawing.Point(0, 0);
             this.panAiConversation.Name = "panAiConversation";
-            this.panAiConversation.Size = new System.Drawing.Size(428, 205);
+            this.panAiConversation.Size = new System.Drawing.Size(428, 201);
             this.panAiConversation.TabIndex = 0;
             // 
             // txtAiChat
@@ -108,7 +108,7 @@
             this.txtAiChat.Multiline = true;
             this.txtAiChat.Name = "txtAiChat";
             this.txtAiChat.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAiChat.Size = new System.Drawing.Size(376, 137);
+            this.txtAiChat.Size = new System.Drawing.Size(376, 141);
             this.txtAiChat.TabIndex = 1;
             this.txtAiChat.TextChanged += new System.EventHandler(this.txtAiChatAsk_TextChanged);
             this.txtAiChat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtAiChatAsk_KeyDown);
@@ -118,7 +118,7 @@
             this.txtUsage.BackColor = System.Drawing.SystemColors.Window;
             this.txtUsage.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtUsage.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.txtUsage.Location = new System.Drawing.Point(0, 137);
+            this.txtUsage.Location = new System.Drawing.Point(0, 141);
             this.txtUsage.Name = "txtUsage";
             this.txtUsage.ReadOnly = true;
             this.txtUsage.Size = new System.Drawing.Size(376, 13);
@@ -137,7 +137,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel1.Location = new System.Drawing.Point(376, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(52, 150);
+            this.panel1.Size = new System.Drawing.Size(52, 154);
             this.panel1.TabIndex = 0;
             // 
             // btnExecute
@@ -149,7 +149,7 @@
             this.btnExecute.TabIndex = 2;
             this.toolTip1.SetToolTip(this.btnExecute, "Execute the query!");
             this.btnExecute.UseVisualStyleBackColor = true;
-            this.btnExecute.Click += new System.EventHandler(this.btnExecute_Click);
+            this.btnExecute.Click += new System.EventHandler(this.SendChatToAI);
             // 
             // btnSettings
             // 
@@ -204,7 +204,7 @@
             this.btnYes.TabIndex = 1;
             this.toolTip1.SetToolTip(this.btnYes, "Yes please!\r\n<CTRL>+Y");
             this.btnYes.UseVisualStyleBackColor = true;
-            this.btnYes.Click += new System.EventHandler(this.btnYes_Click);
+            this.btnYes.Click += new System.EventHandler(this.SendChatToAI);
             // 
             // btnAiChatAsk
             // 
@@ -216,7 +216,7 @@
             this.btnAiChatAsk.TabIndex = 0;
             this.toolTip1.SetToolTip(this.btnAiChatAsk, "<CTRL>+Enter\r\nSend the query to the AI");
             this.btnAiChatAsk.UseVisualStyleBackColor = true;
-            this.btnAiChatAsk.Click += new System.EventHandler(this.btnAiChatAsk_Click);
+            this.btnAiChatAsk.Click += new System.EventHandler(this.SendChatToAI);
             // 
             // AiChatControl
             // 
