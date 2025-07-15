@@ -241,17 +241,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             var entities = fxb.EntitiesToAi();
             var json = System.Text.Json.JsonSerializer.Serialize(entities, new System.Text.Json.JsonSerializerOptions());
-            var sw = Stopwatch.StartNew();
 
             chatHistory.Add(ChatRole.User, $"The tool GetMetadataForUnknownAttribute was called: retrieve a table that matches the description '{tableDescription}'", true);
 
+            var sw = Stopwatch.StartNew();
             var result = AiCommunication.SamplingAI(PromptEntityMeta.Replace("{metadata}", json),
                 $"Please find entries that match the description {tableDescription}", supplier.Name, model.Name, fxb.settings.AiSettings.ApiKey);
-
-            chatHistory.Add(result, true);
-
             sw.Stop();
             fxb.LogUse($"{logname}-Meta-Entity-{tableDescription}", count: entities.Count, duration: sw.ElapsedMilliseconds, ai2: true, ai1: false);
+
+            chatHistory.Add(result, true);
             return result.Text;
         }
 
@@ -280,17 +279,17 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             var attributes = metaAttributes[entityName];
             var json = System.Text.Json.JsonSerializer.Serialize(attributes, new System.Text.Json.JsonSerializerOptions());
-            var sw = Stopwatch.StartNew();
 
             chatHistory.Add(ChatRole.User, $"The tool GetMetadataForUnknownAttribute was called: retrieve attributes for table '{entityName}' that matches the description '{attributeDescription}'", true);
 
+            var sw = Stopwatch.StartNew();
             var result = AiCommunication.SamplingAI(PromptAttributeMeta.Replace("{metadata}", json),
                 $"Please find attributes that match the description {attributeDescription}", supplier.Name, model.Name, fxb.settings.AiSettings.ApiKey);
+            sw.Stop();
+            fxb.LogUse($"{logname}-Meta-Attribute-{entityName}", count: attributes.Count, duration: sw.ElapsedMilliseconds, ai2: true, ai1: false);
 
             chatHistory.Add(result, true);
 
-            sw.Stop();
-            fxb.LogUse($"{logname}-Meta-Attribute-{entityName}", count: attributes.Count, duration: sw.ElapsedMilliseconds, ai2: true, ai1: false);
             return result.Text;
         }
 
