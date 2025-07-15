@@ -204,6 +204,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 sw.Stop();
                 fxb.LogUse($"{logname}-Query-Execute", count: result is QueryInfo qi ? qi.Results.Entities.Count : 0, duration: sw.ElapsedMilliseconds, ai2: true, ai1: false);
                 fxb.HandleRetrieveMultipleResult(result);
+                //fxb.dockControlGrid?.ResetLayout();   Commented it out since it exploded, but it might be good to do this after each new query execute
                 return "Query executed successfully";
             }
             catch (Exception ex)

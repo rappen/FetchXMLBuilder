@@ -171,6 +171,19 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             reloaded = tmpreloaded;
         }
 
+        internal void ShowAllColumns()
+        {
+            ShowHiddenColumns();
+            GetLayoutFromGrid();
+        }
+
+        internal void ResetLayout()
+        {
+            form.dockControlBuilder.ResetLayout();
+            crmGridView1.LayoutXML = form.dockControlBuilder.LayoutXML?.ToXMLString();
+            RefreshData();
+        }
+
         #endregion Internal Methods
 
         #region Private Methods
@@ -473,9 +486,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void mnuResetLayout_Click(object sender, EventArgs e)
         {
-            form.dockControlBuilder.ResetLayout();
-            crmGridView1.LayoutXML = form.dockControlBuilder.LayoutXML?.ToXMLString();
-            RefreshData();
+            ResetLayout();
         }
 
         private void txtPagingCookie_Click(object sender, EventArgs e)
@@ -547,8 +558,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void mnuShowAllCol_Click(object sender, EventArgs e)
         {
-            ShowHiddenColumns();
-            GetLayoutFromGrid();
+            ShowAllColumns();
         }
 
         private void mnuShowLayoutXML_Click(object sender, EventArgs e)
