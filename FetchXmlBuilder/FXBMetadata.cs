@@ -285,31 +285,29 @@ namespace Rappen.XTB.FetchXmlBuilder
                 GetEntity(entityName)?.Attributes == null;
         }
 
-        internal string EntitiesToAiJson() => EntitiesToAiJson(GetDisplayEntities());
+        internal List<SimpleAiMeta> EntitiesToAi() => EntitiesToAi(GetDisplayEntities());
 
-        internal string EntitiesToAiJson(List<EntityMetadata> entities)
+        internal List<SimpleAiMeta> EntitiesToAi(List<EntityMetadata> entities)
         {
             if (entities == null || !entities.Any())
             {
-                return string.Empty;
+                return new List<SimpleAiMeta>();
             }
-            var aimeta = SimpleAiMeta.FromEntities(entities);
-            return System.Text.Json.JsonSerializer.Serialize(aimeta, new System.Text.Json.JsonSerializerOptions());
+            return SimpleAiMeta.FromEntities(entities);
         }
 
-        internal string AttributesToAiJson(string entityName)
+        internal List<SimpleAiMeta> AttributesToAi(string entityName)
         {
             if (string.IsNullOrEmpty(entityName))
             {
-                return string.Empty;
+                return new List<SimpleAiMeta>();
             }
             var attributes = GetDisplayAttributes(entityName).ToList();
             if (attributes == null || !attributes.Any())
             {
-                return string.Empty;
+                return new List<SimpleAiMeta>();
             }
-            var aimeta = SimpleAiMeta.FromAttributes(attributes);
-            return System.Text.Json.JsonSerializer.Serialize(aimeta, new System.Text.Json.JsonSerializerOptions());
+            return SimpleAiMeta.FromAttributes(attributes);
         }
 
         #endregion Internal Methods
