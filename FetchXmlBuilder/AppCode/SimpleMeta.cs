@@ -46,10 +46,8 @@ namespace Rappen.XTB.FXB.AppCode
         {
             if (em == null ||
                 string.IsNullOrEmpty(em.LogicalName) ||
-                !em.LogicalName.Contains("_") ||
                 em.LogicalName.StartsWith("msdyn_") ||
-                em.LogicalName.StartsWith("msfp_") ||
-                em.ToDisplayName().Equals(em.LogicalName, StringComparison.InvariantCultureIgnoreCase))
+                em.LogicalName.StartsWith("msfp_"))
             {
                 return null;
             }
@@ -60,10 +58,8 @@ namespace Rappen.XTB.FXB.AppCode
         {
             if (am == null ||
                 string.IsNullOrEmpty(am.LogicalName) ||
-                !am.LogicalName.Contains("_") ||
                 am.LogicalName.StartsWith("msdyn_") ||
-                am.LogicalName.StartsWith("msfp_") ||
-                am.ToDisplayName().Equals(am.LogicalName, StringComparison.InvariantCultureIgnoreCase))
+                am.LogicalName.StartsWith("msfp_"))
             {
                 return null;
             }
