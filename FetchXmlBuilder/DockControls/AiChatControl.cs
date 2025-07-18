@@ -167,18 +167,26 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             EnableButtons();
             fxb.LogUse($"{logname}-{action}", count: text.Length, ai2: true, ai1: false);
             callingstopwatch = Stopwatch.StartNew();
-            AiCommunication.CallingAI(
-                text,
-                supplier.Name,
-                model.Name,
-                fxb.settings.AiSettings.ApiKey,
-                chatHistory,
-                fxb,
-                HandlingResponseFromAi,
-                ExecuteFetchXMLQuery,
-                UpdateCurrentFetchXmlQuery,
-                GetMetadataForUnknownEntity,
-                GetMetadataForUnknownAttribute);
+            try
+            {
+                AiCommunication.CallingAI(
+                    text,
+                    supplier.Name,
+                    model.Name,
+                    fxb.settings.AiSettings.ApiKey,
+                    chatHistory,
+                    fxb,
+                    HandlingResponseFromAi,
+                    ExecuteFetchXMLQuery,
+                    UpdateCurrentFetchXmlQuery,
+                    GetMetadataForUnknownEntity,
+                    GetMetadataForUnknownAttribute);
+            }
+            catch (Exception ex)
+            {
+                fxb.LogError($"communicating with {supplier.Name}\n{ex.ExceptionDetails()}\n{ex.StackTrace}");
+                fxb.ShowErrorDialog(ex, "AI Chat", "An error occurred while trying to communicate with the AI.");
+            }
             txtAiChat.Clear();
         }
 
