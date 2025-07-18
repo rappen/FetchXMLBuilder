@@ -18,7 +18,6 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 using WeifenLuo.WinFormsUI.Docking;
-using XrmToolBox;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using Entity = Microsoft.Xrm.Sdk.Entity;
