@@ -193,3 +193,4 @@ ModelManifest.xml
 /.vs/config/applicationhost.config
 **/.vs
 /QEx samples
+/FetchXmlBuilder/tmp/bin.x/Debugx
