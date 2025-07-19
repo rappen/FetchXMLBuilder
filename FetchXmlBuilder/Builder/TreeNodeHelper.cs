@@ -3,6 +3,7 @@ using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Settings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -468,9 +469,49 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                 tree.deleteToolStripMenuItem.Enabled = nodecapabilities.Delete;
                 tree.commentToolStripMenuItem.Enabled = nodecapabilities.Comment;
                 tree.uncommentToolStripMenuItem.Enabled = nodecapabilities.Uncomment;
+                tree.pasteToolStripMenuItem.Text = $"Paste {GetClipboardNodeName()}";
+                tree.pasteToolStripMenuItem.Enabled = PasteAvailable(node);
+                tree.duplicateToolStripMenuItem.Enabled = nodecapabilities.Multiple;
 
                 node.ContextMenuStrip = tree.nodeMenu;
             }
+        }
+
+        private static bool PasteAvailable(TreeNode node)
+        {
+            var clipboarsdnode = GetClipboardNodeName();
+            if (node == null || string.IsNullOrWhiteSpace(clipboarsdnode))
+            {
+                return false;
+            }
+            var result = false;
+            var nodecapabilities = new FetchNodeCapabilities(node.Name, true);
+            if (nodecapabilities.ChildTypes.FirstOrDefault(c => c.Name.Equals(clipboarsdnode, StringComparison.OrdinalIgnoreCase)) is FetchNodeCapabilities childnodecap &&
+                (childnodecap.Multiple || !node.Nodes.ContainsKey(clipboarsdnode)))
+            {
+                result = true;
+            }
+            return result;
+        }
+
+        internal static string GetClipboardNodeName()
+        {
+            var clipboarsdnode = Clipboard.ContainsText() ? Clipboard.GetText() : string.Empty;
+            if (!clipboarsdnode.StartsWith("<"))
+            {
+                return null;
+            }
+            clipboarsdnode = clipboarsdnode.Substring(1);
+            if (clipboarsdnode.Contains(" "))
+            {
+                clipboarsdnode = clipboarsdnode.Substring(0, clipboarsdnode.IndexOf(" ", StringComparison.Ordinal));
+            }
+            if (clipboarsdnode.Contains(">"))
+            {
+                clipboarsdnode = clipboarsdnode.Substring(0, clipboarsdnode.IndexOf(">", StringComparison.Ordinal));
+            }
+            clipboarsdnode = clipboarsdnode.Trim();
+            return clipboarsdnode;
         }
 
         private static void AddLinkFromCapability(TreeBuilderControl tree, string name, string tag = null, bool alignright = false)

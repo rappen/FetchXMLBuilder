@@ -489,12 +489,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var node = tvFetch.SelectedNode;
             if (node != null)
             {
-                var doc = new XmlDocument();
-                XmlNode rootNode = doc.CreateElement("root");
-                doc.AppendChild(rootNode);
-                TreeNodeHelper.AddXmlNode(node, rootNode);
-                XDocument xdoc = XDocument.Parse(rootNode.InnerXml);
-                var comment = xdoc.ToString();
+                var comment = GetNodeAsString(node);
                 if (node.Nodes != null && node.Nodes.Count > 0)
                 {
                     comment = "\r\n" + comment + "\r\n";
@@ -507,10 +502,22 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 {
                     comment = comment.Substring(0, comment.Length - 1) + "~";
                 }
-                var commentNode = doc.CreateComment(comment);
+                var doc2 = new XmlDocument();
+                var commentNode = doc2.CreateComment(comment);
                 TreeNodeHelper.AddTreeViewNode(node.Parent, node, commentNode, fxb, true);
                 RecordHistory("comment");
             }
+        }
+
+        private static string GetNodeAsString(TreeNode node)
+        {
+            var doc = new XmlDocument();
+            XmlNode rootNode = doc.CreateElement("root");
+            doc.AppendChild(rootNode);
+            TreeNodeHelper.AddXmlNode(node, rootNode);
+            XDocument xdoc = XDocument.Parse(rootNode.InnerXml);
+            var result = xdoc.ToString();
+            return result;
         }
 
         private TreeNode DeleteNode()
@@ -585,6 +592,24 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 updateNode = DeleteNode();
             }
+            else if (ClickedTag == "Cut")
+            {
+                CopyNode();
+                updateNode = DeleteNode();
+            }
+            else if (ClickedTag == "Copy")
+            {
+                CopyNode();
+            }
+            else if (ClickedTag == "Paste")
+            {
+                PasteNode(false);
+            }
+            else if (ClickedTag == "Duplicate")
+            {
+                CopyNode();
+                PasteNode(true);
+            }
             else if (ClickedTag == "Comment")
             {
                 CommentNode();
@@ -623,6 +648,41 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             FetchChanged = treeChecksum != GetTreeChecksum(null);
             fxb.UpdateLiveXML();
+        }
+
+        private void CopyNode()
+        {
+            if (!(tvFetch.SelectedNode is TreeNode node) || node.Tag == null)
+            {
+                return;
+            }
+            Clipboard.SetText(GetNodeAsString(node));
+        }
+
+        private void PasteNode(bool pastetoparent)
+        {
+            var parentnode = pastetoparent ? tvFetch.SelectedNode?.Parent : tvFetch.SelectedNode;
+            if (parentnode == null || parentnode.Tag == null)
+            {
+                return;
+            }
+            var parenttype = parentnode.Name;
+            var clipboardnode = TreeNodeHelper.GetClipboardNodeName();
+            var clipboard = Clipboard.GetText();
+            var doc = new XmlDocument();
+            try
+            {
+                var newnode = TreeNodeHelper.AddChildNode(parentnode, clipboardnode, fxb, tvFetch.SelectedNode);
+                doc.LoadXml(clipboard);
+                TreeNodeHelper.AddTreeViewNode(parentnode, newnode, doc.DocumentElement, fxb, true);
+                tvFetch.SelectedNode.Expand();
+                RecordHistory("paste");
+            }
+            catch (XmlException ex)
+            {
+                var msg = "Clipboard does contain well formatted xml.\nError description:\n\n" + ex.Message;
+                MessageBox.Show(msg, "Paste", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void HandleNodeSelection(TreeNode node)
@@ -735,6 +795,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void HandleTVKeyDown(KeyEventArgs e)
         {
+            e.Handled = true;
+            e.SuppressKeyPress = true;
             if (e.KeyCode == Keys.Delete)
             {
                 if (deleteToolStripMenuItem.Enabled)
@@ -744,8 +806,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                         HandleNodeMenuClick(deleteToolStripMenuItem.Tag?.ToString());
                     }
                 }
-                e.Handled = true;
-                e.SuppressKeyPress = true;
             }
             else if (e.KeyCode == Keys.Insert)
             {
@@ -759,6 +819,22 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 HandleNodeMenuClick(uncommentToolStripMenuItem.Tag?.ToString());
             }
+            else if (e.Control && e.KeyCode == Keys.X && cutToolStripMenuItem.Enabled)
+            {
+                HandleNodeMenuClick(cutToolStripMenuItem.Tag?.ToString());
+            }
+            else if (e.Control && e.KeyCode == Keys.C && copyToolStripMenuItem.Enabled)
+            {
+                HandleNodeMenuClick(copyToolStripMenuItem.Tag?.ToString());
+            }
+            else if (e.Control && e.KeyCode == Keys.V && pasteToolStripMenuItem.Enabled)
+            {
+                HandleNodeMenuClick(pasteToolStripMenuItem.Tag?.ToString());
+            }
+            else if (e.Control && e.Shift && e.KeyCode == Keys.V && duplicateToolStripMenuItem.Enabled)
+            {
+                HandleNodeMenuClick(duplicateToolStripMenuItem.Tag?.ToString());
+            }
             else if (e.Control && e.KeyCode == Keys.Up && moveUpToolStripMenuItem.Enabled)
             {
                 toolStripButtonMoveUp_Click(null, null);
@@ -766,6 +842,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             else if (e.Control && e.KeyCode == Keys.Down && moveDownToolStripMenuItem.Enabled)
             {
                 toolStripButtonMoveDown_Click(null, null);
+            }
+            else
+            {
+                e.Handled = false;
+                e.SuppressKeyPress = false;
             }
         }
 

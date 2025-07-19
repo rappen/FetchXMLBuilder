@@ -35,7 +35,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             this.splitQueryBuilder = new System.Windows.Forms.SplitContainer();
             this.tvFetch = new System.Windows.Forms.TreeView();
             this.imgFetch = new System.Windows.Forms.ImageList(this.components);
-            this.lblWarning = new System.Windows.Forms.LinkLabel();
             this.panProperties = new System.Windows.Forms.Panel();
             this.gbProperties = new System.Windows.Forms.GroupBox();
             this.panelContainer = new System.Windows.Forms.Panel();
@@ -54,12 +53,18 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             this.toolStripSeparatorBeginOfEdition = new System.Windows.Forms.ToolStripSeparator();
             this.commentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uncommentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.showMetadataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
+            this.lblWarning = new System.Windows.Forms.LinkLabel();
+            this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.duplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showMetadataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitQueryBuilder)).BeginInit();
             this.splitQueryBuilder.Panel1.SuspendLayout();
             this.splitQueryBuilder.Panel2.SuspendLayout();
@@ -132,22 +137,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             this.imgFetch.Images.SetKeyName(11, "info");
             this.imgFetch.Images.SetKeyName(12, "warning");
             this.imgFetch.Images.SetKeyName(13, "error");
-            // 
-            // lblWarning
-            // 
-            this.lblWarning.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lblWarning.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblWarning.ImageIndex = 11;
-            this.lblWarning.ImageList = this.imgFetch;
-            this.lblWarning.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-            this.lblWarning.Location = new System.Drawing.Point(0, 350);
-            this.lblWarning.Name = "lblWarning";
-            this.lblWarning.Padding = new System.Windows.Forms.Padding(4, 4, 0, 0);
-            this.lblWarning.Size = new System.Drawing.Size(594, 28);
-            this.lblWarning.TabIndex = 1;
-            this.lblWarning.Text = "      Warning";
-            this.lblWarning.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblWarning.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblWarning_LinkClicked);
             // 
             // panProperties
             // 
@@ -278,13 +267,18 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             this.toolStripSeparatorBeginOfEdition,
             this.commentToolStripMenuItem,
             this.uncommentToolStripMenuItem,
+            this.toolStripMenuItem3,
+            this.cutToolStripMenuItem,
+            this.copyToolStripMenuItem,
+            this.pasteToolStripMenuItem,
+            this.duplicateToolStripMenuItem,
             this.toolStripMenuItem1,
             this.moveUpToolStripMenuItem,
             this.moveDownToolStripMenuItem,
             this.toolStripSeparator1,
             this.showMetadataToolStripMenuItem});
             this.nodeMenu.Name = "nodeMenu";
-            this.nodeMenu.Size = new System.Drawing.Size(203, 220);
+            this.nodeMenu.Size = new System.Drawing.Size(203, 314);
             this.nodeMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.nodeMenu_ItemClicked);
             // 
             // selectAttributesToolStripMenuItem
@@ -329,6 +323,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             this.uncommentToolStripMenuItem.Tag = "Uncomment";
             this.uncommentToolStripMenuItem.Text = "Uncomment";
             // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(199, 6);
+            // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
@@ -354,6 +353,59 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(199, 6);
+            // 
+            // lblWarning
+            // 
+            this.lblWarning.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblWarning.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblWarning.ImageIndex = 11;
+            this.lblWarning.ImageList = this.imgFetch;
+            this.lblWarning.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
+            this.lblWarning.Location = new System.Drawing.Point(0, 350);
+            this.lblWarning.Name = "lblWarning";
+            this.lblWarning.Padding = new System.Windows.Forms.Padding(4, 4, 0, 0);
+            this.lblWarning.Size = new System.Drawing.Size(594, 28);
+            this.lblWarning.TabIndex = 1;
+            this.lblWarning.Text = "      Warning";
+            this.lblWarning.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblWarning.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblWarning_LinkClicked);
+            // 
+            // cutToolStripMenuItem
+            // 
+            this.cutToolStripMenuItem.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_cut_16;
+            this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
+            this.cutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
+            this.cutToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.cutToolStripMenuItem.Tag = "Cut";
+            this.cutToolStripMenuItem.Text = "Cut";
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_copy2_16;
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.copyToolStripMenuItem.Tag = "Copy";
+            this.copyToolStripMenuItem.Text = "Copy";
+            // 
+            // pasteToolStripMenuItem
+            // 
+            this.pasteToolStripMenuItem.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_paste2_16;
+            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
+            this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.pasteToolStripMenuItem.Tag = "Paste";
+            this.pasteToolStripMenuItem.Text = "Paste";
+            // 
+            // duplicateToolStripMenuItem
+            // 
+            this.duplicateToolStripMenuItem.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_duplicate_16;
+            this.duplicateToolStripMenuItem.Name = "duplicateToolStripMenuItem";
+            this.duplicateToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.V)));
+            this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.duplicateToolStripMenuItem.Tag = "Duplicate";
+            this.duplicateToolStripMenuItem.Text = "Duplicate";
             // 
             // showMetadataToolStripMenuItem
             // 
@@ -428,5 +480,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         internal System.Windows.Forms.ToolStripMenuItem addOneMoreToolStripMenuItem;
         private System.Windows.Forms.ImageList imgFetch;
         private System.Windows.Forms.LinkLabel lblWarning;
+        private ToolStripSeparator toolStripMenuItem3;
+        internal ToolStripMenuItem copyToolStripMenuItem;
+        internal ToolStripMenuItem pasteToolStripMenuItem;
+        internal ToolStripMenuItem duplicateToolStripMenuItem;
+        private ToolStripMenuItem cutToolStripMenuItem;
     }
 }

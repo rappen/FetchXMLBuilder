@@ -833,6 +833,18 @@
   <ItemGroup>
     <None Include="Resources\icons8-waiting.gif" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon-cut-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon-copy2-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon-paste2-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon-duplicate-16.png" />
+  </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />
   <Import Project="..\MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutoComplete\MarkMpn.XmlSchemaAutoComplete.projitems" Label="Shared" />
