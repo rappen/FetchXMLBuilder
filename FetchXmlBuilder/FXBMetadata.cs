@@ -296,7 +296,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             return SimpleAiMeta.FromEntities(entities);
         }
 
-        internal List<SimpleAiMeta> AttributesToAi(string entityName)
+        internal List<SimpleAiMeta> AttributesToAi(string entityName, bool IncludeType)
         {
             if (string.IsNullOrEmpty(entityName))
             {
@@ -307,7 +307,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 return new List<SimpleAiMeta>();
             }
-            return SimpleAiMeta.FromAttributes(attributes);
+            return SimpleAiMeta.FromAttributes(attributes, IncludeType);
         }
 
         #endregion Internal Methods

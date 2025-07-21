@@ -1,14 +1,22 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XRM.Helpers.Extensions;
-using System;
 using System.Collections.Generic;
 
 namespace Rappen.XTB.FXB.AppCode
 {
     public class SimpleAiMeta
     {
-        public string LN { get; set; }
-        public string DN { get; set; }
+        /// <summary>LogicalName</summary>
+        public string L { get; set; }
+
+        /// <summary>DisplayName</summary>
+        public string D { get; set; }
+
+        /// <summary>Type</summary>
+        public string T { get; set; }
+
+        /// <summary>Entity</summary>
+        public string E { get; set; }
 
         public static List<SimpleAiMeta> FromEntities(IEnumerable<EntityMetadata> ems)
         {
@@ -25,13 +33,13 @@ namespace Rappen.XTB.FXB.AppCode
             return result;
         }
 
-        public static List<SimpleAiMeta> FromAttributes(IEnumerable<AttributeMetadata> ams)
+        public static List<SimpleAiMeta> FromAttributes(IEnumerable<AttributeMetadata> ams, bool IncludeType)
         {
             var result = new List<SimpleAiMeta>();
             if (ams == null) return result;
             foreach (var am in ams)
             {
-                var aiMeta = FromAttribute(am);
+                var aiMeta = FromAttribute(am, IncludeType);
                 if (aiMeta != null)
                 {
                     result.Add(aiMeta);
@@ -40,7 +48,7 @@ namespace Rappen.XTB.FXB.AppCode
             return result;
         }
 
-        public override string ToString() => $"{LN} = {DN}";
+        public override string ToString() => $"{L} = {D}";
 
         private static SimpleAiMeta FromEntity(EntityMetadata em)
         {
@@ -51,10 +59,10 @@ namespace Rappen.XTB.FXB.AppCode
             {
                 return null;
             }
-            return new SimpleAiMeta { LN = em.LogicalName, DN = em.ToDisplayName() };
+            return new SimpleAiMeta { L = em.LogicalName, D = em.ToDisplayName() };
         }
 
-        private static SimpleAiMeta FromAttribute(AttributeMetadata am)
+        private static SimpleAiMeta FromAttribute(AttributeMetadata am, bool IncludeType)
         {
             if (am == null ||
                 string.IsNullOrEmpty(am.LogicalName) ||
@@ -63,7 +71,13 @@ namespace Rappen.XTB.FXB.AppCode
             {
                 return null;
             }
-            return new SimpleAiMeta { LN = am.LogicalName, DN = am.ToDisplayName() };
+            var result = new SimpleAiMeta { L = am.LogicalName, D = am.ToDisplayName() };
+            if (IncludeType)
+            {
+                result.T = am.ToTypeName();
+                result.E = am is LookupAttributeMetadata lookup ? string.Join(",", lookup.Targets) : null;
+            }
+            return result;
         }
     }
 }

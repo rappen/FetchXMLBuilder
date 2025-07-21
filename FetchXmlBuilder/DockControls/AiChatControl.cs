@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Text.Json;
 using System.Threading;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
@@ -248,7 +249,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private string GetMetadataForUnknownEntity([Description("The name/description of a table.")] string tableDescription)
         {
             var entities = fxb.EntitiesToAi();
-            var json = System.Text.Json.JsonSerializer.Serialize(entities, new System.Text.Json.JsonSerializerOptions());
+            var json = System.Text.Json.JsonSerializer.Serialize(entities, new System.Text.Json.JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
 
             chatHistory.Add(ChatRole.User, $"The tool GetMetadataForUnknownAttribute was called: retrieve a table that matches the description '{tableDescription}'", true);
 
@@ -274,7 +275,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 try
                 {
-                    var aimeta = fxb.AttributesToAi(entityName);
+                    var aimeta = fxb.AttributesToAi(entityName, true);
 
                     if (aimeta.Count == 0) return $"There is no table called '{entityName}'. Call the GetMetadataForUnknownEntity tool first to get the correct table name.";
 
@@ -286,7 +287,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
             }
             var attributes = metaAttributes[entityName];
-            var json = System.Text.Json.JsonSerializer.Serialize(attributes, new System.Text.Json.JsonSerializerOptions());
+            var json = JsonSerializer.Serialize(attributes, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
 
             chatHistory.Add(ChatRole.User, $"The tool GetMetadataForUnknownAttribute was called: retrieve attributes for table '{entityName}' that matches the description '{attributeDescription}'", true);
 
