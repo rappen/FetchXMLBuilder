@@ -1,10 +1,11 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XRM.Helpers.Extensions;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Rappen.XTB.FXB.AppCode
 {
-    public class SimpleAiMeta
+    public abstract class SimpleAiMeta
     {
         /// <summary>LogicalName</summary>
         public string L { get; set; }
@@ -12,15 +13,14 @@ namespace Rappen.XTB.FXB.AppCode
         /// <summary>DisplayName</summary>
         public string D { get; set; }
 
-        /// <summary>Type</summary>
-        public string T { get; set; }
+        public override string ToString() => $"{L} = {D}";
+    }
 
-        /// <summary>Entity</summary>
-        public string E { get; set; }
-
-        public static List<SimpleAiMeta> FromEntities(IEnumerable<EntityMetadata> ems)
+    public class SimpleAiMetaEntity : SimpleAiMeta
+    {
+        public static List<SimpleAiMetaEntity> FromEntities(IEnumerable<EntityMetadata> ems)
         {
-            var result = new List<SimpleAiMeta>();
+            var result = new List<SimpleAiMetaEntity>();
             if (ems == null) return result;
             foreach (var em in ems)
             {
@@ -33,9 +33,30 @@ namespace Rappen.XTB.FXB.AppCode
             return result;
         }
 
-        public static List<SimpleAiMeta> FromAttributes(IEnumerable<AttributeMetadata> ams, bool IncludeType)
+        private static SimpleAiMetaEntity FromEntity(EntityMetadata em)
         {
-            var result = new List<SimpleAiMeta>();
+            if (em == null ||
+                string.IsNullOrEmpty(em.LogicalName) ||
+                em.LogicalName.StartsWith("msdyn_") ||
+                em.LogicalName.StartsWith("msfp_"))
+            {
+                return null;
+            }
+            return new SimpleAiMetaEntity { L = em.LogicalName, D = em.ToDisplayName() };
+        }
+    }
+
+    public class SimpleAiMetaAttribute : SimpleAiMeta
+    {
+        /// <summary>Type</summary>
+        public string T { get; set; }
+
+        /// <summary>Entity name</summary>
+        public object E { get; set; }
+
+        public static List<SimpleAiMetaAttribute> FromAttributes(IEnumerable<AttributeMetadata> ams, bool IncludeType)
+        {
+            var result = new List<SimpleAiMetaAttribute>();
             if (ams == null) return result;
             foreach (var am in ams)
             {
@@ -48,21 +69,7 @@ namespace Rappen.XTB.FXB.AppCode
             return result;
         }
 
-        public override string ToString() => $"{L} = {D}";
-
-        private static SimpleAiMeta FromEntity(EntityMetadata em)
-        {
-            if (em == null ||
-                string.IsNullOrEmpty(em.LogicalName) ||
-                em.LogicalName.StartsWith("msdyn_") ||
-                em.LogicalName.StartsWith("msfp_"))
-            {
-                return null;
-            }
-            return new SimpleAiMeta { L = em.LogicalName, D = em.ToDisplayName() };
-        }
-
-        private static SimpleAiMeta FromAttribute(AttributeMetadata am, bool IncludeType)
+        private static SimpleAiMetaAttribute FromAttribute(AttributeMetadata am, bool IncludeType)
         {
             if (am == null ||
                 string.IsNullOrEmpty(am.LogicalName) ||
@@ -71,13 +78,63 @@ namespace Rappen.XTB.FXB.AppCode
             {
                 return null;
             }
-            var result = new SimpleAiMeta { L = am.LogicalName, D = am.ToDisplayName() };
+            var result = new SimpleAiMetaAttribute { L = am.LogicalName, D = am.ToDisplayName() };
             if (IncludeType)
             {
                 result.T = am.ToTypeName();
-                result.E = am is LookupAttributeMetadata lookup ? string.Join(",", lookup.Targets) : null;
+                if (am is LookupAttributeMetadata lookup)
+                {
+                    result.E = string.Join(",", lookup.Targets);
+                }
+                else if (am is EnumAttributeMetadata picklist)
+                {
+                    result.E = SimpleAiMetaOptionSet.FromChoice(picklist.OptionSet);
+                }
+                else if (am is MultiSelectPicklistAttributeMetadata multiSelect)
+                {
+                    result.E = SimpleAiMetaOptionSet.FromChoice(multiSelect.OptionSet);
+                }
             }
             return result;
+        }
+    }
+
+    public class SimpleAiMetaOptionSet : SimpleAiMeta
+    {
+        /// <summary>OptionSet/Picklist/Choice</summary>
+        public List<SimpleAiMetaOptionsSetValue> O { get; set; }
+
+        public static SimpleAiMetaOptionSet FromChoice(OptionSetMetadata osm)
+        {
+            var result = new SimpleAiMetaOptionSet
+            {
+                L = osm?.Name,
+                D = osm?.DisplayName?.LocalizedLabels?.FirstOrDefault()?.Label,
+                O = osm?.Options?
+                    .Select(om => SimpleAiMetaOptionsSetValue.FromOption(om))
+                    .Where(o => o != null)
+                    .ToList()
+            };
+            return result;
+        }
+    }
+
+    public class SimpleAiMetaOptionsSetValue : SimpleAiMeta
+    {
+        /// <summary>Value</summary>
+        public int V { get; set; }
+
+        public static SimpleAiMetaOptionsSetValue FromOption(OptionMetadata om)
+        {
+            if (om == null || string.IsNullOrEmpty(om.Value.ToString()) || string.IsNullOrEmpty(om.Label?.LocalizedLabels?.FirstOrDefault()?.Label))
+            {
+                return null;
+            }
+            return new SimpleAiMetaOptionsSetValue
+            {
+                D = om.Label?.LocalizedLabels?.FirstOrDefault()?.Label,
+                V = om.Value.Value
+            };
         }
     }
 }

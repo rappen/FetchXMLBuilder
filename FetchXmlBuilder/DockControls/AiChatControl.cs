@@ -24,7 +24,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private AiModel model;
         private string lastquery;
         private Stopwatch callingstopwatch;
-        private Dictionary<string, List<SimpleAiMeta>> metaAttributes = new Dictionary<string, List<SimpleAiMeta>>();
+        private Dictionary<string, List<SimpleAiMetaAttribute>> metaAttributes = new Dictionary<string, List<SimpleAiMetaAttribute>>();
         private string logname = "AI";
 
         #region Public Constructor
@@ -249,7 +249,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private string GetMetadataForUnknownEntity([Description("The name/description of a table.")] string tableDescription)
         {
             var entities = fxb.EntitiesToAi();
-            var json = System.Text.Json.JsonSerializer.Serialize(entities, new System.Text.Json.JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
+            var json = JsonSerializer.Serialize(entities, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
 
             chatHistory.Add(ChatRole.User, $"The tool GetMetadataForUnknownAttribute was called: retrieve a table that matches the description '{tableDescription}'", true);
 
