@@ -360,11 +360,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             if (e.KeyCode == Keys.Enter && e.Control && !string.IsNullOrWhiteSpace(txtAiChat.Text))
             {
                 e.Handled = true;
+                e.SuppressKeyPress = true; // Prevents the beep sound
                 SendChatToAI(btnAiChatAsk);
             }
             else if (e.KeyCode == Keys.Y && e.Control)
             {
                 e.Handled = true;
+                e.SuppressKeyPress = true;
                 SendChatToAI(btnYes);
             }
         }
