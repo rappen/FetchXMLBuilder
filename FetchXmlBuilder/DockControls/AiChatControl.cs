@@ -66,7 +66,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 fxb.ShowSettings("tabAiChat");
                 return;
             }
-            chatHistory = new ChatMessageHistory(panAiConversation, supplier?.Name, model?.Name, fxb.settings.AiSettings.MyName);
+            chatHistory = new ChatMessageHistory(panAiConversation, supplier?.Name, model?.Name, fxb.settings.AiSettings.ApiKey, fxb.settings.AiSettings.MyName);
             metaAttributes.Clear();
             SetTitle();
             EnableButtons();
@@ -170,13 +170,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             callingstopwatch = Stopwatch.StartNew();
             try
             {
-                AiCommunication.CallingAI(
-                    text,
-                    supplier.Name,
-                    model.Name,
-                    fxb.settings.AiSettings.ApiKey,
-                    chatHistory,
+                AiCommunication.CallingAIAsync(
                     fxb,
+                    chatHistory,
+                    text,
                     HandlingResponseFromAi,
                     ExecuteFetchXMLQuery,
                     UpdateCurrentFetchXmlQuery,
@@ -255,7 +252,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
             var sw = Stopwatch.StartNew();
             var result = AiCommunication.SamplingAI(PromptEntityMeta.Replace("{metadata}", json),
-                $"Please find entries that match the description {tableDescription}", supplier.Name, model.Name, fxb.settings.AiSettings.ApiKey);
+                $"Please find entries that match the description {tableDescription}", chatHistory);
             sw.Stop();
             fxb.LogUse($"{logname}-Meta-Entity-{tableDescription}", count: entities.Count, duration: sw.ElapsedMilliseconds, ai2: true, ai1: false);
 
@@ -293,7 +290,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
             var sw = Stopwatch.StartNew();
             var result = AiCommunication.SamplingAI(PromptAttributeMeta.Replace("{metadata}", json),
-                $"Please find attributes that match the description {attributeDescription}", supplier.Name, model.Name, fxb.settings.AiSettings.ApiKey);
+                $"Please find attributes that match the description {attributeDescription}", chatHistory);
             sw.Stop();
             fxb.LogUse($"{logname}-Meta-Attribute-{entityName}", count: attributes.Count, duration: sw.ElapsedMilliseconds, ai2: true, ai1: false);
 
