@@ -285,29 +285,29 @@ namespace Rappen.XTB.FetchXmlBuilder
                 GetEntity(entityName)?.Attributes == null;
         }
 
-        internal List<SimpleAiMeta> EntitiesToAi() => EntitiesToAi(GetDisplayEntities());
+        internal List<SimpleAiMetaEntity> EntitiesToAi() => EntitiesToAi(GetDisplayEntities());
 
-        internal List<SimpleAiMeta> EntitiesToAi(List<EntityMetadata> entities)
+        internal List<SimpleAiMetaEntity> EntitiesToAi(List<EntityMetadata> entities)
         {
             if (entities == null || !entities.Any())
             {
-                return new List<SimpleAiMeta>();
+                return new List<SimpleAiMetaEntity>();
             }
-            return SimpleAiMeta.FromEntities(entities);
+            return SimpleAiMetaEntity.FromEntities(entities);
         }
 
-        internal List<SimpleAiMeta> AttributesToAi(string entityName, bool IncludeType)
+        internal List<SimpleAiMetaAttribute> AttributesToAi(string entityName, bool IncludeType)
         {
             if (string.IsNullOrEmpty(entityName))
             {
-                return new List<SimpleAiMeta>();
+                return new List<SimpleAiMetaAttribute>();
             }
             var attributes = GetDisplayAttributes(entityName).ToList();
             if (attributes == null || !attributes.Any())
             {
-                return new List<SimpleAiMeta>();
+                return new List<SimpleAiMetaAttribute>();
             }
-            return SimpleAiMeta.FromAttributes(attributes, IncludeType);
+            return SimpleAiMetaAttribute.FromAttributes(attributes, IncludeType);
         }
 
         #endregion Internal Methods
