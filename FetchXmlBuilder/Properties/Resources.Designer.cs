@@ -293,6 +293,26 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icon_more_14 {
+            get {
+                object obj = ResourceManager.GetObject("icon-more-14", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icon_more_16 {
+            get {
+                object obj = ResourceManager.GetObject("icon-more-16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icon_new {
             get {
                 object obj = ResourceManager.GetObject("icon-new", resourceCulture);
@@ -756,6 +776,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         internal static System.Drawing.Bitmap supporting {
             get {
                 object obj = ResourceManager.GetObject("supporting", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Supporting_bg_16 {
+            get {
+                object obj = ResourceManager.GetObject("Supporting bg 16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

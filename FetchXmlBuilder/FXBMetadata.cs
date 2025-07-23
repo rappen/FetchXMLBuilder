@@ -3,9 +3,9 @@ using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Query;
+using Rappen.XRM.Helpers;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Settings;
-using Rappen.XTB.FXB.AppCode;
 using Rappen.XTB.FXB.Settings;
 using Rappen.XTB.Helpers.Extensions;
 using System;
@@ -285,30 +285,9 @@ namespace Rappen.XTB.FetchXmlBuilder
                 GetEntity(entityName)?.Attributes == null;
         }
 
-        internal List<SimpleAiMetaEntity> EntitiesToAi() => EntitiesToAi(GetDisplayEntities());
+        internal List<MetadataForAIEntity> EntitiesForAi() => MetadataForAIEntity.FromEntities(GetDisplayEntities());
 
-        internal List<SimpleAiMetaEntity> EntitiesToAi(List<EntityMetadata> entities)
-        {
-            if (entities == null || !entities.Any())
-            {
-                return new List<SimpleAiMetaEntity>();
-            }
-            return SimpleAiMetaEntity.FromEntities(entities);
-        }
-
-        internal List<SimpleAiMetaAttribute> AttributesToAi(string entityName, bool IncludeType)
-        {
-            if (string.IsNullOrEmpty(entityName))
-            {
-                return new List<SimpleAiMetaAttribute>();
-            }
-            var attributes = GetDisplayAttributes(entityName).ToList();
-            if (attributes == null || !attributes.Any())
-            {
-                return new List<SimpleAiMetaAttribute>();
-            }
-            return SimpleAiMetaAttribute.FromAttributes(attributes, IncludeType);
-        }
+        internal List<MetadataForAIAttribute> AttributesForAi(string entityName, bool IncludeType) => MetadataForAIAttribute.FromAttributes(GetDisplayAttributes(entityName)?.ToList(), IncludeType);
 
         #endregion Internal Methods
 

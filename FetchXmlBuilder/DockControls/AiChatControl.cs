@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.AI;
 using Rappen.AI.WinForm;
+using Rappen.XRM.Helpers;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
-using Rappen.XTB.FXB.AppCode;
 using Rappen.XTB.FXB.Settings;
+using Rappen.XTB.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,7 +25,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private AiModel model;
         private string lastquery;
         private Stopwatch callingstopwatch;
-        private Dictionary<string, List<SimpleAiMetaAttribute>> metaAttributes = new Dictionary<string, List<SimpleAiMetaAttribute>>();
+        private Dictionary<string, List<MetadataForAIAttribute>> metaAttributes = new Dictionary<string, List<MetadataForAIAttribute>>();
         private string logname = "AI";
 
         #region Public Constructor
@@ -193,9 +194,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             btnAiChatAsk.Enabled = chatHistory != null && !string.IsNullOrWhiteSpace(txtAiChat.Text);
             btnYes.Enabled = chatHistory?.HasDialog == true;
             btnExecute.Enabled = chatHistory != null;
-            btnCopy.Enabled = btnYes.Enabled;
-            btnSave.Enabled = btnYes.Enabled;
-            btnReset.Enabled = btnYes.Enabled;
+            btnReset.Enabled = chatHistory?.IsRunning == false && chatHistory?.HasDialog == true;
             splitAiChat.Panel2.Enabled = chatHistory?.IsRunning != true;
             txtAiChat.BackColor = chatHistory?.IsRunning == true ? ChatMessageHistory.WaitingBackColor : ChatMessageHistory.BackColor;
             txtAiChat.Enabled = chatHistory?.IsRunning != true;
@@ -245,7 +244,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         [Description("Retrieves the logical name and display name of tables/entity that matches a description. The result is returned in a JSON list with entries of the format {\"LN\":\"[logical name of entity]\",\"DN\":\"[display name of entity]\"}. There may be many results, if a unique table cannot be found.")]
         private string GetMetadataForUnknownEntity([Description("The name/description of a table.")] string tableDescription)
         {
-            var entities = fxb.EntitiesToAi();
+            var entities = fxb.EntitiesForAi();
             var json = JsonSerializer.Serialize(entities, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
 
             chatHistory.Add(ChatRole.User, $"The tool GetMetadataForUnknownAttribute was called: retrieve a table that matches the description '{tableDescription}'", true);
@@ -272,7 +271,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 try
                 {
-                    var aimeta = fxb.AttributesToAi(entityName, true);
+                    var aimeta = fxb.AttributesForAi(entityName, true);
 
                     if (aimeta.Count == 0) return $"There is no table called '{entityName}'. Call the GetMetadataForUnknownEntity tool first to get the correct table name.";
 
@@ -368,14 +367,29 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        private void btnCopy_Click(object sender, EventArgs e)
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            if (MessageBoxEx.Show(fxb, "Are you sure you want to clear the AI chat history?", "Reset AI Chat", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Initialize();
+            }
+        }
+
+        private void btnMenu_Click(object sender, EventArgs e)
+        {
+            mnuCopy.Enabled = chatHistory?.HasDialog == true;
+            mnuSave.Enabled = chatHistory?.HasDialog == true;
+            contextMenuStrip1.Show(btnMenu, new Point(0, btnMenu.Height));
+        }
+
+        private void mnuCopy_Click(object sender, EventArgs e)
         {
             var chat = chatHistory.ToString();
             Clipboard.SetText(chat);
             fxb.WorkAsync(new WorkAsyncInfo { Message = "Copying!", Work = (w, a) => { Thread.Sleep(500); } });
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private void mnuSave_Click(object sender, EventArgs e)
         {
             var sfd = new SaveFileDialog
             {
@@ -389,17 +403,19 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        private void btnReset_Click(object sender, EventArgs e)
-        {
-            if (MessageBoxEx.Show(fxb, "Are you sure you want to clear the AI chat history?", "Reset AI Chat", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                Initialize();
-            }
-        }
-
-        private void btnSettings_Click(object sender, EventArgs e)
+        private void mnuSettings_Click(object sender, EventArgs e)
         {
             fxb.ShowSettings("tabAiChat");
+        }
+
+        private void mnuSupporting_Click(object sender, EventArgs e)
+        {
+            Supporting.ShowIf(fxb, true, false, fxb.ai2);
+        }
+
+        private void mnuDocs_Click(object sender, EventArgs e)
+        {
+            UrlUtils.OpenUrl("https://fetchxmlbuilder.com/features/ai/");
         }
 
         #endregion Private Event Handlers

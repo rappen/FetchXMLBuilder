@@ -139,8 +139,14 @@
   <data name="icon-save2-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icon-save2-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="icon-duplicate-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icon-duplicate-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="icon-savefile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-save-32 (3).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon-more-14" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icon-more-14.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="icon-paste2-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icon-paste2-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -226,6 +232,9 @@
   <data name="icon-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-placeholder-thumbnail-json-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="icon-powerplatform" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PowerApps_scalable trs 32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="icon-options" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-options-32 (5).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -262,11 +271,14 @@
   <data name="logo-BDU" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BDU-2019-032-tsp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="logo-Microsoft" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Microsoft_logo.32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="icons8-bot-32 (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons8-bot-32 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="I_Contribute_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\I-Contribute-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon-more-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icon-more-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="icon-powerplatformdeveloper" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Power Platform Developer icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -283,6 +295,9 @@
   <data name="icon-search-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\view.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="logo-Microsoft" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Microsoft_logo.32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="icon-paste-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icon-paste-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -291,12 +306,6 @@
   </data>
   <data name="icon-undo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-undo-32 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="icon-info-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icon-info-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="icons8-bot-32 (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons8-bot-32 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="I_Support_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\I-Support-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -322,13 +331,13 @@
   <data name="icon-odata" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-odata-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icon-powerplatform" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PowerApps_scalable trs 32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="icon-info-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icon-info-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="icon-raw" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-robot-face-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icon-duplicate-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icon-duplicate-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Supporting bg 16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Supporting bg 16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

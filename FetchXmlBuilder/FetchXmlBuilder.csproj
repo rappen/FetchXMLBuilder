@@ -278,7 +278,6 @@
       <DependentUpon>Supporting.cs</DependentUpon>
     </Compile>
     <Compile Include="AppCode\ExcelHelper.cs" />
-    <Compile Include="AppCode\SimpleMeta.cs" />
     <Compile Include="Converters\LCG\CommonSettings.cs" />
     <Compile Include="Converters\LCG\ConfigurationUtils.cs" />
     <Compile Include="Converters\LCG\Extensions.cs" />
@@ -844,6 +843,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icon-duplicate-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon-more-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon-more-14.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Supporting bg 16.png" />
   </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />

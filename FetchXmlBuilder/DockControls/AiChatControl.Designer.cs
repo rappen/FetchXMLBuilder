@@ -35,10 +35,17 @@
             this.txtAiChat = new System.Windows.Forms.TextBox();
             this.txtUsage = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnMenu = new System.Windows.Forms.Button();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuSupporting = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuDocs = new System.Windows.Forms.ToolStripMenuItem();
             this.btnExecute = new System.Windows.Forms.Button();
-            this.btnSettings = new System.Windows.Forms.Button();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.btnCopy = new System.Windows.Forms.Button();
             this.btnReset = new System.Windows.Forms.Button();
             this.btnYes = new System.Windows.Forms.Button();
             this.btnAiChatAsk = new System.Windows.Forms.Button();
@@ -49,6 +56,7 @@
             this.splitAiChat.Panel2.SuspendLayout();
             this.splitAiChat.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panOData
@@ -85,7 +93,7 @@
             this.splitAiChat.Panel2.Controls.Add(this.panel1);
             this.splitAiChat.Panel2MinSize = 40;
             this.splitAiChat.Size = new System.Drawing.Size(428, 363);
-            this.splitAiChat.SplitterDistance = 201;
+            this.splitAiChat.SplitterDistance = 258;
             this.splitAiChat.SplitterWidth = 8;
             this.splitAiChat.TabIndex = 13;
             // 
@@ -98,7 +106,7 @@
             this.panAiConversation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panAiConversation.Location = new System.Drawing.Point(0, 0);
             this.panAiConversation.Name = "panAiConversation";
-            this.panAiConversation.Size = new System.Drawing.Size(428, 201);
+            this.panAiConversation.Size = new System.Drawing.Size(428, 258);
             this.panAiConversation.TabIndex = 0;
             // 
             // txtAiChat
@@ -108,7 +116,7 @@
             this.txtAiChat.Multiline = true;
             this.txtAiChat.Name = "txtAiChat";
             this.txtAiChat.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAiChat.Size = new System.Drawing.Size(376, 141);
+            this.txtAiChat.Size = new System.Drawing.Size(376, 84);
             this.txtAiChat.TabIndex = 1;
             this.txtAiChat.TextChanged += new System.EventHandler(this.txtAiChatAsk_TextChanged);
             this.txtAiChat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtAiChatAsk_KeyDown);
@@ -118,7 +126,7 @@
             this.txtUsage.BackColor = System.Drawing.SystemColors.Window;
             this.txtUsage.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtUsage.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.txtUsage.Location = new System.Drawing.Point(0, 141);
+            this.txtUsage.Location = new System.Drawing.Point(0, 84);
             this.txtUsage.Name = "txtUsage";
             this.txtUsage.ReadOnly = true;
             this.txtUsage.Size = new System.Drawing.Size(376, 13);
@@ -127,18 +135,97 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.Window;
+            this.panel1.Controls.Add(this.btnMenu);
             this.panel1.Controls.Add(this.btnExecute);
-            this.panel1.Controls.Add(this.btnSettings);
-            this.panel1.Controls.Add(this.btnSave);
-            this.panel1.Controls.Add(this.btnCopy);
             this.panel1.Controls.Add(this.btnReset);
             this.panel1.Controls.Add(this.btnYes);
             this.panel1.Controls.Add(this.btnAiChatAsk);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel1.Location = new System.Drawing.Point(376, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(52, 154);
+            this.panel1.Size = new System.Drawing.Size(52, 97);
             this.panel1.TabIndex = 0;
+            // 
+            // btnMenu
+            // 
+            this.btnMenu.ContextMenuStrip = this.contextMenuStrip1;
+            this.btnMenu.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_more_14;
+            this.btnMenu.Location = new System.Drawing.Point(25, 73);
+            this.btnMenu.Name = "btnMenu";
+            this.btnMenu.Size = new System.Drawing.Size(22, 22);
+            this.btnMenu.TabIndex = 7;
+            this.toolTip1.SetToolTip(this.btnMenu, "Open menu to get more options\r\nfor the AI Chat, including\r\ndocumentation!");
+            this.btnMenu.UseVisualStyleBackColor = true;
+            this.btnMenu.Click += new System.EventHandler(this.btnMenu_Click);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuCopy,
+            this.mnuSave,
+            this.toolStripMenuItem1,
+            this.mnuSettings,
+            this.toolStripMenuItem2,
+            this.mnuSupporting,
+            this.toolStripMenuItem3,
+            this.mnuDocs});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(167, 132);
+            // 
+            // mnuCopy
+            // 
+            this.mnuCopy.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_paste_16;
+            this.mnuCopy.Name = "mnuCopy";
+            this.mnuCopy.Size = new System.Drawing.Size(166, 22);
+            this.mnuCopy.Text = "Copy dialog";
+            this.mnuCopy.Click += new System.EventHandler(this.mnuCopy_Click);
+            // 
+            // mnuSave
+            // 
+            this.mnuSave.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_save2_16;
+            this.mnuSave.Name = "mnuSave";
+            this.mnuSave.Size = new System.Drawing.Size(166, 22);
+            this.mnuSave.Text = "Save dialog...";
+            this.mnuSave.Click += new System.EventHandler(this.mnuSave_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(163, 6);
+            // 
+            // mnuSettings
+            // 
+            this.mnuSettings.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_settings_16;
+            this.mnuSettings.Name = "mnuSettings";
+            this.mnuSettings.Size = new System.Drawing.Size(166, 22);
+            this.mnuSettings.Text = "Settings...";
+            this.mnuSettings.Click += new System.EventHandler(this.mnuSettings_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(163, 6);
+            // 
+            // mnuSupporting
+            // 
+            this.mnuSupporting.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.Supporting_bg_16;
+            this.mnuSupporting.Name = "mnuSupporting";
+            this.mnuSupporting.Size = new System.Drawing.Size(166, 22);
+            this.mnuSupporting.Text = "Supporting...";
+            this.mnuSupporting.Click += new System.EventHandler(this.mnuSupporting_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(163, 6);
+            // 
+            // mnuDocs
+            // 
+            this.mnuDocs.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_info_16;
+            this.mnuDocs.Name = "mnuDocs";
+            this.mnuDocs.Size = new System.Drawing.Size(166, 22);
+            this.mnuDocs.Text = "Documentation...";
+            this.mnuDocs.Click += new System.EventHandler(this.mnuDocs_Click);
             // 
             // btnExecute
             // 
@@ -151,43 +238,10 @@
             this.btnExecute.UseVisualStyleBackColor = true;
             this.btnExecute.Click += new System.EventHandler(this.SendChatToAI);
             // 
-            // btnSettings
-            // 
-            this.btnSettings.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_settings_16;
-            this.btnSettings.Location = new System.Drawing.Point(25, 95);
-            this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(22, 22);
-            this.btnSettings.TabIndex = 6;
-            this.toolTip1.SetToolTip(this.btnSettings, "Open Settings regarding the AI Chat");
-            this.btnSettings.UseVisualStyleBackColor = true;
-            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
-            // 
-            // btnSave
-            // 
-            this.btnSave.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_save2_16;
-            this.btnSave.Location = new System.Drawing.Point(25, 73);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(22, 22);
-            this.btnSave.TabIndex = 4;
-            this.toolTip1.SetToolTip(this.btnSave, "Save all communication with the robot");
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // btnCopy
-            // 
-            this.btnCopy.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_paste_16;
-            this.btnCopy.Location = new System.Drawing.Point(3, 73);
-            this.btnCopy.Name = "btnCopy";
-            this.btnCopy.Size = new System.Drawing.Size(22, 22);
-            this.btnCopy.TabIndex = 3;
-            this.toolTip1.SetToolTip(this.btnCopy, "Copy all conversation with the robot");
-            this.btnCopy.UseVisualStyleBackColor = true;
-            this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
-            // 
             // btnReset
             // 
             this.btnReset.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_reset_16;
-            this.btnReset.Location = new System.Drawing.Point(3, 95);
+            this.btnReset.Location = new System.Drawing.Point(3, 73);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(22, 22);
             this.btnReset.TabIndex = 5;
@@ -239,6 +293,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitAiChat)).EndInit();
             this.splitAiChat.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -253,11 +308,18 @@
         private System.Windows.Forms.Panel panAiConversation;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Button btnYes;
-        private System.Windows.Forms.Button btnSettings;
-        private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.Button btnCopy;
         private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.Button btnExecute;
         private System.Windows.Forms.TextBox txtUsage;
+        private System.Windows.Forms.Button btnMenu;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem mnuCopy;
+        private System.Windows.Forms.ToolStripMenuItem mnuSave;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem mnuSettings;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem mnuSupporting;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem mnuDocs;
     }
 }

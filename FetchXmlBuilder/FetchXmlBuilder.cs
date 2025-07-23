@@ -35,12 +35,12 @@ namespace Rappen.XTB.FetchXmlBuilder
         private const string aiKey2 = "d46e9c12-ee8b-4b28-9643-dae62ae7d3d4";    // jonas@jonasr.app, XrmToolBoxTools
 
         private readonly AppInsights ai1;
-        private readonly AppInsights ai2;
 
         #endregion AI to log
 
         #region Internal Fields
 
+        internal readonly AppInsights ai2;
         internal Dictionary<string, List<Entity>> views;
         internal FXBSettings settings;
         internal FXBConnectionSettings connectionsettings;
@@ -948,8 +948,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             Supporting.ShowIf(this, true, false, ai2);
         }
 
-        #endregion Private Event Handlers
-
         private void reloadBySolutionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             bool showConfirmBox() =>
@@ -993,5 +991,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     "No metadata loaded. Please refresh the full cache first to enable subset refresh.";
             }
         }
+
+        #endregion Private Event Handlers
     }
 }
