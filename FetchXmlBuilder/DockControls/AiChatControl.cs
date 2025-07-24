@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Windows.Forms;
@@ -27,6 +28,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private Stopwatch callingstopwatch;
         private Dictionary<string, List<MetadataForAIAttribute>> metaAttributes = new Dictionary<string, List<MetadataForAIAttribute>>();
         private string logname = "AI";
+        private int manualcalls = 0; // Counts the number of calls made by the user in this session
 
         #region Public Constructor
 
@@ -89,14 +91,27 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             TabText = Text;
         }
 
+        private void EnableButtons()
+        {
+            btnAiChatAsk.Enabled = chatHistory != null && !string.IsNullOrWhiteSpace(txtAiChat.Text);
+            btnYes.Enabled = chatHistory?.HasDialog == true;
+            btnExecute.Enabled = chatHistory != null;
+            btnReset.Enabled = chatHistory?.IsRunning == false && chatHistory?.HasDialog == true;
+            splitAiChat.Panel2.Enabled = chatHistory?.IsRunning != true;
+            txtAiChat.BackColor = chatHistory?.IsRunning == true ? ChatMessageHistory.WaitingBackColor : ChatMessageHistory.BackColor;
+            txtAiChat.Enabled = chatHistory?.IsRunning != true;
+        }
+
         private void SendChatToAI(object sender, EventArgs e = null)
         {
             var text = string.Empty;
             var action = "Ask";
+            var countcall = false;
             switch (sender)
             {
                 case Button btn when btn == btnAiChatAsk:
                     text = txtAiChat.Text;
+                    countcall = true;
                     break;
 
                 case Button btn when btn == btnYes:
@@ -144,6 +159,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 return;
             }
 
+            if (countcall)
+            {
+                fxb.settings.AiSettings.Calls++;
+                fxb.settings.Save();
+                PopupMessageIfRelevant();
+            }
+            manualcalls++;
+
             var manualquery = fxb.dockControlBuilder?.GetFetchString(true, false);
             if (string.IsNullOrEmpty(lastquery))
             {
@@ -189,15 +212,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             txtAiChat.Clear();
         }
 
-        private void EnableButtons()
+        private void HandlingResponseFromAi(ChatResponse response)
         {
-            btnAiChatAsk.Enabled = chatHistory != null && !string.IsNullOrWhiteSpace(txtAiChat.Text);
-            btnYes.Enabled = chatHistory?.HasDialog == true;
-            btnExecute.Enabled = chatHistory != null;
-            btnReset.Enabled = chatHistory?.IsRunning == false && chatHistory?.HasDialog == true;
-            splitAiChat.Panel2.Enabled = chatHistory?.IsRunning != true;
-            txtAiChat.BackColor = chatHistory?.IsRunning == true ? ChatMessageHistory.WaitingBackColor : ChatMessageHistory.BackColor;
-            txtAiChat.Enabled = chatHistory?.IsRunning != true;
+            callingstopwatch?.Stop();
+            fxb.LogUse($"{logname}-Response", count: response?.ToString()?.Length, duration: callingstopwatch?.ElapsedMilliseconds, ai2: true, ai1: false);
+            txtAiChat.Clear();
+            txtUsage.Text = chatHistory.Responses.UsageToString();
+            EnableButtons();
+            txtAiChat.Focus();
         }
 
         [Description("Executes FetchXML Query")]
@@ -298,16 +320,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             return result.Text;
         }
 
-        private void HandlingResponseFromAi(ChatResponse response)
-        {
-            callingstopwatch?.Stop();
-            fxb.LogUse($"{logname}-Response", count: response?.ToString()?.Length, duration: callingstopwatch?.ElapsedMilliseconds, ai2: true, ai1: false);
-            txtAiChat.Clear();
-            txtUsage.Text = chatHistory.Responses.UsageToString();
-            EnableButtons();
-            txtAiChat.Focus();
-        }
-
         private void SetQueryFromAi(string fetch)
         {
             if (lastquery.EqualXml(fetch))
@@ -320,6 +332,31 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             fxb.LogUse($"{logname}-Query-Change", ai2: true, ai1: false);
         }
 
+        private void PopupMessageIfRelevant()
+        {
+            var supporting = Supporting.IsMonetarySupporting(fxb) || Supporting.IsPending(fxb);
+            if (OnlineSettings.Instance.AiSupport.PopupByCallNos
+                .FirstOrDefault(p => p.TimeToPopup(fxb.settings.AiSettings.Calls, supporting)) is PopupByCallNo popup)
+            {
+                var message = popup.Message.Replace("{calls}", fxb.settings.AiSettings.Calls.ToString());
+                if (popup.SuggestsSupporting)
+                {
+                    if (MessageBoxEx.Show(fxb, message, "AI Chat", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
+                    {
+                        Supporting.ShowIf(fxb, true, false, fxb.ai2);
+                    }
+                }
+                else if (!string.IsNullOrWhiteSpace(popup.HelpUrl))
+                {
+                    MessageBoxEx.Show(fxb, message, "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, popup.HelpUrl);
+                }
+                else
+                {
+                    MessageBoxEx.Show(fxb, message, "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
         #endregion Private Methods
 
         #region Private Event Handlers
@@ -327,6 +364,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void AiChatControl_FormClosing(object sender, FormClosingEventArgs e)
         {
             chatHistory?.Save(Paths.LogsPath, "FXB");
+            if (manualcalls > 0)
+            {
+                fxb.LogUse($"{logname}-Session-Calls", count: manualcalls, ai2: true, ai1: false);
+            }
             if (chatHistory?.Initialized == true)
             {
                 fxb.LogUse($"{logname}-Closing", count: chatHistory.Responses?.Count, ai2: true, ai1: false);
