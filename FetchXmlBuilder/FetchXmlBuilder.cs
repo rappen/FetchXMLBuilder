@@ -379,7 +379,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         /// <summary>Saves various configurations to file for next session</summary>
         internal void SaveSetting()
         {
-            SettingsManager.Instance.Save(typeof(FetchXmlBuilder), settings, "[Common]");
+            settings.Save();
             if (connectionsettings == null)
             {
                 connectionsettings = new FXBConnectionSettings();
