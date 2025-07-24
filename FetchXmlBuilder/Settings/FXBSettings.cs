@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Linq;
 using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
+using XrmToolBox.Extensibility;
 
 namespace Rappen.XTB.FetchXmlBuilder.Settings
 {
@@ -57,6 +58,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public CodeGenerators CodeGenerators { get; set; } = new CodeGenerators();
         public AiSettings AiSettings { get; set; } = new AiSettings();
         public List<AiSettings> AiSettingsList { get; set; } = new List<AiSettings>();
+
+        internal void Save()
+        {
+            SettingsManager.Instance.Save(typeof(FetchXmlBuilder), this, "[Common]");
+        }
     }
 
     public class ExecuteOptions
