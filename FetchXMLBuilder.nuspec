@@ -48,6 +48,8 @@ To make it even more appealing, there is also the possibility to have it show "F
 FetchXML Builder (can now be) driven by AI!
 Open the "AI Chat" tab and ask questions about your data, queries, or how to use the tool.
 
+** NOTE: This version of FetchXML Builder needs to have XrmToolBox in version 1.2025.7.* or later! **
+
 Full release notes:
 https://fetchxmlbuilder.com/releases/#$versionnumber$
 
