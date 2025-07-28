@@ -66,16 +66,18 @@
             this.panOData.Controls.Add(this.splitAiChat);
             this.panOData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panOData.Location = new System.Drawing.Point(0, 0);
+            this.panOData.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.panOData.Name = "panOData";
-            this.panOData.Padding = new System.Windows.Forms.Padding(4);
-            this.panOData.Size = new System.Drawing.Size(438, 373);
+            this.panOData.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.panOData.Size = new System.Drawing.Size(511, 430);
             this.panOData.TabIndex = 28;
             // 
             // splitAiChat
             // 
             this.splitAiChat.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitAiChat.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.splitAiChat.Location = new System.Drawing.Point(4, 4);
+            this.splitAiChat.Location = new System.Drawing.Point(5, 5);
+            this.splitAiChat.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.splitAiChat.Name = "splitAiChat";
             this.splitAiChat.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -92,9 +94,9 @@
             this.splitAiChat.Panel2.Controls.Add(this.txtUsage);
             this.splitAiChat.Panel2.Controls.Add(this.panel1);
             this.splitAiChat.Panel2MinSize = 40;
-            this.splitAiChat.Size = new System.Drawing.Size(428, 363);
-            this.splitAiChat.SplitterDistance = 258;
-            this.splitAiChat.SplitterWidth = 8;
+            this.splitAiChat.Size = new System.Drawing.Size(499, 418);
+            this.splitAiChat.SplitterDistance = 308;
+            this.splitAiChat.SplitterWidth = 9;
             this.splitAiChat.TabIndex = 13;
             // 
             // panAiConversation
@@ -105,18 +107,20 @@
             this.panAiConversation.BackColor = System.Drawing.SystemColors.Window;
             this.panAiConversation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panAiConversation.Location = new System.Drawing.Point(0, 0);
+            this.panAiConversation.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.panAiConversation.Name = "panAiConversation";
-            this.panAiConversation.Size = new System.Drawing.Size(428, 258);
+            this.panAiConversation.Size = new System.Drawing.Size(499, 308);
             this.panAiConversation.TabIndex = 0;
             // 
             // txtAiChat
             // 
             this.txtAiChat.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtAiChat.Location = new System.Drawing.Point(0, 0);
+            this.txtAiChat.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtAiChat.Multiline = true;
             this.txtAiChat.Name = "txtAiChat";
             this.txtAiChat.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAiChat.Size = new System.Drawing.Size(376, 84);
+            this.txtAiChat.Size = new System.Drawing.Size(438, 88);
             this.txtAiChat.TabIndex = 1;
             this.txtAiChat.TextChanged += new System.EventHandler(this.txtAiChatAsk_TextChanged);
             this.txtAiChat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtAiChatAsk_KeyDown);
@@ -126,10 +130,12 @@
             this.txtUsage.BackColor = System.Drawing.SystemColors.Window;
             this.txtUsage.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtUsage.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.txtUsage.Location = new System.Drawing.Point(0, 84);
+            this.txtUsage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtUsage.Location = new System.Drawing.Point(0, 88);
+            this.txtUsage.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtUsage.Name = "txtUsage";
             this.txtUsage.ReadOnly = true;
-            this.txtUsage.Size = new System.Drawing.Size(376, 13);
+            this.txtUsage.Size = new System.Drawing.Size(438, 13);
             this.txtUsage.TabIndex = 2;
             // 
             // panel1
@@ -141,18 +147,20 @@
             this.panel1.Controls.Add(this.btnYes);
             this.panel1.Controls.Add(this.btnAiChatAsk);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel1.Location = new System.Drawing.Point(376, 0);
+            this.panel1.Location = new System.Drawing.Point(438, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(52, 97);
+            this.panel1.Size = new System.Drawing.Size(61, 101);
             this.panel1.TabIndex = 0;
             // 
             // btnMenu
             // 
             this.btnMenu.ContextMenuStrip = this.contextMenuStrip1;
             this.btnMenu.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_more_14;
-            this.btnMenu.Location = new System.Drawing.Point(25, 73);
+            this.btnMenu.Location = new System.Drawing.Point(29, 75);
+            this.btnMenu.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnMenu.Name = "btnMenu";
-            this.btnMenu.Size = new System.Drawing.Size(22, 22);
+            this.btnMenu.Size = new System.Drawing.Size(26, 25);
             this.btnMenu.TabIndex = 7;
             this.toolTip1.SetToolTip(this.btnMenu, "Open menu to get more options\r\nfor the AI Chat, including\r\ndocumentation!");
             this.btnMenu.UseVisualStyleBackColor = true;
@@ -230,9 +238,10 @@
             // btnExecute
             // 
             this.btnExecute.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_play_16;
-            this.btnExecute.Location = new System.Drawing.Point(25, 51);
+            this.btnExecute.Location = new System.Drawing.Point(29, 50);
+            this.btnExecute.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnExecute.Name = "btnExecute";
-            this.btnExecute.Size = new System.Drawing.Size(22, 22);
+            this.btnExecute.Size = new System.Drawing.Size(26, 25);
             this.btnExecute.TabIndex = 2;
             this.toolTip1.SetToolTip(this.btnExecute, "Execute the query!");
             this.btnExecute.UseVisualStyleBackColor = true;
@@ -241,9 +250,10 @@
             // btnReset
             // 
             this.btnReset.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_reset_16;
-            this.btnReset.Location = new System.Drawing.Point(3, 73);
+            this.btnReset.Location = new System.Drawing.Point(4, 75);
+            this.btnReset.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(22, 22);
+            this.btnReset.Size = new System.Drawing.Size(26, 25);
             this.btnReset.TabIndex = 5;
             this.toolTip1.SetToolTip(this.btnReset, "Reset all chat dialog");
             this.btnReset.UseVisualStyleBackColor = true;
@@ -252,9 +262,10 @@
             // btnYes
             // 
             this.btnYes.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_yes_16;
-            this.btnYes.Location = new System.Drawing.Point(3, 51);
+            this.btnYes.Location = new System.Drawing.Point(4, 50);
+            this.btnYes.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnYes.Name = "btnYes";
-            this.btnYes.Size = new System.Drawing.Size(22, 22);
+            this.btnYes.Size = new System.Drawing.Size(26, 25);
             this.btnYes.TabIndex = 1;
             this.toolTip1.SetToolTip(this.btnYes, "Yes please!\r\n<CTRL>+Y");
             this.btnYes.UseVisualStyleBackColor = true;
@@ -264,9 +275,10 @@
             // 
             this.btnAiChatAsk.Enabled = false;
             this.btnAiChatAsk.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_bot_32;
-            this.btnAiChatAsk.Location = new System.Drawing.Point(3, 3);
+            this.btnAiChatAsk.Location = new System.Drawing.Point(4, 0);
+            this.btnAiChatAsk.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnAiChatAsk.Name = "btnAiChatAsk";
-            this.btnAiChatAsk.Size = new System.Drawing.Size(44, 42);
+            this.btnAiChatAsk.Size = new System.Drawing.Size(51, 48);
             this.btnAiChatAsk.TabIndex = 0;
             this.toolTip1.SetToolTip(this.btnAiChatAsk, "<CTRL>+Enter\r\nSend the query to the AI");
             this.btnAiChatAsk.UseVisualStyleBackColor = true;
@@ -274,12 +286,14 @@
             // 
             // AiChatControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(438, 373);
+            this.ClientSize = new System.Drawing.Size(511, 430);
             this.Controls.Add(this.panOData);
             this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight)));
+            this.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "AiChatControl";
             this.TabText = "AI Chat";
             this.Text = "AI Chat";
