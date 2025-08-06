@@ -75,8 +75,11 @@ namespace Rappen.XTB.FetchXmlBuilder
             UrlUtils.TOOL_NAME = "FetchXMLBuilder";
             tslAbout.ToolTipText = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 
+            // When my PR https://github.com/MscrmTools/XrmToolBox/pull/1409 is accepted,
+            // use constructor that takes my tool as parameter
             ai1 = new AppInsights(aiEndpoint, aiKey1, Assembly.GetExecutingAssembly(), "FetchXML Builder");
             ai2 = new AppInsights(aiEndpoint, aiKey2, Assembly.GetExecutingAssembly(), "FetchXML Builder");
+
             var theme = new VS2015LightTheme();
             dockContainer.Theme = theme;
             dockContainer.Theme.Skin.DockPaneStripSkin.TextFont = Font;
@@ -313,6 +316,8 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         internal void LogUse(string action, bool forceLog = false, double? count = null, double? duration = null, bool ai1 = true, bool ai2 = false)
         {
+            // Will be done in the WriteEvent when my PR #1409 is accepted, remove this line then
+            LogInfo($"{action}{(count != null ? $" Count: {count}" : "")}{(duration != null ? $" Duration: {duration}" : "")}");
             if (ai1)
             {
                 this.ai1.WriteEvent(action, count, duration, HandleAIResult);
