@@ -53,9 +53,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             ChatMessageHistory.AssistansBackgroundColor = OnlineSettings.Instance.Colors.Bright;
             ChatMessageHistory.WaitingBackColor = Color.FromArgb(240, 240, 240);
 
-            chatHistory?.Save(Paths.LogsPath, "FXB");
-            supplier = OnlineSettings.Instance.AiSupport.Supplier(fxb.settings.AiSettings.Supplier);
+            ClosingSession();
 
+            supplier = OnlineSettings.Instance.AiSupport.Supplier(fxb.settings.AiSettings.Supplier);
             if (supplier == null)
             {
                 MessageBoxEx.Show(fxb, "The AI supplier is not available (yet).\nGo check the setting!", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -359,21 +359,29 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
+        private void ClosingSession()
+        {
+            if (chatHistory != null)
+            {
+                chatHistory.Save(Paths.LogsPath, "FXB");
+                if (manualcalls > 0)
+                {
+                    fxb.LogUse($"{logname}-Session-Calls", count: manualcalls, ai2: true, ai1: false);
+                }
+                if (chatHistory?.Initialized == true)
+                {
+                    fxb.LogUse($"{logname}-Closing", count: chatHistory.Responses?.Count, duration: sessionstopwatch?.ElapsedMilliseconds, ai2: true, ai1: false);
+                }
+            }
+        }
+
         #endregion Private Methods
 
         #region Private Event Handlers
 
         private void AiChatControl_FormClosing(object sender, FormClosingEventArgs e)
         {
-            chatHistory?.Save(Paths.LogsPath, "FXB");
-            if (manualcalls > 0)
-            {
-                fxb.LogUse($"{logname}-Session-Calls", count: manualcalls, ai2: true, ai1: false);
-            }
-            if (chatHistory?.Initialized == true)
-            {
-                fxb.LogUse($"{logname}-Closing", count: chatHistory.Responses?.Count, duration: sessionstopwatch?.ElapsedMilliseconds, ai2: true, ai1: false);
-            }
+            ClosingSession();
         }
 
         private void AiChatControl_DockStateChanged(object sender, EventArgs e)
