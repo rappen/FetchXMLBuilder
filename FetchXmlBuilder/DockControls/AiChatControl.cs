@@ -25,6 +25,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private AiSupplier supplier;
         private AiModel model;
         private string lastquery;
+        private Stopwatch sessionstopwatch;
         private Stopwatch callingstopwatch;
         private Dictionary<string, List<MetadataForAIAttribute>> metaAttributes = new Dictionary<string, List<MetadataForAIAttribute>>();
         private string logname = "AI";
@@ -180,7 +181,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     intro += Environment.NewLine + PromptMyName.Replace("{callme}", fxb.settings.AiSettings.MyName).Trim();
                 }
                 chatHistory.Initialize(intro);
-                fxb.LogUse($"{logname}-Init", count: intro.Length, ai2: true, ai1: false);
+                fxb.LogUse($"{logname}-{model}-Init", count: intro.Length, ai2: true, ai1: false);
+                sessionstopwatch = Stopwatch.StartNew();
             }
             else if (!manualquery.EqualXml(lastquery))
             {
@@ -370,7 +372,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             if (chatHistory?.Initialized == true)
             {
-                fxb.LogUse($"{logname}-Closing", count: chatHistory.Responses?.Count, ai2: true, ai1: false);
+                fxb.LogUse($"{logname}-Closing", count: chatHistory.Responses?.Count, duration: sessionstopwatch?.ElapsedMilliseconds, ai2: true, ai1: false);
             }
         }
 
