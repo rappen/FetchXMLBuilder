@@ -31,6 +31,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public QueryOptions QueryOptions { get; set; } = new QueryOptions();
         public ExecuteOptions ExecuteOptions { get; set; } = new ExecuteOptions();
         public ResultOptions Results { get; set; } = new ResultOptions();
+        public LayoutOptions Layout { get; set; } = new LayoutOptions();
         public string CurrentVersion { get; set; }
         public string LastOpenedViewEntity { get; set; }
         public Guid LastOpenedViewId { get; set; }
@@ -118,8 +119,17 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool PagingCookie { get; set; } = false;
         public bool ClickableLinks { get; set; } = true;
         public int MaxColumnWidth { get; set; } = 500;
+
+        [Obsolete("Use the LayoutOptions instead, still here only for migration when upgraded")]
         public bool WorkWithLayout { get; set; } = true;
+
         public bool ShowRetrieveTime { get; set; } = true;
+    }
+
+    public class LayoutOptions
+    {
+        public bool Enabled { get; set; } = true;
+        public bool UseFixedWidths { get; set; } = false;
     }
 
     public class DockStates

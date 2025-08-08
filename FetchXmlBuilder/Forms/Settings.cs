@@ -62,7 +62,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             chkResAllPages.Checked = settings.ExecuteOptions.AllPages;
             chkClickableLinks.Checked = settings.Results.ClickableLinks;
             numMaxColumnWidth.Value = settings.Results.MaxColumnWidth;
-            chkWorkWithLayout.Checked = settings.Results.WorkWithLayout;
+            chkWorkWithLayout.Checked = settings.Layout.Enabled;
+            chkLayoutUseFixedWidths.Checked = settings.Layout.UseFixedWidths;
             propXmlColors.SelectedObject = settings.XmlColors;
             txtFetch.ConfigureForXml(settings);
             txtFetch.FormatXML(settings.QueryOptions.NewQueryTemplate, settings);
@@ -118,7 +119,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.ExecuteOptions.AllPages = chkResAllPages.Checked;
             settings.Results.ClickableLinks = chkClickableLinks.Checked;
             settings.Results.MaxColumnWidth = (int)numMaxColumnWidth.Value;
-            settings.Results.WorkWithLayout = chkWorkWithLayout.Checked;
+            settings.Layout.Enabled = chkWorkWithLayout.Checked;
+            settings.Layout.UseFixedWidths = chkLayoutUseFixedWidths.Checked;
             settings.OpenUncustomizableViews = chkAppAllowUncustViews.Checked;
             settings.AddConditionToFilter = chkAddConditionToFilter.Checked;
             settings.UseSQL4CDS = chkUseSQL4CDS.Checked;
@@ -336,6 +338,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private void picAiSupplier_Click(object sender, EventArgs e)
         {
             UrlUtils.OpenUrl(sender);
+        }
+
+        private void chkWorkWithLayout_CheckedChanged(object sender, EventArgs e)
+        {
+            panLayout.Enabled = chkWorkWithLayout.Checked;
         }
     }
 }

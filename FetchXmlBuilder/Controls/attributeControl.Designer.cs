@@ -28,6 +28,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(attributeControl));
             this.label2 = new System.Windows.Forms.Label();
             this.cmbAttribute = new System.Windows.Forms.ComboBox();
@@ -51,6 +52,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.chkLayoutVisible = new System.Windows.Forms.CheckBox();
             this.grpLayout = new System.Windows.Forms.GroupBox();
             this.lblIndex = new System.Windows.Forms.Label();
+            this.chkLayoutFixedWidths = new System.Windows.Forms.CheckBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -316,20 +319,22 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.trkLayoutWidth.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
             this.trkLayoutWidth.Value = 100;
             this.trkLayoutWidth.Scroll += new System.EventHandler(this.trkLayoutWidth_Scroll);
+            this.trkLayoutWidth.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trkLayoutWidth_MouseUp);
             // 
             // chkLayoutVisible
             // 
             this.chkLayoutVisible.AutoSize = true;
             this.chkLayoutVisible.Location = new System.Drawing.Point(7, 19);
             this.chkLayoutVisible.Name = "chkLayoutVisible";
-            this.chkLayoutVisible.Size = new System.Drawing.Size(150, 17);
+            this.chkLayoutVisible.Size = new System.Drawing.Size(90, 17);
             this.chkLayoutVisible.TabIndex = 1;
-            this.chkLayoutVisible.Text = "Show Attribute in the View";
+            this.chkLayoutVisible.Text = "Show column";
             this.chkLayoutVisible.UseVisualStyleBackColor = true;
             this.chkLayoutVisible.CheckedChanged += new System.EventHandler(this.chkLayoutVisible_CheckedChanged);
             // 
             // grpLayout
             // 
+            this.grpLayout.Controls.Add(this.chkLayoutFixedWidths);
             this.grpLayout.Controls.Add(this.lblIndex);
             this.grpLayout.Controls.Add(this.lblWidth);
             this.grpLayout.Controls.Add(this.chkLayoutVisible);
@@ -351,6 +356,21 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.lblIndex.Size = new System.Drawing.Size(70, 13);
             this.lblIndex.TabIndex = 4;
             this.lblIndex.Text = "Display Index";
+            // 
+            // chkLayoutFixedWidths
+            // 
+            this.chkLayoutFixedWidths.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkLayoutFixedWidths.AutoSize = true;
+            this.chkLayoutFixedWidths.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkLayoutFixedWidths.Location = new System.Drawing.Point(167, 19);
+            this.chkLayoutFixedWidths.Name = "chkLayoutFixedWidths";
+            this.chkLayoutFixedWidths.Size = new System.Drawing.Size(103, 17);
+            this.chkLayoutFixedWidths.TabIndex = 5;
+            this.chkLayoutFixedWidths.Text = "Use fixed widths";
+            this.toolTip1.SetToolTip(this.chkLayoutFixedWidths, "Enable/disable to fix the widths in the old school:\r\n25, 50, 75, 100, 125, 150, 2" +
+        "00, 300 pixels");
+            this.chkLayoutFixedWidths.UseVisualStyleBackColor = true;
+            this.chkLayoutFixedWidths.CheckedChanged += new System.EventHandler(this.chkLayoutFixedWidths_CheckedChanged);
             // 
             // attributeControl
             // 
@@ -400,5 +420,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private System.Windows.Forms.Label lblWidth;
         private System.Windows.Forms.GroupBox grpLayout;
         private System.Windows.Forms.Label lblIndex;
+        private System.Windows.Forms.CheckBox chkLayoutFixedWidths;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

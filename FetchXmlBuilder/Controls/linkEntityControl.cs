@@ -392,7 +392,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 {
                     return aliasresult;
                 }
-                if (string.IsNullOrWhiteSpace(txtAlias.Text) && fxb.settings.Results.WorkWithLayout && Node.ParentNotEntity().Name != "filter")
+                if (string.IsNullOrWhiteSpace(txtAlias.Text) && fxb.settings.Layout.Enabled && Node.ParentNotEntity().Name != "filter")
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, "Using Layout: Alias is needed to show these attributes");
                 }

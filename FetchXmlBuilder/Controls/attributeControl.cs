@@ -34,6 +34,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         {
             cmbAttribute.Items.Clear();
             aggregate = fxb.settings.AlwaysShowAggregationProperties || Node.IsFetchAggregate();
+            chkLayoutFixedWidths.Checked = fxb.settings.Layout.UseFixedWidths;
             panAggregate.Visible = aggregate;
             grpLayout.Visible = !aggregate;
             cmbAggregate.Enabled = aggregate;
@@ -172,7 +173,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         {
             if (cell?.Width > 0)
             {
-                lblWidth.Text = $"Width: {Math.Min(cell.Width, trkLayoutWidth.Maximum)}";
+                var goalwidth = Math.Min(StickWidth(cell.Width), trkLayoutWidth.Maximum);
+                var currentwidth = cell.Width;
+                lblWidth.Text = $"Width: {currentwidth}{(goalwidth != currentwidth ? $" ({goalwidth})" : "")}";
                 lblIndex.Text = $"Display Index: {cell?.DisplayIndex}";
             }
             else
@@ -218,6 +221,43 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 }
                 UpdateCellFromUI();
             }
+        }
+
+        private void trkLayoutWidth_MouseUp(object sender = null, MouseEventArgs e = null)
+        {
+            if (!fxb.settings.Layout.Enabled || !fxb.settings.Layout.UseFixedWidths)
+            {
+                return;
+            }
+            int width = StickWidth(trkLayoutWidth.Value);
+            trkLayoutWidth.Value = width;
+            if (IsInitialized)
+            {
+                UpdateCellFromUI();
+            }
+        }
+
+        private int StickWidth(int width)
+        {
+            if (!fxb.settings.Layout.Enabled || !fxb.settings.Layout.UseFixedWidths)
+            {
+                return width;
+            }
+            if (width > 5 && width < 33) width = 25;
+            if (width >= 33 && width < 63) width = 50;
+            if (width >= 63 && width < 88) width = 75;
+            if (width >= 88 && width < 113) width = 100;
+            if (width >= 113 && width < 133) width = 125;
+            if (width >= 133 && width < 175) width = 150;
+            if (width >= 175 && width < 250) width = 200;
+            if (width >= 250) width = 300;
+            return width;
+        }
+
+        private void chkLayoutFixedWidths_CheckedChanged(object sender, EventArgs e)
+        {
+            fxb.settings.Layout.UseFixedWidths = chkLayoutFixedWidths.Checked;
+            trkLayoutWidth_MouseUp();
         }
     }
 }

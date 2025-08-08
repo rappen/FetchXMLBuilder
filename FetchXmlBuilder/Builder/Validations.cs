@@ -112,7 +112,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
             {
                 return new ControlValidationResult(ControlValidationLevel.Warning, "Link-Entity must include Name, To, From");
             }
-            if (fxb.settings.Results.WorkWithLayout &&
+            if (fxb.settings.Layout.Enabled &&
                 string.IsNullOrWhiteSpace(alias) &&
                 node.Nodes.OfType<TreeNode>().Any(n => n.Name == "attribute"))
             {
@@ -213,7 +213,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
 
         private static ControlValidationResult ValidateAllAttribute(TreeNode node, FetchXmlBuilder fxb)
         {
-            if (fxb.settings.Results.WorkWithLayout)
+            if (fxb.settings.Layout.Enabled)
             {
                 return new ControlValidationResult(ControlValidationLevel.Warning, "Using Layout: All-Attributes is not possible to show");
             }

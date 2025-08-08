@@ -75,11 +75,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             get
             {
-                return fxb.settings.Results.WorkWithLayout ? layoutxml : null;
+                return fxb.settings.Layout.Enabled ? layoutxml : null;
             }
             set
             {
-                layoutxml = fxb.settings.Results.WorkWithLayout ? value : null;
+                layoutxml = fxb.settings.Layout.Enabled ? value : null;
             }
         }
 
@@ -383,7 +383,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 layoutxml = layoutxmloriginal;
             }
-            LayoutXML = fxb.settings.Results.WorkWithLayout && !string.IsNullOrWhiteSpace(layoutxml)
+            LayoutXML = fxb.settings.Layout.Enabled && !string.IsNullOrWhiteSpace(layoutxml)
                 ? new LayoutXML(layoutxml, fxb) : null;
         }
 

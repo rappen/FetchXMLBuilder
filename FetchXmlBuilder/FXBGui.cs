@@ -85,7 +85,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     // Sub menu Save items
                     tsmiSaveFile.Enabled = enabled && dockControlBuilder?.FetchChanged == true && !string.IsNullOrEmpty(FileName);
                     tsmiSaveView.Enabled = enabled && Service != null && View != null && View.IsCustomizable();
-                    tsmiSaveViewAs.Enabled = enabled && Service != null && (tsmiSaveView.Enabled || settings.Results.WorkWithLayout);
+                    tsmiSaveViewAs.Enabled = enabled && Service != null && (tsmiSaveView.Enabled || settings.Layout.Enabled);
                     tsmiSaveML.Enabled = enabled && Service != null && DynML != null;
                     tsmiSaveCWP.Visible = enabled && Service != null && GetEntity("cint_feed") != null;
                     tsmiSaveCWP.Enabled = enabled && Service != null && dockControlBuilder?.FetchChanged == true && !string.IsNullOrEmpty(CWPFeed);
@@ -94,7 +94,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     tsmiSelect.Enabled = enabled && Service != null;
 
                     // Sub menu Convert items
-                    tsmiShowLayoutXML.Enabled = enabled && Service != null && (dockControlBuilder?.IsFetchAggregate() == false) && settings.Results.WorkWithLayout;
+                    tsmiShowLayoutXML.Enabled = enabled && Service != null && (dockControlBuilder?.IsFetchAggregate() == false) && settings.Layout.Enabled;
                     tsmiShowMetadata.Enabled = enabled && Service != null;
                     tsmiShowFlow.Enabled = enabled && Service != null;
                     tsmiShowOData.Enabled = enabled && Service != null;
@@ -146,7 +146,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 }
                 if (dockControlLayoutXml?.Visible == true)
                 {
-                    if (settings.Results.WorkWithLayout)
+                    if (settings.Layout.Enabled)
                     {
                         dockControlLayoutXml.UpdateXML(dockControlBuilder.LayoutXML?.ToXMLString());
                     }
@@ -632,7 +632,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 }
             }
             var includelayout = saveas;
-            if (!includelayout && settings.Results.WorkWithLayout)
+            if (!includelayout && settings.Layout.Enabled)
             {
                 var inclresult = MessageBox.Show("Include the layout of the view?", "Save View",
                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, 0,

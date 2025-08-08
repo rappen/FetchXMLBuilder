@@ -95,10 +95,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             mnuFriendly.Checked = form.settings.Results.Friendly;
             mnuBothNames.Checked = form.settings.Results.BothNames;
-            mnuIdCol.Checked = form.settings.Results.WorkWithLayout ? false : form.settings.Results.Id;
-            mnuIndexCol.Checked = form.settings.Results.WorkWithLayout ? false : form.settings.Results.Index;
-            mnuNullCol.Checked = form.settings.Results.WorkWithLayout ? true : form.settings.Results.NullColumns;
-            mnuSysCol.Checked = form.settings.Results.WorkWithLayout ? false : form.settings.Results.SysColumns;
+            mnuIdCol.Checked = form.settings.Layout.Enabled ? false : form.settings.Results.Id;
+            mnuIndexCol.Checked = form.settings.Layout.Enabled ? false : form.settings.Results.Index;
+            mnuNullCol.Checked = form.settings.Layout.Enabled ? true : form.settings.Results.NullColumns;
+            mnuSysCol.Checked = form.settings.Layout.Enabled ? false : form.settings.Results.SysColumns;
             mnuLocalTime.Checked = form.settings.Results.LocalTime;
             mnuCopyHeaders.Checked = form.settings.Results.CopyHeaders;
             mnuExcelAdvanced.Checked = form.settings.Results.ExcelAdvanced;
@@ -107,15 +107,15 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             mnuShowElapsed.Checked = form.settings.Results.ShowRetrieveTime;
             mnuAllPages.Checked = form.settings.ExecuteOptions.AllPages;
 
-            mnuIdCol.Visible = !form.settings.Results.WorkWithLayout;
-            mnuIndexCol.Visible = !form.settings.Results.WorkWithLayout;
-            mnuNullCol.Visible = !form.settings.Results.WorkWithLayout;
-            mnuSysCol.Visible = !form.settings.Results.WorkWithLayout;
-            mnuResetLayout.Visible = form.settings.Results.WorkWithLayout && !string.IsNullOrWhiteSpace(crmGridView1.LayoutXML);
-            mnuShowAllCol.Visible = form.settings.Results.WorkWithLayout;
-            mnuShowLayoutXML.Visible = form.settings.Results.WorkWithLayout;
+            mnuIdCol.Visible = !form.settings.Layout.Enabled;
+            mnuIndexCol.Visible = !form.settings.Layout.Enabled;
+            mnuNullCol.Visible = !form.settings.Layout.Enabled;
+            mnuSysCol.Visible = !form.settings.Layout.Enabled;
+            mnuResetLayout.Visible = form.settings.Layout.Enabled && !string.IsNullOrWhiteSpace(crmGridView1.LayoutXML);
+            mnuShowAllCol.Visible = form.settings.Layout.Enabled;
+            mnuShowLayoutXML.Visible = form.settings.Layout.Enabled;
 
-            if (!form.settings.Results.WorkWithLayout && crmGridView1.LayoutXML != null)
+            if (!form.settings.Layout.Enabled && crmGridView1.LayoutXML != null)
             {
                 crmGridView1.LayoutXML = null;
             }
@@ -160,7 +160,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal void SetLayoutToGrid()
         {
-            if (!form.settings.Results.WorkWithLayout || form.dockControlBuilder?.LayoutXML?.Cells == null)
+            if (!form.settings.Layout.Enabled || form.dockControlBuilder?.LayoutXML?.Cells == null)
             {
                 return;
             }
@@ -305,7 +305,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void GetLayoutFromGrid()
         {
-            if (!form.settings.Results.WorkWithLayout ||
+            if (!form.settings.Layout.Enabled ||
                 !(form.dockControlBuilder.RootEntityMetadata is EntityMetadata entity) ||
                 crmGridView1.DataSource == null)
             {

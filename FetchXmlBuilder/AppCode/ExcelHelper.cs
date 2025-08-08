@@ -103,7 +103,7 @@ namespace Rappen.XTB.FetchXmlBuilder.AppCode
             ((Range)xlSourceSheet.Cells[2, 2]).Value = conndet?.WebApplicationUrl;
             ((Range)xlSourceSheet.Cells[3, 1]).Value = "Query";
             ((Range)xlSourceSheet.Cells[3, 2]).Value = fetch;
-            if (settings.Results.WorkWithLayout)
+            if (settings.Layout.Enabled)
             {
                 ((Range)xlSourceSheet.Cells[4, 1]).Value = "Layout";
                 ((Range)xlSourceSheet.Cells[4, 2]).Value = layout;

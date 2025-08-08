@@ -509,6 +509,21 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
         }
 
+        private void MigrateAfterUpgrade(string oldVersionStr, string newVersionStr)
+        {
+            var oldVersion = new Version(oldVersionStr);
+            var newVersion = new Version(newVersionStr);
+
+            // From 1.2025.7.1 > newer
+            var thresholdVersion = new Version(1, 2025, 7, 1);
+            var oldcompare = oldVersion.CompareTo(thresholdVersion);
+            var newcompare = newVersion.CompareTo(thresholdVersion);
+            if (oldcompare <= 0 && newcompare > 0)
+            {
+                settings.Layout.Enabled = settings.Results.WorkWithLayout;
+            }
+        }
+
         #endregion Private Methods
 
         #region Private Event Handlers
@@ -564,6 +579,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             var version = ass.Version.ToString();
             if (!version.Equals(settings.CurrentVersion))
             {
+                MigrateAfterUpgrade(settings.CurrentVersion, version);
                 // Reset some settings when new version is deployed
                 var oldversion = settings.CurrentVersion;
                 settings.CurrentVersion = version;

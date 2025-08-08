@@ -264,7 +264,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 dockControlBuilder.ApplyCurrentSettings();
                 dockControlFetchXml?.ApplyCurrentSettings();
                 dockControlGrid?.ApplySettingsToGrid();
-                if (dockControlLayoutXml?.Visible == true && !settings.Results.WorkWithLayout)
+                if (dockControlLayoutXml?.Visible == true && !settings.Layout.Enabled)
                 {
                     dockControlLayoutXml.PanelPane?.CloseActiveContent();
                 }
