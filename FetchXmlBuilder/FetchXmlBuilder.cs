@@ -511,16 +511,19 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void MigrateAfterUpgrade(string oldVersionStr, string newVersionStr)
         {
-            var oldVersion = new Version(oldVersionStr);
-            var newVersion = new Version(newVersionStr);
+            var hasold = Version.TryParse(oldVersionStr, out var oldVersion);
+            var hasnew = Version.TryParse(newVersionStr, out var newVersion);
 
-            // From 1.2025.7.1 > newer
-            var thresholdVersion = new Version(1, 2025, 7, 1);
-            var oldcompare = oldVersion.CompareTo(thresholdVersion);
-            var newcompare = newVersion.CompareTo(thresholdVersion);
-            if (oldcompare <= 0 && newcompare > 0)
+            if (hasold && hasnew)
             {
-                settings.Layout.Enabled = settings.Results.WorkWithLayout;
+                // From 1.2025.7.1 > newer
+                var thresholdVersion = new Version(1, 2025, 7, 1);
+                var oldcompare = oldVersion.CompareTo(thresholdVersion);
+                var newcompare = newVersion.CompareTo(thresholdVersion);
+                if (oldcompare <= 0 && newcompare > 0)
+                {
+                    settings.Layout.Enabled = settings.Results.WorkWithLayout;
+                }
             }
         }
 
