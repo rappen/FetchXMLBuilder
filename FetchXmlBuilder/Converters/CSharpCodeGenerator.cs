@@ -44,13 +44,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             return result;
         }
 
-        internal static string GetCSharpFetchExpression(string fetch, FXBSettings settings)
-        {
-            var result = $"var query = new FetchExpression(@\"{fetch.Replace("\"", "'")}\");";
-            result = string.Join("\n", result.Split('\n').Select(l => Indent(settings.CodeGenerators.Indents) + l));
-            return result;
-        }
-
         private CSharpCodeGenerator(QueryExpression QEx, List<EntityMetadata> entities, FXBSettings fxbsettings)
         {
             globalVariables = new List<string>();

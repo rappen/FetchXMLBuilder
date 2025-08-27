@@ -347,7 +347,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 case QExStyleEnum.FetchExpression:
                     try
                     {
-                        return CSharpCodeGenerator.GetCSharpFetchExpression(dockControlBuilder.GetFetchString(true, false), settings);
+                        return CSharpCodeGeneratorFetchExpression.GetCSharpFetchExpression(dockControlBuilder.GetFetchString(true, false), settings);
                     }
                     catch (Exception ex)
                     {
