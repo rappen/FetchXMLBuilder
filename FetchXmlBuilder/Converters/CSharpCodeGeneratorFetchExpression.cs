@@ -1,14 +1,11 @@
-﻿using System;
-using System.CodeDom.Compiler;
+﻿using Rappen.XRM.Helpers.Extensions;
+using Rappen.XTB.FetchXmlBuilder.Settings;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Security;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using Rappen.XRM.Helpers.Extensions;
-using Rappen.XTB.FetchXmlBuilder.Settings;
 
 namespace Rappen.XTB.FetchXmlBuilder.Converters
 {
