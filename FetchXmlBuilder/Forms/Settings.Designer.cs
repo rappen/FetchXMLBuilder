@@ -646,9 +646,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(20, 20);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(58, 13);
+            this.label6.Size = new System.Drawing.Size(59, 13);
             this.label6.TabIndex = 2;
-            this.label6.Text = "AI Supplier";
+            this.label6.Text = "AI Provider";
             // 
             // cmbAiSupplier
             // 

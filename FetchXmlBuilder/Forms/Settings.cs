@@ -322,6 +322,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 {
                     cmbAiModel.SelectedIndex = 0;
                 }
+                if (supplier.IsFree)
+                {
+                    txtAiApiKey.Text = "";
+                    txtAiApiKey.Enabled = false;
+                }
+                else
+                {
+                    txtAiApiKey.Enabled = true;
+                }
             }
             picAiSupplier.Visible = !string.IsNullOrWhiteSpace(picAiSupplier.Tag as string);
             LoadAiSettingsKey();
