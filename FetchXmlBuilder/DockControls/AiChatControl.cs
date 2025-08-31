@@ -38,6 +38,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         public AiChatControl(FetchXmlBuilder fetchXmlBuilder)
         {
+            ChatMessageHistory.UserTextColor = OnlineSettings.Instance.Colors.Bright;
+            ChatMessageHistory.UserBackgroundColor = OnlineSettings.Instance.Colors.Medium;
+            ChatMessageHistory.AssistansTextColor = OnlineSettings.Instance.Colors.Dark;
+            ChatMessageHistory.AssistansBackgroundColor = OnlineSettings.Instance.Colors.Bright;
+            ChatMessageHistory.WaitingBackColor = Color.FromArgb(240, 240, 240);
+
             fxb = fetchXmlBuilder;
             InitializeComponent();
             Initialize();
@@ -50,12 +56,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal void Initialize()
         {
-            ChatMessageHistory.UserTextColor = OnlineSettings.Instance.Colors.Bright;
-            ChatMessageHistory.UserBackgroundColor = OnlineSettings.Instance.Colors.Medium;
-            ChatMessageHistory.AssistansTextColor = OnlineSettings.Instance.Colors.Dark;
-            ChatMessageHistory.AssistansBackgroundColor = OnlineSettings.Instance.Colors.Bright;
-            ChatMessageHistory.WaitingBackColor = Color.FromArgb(240, 240, 240);
-
             freeusers = null;
             ClosingSession();
 
@@ -77,9 +77,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var apikey = "";
             if (supplier.IsFree)
             {
+                logname = "AI-Free";
                 if (!IsFreeAiUser(fxb))
                 {
-                    PromptToUseForFree(fxb);
+                    if (MessageBoxEx.Show(fxb, $"To use the free AI provider, you have to fill in this form.\nOn this webpage you can read details about why and why.", "Free AI by Jonas", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                    {
+                        PromptToUseForFree(fxb);
+                    }
                     return;
                 }
                 apikey = model.ApiKey;
@@ -110,14 +114,18 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal static void PromptToUseForFree(PluginControlBase tool)
         {
-            if (MessageBoxEx.Show(tool, $"To use the free AI provider, you have to fill in this form.\nOn this webpage you can read details about why and why.", "Free AI by Jonas", MessageBoxButtons.OKCancel) == DialogResult.OK)
-            {
-                var url = OnlineSettings.Instance.AiSupport.UrlToUseForFree;
-                var wpf = OnlineSettings.Instance.AiSupport.WpfToUseForFree;
-                var installid = InstallationInfo.Instance.InstallationId;
-                var version = Assembly.GetExecutingAssembly().GetName().Version;
-                Process.Start($"{url}?wpf{wpf}_31={tool.ToolName}&wpf{wpf}_32={version}&wpf{wpf}_33={installid}");
-            }
+            var install = Installation.Load(null);
+            var url = OnlineSettings.Instance.AiSupport.UrlToUseForFree;
+            var wpf = OnlineSettings.Instance.AiSupport.WpfToUseForFree;
+            var installid = InstallationInfo.Instance.InstallationId;
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            var fullurl = $"{url}?" +
+                $"wpf{wpf}_1_first={install?.PersonalFirstName}&" +
+                $"wpf{wpf}_1_last={install?.PersonalLastName}&" +
+                $"wpf{wpf}_3={install?.PersonalCountry}&" +
+                $"wpf{wpf}_4={install?.PersonalEmail}&" +
+                $"wpf{wpf}_31={tool.ToolName}&wpf{wpf}_32={version}&wpf{wpf}_33={installid}";
+            Process.Start(fullurl);
         }
 
         #endregion Internal Methods
@@ -225,7 +233,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     intro += Environment.NewLine + PromptMyName.Replace("{callme}", fxb.settings.AiSettings.MyName).Trim();
                 }
                 chatHistory.Initialize(intro);
-                fxb.LogUse($"{logname}-{model}-Init", count: intro.Length, ai2: true, ai1: false);
+                Log($"{model}-Init", count: intro.Length);
                 sessionstopwatch = Stopwatch.StartNew();
             }
             else if (!manualquery.EqualXml(lastquery))
@@ -236,7 +244,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
             chatHistory.IsRunning = true;
             EnableButtons();
-            fxb.LogUse($"{logname}-{action}", count: text.Length, ai2: true, ai1: false);
+            Log(action, count: text.Length);
             callingstopwatch = Stopwatch.StartNew();
             try
             {
@@ -261,7 +269,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void HandlingResponseFromAi(ChatResponse response)
         {
             callingstopwatch?.Stop();
-            fxb.LogUse($"{logname}-Response", count: response?.ToString()?.Length, duration: callingstopwatch?.ElapsedMilliseconds, ai2: true, ai1: false);
+            Log("Response", response?.ToString()?.Length, callingstopwatch?.ElapsedMilliseconds);
             txtAiChat.Clear();
             txtUsage.Text = chatHistory.Responses.UsageToString();
             EnableButtons();
@@ -277,7 +285,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 var sw = Stopwatch.StartNew();
                 var result = fxb.RetrieveMultipleSync(fetchXml, null, null);
                 sw.Stop();
-                fxb.LogUse($"{logname}-Query-Execute", count: result is QueryInfo qi ? qi.Results.Entities.Count : 0, duration: sw.ElapsedMilliseconds, ai2: true, ai1: false);
+                Log($"Query-Execute", result is QueryInfo qi ? qi.Results.Entities.Count : 0, sw.ElapsedMilliseconds);
                 fxb.HandleRetrieveMultipleResult(result);
                 //fxb.dockControlGrid?.ResetLayout();   Commented it out since it exploded, but it might be good to do this after each new query execute
                 return "Query executed successfully";
@@ -321,7 +329,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var result = AiCommunication.SamplingAI(PromptEntityMeta.Replace("{metadata}", json),
                 $"Please find entries that match the description {tableDescription}", chatHistory);
             sw.Stop();
-            fxb.LogUse($"{logname}-Meta-Entity-{tableDescription}", count: entities.Count, duration: sw.ElapsedMilliseconds, ai2: true, ai1: false);
+            Log($"Meta-Entity-{tableDescription}", entities.Count, sw.ElapsedMilliseconds);
 
             chatHistory.Add(result, true);
             return result.Text;
@@ -359,7 +367,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var result = AiCommunication.SamplingAI(PromptAttributeMeta.Replace("{metadata}", json),
                 $"Please find attributes that match the description {attributeDescription}", chatHistory);
             sw.Stop();
-            fxb.LogUse($"{logname}-Meta-Attribute-{entityName}", count: attributes.Count, duration: sw.ElapsedMilliseconds, ai2: true, ai1: false);
+            Log($"Meta-Attribute-{entityName}", attributes.Count, sw.ElapsedMilliseconds);
 
             chatHistory.Add(result, true);
 
@@ -375,7 +383,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             lastquery = fetch;
             MethodInvoker mi = () => { fxb.dockControlBuilder.Init(fetch, null, false, "Query from AI", true); };
             if (InvokeRequired) Invoke(mi); else mi();
-            fxb.LogUse($"{logname}-Query-Change", ai2: true, ai1: false);
+            Log($"Query-Change");
         }
 
         private void PopupMessageIfRelevant()
@@ -410,13 +418,20 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 chatHistory.Save(Paths.LogsPath, "FXB");
                 if (manualcalls > 0)
                 {
-                    fxb.LogUse($"{logname}-Session-Calls", count: manualcalls, ai2: true, ai1: false);
+                    Log($"Session-Calls", count: manualcalls);
                 }
-                if (chatHistory?.Initialized == true)
+                if (chatHistory.Initialized)
                 {
-                    fxb.LogUse($"{logname}-Closing", count: chatHistory.Responses?.Count, duration: sessionstopwatch?.ElapsedMilliseconds, ai2: true, ai1: false);
+                    Log($"Session-Responses", chatHistory.Responses?.Count, sessionstopwatch?.ElapsedMilliseconds);
                 }
+                chatHistory = null;
+                Log("Close");
             }
+        }
+
+        private void Log(string action, double? count = null, double? duration = null)
+        {
+            fxb.LogUse($"{logname}-{action}", false, count, duration, false, true);
         }
 
         #endregion Private Methods

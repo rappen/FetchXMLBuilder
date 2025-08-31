@@ -7,6 +7,7 @@ using System.Linq;
 using Rappen.AI.WinForm;
 using Rappen.XTB.Helpers;
 using System.Collections.Generic;
+using Rappen.XTB.FetchXmlBuilder.DockControls;
 
 namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
@@ -91,6 +92,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
             txtAiApiKey.Text = settings.AiSettings.ApiKey;
             txtAiCallMe.Text = settings.AiSettings.MyName;
+            cmbAiSupplier_SelectedIndexChanged();
         }
 
         private int SettingResultToComboBoxItem(ResultOutput resultOutput)
@@ -140,7 +142,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.AlwaysShowAggregationProperties = chkAlwaysShowAggregateProperties.Checked;
             settings.AiSettings.Supplier = cmbAiSupplier.Text;
             settings.AiSettings.Model = cmbAiModel.Text;
-            settings.AiSettings.ApiKey = txtAiApiKey.Text;
+            settings.AiSettings.ApiKey = txtAiApiKey.Enabled ? txtAiApiKey.Text : "";
             settings.AiSettings.MyName = txtAiCallMe.Text;
             UpdateAiSettingsList();
             settings.AiSettingsList = aisettingslist;
@@ -305,7 +307,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
         }
 
-        private void cmbAiSupplier_SelectedIndexChanged(object sender, EventArgs e)
+        private void cmbAiSupplier_SelectedIndexChanged(object sender = null, EventArgs e = null)
         {
             cmbAiModel.Items.Clear();
             picAiSupplier.Tag = null;
@@ -324,7 +326,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 }
                 if (supplier.IsFree)
                 {
-                    txtAiApiKey.Text = "";
+                    if (AiChatControl.IsFreeAiUser(fxb))
+                    {
+                        txtAiApiKey.Text = "ApiKey is handled by Jonas for this free provider.";
+                    }
+                    else
+                    {
+                        txtAiApiKey.Text = "To use the free provider, you have to submit a form only for Jonas to make sure you are not using gazillian tokens. Click the (i) button on the provider above!";
+                        picAiSupplier.Tag = "FREE";
+                        tt.SetToolTip(picAiSupplier, $"Click to fill in the form to get free provider! at {OnlineSettings.Instance.AiSupport.UrlToUseForFree}");
+                    }
                     txtAiApiKey.Enabled = false;
                 }
                 else
@@ -346,7 +357,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void picAiSupplier_Click(object sender, EventArgs e)
         {
-            UrlUtils.OpenUrl(sender);
+            if (sender is PictureBox pic && pic.Tag == "FREE")
+            {
+                AiChatControl.PromptToUseForFree(fxb);
+            }
+            else
+            {
+                UrlUtils.OpenUrl(sender);
+            }
         }
 
         private void chkWorkWithLayout_CheckedChanged(object sender, EventArgs e)
