@@ -92,6 +92,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
             txtAiApiKey.Text = settings.AiSettings.ApiKey;
             txtAiCallMe.Text = settings.AiSettings.MyName;
+            chkAiLogConversation.Checked = settings.AiSettings.LogConversation;
             cmbAiSupplier_SelectedIndexChanged();
         }
 
@@ -144,6 +145,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.AiSettings.Model = cmbAiModel.Text;
             settings.AiSettings.ApiKey = txtAiApiKey.Enabled ? txtAiApiKey.Text : "";
             settings.AiSettings.MyName = txtAiCallMe.Text;
+            settings.AiSettings.LogConversation = chkAiLogConversation.Checked;
             UpdateAiSettingsList();
             settings.AiSettingsList = aisettingslist;
             return settings;
@@ -301,7 +303,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                     {
                         Supplier = supplier.Name,
                         Model = model.Name,
-                        ApiKey = txtAiApiKey.Text
+                        ApiKey = !supplier.IsFree ? txtAiApiKey.Text : ""
                     });
                 }
             }
@@ -344,7 +346,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 }
             }
             picAiSupplier.Visible = !string.IsNullOrWhiteSpace(picAiSupplier.Tag as string);
-            LoadAiSettingsKey();
+            if (sender != null)
+            {
+                LoadAiSettingsKey();
+            }
         }
 
         private void cmbAiModel_SelectedIndexChanged(object sender, EventArgs e)
