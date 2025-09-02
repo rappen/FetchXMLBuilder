@@ -23,6 +23,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
     public partial class AiChatControl : WeifenLuo.WinFormsUI.Docking.DockContent
     {
         private FetchXmlBuilder fxb;
+        private AIAppInsights ai;
         private ChatMessageHistory chatHistory;
         private AiSupplier supplier;
         private AiModel model;
@@ -233,7 +234,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     intro += Environment.NewLine + PromptMyName.Replace("{callme}", fxb.settings.AiSettings.MyName).Trim();
                 }
                 chatHistory.Initialize(intro);
-                Log($"{model}-Init", count: intro.Length);
+                Log("Init", count: intro.Length, msg: intro);
                 sessionstopwatch = Stopwatch.StartNew();
             }
             else if (!manualquery.EqualXml(lastquery))
@@ -244,7 +245,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
             chatHistory.IsRunning = true;
             EnableButtons();
-            Log(action, count: text.Length);
+            Log(action, count: text.Length, msg: text);
             callingstopwatch = Stopwatch.StartNew();
             try
             {
@@ -269,7 +270,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void HandlingResponseFromAi(ChatResponse response)
         {
             callingstopwatch?.Stop();
-            Log("Response", response?.ToString()?.Length, callingstopwatch?.ElapsedMilliseconds);
+            Log("Response", response?.ToString()?.Length, callingstopwatch?.ElapsedMilliseconds, response?.Usage?.OutputTokenCount, response?.Usage?.InputTokenCount, response.Text);
             txtAiChat.Clear();
             txtUsage.Text = chatHistory.Responses.UsageToString();
             EnableButtons();
@@ -416,22 +417,36 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             if (chatHistory != null)
             {
                 chatHistory.Save(Paths.LogsPath, "FXB");
-                if (manualcalls > 0)
-                {
-                    Log($"Session-Calls", count: manualcalls);
-                }
                 if (chatHistory.Initialized)
                 {
-                    Log($"Session-Responses", chatHistory.Responses?.Count, sessionstopwatch?.ElapsedMilliseconds);
+                    Log("Session-Time", duration: sessionstopwatch?.ElapsedMilliseconds);
+                    if (manualcalls > 0)
+                    {
+                        Log("Session-Calls-Manual", count: manualcalls);
+                    }
+                    Log("Session-Calls-Total", chatHistory.Messages?.Count ?? 0);
+                    Log("Session-Responses", chatHistory.Responses?.Count ?? 0);
+                    Log("Session-Tokens", tokensout: chatHistory.TokensOut, tokensin: chatHistory.TokensIn);
                 }
                 chatHistory = null;
                 Log("Close");
+                ai = null;
             }
         }
 
-        private void Log(string action, double? count = null, double? duration = null)
+        private void Log(string action, double? count = null, double? duration = null, long? tokensout = null, long? tokensin = null, string msg = null)
         {
-            fxb.LogUse($"{logname}-{action}", false, count, duration, false, true);
+            if (count == 0 && duration == null)
+            {   // Unnecessary to log nothing
+                return;
+            }
+            fxb.LogInfo($"{logname}-{action}{(count != null ? $" Count: {count}" : "")}{(duration != null ? $" Duration: {duration}" : "")}{(tokensout != null ? $" TokensOut: {tokensout}" : "")}{(tokensin != null ? $" TokensIn: {tokensin}" : "")}");
+
+            if (ai == null)
+            {
+                ai = new AIAppInsights(fxb, OnlineSettings.Instance.AiSupport.AppRegistrationEndpoint, OnlineSettings.Instance.AiSupport.InstrumentationKey, supplier.Name, model.Name);
+            }
+            ai.WriteEvent($"{action}", count ?? msg?.Length, duration, tokensout, tokensin, fxb.settings.AiSettings.LogConversation ? msg : null);
         }
 
         #endregion Private Methods
