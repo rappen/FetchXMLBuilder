@@ -330,7 +330,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var result = AiCommunication.SamplingAI(PromptEntityMeta.Replace("{metadata}", json),
                 $"Please find entries that match the description {tableDescription}", chatHistory);
             sw.Stop();
-            Log($"Meta-Entity-{tableDescription}", entities.Count, sw.ElapsedMilliseconds);
+            Log($"Meta-Entity-{tableDescription}", entities.Count, sw.ElapsedMilliseconds, result.Usage.OutputTokenCount, result.Usage.InputTokenCount, result.Text);
 
             chatHistory.Add(result, true);
             return result.Text;
@@ -368,7 +368,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var result = AiCommunication.SamplingAI(PromptAttributeMeta.Replace("{metadata}", json),
                 $"Please find attributes that match the description {attributeDescription}", chatHistory);
             sw.Stop();
-            Log($"Meta-Attribute-{entityName}", attributes.Count, sw.ElapsedMilliseconds);
+            Log($"Meta-Attribute-{entityName}", attributes.Count, sw.ElapsedMilliseconds, result.Usage.OutputTokenCount, result.Usage.InputTokenCount, result.Text);
 
             chatHistory.Add(result, true);
 
