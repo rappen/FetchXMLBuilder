@@ -270,9 +270,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void HandlingResponseFromAi(ChatResponse response)
         {
             callingstopwatch?.Stop();
-            Log("Response", response?.ToString()?.Length, callingstopwatch?.ElapsedMilliseconds, response?.Usage?.OutputTokenCount, response?.Usage?.InputTokenCount, response.Text);
+            Log("Response", response?.ToString()?.Length, callingstopwatch?.ElapsedMilliseconds, response?.Usage?.OutputTokenCount, response?.Usage?.InputTokenCount, response?.Text);
             txtAiChat.Clear();
-            txtUsage.Text = chatHistory.Responses.UsageToString();
+            txtUsage.Text = chatHistory?.Responses?.UsageToString() ?? "?";
             EnableButtons();
             txtAiChat.Focus();
         }
@@ -286,9 +286,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 var sw = Stopwatch.StartNew();
                 var result = fxb.RetrieveMultipleSync(fetchXml, null, null);
                 sw.Stop();
-                Log($"Query-Execute", result is QueryInfo qi ? qi.Results.Entities.Count : 0, sw.ElapsedMilliseconds);
+                var records = (result as QueryInfo)?.Results?.Entities?.Count ?? null;
+                Log($"Query-Execute", records, sw.ElapsedMilliseconds);
                 fxb.HandleRetrieveMultipleResult(result);
-                //fxb.dockControlGrid?.ResetLayout();   Commented it out since it exploded, but it might be good to do this after each new query execute
+                chatHistory.Add(ChatRole.User, records == 0 ? "No record returned." : $"Retrieved {records} records.", true);
+                //Commented it out since it exploded, but it might be good to do this after each new query execute
+                //fxb.dockControlGrid?.ResetLayout();
                 return "Query executed successfully";
             }
             catch (Exception ex)
@@ -384,7 +387,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             lastquery = fetch;
             MethodInvoker mi = () => { fxb.dockControlBuilder.Init(fetch, null, false, "Query from AI", true); };
             if (InvokeRequired) Invoke(mi); else mi();
-            Log($"Query-Change");
+            Log($"Query-Change", msg: fetch);
         }
 
         private void PopupMessageIfRelevant()
