@@ -120,6 +120,21 @@
   <metadata name="tt.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="picAiLogFolder.ToolTip" xml:space="preserve">
+    <value>Every session in the conversation to the AI is stored in this folder.
+The conversation is not only what you can see in the UI, but also
+internal messages back and forth, e.g. the metadata that the AI
+may need.
+This logging is not used by the tool, you may clean the folder
+whenever you want to, this is just to give you the opportunity to
+learn even more, to see what the AI is asking the tool about.</value>
+  </data>
+  <data name="chkAiLogConversation.ToolTip" xml:space="preserve">
+    <value>Accepting this makes it possible to log your conversation to and from the AI.
+The reason is mostly to be able to debug strange resposes, to hopefully
+improve the feature.
+This log is stored in Azure Application Insights.</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="btnResetXmlColors.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

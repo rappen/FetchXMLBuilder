@@ -31,8 +31,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             Rappen.XTB.FetchXmlBuilder.Settings.XmlColors xmlColors1 = new Rappen.XTB.FetchXmlBuilder.Settings.XmlColors();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             this.cmbResult = new System.Windows.Forms.ComboBox();
             this.chkResAllPages = new System.Windows.Forms.CheckBox();
             this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
@@ -71,6 +71,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkAppBothNamesResults = new System.Windows.Forms.CheckBox();
             this.tabBehavior = new System.Windows.Forms.TabPage();
             this.tabAiChat = new System.Windows.Forms.TabPage();
+            this.chkAiLogConversation = new System.Windows.Forms.CheckBox();
             this.txtAiCallMe = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.picAiUrl = new System.Windows.Forms.PictureBox();
@@ -102,7 +103,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.btnResetAll = new System.Windows.Forms.Button();
             this.chkShowOData2 = new System.Windows.Forms.CheckBox();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
-            this.chkAiLogConversation = new System.Windows.Forms.CheckBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.linkAiLogFolder = new System.Windows.Forms.LinkLabel();
+            this.picAiLogFolder = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -119,6 +122,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabDefaultQuery.SuspendLayout();
             this.tabXmlScheme.SuspendLayout();
             this.tabAdvanced.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picAiLogFolder)).BeginInit();
             this.SuspendLayout();
             // 
             // cmbResult
@@ -315,7 +319,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.panel1.Controls.Add(this.llShowWelcome);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
-            this.panel1.Location = new System.Drawing.Point(12, 197);
+            this.panel1.Location = new System.Drawing.Point(12, 227);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(509, 53);
             this.panel1.TabIndex = 100;
@@ -466,6 +470,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             // tabSettings
             // 
+            this.tabSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabSettings.Controls.Add(this.tabAppearance);
             this.tabSettings.Controls.Add(this.tabBehavior);
             this.tabSettings.Controls.Add(this.tabAiChat);
@@ -477,7 +484,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabSettings.Location = new System.Drawing.Point(12, 12);
             this.tabSettings.Name = "tabSettings";
             this.tabSettings.SelectedIndex = 0;
-            this.tabSettings.Size = new System.Drawing.Size(513, 179);
+            this.tabSettings.Size = new System.Drawing.Size(513, 209);
             this.tabSettings.TabIndex = 103;
             // 
             // tabAppearance
@@ -586,6 +593,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // tabAiChat
             // 
             this.tabAiChat.BackColor = System.Drawing.SystemColors.Window;
+            this.tabAiChat.Controls.Add(this.picAiLogFolder);
+            this.tabAiChat.Controls.Add(this.linkAiLogFolder);
+            this.tabAiChat.Controls.Add(this.label10);
             this.tabAiChat.Controls.Add(this.chkAiLogConversation);
             this.tabAiChat.Controls.Add(this.txtAiCallMe);
             this.tabAiChat.Controls.Add(this.label9);
@@ -599,15 +609,26 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabAiChat.Controls.Add(this.label7);
             this.tabAiChat.Location = new System.Drawing.Point(4, 22);
             this.tabAiChat.Name = "tabAiChat";
-            this.tabAiChat.Size = new System.Drawing.Size(505, 153);
+            this.tabAiChat.Size = new System.Drawing.Size(505, 183);
             this.tabAiChat.TabIndex = 7;
             this.tabAiChat.Text = "AI Chat";
+            // 
+            // chkAiLogConversation
+            // 
+            this.chkAiLogConversation.AutoSize = true;
+            this.chkAiLogConversation.Location = new System.Drawing.Point(287, 129);
+            this.chkAiLogConversation.Name = "chkAiLogConversation";
+            this.chkAiLogConversation.Size = new System.Drawing.Size(213, 17);
+            this.chkAiLogConversation.TabIndex = 13;
+            this.chkAiLogConversation.Text = "Log conversation to Azure App Inslights";
+            this.tt.SetToolTip(this.chkAiLogConversation, resources.GetString("chkAiLogConversation.ToolTip"));
+            this.chkAiLogConversation.UseVisualStyleBackColor = true;
             // 
             // txtAiCallMe
             // 
             this.txtAiCallMe.Location = new System.Drawing.Point(84, 127);
             this.txtAiCallMe.Name = "txtAiCallMe";
-            this.txtAiCallMe.Size = new System.Drawing.Size(116, 20);
+            this.txtAiCallMe.Size = new System.Drawing.Size(157, 20);
             this.txtAiCallMe.TabIndex = 12;
             // 
             // label9
@@ -648,9 +669,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(20, 20);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(59, 13);
+            this.label6.Size = new System.Drawing.Size(46, 13);
             this.label6.TabIndex = 2;
-            this.label6.Text = "AI Provider";
+            this.label6.Text = "Provider";
             // 
             // cmbAiSupplier
             // 
@@ -790,7 +811,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             this.chkLayoutUseFixedWidths.AutoSize = true;
             this.chkLayoutUseFixedWidths.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.chkLayoutUseFixedWidths.Location = new System.Drawing.Point(9, 6);
+            this.chkLayoutUseFixedWidths.Location = new System.Drawing.Point(9, 5);
             this.chkLayoutUseFixedWidths.Name = "chkLayoutUseFixedWidths";
             this.chkLayoutUseFixedWidths.Size = new System.Drawing.Size(200, 30);
             this.chkLayoutUseFixedWidths.TabIndex = 0;
@@ -952,15 +973,37 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         "how it anyway, if you which, but checking this one.");
             this.chkShowOData2.UseVisualStyleBackColor = true;
             // 
-            // chkAiLogConversation
+            // label10
             // 
-            this.chkAiLogConversation.AutoSize = true;
-            this.chkAiLogConversation.Location = new System.Drawing.Point(280, 129);
-            this.chkAiLogConversation.Name = "chkAiLogConversation";
-            this.chkAiLogConversation.Size = new System.Drawing.Size(213, 17);
-            this.chkAiLogConversation.TabIndex = 13;
-            this.chkAiLogConversation.Text = "Log conversation to Azure App Inslights";
-            this.chkAiLogConversation.UseVisualStyleBackColor = true;
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(20, 157);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(45, 13);
+            this.label10.TabIndex = 14;
+            this.label10.Text = "Logging";
+            // 
+            // linkAiLogFolder
+            // 
+            this.linkAiLogFolder.AutoSize = true;
+            this.linkAiLogFolder.Location = new System.Drawing.Point(81, 157);
+            this.linkAiLogFolder.Name = "linkAiLogFolder";
+            this.linkAiLogFolder.Size = new System.Drawing.Size(174, 13);
+            this.linkAiLogFolder.TabIndex = 15;
+            this.linkAiLogFolder.TabStop = true;
+            this.linkAiLogFolder.Text = "<storade folder>\\Log\\FXB AI Chat\\";
+            this.tt.SetToolTip(this.linkAiLogFolder, "Click to open the folder.");
+            this.linkAiLogFolder.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLogFolder_LinkClicked);
+            // 
+            // picAiLogFolder
+            // 
+            this.picAiLogFolder.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picAiLogFolder.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_info_16;
+            this.picAiLogFolder.Location = new System.Drawing.Point(477, 157);
+            this.picAiLogFolder.Name = "picAiLogFolder";
+            this.picAiLogFolder.Size = new System.Drawing.Size(16, 16);
+            this.picAiLogFolder.TabIndex = 16;
+            this.picAiLogFolder.TabStop = false;
+            this.tt.SetToolTip(this.picAiLogFolder, resources.GetString("picAiLogFolder.ToolTip"));
             // 
             // Settings
             // 
@@ -969,7 +1012,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(535, 262);
+            this.ClientSize = new System.Drawing.Size(535, 292);
             this.Controls.Add(this.tabSettings);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -1004,6 +1047,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabXmlScheme.PerformLayout();
             this.tabAdvanced.ResumeLayout(false);
             this.tabAdvanced.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picAiLogFolder)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1079,5 +1123,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.Panel panLayout;
         private System.Windows.Forms.CheckBox chkLayoutUseFixedWidths;
         private System.Windows.Forms.CheckBox chkAiLogConversation;
+        private System.Windows.Forms.LinkLabel linkAiLogFolder;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.PictureBox picAiLogFolder;
     }
 }

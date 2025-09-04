@@ -8,6 +8,9 @@ using Rappen.AI.WinForm;
 using Rappen.XTB.Helpers;
 using System.Collections.Generic;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
+using XrmToolBox.Extensibility;
+using System.IO;
+using System.Diagnostics;
 
 namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
@@ -93,6 +96,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             txtAiApiKey.Text = settings.AiSettings.ApiKey;
             txtAiCallMe.Text = settings.AiSettings.MyName;
             chkAiLogConversation.Checked = settings.AiSettings.LogConversation;
+            linkAiLogFolder.Text = Path.Combine(Paths.LogsPath, "FXB AI Chat");
             cmbAiSupplier_SelectedIndexChanged();
         }
 
@@ -375,6 +379,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private void chkWorkWithLayout_CheckedChanged(object sender, EventArgs e)
         {
             panLayout.Enabled = chkWorkWithLayout.Checked;
+        }
+
+        private void linkLogFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("explorer.exe", linkAiLogFolder.Text);
         }
     }
 }
