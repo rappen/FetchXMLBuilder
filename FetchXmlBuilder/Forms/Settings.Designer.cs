@@ -31,8 +31,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            Rappen.XTB.FetchXmlBuilder.Settings.XmlColors xmlColors1 = new Rappen.XTB.FetchXmlBuilder.Settings.XmlColors();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
+            Rappen.XTB.FetchXmlBuilder.Settings.XmlColors xmlColors1 = new Rappen.XTB.FetchXmlBuilder.Settings.XmlColors();
             this.cmbResult = new System.Windows.Forms.ComboBox();
             this.chkResAllPages = new System.Windows.Forms.CheckBox();
             this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
@@ -97,7 +97,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabXmlScheme = new System.Windows.Forms.TabPage();
             this.label4 = new System.Windows.Forms.Label();
             this.btnResetXmlColors = new System.Windows.Forms.Button();
-            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.tabAdvanced = new System.Windows.Forms.TabPage();
             this.btnForceReloadMetadata = new System.Windows.Forms.Button();
             this.btnResetAll = new System.Windows.Forms.Button();
@@ -106,6 +105,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.label10 = new System.Windows.Forms.Label();
             this.linkAiLogFolder = new System.Windows.Forms.LinkLabel();
             this.picAiLogFolder = new System.Windows.Forms.PictureBox();
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -503,7 +503,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabAppearance.Location = new System.Drawing.Point(4, 22);
             this.tabAppearance.Name = "tabAppearance";
             this.tabAppearance.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAppearance.Size = new System.Drawing.Size(505, 153);
+            this.tabAppearance.Size = new System.Drawing.Size(505, 183);
             this.tabAppearance.TabIndex = 0;
             this.tabAppearance.Text = "Appearance";
             // 
@@ -586,7 +586,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabBehavior.Controls.Add(this.chkUseSQL4CDS);
             this.tabBehavior.Location = new System.Drawing.Point(4, 22);
             this.tabBehavior.Name = "tabBehavior";
-            this.tabBehavior.Size = new System.Drawing.Size(505, 153);
+            this.tabBehavior.Size = new System.Drawing.Size(505, 183);
             this.tabBehavior.TabIndex = 2;
             this.tabBehavior.Text = "Behavior";
             // 
@@ -740,7 +740,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabResults.Controls.Add(this.chkAppResultsNewWindow);
             this.tabResults.Location = new System.Drawing.Point(4, 22);
             this.tabResults.Name = "tabResults";
-            this.tabResults.Size = new System.Drawing.Size(505, 153);
+            this.tabResults.Size = new System.Drawing.Size(505, 183);
             this.tabResults.TabIndex = 3;
             this.tabResults.Text = "Results";
             // 
@@ -795,7 +795,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabLayout.Location = new System.Drawing.Point(4, 22);
             this.tabLayout.Name = "tabLayout";
             this.tabLayout.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLayout.Size = new System.Drawing.Size(505, 153);
+            this.tabLayout.Size = new System.Drawing.Size(505, 183);
             this.tabLayout.TabIndex = 1;
             this.tabLayout.Text = "Layout";
             // 
@@ -850,7 +850,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabDefaultQuery.Controls.Add(this.txtFetch);
             this.tabDefaultQuery.Location = new System.Drawing.Point(4, 22);
             this.tabDefaultQuery.Name = "tabDefaultQuery";
-            this.tabDefaultQuery.Size = new System.Drawing.Size(505, 153);
+            this.tabDefaultQuery.Size = new System.Drawing.Size(505, 183);
             this.tabDefaultQuery.TabIndex = 5;
             this.tabDefaultQuery.Text = "Default Query";
             // 
@@ -871,7 +871,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabXmlScheme.Controls.Add(this.propXmlColors);
             this.tabXmlScheme.Location = new System.Drawing.Point(4, 22);
             this.tabXmlScheme.Name = "tabXmlScheme";
-            this.tabXmlScheme.Size = new System.Drawing.Size(505, 153);
+            this.tabXmlScheme.Size = new System.Drawing.Size(505, 183);
             this.tabXmlScheme.TabIndex = 6;
             this.tabXmlScheme.Text = "XML Scheme";
             // 
@@ -896,33 +896,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.btnResetXmlColors.UseVisualStyleBackColor = true;
             this.btnResetXmlColors.Click += new System.EventHandler(this.btnResetXmlColors_Click);
             // 
-            // propXmlColors
-            // 
-            this.propXmlColors.CanShowVisualStyleGlyphs = false;
-            this.propXmlColors.HelpVisible = false;
-            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.Location = new System.Drawing.Point(4, 40);
-            this.propXmlColors.Name = "propXmlColors";
-            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            xmlColors1.AttributeKey = System.Drawing.Color.Red;
-            xmlColors1.AttributeKeyColor = "Red";
-            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
-            xmlColors1.AttributeValueColor = "Blue";
-            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            xmlColors1.CommentColor = "0";
-            xmlColors1.Element = System.Drawing.Color.DarkRed;
-            xmlColors1.ElementColor = "DarkRed";
-            xmlColors1.Tag = System.Drawing.Color.Blue;
-            xmlColors1.TagColor = "Blue";
-            xmlColors1.Value = System.Drawing.Color.Black;
-            xmlColors1.ValueColor = "Black";
-            this.propXmlColors.SelectedObject = xmlColors1;
-            this.propXmlColors.Size = new System.Drawing.Size(252, 97);
-            this.propXmlColors.TabIndex = 7;
-            this.propXmlColors.ToolbarVisible = false;
-            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
-            // 
             // tabAdvanced
             // 
             this.tabAdvanced.BackColor = System.Drawing.SystemColors.Window;
@@ -936,7 +909,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabAdvanced.Controls.Add(this.chkTryMetadataCache);
             this.tabAdvanced.Location = new System.Drawing.Point(4, 22);
             this.tabAdvanced.Name = "tabAdvanced";
-            this.tabAdvanced.Size = new System.Drawing.Size(505, 153);
+            this.tabAdvanced.Size = new System.Drawing.Size(505, 183);
             this.tabAdvanced.TabIndex = 4;
             this.tabAdvanced.Text = "Advanced";
             // 
@@ -953,7 +926,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // btnResetAll
             // 
             this.btnResetAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnResetAll.Location = new System.Drawing.Point(280, 116);
+            this.btnResetAll.Location = new System.Drawing.Point(280, 146);
             this.btnResetAll.Name = "btnResetAll";
             this.btnResetAll.Size = new System.Drawing.Size(177, 23);
             this.btnResetAll.TabIndex = 20;
@@ -1004,6 +977,34 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.picAiLogFolder.TabIndex = 16;
             this.picAiLogFolder.TabStop = false;
             this.tt.SetToolTip(this.picAiLogFolder, resources.GetString("picAiLogFolder.ToolTip"));
+            this.picAiLogFolder.Click += new System.EventHandler(this.picAiLogFolder_Click);
+            // 
+            // propXmlColors
+            // 
+            this.propXmlColors.CanShowVisualStyleGlyphs = false;
+            this.propXmlColors.HelpVisible = false;
+            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.Location = new System.Drawing.Point(4, 40);
+            this.propXmlColors.Name = "propXmlColors";
+            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            xmlColors1.AttributeKey = System.Drawing.Color.Red;
+            xmlColors1.AttributeKeyColor = "Red";
+            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
+            xmlColors1.AttributeValueColor = "Blue";
+            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            xmlColors1.CommentColor = "0";
+            xmlColors1.Element = System.Drawing.Color.DarkRed;
+            xmlColors1.ElementColor = "DarkRed";
+            xmlColors1.Tag = System.Drawing.Color.Blue;
+            xmlColors1.TagColor = "Blue";
+            xmlColors1.Value = System.Drawing.Color.Black;
+            xmlColors1.ValueColor = "Black";
+            this.propXmlColors.SelectedObject = xmlColors1;
+            this.propXmlColors.Size = new System.Drawing.Size(252, 97);
+            this.propXmlColors.TabIndex = 7;
+            this.propXmlColors.ToolbarVisible = false;
+            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
             // 
             // Settings
             // 

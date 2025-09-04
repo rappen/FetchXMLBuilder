@@ -385,5 +385,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         {
             Process.Start("explorer.exe", linkAiLogFolder.Text);
         }
+
+        private void picAiLogFolder_Click(object sender, EventArgs e)
+        {
+            MessageBoxEx.Show(this, tt.GetToolTip(picAiLogFolder), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }
