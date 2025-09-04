@@ -65,6 +65,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 MessageBoxEx.Show(fxb, "The AI supplier is not available (yet).\nGo check the setting!", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 fxb.ShowSettings("tabAiChat");
+                Initialize();
                 return;
             }
             logname = $"AI-{supplier.Name}";
@@ -73,6 +74,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 MessageBoxEx.Show(fxb, "The AI model is not available (yet).\nGo check the setting!", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 fxb.ShowSettings("tabAiChat");
+                Initialize();
                 return;
             }
             var apikey = "";
@@ -159,7 +161,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void SendChatToAI(object sender, EventArgs e = null)
         {
             var text = string.Empty;
-            var action = "Ask";
+            var action = "Prompt";
             var countcall = false;
             switch (sender)
             {
@@ -170,12 +172,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
                 case Button btn when btn == btnYes:
                     text = "Yes please!";
-                    action = "Yes!";
+                    action += "-Yes";
                     break;
 
                 case Button btn when btn == btnExecute:
-                    text = "Please execute the FetchXML query!";
-                    action = "Execute!";
+                    text = "Please execute the query!";
+                    action += "-Execute";
                     break;
             }
             if (string.IsNullOrWhiteSpace(text))
@@ -270,7 +272,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void HandlingResponseFromAi(ChatResponse response)
         {
             callingstopwatch?.Stop();
-            Log("Response", response?.ToString()?.Length, callingstopwatch?.ElapsedMilliseconds, response?.Usage?.OutputTokenCount, response?.Usage?.InputTokenCount, response?.Text);
+            Log("Response", response, callingstopwatch?.ElapsedMilliseconds);
             txtAiChat.Clear();
             txtUsage.Text = chatHistory?.Responses?.UsageToString() ?? "?";
             EnableButtons();
@@ -333,7 +335,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var result = AiCommunication.SamplingAI(PromptEntityMeta.Replace("{metadata}", json),
                 $"Please find entries that match the description {tableDescription}", chatHistory);
             sw.Stop();
-            Log($"Meta-Entity-{tableDescription}", entities.Count, sw.ElapsedMilliseconds, result.Usage.OutputTokenCount, result.Usage.InputTokenCount, result.Text);
+            Log($"Meta-Entity-{tableDescription}", result, sw.ElapsedMilliseconds, entities.Count);
 
             chatHistory.Add(result, true);
             return result.Text;
@@ -371,7 +373,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var result = AiCommunication.SamplingAI(PromptAttributeMeta.Replace("{metadata}", json),
                 $"Please find attributes that match the description {attributeDescription}", chatHistory);
             sw.Stop();
-            Log($"Meta-Attribute-{entityName}", attributes.Count, sw.ElapsedMilliseconds, result.Usage.OutputTokenCount, result.Usage.InputTokenCount, result.Text);
+            Log($"Meta-Attribute-{entityName}", result, sw.ElapsedMilliseconds, attributes.Count);
 
             chatHistory.Add(result, true);
 
@@ -435,6 +437,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 Log("Close");
                 ai = null;
             }
+        }
+
+        private void Log(string action, ChatResponse response, double? duration, double? count = null)
+        {
+            var text = response?.Text;
+            if (string.IsNullOrWhiteSpace(text.Trim('[', ']', '{', '}')))
+            {
+                text = null;
+            }
+            Log(action, count ?? response?.ToString()?.Length, duration, response?.Usage?.OutputTokenCount, response?.Usage?.InputTokenCount, text);
         }
 
         private void Log(string action, double? count = null, double? duration = null, long? tokensout = null, long? tokensin = null, string msg = null)
