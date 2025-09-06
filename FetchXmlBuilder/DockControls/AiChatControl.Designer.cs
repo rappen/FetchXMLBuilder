@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.panOData = new System.Windows.Forms.Panel();
+            this.panAiChat = new System.Windows.Forms.Panel();
             this.splitAiChat = new System.Windows.Forms.SplitContainer();
             this.panAiConversation = new System.Windows.Forms.Panel();
             this.txtAiChat = new System.Windows.Forms.TextBox();
@@ -42,15 +42,16 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.mnuSupporting = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuDocs = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuFree = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuSupporting = new System.Windows.Forms.ToolStripMenuItem();
             this.btnExecute = new System.Windows.Forms.Button();
             this.btnReset = new System.Windows.Forms.Button();
             this.btnYes = new System.Windows.Forms.Button();
             this.btnAiChatAsk = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.panOData.SuspendLayout();
+            this.panAiChat.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitAiChat)).BeginInit();
             this.splitAiChat.Panel1.SuspendLayout();
             this.splitAiChat.Panel2.SuspendLayout();
@@ -59,18 +60,18 @@
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panOData
+            // panAiChat
             // 
-            this.panOData.BackColor = System.Drawing.SystemColors.Window;
-            this.panOData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panOData.Controls.Add(this.splitAiChat);
-            this.panOData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panOData.Location = new System.Drawing.Point(0, 0);
-            this.panOData.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.panOData.Name = "panOData";
-            this.panOData.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
-            this.panOData.Size = new System.Drawing.Size(511, 430);
-            this.panOData.TabIndex = 28;
+            this.panAiChat.BackColor = System.Drawing.SystemColors.Window;
+            this.panAiChat.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panAiChat.Controls.Add(this.splitAiChat);
+            this.panAiChat.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panAiChat.Location = new System.Drawing.Point(0, 0);
+            this.panAiChat.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.panAiChat.Name = "panAiChat";
+            this.panAiChat.Padding = new System.Windows.Forms.Padding(5);
+            this.panAiChat.Size = new System.Drawing.Size(511, 430);
+            this.panAiChat.TabIndex = 28;
             // 
             // splitAiChat
             // 
@@ -95,7 +96,7 @@
             this.splitAiChat.Panel2.Controls.Add(this.panel1);
             this.splitAiChat.Panel2MinSize = 40;
             this.splitAiChat.Size = new System.Drawing.Size(499, 418);
-            this.splitAiChat.SplitterDistance = 308;
+            this.splitAiChat.SplitterDistance = 304;
             this.splitAiChat.SplitterWidth = 9;
             this.splitAiChat.TabIndex = 13;
             // 
@@ -109,7 +110,7 @@
             this.panAiConversation.Location = new System.Drawing.Point(0, 0);
             this.panAiConversation.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.panAiConversation.Name = "panAiConversation";
-            this.panAiConversation.Size = new System.Drawing.Size(499, 308);
+            this.panAiConversation.Size = new System.Drawing.Size(499, 304);
             this.panAiConversation.TabIndex = 0;
             // 
             // txtAiChat
@@ -120,7 +121,7 @@
             this.txtAiChat.Multiline = true;
             this.txtAiChat.Name = "txtAiChat";
             this.txtAiChat.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAiChat.Size = new System.Drawing.Size(438, 88);
+            this.txtAiChat.Size = new System.Drawing.Size(438, 92);
             this.txtAiChat.TabIndex = 1;
             this.txtAiChat.TextChanged += new System.EventHandler(this.txtAiChatAsk_TextChanged);
             this.txtAiChat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtAiChatAsk_KeyDown);
@@ -131,7 +132,7 @@
             this.txtUsage.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtUsage.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.txtUsage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtUsage.Location = new System.Drawing.Point(0, 88);
+            this.txtUsage.Location = new System.Drawing.Point(0, 92);
             this.txtUsage.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtUsage.Name = "txtUsage";
             this.txtUsage.ReadOnly = true;
@@ -150,7 +151,7 @@
             this.panel1.Location = new System.Drawing.Point(438, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(61, 101);
+            this.panel1.Size = new System.Drawing.Size(61, 105);
             this.panel1.TabIndex = 0;
             // 
             // btnMenu
@@ -174,17 +175,18 @@
             this.toolStripMenuItem1,
             this.mnuSettings,
             this.toolStripMenuItem2,
-            this.mnuSupporting,
+            this.mnuDocs,
+            this.mnuFree,
             this.toolStripMenuItem3,
-            this.mnuDocs});
+            this.mnuSupporting});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(167, 132);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(189, 154);
             // 
             // mnuCopy
             // 
             this.mnuCopy.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_paste_16;
             this.mnuCopy.Name = "mnuCopy";
-            this.mnuCopy.Size = new System.Drawing.Size(166, 22);
+            this.mnuCopy.Size = new System.Drawing.Size(188, 22);
             this.mnuCopy.Text = "Copy dialog";
             this.mnuCopy.Click += new System.EventHandler(this.mnuCopy_Click);
             // 
@@ -192,48 +194,56 @@
             // 
             this.mnuSave.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_save2_16;
             this.mnuSave.Name = "mnuSave";
-            this.mnuSave.Size = new System.Drawing.Size(166, 22);
+            this.mnuSave.Size = new System.Drawing.Size(188, 22);
             this.mnuSave.Text = "Save dialog...";
             this.mnuSave.Click += new System.EventHandler(this.mnuSave_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(163, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(185, 6);
             // 
             // mnuSettings
             // 
             this.mnuSettings.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_settings_16;
             this.mnuSettings.Name = "mnuSettings";
-            this.mnuSettings.Size = new System.Drawing.Size(166, 22);
+            this.mnuSettings.Size = new System.Drawing.Size(188, 22);
             this.mnuSettings.Text = "Settings...";
             this.mnuSettings.Click += new System.EventHandler(this.mnuSettings_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(163, 6);
-            // 
-            // mnuSupporting
-            // 
-            this.mnuSupporting.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.Supporting_bg_16;
-            this.mnuSupporting.Name = "mnuSupporting";
-            this.mnuSupporting.Size = new System.Drawing.Size(166, 22);
-            this.mnuSupporting.Text = "Supporting...";
-            this.mnuSupporting.Click += new System.EventHandler(this.mnuSupporting_Click);
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(163, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(185, 6);
             // 
             // mnuDocs
             // 
             this.mnuDocs.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_info_16;
             this.mnuDocs.Name = "mnuDocs";
-            this.mnuDocs.Size = new System.Drawing.Size(166, 22);
+            this.mnuDocs.Size = new System.Drawing.Size(188, 22);
             this.mnuDocs.Text = "Documentation...";
             this.mnuDocs.Click += new System.EventHandler(this.mnuDocs_Click);
+            // 
+            // mnuFree
+            // 
+            this.mnuFree.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_heart_16;
+            this.mnuFree.Name = "mnuFree";
+            this.mnuFree.Size = new System.Drawing.Size(188, 22);
+            this.mnuFree.Text = "Ask for Free AI...";
+            this.mnuFree.Click += new System.EventHandler(this.mnuFree_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(185, 6);
+            // 
+            // mnuSupporting
+            // 
+            this.mnuSupporting.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.Supporting_bg_16;
+            this.mnuSupporting.Name = "mnuSupporting";
+            this.mnuSupporting.Size = new System.Drawing.Size(188, 22);
+            this.mnuSupporting.Text = "Supporting this tool...";
+            this.mnuSupporting.Click += new System.EventHandler(this.mnuSupporting_Click);
             // 
             // btnExecute
             // 
@@ -289,7 +299,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(511, 430);
-            this.Controls.Add(this.panOData);
+            this.Controls.Add(this.panAiChat);
             this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight)));
             this.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -299,7 +309,7 @@
             this.Text = "AI Chat";
             this.DockStateChanged += new System.EventHandler(this.AiChatControl_DockStateChanged);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AiChatControl_FormClosing);
-            this.panOData.ResumeLayout(false);
+            this.panAiChat.ResumeLayout(false);
             this.splitAiChat.Panel1.ResumeLayout(false);
             this.splitAiChat.Panel1.PerformLayout();
             this.splitAiChat.Panel2.ResumeLayout(false);
@@ -314,7 +324,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel panOData;
+        private System.Windows.Forms.Panel panAiChat;
         private System.Windows.Forms.SplitContainer splitAiChat;
         private System.Windows.Forms.TextBox txtAiChat;
         private System.Windows.Forms.Panel panel1;
@@ -335,5 +345,6 @@
         private System.Windows.Forms.ToolStripMenuItem mnuSupporting;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem mnuDocs;
+        private System.Windows.Forms.ToolStripMenuItem mnuFree;
     }
 }

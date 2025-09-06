@@ -65,7 +65,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 MessageBoxEx.Show(fxb, "The AI supplier is not available (yet).\nGo check the setting!", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 fxb.ShowSettings("tabAiChat");
-                Initialize();
+                if (!string.IsNullOrWhiteSpace(fxb.settings.AiSettings.Supplier))
+                {
+                    Initialize();
+                }
                 return;
             }
             logname = $"AI-{supplier.Name}";
@@ -74,22 +77,32 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 MessageBoxEx.Show(fxb, "The AI model is not available (yet).\nGo check the setting!", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 fxb.ShowSettings("tabAiChat");
-                Initialize();
+                if (!string.IsNullOrWhiteSpace(fxb.settings.AiSettings.Model))
+                {
+                    Initialize();
+                }
                 return;
             }
             var apikey = "";
             if (supplier.IsFree)
             {
                 logname = "AI-Free";
-                if (!IsFreeAiUser(fxb))
+                if (IsFreeAiUser(fxb))
                 {
-                    if (MessageBoxEx.Show(fxb, $"To use the free AI provider, you have to fill in this form.\nOn this webpage you can read details about why and why.", "Free AI by Jonas", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                    apikey = model.ApiKeyDecrypted;
+                    //model.ApiKey = apikey;
+                    //OnlineSettings.Instance.Save();
+                    if (string.IsNullOrWhiteSpace(apikey))
                     {
-                        PromptToUseForFree(fxb);
+                        MessageBoxEx.Show(fxb, "The AI model is unfortunately not available right now.", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        fxb.ShowSettings("tabAiChat");
+                        if (!string.IsNullOrWhiteSpace(fxb.settings.AiSettings.Model))
+                        {
+                            Initialize();
+                        }
+                        return;
                     }
-                    return;
                 }
-                apikey = model.ApiKey;
             }
             else
             {
@@ -98,6 +111,15 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             chatHistory = new ChatMessageHistory(panAiConversation, supplier?.Name, model?.Endpoint, model?.Name, apikey, fxb.settings.AiSettings.MyName);
             metaAttributes.Clear();
             SetTitle();
+            if (supplier.IsFree && !IsFreeAiUser(fxb))
+            {
+                chatHistory.Add(ChatRole.Assistant, @"To use the free AI provider, you have to fill in a form.
+Please click the button (the three dots down-right) and select 'Ask for Free AI'.
+
+Jonas stands for any costs. Why? Read my blog: https://jonasr.app/free-ai-by-jonas
+Note that there will be a slight lag between your submission and when it is activated.", false);
+            }
+            mnuFree.Text = IsFreeAiUser(fxb) ? "Using AI for free!" : "Ask for Free AI...";
             EnableButtons();
         }
 
@@ -143,19 +165,20 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void SetTitle()
         {
-            Text = $"AI Chat - {supplier}";
+            Text = $"AI Chat - {supplier?.Name ?? "<no provider>"} - {model?.Name ?? "<no model>"}";
             TabText = Text;
         }
 
         private void EnableButtons()
         {
-            btnAiChatAsk.Enabled = chatHistory != null && !string.IsNullOrWhiteSpace(txtAiChat.Text);
-            btnYes.Enabled = chatHistory?.HasDialog == true;
-            btnExecute.Enabled = chatHistory != null;
-            btnReset.Enabled = chatHistory?.IsRunning == false && chatHistory?.HasDialog == true;
+            var cancall = chatHistory != null && !string.IsNullOrWhiteSpace(chatHistory.ApiKey);
+            btnAiChatAsk.Enabled = cancall && !string.IsNullOrWhiteSpace(txtAiChat.Text);
+            btnYes.Enabled = cancall && chatHistory?.HasDialog == true;
+            btnExecute.Enabled = cancall;
+            btnReset.Enabled = cancall && chatHistory?.IsRunning == false && chatHistory?.HasDialog == true;
             splitAiChat.Panel2.Enabled = chatHistory?.IsRunning != true;
             txtAiChat.BackColor = chatHistory?.IsRunning == true ? ChatMessageHistory.WaitingBackColor : ChatMessageHistory.BackColor;
-            txtAiChat.Enabled = chatHistory != null && chatHistory?.IsRunning != true;
+            txtAiChat.Enabled = cancall && chatHistory?.IsRunning != true;
         }
 
         private void SendChatToAI(object sender, EventArgs e = null)
@@ -291,14 +314,15 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 var records = (result as QueryInfo)?.Results?.Entities?.Count ?? null;
                 Log($"Query-Execute", records, sw.ElapsedMilliseconds);
                 fxb.HandleRetrieveMultipleResult(result);
-                chatHistory.Add(ChatRole.User, records == 0 ? "No record returned." : $"Retrieved {records} records.", true);
+                AiCommunication.SamplingAI("The FetchXML query is executed", records == 0 ? "No record returned." : $"Retrieved {records} records.", chatHistory);
+                //chatHistory.Add(ChatRole.User, records == 0 ? "No record returned." : $"Retrieved {records} records.", true);
                 //Commented it out since it exploded, but it might be good to do this after each new query execute
                 //fxb.dockControlGrid?.ResetLayout();
                 return "Query executed successfully";
             }
             catch (Exception ex)
             {
-                return $"Error executing query: {ex.Message}";
+                return $"The FetchXML query execution failed. Please let me know if you change the query to solve the problem. Error message: {ex.Message}";
             }
         }
 
@@ -442,7 +466,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void Log(string action, ChatResponse response, double? duration, double? count = null)
         {
             var text = response?.Text;
-            if (string.IsNullOrWhiteSpace(text.Trim('[', ']', '{', '}')))
+            if (string.IsNullOrWhiteSpace(text?.Trim('[', ']', '{', '}')))
             {
                 text = null;
             }
@@ -556,6 +580,18 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void mnuDocs_Click(object sender, EventArgs e)
         {
             UrlUtils.OpenUrl("https://fetchxmlbuilder.com/features/ai/");
+        }
+
+        private void mnuFree_Click(object sender, EventArgs e)
+        {
+            if (!IsFreeAiUser(fxb))
+            {
+                PromptToUseForFree(fxb);
+            }
+            else
+            {
+                MessageBoxEx.Show(fxb, "You are already registered as a free user!", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         #endregion Private Event Handlers
