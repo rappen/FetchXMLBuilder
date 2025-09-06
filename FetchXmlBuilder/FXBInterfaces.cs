@@ -268,7 +268,11 @@ namespace Rappen.XTB.FetchXmlBuilder
                 {
                     dockControlLayoutXml.PanelPane?.CloseActiveContent();
                 }
-                if (oldaisetting != settings.AiSettings.Supplier + settings.AiSettings.Model)
+                if (string.IsNullOrWhiteSpace(settings.AiSettings.Supplier) || string.IsNullOrWhiteSpace(settings.AiSettings.Model))
+                {
+                    dockControlAiChat?.Close();
+                }
+                else if (oldaisetting != settings.AiSettings.Supplier + settings.AiSettings.Model)
                 {
                     dockControlAiChat?.Initialize();
                 }
