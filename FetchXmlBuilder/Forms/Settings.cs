@@ -7,6 +7,10 @@ using System.Linq;
 using Rappen.AI.WinForm;
 using Rappen.XTB.Helpers;
 using System.Collections.Generic;
+using Rappen.XTB.FetchXmlBuilder.DockControls;
+using XrmToolBox.Extensibility;
+using System.IO;
+using System.Diagnostics;
 
 namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
@@ -22,6 +26,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             InitializeComponent();
             this.fxb = fxb;
             cmbAiSupplier.Items.Clear();
+            cmbAiSupplier.Items.Add("");
             cmbAiSupplier.Items.AddRange(OnlineSettings.Instance.AiSupport.AiSuppliers.ToArray());
             PopulateSettings(fxb.settings);
             tabSettings.SelectedTab = tabSettings.TabPages
@@ -91,6 +96,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
             txtAiApiKey.Text = settings.AiSettings.ApiKey;
             txtAiCallMe.Text = settings.AiSettings.MyName;
+            chkAiLogConversation.Checked = settings.AiSettings.LogConversation;
+            linkAiLogFolder.Text = Path.Combine(Paths.LogsPath, "FXB AI Chat");
+            cmbAiSupplier_SelectedIndexChanged();
         }
 
         private int SettingResultToComboBoxItem(ResultOutput resultOutput)
@@ -140,8 +148,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.AlwaysShowAggregationProperties = chkAlwaysShowAggregateProperties.Checked;
             settings.AiSettings.Supplier = cmbAiSupplier.Text;
             settings.AiSettings.Model = cmbAiModel.Text;
-            settings.AiSettings.ApiKey = txtAiApiKey.Text;
+            settings.AiSettings.ApiKey = txtAiApiKey.Enabled ? txtAiApiKey.Text : "";
             settings.AiSettings.MyName = txtAiCallMe.Text;
+            settings.AiSettings.LogConversation = chkAiLogConversation.Checked;
             UpdateAiSettingsList();
             settings.AiSettingsList = aisettingslist;
             return settings;
@@ -181,8 +190,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "XML Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBoxEx.Show(this, ex.Message, "XML Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DialogResult = DialogResult.None;
+                return;
+            }
+            if (cmbAiSupplier.SelectedItem is AiSupplier supplier &&
+                supplier.IsFree &&
+                cmbAiModel.SelectedItem is AiModel model &&
+                string.IsNullOrEmpty(model.ApiKeyDecrypted))
+            {
+                MessageBoxEx.Show(this, $"The selected Free AI model '{model.Name}' is not available right now. Please select another model.", "AI Chat Settings", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                DialogResult = DialogResult.None;
+                return;
             }
         }
 
@@ -299,16 +318,36 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                     {
                         Supplier = supplier.Name,
                         Model = model.Name,
-                        ApiKey = txtAiApiKey.Text
+                        ApiKey = !supplier.IsFree ? txtAiApiKey.Text : ""
                     });
                 }
             }
         }
 
-        private void cmbAiSupplier_SelectedIndexChanged(object sender, EventArgs e)
+        private void HandlingFreeAI()
+        {
+            if (cmbAiModel.SelectedItem is AiModel selectedmodel && string.IsNullOrEmpty(selectedmodel.ApiKeyDecrypted))
+            {
+                txtAiApiKey.Text = "Unfortunately, this model is currently not supported.";
+            }
+            else
+            {
+                if (AiChatControl.IsFreeAiUser(fxb))
+                {
+                    txtAiApiKey.Text = "ApiKey is handled by Jonas for this free provider.";
+                }
+                else
+                {
+                    txtAiApiKey.Text = "To use the free provider, you have to submit a form only for Jonas to make sure you are not using gazillian tokens. Click the (i) button on the provider above!";
+                    picAiSupplier.Tag = "FREE";
+                    tt.SetToolTip(picAiSupplier, $"Click to fill in the form to get free provider! at {OnlineSettings.Instance.AiSupport.UrlToUseForFree}");
+                }
+            }
+        }
+
+        private void cmbAiSupplier_SelectedIndexChanged(object sender = null, EventArgs e = null)
         {
             cmbAiModel.Items.Clear();
-            picAiSupplier.Tag = null;
             if (cmbAiSupplier.SelectedItem is AiSupplier supplier)
             {
                 tt.SetToolTip(picAiSupplier, $"Read about {supplier.Name} at {supplier.Url}");
@@ -323,26 +362,63 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                     cmbAiModel.SelectedIndex = 0;
                 }
             }
-            picAiSupplier.Visible = !string.IsNullOrWhiteSpace(picAiSupplier.Tag as string);
-            LoadAiSettingsKey();
+            else
+            {
+                picAiSupplier.Tag = null;
+            }
+            cmbAiModel_SelectedIndexChanged();
         }
 
-        private void cmbAiModel_SelectedIndexChanged(object sender, EventArgs e)
+        private void cmbAiModel_SelectedIndexChanged(object sender = null, EventArgs e = null)
         {
-            var aimodelurl = OnlineSettings.Instance.AiSupport.Supplier(cmbAiSupplier.Text)?.Models.FirstOrDefault(m => m.Name == cmbAiModel.Text)?.Url;
-            picAiUrl.Tag = aimodelurl;
-            picAiUrl.Visible = !string.IsNullOrWhiteSpace(aimodelurl);
-            LoadAiSettingsKey();
+            if (cmbAiSupplier.SelectedItem is AiSupplier supplier && cmbAiModel.SelectedItem is AiModel model)
+            {
+                picAiUrl.Tag = OnlineSettings.Instance.AiSupport.Supplier(cmbAiSupplier.Text)?.Models.FirstOrDefault(m => m.Name == cmbAiModel.Text)?.Url;
+                if (supplier.IsFree)
+                {
+                    HandlingFreeAI();
+                }
+                else //if (sender != null)
+                {
+                    LoadAiSettingsKey();
+                }
+                txtAiApiKey.Enabled = !supplier.IsFree;
+            }
+            else
+            {
+                picAiUrl.Tag = null;
+                txtAiApiKey.Text = "";
+                txtAiApiKey.Enabled = false;
+            }
+            picAiSupplier.Visible = picAiSupplier.Tag != null;
+            picAiUrl.Visible = picAiUrl.Tag != null;
         }
 
         private void picAiSupplier_Click(object sender, EventArgs e)
         {
-            UrlUtils.OpenUrl(sender);
+            if (sender is PictureBox pic && pic.Tag is string text && text == "FREE")
+            {
+                AiChatControl.PromptToUseForFree(fxb);
+            }
+            else
+            {
+                UrlUtils.OpenUrl(sender);
+            }
         }
 
         private void chkWorkWithLayout_CheckedChanged(object sender, EventArgs e)
         {
             panLayout.Enabled = chkWorkWithLayout.Checked;
+        }
+
+        private void linkLogFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("explorer.exe", linkAiLogFolder.Text);
+        }
+
+        private void picAiLogFolder_Click(object sender, EventArgs e)
+        {
+            MessageBoxEx.Show(this, tt.GetToolTip(picAiLogFolder), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

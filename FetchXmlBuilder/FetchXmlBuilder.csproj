@@ -48,6 +48,12 @@
     <Reference Include="Anthropic, Version=3.0.0.0, Culture=neutral, PublicKeyToken=20925763ef4043f0, processorArchitecture=MSIL">
       <HintPath>..\packages\Anthropic.3.7.1\lib\net462\Anthropic.dll</HintPath>
     </Reference>
+    <Reference Include="Azure.AI.OpenAI, Version=2.2.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
+      <HintPath>..\packages\Azure.AI.OpenAI.2.2.0-beta.5\lib\netstandard2.0\Azure.AI.OpenAI.dll</HintPath>
+    </Reference>
+    <Reference Include="Azure.Core, Version=1.47.1.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
+      <HintPath>..\packages\Azure.Core.1.47.1\lib\net472\Azure.Core.dll</HintPath>
+    </Reference>
     <Reference Include="CSharpToJsonSchema, Version=3.0.0.0, Culture=neutral, PublicKeyToken=20925763ef4043f0, processorArchitecture=MSIL">
       <HintPath>..\packages\CSharpToJsonSchema.3.10.1\lib\net462\CSharpToJsonSchema.dll</HintPath>
     </Reference>
@@ -852,6 +858,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Supporting bg 16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon-heart-16.png" />
   </ItemGroup>
   <Import Project="..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <Import Project="..\FXBEditorUtils\FXBEditorUtils.projitems" Label="Shared" />

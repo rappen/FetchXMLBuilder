@@ -962,7 +962,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                  string.IsNullOrEmpty(settings.AiSettings?.Model)) &&
                  !dontask)
             {
-                if (MessageBoxEx.Show(this, "AI Chat is missing some setting, please add them!", "AI Chat", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                if (MessageBoxEx.Show(this, "The AI Chat feature is missing some settings, please add them now.", "AI Chat", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     ShowSettings("tabAiChat");
                     ShowAiChatControl(true);
