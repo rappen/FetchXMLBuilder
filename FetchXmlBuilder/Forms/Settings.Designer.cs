@@ -71,6 +71,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkAppBothNamesResults = new System.Windows.Forms.CheckBox();
             this.tabBehavior = new System.Windows.Forms.TabPage();
             this.tabAiChat = new System.Windows.Forms.TabPage();
+            this.picAiLogFolder = new System.Windows.Forms.PictureBox();
+            this.linkAiLogFolder = new System.Windows.Forms.LinkLabel();
+            this.label10 = new System.Windows.Forms.Label();
             this.chkAiLogConversation = new System.Windows.Forms.CheckBox();
             this.txtAiCallMe = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -97,15 +100,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabXmlScheme = new System.Windows.Forms.TabPage();
             this.label4 = new System.Windows.Forms.Label();
             this.btnResetXmlColors = new System.Windows.Forms.Button();
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.tabAdvanced = new System.Windows.Forms.TabPage();
             this.btnForceReloadMetadata = new System.Windows.Forms.Button();
             this.btnResetAll = new System.Windows.Forms.Button();
             this.chkShowOData2 = new System.Windows.Forms.CheckBox();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
-            this.label10 = new System.Windows.Forms.Label();
-            this.linkAiLogFolder = new System.Windows.Forms.LinkLabel();
-            this.picAiLogFolder = new System.Windows.Forms.PictureBox();
-            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -113,6 +113,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabAppearance.SuspendLayout();
             this.tabBehavior.SuspendLayout();
             this.tabAiChat.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picAiLogFolder)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picAiUrl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picAiSupplier)).BeginInit();
             this.tabResults.SuspendLayout();
@@ -122,7 +123,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabDefaultQuery.SuspendLayout();
             this.tabXmlScheme.SuspendLayout();
             this.tabAdvanced.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picAiLogFolder)).BeginInit();
             this.SuspendLayout();
             // 
             // cmbResult
@@ -613,6 +613,39 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabAiChat.TabIndex = 7;
             this.tabAiChat.Text = "AI Chat";
             // 
+            // picAiLogFolder
+            // 
+            this.picAiLogFolder.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picAiLogFolder.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_info_16;
+            this.picAiLogFolder.Location = new System.Drawing.Point(477, 157);
+            this.picAiLogFolder.Name = "picAiLogFolder";
+            this.picAiLogFolder.Size = new System.Drawing.Size(16, 16);
+            this.picAiLogFolder.TabIndex = 16;
+            this.picAiLogFolder.TabStop = false;
+            this.tt.SetToolTip(this.picAiLogFolder, resources.GetString("picAiLogFolder.ToolTip"));
+            this.picAiLogFolder.Click += new System.EventHandler(this.picAiLogFolder_Click);
+            // 
+            // linkAiLogFolder
+            // 
+            this.linkAiLogFolder.AutoSize = true;
+            this.linkAiLogFolder.Location = new System.Drawing.Point(81, 157);
+            this.linkAiLogFolder.Name = "linkAiLogFolder";
+            this.linkAiLogFolder.Size = new System.Drawing.Size(174, 13);
+            this.linkAiLogFolder.TabIndex = 15;
+            this.linkAiLogFolder.TabStop = true;
+            this.linkAiLogFolder.Text = "<storade folder>\\Log\\FXB AI Chat\\";
+            this.tt.SetToolTip(this.linkAiLogFolder, "Click to open the folder.");
+            this.linkAiLogFolder.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLogFolder_LinkClicked);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(20, 157);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(45, 13);
+            this.label10.TabIndex = 14;
+            this.label10.Text = "Logging";
+            // 
             // chkAiLogConversation
             // 
             this.chkAiLogConversation.AutoSize = true;
@@ -650,6 +683,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.picAiUrl.TabIndex = 10;
             this.picAiUrl.TabStop = false;
             this.tt.SetToolTip(this.picAiUrl, "Browse to the api endpoint");
+            this.picAiUrl.Visible = false;
             this.picAiUrl.Click += new System.EventHandler(this.picAiSupplier_Click);
             // 
             // picAiSupplier
@@ -662,6 +696,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.picAiSupplier.TabIndex = 9;
             this.picAiSupplier.TabStop = false;
             this.tt.SetToolTip(this.picAiSupplier, "Read more");
+            this.picAiSupplier.Visible = false;
             this.picAiSupplier.Click += new System.EventHandler(this.picAiSupplier_Click);
             // 
             // label6
@@ -896,6 +931,33 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.btnResetXmlColors.UseVisualStyleBackColor = true;
             this.btnResetXmlColors.Click += new System.EventHandler(this.btnResetXmlColors_Click);
             // 
+            // propXmlColors
+            // 
+            this.propXmlColors.CanShowVisualStyleGlyphs = false;
+            this.propXmlColors.HelpVisible = false;
+            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.Location = new System.Drawing.Point(4, 40);
+            this.propXmlColors.Name = "propXmlColors";
+            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            xmlColors1.AttributeKey = System.Drawing.Color.Red;
+            xmlColors1.AttributeKeyColor = "Red";
+            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
+            xmlColors1.AttributeValueColor = "Blue";
+            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            xmlColors1.CommentColor = "0";
+            xmlColors1.Element = System.Drawing.Color.DarkRed;
+            xmlColors1.ElementColor = "DarkRed";
+            xmlColors1.Tag = System.Drawing.Color.Blue;
+            xmlColors1.TagColor = "Blue";
+            xmlColors1.Value = System.Drawing.Color.Black;
+            xmlColors1.ValueColor = "Black";
+            this.propXmlColors.SelectedObject = xmlColors1;
+            this.propXmlColors.Size = new System.Drawing.Size(252, 97);
+            this.propXmlColors.TabIndex = 7;
+            this.propXmlColors.ToolbarVisible = false;
+            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
+            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
+            // 
             // tabAdvanced
             // 
             this.tabAdvanced.BackColor = System.Drawing.SystemColors.Window;
@@ -946,66 +1008,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         "how it anyway, if you which, but checking this one.");
             this.chkShowOData2.UseVisualStyleBackColor = true;
             // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(20, 157);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(45, 13);
-            this.label10.TabIndex = 14;
-            this.label10.Text = "Logging";
-            // 
-            // linkAiLogFolder
-            // 
-            this.linkAiLogFolder.AutoSize = true;
-            this.linkAiLogFolder.Location = new System.Drawing.Point(81, 157);
-            this.linkAiLogFolder.Name = "linkAiLogFolder";
-            this.linkAiLogFolder.Size = new System.Drawing.Size(174, 13);
-            this.linkAiLogFolder.TabIndex = 15;
-            this.linkAiLogFolder.TabStop = true;
-            this.linkAiLogFolder.Text = "<storade folder>\\Log\\FXB AI Chat\\";
-            this.tt.SetToolTip(this.linkAiLogFolder, "Click to open the folder.");
-            this.linkAiLogFolder.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLogFolder_LinkClicked);
-            // 
-            // picAiLogFolder
-            // 
-            this.picAiLogFolder.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picAiLogFolder.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_info_16;
-            this.picAiLogFolder.Location = new System.Drawing.Point(477, 157);
-            this.picAiLogFolder.Name = "picAiLogFolder";
-            this.picAiLogFolder.Size = new System.Drawing.Size(16, 16);
-            this.picAiLogFolder.TabIndex = 16;
-            this.picAiLogFolder.TabStop = false;
-            this.tt.SetToolTip(this.picAiLogFolder, resources.GetString("picAiLogFolder.ToolTip"));
-            this.picAiLogFolder.Click += new System.EventHandler(this.picAiLogFolder_Click);
-            // 
-            // propXmlColors
-            // 
-            this.propXmlColors.CanShowVisualStyleGlyphs = false;
-            this.propXmlColors.HelpVisible = false;
-            this.propXmlColors.LineColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.Location = new System.Drawing.Point(4, 40);
-            this.propXmlColors.Name = "propXmlColors";
-            this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            xmlColors1.AttributeKey = System.Drawing.Color.Red;
-            xmlColors1.AttributeKeyColor = "Red";
-            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
-            xmlColors1.AttributeValueColor = "Blue";
-            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            xmlColors1.CommentColor = "0";
-            xmlColors1.Element = System.Drawing.Color.DarkRed;
-            xmlColors1.ElementColor = "DarkRed";
-            xmlColors1.Tag = System.Drawing.Color.Blue;
-            xmlColors1.TagColor = "Blue";
-            xmlColors1.Value = System.Drawing.Color.Black;
-            xmlColors1.ValueColor = "Black";
-            this.propXmlColors.SelectedObject = xmlColors1;
-            this.propXmlColors.Size = new System.Drawing.Size(252, 97);
-            this.propXmlColors.TabIndex = 7;
-            this.propXmlColors.ToolbarVisible = false;
-            this.propXmlColors.ViewBorderColor = System.Drawing.SystemColors.Window;
-            this.propXmlColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propXmlColors_PropertyValueChanged);
-            // 
             // Settings
             // 
             this.AcceptButton = this.btnOK;
@@ -1032,6 +1034,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabBehavior.PerformLayout();
             this.tabAiChat.ResumeLayout(false);
             this.tabAiChat.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picAiLogFolder)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picAiUrl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picAiSupplier)).EndInit();
             this.tabResults.ResumeLayout(false);
@@ -1048,7 +1051,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabXmlScheme.PerformLayout();
             this.tabAdvanced.ResumeLayout(false);
             this.tabAdvanced.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picAiLogFolder)).EndInit();
             this.ResumeLayout(false);
 
         }
