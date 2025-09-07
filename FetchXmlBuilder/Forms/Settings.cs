@@ -195,7 +195,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 return;
             }
             if (cmbAiSupplier.SelectedItem is AiSupplier supplier &&
-                supplier.IsFree &&
+                supplier.Free &&
                 cmbAiModel.SelectedItem is AiModel model &&
                 string.IsNullOrEmpty(model.ApiKeyDecrypted))
             {
@@ -308,7 +308,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 cmbAiModel.SelectedItem is AiModel model &&
                 !string.IsNullOrWhiteSpace(txtAiApiKey.Text))
             {
-                if (aisettingslist.FirstOrDefault(a => a.Supplier == supplier.Name && a.Model == model.Name) is AiSettings existing)
+                if (aisettingslist.FirstOrDefault(a => a.Supplier == supplier.ToString() && a.Model == model.Name) is AiSettings existing)
                 {
                     existing.ApiKey = txtAiApiKey.Text;
                 }
@@ -316,9 +316,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 {
                     aisettingslist.Add(new AiSettings
                     {
-                        Supplier = supplier.Name,
+                        Supplier = supplier.ToString(),
                         Model = model.Name,
-                        ApiKey = !supplier.IsFree ? txtAiApiKey.Text : ""
+                        ApiKey = !supplier.Free ? txtAiApiKey.Text : ""
                     });
                 }
             }
@@ -350,7 +350,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             cmbAiModel.Items.Clear();
             if (cmbAiSupplier.SelectedItem is AiSupplier supplier)
             {
-                tt.SetToolTip(picAiSupplier, $"Read about {supplier.Name} at {supplier.Url}");
+                tt.SetToolTip(picAiSupplier, $"Read about {supplier} at {supplier.Url}");
                 picAiSupplier.Tag = supplier.Url;
                 cmbAiModel.Items.AddRange(supplier.Models.ToArray());
                 if (supplier.Models.FirstOrDefault(m => m.Name == fxb.settings.AiSettings.Model) is AiModel model)
@@ -374,7 +374,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             if (cmbAiSupplier.SelectedItem is AiSupplier supplier && cmbAiModel.SelectedItem is AiModel model)
             {
                 picAiUrl.Tag = OnlineSettings.Instance.AiSupport.Supplier(cmbAiSupplier.Text)?.Models.FirstOrDefault(m => m.Name == cmbAiModel.Text)?.Url;
-                if (supplier.IsFree)
+                if (supplier.Free)
                 {
                     HandlingFreeAI();
                 }
@@ -382,7 +382,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 {
                     LoadAiSettingsKey();
                 }
-                txtAiApiKey.Enabled = !supplier.IsFree;
+                txtAiApiKey.Enabled = !supplier.Free;
             }
             else
             {

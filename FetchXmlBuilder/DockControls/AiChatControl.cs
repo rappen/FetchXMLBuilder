@@ -84,7 +84,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 return;
             }
             var apikey = "";
-            if (supplier.IsFree)
+            if (supplier.Free)
             {
                 logname = "AI-Free";
                 if (IsFreeAiUser(fxb))
@@ -111,7 +111,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             chatHistory = new ChatMessageHistory(panAiConversation, supplier?.Name, model?.Endpoint, model?.Name, apikey, fxb.settings.AiSettings.MyName);
             metaAttributes.Clear();
             SetTitle();
-            if (supplier.IsFree && !IsFreeAiUser(fxb))
+            if (supplier.Free && !IsFreeAiUser(fxb))
             {
                 chatHistory.Add(ChatRole.Assistant, @"To use the free AI provider, you have to fill in a form.
 Please click the button (the three dots down-right) and select 'Ask for Free AI'.
@@ -165,7 +165,7 @@ Note that there will be a slight lag between your submission and when it is acti
 
         private void SetTitle()
         {
-            Text = $"AI Chat - {supplier?.Name ?? "<no provider>"} - {model?.Name ?? "<no model>"}";
+            Text = $"AI Chat - {supplier?.ToString() ?? "<no provider>"} - {model?.Name ?? "<no model>"}";
             TabText = Text;
         }
 
@@ -286,7 +286,7 @@ Note that there will be a slight lag between your submission and when it is acti
             }
             catch (Exception ex)
             {
-                fxb.LogError($"communicating with {supplier.Name}\n{ex.ExceptionDetails()}\n{ex.StackTrace}");
+                fxb.LogError($"Communicating with {supplier}:\n{ex.ExceptionDetails()}\n{ex.StackTrace}");
                 fxb.ShowErrorDialog(ex, "AI Chat", "An error occurred while trying to communicate with the AI.");
             }
             txtAiChat.Clear();
@@ -420,9 +420,12 @@ Note that there will be a slight lag between your submission and when it is acti
         {
             var supporting = Supporting.IsMonetarySupporting(fxb) || Supporting.IsPending(fxb);
             if (OnlineSettings.Instance.AiSupport.PopupByCallNos
-                .FirstOrDefault(p => p.TimeToPopup(fxb.settings.AiSettings.Calls, supporting)) is PopupByCallNo popup)
+                .FirstOrDefault(p => p.TimeToPopup(fxb.settings.AiSettings.Calls, supporting, supplier.Free)) is PopupByCallNo popup)
             {
-                var message = popup.Message.Replace("{calls}", fxb.settings.AiSettings.Calls.ToString());
+                var message = popup.Message
+                    .Replace("{calls}", fxb.settings.AiSettings.Calls.ToString())
+                    .Replace("{provider}", supplier.ToString())
+                    .Replace("{model}", model.Name);
                 if (popup.SuggestsSupporting)
                 {
                     if (MessageBoxEx.Show(fxb, message, "AI Chat", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
