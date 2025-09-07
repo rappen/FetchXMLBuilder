@@ -357,7 +357,6 @@
             // 
             this.chkVirtual.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkVirtual.Checked = true;
             this.chkVirtual.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkVirtual.Location = new System.Drawing.Point(18, 100);
             this.chkVirtual.Name = "chkVirtual";
@@ -415,7 +414,6 @@
             // 
             this.chkEActivityParty.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkEActivityParty.Checked = true;
             this.chkEActivityParty.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkEActivityParty.Location = new System.Drawing.Point(18, 238);
             this.chkEActivityParty.Name = "chkEActivityParty";
@@ -434,7 +432,6 @@
             // 
             this.chkEActivity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkEActivity.Checked = true;
             this.chkEActivity.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkEActivity.Location = new System.Drawing.Point(18, 215);
             this.chkEActivity.Name = "chkEActivity";
@@ -453,7 +450,6 @@
             // 
             this.chkELogical.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkELogical.Checked = true;
             this.chkELogical.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkELogical.Location = new System.Drawing.Point(18, 192);
             this.chkELogical.Name = "chkELogical";
@@ -472,7 +468,6 @@
             // 
             this.chkEAudit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkEAudit.Checked = true;
             this.chkEAudit.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkEAudit.Location = new System.Drawing.Point(18, 169);
             this.chkEAudit.Name = "chkEAudit";
@@ -491,7 +486,6 @@
             // 
             this.chkEAdvFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkEAdvFind.Checked = true;
             this.chkEAdvFind.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkEAdvFind.Location = new System.Drawing.Point(18, 146);
             this.chkEAdvFind.Name = "chkEAdvFind";
@@ -510,7 +504,6 @@
             // 
             this.chkEIntersect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkEIntersect.Checked = true;
             this.chkEIntersect.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkEIntersect.Location = new System.Drawing.Point(18, 123);
             this.chkEIntersect.Name = "chkEIntersect";
@@ -529,7 +522,6 @@
             // 
             this.chkECustomizable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkECustomizable.Checked = true;
             this.chkECustomizable.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkECustomizable.Location = new System.Drawing.Point(18, 77);
             this.chkECustomizable.Name = "chkECustomizable";
@@ -548,7 +540,6 @@
             // 
             this.chkECustom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkECustom.Checked = true;
             this.chkECustom.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkECustom.Location = new System.Drawing.Point(18, 54);
             this.chkECustom.Name = "chkECustom";
@@ -567,7 +558,6 @@
             // 
             this.chkEManaged.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkEManaged.Checked = true;
             this.chkEManaged.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkEManaged.Location = new System.Drawing.Point(18, 30);
             this.chkEManaged.Name = "chkEManaged";
@@ -679,7 +669,6 @@
             // 
             this.chkACalculationOf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkACalculationOf.Checked = true;
             this.chkACalculationOf.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkACalculationOf.Location = new System.Drawing.Point(18, 284);
             this.chkACalculationOf.Name = "chkACalculationOf";
@@ -711,7 +700,6 @@
             // 
             this.chkAAttributeOf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkAAttributeOf.Checked = true;
             this.chkAAttributeOf.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkAAttributeOf.Location = new System.Drawing.Point(18, 261);
             this.chkAAttributeOf.Name = "chkAAttributeOf";
@@ -874,7 +862,6 @@
             // 
             this.chkARead.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkARead.Checked = true;
             this.chkARead.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkARead.Location = new System.Drawing.Point(18, 100);
             this.chkARead.Name = "chkARead";
@@ -904,7 +891,6 @@
             // 
             this.chkAFiltered.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkAFiltered.Checked = true;
             this.chkAFiltered.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkAFiltered.Location = new System.Drawing.Point(18, 238);
             this.chkAFiltered.Name = "chkAFiltered";
@@ -923,7 +909,6 @@
             // 
             this.chkARetrievable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkARetrievable.Checked = true;
             this.chkARetrievable.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkARetrievable.Location = new System.Drawing.Point(18, 215);
             this.chkARetrievable.Name = "chkARetrievable";
@@ -942,7 +927,6 @@
             // 
             this.chkALogical.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkALogical.Checked = true;
             this.chkALogical.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkALogical.Location = new System.Drawing.Point(18, 192);
             this.chkALogical.Name = "chkALogical";
@@ -961,7 +945,6 @@
             // 
             this.chkAAudit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkAAudit.Checked = true;
             this.chkAAudit.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkAAudit.Location = new System.Drawing.Point(18, 169);
             this.chkAAudit.Name = "chkAAudit";
@@ -980,7 +963,6 @@
             // 
             this.chkAAdvFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkAAdvFind.Checked = true;
             this.chkAAdvFind.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkAAdvFind.Location = new System.Drawing.Point(18, 146);
             this.chkAAdvFind.Name = "chkAAdvFind";
@@ -999,7 +981,6 @@
             // 
             this.chkAGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkAGrid.Checked = true;
             this.chkAGrid.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkAGrid.Location = new System.Drawing.Point(18, 123);
             this.chkAGrid.Name = "chkAGrid";
@@ -1018,7 +999,6 @@
             // 
             this.chkACustomizable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkACustomizable.Checked = true;
             this.chkACustomizable.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkACustomizable.Location = new System.Drawing.Point(18, 77);
             this.chkACustomizable.Name = "chkACustomizable";
@@ -1037,7 +1017,6 @@
             // 
             this.chkACustom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkACustom.Checked = true;
             this.chkACustom.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkACustom.Location = new System.Drawing.Point(18, 54);
             this.chkACustom.Name = "chkACustom";
@@ -1056,7 +1035,6 @@
             // 
             this.chkAManaged.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkAManaged.Checked = true;
             this.chkAManaged.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.chkAManaged.Location = new System.Drawing.Point(18, 30);
             this.chkAManaged.Name = "chkAManaged";
