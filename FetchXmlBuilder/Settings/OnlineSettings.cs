@@ -32,7 +32,7 @@ namespace Rappen.XTB.FXB.Settings
                 {
 #if DEBUG
                     instance = Load<OnlineSettings>(FileName) ?? new OnlineSettings();
-                    instance.Save();
+                    //instance.Save();
 #else
                     instance = new Uri(ToolSettingsURLPath, FileName).DownloadXml<OnlineSettings>() ?? new OnlineSettings();
 #endif
