@@ -334,7 +334,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             {
                 if (AiChatControl.IsFreeAiUser(fxb))
                 {
-                    txtAiApiKey.Text = "ApiKey is handled by Jonas for this free provider.";
+                    txtAiApiKey.Text = "API Key is handled by Jonas for this free provider.";
                 }
                 else
                 {
