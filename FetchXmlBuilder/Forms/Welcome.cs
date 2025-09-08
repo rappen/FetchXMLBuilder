@@ -80,12 +80,14 @@ Jonas", "Anonymous statistics", MessageBoxButtons.OK, MessageBoxIcon.Information
 
         private void Welcome_Shown(object sender, EventArgs e)
         {
-            timerLoading.Enabled = true;
+            timerLoading.Start();
         }
 
         private void timerLoading_Tick(object sender, EventArgs e)
         {
+            timerLoading.Stop();
             linkCantLoad.Visible = panLoading.Visible;
+            btnClose.Visible = true;
         }
     }
 }

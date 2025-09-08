@@ -182,6 +182,7 @@
             this.btnClose.TabIndex = 39;
             this.btnClose.Text = "Continue";
             this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Visible = false;
             // 
             // lblVersion
             // 
