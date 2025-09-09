@@ -459,9 +459,9 @@ Note that there will be a slight lag between your submission and when it is acti
                     Log("Session-Calls-Total", chatHistory.Messages?.Count ?? 0);
                     Log("Session-Responses", chatHistory.Responses?.Count ?? 0);
                     Log("Session-Tokens", tokensout: chatHistory.TokensOut, tokensin: chatHistory.TokensIn);
+                    Log("Close");
                 }
                 chatHistory = null;
-                Log("Close");
                 ai = null;
             }
         }
