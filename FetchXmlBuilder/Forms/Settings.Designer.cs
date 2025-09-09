@@ -651,9 +651,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkAiLogConversation.AutoSize = true;
             this.chkAiLogConversation.Location = new System.Drawing.Point(287, 129);
             this.chkAiLogConversation.Name = "chkAiLogConversation";
-            this.chkAiLogConversation.Size = new System.Drawing.Size(213, 17);
+            this.chkAiLogConversation.Size = new System.Drawing.Size(211, 17);
             this.chkAiLogConversation.TabIndex = 13;
-            this.chkAiLogConversation.Text = "Log conversation to Azure App Inslights";
+            this.chkAiLogConversation.Text = "Log conversation to Azure App Insights";
             this.tt.SetToolTip(this.chkAiLogConversation, resources.GetString("chkAiLogConversation.ToolTip"));
             this.chkAiLogConversation.UseVisualStyleBackColor = true;
             // 
