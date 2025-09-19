@@ -446,24 +446,26 @@ Note that there will be a slight lag between your submission and when it is acti
 
         private void ClosingSession()
         {
-            if (chatHistory != null)
+            if (chatHistory?.Initialized == true)
             {
                 chatHistory.Save(Paths.LogsPath, "FXB");
-                if (chatHistory.Initialized)
+                if (manualcalls > 0)
                 {
-                    Log("Session-Time", duration: sessionstopwatch?.ElapsedMilliseconds);
-                    if (manualcalls > 0)
-                    {
-                        Log("Session-Calls-Manual", count: manualcalls);
-                    }
-                    Log("Session-Calls-Total", chatHistory.Messages?.Count ?? 0);
-                    Log("Session-Responses", chatHistory.Responses?.Count ?? 0);
-                    Log("Session-Tokens", tokensout: chatHistory.TokensOut, tokensin: chatHistory.TokensIn);
-                    Log("Close");
+                    Log("Session-Prompts", count: manualcalls);
                 }
-                chatHistory = null;
-                ai = null;
+                if (chatHistory.Responses?.Count > 0)
+                {
+                    Log("Session-Responses", chatHistory.Responses.Count);
+                }
+                Log("Session-Summary",
+                    count: chatHistory.Messages?.Count ?? 0,
+                    duration: sessionstopwatch?.ElapsedMilliseconds,
+                    tokensout: chatHistory.TokensOut,
+                    tokensin: chatHistory.TokensIn);
             }
+            manualcalls = 0;
+            chatHistory = null;
+            ai = null;
         }
 
         private void Log(string action, ChatResponse response, double? duration, double? count = null)
