@@ -28,56 +28,53 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         public override Guid GetId() => XrmToolBoxToolIds.FetchXMLBuilder;
 
-        //public FetchXMLBuilderPlugin()
-        //{
-        //    AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(AssemblyResolveEventHandler);
-        //}
+        public FetchXMLBuilderPlugin()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(AssemblyResolveEventHandler);
+        }
 
-        //private readonly HashSet<string> _redirectAssemblies = new HashSet<string>
-        //{
-        //    //"Microsoft.Bcl.AsyncInterfaces",
-        //    //"System.Text.Json",
-        //    //"System.Memory.Data",
-        //    //"System.Diagnostics.DiagnosticSource",
-        //    //"System.Text.Encodings.Web",
-        //    //"System.Buffers",
-        //    //"System.ClientModel",
-        //    //"System.IO.Pipelines"
-        //};
+        private readonly HashSet<string> _redirectAssemblies = new HashSet<string>
+        {
+            "Microsoft.Bcl.AsyncInterfaces",
+            "System.Text.Json",
+            "System.Memory.Data",
+            "System.Diagnostics.DiagnosticSource",
+            "System.Text.Encodings.Web",
+            "System.Buffers",
+            "System.ClientModel",
+            //"System.ValueTuple",
+            "System.IO.Pipelines"
+        };
 
-        //private Assembly AssemblyResolveEventHandler(object sender, ResolveEventArgs args)
-        //{
-        //    Assembly loadAssembly = null;
-        //    Assembly currAssembly = Assembly.GetExecutingAssembly();
+        private Assembly AssemblyResolveEventHandler(object sender, ResolveEventArgs args)
+        {
+            Assembly loadAssembly = null;
+            Assembly currAssembly = Assembly.GetExecutingAssembly();
 
-        //    // base name of the assembly that failed to resolve
-        //    var argName = args.Name.Substring(0, args.Name.IndexOf(","));
+            // base name of the assembly that failed to resolve
+            var argName = args.Name.Substring(0, args.Name.IndexOf(","));
 
-        //    // check to see if the failing assembly is one that we reference.
-        //    List<AssemblyName> refAssemblies = currAssembly.GetReferencedAssemblies().ToList();
-        //    var refAssembly = refAssemblies.Where(a => a.Name == argName).FirstOrDefault();
+            // check to see if the failing assembly is one that we reference.
+            List<AssemblyName> refAssemblies = currAssembly.GetReferencedAssemblies().ToList();
+            var refAssembly = refAssemblies.Where(a => a.Name == argName).FirstOrDefault();
 
-        //    // if the current unresolved assembly is referenced by our plugin, attempt to load
-        //    if (refAssembly != null || _redirectAssemblies.Contains(argName))
-        //    {
-        //        // load from the path to this plugin assembly, not host executable
-        //        string dir = Path.GetDirectoryName(currAssembly.Location).ToLower();
-        //        string folder = Path.GetFileNameWithoutExtension(currAssembly.Location);
-        //        dir = Path.Combine(dir, folder);
+            // if the current unresolved assembly is referenced by our plugin, attempt to load
+            if (refAssembly != null || _redirectAssemblies.Contains(argName))
+            {
+                // load from the path to this plugin assembly, not host executable
+                var assmbPath = Path.Combine(Paths.PluginsPath, Path.GetFileNameWithoutExtension(currAssembly.Location), $"{argName}.dll");
 
-        //        var assmbPath = Path.Combine(dir, $"{argName}.dll");
+                if (File.Exists(assmbPath))
+                {
+                    loadAssembly = Assembly.LoadFrom(assmbPath);
+                }
+                else
+                {
+                    throw new FileNotFoundException($"Unable to locate dependency: {assmbPath}");
+                }
+            }
 
-        //        if (File.Exists(assmbPath))
-        //        {
-        //            loadAssembly = Assembly.LoadFrom(assmbPath);
-        //        }
-        //        else
-        //        {
-        //            throw new FileNotFoundException($"Unable to locate dependency: {assmbPath}");
-        //        }
-        //    }
-
-        //    return loadAssembly;
-        //}
+            return loadAssembly;
+        }
     }
 }
