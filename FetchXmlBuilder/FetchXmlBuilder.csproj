@@ -49,11 +49,11 @@
     <Reference Include="Anthropic, Version=3.0.0.0, Culture=neutral, PublicKeyToken=20925763ef4043f0, processorArchitecture=MSIL">
       <HintPath>..\packages\Anthropic.3.7.1\lib\net462\Anthropic.dll</HintPath>
     </Reference>
-    <Reference Include="Azure.AI.OpenAI, Version=2.2.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
-      <HintPath>..\packages\Azure.AI.OpenAI.2.2.0-beta.5\lib\netstandard2.0\Azure.AI.OpenAI.dll</HintPath>
+    <Reference Include="Azure.AI.OpenAI, Version=2.1.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
+      <HintPath>..\packages\Azure.AI.OpenAI.2.1.0\lib\netstandard2.0\Azure.AI.OpenAI.dll</HintPath>
     </Reference>
-    <Reference Include="Azure.Core, Version=1.47.1.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
-      <HintPath>..\packages\Azure.Core.1.47.1\lib\net472\Azure.Core.dll</HintPath>
+    <Reference Include="Azure.Core, Version=1.48.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
+      <HintPath>..\packages\Azure.Core.1.48.0\lib\net472\Azure.Core.dll</HintPath>
     </Reference>
     <Reference Include="CSharpToJsonSchema, Version=3.0.0.0, Culture=neutral, PublicKeyToken=20925763ef4043f0, processorArchitecture=MSIL">
       <HintPath>..\packages\CSharpToJsonSchema.3.10.1\lib\net462\CSharpToJsonSchema.dll</HintPath>
@@ -141,8 +141,8 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="OpenAI, Version=2.2.0.0, Culture=neutral, PublicKeyToken=b4187f3e65366280, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenAI.2.2.0\lib\netstandard2.0\OpenAI.dll</HintPath>
+    <Reference Include="OpenAI, Version=2.4.0.0, Culture=neutral, PublicKeyToken=b4187f3e65366280, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenAI.2.4.0\lib\netstandard2.0\OpenAI.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
@@ -154,8 +154,8 @@
     <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
     </Reference>
-    <Reference Include="System.ClientModel, Version=1.5.1.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ClientModel.1.5.1\lib\netstandard2.0\System.ClientModel.dll</HintPath>
+    <Reference Include="System.ClientModel, Version=1.6.1.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ClientModel.1.6.1\lib\netstandard2.0\System.ClientModel.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -877,7 +877,14 @@
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Debug (
   IF NOT EXIST Plugins mkdir Plugins
-  copy /Y  "Rappen.XTB.FXB.dll" Plugins
+  IF NOT EXIST Plugins\Rappen.XTB.FXB mkdir Plugins\Rappen.XTB.FXB
+  del /Q "Plugins\Rappen.XTB.FXB\*.*"
+  copy /Y "Rappen.XTB.FXB.dll" Plugins
+  move /Y "System.ClientModel*.*" Plugins\Rappen.XTB.FXB
+  move /Y "System.ValueTuple*.*" Plugins\Rappen.XTB.FXB
+  move /Y "Azure.*.*" Plugins\Rappen.XTB.FXB
+  move /Y "OpenAI*.*" Plugins\Rappen.XTB.FXB
+rem  move /Y "Azure.*.*" Plugins\Rappen.XTB.FXB
 )
 
 
@@ -887,11 +894,11 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Web.WebView2.1.0.3351.48\build\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Web.WebView2.1.0.3351.48\build\Microsoft.Web.WebView2.targets'))" />
+    <Error Condition="!Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets'))" />
   </Target>
-  <Import Project="..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets" Condition="Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" />
   <Import Project="..\packages\Microsoft.Web.WebView2.1.0.3351.48\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.1.0.3351.48\build\Microsoft.Web.WebView2.targets')" />
+  <Import Project="..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets" Condition="Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
