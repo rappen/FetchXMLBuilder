@@ -42,7 +42,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             "System.Text.Encodings.Web",
             "System.Buffers",
             "System.ClientModel",
-            //"System.ValueTuple",
+            "System.ValueTuple",
             "System.IO.Pipelines"
         };
 

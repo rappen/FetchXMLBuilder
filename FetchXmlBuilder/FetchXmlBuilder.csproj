@@ -879,12 +879,16 @@
   IF NOT EXIST Plugins mkdir Plugins
   IF NOT EXIST Plugins\Rappen.XTB.FXB mkdir Plugins\Rappen.XTB.FXB
   del /Q "Plugins\Rappen.XTB.FXB\*.*"
-  copy /Y "Rappen.XTB.FXB.dll" Plugins
+  move /Y "Rappen.XTB.FXB.dll" Plugins
+  move /Y "System.Memory.Data.*" Plugins\Rappen.XTB.FXB
   move /Y "System.ClientModel*.*" Plugins\Rappen.XTB.FXB
   move /Y "System.ValueTuple*.*" Plugins\Rappen.XTB.FXB
+  move /Y "Microsoft.Office.Interop.Excel.*" Plugins\Rappen.XTB.FXB
+  move /Y "CSharpToJsonSchema.*" Plugins\Rappen.XTB.FXB
+  move /Y "Anthropic.*" Plugins\Rappen.XTB.FXB
+  move /Y "OpenAI.*" Plugins\Rappen.XTB.FXB
+  move /Y "Microsoft.Extensions.AI.OpenAI.*" Plugins\Rappen.XTB.FXB
   move /Y "Azure.*.*" Plugins\Rappen.XTB.FXB
-  move /Y "OpenAI*.*" Plugins\Rappen.XTB.FXB
-rem  move /Y "Azure.*.*" Plugins\Rappen.XTB.FXB
 )
 
 
