@@ -33,23 +33,11 @@ namespace Rappen.XTB.FetchXmlBuilder
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(AssemblyResolveEventHandler);
         }
 
-        private readonly HashSet<string> _redirectAssemblies = new HashSet<string>
-        {
-            "Microsoft.Bcl.AsyncInterfaces",
-            "System.Text.Json",
-            "System.Memory.Data",
-            "System.Diagnostics.DiagnosticSource",
-            "System.Text.Encodings.Web",
-            "System.Buffers",
-            "System.ClientModel",
-            "System.IO.Pipelines"
-        };
-
         private Assembly AssemblyResolveEventHandler(object sender, ResolveEventArgs args)
         {
             var currAssembly = Assembly.GetExecutingAssembly();
             var argName = args.Name.Split(',')[0];
-            if (_redirectAssemblies.Contains(argName) || currAssembly.GetReferencedAssemblies().Any(a => a.Name == argName))
+            if (currAssembly.GetReferencedAssemblies().Any(a => a.Name == argName))
             {
                 return Assembly.LoadFrom(Path.Combine(Paths.PluginsPath, Path.GetFileNameWithoutExtension(currAssembly.Location), $"{argName}.dll"));
             }
