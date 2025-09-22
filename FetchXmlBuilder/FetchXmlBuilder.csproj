@@ -882,7 +882,6 @@
   move /Y "Rappen.XTB.FXB.dll" Plugins
   move /Y "System.Memory.Data.*" Plugins\Rappen.XTB.FXB
   move /Y "System.ClientModel*.*" Plugins\Rappen.XTB.FXB
-  move /Y "System.ValueTuple*.*" Plugins\Rappen.XTB.FXB
   move /Y "Microsoft.Office.Interop.Excel.*" Plugins\Rappen.XTB.FXB
   move /Y "CSharpToJsonSchema.*" Plugins\Rappen.XTB.FXB
   move /Y "Anthropic.*" Plugins\Rappen.XTB.FXB

@@ -45,16 +45,14 @@ The tool reads metadata from Microsoft Dataverse and Dynamics 365 / CRM to assis
 To make it even more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.
 		</description>
 		<releaseNotes>
-FetchXML Builder (can now be) driven by AI!
+FetchXML Builder AI Chat can now be used / tested by my Azure AI Foundry provider!
+No personal account at OpenAI or Anthropic needed (but still possible to use, of course).
 Open the "AI Chat" tab and ask questions about your data, queries, or how to use the tool.
 
 ** NOTE: This version of FetchXML Builder needs to have XrmToolBox in version 1.2025.7.* or later! **
 
 Full release notes:
 https://fetchxmlbuilder.com/releases/#$versionnumber$
-
-Released for manual download:
-https://github.com/rappen/FetchXMLBuilder/releases/tag/$buildnumber$
 		</releaseNotes>
 		<copyright>Copyright Jonas Rapp 2014-2025</copyright>
 		<tags>XrmToolBox Plugins FetchXML Builder</tags>
@@ -71,5 +69,8 @@ https://github.com/rappen/FetchXMLBuilder/releases/tag/$buildnumber$
 		<file src="FetchXMLBuilder\bin\Release\OpenAI.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
 		<file src="FetchXMLBuilder\bin\Release\System.ClientModel.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
 		<file src="FetchXMLBuilder\bin\Release\System.Memory.Data.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
+		<file src="FetchXMLBuilder\bin\Release\Azure.Core.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
+		<file src="FetchXMLBuilder\bin\Release\Azure.AI.*.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
+		<file src="FetchXMLBuilder\bin\Release\Microsoft.Extensions.AI.*.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
 	</files>
 </package>

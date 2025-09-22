@@ -42,39 +42,18 @@ namespace Rappen.XTB.FetchXmlBuilder
             "System.Text.Encodings.Web",
             "System.Buffers",
             "System.ClientModel",
-            "System.ValueTuple",
             "System.IO.Pipelines"
         };
 
         private Assembly AssemblyResolveEventHandler(object sender, ResolveEventArgs args)
         {
-            Assembly loadAssembly = null;
-            Assembly currAssembly = Assembly.GetExecutingAssembly();
-
-            // base name of the assembly that failed to resolve
-            var argName = args.Name.Substring(0, args.Name.IndexOf(","));
-
-            // check to see if the failing assembly is one that we reference.
-            List<AssemblyName> refAssemblies = currAssembly.GetReferencedAssemblies().ToList();
-            var refAssembly = refAssemblies.Where(a => a.Name == argName).FirstOrDefault();
-
-            // if the current unresolved assembly is referenced by our plugin, attempt to load
-            if (refAssembly != null || _redirectAssemblies.Contains(argName))
+            var currAssembly = Assembly.GetExecutingAssembly();
+            var argName = args.Name.Split(',')[0];
+            if (_redirectAssemblies.Contains(argName) || currAssembly.GetReferencedAssemblies().Any(a => a.Name == argName))
             {
-                // load from the path to this plugin assembly, not host executable
-                var assmbPath = Path.Combine(Paths.PluginsPath, Path.GetFileNameWithoutExtension(currAssembly.Location), $"{argName}.dll");
-
-                if (File.Exists(assmbPath))
-                {
-                    loadAssembly = Assembly.LoadFrom(assmbPath);
-                }
-                else
-                {
-                    throw new FileNotFoundException($"Unable to locate dependency: {assmbPath}");
-                }
+                return Assembly.LoadFrom(Path.Combine(Paths.PluginsPath, Path.GetFileNameWithoutExtension(currAssembly.Location), $"{argName}.dll"));
             }
-
-            return loadAssembly;
+            return null;
         }
     }
 }
