@@ -291,11 +291,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 return;
             }
             var setting = aisettingslist.FirstOrDefault(a => a.Supplier == cmbAiSupplier.Text && a.Model == cmbAiModel.Text);
-            if (string.IsNullOrEmpty(setting?.ApiKey))
-            {
-                return;
-            }
-            txtAiApiKey.Text = setting.ApiKey;
+            txtAiApiKey.Text = setting?.ApiKey;
         }
 
         private void UpdateAiSettingsList()
