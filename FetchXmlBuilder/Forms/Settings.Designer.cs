@@ -71,6 +71,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkAppBothNamesResults = new System.Windows.Forms.CheckBox();
             this.tabBehavior = new System.Windows.Forms.TabPage();
             this.tabAiChat = new System.Windows.Forms.TabPage();
+            this.picAiLogConversation = new System.Windows.Forms.PictureBox();
             this.picAiLogFolder = new System.Windows.Forms.PictureBox();
             this.linkAiLogFolder = new System.Windows.Forms.LinkLabel();
             this.label10 = new System.Windows.Forms.Label();
@@ -113,6 +114,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabAppearance.SuspendLayout();
             this.tabBehavior.SuspendLayout();
             this.tabAiChat.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picAiLogConversation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picAiLogFolder)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picAiUrl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picAiSupplier)).BeginInit();
@@ -593,6 +595,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // tabAiChat
             // 
             this.tabAiChat.BackColor = System.Drawing.SystemColors.Window;
+            this.tabAiChat.Controls.Add(this.picAiLogConversation);
             this.tabAiChat.Controls.Add(this.picAiLogFolder);
             this.tabAiChat.Controls.Add(this.linkAiLogFolder);
             this.tabAiChat.Controls.Add(this.label10);
@@ -613,6 +616,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabAiChat.TabIndex = 7;
             this.tabAiChat.Text = "AI Chat";
             // 
+            // picAiLogConversation
+            // 
+            this.picAiLogConversation.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picAiLogConversation.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_info_16;
+            this.picAiLogConversation.Location = new System.Drawing.Point(477, 129);
+            this.picAiLogConversation.Name = "picAiLogConversation";
+            this.picAiLogConversation.Size = new System.Drawing.Size(16, 16);
+            this.picAiLogConversation.TabIndex = 17;
+            this.picAiLogConversation.TabStop = false;
+            this.tt.SetToolTip(this.picAiLogConversation, resources.GetString("picAiLogConversation.ToolTip"));
+            this.picAiLogConversation.Click += new System.EventHandler(this.picAiLog_Click);
+            // 
             // picAiLogFolder
             // 
             this.picAiLogFolder.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -623,7 +638,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.picAiLogFolder.TabIndex = 16;
             this.picAiLogFolder.TabStop = false;
             this.tt.SetToolTip(this.picAiLogFolder, resources.GetString("picAiLogFolder.ToolTip"));
-            this.picAiLogFolder.Click += new System.EventHandler(this.picAiLogFolder_Click);
+            this.picAiLogFolder.Click += new System.EventHandler(this.picAiLog_Click);
             // 
             // linkAiLogFolder
             // 
@@ -649,7 +664,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // chkAiLogConversation
             // 
             this.chkAiLogConversation.AutoSize = true;
-            this.chkAiLogConversation.Location = new System.Drawing.Point(287, 129);
+            this.chkAiLogConversation.Location = new System.Drawing.Point(268, 129);
             this.chkAiLogConversation.Name = "chkAiLogConversation";
             this.chkAiLogConversation.Size = new System.Drawing.Size(211, 17);
             this.chkAiLogConversation.TabIndex = 13;
@@ -1034,6 +1049,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabBehavior.PerformLayout();
             this.tabAiChat.ResumeLayout(false);
             this.tabAiChat.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picAiLogConversation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picAiLogFolder)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picAiUrl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picAiSupplier)).EndInit();
@@ -1129,5 +1145,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.LinkLabel linkAiLogFolder;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.PictureBox picAiLogFolder;
+        private System.Windows.Forms.PictureBox picAiLogConversation;
     }
 }

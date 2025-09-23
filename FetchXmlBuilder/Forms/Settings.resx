@@ -120,6 +120,18 @@
   <metadata name="tt.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="picAiLogConversation.ToolTip" xml:space="preserve">
+    <value>Every session in the conversation to the AI is stored in this folder.
+The conversation is not only what you can see in the UI,
+but also internal messages back and forth, e.g. the metadata
+that the AI may need.
+This logging is not used by the tool, you may clean the
+folder whenever you want to, this is just to give you the
+opportunity to learn even more, to see what the AI is asking
+the tool about.
+Note that this type of detail logs are only stored locally, not
+in any external system!</value>
+  </data>
   <data name="picAiLogFolder.ToolTip" xml:space="preserve">
     <value>Every session in the conversation to the AI is stored in this folder.
 The conversation is not only what you can see in the UI,

@@ -379,6 +379,17 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                     LoadAiSettingsKey();
                 }
                 txtAiApiKey.Enabled = !supplier.Free;
+                if (model.LogConversation != null)
+                {
+                    chkAiLogConversation.Checked = model.LogConversation.Value;
+                    chkAiLogConversation.Enabled = false;
+                    tt.SetToolTip(picAiLogConversation, $"The setting for logging conversations is determined by{Environment.NewLine}Supplier: {supplier} and{Environment.NewLine}Model: {model}{Environment.NewLine}and cannot be changed manually.");
+                }
+                else
+                {
+                    chkAiLogConversation.Enabled = true;
+                    tt.SetToolTip(picAiLogConversation, $"If checked, the conversation will be logged to Application Insights.");
+                }
             }
             else
             {
@@ -412,9 +423,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             Process.Start("explorer.exe", linkAiLogFolder.Text);
         }
 
-        private void picAiLogFolder_Click(object sender, EventArgs e)
+        private void picAiLog_Click(object sender, EventArgs e)
         {
-            MessageBoxEx.Show(this, tt.GetToolTip(picAiLogFolder), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (sender is PictureBox pic)
+            {
+                MessageBoxEx.Show(this, tt.GetToolTip(pic), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }

@@ -32,6 +32,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private Stopwatch callingstopwatch;
         private Dictionary<string, List<MetadataForAIAttribute>> metaAttributes = new Dictionary<string, List<MetadataForAIAttribute>>();
         private string logname = "AI";
+        private bool logconversation = false;
         private int manualcalls = 0; // Counts the number of calls made by the user in this session
         private static List<AiUser> freeusers;
 
@@ -108,6 +109,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 apikey = fxb.settings.AiSettings.ApiKey;
             }
+            logconversation = model.LogConversation ?? fxb.settings.AiSettings.LogConversation;
             chatHistory = new ChatMessageHistory(panAiConversation, supplier?.Name, model?.Endpoint, model?.Name, apikey, fxb.settings.AiSettings.MyName);
             metaAttributes.Clear();
             SetTitle();
@@ -490,7 +492,7 @@ Note that there will be a slight lag between your submission and when it is acti
             {
                 ai = new AIAppInsights(fxb, OnlineSettings.Instance.AiSupport.AppRegistrationEndpoint, OnlineSettings.Instance.AiSupport.InstrumentationKey, supplier.Name, model.Name);
             }
-            ai.WriteEvent($"{action}", count ?? msg?.Length, duration, tokensout, tokensin, fxb.settings.AiSettings.LogConversation ? msg : null);
+            ai.WriteEvent($"{action}", count ?? msg?.Length, duration, tokensout, tokensin, logconversation ? msg : null);
         }
 
         #endregion Private Methods
