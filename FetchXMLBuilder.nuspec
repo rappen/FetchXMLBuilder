@@ -64,7 +64,6 @@ https://fetchxmlbuilder.com/releases/#$versionnumber$
 		<file src="FetchXMLBuilder\bin\Release\Rappen.XTB.FXB.dll" target="lib\net472\Plugins" />
 		<file src="FetchXMLBuilder\bin\Release\Anthropic.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
 		<file src="FetchXMLBuilder\bin\Release\CSharpToJsonSchema.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
-		<file src="FetchXMLBuilder\bin\Release\Microsoft.Extensions.AI.OpenAI.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
 		<file src="FetchXMLBuilder\bin\Release\Microsoft.Office.*.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
 		<file src="FetchXMLBuilder\bin\Release\OpenAI.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
 		<file src="FetchXMLBuilder\bin\Release\System.ClientModel.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
