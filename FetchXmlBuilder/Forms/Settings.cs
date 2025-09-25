@@ -95,7 +95,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 cmbAiProvider.SelectedIndex = -1;
             }
             cmbAiProvider_SelectedIndexChanged();
-            txtAiApiKey.Text = settings.AiSettings.ApiKey;
+            if ((cmbAiProvider.SelectedItem as AiProvider)?.Free != true)
+            {
+                txtAiApiKey.Text = settings.AiSettings.ApiKey;
+            }
             txtAiCallMe.Text = settings.AiSettings.MyName;
             chkAiLogConversation.Checked = settings.AiSettings.LogConversation;
             linkAiLogFolder.Text = Path.Combine(Paths.LogsPath, "FXB AI Chat");
