@@ -90,7 +90,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 logname = "AI-Free";
                 if (IsFreeAiUser(fxb))
                 {
-                    apikey = model.ApiKeyDecrypted;
+                    apikey = supplier.ApiKeyDecrypted;
                     //model.ApiKey = apikey;
                     //OnlineSettings.Instance.Save();
                     if (string.IsNullOrWhiteSpace(apikey))
