@@ -231,7 +231,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 LogUse("SaveOptions");
                 var oldtrycachemetadata = settings.TryMetadataCache;
-                var oldaisetting = settings.AiSettings.Supplier + settings.AiSettings.Model + settings.AiSettings.ApiKey;
+                var oldaisetting = settings.AiSettings.Provider + settings.AiSettings.Model + settings.AiSettings.ApiKey;
                 settings = settingDlg.GetSettings();
                 if (Service != null)
                 {
@@ -268,11 +268,11 @@ namespace Rappen.XTB.FetchXmlBuilder
                 {
                     dockControlLayoutXml.PanelPane?.CloseActiveContent();
                 }
-                if (string.IsNullOrWhiteSpace(settings.AiSettings.Supplier) || string.IsNullOrWhiteSpace(settings.AiSettings.Model))
+                if (string.IsNullOrWhiteSpace(settings.AiSettings.Provider) || string.IsNullOrWhiteSpace(settings.AiSettings.Model))
                 {
                     dockControlAiChat?.Close();
                 }
-                else if (oldaisetting != settings.AiSettings.Supplier + settings.AiSettings.Model + settings.AiSettings.ApiKey)
+                else if (oldaisetting != settings.AiSettings.Provider + settings.AiSettings.Model + settings.AiSettings.ApiKey)
                 {
                     dockControlAiChat?.Initialize();
                 }

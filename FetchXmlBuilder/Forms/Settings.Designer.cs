@@ -32,7 +32,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
-            Rappen.XTB.FetchXmlBuilder.Settings.XmlColors xmlColors1 = new Rappen.XTB.FetchXmlBuilder.Settings.XmlColors();
+            Rappen.XTB.FetchXmlBuilder.Settings.XmlColors xmlColors2 = new Rappen.XTB.FetchXmlBuilder.Settings.XmlColors();
             this.cmbResult = new System.Windows.Forms.ComboBox();
             this.chkResAllPages = new System.Windows.Forms.CheckBox();
             this.chkAppResultsNewWindow = new System.Windows.Forms.CheckBox();
@@ -79,9 +79,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.txtAiCallMe = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.picAiUrl = new System.Windows.Forms.PictureBox();
-            this.picAiSupplier = new System.Windows.Forms.PictureBox();
+            this.picAiProvider = new System.Windows.Forms.PictureBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.cmbAiSupplier = new System.Windows.Forms.ComboBox();
+            this.cmbAiProvider = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.cmbAiModel = new System.Windows.Forms.ComboBox();
             this.txtAiApiKey = new System.Windows.Forms.TextBox();
@@ -117,7 +117,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             ((System.ComponentModel.ISupportInitialize)(this.picAiLogConversation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picAiLogFolder)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picAiUrl)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picAiSupplier)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picAiProvider)).BeginInit();
             this.tabResults.SuspendLayout();
             this.panResultView.SuspendLayout();
             this.tabLayout.SuspendLayout();
@@ -603,9 +603,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabAiChat.Controls.Add(this.txtAiCallMe);
             this.tabAiChat.Controls.Add(this.label9);
             this.tabAiChat.Controls.Add(this.picAiUrl);
-            this.tabAiChat.Controls.Add(this.picAiSupplier);
+            this.tabAiChat.Controls.Add(this.picAiProvider);
             this.tabAiChat.Controls.Add(this.label6);
-            this.tabAiChat.Controls.Add(this.cmbAiSupplier);
+            this.tabAiChat.Controls.Add(this.cmbAiProvider);
             this.tabAiChat.Controls.Add(this.label8);
             this.tabAiChat.Controls.Add(this.cmbAiModel);
             this.tabAiChat.Controls.Add(this.txtAiApiKey);
@@ -699,20 +699,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.picAiUrl.TabStop = false;
             this.tt.SetToolTip(this.picAiUrl, "Browse to the api endpoint");
             this.picAiUrl.Visible = false;
-            this.picAiUrl.Click += new System.EventHandler(this.picAiSupplier_Click);
+            this.picAiUrl.Click += new System.EventHandler(this.picAiProvider_Click);
             // 
-            // picAiSupplier
+            // picAiProvider
             // 
-            this.picAiSupplier.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picAiSupplier.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_info_16;
-            this.picAiSupplier.Location = new System.Drawing.Point(477, 19);
-            this.picAiSupplier.Name = "picAiSupplier";
-            this.picAiSupplier.Size = new System.Drawing.Size(16, 16);
-            this.picAiSupplier.TabIndex = 9;
-            this.picAiSupplier.TabStop = false;
-            this.tt.SetToolTip(this.picAiSupplier, "Read more");
-            this.picAiSupplier.Visible = false;
-            this.picAiSupplier.Click += new System.EventHandler(this.picAiSupplier_Click);
+            this.picAiProvider.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picAiProvider.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_info_16;
+            this.picAiProvider.Location = new System.Drawing.Point(477, 19);
+            this.picAiProvider.Name = "picAiProvider";
+            this.picAiProvider.Size = new System.Drawing.Size(16, 16);
+            this.picAiProvider.TabIndex = 9;
+            this.picAiProvider.TabStop = false;
+            this.tt.SetToolTip(this.picAiProvider, "Read more");
+            this.picAiProvider.Visible = false;
+            this.picAiProvider.Click += new System.EventHandler(this.picAiProvider_Click);
             // 
             // label6
             // 
@@ -723,19 +723,19 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.label6.TabIndex = 2;
             this.label6.Text = "Provider";
             // 
-            // cmbAiSupplier
+            // cmbAiProvider
             // 
-            this.cmbAiSupplier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbAiSupplier.FormattingEnabled = true;
-            this.cmbAiSupplier.Items.AddRange(new object[] {
+            this.cmbAiProvider.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbAiProvider.FormattingEnabled = true;
+            this.cmbAiProvider.Items.AddRange(new object[] {
             "Anthropic",
             "OpenAI",
             "Azure OpenAI"});
-            this.cmbAiSupplier.Location = new System.Drawing.Point(84, 17);
-            this.cmbAiSupplier.Name = "cmbAiSupplier";
-            this.cmbAiSupplier.Size = new System.Drawing.Size(387, 21);
-            this.cmbAiSupplier.TabIndex = 1;
-            this.cmbAiSupplier.SelectedIndexChanged += new System.EventHandler(this.cmbAiSupplier_SelectedIndexChanged);
+            this.cmbAiProvider.Location = new System.Drawing.Point(84, 17);
+            this.cmbAiProvider.Name = "cmbAiProvider";
+            this.cmbAiProvider.Size = new System.Drawing.Size(387, 21);
+            this.cmbAiProvider.TabIndex = 1;
+            this.cmbAiProvider.SelectedIndexChanged += new System.EventHandler(this.cmbAiProvider_SelectedIndexChanged);
             // 
             // label8
             // 
@@ -954,19 +954,19 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.propXmlColors.Location = new System.Drawing.Point(4, 40);
             this.propXmlColors.Name = "propXmlColors";
             this.propXmlColors.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            xmlColors1.AttributeKey = System.Drawing.Color.Red;
-            xmlColors1.AttributeKeyColor = "Red";
-            xmlColors1.AttributeValue = System.Drawing.Color.Blue;
-            xmlColors1.AttributeValueColor = "Blue";
-            xmlColors1.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            xmlColors1.CommentColor = "0";
-            xmlColors1.Element = System.Drawing.Color.DarkRed;
-            xmlColors1.ElementColor = "DarkRed";
-            xmlColors1.Tag = System.Drawing.Color.Blue;
-            xmlColors1.TagColor = "Blue";
-            xmlColors1.Value = System.Drawing.Color.Black;
-            xmlColors1.ValueColor = "Black";
-            this.propXmlColors.SelectedObject = xmlColors1;
+            xmlColors2.AttributeKey = System.Drawing.Color.Red;
+            xmlColors2.AttributeKeyColor = "Red";
+            xmlColors2.AttributeValue = System.Drawing.Color.Blue;
+            xmlColors2.AttributeValueColor = "Blue";
+            xmlColors2.Comment = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            xmlColors2.CommentColor = "0";
+            xmlColors2.Element = System.Drawing.Color.DarkRed;
+            xmlColors2.ElementColor = "DarkRed";
+            xmlColors2.Tag = System.Drawing.Color.Blue;
+            xmlColors2.TagColor = "Blue";
+            xmlColors2.Value = System.Drawing.Color.Black;
+            xmlColors2.ValueColor = "Black";
+            this.propXmlColors.SelectedObject = xmlColors2;
             this.propXmlColors.Size = new System.Drawing.Size(252, 97);
             this.propXmlColors.TabIndex = 7;
             this.propXmlColors.ToolbarVisible = false;
@@ -1052,7 +1052,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             ((System.ComponentModel.ISupportInitialize)(this.picAiLogConversation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picAiLogFolder)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picAiUrl)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picAiSupplier)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picAiProvider)).EndInit();
             this.tabResults.ResumeLayout(false);
             this.tabResults.PerformLayout();
             this.panResultView.ResumeLayout(false);
@@ -1122,12 +1122,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.CheckBox chkAppBothNamesResults;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.ComboBox cmbAiSupplier;
+        private System.Windows.Forms.ComboBox cmbAiProvider;
         private System.Windows.Forms.TextBox txtAiApiKey;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ComboBox cmbAiModel;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.PictureBox picAiSupplier;
+        private System.Windows.Forms.PictureBox picAiProvider;
         private System.Windows.Forms.TabPage tabAiChat;
         private System.Windows.Forms.PictureBox picAiUrl;
         private System.Windows.Forms.TextBox txtAiCallMe;

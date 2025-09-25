@@ -274,7 +274,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             else if (persistString == typeof(AiChatControl).ToString() && dockControlAiChat?.IsDisposed != false)
             {
-                dockControlAiChat = new AiChatControl(this);
+                dockControlAiChat = new AiChatControl(this, true);
                 return dockControlAiChat;
             }
             return null;
@@ -958,7 +958,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         internal void ShowAiChatControl(bool dontask = false)
         {
-            if ((string.IsNullOrEmpty(settings.AiSettings?.Supplier) ||
+            if ((string.IsNullOrEmpty(settings.AiSettings?.Provider) ||
                  string.IsNullOrEmpty(settings.AiSettings?.Model)) &&
                  !dontask)
             {
@@ -968,13 +968,13 @@ namespace Rappen.XTB.FetchXmlBuilder
                     ShowAiChatControl(true);
                 }
             }
-            if (!string.IsNullOrEmpty(settings.AiSettings?.Supplier) &&
+            if (!string.IsNullOrEmpty(settings.AiSettings?.Provider) &&
                 !string.IsNullOrEmpty(settings.AiSettings?.Model))
             {
                 LogUse("Show-AiChat");
                 if (dockControlAiChat?.IsDisposed != false)
                 {
-                    dockControlAiChat = new AiChatControl(this);
+                    dockControlAiChat = new AiChatControl(this, false);
                     dockControlAiChat.Show(dockContainer, DockState.DockRight);
                 }
                 else

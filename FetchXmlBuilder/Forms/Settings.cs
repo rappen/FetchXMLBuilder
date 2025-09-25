@@ -19,15 +19,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private FetchXmlBuilder fxb;
         private bool validateinfo;
         internal bool forcereloadingmetadata = false;
-        private List<AiSettings> aisettingslist;
+        private List<AiSettings> aiproviders;
 
         public Settings(FetchXmlBuilder fxb, string tab)
         {
             InitializeComponent();
             this.fxb = fxb;
-            cmbAiSupplier.Items.Clear();
-            cmbAiSupplier.Items.Add("");
-            cmbAiSupplier.Items.AddRange(OnlineSettings.Instance.AiSupport.AiSuppliers.ToArray());
+            cmbAiProvider.Items.Clear();
+            cmbAiProvider.Items.Add("");
+            cmbAiProvider.Items.AddRange(OnlineSettings.Instance.AiSupport.AiProviders.ToArray());
             PopulateSettings(fxb.settings);
             tabSettings.SelectedTab = tabSettings.TabPages
                 .Cast<TabPage>()
@@ -84,17 +84,17 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 chkWaitUntilMetadataLoaded.Enabled = false;
                 chkWaitUntilMetadataLoaded.Checked = false;
             }
-            aisettingslist = fxb.settings.AiSettingsList ?? new List<AiSettings>();
+            aiproviders = fxb.settings.AiProviders ?? new List<AiSettings>();
             UpdateAiSettingsList();
-            if (OnlineSettings.Instance.AiSupport.Supplier(settings.AiSettings.Supplier) is AiSupplier supplier)
+            if (OnlineSettings.Instance.AiSupport.Provider(settings.AiSettings.Provider) is AiProvider provider)
             {
-                cmbAiSupplier.SelectedItem = supplier;
+                cmbAiProvider.SelectedItem = provider;
             }
             else
             {
-                cmbAiSupplier.SelectedIndex = -1;
+                cmbAiProvider.SelectedIndex = -1;
             }
-            cmbAiSupplier_SelectedIndexChanged();
+            cmbAiProvider_SelectedIndexChanged();
             txtAiApiKey.Text = settings.AiSettings.ApiKey;
             txtAiCallMe.Text = settings.AiSettings.MyName;
             chkAiLogConversation.Checked = settings.AiSettings.LogConversation;
@@ -146,13 +146,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.TryMetadataCache = chkTryMetadataCache.Checked;
             settings.WaitUntilMetadataLoaded = chkWaitUntilMetadataLoaded.Checked;
             settings.AlwaysShowAggregationProperties = chkAlwaysShowAggregateProperties.Checked;
-            settings.AiSettings.Supplier = cmbAiSupplier.Text;
+            settings.AiSettings.Provider = cmbAiProvider.Text;
             settings.AiSettings.Model = cmbAiModel.Text;
             settings.AiSettings.ApiKey = txtAiApiKey.Enabled ? txtAiApiKey.Text : "";
             settings.AiSettings.MyName = txtAiCallMe.Text;
             settings.AiSettings.LogConversation = chkAiLogConversation.Checked;
             UpdateAiSettingsList();
-            settings.AiSettingsList = aisettingslist;
+            settings.AiProviders = aiproviders;
             return settings;
         }
 
@@ -194,11 +194,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 DialogResult = DialogResult.None;
                 return;
             }
-            if (cmbAiSupplier.SelectedItem is AiSupplier supplier &&
-                supplier.Free &&
-                string.IsNullOrEmpty(supplier.ApiKeyDecrypted))
+            if (cmbAiProvider.SelectedItem is AiProvider provider &&
+                provider.Free &&
+                string.IsNullOrEmpty(provider.ApiKeyDecrypted))
             {
-                MessageBoxEx.Show(this, $"The selected Free AI provider '{supplier.Name}' is not available right now. Please select another provider.", "AI Chat Settings", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBoxEx.Show(this, $"The selected Free AI provider '{provider.Name}' is not available right now. Please select another provider.", "AI Chat Settings", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 DialogResult = DialogResult.None;
                 return;
             }
@@ -283,15 +283,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
         }
 
-        private void LoadAiSettingsKey(AiSupplier supplier)
+        private void LoadAiSettingsKey(AiProvider provider)
         {
-            if (supplier == null)
+            if (provider == null)
             {
                 txtAiApiKey.Text = "";
             }
             else
             {
-                var setting = aisettingslist.FirstOrDefault(a => a.Supplier == supplier.Name);
+                var setting = aiproviders.FirstOrDefault(a => a.Provider == provider.Name);
                 txtAiApiKey.Text = setting?.ApiKey;
                 chkAiLogConversation.Checked = setting?.LogConversation ?? true;
             }
@@ -299,15 +299,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void UpdateAiSettingsList()
         {
-            if (aisettingslist == null)
+            if (aiproviders == null)
             {
-                aisettingslist = new List<AiSettings>();
+                aiproviders = new List<AiSettings>();
             }
-            if (cmbAiSupplier.SelectedItem is AiSupplier supplier)
+            if (cmbAiProvider.SelectedItem is AiProvider provider)
             {
-                if (aisettingslist.FirstOrDefault(a => a.Supplier == supplier.Name) is AiSettings existing)
+                if (aiproviders.FirstOrDefault(a => a.Provider == provider.Name) is AiSettings existing)
                 {
-                    if (!supplier.Free && !string.IsNullOrWhiteSpace(txtAiApiKey.Text))
+                    if (!provider.Free && !string.IsNullOrWhiteSpace(txtAiApiKey.Text))
                     {
                         existing.ApiKey = txtAiApiKey.Text;
                     }
@@ -315,19 +315,19 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 }
                 else
                 {
-                    aisettingslist.Add(new AiSettings
+                    aiproviders.Add(new AiSettings
                     {
-                        Supplier = supplier.Name,
-                        ApiKey = !supplier.Free ? txtAiApiKey.Text : "",
+                        Provider = provider.Name,
+                        ApiKey = !provider.Free ? txtAiApiKey.Text : "",
                         LogConversation = chkAiLogConversation.Checked,
                     });
                 }
             }
         }
 
-        private void HandlingFreeAI(AiSupplier supplier)
+        private void HandlingFreeAI(AiProvider provider)
         {
-            if (string.IsNullOrWhiteSpace(supplier?.ApiKeyDecrypted))
+            if (string.IsNullOrWhiteSpace(provider?.ApiKeyDecrypted))
             {
                 txtAiApiKey.Text = "Unfortunately, this provider is currently not supported.";
             }
@@ -340,30 +340,30 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 else
                 {
                     txtAiApiKey.Text = "To use the free provider, you have to submit a form only for Jonas to make sure you are not using gazillian tokens. Click the (i) button on the provider above!";
-                    picAiSupplier.Tag = "FREE";
-                    tt.SetToolTip(picAiSupplier, $"Click to fill in the form to get free provider! at {OnlineSettings.Instance.AiSupport.UrlToUseForFree}");
+                    picAiProvider.Tag = "FREE";
+                    tt.SetToolTip(picAiProvider, $"Click to fill in the form to get free provider! at {OnlineSettings.Instance.AiSupport.UrlToUseForFree}");
                 }
             }
         }
 
-        private void cmbAiSupplier_SelectedIndexChanged(object sender = null, EventArgs e = null)
+        private void cmbAiProvider_SelectedIndexChanged(object sender = null, EventArgs e = null)
         {
             cmbAiModel.Items.Clear();
-            if (cmbAiSupplier.SelectedItem is AiSupplier supplier)
+            if (cmbAiProvider.SelectedItem is AiProvider provider)
             {
-                tt.SetToolTip(picAiSupplier, $"Read about {supplier} at {supplier.Url}");
-                picAiSupplier.Tag = supplier.Url;
-                if (supplier.Free)
+                tt.SetToolTip(picAiProvider, $"Read about {provider} at {provider.Url}");
+                picAiProvider.Tag = provider.Url;
+                if (provider.Free)
                 {
-                    HandlingFreeAI(supplier);
+                    HandlingFreeAI(provider);
                 }
                 else
                 {
-                    LoadAiSettingsKey(supplier);
+                    LoadAiSettingsKey(provider);
                 }
-                txtAiApiKey.Enabled = !supplier.Free;
-                cmbAiModel.Items.AddRange(supplier.Models.ToArray());
-                if (supplier.Models.FirstOrDefault(m => m.Name == fxb.settings.AiSettings.Model) is AiModel model)
+                txtAiApiKey.Enabled = !provider.Free;
+                cmbAiModel.Items.AddRange(provider.Models.ToArray());
+                if (provider.Models.FirstOrDefault(m => m.Name == fxb.settings.AiSettings.Model) is AiModel model)
                 {
                     cmbAiModel.SelectedItem = model;
                 }
@@ -374,7 +374,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
             else
             {
-                picAiSupplier.Tag = null;
+                picAiProvider.Tag = null;
                 txtAiApiKey.Text = "";
                 txtAiApiKey.Enabled = false;
             }
@@ -383,14 +383,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void cmbAiModel_SelectedIndexChanged(object sender = null, EventArgs e = null)
         {
-            if (cmbAiSupplier.SelectedItem is AiSupplier supplier && cmbAiModel.SelectedItem is AiModel model)
+            if (cmbAiProvider.SelectedItem is AiProvider provider && cmbAiModel.SelectedItem is AiModel model)
             {
-                picAiUrl.Tag = OnlineSettings.Instance.AiSupport.Supplier(cmbAiSupplier.Text)?.Models.FirstOrDefault(m => m.Name == cmbAiModel.Text)?.Url;
+                picAiUrl.Tag = OnlineSettings.Instance.AiSupport.Provider(cmbAiProvider.Text)?.Models.FirstOrDefault(m => m.Name == cmbAiModel.Text)?.Url;
                 if (model.LogConversation != null)
                 {
                     chkAiLogConversation.Checked = model.LogConversation.Value;
                     chkAiLogConversation.Enabled = false;
-                    tt.SetToolTip(picAiLogConversation, $"The setting for logging conversations is determined by{Environment.NewLine}Supplier: {supplier} and{Environment.NewLine}Model: {model}{Environment.NewLine}and cannot be changed manually.");
+                    tt.SetToolTip(picAiLogConversation, $"The setting for logging conversations is determined by{Environment.NewLine}Provider: {provider}{Environment.NewLine}Model: {model}{Environment.NewLine}This cannot be changed manually.");
                 }
                 else
                 {
@@ -402,11 +402,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             {
                 picAiUrl.Tag = null;
             }
-            picAiSupplier.Visible = picAiSupplier.Tag != null;
+            picAiProvider.Visible = picAiProvider.Tag != null;
             picAiUrl.Visible = picAiUrl.Tag != null;
         }
 
-        private void picAiSupplier_Click(object sender, EventArgs e)
+        private void picAiProvider_Click(object sender, EventArgs e)
         {
             if (sender is PictureBox pic && pic.Tag is string text && text == "FREE")
             {

@@ -25,7 +25,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private FetchXmlBuilder fxb;
         private AIAppInsights ai;
         private ChatMessageHistory chatHistory;
-        private AiSupplier supplier;
+        private AiProvider provider;
         private AiModel model;
         private string lastquery;
         private Stopwatch sessionstopwatch;
@@ -38,7 +38,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         #region Public Constructor
 
-        public AiChatControl(FetchXmlBuilder fetchXmlBuilder)
+        public AiChatControl(FetchXmlBuilder fetchXmlBuilder, bool neverprompt)
         {
             ChatMessageHistory.UserTextColor = OnlineSettings.Instance.Colors.Bright;
             ChatMessageHistory.UserBackgroundColor = OnlineSettings.Instance.Colors.Medium;
@@ -48,7 +48,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
             fxb = fetchXmlBuilder;
             InitializeComponent();
-            Initialize();
+            Initialize(neverprompt);
             EnableButtons();
         }
 
@@ -56,50 +56,70 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         #region Internal Methods
 
-        internal void Initialize()
+        internal void Initialize(bool neverprompt = false)
         {
             freeusers = null;
             ClosingSession();
+            txtAiChat.Text = string.Empty;
 
-            supplier = OnlineSettings.Instance.AiSupport.Supplier(fxb.settings.AiSettings.Supplier);
-            if (supplier == null)
+            provider = OnlineSettings.Instance.AiSupport.Provider(fxb.settings.AiSettings.Provider);
+            if (provider == null)
             {
-                MessageBoxEx.Show(fxb, "The AI supplier is not available (yet).\nGo check the setting!", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                fxb.ShowSettings("tabAiChat");
-                if (!string.IsNullOrWhiteSpace(fxb.settings.AiSettings.Supplier))
+                if (neverprompt)
                 {
-                    Initialize();
+                    txtAiChat.Text = $"Missing AI Provider.{Environment.NewLine}Please open the Setting for AI Chat.";
+                }
+                else
+                {
+                    MessageBoxEx.Show(fxb, "The AI provider is not available (yet).\nGo check the setting!", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    fxb.ShowSettings("tabAiChat");
+                    if (!string.IsNullOrWhiteSpace(fxb.settings.AiSettings.Provider))
+                    {
+                        Initialize();
+                    }
                 }
                 return;
             }
-            logname = $"AI-{supplier.Name}";
-            model = supplier.Model(fxb.settings.AiSettings.Model);
+            logname = $"AI-{provider.Name}";
+            model = provider.Model(fxb.settings.AiSettings.Model);
             if (model == null)
             {
-                MessageBoxEx.Show(fxb, "The AI model is not available (yet).\nGo check the setting!", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                fxb.ShowSettings("tabAiChat");
-                if (!string.IsNullOrWhiteSpace(fxb.settings.AiSettings.Model))
+                if (neverprompt)
                 {
-                    Initialize();
+                    txtAiChat.Text = $"Missing AI Model.{Environment.NewLine}Please open the Setting for AI Chat.";
+                }
+                else
+                {
+                    MessageBoxEx.Show(fxb, "The AI model is not available (yet).\nGo check the setting!", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    fxb.ShowSettings("tabAiChat");
+                    if (!string.IsNullOrWhiteSpace(fxb.settings.AiSettings.Model))
+                    {
+                        Initialize();
+                    }
                 }
                 return;
             }
             var apikey = "";
-            if (supplier.Free)
+            if (provider.Free)
             {
                 logname = "AI-Free";
                 if (IsFreeAiUser(fxb))
                 {
-                    apikey = supplier.ApiKeyDecrypted;
-                    //model.ApiKey = apikey;
-                    //OnlineSettings.Instance.Save();
+                    apikey = provider.ApiKeyDecrypted;
                     if (string.IsNullOrWhiteSpace(apikey))
                     {
-                        MessageBoxEx.Show(fxb, "The AI model is unfortunately not available right now.", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        fxb.ShowSettings("tabAiChat");
-                        if (!string.IsNullOrWhiteSpace(fxb.settings.AiSettings.Model))
+                        if (neverprompt)
                         {
-                            Initialize();
+                            txtAiChat.Text = "The Free AI provider is currently not available. Sorry...";
+                        }
+                        else
+                        {
+                            MessageBoxEx.Show(fxb, "The AI model is unfortunately not available right now.", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            fxb.ShowSettings("tabAiChat");
+                            if (!string.IsNullOrWhiteSpace(fxb.settings.AiSettings.Model))
+                            {
+                                Initialize();
+                            }
                         }
                         return;
                     }
@@ -108,12 +128,29 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             else
             {
                 apikey = fxb.settings.AiSettings.ApiKey;
+                if (string.IsNullOrWhiteSpace(apikey))
+                {
+                    if (neverprompt)
+                    {
+                        txtAiChat.Text = $"Missing API Key.{Environment.NewLine}Please open the Setting for AI Chat.";
+                    }
+                    else
+                    {
+                        MessageBoxEx.Show(fxb, "The AI API Key is not entered.\nGo check the setting!", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        fxb.ShowSettings("tabAiChat");
+                        if (!string.IsNullOrWhiteSpace(fxb.settings.AiSettings.Model))
+                        {
+                            Initialize();
+                        }
+                    }
+                    return;
+                }
             }
             logconversation = model.LogConversation ?? fxb.settings.AiSettings.LogConversation;
-            chatHistory = new ChatMessageHistory(panAiConversation, supplier?.Name, model?.Endpoint, model?.Name, apikey, fxb.settings.AiSettings.MyName);
+            chatHistory = new ChatMessageHistory(panAiConversation, provider?.Name, model?.Endpoint, model?.Name, apikey, fxb.settings.AiSettings.MyName);
             metaAttributes.Clear();
             SetTitle();
-            if (supplier.Free && !IsFreeAiUser(fxb))
+            if (provider.Free && !IsFreeAiUser(fxb))
             {
                 chatHistory.Add(ChatRole.Assistant, @"To use the free AI provider, you have to fill in a form.
 Please click the button (the three dots down-right) and select 'Ask for Free AI'.
@@ -159,15 +196,15 @@ Note that there will be a slight lag between your submission and when it is acti
 
         #region Private Methods
 
-        private string PromptSystem => model?.Prompts?.System ?? supplier?.Prompts?.System ?? OnlineSettings.Instance.AiSupport.Prompts.System;
-        private string PromptMyName => model?.Prompts?.CallMe ?? supplier?.Prompts?.CallMe ?? OnlineSettings.Instance.AiSupport.Prompts.CallMe;
-        private string PromptUpdate => model?.Prompts?.Update ?? supplier?.Prompts?.Update ?? OnlineSettings.Instance.AiSupport.Prompts.Update;
-        private string PromptEntityMeta => model?.Prompts?.EntityMeta ?? supplier?.Prompts?.EntityMeta ?? OnlineSettings.Instance.AiSupport.Prompts.EntityMeta;
-        private string PromptAttributeMeta => model?.Prompts?.AttributeMeta ?? supplier?.Prompts?.AttributeMeta ?? OnlineSettings.Instance.AiSupport.Prompts.AttributeMeta;
+        private string PromptSystem => model?.Prompts?.System ?? provider?.Prompts?.System ?? OnlineSettings.Instance.AiSupport.Prompts.System;
+        private string PromptMyName => model?.Prompts?.CallMe ?? provider?.Prompts?.CallMe ?? OnlineSettings.Instance.AiSupport.Prompts.CallMe;
+        private string PromptUpdate => model?.Prompts?.Update ?? provider?.Prompts?.Update ?? OnlineSettings.Instance.AiSupport.Prompts.Update;
+        private string PromptEntityMeta => model?.Prompts?.EntityMeta ?? provider?.Prompts?.EntityMeta ?? OnlineSettings.Instance.AiSupport.Prompts.EntityMeta;
+        private string PromptAttributeMeta => model?.Prompts?.AttributeMeta ?? provider?.Prompts?.AttributeMeta ?? OnlineSettings.Instance.AiSupport.Prompts.AttributeMeta;
 
         private void SetTitle()
         {
-            Text = $"AI Chat - {supplier?.ToString() ?? "<no provider>"} - {model?.Name ?? "<no model>"}";
+            Text = $"AI Chat - {provider?.ToString() ?? "<no provider>"} - {model?.Name ?? "<no model>"}";
             TabText = Text;
         }
 
@@ -215,9 +252,9 @@ Note that there will be a slight lag between your submission and when it is acti
                 MessageBoxEx.Show(fxb, "Chat history is not initialized. Please try to close and open the AI chat again.", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (string.IsNullOrWhiteSpace(chatHistory.Supplier))
+            if (string.IsNullOrWhiteSpace(chatHistory.Provider))
             {
-                if (MessageBoxEx.Show(fxb, "No AI supplier found.\nAdd it in the setting!", "AI Chat", MessageBoxButtons.OKCancel, MessageBoxIcon.Error) == DialogResult.OK)
+                if (MessageBoxEx.Show(fxb, "No AI provider found.\nAdd it in the setting!", "AI Chat", MessageBoxButtons.OKCancel, MessageBoxIcon.Error) == DialogResult.OK)
                 {
                     fxb.ShowSettings("tabAiChat");
                 }
@@ -288,7 +325,7 @@ Note that there will be a slight lag between your submission and when it is acti
             }
             catch (Exception ex)
             {
-                fxb.LogError($"Communicating with {supplier}:\n{ex.ExceptionDetails()}\n{ex.StackTrace}");
+                fxb.LogError($"Communicating with {provider}:\n{ex.ExceptionDetails()}\n{ex.StackTrace}");
                 fxb.ShowErrorDialog(ex, "AI Chat", "An error occurred while trying to communicate with the AI.");
             }
             txtAiChat.Clear();
@@ -422,11 +459,11 @@ Note that there will be a slight lag between your submission and when it is acti
         {
             var supporting = Supporting.IsMonetarySupporting(fxb) || Supporting.IsPending(fxb);
             if (OnlineSettings.Instance.AiSupport.PopupByCallNos
-                .FirstOrDefault(p => p.TimeToPopup(fxb.settings.AiSettings.Calls, supporting, supplier.Free)) is PopupByCallNo popup)
+                .FirstOrDefault(p => p.TimeToPopup(fxb.settings.AiSettings.Calls, supporting, provider.Free)) is PopupByCallNo popup)
             {
                 var message = popup.Message
                     .Replace("{calls}", fxb.settings.AiSettings.Calls.ToString())
-                    .Replace("{provider}", supplier.ToString())
+                    .Replace("{provider}", provider.ToString())
                     .Replace("{model}", model.Name);
                 if (popup.SuggestsSupporting)
                 {
@@ -490,7 +527,7 @@ Note that there will be a slight lag between your submission and when it is acti
 
             if (ai == null)
             {
-                ai = new AIAppInsights(fxb, OnlineSettings.Instance.AiSupport.AppRegistrationEndpoint, OnlineSettings.Instance.AiSupport.InstrumentationKey, supplier.Name, model.Name);
+                ai = new AIAppInsights(fxb, OnlineSettings.Instance.AiSupport.AppRegistrationEndpoint, OnlineSettings.Instance.AiSupport.InstrumentationKey, provider.Name, model.Name);
             }
             ai.WriteEvent($"{action}", count ?? msg?.Length, duration, tokensout, tokensin, logconversation ? msg : null);
         }
