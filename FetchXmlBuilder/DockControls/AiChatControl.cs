@@ -342,6 +342,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             try
             {
+                chatHistory.Add(ChatRole.Assistant, "Executing the FetchXML query...", false, true);
                 SetQueryFromAi(fetchXml);
                 var sw = Stopwatch.StartNew();
                 var result = fxb.RetrieveMultipleSync(fetchXml, null, null);
@@ -349,7 +350,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 var records = (result as QueryInfo)?.Results?.Entities?.Count ?? null;
                 Log($"Query-Execute", records, sw.ElapsedMilliseconds);
                 fxb.HandleRetrieveMultipleResult(result);
-                AiCommunication.SamplingAI("The FetchXML query is executed", records == 0 ? "No record returned." : $"Retrieved {records} records.", chatHistory);
+                AiCommunication.SamplingAI(
+                    chatHistory,
+                    "The FetchXML query is executed",
+                    records == 0 ? "No record returned." : $"Retrieved {records} records.",
+                    $"Contemplating that it returned {records} records...{Environment.NewLine}(I will never get any data, only the amount!)");
                 //chatHistory.Add(ChatRole.User, records == 0 ? "No record returned." : $"Retrieved {records} records.", true);
                 //Commented it out since it exploded, but it might be good to do this after each new query execute
                 //fxb.dockControlGrid?.ResetLayout();
@@ -388,11 +393,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var entities = fxb.EntitiesForAi();
             var json = JsonSerializer.Serialize(entities, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
 
-            chatHistory.Add(ChatRole.User, $"The tool GetMetadataForUnknownAttribute was called: retrieve a table that matches the description '{tableDescription}'", true);
+            chatHistory.Add(ChatRole.Assistant, $"Asking for metadata for table '{tableDescription}'...", false, true);
 
             var sw = Stopwatch.StartNew();
-            var result = AiCommunication.SamplingAI(PromptEntityMeta.Replace("{metadata}", json),
-                $"Please find entries that match the description {tableDescription}", chatHistory);
+            var result = AiCommunication.SamplingAI(
+                chatHistory,
+                PromptEntityMeta.Replace("{metadata}", json),
+                $"Please find entries that match the description {tableDescription}",
+                $"Asking for metadata for table '{tableDescription}'...");
             sw.Stop();
             Log($"Meta-Entity-{tableDescription}", result, sw.ElapsedMilliseconds, entities.Count);
 
@@ -403,7 +411,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         [Description("Returns attributes of a table/entity that matches a description. Information about attributes is returned in a JSON list with entries of the format {\"LN\":\"[logical name of attribute]\",\"DN\":\"[display name of attribute]\"}. There may be many results, if a unique attribute cannot be found.")]
         private string GetMetadataForUnknownAttribute([Description("The logical name of the entity and a name/description of an attribute, separated by '@@'. Example: 'logical name of table@@a description of an attribute'")] string entityNameAndAttributeDescription)
         {
-            string[] parts = entityNameAndAttributeDescription.Split(new[] { "@@" }, 2, StringSplitOptions.None);
+            var parts = entityNameAndAttributeDescription.Split(new[] { "@@" }, 2, StringSplitOptions.None);
 
             var entityName = parts[0];
             var attributeDescription = parts[1];
@@ -429,8 +437,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             chatHistory.Add(ChatRole.User, $"The tool GetMetadataForUnknownAttribute was called: retrieve attributes for table '{entityName}' that matches the description '{attributeDescription}'", true);
 
             var sw = Stopwatch.StartNew();
-            var result = AiCommunication.SamplingAI(PromptAttributeMeta.Replace("{metadata}", json),
-                $"Please find attributes that match the description {attributeDescription}", chatHistory);
+            var result = AiCommunication.SamplingAI(
+                chatHistory,
+                PromptAttributeMeta.Replace("{metadata}", json),
+                $"Please find attributes that match the description {attributeDescription}",
+                $"Asking for metadata for column '{attributeDescription}' in table '{entityName}'...");
             sw.Stop();
             Log($"Meta-Attribute-{entityName}", result, sw.ElapsedMilliseconds, attributes.Count);
 
