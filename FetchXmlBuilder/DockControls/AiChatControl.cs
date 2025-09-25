@@ -150,15 +150,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             chatHistory = new ChatMessageHistory(panAiConversation, provider?.Name, model?.Endpoint, model?.Name, apikey, fxb.settings.AiSettings.MyName);
             metaAttributes.Clear();
             SetTitle();
-            if (provider.Free && !IsFreeAiUser(fxb))
+            if (provider.Free && !IsFreeAiUser(fxb) && !string.IsNullOrWhiteSpace(OnlineSettings.Instance.AiSupport.TextToRequestFreeAi))
             {
-                chatHistory.Add(ChatRole.Assistant, @"To use the free AI provider, you have to fill in a form.
-Please click the button (the three dots down-right) and select 'Ask for Free AI'.
-
-Jonas stands for any costs. Why? Read my blog: https://jonasr.app/free-ai-by-jonas
-Note that there will be a slight lag between your submission and when it is activated.", false);
+                chatHistory.Add(ChatRole.Assistant, OnlineSettings.Instance.AiSupport.TextToRequestFreeAi, false);
             }
-            mnuFree.Text = IsFreeAiUser(fxb) ? "Using AI for free!" : "Ask for Free AI...";
+            mnuFree.Text = IsFreeAiUser(fxb) ? "Using AI for Free!" : "Request for Free AI...";
             EnableButtons();
         }
 
