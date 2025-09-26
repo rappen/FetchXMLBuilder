@@ -393,8 +393,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var entities = fxb.EntitiesForAi();
             var json = JsonSerializer.Serialize(entities, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
 
-            chatHistory.Add(ChatRole.Assistant, $"Asking for metadata for table '{tableDescription}'...", false, true);
-
             var sw = Stopwatch.StartNew();
             var result = AiCommunication.SamplingAI(
                 chatHistory,
