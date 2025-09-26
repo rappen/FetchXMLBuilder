@@ -147,7 +147,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
             }
             logconversation = model.LogConversation ?? fxb.settings.AiSettings.LogConversation;
-            chatHistory = new ChatMessageHistory(panAiConversation, provider?.Name, model?.Endpoint, model?.Name, apikey, fxb.settings.AiSettings.MyName);
+            chatHistory = new ChatMessageHistory(panAiConversation, provider?.Name, model?.Endpoint, model?.Name, apikey, fxb.settings.AiSettings.MyName, OnlineSettings.Instance.AiSupport.OnlyInfoName);
             metaAttributes.Clear();
             SetTitle();
             if (provider.Free && !IsFreeAiUser(fxb) && !string.IsNullOrWhiteSpace(OnlineSettings.Instance.AiSupport.TextToRequestFreeAi))
