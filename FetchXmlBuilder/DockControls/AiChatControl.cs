@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.AI;
+﻿using F23.StringSimilarity;
+using Microsoft.Extensions.AI;
 using Rappen.AI.WinForm;
 using Rappen.XRM.Helpers;
 using Rappen.XRM.Helpers.Extensions;
@@ -13,6 +14,8 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using XrmToolBox.AppCode.AppInsights;
@@ -350,11 +353,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 var records = (result as QueryInfo)?.Results?.Entities?.Count ?? null;
                 Log($"Query-Execute", records, sw.ElapsedMilliseconds);
                 fxb.HandleRetrieveMultipleResult(result);
-                AiCommunication.SamplingAI(
-                    chatHistory,
-                    "The FetchXML query is executed",
-                    records == 0 ? "No record returned." : $"Retrieved {records} records.",
-                    $"Contemplating that it returned {records} records...{Environment.NewLine}(I will never get any data, only the amount!)");
+                //AiCommunication.SamplingAI(
+                //    chatHistory,
+                //    "The FetchXML query is executed",
+                //    records == 0 ? "No record returned." : $"Retrieved {records} records.",
+                //    $"Contemplating that it returned {records} records...{Environment.NewLine}(I will never get any data, only the amount!)");
                 //chatHistory.Add(ChatRole.User, records == 0 ? "No record returned." : $"Retrieved {records} records.", true);
                 //Commented it out since it exploded, but it might be good to do this after each new query execute
                 //fxb.dockControlGrid?.ResetLayout();
@@ -387,11 +390,20 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        [Description("Retrieves the logical name and display name of tables/entity that matches a description. The result is returned in a JSON list with entries of the format {\"LN\":\"[logical name of entity]\",\"DN\":\"[display name of entity]\"}. There may be many results, if a unique table cannot be found.")]
+        [Description("Retrieves the logical name and display name of tables/entity that matches a description. The result is returned in a JSON list with entries of the format {\"L\":\"[logical name of entity]\",\"D\":\"[display name of entity]\"}. There may be many results, if a unique table cannot be found.")]
         private string GetMetadataForUnknownEntity([Description("The name/description of a table.")] string tableDescription)
         {
             var entities = fxb.EntitiesForAi();
             var json = JsonSerializer.Serialize(entities, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
+
+            var items = JsonSerializer.Deserialize<List<Meta>>(json);
+
+            var quickMatch = DataverseMetadataMatcher.Find(tableDescription, items);
+
+            if (quickMatch != null && quickMatch.Count > 0)
+            {
+                return JsonSerializer.Serialize(quickMatch);
+            }
 
             var sw = Stopwatch.StartNew();
             var result = AiCommunication.SamplingAI(
@@ -406,7 +418,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             return result.Text;
         }
 
-        [Description("Returns attributes of a table/entity that matches a description. Information about attributes is returned in a JSON list with entries of the format {\"LN\":\"[logical name of attribute]\",\"DN\":\"[display name of attribute]\"}. There may be many results, if a unique attribute cannot be found.")]
+        [Description("Returns attributes of a table/entity that matches a description. Information about attributes is returned in a JSON list with entries of the format {\"L\":\"[logical name of attribute]\",\"D\":\"[display name of attribute]\"}. There may be many results, if a unique attribute cannot be found.")]
         private string GetMetadataForUnknownAttribute([Description("The logical name of the entity and a name/description of an attribute, separated by '@@'. Example: 'logical name of table@@a description of an attribute'")] string entityNameAndAttributeDescription)
         {
             var parts = entityNameAndAttributeDescription.Split(new[] { "@@" }, 2, StringSplitOptions.None);
@@ -431,6 +443,15 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             var attributes = metaAttributes[entityName];
             var json = JsonSerializer.Serialize(attributes, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
+
+            var items = JsonSerializer.Deserialize<List<Meta>>(json);
+
+            var quickMatch = DataverseMetadataMatcher.Find(attributeDescription, items);
+
+            if (quickMatch != null && quickMatch.Count > 0)
+            {
+                return JsonSerializer.Serialize(quickMatch);
+            }
 
             chatHistory.Add(ChatRole.User, $"The tool GetMetadataForUnknownAttribute was called: retrieve attributes for table '{entityName}' that matches the description '{attributeDescription}'", true);
 
@@ -656,4 +677,254 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         public override string ToString() => $"{InstallationId} {ToolName} {Date}";
     }
+
+        public class Meta
+        {
+            [JsonPropertyName("L")]
+            public string L { get; set; }  // Logical name
+
+            [JsonPropertyName("D")]
+            public string D { get; set; }  // Display name
+
+            public Meta() { }
+            public Meta(string logicalName, string displayName)
+            {
+                L = logicalName;
+                D = displayName;
+            }
+        }
+
+        public class Scored
+        {
+            public Meta Item { get; set; }
+            public double Score { get; set; }
+            public Scored(Meta item, double score) { Item = item; Score = score; }
+        }
+
+        public static class DataverseMetadataMatcher
+        {
+            // --- Tunables --------------------------------------------------------
+            private const double Threshold = 0.62;
+            private const int MaxReturn = 5;
+
+            // Heuristic weights
+            private const double WExactDisplay = 0.50;
+            private const double WExactLogical = 0.45;
+            private const double WStartsWith = 0.25;
+            private const double WTokenJaccard = 0.35;
+            private const double WFuzzyDisplay = 0.35;
+            private const double WFuzzyLogical = 0.25;
+            private const double WBizzBoost = 0.12;
+            private const double WSystemPenalty = -0.18;
+
+            private static readonly Regex Splitter = new Regex(@"[^\p{L}\p{Nd}]+", RegexOptions.Compiled);
+            private static readonly JaroWinkler Jw = new JaroWinkler();
+
+            // Synonym dictionary
+            private static readonly Dictionary<string, string[]> Synonyms =
+                new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
+            {
+            {"company", new[] {"account"}},
+            {"organisation", new[] {"account", "organization"}},
+            {"organization", new[] {"account", "organization"}},
+            {"customer", new[] {"account", "contact"}},
+            {"person", new[] {"contact"}},
+            {"contact person", new[] {"contact"}},
+            {"ticket", new[] {"case", "incident"}},
+            {"case", new[] {"incident"}},
+            {"incident", new[] {"case"}},
+            {"task", new[] {"task", "activity"}},
+            {"phone", new[] {"phone call", "phonecall"}},
+            {"phone call", new[] {"phonecall"}},
+            {"email", new[] {"email"}},
+            {"appointment", new[] {"appointment"}},
+            {"order", new[] {"salesorder", "order"}},
+            {"quote", new[] {"quote"}},
+            {"invoice", new[] {"invoice"}},
+            {"lead", new[] {"lead"}},
+            {"opportunity", new[] {"opportunity"}},
+            {"user", new[] {"systemuser", "aaduser", "applicationuser"}},
+            {"aad", new[] {"aaduser", "microsoft entra id"}},
+            {"entra", new[] {"aaduser", "microsoft entra id"}},
+            {"portal", new[] {"power pages", "mspp", "adx"}},
+            {"web page", new[] {"mspp_webpage"}},
+            {"webfile", new[] {"mspp_webfile"}},
+            {"knowledge", new[] {"knowledge article", "kbarticle", "knowledgearticle"}},
+            {"product", new[] {"product", "dynamicproperty"}},
+            {"queue", new[] {"queue", "queueitem"}},
+            {"role", new[] {"role", "security role"}},
+            {"team", new[] {"team", "teammembership"}}
+            };
+
+            private static readonly string[] BusinessHints = new[]
+            {
+            "account","contact","incident","lead","opportunity","salesorder","quote","invoice",
+            "product","case","task","email","appointment","phonecall","knowledge","queue","role","team","user"
+        };
+
+            private static readonly Regex SystemPattern = new Regex(
+                @"^(mspp_|msdyn|sdkmessage|ribbon|workflow|stringmap|solution|environmentvariable|customapi|plugin|appmodule|powerpagecomponent|feature|orginsights|sourcecontrol|staged|retention|synapse|search|topicmodel|webresource|tdsmetadata)",
+                RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+            // --- Public API ------------------------------------------------------
+            public static List<Meta> Find(string userQuery, IList<Meta> items)
+            {
+                if (string.IsNullOrWhiteSpace(userQuery) || items == null || items.Count == 0)
+                    return null;
+
+                string q = Normalize(userQuery);
+                HashSet<string> qTokens = ExpandAndTokenize(q);
+
+                var candidates = new List<Tuple<Meta, string, string>>();
+                foreach (var m in items)
+                {
+                    string normD = Normalize(m.D ?? string.Empty);
+                    string normL = Normalize(m.L ?? string.Empty);
+                    if (PassesPrefilter(qTokens, normD, normL))
+                        candidates.Add(Tuple.Create(m, normD, normL));
+                }
+                if (candidates.Count == 0) return null;
+
+                var scored = new List<Scored>(candidates.Count);
+                foreach (var c in candidates)
+                {
+                    var m = c.Item1;
+                    string normD = c.Item2;
+                    string normL = c.Item3;
+
+                    var itemTokens = UnionToHashSet(Tokenize(normD), Tokenize(normL));
+                    double score = 0.0;
+
+                    if (StringEqualsOrdinal(normD, q)) score += WExactDisplay;
+                    if (StringEqualsOrdinal(normL, q)) score += WExactLogical;
+
+                    if (AnyStartsWith(qTokens, normD, normL)) score += WStartsWith;
+
+                    double jacc = Jaccard(qTokens, itemTokens);
+                    score += WTokenJaccard * jacc;
+
+                    score += WFuzzyDisplay * Jw.Similarity(q, normD);
+                    score += WFuzzyLogical * Jw.Similarity(q, normL);
+
+                    if (ContainsAny(normD, BusinessHints) || ContainsAny(normL, BusinessHints)) score += WBizzBoost;
+                    if (SystemPattern.IsMatch(normL)) score += WSystemPenalty;
+
+                    scored.Add(new Scored(m, score));
+                }
+
+                scored.Sort((a, b) => b.Score.CompareTo(a.Score));
+
+                var result = new List<Meta>();
+                foreach (var s in scored)
+                {
+                    if (s.Score >= Threshold)
+                    {
+                        result.Add(s.Item);
+                        if (result.Count >= MaxReturn) break;
+                    }
+                }
+
+                return result;
+            }
+
+            // --- Internals -------------------------------------------------------
+            private static string Normalize(string s)
+            {
+                if (string.IsNullOrEmpty(s)) return string.Empty;
+                s = s.Trim().ToLowerInvariant();
+                s = Regex.Replace(s, "([a-z])([A-Z])", "$1 $2");
+                s = s.Replace('_', ' ');
+                s = Regex.Replace(s, @"[^\p{L}\p{Nd}]+", " ");
+                s = Regex.Replace(s, @"\s{2,}", " ").Trim();
+                return s;
+            }
+
+            private static HashSet<string> Tokenize(string s)
+            {
+                var parts = Splitter.Split(s);
+                var set = new HashSet<string>(StringComparer.Ordinal);
+                foreach (var t0 in parts)
+                {
+                    var t = t0;
+                    if (t.Length == 0) continue;
+                    if (t.Length > 3 && t.EndsWith("s", StringComparison.Ordinal))
+                        t = t.Substring(0, t.Length - 1);
+                    set.Add(t);
+                }
+                return set;
+            }
+
+            private static HashSet<string> ExpandAndTokenize(string q)
+            {
+                var tokens = Tokenize(q);
+                var toAdd = new List<string>();
+                foreach (var t in tokens)
+                {
+                    string[] syns;
+                    if (Synonyms.TryGetValue(t, out syns))
+                    {
+                        foreach (var s in syns)
+                            foreach (var st in Tokenize(s)) toAdd.Add(st);
+                    }
+                }
+                string[] phraseSyns;
+                if (Synonyms.TryGetValue(q, out phraseSyns))
+                {
+                    foreach (var s in phraseSyns)
+                        foreach (var st in Tokenize(s)) toAdd.Add(st);
+                }
+                foreach (var add in toAdd) tokens.Add(add);
+                return tokens;
+            }
+
+            private static bool PassesPrefilter(HashSet<string> qTokens, string normD, string normL)
+            {
+                foreach (var t in qTokens)
+                {
+                    if (normD.Contains(t)) return true;
+                    if (normL.Contains(t)) return true;
+                    if (normD.StartsWith(t)) return true;
+                    if (normL.StartsWith(t)) return true;
+                }
+                return false;
+            }
+
+            private static bool AnyStartsWith(HashSet<string> tokens, string a, string b)
+            {
+                foreach (var t in tokens)
+                {
+                    if (a.StartsWith(t)) return true;
+                    if (b.StartsWith(t)) return true;
+                }
+                return false;
+            }
+
+            private static bool StringEqualsOrdinal(string a, string b) =>
+                string.Equals(a, b, StringComparison.Ordinal);
+
+            private static bool ContainsAny(string s, IEnumerable<string> needles)
+            {
+                foreach (var n in needles)
+                {
+                    if (s.Contains(n)) return true;
+                }
+                return false;
+            }
+
+            private static double Jaccard(HashSet<string> a, HashSet<string> b)
+            {
+                if (a.Count == 0 || b.Count == 0) return 0.0;
+                int inter = 0;
+                foreach (var t in a) if (b.Contains(t)) inter++;
+                int union = a.Count + b.Count - inter;
+                return union == 0 ? 0.0 : (double)inter / union;
+            }
+
+            private static HashSet<string> UnionToHashSet(HashSet<string> a, HashSet<string> b)
+            {
+                var u = new HashSet<string>(a, StringComparer.Ordinal);
+                foreach (var t in b) u.Add(t);
+                return u;
+            }
+        }
 }
