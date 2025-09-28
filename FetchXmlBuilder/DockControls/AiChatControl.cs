@@ -387,7 +387,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        [Description("Retrieves the logical name and display name of tables/entity that matches a description. The result is returned in a JSON list with entries of the format {\"L\":\"[logical name of entity]\",\"D\":\"[display name of entity]\"}. There may be many results, if a unique table cannot be found.")]
+        [Description("Retrieves the logical name and display name of tables/entity that matches a description. The result is returned in a JSON list with entries of the format {\"L\":\"[logical name of entity]\",\"D\":\"[display name of entity]\",\"Desc\":\"[description of the entity]\"}. There may be many results, if a unique table cannot be found.")]
         private string GetMetadataForUnknownEntity([Description("The name/description of a table.")] string tableDescription)
         {
             var entities = fxb.EntitiesForAi();
@@ -406,13 +406,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             return result.Text;
         }
 
-        [Description("Returns attributes of a table/entity that matches a description. Information about attributes is returned in a JSON list with entries of the format {\"L\":\"[logical name of attribute]\",\"D\":\"[display name of attribute]\"}. There may be many results, if a unique attribute cannot be found.")]
+        [Description("Returns attributes of a table/entity that matches a description. Information about attributes is returned in a JSON list with entries of the format {\"L\":\"[logical name of attribute]\",\"D\":\"[display name of attribute]\",\"Desc\":\"[description of the attribute]\"}. There may be many results, if a unique attribute cannot be found.")]
         private string GetMetadataForUnknownAttribute([Description("The logical name of the entity and a name/description of an attribute, separated by '@@'. Example: 'logical name of table@@a description of an attribute'")] string entityNameAndAttributeDescription)
         {
             var parts = entityNameAndAttributeDescription.Split(new[] { "@@" }, 2, StringSplitOptions.None);
 
             var entityName = parts[0];
-            var attributeDescription = parts[1];
+            var attributeName = parts[1];
 
             if (!metaAttributes.ContainsKey(entityName))
             {
@@ -432,16 +432,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var attributes = metaAttributes[entityName];
             var json = JsonSerializer.Serialize(attributes, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
 
-            chatHistory.Add(ChatRole.User, $"The tool GetMetadataForUnknownAttribute was called: retrieve attributes for table '{entityName}' that matches the description '{attributeDescription}'", true);
+            chatHistory.Add(ChatRole.User, $"The tool GetMetadataForUnknownAttribute was called: retrieve attributes for table '{entityName}' that matches the name '{attributeName}'", true);
 
             var sw = Stopwatch.StartNew();
             var result = AiCommunication.SamplingAI(
                 chatHistory,
                 PromptAttributeMeta.Replace("{metadata}", json),
-                $"Please find attributes that match the description {attributeDescription}",
-                $"Asking for metadata for column '{attributeDescription}' in table '{entityName}'...");
+                $"Please find attributes that match the name {attributeName}",
+                $"Asking for metadata for column '{attributeName}' in table '{entityName}'...");
             sw.Stop();
-            Log($"Meta-Attribute-{entityName}", result, sw.ElapsedMilliseconds, attributes.Count);
+            Log($"Meta-Attribute-{entityName}-{attributeName}", result, sw.ElapsedMilliseconds, attributes.Count);
 
             chatHistory.Add(result, true);
 
