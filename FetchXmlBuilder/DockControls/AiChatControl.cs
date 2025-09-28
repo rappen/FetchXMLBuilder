@@ -350,12 +350,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 var records = (result as QueryInfo)?.Results?.Entities?.Count ?? null;
                 Log($"Query-Execute", records, sw.ElapsedMilliseconds);
                 fxb.HandleRetrieveMultipleResult(result);
-                AiCommunication.SamplingAI(
-                    chatHistory,
-                    "The FetchXML query is executed",
-                    records == 0 ? "No record returned." : $"Retrieved {records} records.",
-                    $"Contemplating that it returned {records} records...{Environment.NewLine}(I will never get any data, only the amount!)");
-                //chatHistory.Add(ChatRole.User, records == 0 ? "No record returned." : $"Retrieved {records} records.", true);
+                chatHistory.Add(ChatRole.User, records == 0 ? "No record returned." : $"Retrieved {records} records.", true);
                 //Commented it out since it exploded, but it might be good to do this after each new query execute
                 //fxb.dockControlGrid?.ResetLayout();
                 return "Query executed successfully";
