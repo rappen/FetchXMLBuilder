@@ -10,8 +10,7 @@
 		<iconUrl>https://jonasr.app/wp-content/uploads/2019/09/FXB-2019-2-150-tsp.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>Build queries for Microsoft Dataverse and the Power Platform. Let AI fix what you can't. Investigate data. Fix the layouts. Get code. Empower yourself to achieve more.</summary>
-		<description>
-Build queries for Microsoft Dataverse and the Power Platform. Investigate data. Fix the layouts. Get code. Let AI fix what you can't. Empower yourself to achieve more.
+		<description>Build queries for Microsoft Dataverse and the Power Platform. Investigate data. Fix the layouts. Get code. Let AI fix what you can't. Empower yourself to achieve more.
 
 Read more: https://fetchxmlbuilder.com/
 
@@ -42,18 +41,19 @@ The tool will assist in three major areas:
 
 The tool reads metadata from Microsoft Dataverse and Dynamics 365 / CRM to assist with selecting entities, attributes, relations and to perform validation of condition values.
 
-To make it even more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.
-		</description>
-		<releaseNotes>
-FetchXML Builder AI Chat can now be used / tested by my Azure AI Foundry provider!
-No personal account at OpenAI or Anthropic needed (but still possible to use, of course).
+To make it even more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.</description>
+		<releaseNotes>Added a few improvements in the latest release, but most new things came out in version 1.2025.9.6.
+Etherway - always get the latest! :)
+
+FetchXML Builder AI Chat can now be used / tested by my Free Azure AI Foundry provider!
+No personal account at OpenAI or Anthropic is required (although it is still possible to use one, of course).
 Open the "AI Chat" tab and ask questions about your data, queries, or how to use the tool.
 
-** NOTE: This version of FetchXML Builder needs to have XrmToolBox in version 1.2025.7.* or later! **
+NOTE: 
+This version of FetchXML Builder needs to have XrmToolBox in version 1.2025.7.* or later!
 
 Full release notes:
-https://fetchxmlbuilder.com/releases/#$versionnumber$
-		</releaseNotes>
+https://fetchxmlbuilder.com/releases/#$versionnumber$</releaseNotes>
 		<copyright>Copyright Jonas Rapp 2014-2025</copyright>
 		<tags>XrmToolBox Plugins FetchXML Builder</tags>
 		<dependencies>
