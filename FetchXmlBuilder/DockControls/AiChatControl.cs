@@ -152,7 +152,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             SetTitle();
             if (provider.Free && !IsFreeAiUser(fxb) && !string.IsNullOrWhiteSpace(OnlineSettings.Instance.AiSupport.TextToRequestFreeAi))
             {
-                chatHistory.Add(ChatRole.Assistant, OnlineSettings.Instance.AiSupport.TextToRequestFreeAi, false);
+                chatHistory.Add(ChatRole.Assistant, OnlineSettings.Instance.AiSupport.TextToRequestFreeAi);
             }
             mnuFree.Text = IsFreeAiUser(fxb) ? "Using AI for Free!" : "Request for Free AI...";
             EnableButtons();
@@ -210,7 +210,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             btnAiChatAsk.Enabled = cancall && !string.IsNullOrWhiteSpace(txtAiChat.Text);
             btnYes.Enabled = cancall && chatHistory?.HasDialog == true;
             btnExecute.Enabled = cancall;
-            btnReset.Enabled = cancall && chatHistory?.IsRunning == false && chatHistory?.HasDialog == true;
+            btnReset.Enabled = (cancall && chatHistory?.IsRunning == false && chatHistory?.HasDialog == true) || (provider?.Free == true && !IsFreeAiUser(fxb));
             splitAiChat.Panel2.Enabled = chatHistory?.IsRunning != true;
             txtAiChat.BackColor = chatHistory?.IsRunning == true ? ChatMessageHistory.WaitingBackColor : ChatMessageHistory.BackColor;
             txtAiChat.Enabled = cancall && chatHistory?.IsRunning != true;
@@ -387,7 +387,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        [Description("Retrieves the logical name and display name of tables/entity that matches a description. The result is returned in a JSON list with entries of the format {\"LN\":\"[logical name of entity]\",\"DN\":\"[display name of entity]\"}. There may be many results, if a unique table cannot be found.")]
+        [Description("Retrieves the logical name and display name of tables/entity that matches a description. The result is returned in a JSON list with entries of the format {\"L\":\"[logical name of entity]\",\"D\":\"[display name of entity]\"}. There may be many results, if a unique table cannot be found.")]
         private string GetMetadataForUnknownEntity([Description("The name/description of a table.")] string tableDescription)
         {
             var entities = fxb.EntitiesForAi();
@@ -406,7 +406,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             return result.Text;
         }
 
-        [Description("Returns attributes of a table/entity that matches a description. Information about attributes is returned in a JSON list with entries of the format {\"LN\":\"[logical name of attribute]\",\"DN\":\"[display name of attribute]\"}. There may be many results, if a unique attribute cannot be found.")]
+        [Description("Returns attributes of a table/entity that matches a description. Information about attributes is returned in a JSON list with entries of the format {\"L\":\"[logical name of attribute]\",\"D\":\"[display name of attribute]\"}. There may be many results, if a unique attribute cannot be found.")]
         private string GetMetadataForUnknownAttribute([Description("The logical name of the entity and a name/description of an attribute, separated by '@@'. Example: 'logical name of table@@a description of an attribute'")] string entityNameAndAttributeDescription)
         {
             var parts = entityNameAndAttributeDescription.Split(new[] { "@@" }, 2, StringSplitOptions.None);
@@ -582,6 +582,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void btnReset_Click(object sender, EventArgs e)
         {
+            if (provider?.Free == true && !IsFreeAiUser(fxb))
+            {
+                OnlineSettings.Reset();
+                Initialize();
+                return;
+            }
             if (MessageBoxEx.Show(fxb, "Are you sure you want to clear the AI chat history?", "Reset AI Chat", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 Initialize();

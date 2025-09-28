@@ -42,6 +42,8 @@ namespace Rappen.XTB.FXB.Settings
             }
         }
 
+        public static void Reset() => instance = null;
+
         private static T Load<T>(string filename)
         {
             var path = Path.Combine(Paths.SettingsPath, FileName);
