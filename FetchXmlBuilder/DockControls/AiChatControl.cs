@@ -220,12 +220,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             var text = string.Empty;
             var action = "Prompt";
-            var countcall = false;
             switch (sender)
             {
                 case Button btn when btn == btnAiChatAsk:
                     text = txtAiChat.Text;
-                    countcall = true;
                     break;
 
                 case Button btn when btn == btnYes:
@@ -236,6 +234,15 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 case Button btn when btn == btnExecute:
                     text = "Please execute the query!";
                     action += "-Execute";
+                    break;
+
+                case int option:
+                    text = option.ToString();
+                    action += "-Option";
+                    break;
+
+                case string manual:
+                    text = manual;
                     break;
             }
             if (string.IsNullOrWhiteSpace(text))
@@ -273,12 +280,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 return;
             }
 
-            if (countcall)
-            {
-                fxb.settings.AiSettings.Calls++;
-                fxb.settings.Save();
-                PopupMessageIfRelevant();
-            }
+            fxb.settings.AiSettings.Calls++;
+            fxb.settings.Save();
+            PopupMessageIfRelevant();
             manualcalls++;
 
             var manualquery = fxb.dockControlBuilder?.GetFetchString(true, false);
@@ -303,6 +307,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 chatHistory.Add(ChatRole.User, PromptUpdate.Replace("{fetchxml}", manualquery), true);
             }
 
+            text = text.Trim();
             chatHistory.IsRunning = true;
             EnableButtons();
             Log(action, count: text.Length, msg: text);
@@ -519,12 +524,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void Log(string action, double? count = null, double? duration = null, long? tokensout = null, long? tokensin = null, string msg = null)
         {
-            if (count == 0 && duration == null)
-            {   // Unnecessary to log nothing
-                return;
-            }
-            fxb.LogInfo($"{logname}-{action}{(count != null ? $" Count: {count}" : "")}{(duration != null ? $" Duration: {duration}" : "")}{(tokensout != null ? $" TokensOut: {tokensout}" : "")}{(tokensin != null ? $" TokensIn: {tokensin}" : "")}");
-
             if (ai == null)
             {
                 ai = new AIAppInsights(fxb, OnlineSettings.Instance.AiSupport.AppRegistrationEndpoint, OnlineSettings.Instance.AiSupport.InstrumentationKey, provider.Name, model.Name);
@@ -561,17 +560,31 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void txtAiChatAsk_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter && e.Control && btnAiChatAsk.Enabled && !string.IsNullOrWhiteSpace(txtAiChat.Text))
-            {
+            if (e.Control)
+            {   // Control...
+                switch (e.KeyCode)
+                {
+                    case Keys k when k == Keys.Enter && btnAiChatAsk.Enabled && !string.IsNullOrWhiteSpace(txtAiChat.Text):
+                        SendChatToAI(txtAiChat.Text);
+                        break;
+
+                    case Keys.Y:
+                        SendChatToAI(btnYes);
+                        break;
+
+                    case Keys k when k >= Keys.D0 && k <= Keys.D9:
+                        SendChatToAI((int)k - (int)Keys.D0);
+                        break;
+
+                    case Keys k when k >= Keys.NumPad0 && k <= Keys.NumPad9:
+                        SendChatToAI((int)k - (int)Keys.NumPad0);
+                        break;
+
+                    default:
+                        return;
+                }
                 e.Handled = true;
                 e.SuppressKeyPress = true; // Prevents the beep sound
-                SendChatToAI(btnAiChatAsk);
-            }
-            else if (e.KeyCode == Keys.Y && e.Control)
-            {
-                e.Handled = true;
-                e.SuppressKeyPress = true;
-                SendChatToAI(btnYes);
             }
         }
 
