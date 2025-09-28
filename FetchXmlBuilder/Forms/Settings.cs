@@ -100,6 +100,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 txtAiApiKey.Text = settings.AiSettings.ApiKey;
             }
             txtAiCallMe.Text = settings.AiSettings.MyName;
+            rbAiPreferLogicalName.Checked = !settings.AiSettings.PreferDisplayName;
+            rbAiPreferDisplayName.Checked = settings.AiSettings.PreferDisplayName;
             chkAiLogConversation.Checked = settings.AiSettings.LogConversation;
             linkAiLogFolder.Text = Path.Combine(Paths.LogsPath, "FXB AI Chat");
         }
@@ -153,6 +155,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.AiSettings.Model = cmbAiModel.Text;
             settings.AiSettings.ApiKey = txtAiApiKey.Enabled ? txtAiApiKey.Text : "";
             settings.AiSettings.MyName = txtAiCallMe.Text;
+            settings.AiSettings.PreferDisplayName = rbAiPreferDisplayName.Checked;
             settings.AiSettings.LogConversation = chkAiLogConversation.Checked;
             UpdateAiSettingsList();
             settings.AiProviders = aiproviders;

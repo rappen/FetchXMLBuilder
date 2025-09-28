@@ -96,7 +96,7 @@
             this.splitAiChat.Panel2.Controls.Add(this.panel1);
             this.splitAiChat.Panel2MinSize = 40;
             this.splitAiChat.Size = new System.Drawing.Size(499, 418);
-            this.splitAiChat.SplitterDistance = 289;
+            this.splitAiChat.SplitterDistance = 300;
             this.splitAiChat.SplitterWidth = 9;
             this.splitAiChat.TabIndex = 13;
             // 
@@ -110,7 +110,7 @@
             this.panAiConversation.Location = new System.Drawing.Point(0, 0);
             this.panAiConversation.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.panAiConversation.Name = "panAiConversation";
-            this.panAiConversation.Size = new System.Drawing.Size(499, 289);
+            this.panAiConversation.Size = new System.Drawing.Size(499, 300);
             this.panAiConversation.TabIndex = 0;
             // 
             // txtAiChat
@@ -121,7 +121,7 @@
             this.txtAiChat.Multiline = true;
             this.txtAiChat.Name = "txtAiChat";
             this.txtAiChat.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAiChat.Size = new System.Drawing.Size(438, 107);
+            this.txtAiChat.Size = new System.Drawing.Size(438, 96);
             this.txtAiChat.TabIndex = 1;
             this.txtAiChat.TextChanged += new System.EventHandler(this.txtAiChatAsk_TextChanged);
             this.txtAiChat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtAiChatAsk_KeyDown);
@@ -132,7 +132,7 @@
             this.txtUsage.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtUsage.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.txtUsage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtUsage.Location = new System.Drawing.Point(0, 107);
+            this.txtUsage.Location = new System.Drawing.Point(0, 96);
             this.txtUsage.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtUsage.Name = "txtUsage";
             this.txtUsage.ReadOnly = true;
@@ -151,7 +151,7 @@
             this.panel1.Location = new System.Drawing.Point(438, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(61, 120);
+            this.panel1.Size = new System.Drawing.Size(61, 109);
             this.panel1.TabIndex = 0;
             // 
             // btnMenu
@@ -180,7 +180,7 @@
             this.toolStripMenuItem3,
             this.mnuSupporting});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(189, 176);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(189, 154);
             // 
             // mnuCopy
             // 

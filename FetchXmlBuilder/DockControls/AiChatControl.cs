@@ -297,6 +297,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 {
                     intro += Environment.NewLine + PromptMyName.Replace("{callme}", fxb.settings.AiSettings.MyName).Trim();
                 }
+                if (!string.IsNullOrWhiteSpace(OnlineSettings.Instance.AiSupport.Prompts.PreferNames))
+                {
+                    intro += Environment.NewLine + OnlineSettings.Instance.AiSupport.Prompts.PreferNames.Replace("{prefer}", fxb.settings.AiSettings.PreferDisplayName ? "DisplanyName" : "LogicalName").Trim();
+                }
                 chatHistory.Initialize(intro);
                 Log("Init", count: intro.Length, msg: intro);
                 sessionstopwatch = Stopwatch.StartNew();

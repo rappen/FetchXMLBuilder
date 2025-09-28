@@ -231,7 +231,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 LogUse("SaveOptions");
                 var oldtrycachemetadata = settings.TryMetadataCache;
-                var oldaisetting = settings.AiSettings.Provider + settings.AiSettings.Model + settings.AiSettings.ApiKey;
+                var oldaisetting = settings.AiSettings.ToString();
                 settings = settingDlg.GetSettings();
                 if (Service != null)
                 {
@@ -272,7 +272,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 {
                     dockControlAiChat?.Close();
                 }
-                else if (oldaisetting != settings.AiSettings.Provider + settings.AiSettings.Model + settings.AiSettings.ApiKey)
+                else if (oldaisetting != settings.AiSettings.ToString())
                 {
                     dockControlAiChat?.Initialize();
                 }
