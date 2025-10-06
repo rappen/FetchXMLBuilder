@@ -89,15 +89,24 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             if (OnlineSettings.Instance.AiSupport.Provider(settings.AiSettings.Provider) is AiProvider provider)
             {
                 cmbAiProvider.SelectedItem = provider;
+                cmbAiProvider_SelectedIndexChanged();
+                if (provider.EndpointFixed)
+                {
+                    txtAiEndpoint.Enabled = false;
+                }
+                else
+                {
+                    txtAiEndpoint.Enabled = true;
+                    txtAiEndpoint.Text = settings.AiSettings.Endpoint;
+                }
+                if (!provider.Free)
+                {
+                    txtAiApiKey.Text = settings.AiSettings.ApiKey;
+                }
             }
             else
             {
                 cmbAiProvider.SelectedIndex = -1;
-            }
-            cmbAiProvider_SelectedIndexChanged();
-            if ((cmbAiProvider.SelectedItem as AiProvider)?.Free != true)
-            {
-                txtAiApiKey.Text = settings.AiSettings.ApiKey;
             }
             txtAiCallMe.Text = settings.AiSettings.MyName;
             rbAiPreferLogicalName.Checked = !settings.AiSettings.PreferDisplayName;
@@ -153,6 +162,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.AlwaysShowAggregationProperties = chkAlwaysShowAggregateProperties.Checked;
             settings.AiSettings.Provider = cmbAiProvider.Text;
             settings.AiSettings.Model = cmbAiModel.Text;
+            settings.AiSettings.Endpoint = txtAiEndpoint.Enabled ? txtAiEndpoint.Text : "";
             settings.AiSettings.ApiKey = txtAiApiKey.Enabled ? txtAiApiKey.Text : "";
             settings.AiSettings.MyName = txtAiCallMe.Text;
             settings.AiSettings.PreferDisplayName = rbAiPreferDisplayName.Checked;
@@ -289,7 +299,20 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
         }
 
-        private void LoadAiSettingsKey(AiProvider provider)
+        private void LoadAiSettingEndpoint(AiProvider provider)
+        {
+            if (provider == null)
+            {
+                txtAiEndpoint.Text = "";
+            }
+            else
+            {
+                var setting = aiproviders.FirstOrDefault(a => a.Provider == provider.Name);
+                txtAiEndpoint.Text = setting?.Endpoint;
+            }
+        }
+
+        private void LoadAiSettingsApiKey(AiProvider provider)
         {
             if (provider == null)
             {
@@ -313,6 +336,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             {
                 if (aiproviders.FirstOrDefault(a => a.Provider == provider.Name) is AiSettings existing)
                 {
+                    existing.Endpoint = !provider.EndpointFixed ? txtAiEndpoint.Text : "";
                     if (!provider.Free && !string.IsNullOrWhiteSpace(txtAiApiKey.Text))
                     {
                         existing.ApiKey = txtAiApiKey.Text;
@@ -324,6 +348,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                     aiproviders.Add(new AiSettings
                     {
                         Provider = provider.Name,
+                        Endpoint = !provider.EndpointFixed ? txtAiEndpoint.Text : "",
                         ApiKey = !provider.Free ? txtAiApiKey.Text : "",
                         LogConversation = chkAiLogConversation.Checked,
                     });
@@ -359,13 +384,23 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             {
                 tt.SetToolTip(picAiProvider, $"Read about {provider} at {provider.Url}");
                 picAiProvider.Tag = provider.Url;
+                if (provider.EndpointFixed)
+                {
+                    txtAiEndpoint.Text = "";
+                    txtAiEndpoint.Enabled = false;
+                }
+                else
+                {
+                    txtAiEndpoint.Enabled = true;
+                    LoadAiSettingEndpoint(provider);
+                }
                 if (provider.Free)
                 {
                     HandlingFreeAI(provider);
                 }
                 else
                 {
-                    LoadAiSettingsKey(provider);
+                    LoadAiSettingsApiKey(provider);
                 }
                 txtAiApiKey.Enabled = !provider.Free;
                 cmbAiModel.Items.AddRange(provider.Models.ToArray());
@@ -384,6 +419,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 txtAiApiKey.Text = "";
                 txtAiApiKey.Enabled = false;
             }
+            HideShowApiKey(txtAiApiKey.Enabled);
             cmbAiModel_SelectedIndexChanged();
         }
 
@@ -439,6 +475,26 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             if (sender is PictureBox pic)
             {
                 MessageBoxEx.Show(this, tt.GetToolTip(pic), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void picAiApikey_Click(object sender, EventArgs e)
+        {
+            var hide = txtAiApiKey.PasswordChar != '●';
+            HideShowApiKey(hide);
+        }
+
+        private void HideShowApiKey(bool hide)
+        {
+            if (hide)
+            {
+                txtAiApiKey.PasswordChar = '●';
+                picAiApikey.Image = Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_eye_16;
+            }
+            else
+            {
+                txtAiApiKey.PasswordChar = '\0';
+                picAiApikey.Image = Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_hide_16;
             }
         }
     }

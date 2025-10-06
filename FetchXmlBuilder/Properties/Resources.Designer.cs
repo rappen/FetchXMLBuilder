@@ -203,6 +203,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icon_eye_16 {
+            get {
+                object obj = ResourceManager.GetObject("icon-eye-16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icon_flow {
             get {
                 object obj = ResourceManager.GetObject("icon-flow", resourceCulture);
@@ -236,6 +246,16 @@ namespace Cinteros.Xrm.FetchXmlBuilder.Properties {
         internal static System.Drawing.Bitmap icon_heart_16 {
             get {
                 object obj = ResourceManager.GetObject("icon-heart-16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icon_hide_16 {
+            get {
+                object obj = ResourceManager.GetObject("icon-hide-16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

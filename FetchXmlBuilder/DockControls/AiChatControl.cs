@@ -99,6 +99,24 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
                 return;
             }
+            var endpoint = provider.EndpointFixed ? model.Endpoint : fxb.settings.AiSettings.Endpoint;
+            if (!provider.EndpointFixed && string.IsNullOrWhiteSpace(endpoint))
+            {
+                if (neverprompt)
+                {
+                    txtAiChat.Text = $"Missing AI Endpoint.{Environment.NewLine}Please open the Setting for AI Chat.";
+                }
+                else
+                {
+                    MessageBoxEx.Show(fxb, "The AI endpoint is not set.\nGo check the setting!", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    fxb.ShowSettings("tabAiChat");
+                    if (!string.IsNullOrWhiteSpace(fxb.settings.AiSettings.Endpoint))
+                    {
+                        Initialize();
+                    }
+                }
+                return;
+            }
             var apikey = "";
             if (provider.Free)
             {
@@ -147,7 +165,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
             }
             logconversation = model.LogConversation ?? fxb.settings.AiSettings.LogConversation;
-            chatHistory = new ChatMessageHistory(panAiConversation, provider?.Name, model?.Endpoint, model?.Name, apikey, fxb.settings.AiSettings.MyName, OnlineSettings.Instance.AiSupport.OnlyInfoName);
+            chatHistory = new ChatMessageHistory(panAiConversation, provider.Name, model.Name, endpoint, apikey, fxb.settings.AiSettings.MyName, OnlineSettings.Instance.AiSupport.OnlyInfoName);
             metaAttributes.Clear();
             SetTitle();
             if (provider.Free && !IsFreeAiUser(fxb) && !string.IsNullOrWhiteSpace(OnlineSettings.Instance.AiSupport.TextToRequestFreeAi))
@@ -156,6 +174,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             mnuFree.Text = IsFreeAiUser(fxb) ? "Using AI for Free!" : "Request for Free AI...";
             EnableButtons();
+            if (txtAiChat.Enabled)
+            {
+                txtAiChat.Focus();
+            }
         }
 
         internal static bool IsFreeAiUser(PluginControlBase tool)
@@ -470,24 +492,30 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             if (OnlineSettings.Instance.AiSupport.PopupByCallNos
                 .FirstOrDefault(p => p.TimeToPopup(fxb.settings.AiSettings.Calls, supporting, provider.Free)) is PopupByCallNo popup)
             {
+                var title = string.IsNullOrWhiteSpace(popup.Title) ? "AI Chat" :
+                    popup.Title
+                        .Replace("{calls}", fxb.settings.AiSettings.Calls.ToString())
+                        .Replace("{provider}", provider.ToString())
+                        .Replace("{model}", model.Name);
                 var message = popup.Message
                     .Replace("{calls}", fxb.settings.AiSettings.Calls.ToString())
                     .Replace("{provider}", provider.ToString())
                     .Replace("{model}", model.Name);
+                Log($"Popup-{title.Replace(" ", "-")}", msg: message);
                 if (popup.SuggestsSupporting)
                 {
-                    if (MessageBoxEx.Show(fxb, message, "AI Chat", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
+                    if (MessageBoxEx.Show(fxb, message, title, MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
                     {
                         Supporting.ShowIf(fxb, true, false, fxb.ai2);
                     }
                 }
                 else if (!string.IsNullOrWhiteSpace(popup.HelpUrl))
                 {
-                    MessageBoxEx.Show(fxb, message, "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, popup.HelpUrl);
+                    MessageBoxEx.Show(fxb, message, title, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, popup.HelpUrl);
                 }
                 else
                 {
-                    MessageBoxEx.Show(fxb, message, "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBoxEx.Show(fxb, message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
