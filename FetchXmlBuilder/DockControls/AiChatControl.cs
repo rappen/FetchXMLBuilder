@@ -60,6 +60,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             freeusers = null;
             ClosingSession();
+            mnuSendWithEnter.Checked = fxb.settings.AiSettings.SendWithEnter;
             txtAiChat.Text = string.Empty;
 
             provider = OnlineSettings.Instance.AiSupport.Provider(fxb.settings.AiSettings.Provider);
@@ -592,7 +593,21 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void txtAiChatAsk_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Control)
+            if (!e.Control && !e.Shift && !e.Alt)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.Enter when fxb.settings.AiSettings.SendWithEnter && mnuSendWithEnter.Checked && btnAiChatAsk.Enabled && !string.IsNullOrWhiteSpace(txtAiChat.Text):
+                        SendChatToAI(txtAiChat.Text);
+                        break;
+
+                    default:
+                        return;
+                }
+                e.Handled = true;
+                e.SuppressKeyPress = true; // Prevents the beep sound
+            }
+            else if (e.Control)
             {   // Control...
                 switch (e.KeyCode)
                 {
@@ -690,6 +705,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         }
 
         #endregion Private Event Handlers
+
+        private void mnuSendWithEnter_Click(object sender, EventArgs e)
+        {
+            fxb.settings.AiSettings.SendWithEnter = mnuSendWithEnter.Checked;
+            fxb.settings.Save();
+        }
     }
 
     public class AiUser

@@ -51,6 +51,7 @@
             this.btnYes = new System.Windows.Forms.Button();
             this.btnAiChatAsk = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.mnuSendWithEnter = new System.Windows.Forms.ToolStripMenuItem();
             this.panAiChat.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitAiChat)).BeginInit();
             this.splitAiChat.Panel1.SuspendLayout();
@@ -96,7 +97,7 @@
             this.splitAiChat.Panel2.Controls.Add(this.panel1);
             this.splitAiChat.Panel2MinSize = 40;
             this.splitAiChat.Size = new System.Drawing.Size(499, 418);
-            this.splitAiChat.SplitterDistance = 300;
+            this.splitAiChat.SplitterDistance = 295;
             this.splitAiChat.SplitterWidth = 9;
             this.splitAiChat.TabIndex = 13;
             // 
@@ -110,7 +111,7 @@
             this.panAiConversation.Location = new System.Drawing.Point(0, 0);
             this.panAiConversation.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.panAiConversation.Name = "panAiConversation";
-            this.panAiConversation.Size = new System.Drawing.Size(499, 300);
+            this.panAiConversation.Size = new System.Drawing.Size(499, 295);
             this.panAiConversation.TabIndex = 0;
             // 
             // txtAiChat
@@ -121,7 +122,7 @@
             this.txtAiChat.Multiline = true;
             this.txtAiChat.Name = "txtAiChat";
             this.txtAiChat.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAiChat.Size = new System.Drawing.Size(438, 96);
+            this.txtAiChat.Size = new System.Drawing.Size(438, 101);
             this.txtAiChat.TabIndex = 1;
             this.txtAiChat.TextChanged += new System.EventHandler(this.txtAiChatAsk_TextChanged);
             this.txtAiChat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtAiChatAsk_KeyDown);
@@ -132,7 +133,7 @@
             this.txtUsage.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtUsage.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.txtUsage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtUsage.Location = new System.Drawing.Point(0, 96);
+            this.txtUsage.Location = new System.Drawing.Point(0, 101);
             this.txtUsage.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtUsage.Name = "txtUsage";
             this.txtUsage.ReadOnly = true;
@@ -151,7 +152,7 @@
             this.panel1.Location = new System.Drawing.Point(438, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(61, 109);
+            this.panel1.Size = new System.Drawing.Size(61, 114);
             this.panel1.TabIndex = 0;
             // 
             // btnMenu
@@ -173,6 +174,7 @@
             this.mnuCopy,
             this.mnuSave,
             this.toolStripMenuItem1,
+            this.mnuSendWithEnter,
             this.mnuSettings,
             this.toolStripMenuItem2,
             this.mnuDocs,
@@ -180,7 +182,7 @@
             this.toolStripMenuItem3,
             this.mnuSupporting});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(189, 154);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(189, 198);
             // 
             // mnuCopy
             // 
@@ -294,6 +296,15 @@
             this.btnAiChatAsk.UseVisualStyleBackColor = true;
             this.btnAiChatAsk.Click += new System.EventHandler(this.SendChatToAI);
             // 
+            // mnuSendWithEnter
+            // 
+            this.mnuSendWithEnter.CheckOnClick = true;
+            this.mnuSendWithEnter.Name = "mnuSendWithEnter";
+            this.mnuSendWithEnter.Size = new System.Drawing.Size(188, 22);
+            this.mnuSendWithEnter.Text = "Send with <enter>";
+            this.mnuSendWithEnter.ToolTipText = "Unchecked, it sends with <ctrl>+<enter>";
+            this.mnuSendWithEnter.Click += new System.EventHandler(this.mnuSendWithEnter_Click);
+            // 
             // AiChatControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -346,5 +357,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem mnuDocs;
         private System.Windows.Forms.ToolStripMenuItem mnuFree;
+        private System.Windows.Forms.ToolStripMenuItem mnuSendWithEnter;
     }
 }
