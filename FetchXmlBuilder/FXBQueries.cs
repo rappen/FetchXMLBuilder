@@ -103,6 +103,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     MessageBox.Show("Select valid output type under Options.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
             }
+            Supporting.ShowIf(this, ShowItFrom.Execute, false, false, ai2);
         }
 
         internal void LoadViews(Action viewsLoaded)
