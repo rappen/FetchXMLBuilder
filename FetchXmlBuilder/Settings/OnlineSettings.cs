@@ -1,19 +1,17 @@
 ﻿using Rappen.AI.WinForm;
 using Rappen.XTB.Helpers;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
-using XrmToolBox.ToolLibrary.AppCode;
 
 namespace Rappen.XTB.FXB.Settings
 {
     public class OnlineSettings
     {
         private const string FileName = "Rappen.XTB.FXB.Settings.xml";
-        private static readonly Uri ToolSettingsURLPath = new Uri("https://rappen.github.io/Tools/");
+        private static readonly string ToolSettingsURLPath = "https://rappen.github.io/Tools/";
         private static OnlineSettings instance;
 
         public int SettingsVersion = 1;
@@ -22,7 +20,7 @@ namespace Rappen.XTB.FXB.Settings
         public AiSupport AiSupport = new AiSupport();
         public ToolColors Colors = new ToolColors();
 
-        private OnlineSettings()
+        public OnlineSettings()
         { }
 
         public static OnlineSettings Instance
@@ -32,11 +30,13 @@ namespace Rappen.XTB.FXB.Settings
                 if (instance == null)
                 {
 #if DEBUG
-                    instance = Load<OnlineSettings>(FileName) ?? new OnlineSettings();
-                    //instance.Save();
-#else
-                    instance = new Uri(ToolSettingsURLPath, FileName).DownloadXml<OnlineSettings>() ?? new OnlineSettings();
+                    var path = Path.Combine(Paths.SettingsPath, FileName);
+                    if (!File.Exists(path))
+                    {
+                        MessageBoxEx.Show($"DEBUG MODE:\n\nSettings file '{path}' not found. Now it's created by default.\nIt can be found here:\n{ToolSettingsURLPath}{FileName}");
+                    }
 #endif
+                    instance = XmlAtomicStore.DownloadXml<OnlineSettings>(ToolSettingsURLPath, FileName, Paths.SettingsPath);
                 }
                 return instance;
             }
@@ -44,27 +44,7 @@ namespace Rappen.XTB.FXB.Settings
 
         public static void Reset() => instance = null;
 
-        private static T Load<T>(string filename)
-        {
-            var path = Path.Combine(Paths.SettingsPath, FileName);
-            if (!File.Exists(path))
-            {
-                MessageBoxEx.Show($"DEBUG MODE:\n\nSettings file '{path}' not found. Now it's created by default.\nIt can be found here:\n{ToolSettingsURLPath}{FileName}");
-                return default(T);
-            }
-            var file = File.ReadAllText(path);
-            return (T)XmlSerializerHelper.Deserialize(file, typeof(T));
-        }
-
-        public void Save()
-        {
-            if (!Directory.Exists(Paths.SettingsPath))
-            {
-                Directory.CreateDirectory(Paths.SettingsPath);
-            }
-            var path = Path.Combine(Paths.SettingsPath, FileName);
-            XmlSerializerHelper.SerializeToFile(this, path);
-        }
+        public void Save() => XmlAtomicStore.Serialize(this, Path.Combine(Paths.SettingsPath, FileName));
     }
 
     public class ToolColors

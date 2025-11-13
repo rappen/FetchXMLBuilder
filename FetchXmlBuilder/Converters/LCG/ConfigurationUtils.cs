@@ -1,11 +1,11 @@
-﻿using McTools.Xrm.Connection;
+﻿using Rappen.XTB.Helpers;
 using System.IO;
 
-namespace Rappen.XTB.Helper
+namespace Rappen.XTB.Helpers
 {
     public static class ConfigurationUtils
     {
-        public static T GetEmbeddedConfiguration<T>(string filename, string begintoken, string endtoken)
+        public static T GetEmbeddedConfiguration<T>(string filename, string begintoken, string endtoken) where T : new()
         {
             var csfile = File.ReadAllText(filename);
             var configstr = csfile.GetTextBetween(begintoken, endtoken, false);
@@ -19,7 +19,7 @@ namespace Rappen.XTB.Helper
             {
                 throw new FileLoadException($"Could not find {configname} XML in file.", filename);
             }
-            var inlinesettings = (T)XmlSerializerHelper.Deserialize(configstr, typeof(T));
+            var inlinesettings = XmlAtomicStore.Deserialize<T>(configstr);
             return inlinesettings;
         }
 

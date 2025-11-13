@@ -22,6 +22,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 {
     public partial class AiChatControl : WeifenLuo.WinFormsUI.Docking.DockContent
     {
+        private const string GeneralSettingsURL = "https://rappen.github.io/Tools/";
+        private const string AiUsersFileName = "Rappen.XTB.AI.Settings.xml";
+
         private FetchXmlBuilder fxb;
         private AIAppInsights ai;
         private ChatMessageHistory chatHistory;
@@ -185,9 +188,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             if (freeusers == null)
             {
-                freeusers = new Uri("https://rappen.github.io/Tools/Rappen.XTB.AI.Users.xml")
-                    .DownloadXml(new List<AiUser>())
-                    .ToList();
+                freeusers = XmlAtomicStore.DownloadXml<List<AiUser>>(GeneralSettingsURL, AiUsersFileName, Paths.SettingsPath);
             }
             return freeusers?.Any(u =>
                 u.ToolName == tool.ToolName &&
@@ -507,7 +508,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 {
                     if (MessageBoxEx.Show(fxb, message, title, MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
                     {
-                        Supporting.ShowIf(fxb, true, false, fxb.ai2);
+                        Supporting.ShowIf(fxb, ShowItFrom.Button, true, false, fxb.ai2, sync: true);
                     }
                 }
                 else if (!string.IsNullOrWhiteSpace(popup.HelpUrl))
@@ -684,7 +685,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void mnuSupporting_Click(object sender, EventArgs e)
         {
-            Supporting.ShowIf(fxb, true, false, fxb.ai2);
+            Supporting.ShowIf(fxb, ShowItFrom.Button, true, false, fxb.ai2, sync: true);
         }
 
         private void mnuDocs_Click(object sender, EventArgs e)

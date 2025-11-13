@@ -1,10 +1,8 @@
-﻿using McTools.Xrm.Connection;
-using Rappen.XTB.Helper;
+﻿using Rappen.XTB.Helpers;
 using Rappen.XTB.LCG;
 using System;
 using System.IO;
 using System.Windows.Forms;
-using System.Xml;
 
 namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
@@ -83,13 +81,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                     var lcgsettings = new LCG.Settings();
                     if (type == ".cs")
                     {
-                        lcgsettings = ConfigurationUtils.GetEmbeddedConfiguration<LCG.Settings>(ofd.FileName, lcgsettings.commonsettings.InlineConfigBegin, lcgsettings.commonsettings.InlineConfigEnd);
+                        lcgsettings = ConfigurationUtils.GetEmbeddedConfiguration<LCG.Settings>(ofd.FileName, lcgsettings.commonsettings.InlineConfigBegin, lcgsettings.commonsettings.InlineConfigEnd) ?? new LCG.Settings();
                     }
                     else if (type == ".xml")
                     {
-                        var document = new XmlDocument();
-                        document.Load(ofd.FileName);
-                        lcgsettings = (LCG.Settings)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(LCG.Settings));
+                        lcgsettings = XmlAtomicStore.Deserialize<LCG.Settings>(File.ReadAllText(ofd.FileName));
                     }
                     lcgsettings.SourceFile = ofd.FileName;
                     SetSettings(lcgsettings);

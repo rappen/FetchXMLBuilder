@@ -1,5 +1,6 @@
 ﻿using Cinteros.Xrm.FetchXmlBuilder.Properties;
 using McTools.Xrm.Connection;
+using Microsoft.Toolkit.Uwp.Notifications;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.Builder;
@@ -254,6 +255,15 @@ namespace Rappen.XTB.FetchXmlBuilder
             dockControlAiChat?.Close();
             SaveSetting();
             LogUse("Close", ai2: true);
+        }
+
+        public override void HandleToastActivation(ToastNotificationActivatedEventArgsCompat args)
+        {
+            if (Supporting.HandleToastActivation(this, args, ai2))
+            {
+                return;
+            }
+            base.HandleToastActivation(args);
         }
 
         public void ApplyState(object state)
@@ -592,7 +602,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             else
             {
-                Supporting.ShowIf(this, false, true, ai2);
+                Supporting.ShowIf(this, ShowItFrom.Open, false, true, ai2);
             }
             if (Supporting.IsEnabled(this))
             {
@@ -894,7 +904,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             };
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                XmlSerializerHelper.SerializeToFile(repository, sfd.FileName);
+                XmlAtomicStore.Serialize(repository, sfd.FileName);
                 MessageBox.Show($"The entire repository has been saved to file\n{sfd.FileName}", "Export repository", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -911,9 +921,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 try
                 {
-                    var document = new XmlDocument();
-                    document.Load(ofd.FileName);
-                    var repo = (QueryRepository)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(QueryRepository));
+                    var repo = XmlAtomicStore.Deserialize<QueryRepository>(ofd.FileName);
                     var reponame = Path.ChangeExtension(Path.GetFileName(ofd.FileName), "").Trim('.');
                     if (MessageBox.Show($"Confirm importing {repo.Queries.Count} queries into repository folder \"{reponame}\".", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
                     {
@@ -969,7 +977,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void tsbSupporting_Click(object sender, EventArgs e)
         {
-            Supporting.ShowIf(this, true, false, ai2);
+            Supporting.ShowIf(this, ShowItFrom.Button, true, false, ai2, sync: true);
         }
 
         private void reloadBySolutionToolStripMenuItem_Click(object sender, EventArgs e)
