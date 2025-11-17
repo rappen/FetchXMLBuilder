@@ -64,6 +64,23 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         {
             SettingsManager.Instance.Save(typeof(FetchXmlBuilder), this, "[Common]");
         }
+
+        internal void Migrate(string newVersionStr)
+        {
+            if (Version.TryParse(CurrentVersion, out var oldV) &&
+                Version.TryParse(newVersionStr, out var newV))
+            {
+                var threshold1 = new Version(1, 2025, 7, 1);
+                if (oldV <= threshold1 && newV > threshold1)
+                {
+#pragma warning disable 612, 618 // Use of obsolete member for one-time migration
+                    Layout.Enabled = Results.WorkWithLayout;
+#pragma warning restore 612, 618
+                }
+                CurrentVersion = newVersionStr;
+                SettingsManager.Instance.Save(typeof(FetchXmlBuilder), this, "[Common]");
+            }
+        }
     }
 
     public class ExecuteOptions
@@ -114,6 +131,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool LocalTime { get; set; }
         public bool CopyHeaders { get; set; } = true;
         public bool ExcelAdvanced { get; set; } = false;
+        public bool ExcelAddLinks { get; set; } = true;
         public bool AlwaysNewWindow { get; set; } = false;
         public bool QuickFilter { get; set; } = false;
         public bool PagingCookie { get; set; } = false;

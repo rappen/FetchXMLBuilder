@@ -525,24 +525,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
         }
 
-        private void MigrateAfterUpgrade(string oldVersionStr, string newVersionStr)
-        {
-            var hasold = Version.TryParse(oldVersionStr, out var oldVersion);
-            var hasnew = Version.TryParse(newVersionStr, out var newVersion);
-
-            if (hasold && hasnew)
-            {
-                // From 1.2025.7.1 > newer
-                var thresholdVersion = new Version(1, 2025, 7, 1);
-                var oldcompare = oldVersion.CompareTo(thresholdVersion);
-                var newcompare = newVersion.CompareTo(thresholdVersion);
-                if (oldcompare <= 0 && newcompare > 0)
-                {
-                    settings.Layout.Enabled = settings.Results.WorkWithLayout;
-                }
-            }
-        }
-
         #endregion Private Methods
 
         #region Private Event Handlers
@@ -598,11 +580,8 @@ namespace Rappen.XTB.FetchXmlBuilder
             var version = ass.Version.ToString();
             if (!version.Equals(settings.CurrentVersion))
             {
-                MigrateAfterUpgrade(settings.CurrentVersion, version);
-                // Reset some settings when new version is deployed
                 var oldversion = settings.CurrentVersion;
-                settings.CurrentVersion = version;
-                SettingsManager.Instance.Save(typeof(FetchXmlBuilder), settings, "[Common]");
+                settings.Migrate(version);
                 LogUse("ShowWelcome", ai2: true);
                 Welcome.ShowWelcome(this, oldversion);
             }
@@ -988,18 +967,12 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void reloadBySolutionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            bool showConfirmBox() =>
-                MessageBoxEx.Show(this,
-                    "Reloading all metadata may take a while  (10-300 secs) .\n\nDo you want to continue?",
-                    "Reload Metadata",
-                    MessageBoxButtons.OKCancel,
-                    MessageBoxIcon.Exclamation
-                ) == DialogResult.OK;
-
             RefreshMetadataOptions.Show(this, (bool ok, FilterSetting filter) =>
             {
                 if (!ok)
+                {
                     return;
+                }
                 RefreshEntities(filter);
             });
         }
