@@ -18,30 +18,26 @@ Before opening a PR:
 - [ ] No commented‑out dead code.
 - [ ] Exception handling follows section 3.
 - [ ] New public APIs have XML summaries.
-- [ ] No compressed multi‑statement one‑iners.
+- [ ] No compressed multi‑statement one‑liners.
 - [ ] Repeated logic extracted to helpers.
 
 ## 3. Exception Handling
 Always use braces for `try` / `catch`.
 
 Bad (compressed, hard to scan):
-
-```csharp
-try { DoWork(); } catch (IOException ex) { LogWarn("Optional file load failed", ex); }
-```
+    
+    try { DoWork(); } catch (IOException ex) { LogWarn("Optional file load failed", ex); }
 
 Good:
-
-```csharp
-try
-{
-    DoWork();
-}
-catch (IOException ex)
-{
-    LogWarn("Optional file load failed", ex);
-}
-```
+    
+    try
+    {
+        DoWork();
+    }
+    catch (IOException ex)
+    {
+        LogWarn("Optional file load failed", ex);
+    }
 
 Scope `try` blocks narrowly (only code that may throw).
 
@@ -51,20 +47,17 @@ Empty catch is allowed ONLY when:
 3. Logging is added if it aids diagnosis.
 
 Recommend (single harmless statement):
-```csharp
-try { LoadOptionalMetadata(); } catch { }
-```
+    
+    try { LoadOptionalMetadata(); } catch { }
 
-Empty `catch` should be in one line:
-```csharp
-try
-{
-    DoWork();
-    DoMoreStuff();
-}
-catch { }
-```
-
+Empty `catch` guarding a multi‑statement block should be one line:
+    
+    try
+    {
+        DoWork();
+        DoMoreStuff();
+    }
+    catch { }
 
 Forbidden:
 - `catch;` (invalid)
@@ -77,29 +70,25 @@ Prefer specific exceptions (e.g. `IOException`, `SqlException`) over broad `Exce
 Always use braces for `if`, `else`, `for`, `foreach`, `while`, `do`, `using`, `lock`, `switch` case blocks.
 
 Bad:
-
-```csharp
-if (ready) DoThing(); 
-if (condition) DoSomething(); else DoSomethingElse();
-```
+    
+    if (ready) DoThing();
+    if (condition) DoSomething(); else DoSomethingElse();
 
 Good:
-
-```csharp
-if (ready)
-{
-    DoThing();
-}
-
-if (condition)
-{
-    DoSomething();
-}
-else
-{
-    DoSomethingElse();
-}
-```
+    
+    if (ready)
+    {
+        DoThing();
+    }
+    
+    if (condition)
+    {
+        DoSomething();
+    }
+    else
+    {
+        DoSomethingElse();
+    }
 
 No multiple statements on one line.
 
@@ -176,207 +165,127 @@ Ternaries are allowed and encouraged when they:
 - Are not nested more than once.
 
 Good:
+    
+    var status   = isActive ? "Active" : "Inactive";
+    var logLevel = isDebug ? LogLevel.Debug : LogLevel.Info;
+    var result   = flag ? 42 : 0;
+    var message  = isError ? "Error" : "Success";
+    var display  = name != null ? name : "<unknown>";
+    var label    = customLabel ?? (isDefault ? "Default" : "Custom");
 
-```csharp
-var status = isActive ? "Active" : "Inactive";
-var logLevel = (isDebug ? LogLevel.Debug : LogLevel.Info);
+Avoid (rewrite with if/switch):
+    
+    var value = a ? b ? c : d : e;                      // nested ternary
+    var role  = isA ? "A" : isB ? "B" : isC ? "C" : "X"; // long chain
+    var y     = isDebug ? LogDebug(message) : LogInfo(message); // side effects
 
-var query = from e in entities
-            where e.IsActive
-            select new { e.Id, Name = e.FirstName + " " + e.LastName };
-```
-
-Bad:
-
-```csharp
-var x = condition ? DoSomething() : DoSomethingElse();
-var y = isDebug ? LogDebug(message) : LogInfo(message);
-```
-
-Prefer conditional expression for return/assignment when both arms are simple values or calls:
-```csharp
-var result = flag ? 42 : 0;
-var message = isError ? "Error" : "Success";
-```
-
+Prefer conditional expression for return/assignment when both arms are simple values or pure calls.
 Do not use ternaries for side-effect heavy logic—use `if/else`.
-
-Do not encode side effects in ternary arms; keep them for pure selection.
 
 ## 16. Example Patterns
 
 Early return:
-
-```csharp
-public bool Save()
-{
-    if (!Validate()) { return false; }
-
-    // ...save logic...
-
-    return true;
-}
-```
+    
+    public bool Save()
+    {
+        if (!Validate())
+        {
+            return false;
+        }
+    
+        // Save logic...
+        return true;
+    }
 
 Guarded extension:
-
-```csharp
-public static class EntityExtensions
-{
-    public static void SetName(this Entity entity, string name)
+    
+    public static class EntityExtensions
     {
-        if (entity == null) throw new ArgumentNullException(nameof(entity));
-        if (name == null) throw new ArgumentNullException(nameof(name));
-
-        entity["name"] = name;
+        public static void SetName(this Entity entity, string name)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            entity["name"] = name;
+        }
     }
-}
-```
 
 Safe invocation with logging:
-
-```csharp
-public static TResult SafeInvoke<T, TResult>(this T obj, Func<T, TResult> func, TResult defaultValue = default)
-{
-    try
+    
+    public static TResult SafeInvoke<T, TResult>(this T obj, Func<T, TResult> func, TResult defaultValue = default)
     {
-        return obj != null ? func(obj) : defaultValue;
+        try
+        {
+            return obj != null ? func(obj) : defaultValue;
+        }
+        catch (Exception ex)
+        {
+            LogError($"Error in {nameof(SafeInvoke)}: {ex.Message}", ex);
+            return defaultValue;
+        }
     }
-    catch (Exception ex)
-    {
-        LogError($"Error in {nameof(SafeInvoke)}: {ex.Message}", ex);
-        return defaultValue;
-    }
-}
-```
 
 UI invocation:
-
-```csharp
-public static void SafeInvoke(this Control control, Action action) { if (control.InvokeRequired) { control.Invoke(action); } else { action(); } }
-```
-
-String interpolation:
-
-```csharp
-public class Person
-{
-    private string _firstName;
-    private string _lastName;
-
-    public Person(string firstName, string lastName)
+    
+    public static void SafeInvoke(this Control control, Action action)
     {
-        _firstName = firstName;
-        _lastName = lastName;
-    }
-
-    public string FullName => $"{_firstName} {_lastName}";
-}
-
-private readonly string _name; public string Name => _name ?? "<unknown>";
-```
-
-Numeric check extension:
-
-```csharp
-public static class NumericExtensions
-{
-    public static bool IsNumeric(this string str)
-    {
-        if (string.IsNullOrWhiteSpace(str)) return false;
-        foreach (char c in str)
+        if (control.InvokeRequired)
         {
-            if (!char.IsDigit(c)) return false;
+            control.Invoke(action);
         }
-        return true;
+        else
+        {
+            action();
+        }
     }
-}
-
-public static bool IsNumeric(this string value) => int.TryParse(value, out _);
-```
-
-Try/catch for optional features:
-
-```csharp
-try
-{
-    // Some optional initialization
-}
-catch
-{
-    // Ignored: optional feature not critical to operation
-}
-
-try { PreloadCache(); } catch { // Ignored: cache warm-up is optional }
-```
-
-Empty `catch` guarding a multi‑statement block:
-```csharp
-try
-{
-    DoWork();
-    DoMoreStuff();
-}
-catch { }
-
-```
-
-Safe invoke (generic):
-
-```csharp
-public static TResult SafeInvoke<T, TResult>(this T obj, Func<T, TResult> func, TResult defaultValue = default)
-{
-    try
-    {
-        return obj != null ? func(obj) : defaultValue;
-    }
-    catch (Exception ex)
-    {
-        LogError($"Error in {nameof(SafeInvoke)}: {ex.Message}", ex);
-        return defaultValue;
-    }
-}
-```
 
 Expression-bodied property:
-
-Field with fallback:
-
-```csharp
-public class Person
-{
-    private string _firstName;
-    private string _lastName;
-
-    public Person(string firstName, string lastName)
+    
+    public class Person
     {
-        _firstName = firstName;
-        _lastName = lastName;
+        private string _firstName;
+        private string _lastName;
+    
+        public Person(string firstName, string lastName)
+        {
+            _firstName = firstName;
+            _lastName  = lastName;
+        }
+    
+        public string FullName => $"{_firstName} {_lastName}";
     }
-
-    public string FullName => $"{_firstName} {_lastName}";
-}
-
-private readonly string _name; public string Name => _name ?? "<unknown>";
-```
+    
+    private readonly string _name;
+    public string Name => _name ?? "<unknown>";
 
 Numeric check (manual and TryParse):
-```csharp
-public static class NumericExtensions
-{
-    public static bool IsNumeric(this string str)
+    
+    public static class NumericExtensions
     {
-        if (string.IsNullOrWhiteSpace(str)) return false;
-        foreach (char c in str)
+        public static bool IsNumeric(this string str)
         {
-            if (!char.IsDigit(c)) return false;
+            if (string.IsNullOrWhiteSpace(str)) return false;
+            foreach (char c in str)
+            {
+                if (!char.IsDigit(c)) return false;
+            }
+            return true;
         }
-        return true;
+    
+        public static bool IsNumericFast(this string value) => int.TryParse(value, out _);
     }
-}
 
-public static bool IsNumeric(this string value) => int.TryParse(value, out _);
-```
+Empty catch with rationale:
+    
+    try
+    {
+        // Optional initialization
+    }
+    catch
+    {
+        // Ignored: optional feature not critical to operation
+    }
+    
+    try { PreloadCache(); } catch { /* Ignored: cache warm-up is optional */ }
 
 ## 17. Updating These Guidelines
 Propose changes via PR including:
