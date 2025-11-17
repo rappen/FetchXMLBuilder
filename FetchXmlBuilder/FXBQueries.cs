@@ -7,6 +7,7 @@ using Rappen.XRM.Helpers.Serialization;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Settings;
+using Rappen.XTB.Helpers;
 using Rappen.XTB.Helpers.Extensions;
 using System;
 using System.Collections.Generic;
@@ -277,7 +278,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             qeFeed.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
             qeFeed.Criteria.AddCondition("cint_id", ConditionOperator.Equal, feedid);
             var feeds = RetrieveMultiple(qeFeed);
-            Entity feed = feeds.Entities.Count > 0 ? feeds.Entities[0] : null;
+            var feed = feeds.Entities.Count > 0 ? feeds.Entities[0] : null;
             return feed;
         }
 
@@ -364,6 +365,15 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 if (result is QueryInfo queryinfo)
                 {
+                    if (!this.IsShownAndActive())
+                    {
+                        ToastHelper.ToastIt(
+                            this,
+                            $"result-{settings.ExecuteOptions.ResultOutput}",
+                            $"FetchXML Builder executed.",
+                            $"Retrieved {queryinfo.Results.Entities.Count} records\nin {queryinfo.Elapsed.TotalSeconds:N2} seconds.\n\nClick to see result!",
+                            logo: "https://rappen.github.io/Tools/Images/FXB150.png");
+                    }
                     switch (settings.ExecuteOptions.ResultOutput)
                     {
                         case ResultOutput.Grid:

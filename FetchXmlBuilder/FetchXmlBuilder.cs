@@ -263,6 +263,12 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 return;
             }
+            var arguments = ToastArguments.Parse(args.Argument);
+            if (arguments.TryGetValue("action", out var action) && action == "default")
+            {
+                this.BringToolToFront(dockControlBuilder?.tvFetch);
+                return;
+            }
             base.HandleToastActivation(args);
         }
 
@@ -992,7 +998,8 @@ namespace Rappen.XTB.FetchXmlBuilder
 
             RefreshMetadataOptions.Show(this, (bool ok, FilterSetting filter) =>
             {
-                if (!ok) return;
+                if (!ok)
+                    return;
                 RefreshEntities(filter);
             });
         }
