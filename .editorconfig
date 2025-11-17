@@ -1,67 +1,51 @@
 root = true
 
 [*.cs]
-# Require braces and enforce Allman style
-csharp_prefer_braces = true:error
+# Require braces for control blocks
+csharp_prefer_braces = true:warning
+
+# Always new line for braces (Allman style)
 csharp_new_line_before_open_brace = all
 csharp_new_line_between_query_expression_clauses = true
 
 # Formatting preferences
 csharp_indent_case_contents = true
 csharp_indent_switch_labels = true
+
+# 'var' usage preferences
+csharp_style_var_for_built_in_types = true:warning
+csharp_style_var_when_type_is_apparent = true:warning
+csharp_style_var_elsewhere = true:warning
+
+# Keep us from collapsing multi-line constructs
 csharp_preserve_single_line_statements = false
 csharp_preserve_single_line_blocks = true
 
-# 'var' usage (your preference)
-csharp_style_var_for_built_in_types = true:warning
-csharp_style_var_when_type_is_apparent = true:error
-csharp_style_var_elsewhere = true:error
+# Encourage conditional (ternary) expressions where appropriate
+dotnet_style_prefer_conditional_expression_over_assignment = true:suggestion
+dotnet_style_prefer_conditional_expression_over_return = true:suggestion
+dotnet_diagnostic.IDE0045.severity = suggestion  # Use conditional expression for assignment
+dotnet_diagnostic.IDE0046.severity = suggestion  # Use conditional expression for return
+dotnet_diagnostic.IDE0054.severity = suggestion	 # No multi-statement one-liners
 
-# Disallow C# 8 "simple using" (prefer block with braces)
-csharp_prefer_simple_using_statement = false:error
+# String comparisons
+dotnet_style_string_comparison = true:suggestion
 
-# Discourage ternaries in favor of readable branching
-dotnet_style_prefer_conditional_expression_over_assignment = false:warning
-dotnet_style_prefer_conditional_expression_over_return = false:warning
-dotnet_diagnostic.IDE0045.severity = none   # Convert to conditional expression
-dotnet_diagnostic.IDE0046.severity = none   # Convert to conditional expression
+# Null checks and patterns
+dotnet_style_throw_expression = false
+dotnet_style_coalesce_expression = true:suggestion
 
-# Remove unused usings automatically flagged
-dotnet_diagnostic.IDE0005.severity = warning
+# Member ordering by kind
+dotnet_diagnostic.SA1201.severity = warning
+# Members ordered by access level
+dotnet_diagnostic.SA1202.severity = warning
+# Do not require a blank line after a closing brace
+dotnet_diagnostic.SA1513.severity = none
 
-# Prefer System usings first (for consistent cleanup/sorting)
-dotnet_sort_system_directives_first = true
-
-# StyleCop: member ordering already enabled
-dotnet_diagnostic.SA1201.severity = warning   # Members ordered by kind
-dotnet_diagnostic.SA1202.severity = warning   # Members ordered by access level
-
-# StyleCop: enforce braces not omitted
-dotnet_diagnostic.SA1503.severity = error     # Braces should not be omitted
-
-# StyleCop: one type per file (aligns with "Keep one public class per file")
-dotnet_diagnostic.SA1402.severity = warning   # File may only contain a single type
-
-# Prefer specific exceptions over broad Exception
-dotnet_diagnostic.CA1031.severity = warning   # Do not catch general exception types
+# Treat specific analyzers as warnings
+dotnet_diagnostic.IDE0011.severity = warning   # Add braces
+dotnet_diagnostic.IDE0063.severity = warning   # 'using' statement style
 
 # Optional: modifier order
 csharp_preferred_modifier_order = public, private, protected, internal, static, extern, new, virtual, abstract, sealed, override, readonly, unsafe, volatile, async:suggestion
 
-# Explicitly enforce "Add braces" analyzer as error too
-dotnet_diagnostic.IDE0011.severity = error
-
-# Naming: private fields as _camelCase
-dotnet_naming_rule.private_fields_should_be__camelCase.severity = warning
-dotnet_naming_rule.private_fields_should_be__camelCase.symbols = private_fields
-dotnet_naming_rule.private_fields_should_be__camelCase.style = prefixed_underscore_camel_case
-
-dotnet_naming_symbols.private_fields.applicable_kinds = field
-dotnet_naming_symbols.private_fields.applicable_accessibilities = private
-dotnet_naming_symbols.private_fields.required_modifiers =
-
-dotnet_naming_style.prefixed_underscore_camel_case.required_prefix = _
-dotnet_naming_style.prefixed_underscore_camel_case.capitalization = camel_case
-
-# Disable StyleCop rule that forbids underscores in member names (conflicts with your style)
-dotnet_diagnostic.SA1309.severity = none
