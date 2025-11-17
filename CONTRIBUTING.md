@@ -18,7 +18,7 @@ Before opening a PR:
 - [ ] No commented‑out dead code.
 - [ ] Exception handling follows section 3.
 - [ ] New public APIs have XML summaries.
-- [ ] No compressed multi‑statement one‑liners.
+- [ ] No compressed multi‑statement one‑iners.
 - [ ] Repeated logic extracted to helpers.
 
 ## 3. Exception Handling
@@ -50,10 +50,7 @@ Empty catch is allowed ONLY when:
 2. A comment explains why it is ignored.
 3. Logging is added if it aids diagnosis.
 
-Recommend:
-
-A simple `try` with only one statement and empty `catch` (no statement and no comment) should be on one line:
-
+Recommend (single harmless statement):
 ```csharp
 try { LoadOptionalMetadata(); } catch { }
 ```
@@ -72,7 +69,7 @@ catch { }
 Forbidden:
 - `catch;` (invalid)
 - Logic-heavy one-line: `try { if (x) A(); else B(); } catch { /* ignored */ }`
-- Swallowing recoverable exceptions that users should know about
+- Swallowing recoverable exceptions users should know about
 
 Prefer specific exceptions (e.g. `IOException`, `SqlException`) over broad `Exception` unless scope demands it.
 
@@ -168,52 +165,76 @@ Do NOT:
 - Use one-line `try/catch` with logic.
 - Silently swallow exceptions (no comment/log).
 - Rely on brittle `.Parent.Parent` chains (use ancestor search helpers).
-- Overuse nested ternaries—prefer readable branching.
+- Abuse nested ternaries—avoid more than one level.
 - Mix unrelated concerns in one method.
 
-## 15. Example Patterns
+## 15. Ternary (Conditional) Operator Usage
+Ternaries are allowed and encouraged when they:
+- Are a single, simple condition yielding clear alternative values.
+- Improve readability compared to a short `if/else`.
+- Have simple expressions on both sides (values or non-side-effect calls).
+- Are not nested more than once.
+
+Good:
+
+```csharp
+var status = isActive ? "Active" : "Inactive";
+var logLevel = (isDebug ? LogLevel.Debug : LogLevel.Info);
+
+var query = from e in entities
+            where e.IsActive
+            select new { e.Id, Name = e.FirstName + " " + e.LastName };
+```
+
+Bad:
+
+```csharp
+var x = condition ? DoSomething() : DoSomethingElse();
+var y = isDebug ? LogDebug(message) : LogInfo(message);
+```
+
+Prefer conditional expression for return/assignment when both arms are simple values or calls:
+```csharp
+var result = flag ? 42 : 0;
+var message = isError ? "Error" : "Success";
+```
+
+Do not use ternaries for side-effect heavy logic—use `if/else`.
+
+Do not encode side effects in ternary arms; keep them for pure selection.
+
+## 16. Example Patterns
 
 Early return:
+
 ```csharp
-public bool TryInitialize(Config config) 
+public bool Save()
 {
-    if (config == null)
-    {
-        return false;
-    }
-    if (!config.Enabled)
-    { 
-        return false;
-    }
-    InitializeCore(config);
+    if (!Validate()) { return false; }
+
+    // ...save logic...
+
     return true;
 }
 ```
 
 Guarded extension:
-```csharp
-public static IEnumerable<T> SafeSelect<T>(this IEnumerable<T> source, Func<T, bool> predicate)
-{
-    if (source == null) throw new ArgumentNullException(nameof(source));
-    if (predicate == null) throw new ArgumentNullException(nameof(predicate));
 
-    foreach (var item in source)
+```csharp
+public static class EntityExtensions
+{
+    public static void SetName(this Entity entity, string name)
     {
-        try
-        {
-            if (predicate(item)) yield return item;
-        }
-        catch (Exception ex)
-        {
-            LogError($"Error processing item in {nameof(SafeSelect)}: {ex.Message}", ex);
-        }
+        if (entity == null) throw new ArgumentNullException(nameof(entity));
+        if (name == null) throw new ArgumentNullException(nameof(name));
+
+        entity["name"] = name;
     }
 }
-
-public static bool BringToolToFront(this PluginControlBase control, Control focus = null) { if (control == null) { return false; } // Logic ... return true; }
 ```
 
-Safe invoke:
+Safe invocation with logging:
+
 ```csharp
 public static TResult SafeInvoke<T, TResult>(this T obj, Func<T, TResult> func, TResult defaultValue = default)
 {
@@ -227,11 +248,16 @@ public static TResult SafeInvoke<T, TResult>(this T obj, Func<T, TResult> func, 
         return defaultValue;
     }
 }
+```
 
+UI invocation:
+
+```csharp
 public static void SafeInvoke(this Control control, Action action) { if (control.InvokeRequired) { control.Invoke(action); } else { action(); } }
 ```
 
-Expression-bodied property:
+String interpolation:
+
 ```csharp
 public class Person
 {
@@ -251,6 +277,7 @@ private readonly string _name; public string Name => _name ?? "<unknown>";
 ```
 
 Numeric check extension:
+
 ```csharp
 public static class NumericExtensions
 {
@@ -268,7 +295,8 @@ public static class NumericExtensions
 public static bool IsNumeric(this string value) => int.TryParse(value, out _);
 ```
 
-Empty catch with rationale:
+Try/catch for optional features:
+
 ```csharp
 try
 {
@@ -282,8 +310,79 @@ catch
 try { PreloadCache(); } catch { // Ignored: cache warm-up is optional }
 ```
 
-## 16. Updating These Guidelines
-Propose changes via PR with reasoning (e.g. new async pattern, analyzer adoption). Keep this concise and enforceable.
+Empty `catch` guarding a multi‑statement block:
+```csharp
+try
+{
+    DoWork();
+    DoMoreStuff();
+}
+catch { }
+
+```
+
+Safe invoke (generic):
+
+```csharp
+public static TResult SafeInvoke<T, TResult>(this T obj, Func<T, TResult> func, TResult defaultValue = default)
+{
+    try
+    {
+        return obj != null ? func(obj) : defaultValue;
+    }
+    catch (Exception ex)
+    {
+        LogError($"Error in {nameof(SafeInvoke)}: {ex.Message}", ex);
+        return defaultValue;
+    }
+}
+```
+
+Expression-bodied property:
+
+Field with fallback:
+
+```csharp
+public class Person
+{
+    private string _firstName;
+    private string _lastName;
+
+    public Person(string firstName, string lastName)
+    {
+        _firstName = firstName;
+        _lastName = lastName;
+    }
+
+    public string FullName => $"{_firstName} {_lastName}";
+}
+
+private readonly string _name; public string Name => _name ?? "<unknown>";
+```
+
+Numeric check (manual and TryParse):
+```csharp
+public static class NumericExtensions
+{
+    public static bool IsNumeric(this string str)
+    {
+        if (string.IsNullOrWhiteSpace(str)) return false;
+        foreach (char c in str)
+        {
+            if (!char.IsDigit(c)) return false;
+        }
+        return true;
+    }
+}
+
+public static bool IsNumeric(this string value) => int.TryParse(value, out _);
+```
+
+## 17. Updating These Guidelines
+Propose changes via PR including:
+- The rationale (e.g. new async pattern, analyzer adoption, readability improvement).
+- Any required .editorconfig amendments.
+Keep additions concise and enforceable. Large stylistic shifts should be discussed first in an issue.
 
 ---
 Consistent adherence improves readability and lowers maintenance cost. Thank you!
