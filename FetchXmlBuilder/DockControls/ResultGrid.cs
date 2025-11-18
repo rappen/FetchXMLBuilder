@@ -7,8 +7,6 @@ using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Views;
 using Rappen.XTB.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
@@ -39,7 +37,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         internal void SetData(QueryInfo queryinfo)
         {
             this.queryinfo = queryinfo;
-            EntityCollection entities = queryinfo.Results;
+            var entities = queryinfo.Results;
             if (entities != null)
             {
                 this.EnsureVisible(form.dockContainer, form.settings.DockStates.ResultView);
@@ -102,7 +100,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             mnuSysCol.Checked = form.settings.Layout.Enabled ? false : form.settings.Results.SysColumns;
             mnuLocalTime.Checked = form.settings.Results.LocalTime;
             mnuCopyHeaders.Checked = form.settings.Results.CopyHeaders;
-            mnuExcelAdvanced.Checked = form.settings.Results.ExcelAdvanced;
             mnuExcelLinks.Checked = form.settings.Results.ExcelAddLinks;
             mnuQuickFilter.Checked = form.settings.Results.QuickFilter;
             mnuPagingCookie.Checked = form.settings.Results.PagingCookie;
@@ -197,13 +194,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 try
                 {
                     panSelectedDetails.Visible = false;
-                    Dictionary<string, string> details = crmGridView1.GetSelectedDetails();
+                    var details = crmGridView1.GetSelectedDetails();
                     var visibleit = !string.IsNullOrWhiteSpace(string.Join("", details.Select(d => d.Value)));
                     if (visibleit)
                     {
                         txtSelectedDetails.Text = string.Join(Environment.NewLine, details.Select(d => $"{d.Key}:\t{d.Value}"));
 
-                        using (Graphics g = this.CreateGraphics())
+                        using (var g = this.CreateGraphics())
                         {
                             var textSize = g.MeasureString(txtSelectedDetails.Text, txtSelectedDetails.Font).ToSize();
                             panSelectedDetails.Width = textSize.Width + 6;
@@ -248,7 +245,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             form.settings.Results.Id = mnuIdCol.Checked;
             form.settings.Results.LocalTime = mnuLocalTime.Checked;
             form.settings.Results.CopyHeaders = mnuCopyHeaders.Checked;
-            form.settings.Results.ExcelAdvanced = mnuExcelAdvanced.Checked;
             form.settings.Results.ExcelAddLinks = mnuExcelLinks.Checked;
             form.settings.Results.QuickFilter = mnuQuickFilter.Checked;
             form.settings.Results.PagingCookie = mnuPagingCookie.Checked;
@@ -262,9 +258,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        [Obsolete]
         private void RefreshData()
         {
+#pragma warning disable 612, 618 // Use of obsolete member for one-time migration
             if (panQuickFilter.Visible)
             {
                 crmGridView1.FilterColumns = crmGridView1.ColumnOrder;
@@ -274,6 +270,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 crmGridView1.FilterText = string.Empty;
             }
+#pragma warning restore 612, 618
             reloaded = true;
             crmGridView1.SuspendLayout();
             if (form.dockControlBuilder.LayoutXML == null)
@@ -406,13 +403,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             var temp1 = new ToolStripItem[mnuBehavior.DropDownItems.Count];
             mnuBehavior.DropDownItems.CopyTo(temp1, 0);
-            foreach (ToolStripItem item in temp1)
+            foreach (var item in temp1)
             {
                 ctxBehavior.DropDownItems.Add(item);
             }
             var temp2 = new ToolStripItem[mnuColumns.DropDownItems.Count];
             mnuColumns.DropDownItems.CopyTo(temp2, 0);
-            foreach (ToolStripItem item in temp2)
+            foreach (var item in temp2)
             {
                 ctxColumns.DropDownItems.Add(item);
             }
@@ -428,13 +425,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             var temp1 = new ToolStripItem[ctxBehavior.DropDownItems.Count];
             ctxBehavior.DropDownItems.CopyTo(temp1, 0);
-            foreach (ToolStripItem item in temp1)
+            foreach (var item in temp1)
             {
                 mnuBehavior.DropDownItems.Add(item);
             }
             var temp2 = new ToolStripItem[ctxColumns.DropDownItems.Count];
             ctxColumns.DropDownItems.CopyTo(temp2, 0);
-            foreach (ToolStripItem item in temp2)
+            foreach (var item in temp2)
             {
                 mnuColumns.DropDownItems.Add(item);
             }
@@ -499,7 +496,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             if (queryinfo.Query is FetchExpression fetchexpr)
             {
-                XmlDocument fetchdoc = fetchexpr.Query.ToXml();
+                var fetchdoc = fetchexpr.Query.ToXml();
                 var fetchnode = fetchdoc.SelectSingleNode("fetch") as XmlElement;
                 fetchnode.SetAttribute("page", page.ToString());
                 form.FetchResults(fetchdoc.OuterXml);
@@ -530,7 +527,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void mnuPage_Validated(object sender, EventArgs e)
         {
-            if (int.TryParse(mnuPage.Text, out int page) && page != queryinfo.PageNo)
+            if (int.TryParse(mnuPage.Text, out var page) && page != queryinfo.PageNo)
             {
                 RetrievePageNo(page);
             }

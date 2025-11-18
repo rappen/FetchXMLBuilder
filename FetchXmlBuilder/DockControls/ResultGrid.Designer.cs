@@ -50,8 +50,6 @@
             this.mnuBothNames = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuLocalTime = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuCopyHeaders = new System.Windows.Forms.ToolStripMenuItem();
-            this.excelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuExcelAdvanced = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuExcelLinks = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuQuickFilter = new System.Windows.Forms.ToolStripMenuItem();
@@ -243,7 +241,7 @@
             this.mnuBothNames,
             this.mnuLocalTime,
             this.mnuCopyHeaders,
-            this.excelToolStripMenuItem,
+            this.mnuExcelLinks,
             this.toolStripMenuItem1,
             this.mnuQuickFilter,
             this.mnuPagingCookie,
@@ -291,31 +289,15 @@
             this.mnuCopyHeaders.Text = "Copy with Headers";
             this.mnuCopyHeaders.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
-            // excelToolStripMenuItem
-            // 
-            this.excelToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuExcelAdvanced,
-            this.mnuExcelLinks});
-            this.excelToolStripMenuItem.Name = "excelToolStripMenuItem";
-            this.excelToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
-            this.excelToolStripMenuItem.Text = "Excel";
-            // 
-            // mnuExcelAdvanced
-            // 
-            this.mnuExcelAdvanced.CheckOnClick = true;
-            this.mnuExcelAdvanced.Name = "mnuExcelAdvanced";
-            this.mnuExcelAdvanced.Size = new System.Drawing.Size(196, 22);
-            this.mnuExcelAdvanced.Text = "Advanced export";
-            this.mnuExcelAdvanced.ToolTipText = "This is slower, but handles new-lines correctly";
-            this.mnuExcelAdvanced.Click += new System.EventHandler(this.chkGridOptions_Click);
-            // 
             // mnuExcelLinks
             // 
             this.mnuExcelLinks.CheckOnClick = true;
             this.mnuExcelLinks.Name = "mnuExcelLinks";
-            this.mnuExcelLinks.Size = new System.Drawing.Size(196, 22);
-            this.mnuExcelLinks.Text = "Include links to records";
-            this.mnuExcelLinks.Click += new System.EventHandler(this.chkGridOptions_Click);
+            this.mnuExcelLinks.Size = new System.Drawing.Size(228, 22);
+            this.mnuExcelLinks.Text = "Excel include links";
+            this.mnuExcelLinks.ToolTipText = "Check this to include all links we can find,\r\nthe main entity, and all related da" +
+    "ta as well.\r\nNote that this feature will make the integration\r\nto Excel a bit sl" +
+    "ower.";
             // 
             // toolStripMenuItem1
             // 
@@ -753,8 +735,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.Panel panSelectedDetails;
         private System.Windows.Forms.TextBox txtSelectedDetails;
-        private System.Windows.Forms.ToolStripMenuItem mnuExcelAdvanced;
-        private System.Windows.Forms.ToolStripMenuItem excelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mnuExcelLinks;
     }
 }
