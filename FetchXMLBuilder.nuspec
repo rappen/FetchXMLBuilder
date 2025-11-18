@@ -57,14 +57,13 @@ https://fetchxmlbuilder.com/releases/#$versionnumber$</releaseNotes>
 		<copyright>Copyright Jonas Rapp 2014-2025</copyright>
 		<tags>XrmToolBox Plugins FetchXML Builder</tags>
 		<dependencies>
-			<dependency id="XrmToolBox" version="1.2025.7.71" />
+			<dependency id="XrmToolBox" version="1.2025.10.74" />
 		</dependencies>
 	</metadata>
 	<files>
 		<file src="FetchXMLBuilder\bin\Release\Rappen.XTB.FXB.dll" target="lib\net472\Plugins" />
 		<file src="FetchXMLBuilder\bin\Release\Anthropic.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
 		<file src="FetchXMLBuilder\bin\Release\CSharpToJsonSchema.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
-		<file src="FetchXMLBuilder\bin\Release\Microsoft.Office.*.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
 		<file src="FetchXMLBuilder\bin\Release\OpenAI.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
 		<file src="FetchXMLBuilder\bin\Release\System.ClientModel.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
 		<file src="FetchXMLBuilder\bin\Release\System.Memory.Data.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />

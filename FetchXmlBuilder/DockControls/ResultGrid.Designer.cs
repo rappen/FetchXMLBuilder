@@ -50,7 +50,9 @@
             this.mnuBothNames = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuLocalTime = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuCopyHeaders = new System.Windows.Forms.ToolStripMenuItem();
+            this.excelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuExcelAdvanced = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuExcelLinks = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuQuickFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuPagingCookie = new System.Windows.Forms.ToolStripMenuItem();
@@ -241,7 +243,7 @@
             this.mnuBothNames,
             this.mnuLocalTime,
             this.mnuCopyHeaders,
-            this.mnuExcelAdvanced,
+            this.excelToolStripMenuItem,
             this.toolStripMenuItem1,
             this.mnuQuickFilter,
             this.mnuPagingCookie,
@@ -289,14 +291,31 @@
             this.mnuCopyHeaders.Text = "Copy with Headers";
             this.mnuCopyHeaders.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
+            // excelToolStripMenuItem
+            // 
+            this.excelToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuExcelAdvanced,
+            this.mnuExcelLinks});
+            this.excelToolStripMenuItem.Name = "excelToolStripMenuItem";
+            this.excelToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+            this.excelToolStripMenuItem.Text = "Excel";
+            // 
             // mnuExcelAdvanced
             // 
             this.mnuExcelAdvanced.CheckOnClick = true;
             this.mnuExcelAdvanced.Name = "mnuExcelAdvanced";
-            this.mnuExcelAdvanced.Size = new System.Drawing.Size(228, 22);
-            this.mnuExcelAdvanced.Text = "Advanced export to Excel";
+            this.mnuExcelAdvanced.Size = new System.Drawing.Size(196, 22);
+            this.mnuExcelAdvanced.Text = "Advanced export";
             this.mnuExcelAdvanced.ToolTipText = "This is slower, but handles new-lines correctly";
             this.mnuExcelAdvanced.Click += new System.EventHandler(this.chkGridOptions_Click);
+            // 
+            // mnuExcelLinks
+            // 
+            this.mnuExcelLinks.CheckOnClick = true;
+            this.mnuExcelLinks.Name = "mnuExcelLinks";
+            this.mnuExcelLinks.Size = new System.Drawing.Size(196, 22);
+            this.mnuExcelLinks.Text = "Include links to records";
+            this.mnuExcelLinks.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -361,7 +380,7 @@
             // 
             this.mnuIndexCol.CheckOnClick = true;
             this.mnuIndexCol.Name = "mnuIndexCol";
-            this.mnuIndexCol.Size = new System.Drawing.Size(180, 22);
+            this.mnuIndexCol.Size = new System.Drawing.Size(166, 22);
             this.mnuIndexCol.Text = "Index";
             this.mnuIndexCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
@@ -369,7 +388,7 @@
             // 
             this.mnuIdCol.CheckOnClick = true;
             this.mnuIdCol.Name = "mnuIdCol";
-            this.mnuIdCol.Size = new System.Drawing.Size(180, 22);
+            this.mnuIdCol.Size = new System.Drawing.Size(166, 22);
             this.mnuIdCol.Text = "Primary Key";
             this.mnuIdCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
@@ -377,7 +396,7 @@
             // 
             this.mnuNullCol.CheckOnClick = true;
             this.mnuNullCol.Name = "mnuNullCol";
-            this.mnuNullCol.Size = new System.Drawing.Size(180, 22);
+            this.mnuNullCol.Size = new System.Drawing.Size(166, 22);
             this.mnuNullCol.Text = "Without value";
             this.mnuNullCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
@@ -385,35 +404,35 @@
             // 
             this.mnuSysCol.CheckOnClick = true;
             this.mnuSysCol.Name = "mnuSysCol";
-            this.mnuSysCol.Size = new System.Drawing.Size(180, 22);
+            this.mnuSysCol.Size = new System.Drawing.Size(166, 22);
             this.mnuSysCol.Text = "System added";
             this.mnuSysCol.Click += new System.EventHandler(this.chkGridOptions_Click);
             // 
             // mnuResetLayout
             // 
             this.mnuResetLayout.Name = "mnuResetLayout";
-            this.mnuResetLayout.Size = new System.Drawing.Size(180, 22);
+            this.mnuResetLayout.Size = new System.Drawing.Size(166, 22);
             this.mnuResetLayout.Text = "Reset Layout";
             this.mnuResetLayout.Click += new System.EventHandler(this.mnuResetLayout_Click);
             // 
             // mnuShowAllCol
             // 
             this.mnuShowAllCol.Name = "mnuShowAllCol";
-            this.mnuShowAllCol.Size = new System.Drawing.Size(180, 22);
+            this.mnuShowAllCol.Size = new System.Drawing.Size(166, 22);
             this.mnuShowAllCol.Text = "Show All";
             this.mnuShowAllCol.Click += new System.EventHandler(this.mnuShowAllCol_Click);
             // 
             // mnuAutoSizeAll
             // 
             this.mnuAutoSizeAll.Name = "mnuAutoSizeAll";
-            this.mnuAutoSizeAll.Size = new System.Drawing.Size(180, 22);
+            this.mnuAutoSizeAll.Size = new System.Drawing.Size(166, 22);
             this.mnuAutoSizeAll.Text = "Auto Size All";
             this.mnuAutoSizeAll.Click += new System.EventHandler(this.mnuAutoSizeAll_Click);
             // 
             // mnuShowLayoutXML
             // 
             this.mnuShowLayoutXML.Name = "mnuShowLayoutXML";
-            this.mnuShowLayoutXML.Size = new System.Drawing.Size(180, 22);
+            this.mnuShowLayoutXML.Size = new System.Drawing.Size(166, 22);
             this.mnuShowLayoutXML.Text = "Show LayoutXML";
             this.mnuShowLayoutXML.Click += new System.EventHandler(this.mnuShowLayoutXML_Click);
             // 
@@ -735,5 +754,7 @@
         private System.Windows.Forms.Panel panSelectedDetails;
         private System.Windows.Forms.TextBox txtSelectedDetails;
         private System.Windows.Forms.ToolStripMenuItem mnuExcelAdvanced;
+        private System.Windows.Forms.ToolStripMenuItem excelToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnuExcelLinks;
     }
 }
