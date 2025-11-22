@@ -23,7 +23,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
     public partial class AiChatControl : WeifenLuo.WinFormsUI.Docking.DockContent
     {
         private const string GeneralSettingsURL = "https://rappen.github.io/Tools/";
-        private const string AiUsersFileName = "Rappen.XTB.AI.Settings.xml";
+        private const string AiUsersFileName = "Rappen.XTB.AI.Users.xml";
 
         private FetchXmlBuilder fxb;
         private AIAppInsights ai;

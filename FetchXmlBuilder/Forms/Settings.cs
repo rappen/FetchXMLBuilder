@@ -1,16 +1,16 @@
-﻿using Rappen.XTB.FetchXmlBuilder.AppCode;
+﻿using Rappen.AI.WinForm;
+using Rappen.XTB.FetchXmlBuilder.AppCode;
+using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using Rappen.XTB.FXB.Settings;
-using System;
-using System.Windows.Forms;
-using System.Linq;
-using Rappen.AI.WinForm;
 using Rappen.XTB.Helpers;
+using System;
 using System.Collections.Generic;
-using Rappen.XTB.FetchXmlBuilder.DockControls;
-using XrmToolBox.Extensibility;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+using XrmToolBox.Extensibility;
 
 namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
@@ -370,7 +370,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 }
                 else
                 {
-                    txtAiApiKey.Text = "To use the free provider, you have to submit a form only for Jonas to make sure you are not using gazillian tokens. Click the (i) button on the provider above!";
+                    txtAiApiKey.Text = "Click the (i) button on the provider above, fill in, submit, to get free AI by Jonas!";
                     picAiProvider.Tag = "FREE";
                     tt.SetToolTip(picAiProvider, $"Click to fill in the form to get free provider! at {OnlineSettings.Instance.AiSupport.UrlToUseForFree}");
                 }
