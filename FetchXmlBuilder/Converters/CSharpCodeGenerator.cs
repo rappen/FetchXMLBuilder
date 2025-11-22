@@ -383,7 +383,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
                 if (AnyAllFilterLinkEntity)
                 {
                     linkcode += $"var {linkname} = new LinkEntity{parms};{CRLF}";
-                    linkcode += $"{LineStart}.AnyAllFilterLinkEntity = {linkname};{CRLF}";
+                    linkcode += $"{LineStart}";
+                    if (LineStart == GetQueryObjectName(settings.QExStyle))
+                    {
+                        linkcode += $".Criteria";
+                    }
+                    linkcode += $".AnyAllFilterLinkEntity = {linkname};{CRLF}";
                 }
                 else
                 {
@@ -840,7 +845,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Converters
             var linkcodes = new List<string>();
             foreach (var link in linkEntities)
             {
-                string linkcode = GetLinkEntityOI(link, ownerName, indentslevel, ref namestree);
+                var linkcode = GetLinkEntityOI(link, ownerName, indentslevel, ref namestree);
                 linkcodes.Add(linkcode);
             }
             linkscode += string.Join($"{betweenchar}{CRLF}", linkcodes);
