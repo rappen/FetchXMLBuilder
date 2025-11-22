@@ -104,6 +104,12 @@ else
 
 No multiple statements on one line.
 
+But for 'if invoke needed' statements, it is totally okay with a one-line:
+```
+MethodInvoker mi = () => { fxb.dockControlBuilder.Init(fetch, null, false, "Query from AI", true); };
+if (InvokeRequired) Invoke(mi); else mi();
+```
+
 ## 5. Formatting & Layout
 - Auto-format before commit.
 - Avoid excess blank lines; use them to separate logical sections only.
