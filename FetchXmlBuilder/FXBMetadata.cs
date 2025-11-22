@@ -19,12 +19,24 @@ namespace Rappen.XTB.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder
     {
-        internal List<EntityMetadata> entities;
+        private bool allmetadataloaded = false;
         private static List<string> entityShitList = new List<string>();
+
+        internal List<EntityMetadata> entities;
         internal List<Entity> solutionentities;
         internal List<Guid> solutionattributes;
 
         internal bool BaseCacheLoaded => entities?.Count > 0;
+
+        internal bool AllMetadataLoaded
+        {
+            get => allmetadataloaded;
+            set
+            {
+                allmetadataloaded = value;
+                dockControlAiChat?.AllMetadataLoadedChanged(value);
+            }
+        }
 
         #region Internal Methods
 
@@ -342,7 +354,10 @@ namespace Rappen.XTB.FetchXmlBuilder
             var toLoad = entities.Where(c => c.GetAttributeValue<OptionSetValue>("componenttype").Value == 1).GroupBy(c => c.GetAttributeValue<Guid>("objectid")).Select(g => g.FirstOrDefault().GetAttributeValue<Guid>("objectid")).ToList();
 
             var total = toLoad.Count;
-            if (total == 0) return;
+            if (total == 0)
+            {
+                return;
+            }
 
             // 3) Kick off ONE WorkAsync to fetch them all
             WorkAsync(new WorkAsyncInfo
@@ -463,6 +478,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             working = true;
             entities = null;
+            AllMetadataLoaded = false;
             entityShitList = new List<string>();
             this.GetAllEntityMetadatas(SetAfterEntitiesLoaded, settings.TryMetadataCache, settings.WaitUntilMetadataLoaded || forcereload, forcereload);
         }
@@ -482,9 +498,10 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             MethodInvoker mi = delegate
             {
-                if (newEntityMetadata != null)
+                if (newEntityMetadata != null && newEntityMetadata.Count() > 0)
                 {
                     entities = newEntityMetadata.ToList();
+                    AllMetadataLoaded = true;
                     if (SendMessageToStatusBar != null)
                     {
                         SendMessageToStatusBar(this, new XrmToolBox.Extensibility.Args.StatusBarMessageEventArgs($"{(manually ? "Reloaded" : "Loaded")} {entities.Count} entities."));

@@ -38,6 +38,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private bool logconversation = false;
         private int manualcalls = 0; // Counts the number of calls made by the user in this session
         private static List<AiUser> freeusers;
+        private bool metadataavailable;
 
         #region Public Constructor
 
@@ -52,6 +53,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             fxb = fetchXmlBuilder;
             InitializeComponent();
             Initialize(neverprompt);
+            AllMetadataLoadedChanged(fxb.AllMetadataLoaded);
             EnableButtons();
         }
 
@@ -212,6 +214,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             Process.Start(fullurl);
         }
 
+        internal void AllMetadataLoadedChanged(bool allLoaded)
+        {
+            metadataavailable = allLoaded;
+            txtAiChat.Text = allLoaded ? string.Empty : "Please wait until all metadata is loaded before asking the AI chat.\nWe need to be able to provide some metadata (NO data!) to solve the issue more correctly.";
+            EnableButtons();
+        }
+
         #endregion Internal Methods
 
         #region Private Methods
@@ -230,7 +239,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void EnableButtons()
         {
-            var cancall = chatHistory != null && !string.IsNullOrWhiteSpace(chatHistory.ApiKey);
+            var cancall = chatHistory != null && !string.IsNullOrWhiteSpace(chatHistory.ApiKey) && metadataavailable;
             btnAiChatAsk.Enabled = cancall && !string.IsNullOrWhiteSpace(txtAiChat.Text);
             btnYes.Enabled = cancall && chatHistory?.HasDialog == true;
             btnExecute.Enabled = cancall;
@@ -242,6 +251,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void SendChatToAI(object sender, EventArgs e = null)
         {
+            if (metadataavailable != true)
+            {
+                MessageBoxEx.Show(fxb, "Please wait until all metadata is loaded before asking the AI chat.\nWe need to be able to provide some metadata (NO data!) to solve the issue more correctly.", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
             var text = string.Empty;
             var action = "Prompt";
             switch (sender)
@@ -448,7 +462,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 {
                     var aimeta = fxb.AttributesForAi(entityName, true);
 
-                    if (aimeta.Count == 0) return $"There is no table called '{entityName}'. Call the GetMetadataForUnknownEntity tool first to get the correct table name.";
+                    if (aimeta.Count == 0)
+                    {
+                        return $"There is no table called '{entityName}'. Call the GetMetadataForUnknownEntity tool first to get the correct table name.";
+                    }
 
                     metaAttributes[entityName] = aimeta;
                 }
@@ -484,7 +501,15 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             lastquery = fetch;
             MethodInvoker mi = () => { fxb.dockControlBuilder.Init(fetch, null, false, "Query from AI", true); };
-            if (InvokeRequired) Invoke(mi); else mi();
+            if (InvokeRequired)
+            {
+                Invoke(mi);
+            }
+            else
+            {
+                mi();
+            }
+
             Log($"Query-Change", msg: fetch);
         }
 
