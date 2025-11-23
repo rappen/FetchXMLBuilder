@@ -240,7 +240,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                                 break;
 
                             case AttributeTypeCode.DateTime:
-                                if (!DateTime.TryParse(value, out DateTime _))
+                                if (!DateTime.TryParse(value, out var _))
                                 {
                                     return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires date value");
                                 }
@@ -252,12 +252,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                             case AttributeTypeCode.Picklist:
                             case AttributeTypeCode.BigInt:
                             case AttributeTypeCode.EntityName:
-                                if (!int.TryParse(value, out int _))
+                                if (!int.TryParse(value, out var _))
                                 {
                                     if (oper.IsMultipleValuesType && !string.IsNullOrWhiteSpace(value))
                                     {
                                         var split = value.Split(',');
-                                        if (split.Any(v => !int.TryParse(v.Trim(), out int _)))
+                                        if (split.Any(v => !int.TryParse(v.Trim(), out var _)))
                                         {
                                             return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires whole number values separated by commas");
                                         }
@@ -272,7 +272,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                             case AttributeTypeCode.Decimal:
                             case AttributeTypeCode.Double:
                             case AttributeTypeCode.Money:
-                                if (!decimal.TryParse(value, out decimal _))
+                                if (!decimal.TryParse(value, out var _))
                                 {
                                     return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires decimal value");
                                 }
@@ -282,7 +282,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                             case AttributeTypeCode.Customer:
                             case AttributeTypeCode.Owner:
                             case AttributeTypeCode.Uniqueidentifier:
-                                if (!Guid.TryParse(value, out Guid _))
+                                if (!Guid.TryParse(value, out var _))
                                 {
                                     return new ControlValidationResult(ControlValidationLevel.Error, "Operator " + oper.ToString() + " requires a proper guid with format: " + Guid.Empty.ToString());
                                 }
@@ -434,9 +434,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             {
                 if (!fxb.working)
                 {
-                    fxb.LoadEntityDetails(entityName, RefreshAttributes);
+                    fxb.LoadEntityDetails(entityName, null, false);
                 }
-                return;
+                else
+                {
+                    return;
+                }
             }
             BeginInit();
             var attributes = fxb.GetDisplayAttributes(entityName);
@@ -495,7 +498,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 {
                     if (!fxb.working)
                     {
-                        fxb.LoadEntityDetails(entityName, RefreshAttributes);
+                        fxb.LoadEntityDetails(entityName, null, false);
+                        RefreshAttributes();
                     }
                     return;
                 }
@@ -635,7 +639,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 else if (fxb.settings.UseLookup
                     && (attributeMetadata is LookupAttributeMetadata
                         || attributeMetadata.AttributeType == AttributeTypeCode.Uniqueidentifier)
-                    && Guid.TryParse(cmbValue.Text, out Guid id) && !Guid.Empty.Equals(id))
+                    && Guid.TryParse(cmbValue.Text, out var id) && !Guid.Empty.Equals(id))
                 {
                     var loookuptargets = new List<string>();
                     if (!string.IsNullOrWhiteSpace(txtUitype.Text))
@@ -727,7 +731,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             else if (valueType == AttributeTypeCode.DateTime)
             {
                 panValue.Visible = !rbDatePicker.Checked;
-                dtPicker.Value = DateTime.TryParse(cmbValue.Text, out DateTime dt) ? dt : DateTime.Now;
+                dtPicker.Value = DateTime.TryParse(cmbValue.Text, out var dt) ? dt : DateTime.Now;
                 panDateSelector.Visible = true;
                 panDatePicker.Visible = rbDatePicker.Checked;
             }

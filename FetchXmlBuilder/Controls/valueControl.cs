@@ -38,13 +38,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             {
                 if (!fxb.working)
                 {
-                    fxb.LoadEntityDetails(_entityName, RefreshValues);
+                    fxb.LoadEntityDetails(_entityName, null, false);
                 }
             }
-            else
-            {
-                RefreshValues();
-            }
+            RefreshValues();
         }
 
         private void RefreshValues()

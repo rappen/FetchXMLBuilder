@@ -47,7 +47,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             {
                 if (!fxb.working)
                 {
-                    fxb.LoadEntityDetails(parententityname, RefreshRelationships);
+                    fxb.LoadEntityDetails(parententityname, null, false);
+                    RefreshRelationships();
                 }
             }
             else
