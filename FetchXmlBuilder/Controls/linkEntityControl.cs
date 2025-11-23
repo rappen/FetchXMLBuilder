@@ -69,7 +69,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             {
                 if (!fxb.working)
                 {
-                    fxb.LoadEntityDetails(entity, RefreshAttributes);
+                    fxb.LoadEntityDetails(entity, null, false);
+                    RefreshAttributes();
                 }
             }
             else
