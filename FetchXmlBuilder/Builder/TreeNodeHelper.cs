@@ -127,9 +127,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                     {
                         text += " top:" + attributes["top"];
                     }
-                    if (attributes.ContainsKey("count"))
+                    if (attributes.ContainsKey("distinct") && attributes["distinct"] == "true")
                     {
-                        text += " cnt:" + attributes["count"];
+                        text += " dist";
                     }
                     if (attributes.ContainsKey("returntotalrecordcount") && attributes["returntotalrecordcount"] == "true")
                     {
@@ -139,9 +139,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                     {
                         text += " aggr";
                     }
-                    if (attributes.ContainsKey("distinct") && attributes["distinct"] == "true")
+                    if (attributes.ContainsKey("count"))
                     {
-                        text += " dist";
+                        text += " cnt:" + attributes["count"];
                     }
                     if (attributes.ContainsKey("page"))
                     {
@@ -579,16 +579,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
             else
             {
                 newNode = parentXmlNode.OwnerDocument.CreateElement(currentNode.Name);
-                foreach (string key in collec.Keys)
+                foreach (var key in collec.Keys)
                 {
                     if (key == "#text")
                     {
-                        XmlText newText = parentXmlNode.OwnerDocument.CreateTextNode(collec[key]);
+                        var newText = parentXmlNode.OwnerDocument.CreateTextNode(collec[key]);
                         newNode.AppendChild(newText);
                     }
                     else
                     {
-                        XmlAttribute attr = parentXmlNode.OwnerDocument.CreateAttribute(key);
+                        var attr = parentXmlNode.OwnerDocument.CreateAttribute(key);
                         attr.Value = collec[key];
                         newNode.Attributes.Append(attr);
                     }
@@ -601,7 +601,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                     others.Add(childNode);
                 }
 
-                foreach (TreeNode otherNode in others)
+                foreach (var otherNode in others)
                 {
                     AddXmlNode(otherNode, newNode);
                 }
