@@ -276,6 +276,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
         private static ControlValidationResult ValidateOrder(TreeNode node, FetchXmlBuilder fxb)
         {
             var attribute = node.Value("attribute");
+            var entityname = node.Value("entityname");
             var alias = node.Value("alias");
             if (node.IsFetchAggregate())
             {
@@ -306,7 +307,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                 if (fxb.GetAttribute(parententity, attribute) is AttributeMetadata metaatt)
                 {
                 }
-                else
+                else if (string.IsNullOrWhiteSpace(entityname))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Warning, $"Order Attribute '{attribute}' is not in the table '{parententity}'.");
                 }
@@ -332,23 +333,33 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
             var entity = parent.Value("name");
 
             if (string.IsNullOrWhiteSpace(entity))
+            {
                 return true;
+            }
 
             if (fxb == null || fxb.entities == null)
+            {
                 return true;
+            }
 
             if (!(fxb.GetEntity(entity) is EntityMetadata metadata))
+            {
                 return true;
+            }
 
             if (string.IsNullOrWhiteSpace(metadata.PrimaryIdAttribute))
+            {
                 return true;
+            }
 
             var attr = parent.Nodes.OfType<TreeNode>()
                 .Where(n => n.Name == "attribute" && n.Value("name") == metadata.PrimaryIdAttribute)
                 .FirstOrDefault();
 
             if (attr != null)
+            {
                 return true;
+            }
 
             return false;
         }

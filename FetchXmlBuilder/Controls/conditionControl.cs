@@ -395,24 +395,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             }
         }
 
-        private List<EntityNode> GetEntities(TreeNode node, bool needsalias)
-        {
-            var result = new List<EntityNode>();
-            if (node.HeritanceOfFilter())
-            {
-                return result;
-            }
-            if (node.Name == "link-entity" && (!needsalias || !string.IsNullOrWhiteSpace(node.Value("alias"))))
-            {
-                result.Add(new EntityNode(node));
-            }
-            foreach (TreeNode child in node.Nodes)
-            {
-                result.AddRange(GetEntities(child, needsalias));
-            }
-            return result;
-        }
-
         private void RefreshAttributes()
         {
             if (!IsInitialized)
@@ -551,7 +533,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             if (closestEntity != null && closestEntity.Name == "entity")
             {
                 cmb.Items.Add("");
-                cmb.Items.AddRange(GetEntities(Tree.tvFetch.Nodes[0], needsalias).ToArray());
+                cmb.Items.AddRange(TreeNodeHelper.GetEntities(Tree.tvFetch.Nodes[0], needsalias).ToArray());
             }
             cmb.Enabled = cmb.Items.Count > 1;
             if (cmb.Parent is Panel pan)

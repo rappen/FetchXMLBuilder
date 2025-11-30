@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.FetchXML;
+using Rappen.XTB.FetchXmlBuilder.ControlsClasses;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using System;
@@ -267,11 +268,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
 
                 case "order":
                     {
+                        var order = string.Empty;
                         var attr = node.Value("attribute");
-                        var desc = node.Value("descending");
                         if (!string.IsNullOrEmpty(alias))
                         {
-                            text += " " + alias;
+                            order += alias;
                         }
                         else if (!string.IsNullOrEmpty(attr))
                         {
@@ -280,13 +281,19 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                                 attr = fxb.GetAttributeDisplayName(ordentity, attr);
                             }
                             {
-                                text += " " + attr;
+                                order += attr;
                             }
                         }
+                        var desc = node.Value("descending");
                         if (desc == "true")
                         {
-                            text += " Desc";
+                            order += " Desc";
                         }
+                        if (node.Value("entityname") is string entityalias && !string.IsNullOrEmpty(entityalias))
+                        {
+                            order = entityalias + "." + order;
+                        }
+                        text += " " + order;
                     }
                     break;
 
@@ -304,7 +311,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
             text = text.Trim();
             if (FetchXmlBuilder.friendlyNames && !string.IsNullOrEmpty(text))
             {
-                text = text.Substring(0, 1).ToUpper() + text.Substring(1);
+                text = text.ToTitleCase();
             }
             if (string.IsNullOrWhiteSpace(text))
             {
@@ -711,6 +718,24 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                 return collec[attribute];
             }
             return null;
+        }
+
+        internal static List<EntityNode> GetEntities(TreeNode node, bool needsalias)
+        {
+            var result = new List<EntityNode>();
+            if (node.HeritanceOfFilter())
+            {
+                return result;
+            }
+            if (node.Name == "link-entity" && (!needsalias || !string.IsNullOrWhiteSpace(node.Value("alias"))))
+            {
+                result.Add(new EntityNode(node));
+            }
+            foreach (TreeNode child in node.Nodes)
+            {
+                result.AddRange(GetEntities(child, needsalias));
+            }
+            return result;
         }
     }
 }
