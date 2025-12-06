@@ -411,7 +411,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             {
                 return;
             }
-            entityName = entityNode.EntityName;
+            entityName = entityNode.LogicalName;
             if (fxb.NeedToLoadEntity(entityName))
             {
                 if (!fxb.working)
@@ -475,7 +475,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 {
                     aliasNode = new EntityNode(Node.LocalEntityNode());
                 }
-                var entityName = aliasNode.EntityName;
+                var entityName = aliasNode.LogicalName;
                 if (fxb.NeedToLoadEntity(entityName))
                 {
                     if (!fxb.working)
@@ -533,7 +533,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             if (closestEntity != null && closestEntity.Name == "entity")
             {
                 cmb.Items.Add("");
-                cmb.Items.AddRange(TreeNodeHelper.GetEntities(Tree.tvFetch.Nodes[0], needsalias).ToArray());
+                cmb.Items.AddRange(fxb.dockControlBuilder?.GetEntityNodes(needsalias: needsalias, excludefromfilter: true).ToArray());
             }
             cmb.Enabled = cmb.Items.Count > 1;
             if (cmb.Parent is Panel pan)
@@ -690,7 +690,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                     if (attrmeta.IsLogical == false)
                     {
                         var entitynode = new EntityNode(Node.LocalEntityNode());
-                        dlgLookup.LogicalName = entitynode.EntityName;
+                        dlgLookup.LogicalName = entitynode.LogicalName;
                     }
                     else if (attrmeta.LogicalName.EndsWith("addressid"))
                     {

@@ -31,7 +31,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         protected override void PopulateControls()
         {
-            SetEntitiesAliases(cmbEntity, false);
+            SetEntitiesAliases(cmbEntity);
             var aggregate = Node.IsFetchAggregate();
             cmbAttribute.Items.Clear();
             cmbAlias.Items.Clear();
@@ -64,7 +64,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             {
                 return;
             }
-            entityName = entityNode.EntityName;
+            entityName = entityNode.LogicalName;
             if (fxb.NeedToLoadEntity(entityName))
             {
                 if (!fxb.working)
@@ -84,14 +84,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             EndInit();
         }
 
-        private void SetEntitiesAliases(ComboBox cmb, bool needsalias)
+        private void SetEntitiesAliases(ComboBox cmb)
         {
             cmb.Items.Clear();
             var closestEntity = Node.LocalEntityNode();
             if (closestEntity != null && closestEntity.Name == "entity")
             {
                 cmb.Items.Add("");
-                cmb.Items.AddRange(TreeNodeHelper.GetEntities(Tree.tvFetch.Nodes[0], needsalias).ToArray());
+                cmb.Items.AddRange(fxb.dockControlBuilder?.GetEntityNodes(needsalias: true, excludefromfilter: true)?.ToArray());
             }
             cmb.Enabled = cmb.Items.Count > 1;
             if (cmb.Parent is Panel pan)

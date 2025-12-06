@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
 using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.FetchXML;
-using Rappen.XTB.FetchXmlBuilder.ControlsClasses;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using System;
@@ -718,24 +717,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
                 return collec[attribute];
             }
             return null;
-        }
-
-        internal static List<EntityNode> GetEntities(TreeNode node, bool needsalias)
-        {
-            var result = new List<EntityNode>();
-            if (node.HeritanceOfFilter())
-            {
-                return result;
-            }
-            if (node.Name == "link-entity" && (!needsalias || !string.IsNullOrWhiteSpace(node.Value("alias"))))
-            {
-                result.Add(new EntityNode(node));
-            }
-            foreach (TreeNode child in node.Nodes)
-            {
-                result.AddRange(GetEntities(child, needsalias));
-            }
-            return result;
         }
     }
 }

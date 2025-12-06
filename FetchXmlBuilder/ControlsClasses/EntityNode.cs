@@ -7,7 +7,9 @@ namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
     {
         #region Public Fields
 
-        public string EntityName;
+        public TreeNode Node { get; }
+        public string LogicalName { get; }
+        public string Alias { get; }
 
         #endregion Public Fields
 
@@ -21,19 +23,17 @@ namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
 
         public EntityNode(TreeNode node)
         {
-            EntityName = node.Value("name");
-            var alias = node.Value("alias");
-            name = !string.IsNullOrEmpty(alias) ? alias : EntityName;
+            Node = node;
+            LogicalName = node.Value("name");
+            Alias = node.Value("alias");
+            name = !string.IsNullOrEmpty(Alias) ? Alias : LogicalName;
         }
 
         #endregion Public Constructors
 
         #region Public Methods
 
-        public override string ToString()
-        {
-            return name;
-        }
+        public override string ToString() => name;
 
         #endregion Public Methods
     }

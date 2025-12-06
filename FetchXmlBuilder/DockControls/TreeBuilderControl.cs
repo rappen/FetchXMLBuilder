@@ -6,6 +6,7 @@ using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XRM.Helpers.Interfaces;
 using Rappen.XTB.FetchXmlBuilder.Builder;
 using Rappen.XTB.FetchXmlBuilder.Controls;
+using Rappen.XTB.FetchXmlBuilder.ControlsClasses;
 using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Forms;
 using Rappen.XTB.FetchXmlBuilder.Views;
@@ -201,6 +202,32 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 .FirstOrDefault(n => n.Name == "entity")?
                 .Nodes.Cast<TreeNode>()?
                 .FirstOrDefault(n => n.Name == "attribute" && n.Value("name") == PrimaryIdName);
+
+        internal List<EntityNode> GetEntityNodes(TreeNode node = null, bool needsalias = false, bool excludefromfilter = false)
+        {
+            if (node == null)
+            {
+                node = tvFetch.Nodes[0];
+            }
+            var result = new List<EntityNode>();
+            if (node == null)
+            {
+                return result;
+            }
+            if (excludefromfilter && node.HeritanceOfFilter())
+            {
+                return result;
+            }
+            if (node.Name == "link-entity" && (!needsalias || !string.IsNullOrWhiteSpace(node.Value("alias"))))
+            {
+                result.Add(new EntityNode(node));
+            }
+            foreach (TreeNode child in node.Nodes)
+            {
+                result.AddRange(GetEntityNodes(child, needsalias, excludefromfilter));
+            }
+            return result;
+        }
 
         private int GetUniqueLinkEntitySuffix(TreeNode entity)
         {
@@ -515,7 +542,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             XmlNode rootNode = doc.CreateElement("root");
             doc.AppendChild(rootNode);
             TreeNodeHelper.AddXmlNode(node, rootNode);
-            XDocument xdoc = XDocument.Parse(rootNode.InnerXml);
+            var xdoc = XDocument.Parse(rootNode.InnerXml);
             var result = xdoc.ToString();
             return result;
         }
@@ -586,7 +613,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private void HandleNodeMenuClick(string ClickedTag)
         {
             if (ClickedTag == null || ClickedTag == "Add")
+            {
                 return;
+            }
+
             TreeNode updateNode = null;
             if (ClickedTag == "Delete")
             {
@@ -696,7 +726,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
 
                 ctrl = null;
-                Control existingControl = panelContainer.Controls.Count > 0 ? panelContainer.Controls[0] : null;
+                var existingControl = panelContainer.Controls.Count > 0 ? panelContainer.Controls[0] : null;
                 if (node != null)
                 {
                     TreeNodeHelper.AddContextMenu(node, this, fxb.settings.QueryOptions);
@@ -746,7 +776,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                                     }
                                     break;
                                 }
-                                AttributeMetadata[] attributes = fxb.GetDisplayAttributes(entity).ToArray();
+                                var attributes = fxb.GetDisplayAttributes(entity).ToArray();
                                 if (node.Name == "attribute")
                                 {
                                     ctrl = new attributeControl(node, attributes, fxb, this);
@@ -787,7 +817,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     ctrl.BringToFront();
                     ctrl.Dock = DockStyle.Top;
                 }
-                if (existingControl != null) panelContainer.Controls.Remove(existingControl);
+                if (existingControl != null)
+                {
+                    panelContainer.Controls.Remove(existingControl);
+                }
+
                 fxb.ShowMetadata(ctrl?.Metadata());
             }
             ManageMenuDisplay();
@@ -852,7 +886,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void ManageMenuDisplay()
         {
-            TreeNode selectedNode = tvFetch.SelectedNode;
+            var selectedNode = tvFetch.SelectedNode;
             moveUpToolStripMenuItem.Enabled = selectedNode != null && selectedNode.Parent != null &&
                                             selectedNode.Index != 0;
             moveDownToolStripMenuItem.Enabled = selectedNode != null && selectedNode.Parent != null &&
@@ -898,7 +932,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 var i = 0;
                 while (i < entityNode.Nodes.Count)
                 {   // Remove unselected previously added attributes
-                    TreeNode subnode = entityNode.Nodes[i];
+                    var subnode = entityNode.Nodes[i];
                     var attributename = subnode.Value("name");
                     if (subnode.Name == "attribute" && !selectedAttributes.Contains(attributename))
                     {
@@ -1019,13 +1053,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             moveDownToolStripMenuItem.Enabled = false;
             fxb.working = true;
-            TreeNode tnmNode = tvFetch.SelectedNode;
-            TreeNode tnmNextNode = tnmNode.NextNode;
+            var tnmNode = tvFetch.SelectedNode;
+            var tnmNextNode = tnmNode.NextNode;
             if (tnmNextNode != null)
             {
-                int idxBegin = tnmNode.Index;
-                int idxEnd = tnmNextNode.Index;
-                TreeNode tnmNodeParent = tnmNode.Parent;
+                var idxBegin = tnmNode.Index;
+                var idxEnd = tnmNextNode.Index;
+                var tnmNodeParent = tnmNode.Parent;
                 if (tnmNodeParent != null)
                 {
                     tnmNode.Remove();
@@ -1045,13 +1079,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             moveUpToolStripMenuItem.Enabled = false;
             fxb.working = true;
-            TreeNode tnmNode = tvFetch.SelectedNode;
-            TreeNode tnmPreviousNode = tnmNode.PrevNode;
+            var tnmNode = tvFetch.SelectedNode;
+            var tnmPreviousNode = tnmNode.PrevNode;
             if (tnmPreviousNode != null)
             {
-                int idxBegin = tnmNode.Index;
-                int idxEnd = tnmPreviousNode.Index;
-                TreeNode tnmNodeParent = tnmNode.Parent;
+                var idxBegin = tnmNode.Index;
+                var idxEnd = tnmPreviousNode.Index;
+                var tnmNodeParent = tnmNode.Parent;
                 if (tnmNodeParent != null)
                 {
                     tnmNode.Remove();
