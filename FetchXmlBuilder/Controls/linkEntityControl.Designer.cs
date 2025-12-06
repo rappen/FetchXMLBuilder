@@ -28,6 +28,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(linkEntityControl));
             this.label2 = new System.Windows.Forms.Label();
             this.cmbEntity = new System.Windows.Forms.ComboBox();
@@ -43,11 +44,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.cmbRelationship = new System.Windows.Forms.ComboBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.chkOnlyLpks = new System.Windows.Forms.CheckBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.picAliasRegen = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.picAliasRegen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -173,7 +177,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtAlias.Location = new System.Drawing.Point(7, 214);
             this.txtAlias.Name = "txtAlias";
-            this.txtAlias.Size = new System.Drawing.Size(214, 20);
+            this.txtAlias.Size = new System.Drawing.Size(192, 20);
             this.txtAlias.TabIndex = 6;
             this.txtAlias.Tag = "alias";
             // 
@@ -222,18 +226,29 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.cmbRelationship.SelectedIndexChanged += new System.EventHandler(this.cmbRelationship_SelectedIndexChanged);
             this.cmbRelationship.DropDownClosed += new System.EventHandler(this.cmbRelationship_DropDownClosed);
             // 
-            // pictureBox2
+            // chkOnlyLpks
             // 
-            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(69, 2);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(14, 14);
-            this.pictureBox2.TabIndex = 48;
-            this.pictureBox2.TabStop = false;
-            this.pictureBox2.Tag = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml/joi" +
-    "n-tables";
-            this.pictureBox2.Click += new System.EventHandler(this.helpIcon_Click);
+            this.chkOnlyLpks.AutoSize = true;
+            this.chkOnlyLpks.Location = new System.Drawing.Point(7, 268);
+            this.chkOnlyLpks.Name = "chkOnlyLpks";
+            this.chkOnlyLpks.Size = new System.Drawing.Size(186, 17);
+            this.chkOnlyLpks.TabIndex = 50;
+            this.chkOnlyLpks.Text = "Show only Lookups/IDs attributes";
+            this.chkOnlyLpks.UseVisualStyleBackColor = true;
+            this.chkOnlyLpks.CheckedChanged += new System.EventHandler(this.rbAttr_CheckedChanged);
+            // 
+            // picAliasRegen
+            // 
+            this.picAliasRegen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.picAliasRegen.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picAliasRegen.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_redo_16;
+            this.picAliasRegen.Location = new System.Drawing.Point(226, 216);
+            this.picAliasRegen.Name = "picAliasRegen";
+            this.picAliasRegen.Size = new System.Drawing.Size(16, 16);
+            this.picAliasRegen.TabIndex = 51;
+            this.picAliasRegen.TabStop = false;
+            this.toolTip1.SetToolTip(this.picAliasRegen, "Click this to regenerate the alias by your options.");
+            this.picAliasRegen.Click += new System.EventHandler(this.picAliasRegen_Click);
             // 
             // pictureBox1
             // 
@@ -248,21 +263,24 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
     "erence/link-entity#link-type-options";
             this.pictureBox1.Click += new System.EventHandler(this.helpIcon_Click);
             // 
-            // chkOnlyLpks
+            // pictureBox2
             // 
-            this.chkOnlyLpks.AutoSize = true;
-            this.chkOnlyLpks.Location = new System.Drawing.Point(7, 268);
-            this.chkOnlyLpks.Name = "chkOnlyLpks";
-            this.chkOnlyLpks.Size = new System.Drawing.Size(186, 17);
-            this.chkOnlyLpks.TabIndex = 50;
-            this.chkOnlyLpks.Text = "Show only Lookups/IDs attributes";
-            this.chkOnlyLpks.UseVisualStyleBackColor = true;
-            this.chkOnlyLpks.CheckedChanged += new System.EventHandler(this.rbAttr_CheckedChanged);
+            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(69, 2);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(14, 14);
+            this.pictureBox2.TabIndex = 48;
+            this.pictureBox2.TabStop = false;
+            this.pictureBox2.Tag = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml/joi" +
+    "n-tables";
+            this.pictureBox2.Click += new System.EventHandler(this.helpIcon_Click);
             // 
             // linkEntityControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.picAliasRegen);
             this.Controls.Add(this.chkOnlyLpks);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.pictureBox2);
@@ -282,8 +300,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             this.Controls.Add(this.label2);
             this.Name = "linkEntityControl";
             this.Size = new System.Drawing.Size(247, 293);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picAliasRegen)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -308,5 +327,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.CheckBox chkOnlyLpks;
+        private System.Windows.Forms.PictureBox picAliasRegen;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

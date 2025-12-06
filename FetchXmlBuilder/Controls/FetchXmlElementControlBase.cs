@@ -50,6 +50,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
 
         protected void InitializeFXB(Dictionary<string, string> collection, FetchXmlBuilder fetchXmlBuilder, TreeBuilderControl tree, TreeNode node)
         {
+            Cursor = Cursors.WaitCursor;
             BeginInit();
 
             fxb = fetchXmlBuilder;
@@ -88,6 +89,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             ValidateControlRecursive(this);
 
             EndInit();
+            Cursor = Cursors.Default;
         }
 
         protected FetchXmlBuilder fxb { get; set; }
@@ -269,7 +271,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             initCount--;
 
             if (initCount == 0)
+            {
                 Initialized?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         public event EventHandler Initialized;

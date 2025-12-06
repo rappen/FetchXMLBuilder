@@ -46,6 +46,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool ShowHelpLinks { get; set; } = true;
         public bool ShowButtonTexts { get; set; } = true;
         public bool LinkEntityIdAttributesOnly { get; set; } = true;
+        public LinkEntityAlias LinkEntityAliasGenerate { get; set; } = LinkEntityAlias.Acronym;
         public XmlColors XmlColors { get; set; } = new XmlColors();
         public bool ShowNodeType { get; set; } = false;
         public bool ShowValidation { get; set; } = true;
@@ -371,5 +372,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         EBGconstants,
         LCGconstants,
         EarlyBound
+    }
+
+    public enum LinkEntityAlias
+    {
+        Acronym,
+        LogicalName,
+        None
     }
 }

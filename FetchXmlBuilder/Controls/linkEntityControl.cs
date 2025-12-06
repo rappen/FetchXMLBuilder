@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
+using Rappen.XRM.Helpers.Extensions;
 using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.Builder;
 using Rappen.XTB.FetchXmlBuilder.ControlsClasses;
@@ -15,6 +16,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
     public partial class linkEntityControl : FetchXmlElementControlBase
     {
         private int relationshipWidth;
+        private bool aliasset;
+        private string lastalias;
 
         public linkEntityControl() : this(null, null, null)
         {
@@ -26,6 +29,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             BeginInit();
             chkOnlyLpks.Checked = fetchXmlBuilder.settings.LinkEntityIdAttributesOnly;
             InitializeFXB(null, fetchXmlBuilder, tree, node);
+            picAliasRegen.Enabled = fxb.settings.LinkEntityAliasGenerate != Settings.LinkEntityAlias.None;
+            aliasset = !string.IsNullOrWhiteSpace(txtAlias.Text);
+            lastalias = txtAlias.Text;
             EndInit();
             RefreshAttributes();
         }
@@ -77,6 +83,87 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             else
             {
                 RefreshAttributes();
+            }
+            GenerateAlias();
+        }
+
+        private void GenerateAlias()
+        {
+            if (aliasset)
+            {
+                return;
+            }
+            if (!IsInitialized)
+            {
+                return;
+            }
+            if (fxb.settings.LinkEntityAliasGenerate == Settings.LinkEntityAlias.None)
+            {
+                return;
+            }
+            var aliasentities = fxb.dockControlBuilder.GetEntityNodes(needsalias: true).Where(ae => ae.Node != Node);
+            switch (fxb.settings.LinkEntityAliasGenerate)
+            {
+                case Settings.LinkEntityAlias.Acronym:
+                    var entitymeta = fxb.GetEntity(cmbEntity.Text);
+                    if (entitymeta == null)
+                    {
+                        return;
+                    }
+                    var displayname = entitymeta.ToDisplayName();
+
+                    // Finding unique acronym
+                    var acronym = string.Empty;
+                    var acronymlength = 1;
+                    while (string.IsNullOrEmpty(acronym))
+                    {
+                        var tempacronym = displayname.ToAcronym(acronymlength, includeAllWordInitials: true);
+                        if (acronymlength >= displayname.Length)
+                        {
+                            acronym = tempacronym;
+                        }
+                        else if (!aliasentities.Any(ae => ae.Alias.RemoveTrailingDigits() == tempacronym))
+                        {   // Not used by other link-entities
+                            acronym = tempacronym;
+                        }
+                        else if (aliasentities.Any(ae => ae.Alias.RemoveTrailingDigits() == tempacronym && ae.LogicalName == entitymeta.LogicalName))
+                        {   // Used by this link-entity
+                            acronym = tempacronym;
+                        }
+                        else
+                        {   // Try longer acronym
+                            acronymlength++;
+                        }
+                    }
+
+                    // Finding possible number
+                    var number = 0;
+                    while (number < 1000)
+                    {
+                        var tempacronym = acronym + (number > 0 ? number.ToString() : "");
+                        if (!aliasentities.Any(ae => ae.Alias == tempacronym))
+                        {   // Not used by other link-entities
+                            txtAlias.Text = tempacronym;
+                            return;
+                        }
+                        number++;
+                    }
+                    break;
+
+                case Settings.LinkEntityAlias.LogicalName:
+                    var logicalname = cmbEntity.Text;
+                    number = 1;
+                    while (number < 1000)
+                    {
+                        var tempalias = logicalname + (number > 0 ? number.ToString() : "");
+                        if (!aliasentities.Any(ae => ae.Alias == tempalias))
+                        {   // Not used by other link-entities
+                            txtAlias.Text = tempalias;
+                            return;
+                        }
+                        number++;
+                    }
+                    break;
             }
         }
 
@@ -467,6 +554,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         public override void Focus()
         {
             cmbRelationship.Focus();
+        }
+
+        private void picAliasRegen_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            aliasset = false;
+            GenerateAlias();
+            Cursor = Cursors.Default;
         }
     }
 }

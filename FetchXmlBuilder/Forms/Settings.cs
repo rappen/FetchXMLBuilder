@@ -44,46 +44,32 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             {
                 settings = new FXBSettings();
             }
+            // Appearance
             chkAppFriendly.Checked = settings.UseFriendlyNames;
             chkAppFriendlyResults.Checked = settings.Results.Friendly;
             chkAppBothNamesResults.Checked = settings.Results.BothNames;
             chkAppSingle.Checked = settings.QueryOptions.UseSingleQuotation;
-            chkAppNoSavePrompt.Checked = settings.DoNotPromptToSave;
-            chkAppResultsNewWindow.Checked = settings.Results.AlwaysNewWindow;
-            chkAppAllowUncustViews.Checked = settings.OpenUncustomizableViews;
-            chkAddConditionToFilter.Checked = settings.AddConditionToFilter;
-            chkUseSQL4CDS.Checked = settings.UseSQL4CDS;
             chkUseLookup.Checked = settings.UseLookup;
+            chkShowButtonTexts.Checked = settings.ShowButtonTexts;
             chkShowHelp.Checked = settings.ShowHelpLinks;
             chkShowNodeTypes.Checked = settings.ShowNodeType;
-            chkShowButtonTexts.Checked = settings.ShowButtonTexts;
-            chkShowValidation.Checked = settings.ShowValidation;
-            chkShowValidationInfo.Checked = settings.ShowValidationInfo;
             chkShowTreeviewAttributeTypes.Checked = settings.ShowTreeviewAttributeTypes;
             chkShowAttributeTypes.Checked = settings.ShowAttributeTypes;
-            chkShowAllAttributes.Checked = settings.QueryOptions.ShowAllAttributes;
-            chkShowOData2.Checked = settings.ShowOData2;
-            cmbResult.SelectedIndex = SettingResultToComboBoxItem(settings.ExecuteOptions.ResultOutput);
-            chkResAllPages.Checked = settings.ExecuteOptions.AllPages;
-            chkClickableLinks.Checked = settings.Results.ClickableLinks;
-            numMaxColumnWidth.Value = settings.Results.MaxColumnWidth;
-            chkWorkWithLayout.Checked = settings.Layout.Enabled;
-            chkLayoutUseFixedWidths.Checked = settings.Layout.UseFixedWidths;
-            propXmlColors.SelectedObject = settings.XmlColors;
-            txtFetch.ConfigureForXml(settings);
-            txtFetch.FormatXML(settings.QueryOptions.NewQueryTemplate, settings);
-            chkTryMetadataCache.Checked = settings.TryMetadataCache;
-            chkAlwaysShowAggregateProperties.Checked = settings.AlwaysShowAggregationProperties;
-            if (chkTryMetadataCache.Checked)
+
+            // Behavior
+            chkAppNoSavePrompt.Checked = settings.DoNotPromptToSave;
+            chkAddConditionToFilter.Checked = settings.AddConditionToFilter;
+            chkUseSQL4CDS.Checked = settings.UseSQL4CDS;
+            chkShowValidation.Checked = settings.ShowValidation;
+            chkShowValidationInfo.Checked = settings.ShowValidationInfo;
+            cmbLinkEntityGenerateAlias.SelectedIndex = settings.LinkEntityAliasGenerate switch
             {
-                chkWaitUntilMetadataLoaded.Enabled = true;
-                chkWaitUntilMetadataLoaded.Checked = settings.WaitUntilMetadataLoaded;
-            }
-            else
-            {
-                chkWaitUntilMetadataLoaded.Enabled = false;
-                chkWaitUntilMetadataLoaded.Checked = false;
-            }
+                LinkEntityAlias.LogicalName => 1,
+                LinkEntityAlias.None => 2,
+                _ => 0,
+            };
+
+            // AI Chat
             aiproviders = fxb.settings.AiProviders ?? new List<AiSettings>();
             UpdateAiSettingsList();
             if (OnlineSettings.Instance.AiSupport.Provider(settings.AiSettings.Provider) is AiProvider provider)
@@ -113,6 +99,41 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             rbAiPreferDisplayName.Checked = settings.AiSettings.PreferDisplayName;
             chkAiLogConversation.Checked = settings.AiSettings.LogConversation;
             linkAiLogFolder.Text = Path.Combine(Paths.LogsPath, "FXB AI Chat");
+
+            // Results
+            cmbResult.SelectedIndex = SettingResultToComboBoxItem(settings.ExecuteOptions.ResultOutput);
+            chkAppResultsNewWindow.Checked = settings.Results.AlwaysNewWindow;
+            chkResAllPages.Checked = settings.ExecuteOptions.AllPages;
+            chkClickableLinks.Checked = settings.Results.ClickableLinks;
+            numMaxColumnWidth.Value = settings.Results.MaxColumnWidth;
+
+            // Layout
+            chkWorkWithLayout.Checked = settings.Layout.Enabled;
+            chkLayoutUseFixedWidths.Checked = settings.Layout.UseFixedWidths;
+
+            // Default Query
+            txtFetch.ConfigureForXml(settings);
+            txtFetch.FormatXML(settings.QueryOptions.NewQueryTemplate, settings);
+
+            // XML Scheme
+            propXmlColors.SelectedObject = settings.XmlColors;
+
+            // Advanced
+            chkAppAllowUncustViews.Checked = settings.OpenUncustomizableViews;
+            chkAlwaysShowAggregateProperties.Checked = settings.AlwaysShowAggregationProperties;
+            chkShowAllAttributes.Checked = settings.QueryOptions.ShowAllAttributes;
+            chkShowOData2.Checked = settings.ShowOData2;
+            chkTryMetadataCache.Checked = settings.TryMetadataCache;
+            if (chkTryMetadataCache.Checked)
+            {
+                chkWaitUntilMetadataLoaded.Enabled = true;
+                chkWaitUntilMetadataLoaded.Checked = settings.WaitUntilMetadataLoaded;
+            }
+            else
+            {
+                chkWaitUntilMetadataLoaded.Enabled = false;
+                chkWaitUntilMetadataLoaded.Checked = false;
+            }
         }
 
         private int SettingResultToComboBoxItem(ResultOutput resultOutput)
@@ -130,36 +151,40 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         internal FXBSettings GetSettings()
         {
             var settings = fxb.settings;
+            // Appearance
             settings.UseFriendlyNames = chkAppFriendly.Checked;
             settings.Results.Friendly = chkAppFriendlyResults.Checked;
             settings.Results.BothNames = chkAppBothNamesResults.Checked;
             settings.QueryOptions.UseSingleQuotation = chkAppSingle.Checked;
-            settings.QueryOptions.NewQueryTemplate = txtFetch.Text;
-            settings.DoNotPromptToSave = chkAppNoSavePrompt.Checked;
-            settings.Results.AlwaysNewWindow = chkAppResultsNewWindow.Checked;
-            settings.ExecuteOptions.ResultOutput = FetchXmlBuilder.ResultItemToSettingResult(cmbResult.SelectedIndex);
-            settings.ExecuteOptions.AllPages = chkResAllPages.Checked;
-            settings.Results.ClickableLinks = chkClickableLinks.Checked;
-            settings.Results.MaxColumnWidth = (int)numMaxColumnWidth.Value;
-            settings.Layout.Enabled = chkWorkWithLayout.Checked;
-            settings.Layout.UseFixedWidths = chkLayoutUseFixedWidths.Checked;
-            settings.OpenUncustomizableViews = chkAppAllowUncustViews.Checked;
-            settings.AddConditionToFilter = chkAddConditionToFilter.Checked;
-            settings.UseSQL4CDS = chkUseSQL4CDS.Checked;
             settings.UseLookup = chkUseLookup.Checked;
+            settings.ShowButtonTexts = chkShowButtonTexts.Checked;
             settings.ShowHelpLinks = chkShowHelp.Checked;
             settings.ShowNodeType = chkShowNodeTypes.Checked;
-            settings.ShowButtonTexts = chkShowButtonTexts.Checked;
-            settings.ShowValidation = chkShowValidation.Checked;
-            settings.ShowValidationInfo = settings.ShowValidation && chkShowValidationInfo.Checked;
             settings.ShowTreeviewAttributeTypes = chkShowTreeviewAttributeTypes.Checked;
             settings.ShowAttributeTypes = chkShowAttributeTypes.Checked;
-            settings.QueryOptions.ShowAllAttributes = chkShowAllAttributes.Checked;
-            settings.ShowOData2 = chkShowOData2.Checked;
-            settings.XmlColors = propXmlColors.SelectedObject as XmlColors;
-            settings.TryMetadataCache = chkTryMetadataCache.Checked;
-            settings.WaitUntilMetadataLoaded = chkWaitUntilMetadataLoaded.Checked;
-            settings.AlwaysShowAggregationProperties = chkAlwaysShowAggregateProperties.Checked;
+
+            // Behavior
+            settings.DoNotPromptToSave = chkAppNoSavePrompt.Checked;
+            settings.AddConditionToFilter = chkAddConditionToFilter.Checked;
+            settings.UseSQL4CDS = chkUseSQL4CDS.Checked;
+            settings.ShowValidation = chkShowValidation.Checked;
+            settings.ShowValidationInfo = settings.ShowValidation && chkShowValidationInfo.Checked;
+            switch (cmbLinkEntityGenerateAlias.SelectedIndex)
+            {
+                case 1:
+                    settings.LinkEntityAliasGenerate = LinkEntityAlias.LogicalName;
+                    break;
+
+                case 2:
+                    settings.LinkEntityAliasGenerate = LinkEntityAlias.None;
+                    break;
+
+                default:
+                    settings.LinkEntityAliasGenerate = LinkEntityAlias.Acronym;
+                    break;
+            }
+
+            // AI Chat
             settings.AiSettings.Provider = cmbAiProvider.Text;
             settings.AiSettings.Model = cmbAiModel.Text;
             settings.AiSettings.Endpoint = txtAiEndpoint.Enabled ? txtAiEndpoint.Text : "";
@@ -169,6 +194,31 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.AiSettings.LogConversation = chkAiLogConversation.Checked;
             UpdateAiSettingsList();
             settings.AiProviders = aiproviders;
+
+            // Results
+            settings.ExecuteOptions.ResultOutput = FetchXmlBuilder.ResultItemToSettingResult(cmbResult.SelectedIndex);
+            settings.Results.AlwaysNewWindow = chkAppResultsNewWindow.Checked;
+            settings.ExecuteOptions.AllPages = chkResAllPages.Checked;
+            settings.Results.ClickableLinks = chkClickableLinks.Checked;
+            settings.Results.MaxColumnWidth = (int)numMaxColumnWidth.Value;
+
+            // Layout
+            settings.Layout.Enabled = chkWorkWithLayout.Checked;
+            settings.Layout.UseFixedWidths = chkLayoutUseFixedWidths.Checked;
+
+            // Default Query
+            settings.QueryOptions.NewQueryTemplate = txtFetch.Text;
+
+            // XML Schema
+            settings.XmlColors = propXmlColors.SelectedObject as XmlColors;
+
+            // Advanced
+            settings.OpenUncustomizableViews = chkAppAllowUncustViews.Checked;
+            settings.AlwaysShowAggregationProperties = chkAlwaysShowAggregateProperties.Checked;
+            settings.QueryOptions.ShowAllAttributes = chkShowAllAttributes.Checked;
+            settings.ShowOData2 = chkShowOData2.Checked;
+            settings.TryMetadataCache = chkTryMetadataCache.Checked;
+            settings.WaitUntilMetadataLoaded = chkWaitUntilMetadataLoaded.Checked;
             return settings;
         }
 
@@ -495,6 +545,28 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             {
                 txtAiApiKey.PasswordChar = '\0';
                 picAiApikey.Image = Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_hide_16;
+            }
+        }
+
+        private void cmbLinkEntityGenerateAlias_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (cmbLinkEntityGenerateAlias.SelectedIndex)
+            {
+                case 0:
+                    txtLinkEntityGenerateAliasHelp.Text = "It tries to get unique acronym for the table. If there are more than on link-entity to the same table, it gets next unused number as a suffix.";
+                    break;
+
+                case 1:
+                    txtLinkEntityGenerateAliasHelp.Text = "Uses the logicalname of the related table and suffix with a number, starting at 1.";
+                    break;
+
+                case 2:
+                    txtLinkEntityGenerateAliasHelp.Text = "Does not generate alias for Link-Entities";
+                    break;
+
+                default:
+                    txtLinkEntityGenerateAliasHelp.Text = "Select above!";
+                    break;
             }
         }
     }

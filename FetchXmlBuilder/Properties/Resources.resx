@@ -121,20 +121,11 @@
   <data name="icon-repository" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-repository-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icon-xml-homemade" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons8-xml-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="icon-flow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PowerAutomate_scalable gray bg 32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="We_Support_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\We-Support-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icon-convert" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons8-transfer-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="icons8-waiting" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons8-waiting.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="icon-xml-homemade" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons8-xml-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="icon-saveas" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-save-32 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -145,8 +136,8 @@
   <data name="icon-save2-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icon-save2-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icon-eye-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icon-eye-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="icon-send2-32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icon-send2-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="icon-duplicate-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icon-duplicate-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -202,8 +193,8 @@
   <data name="icon-send" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-send-32 (5).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icon-open" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons8-open-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="icon-eye-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icon-eye-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="icon-result" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-result-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -211,8 +202,8 @@
   <data name="icon-friendly" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-hug-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icon-settings-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons8-settings-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="icon-views" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons8-view-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="icon-send-32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icon-send-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -232,6 +223,9 @@
   <data name="icon-redo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-redo-32 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="icon-hide-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icon-hide-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="icon-execute" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-play-32 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -244,11 +238,14 @@
   <data name="icon-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-placeholder-thumbnail-json-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="icon-powerplatform" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PowerApps_scalable trs 32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="icon-options" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-options-32 (5).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icon-send2-32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icon-send2-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="icon-flow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PowerAutomate_scalable gray bg 32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="icon-save" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-save-32 (2).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -256,11 +253,20 @@
   <data name="icon-sql" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-sql-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="icon-settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons8-options-32 (4).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="icon-copy2-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icon-copy2-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="icon-grid" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-grid-view-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon-open" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons8-open-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icons8-waiting" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons8-waiting.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="icon-link-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icon-link-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -310,9 +316,6 @@
   <data name="icon-undo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-undo-32 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icon-info-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icon-info-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="icons8-bot-32 (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-bot-32 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -325,11 +328,11 @@
   <data name="icon-execute-options" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-options-32 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icon-settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons8-options-32 (4).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="icon-convert" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons8-transfer-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icon-views" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons8-view-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="icon-settings-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons8-settings-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="icon-json-homemade" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-json-download-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -340,13 +343,13 @@
   <data name="icon-odata" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-odata-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icon-powerplatform" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PowerApps_scalable trs 32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="icon-info-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icon-info-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="icon-raw" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-robot-face-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="icon-hide-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icon-hide-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="icon-redo-16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icon-redo-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
