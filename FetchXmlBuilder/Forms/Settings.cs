@@ -553,15 +553,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             switch (cmbLinkEntityGenerateAlias.SelectedIndex)
             {
                 case 0:
-                    txtLinkEntityGenerateAliasHelp.Text = "It tries to get unique acronym for the table. If there are more than on link-entity to the same table, it gets next unused number as a suffix.";
+                    txtLinkEntityGenerateAliasHelp.Text = "FXB tries to get a unique acronym for the table. If there is more than one link-entity to the same table, it gets the following unused number as a suffix.";
                     break;
 
                 case 1:
-                    txtLinkEntityGenerateAliasHelp.Text = "Uses the logicalname of the related table and suffix with a number, starting at 1.";
+                    txtLinkEntityGenerateAliasHelp.Text = "Uses the 'logicalname' of the related table and suffixes with a number, starting at 1.";
                     break;
 
                 case 2:
-                    txtLinkEntityGenerateAliasHelp.Text = "Does not generate alias for Link-Entities";
+                    txtLinkEntityGenerateAliasHelp.Text = "Does not generate an alias for 'link-entity' nodes.";
                     break;
 
                 default:
