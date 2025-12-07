@@ -2,6 +2,7 @@
 using Microsoft.Xrm.Sdk.Query;
 using Rappen.XTB.Helpers.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
 {
@@ -322,7 +323,7 @@ namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
             return result;
         }
 
-        public static OperatorItem[] GetConditionsByAttributeType(AttributeTypeCode valueType, string attributeTypeName)
+        public static OperatorItem[] GetConditionsByAttributeType(AttributeTypeCode valueType, string attributeTypeName, string[] targets)
         {
             var validConditionsList = new List<OperatorItem>
             {
@@ -467,6 +468,14 @@ namespace Rappen.XTB.FetchXmlBuilder.ControlsClasses
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserOrUserHierarchyAndTeams));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserOrUserTeams));
                     validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserTeams));
+                    break;
+
+                case AttributeTypeCode.Lookup when targets?.Contains("systemuser") == true:
+                case AttributeTypeCode.Customer when targets?.Contains("systemuser") == true:
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.EqualBusinessId));
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.NotEqualBusinessId));
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.EqualUserId));
+                    validConditionsList.Add(new OperatorItem(ConditionOperator.NotEqualUserId));
                     break;
 
                 case AttributeTypeCode.Virtual:

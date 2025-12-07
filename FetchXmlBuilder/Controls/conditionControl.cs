@@ -443,9 +443,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             }
             if (cmbAttribute.SelectedItem is AttributeMetadataItem attributeItem && attributeItem.Metadata.AttributeType is AttributeTypeCode attributeType)
             {
-                //cmbOperator.SelectedItem = null;
+                var targets = new string[] { };
+                if (attributeItem.Metadata is LookupAttributeMetadata lookupmeta)
+                {
+                    targets = lookupmeta.Targets;
+                }
                 cmbOperator.Items.Clear();
-                cmbOperator.Items.AddRange(OperatorItem.GetConditionsByAttributeType(attributeType, attributeItem.Metadata.AttributeTypeName?.Value));
+                cmbOperator.Items.AddRange(OperatorItem.GetConditionsByAttributeType(attributeType, attributeItem.Metadata.AttributeTypeName?.Value, targets));
                 ReFillControl(cmbOperator);
                 if (cmbOperator.SelectedItem == null && cmbOperator.Items.Count > 0)
                 {
