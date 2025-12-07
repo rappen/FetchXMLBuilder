@@ -49,6 +49,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             chkAppFriendlyResults.Checked = settings.Results.Friendly;
             chkAppBothNamesResults.Checked = settings.Results.BothNames;
             chkAppSingle.Checked = settings.QueryOptions.UseSingleQuotation;
+            chkNoSelfClosingXml.Checked = settings.QueryOptions.NoSelfClosingTags;
             chkUseLookup.Checked = settings.UseLookup;
             chkShowButtonTexts.Checked = settings.ShowButtonTexts;
             chkShowHelp.Checked = settings.ShowHelpLinks;
@@ -156,6 +157,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.Results.Friendly = chkAppFriendlyResults.Checked;
             settings.Results.BothNames = chkAppBothNamesResults.Checked;
             settings.QueryOptions.UseSingleQuotation = chkAppSingle.Checked;
+            settings.QueryOptions.NoSelfClosingTags = chkNoSelfClosingXml.Checked;
             settings.UseLookup = chkUseLookup.Checked;
             settings.ShowButtonTexts = chkShowButtonTexts.Checked;
             settings.ShowHelpLinks = chkShowHelp.Checked;
@@ -568,6 +570,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                     txtLinkEntityGenerateAliasHelp.Text = "Select above!";
                     break;
             }
+        }
+
+        private void picNoSelfClosingXml_Click(object sender, EventArgs e)
+        {
+            UrlUtils.OpenUrl(sender);
         }
     }
 }

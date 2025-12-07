@@ -70,6 +70,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.chkShowHelp = new System.Windows.Forms.CheckBox();
             this.chkAppBothNamesResults = new System.Windows.Forms.CheckBox();
             this.tabBehavior = new System.Windows.Forms.TabPage();
+            this.txtLinkEntityGenerateAliasHelp = new System.Windows.Forms.TextBox();
             this.cmbLinkEntityGenerateAlias = new System.Windows.Forms.ComboBox();
             this.label13 = new System.Windows.Forms.Label();
             this.tabAiChat = new System.Windows.Forms.TabPage();
@@ -114,7 +115,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.btnResetAll = new System.Windows.Forms.Button();
             this.chkShowOData2 = new System.Windows.Forms.CheckBox();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
-            this.txtLinkEntityGenerateAliasHelp = new System.Windows.Forms.TextBox();
+            this.chkNoSelfClosingXml = new System.Windows.Forms.CheckBox();
+            this.picNoSelfClosingXml = new System.Windows.Forms.PictureBox();
             this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
@@ -135,6 +137,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabDefaultQuery.SuspendLayout();
             this.tabXmlScheme.SuspendLayout();
             this.tabAdvanced.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picNoSelfClosingXml)).BeginInit();
             this.SuspendLayout();
             // 
             // cmbResult
@@ -255,7 +258,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // chkUseLookup
             // 
             this.chkUseLookup.AutoSize = true;
-            this.chkUseLookup.Location = new System.Drawing.Point(20, 112);
+            this.chkUseLookup.Location = new System.Drawing.Point(20, 135);
             this.chkUseLookup.Name = "chkUseLookup";
             this.chkUseLookup.Size = new System.Drawing.Size(193, 17);
             this.chkUseLookup.TabIndex = 5;
@@ -503,6 +506,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // tabAppearance
             // 
             this.tabAppearance.BackColor = System.Drawing.SystemColors.Window;
+            this.tabAppearance.Controls.Add(this.picNoSelfClosingXml);
+            this.tabAppearance.Controls.Add(this.chkNoSelfClosingXml);
             this.tabAppearance.Controls.Add(this.chkShowTreeviewAttributeTypes);
             this.tabAppearance.Controls.Add(this.chkShowAttributeTypes);
             this.tabAppearance.Controls.Add(this.chkShowNodeTypes);
@@ -605,6 +610,17 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabBehavior.Size = new System.Drawing.Size(505, 209);
             this.tabBehavior.TabIndex = 2;
             this.tabBehavior.Text = "Behavior";
+            // 
+            // txtLinkEntityGenerateAliasHelp
+            // 
+            this.txtLinkEntityGenerateAliasHelp.BackColor = System.Drawing.SystemColors.Window;
+            this.txtLinkEntityGenerateAliasHelp.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtLinkEntityGenerateAliasHelp.Location = new System.Drawing.Point(297, 68);
+            this.txtLinkEntityGenerateAliasHelp.Multiline = true;
+            this.txtLinkEntityGenerateAliasHelp.Name = "txtLinkEntityGenerateAliasHelp";
+            this.txtLinkEntityGenerateAliasHelp.ReadOnly = true;
+            this.txtLinkEntityGenerateAliasHelp.Size = new System.Drawing.Size(189, 126);
+            this.txtLinkEntityGenerateAliasHelp.TabIndex = 11;
             // 
             // cmbLinkEntityGenerateAlias
             // 
@@ -1109,16 +1125,29 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         "how it anyway, if you which, but checking this one.");
             this.chkShowOData2.UseVisualStyleBackColor = true;
             // 
-            // txtLinkEntityGenerateAliasHelp
+            // chkNoSelfClosingXml
             // 
-            this.txtLinkEntityGenerateAliasHelp.BackColor = System.Drawing.SystemColors.Window;
-            this.txtLinkEntityGenerateAliasHelp.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtLinkEntityGenerateAliasHelp.Location = new System.Drawing.Point(297, 68);
-            this.txtLinkEntityGenerateAliasHelp.Multiline = true;
-            this.txtLinkEntityGenerateAliasHelp.Name = "txtLinkEntityGenerateAliasHelp";
-            this.txtLinkEntityGenerateAliasHelp.ReadOnly = true;
-            this.txtLinkEntityGenerateAliasHelp.Size = new System.Drawing.Size(189, 126);
-            this.txtLinkEntityGenerateAliasHelp.TabIndex = 11;
+            this.chkNoSelfClosingXml.AutoSize = true;
+            this.chkNoSelfClosingXml.Location = new System.Drawing.Point(20, 112);
+            this.chkNoSelfClosingXml.Name = "chkNoSelfClosingXml";
+            this.chkNoSelfClosingXml.Size = new System.Drawing.Size(143, 17);
+            this.chkNoSelfClosingXml.TabIndex = 5;
+            this.chkNoSelfClosingXml.Text = "No self-closing XML tags";
+            this.chkNoSelfClosingXml.UseVisualStyleBackColor = true;
+            // 
+            // picNoSelfClosingXml
+            // 
+            this.picNoSelfClosingXml.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picNoSelfClosingXml.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_info_16;
+            this.picNoSelfClosingXml.Location = new System.Drawing.Point(169, 112);
+            this.picNoSelfClosingXml.Name = "picNoSelfClosingXml";
+            this.picNoSelfClosingXml.Size = new System.Drawing.Size(16, 16);
+            this.picNoSelfClosingXml.TabIndex = 14;
+            this.picNoSelfClosingXml.TabStop = false;
+            this.picNoSelfClosingXml.Tag = "https://learn.microsoft.com/power-pages/configure/liquid/template-tags#fetchxml";
+            this.tt.SetToolTip(this.picNoSelfClosingXml, "Read more regarding Liquid!\r\nhttps://learn.microsoft.com/power-pages/configure/li" +
+        "quid/template-tags#fetchxml");
+            this.picNoSelfClosingXml.Click += new System.EventHandler(this.picNoSelfClosingXml_Click);
             // 
             // propXmlColors
             // 
@@ -1192,6 +1221,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabXmlScheme.PerformLayout();
             this.tabAdvanced.ResumeLayout(false);
             this.tabAdvanced.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picNoSelfClosingXml)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1280,5 +1310,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.ComboBox cmbLinkEntityGenerateAlias;
         private System.Windows.Forms.TextBox txtLinkEntityGenerateAliasHelp;
+        private System.Windows.Forms.CheckBox chkNoSelfClosingXml;
+        private System.Windows.Forms.PictureBox picNoSelfClosingXml;
     }
 }

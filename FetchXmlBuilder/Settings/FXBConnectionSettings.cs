@@ -21,6 +21,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
         public bool UseSingleQuotation { get; set; }
         public string NewQueryTemplate { get; set; } = DefaultNewQuery;
         public bool ShowAllAttributes { get; set; } = false;
+        public bool NoSelfClosingTags { get; set; } = false;
     }
 
     public class FilterSetting

@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -277,9 +278,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                         xml = xml.Replace("\"", "'");
                     }
                 }
-                if (format)
+                if (format && !string.IsNullOrEmpty(xml))
                 {
                     xml = XDocument.Parse(xml).ToString();
+                }
+                if (fxb.settings.QueryOptions.NoSelfClosingTags && !string.IsNullOrEmpty(xml))
+                {
+                    // Expand self-closing tags: <tag .../> -> <tag ...></tag>
+                    xml = Regex.Replace(xml, @"<([A-Za-z_][\w\-\.:]*)((?:\s+[^<>]*)?)\/>", @"<$1$2></$1>");
                 }
             }
             return xml;
