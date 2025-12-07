@@ -47,7 +47,6 @@
             this.btnExecute = new System.Windows.Forms.Button();
             this.panSave = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
             this.panOk = new System.Windows.Forms.Panel();
             this.panLiveUpdate = new System.Windows.Forms.Panel();
             this.chkLiveUpdate = new System.Windows.Forms.CheckBox();
@@ -89,7 +88,6 @@
             this.panSQL4CDS.SuspendLayout();
             this.panExecute.SuspendLayout();
             this.panSave.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.panOk.SuspendLayout();
             this.panLiveUpdate.SuspendLayout();
             this.panFormatting.SuspendLayout();
@@ -272,8 +270,8 @@
             // 
             // panSave
             // 
-            this.panSave.Controls.Add(this.panel1);
             this.panSave.Controls.Add(this.btnSave);
+            this.panSave.Controls.Add(this.panel1);
             this.panSave.Dock = System.Windows.Forms.DockStyle.Right;
             this.panSave.Location = new System.Drawing.Point(819, 16);
             this.panSave.Name = "panSave";
@@ -282,22 +280,11 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.button1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(91, 28);
             this.panel1.TabIndex = 7;
-            // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(6, 0);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Save...";
-            this.button1.UseVisualStyleBackColor = true;
             // 
             // panOk
             // 
@@ -705,7 +692,6 @@
             this.panSQL4CDS.ResumeLayout(false);
             this.panExecute.ResumeLayout(false);
             this.panSave.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
             this.panOk.ResumeLayout(false);
             this.panLiveUpdate.ResumeLayout(false);
             this.panLiveUpdate.PerformLayout();
@@ -772,7 +758,6 @@
         private System.Windows.Forms.Panel panCopy;
         private System.Windows.Forms.Button btnCopy;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panParseQE;
         private System.Windows.Forms.Button btnParseQE;
     }
