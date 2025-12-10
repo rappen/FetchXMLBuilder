@@ -217,7 +217,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         internal void AllMetadataLoadedChanged(bool allLoaded)
         {
             metadataavailable = allLoaded;
-            txtAiChat.Text = allLoaded ? string.Empty : "Please wait until all metadata is loaded before asking the AI chat.\nWe need to be able to provide some metadata (NO data!) to solve the issue more correctly.";
+            txtAiChat.Text = allLoaded ? string.Empty : $"Please wait until all metadata is loaded before asking the AI chat.{Environment.NewLine}We need to be able to provide some metadata (NO data!) to solve the issue more correctly.";
             EnableButtons();
         }
 
@@ -382,6 +382,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             txtUsage.Text = chatHistory?.Responses?.UsageToString() ?? "?";
             EnableButtons();
             txtAiChat.Focus();
+            if (!fxb.IsShownAndActive())
+            {
+                ToastHelper.ToastIt(
+                    fxb,
+                    $"AiChatControl",
+                    $"FetchXML Builder AI Chat has answered!",
+                    $"{provider} {model} was thinking in {callingstopwatch.Elapsed.ToSmartString()}.\n\nClick to read my thoughts!",
+                    response.Text,
+                    logo: "https://rappen.github.io/Tools/Images/Robot100.png");
+            }
         }
 
         [Description("Executes FetchXML Query")]
