@@ -52,10 +52,10 @@
             this.rbAllPages = new System.Windows.Forms.RadioButton();
             this.rbPageByPage = new System.Windows.Forms.RadioButton();
             this.grpResult = new System.Windows.Forms.GroupBox();
-            this.rbResultGrid = new System.Windows.Forms.RadioButton();
-            this.rbResultJSON = new System.Windows.Forms.RadioButton();
-            this.rbResultXML = new System.Windows.Forms.RadioButton();
             this.label5 = new System.Windows.Forms.Label();
+            this.rbResultXML = new System.Windows.Forms.RadioButton();
+            this.rbResultJSON = new System.Windows.Forms.RadioButton();
+            this.rbResultGrid = new System.Windows.Forms.RadioButton();
             this.gbOldBypassCustom.SuspendLayout();
             this.gbBypassLogic.SuspendLayout();
             this.panButtons.SuspendLayout();
@@ -116,7 +116,7 @@
             this.gbOldBypassCustom.Location = new System.Drawing.Point(6, 246);
             this.gbOldBypassCustom.Name = "gbOldBypassCustom";
             this.gbOldBypassCustom.Size = new System.Drawing.Size(379, 57);
-            this.gbOldBypassCustom.TabIndex = 4;
+            this.gbOldBypassCustom.TabIndex = 40;
             this.gbOldBypassCustom.TabStop = false;
             this.gbOldBypassCustom.Text = "Old: Bypass Custom";
             // 
@@ -159,7 +159,7 @@
             this.gbBypassLogic.Location = new System.Drawing.Point(6, 117);
             this.gbBypassLogic.Name = "gbBypassLogic";
             this.gbBypassLogic.Size = new System.Drawing.Size(379, 129);
-            this.gbBypassLogic.TabIndex = 3;
+            this.gbBypassLogic.TabIndex = 30;
             this.gbBypassLogic.TabStop = false;
             this.gbBypassLogic.Text = "Bypass Logic";
             // 
@@ -259,7 +259,7 @@
             this.panButtons.Location = new System.Drawing.Point(6, 303);
             this.panButtons.Name = "panButtons";
             this.panButtons.Size = new System.Drawing.Size(379, 78);
-            this.panButtons.TabIndex = 5;
+            this.panButtons.TabIndex = 50;
             // 
             // lblInfo
             // 
@@ -289,7 +289,7 @@
             this.gbPages.Location = new System.Drawing.Point(6, 60);
             this.gbPages.Name = "gbPages";
             this.gbPages.Size = new System.Drawing.Size(379, 57);
-            this.gbPages.TabIndex = 2;
+            this.gbPages.TabIndex = 20;
             this.gbPages.TabStop = false;
             this.gbPages.Text = "Pages";
             // 
@@ -334,31 +334,18 @@
             this.grpResult.Location = new System.Drawing.Point(6, 6);
             this.grpResult.Name = "grpResult";
             this.grpResult.Size = new System.Drawing.Size(379, 54);
-            this.grpResult.TabIndex = 5;
+            this.grpResult.TabIndex = 10;
             this.grpResult.TabStop = false;
             this.grpResult.Text = "Retrieve && Format";
             // 
-            // rbResultGrid
+            // label5
             // 
-            this.rbResultGrid.AutoSize = true;
-            this.rbResultGrid.Location = new System.Drawing.Point(81, 25);
-            this.rbResultGrid.Name = "rbResultGrid";
-            this.rbResultGrid.Size = new System.Drawing.Size(70, 17);
-            this.rbResultGrid.TabIndex = 0;
-            this.rbResultGrid.TabStop = true;
-            this.rbResultGrid.Text = "Grid View";
-            this.rbResultGrid.UseVisualStyleBackColor = true;
-            // 
-            // rbResultJSON
-            // 
-            this.rbResultJSON.AutoSize = true;
-            this.rbResultJSON.Location = new System.Drawing.Point(157, 25);
-            this.rbResultJSON.Name = "rbResultJSON";
-            this.rbResultJSON.Size = new System.Drawing.Size(96, 17);
-            this.rbResultJSON.TabIndex = 1;
-            this.rbResultJSON.TabStop = true;
-            this.rbResultJSON.Text = "JSON WebAPI";
-            this.rbResultJSON.UseVisualStyleBackColor = true;
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 27);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(37, 13);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "Result";
             // 
             // rbResultXML
             // 
@@ -371,14 +358,27 @@
             this.rbResultXML.Text = "XML (deprecated)";
             this.rbResultXML.UseVisualStyleBackColor = true;
             // 
-            // label5
+            // rbResultJSON
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 27);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(37, 13);
-            this.label5.TabIndex = 3;
-            this.label5.Text = "Result";
+            this.rbResultJSON.AutoSize = true;
+            this.rbResultJSON.Location = new System.Drawing.Point(157, 25);
+            this.rbResultJSON.Name = "rbResultJSON";
+            this.rbResultJSON.Size = new System.Drawing.Size(96, 17);
+            this.rbResultJSON.TabIndex = 1;
+            this.rbResultJSON.TabStop = true;
+            this.rbResultJSON.Text = "JSON WebAPI";
+            this.rbResultJSON.UseVisualStyleBackColor = true;
+            // 
+            // rbResultGrid
+            // 
+            this.rbResultGrid.AutoSize = true;
+            this.rbResultGrid.Location = new System.Drawing.Point(81, 25);
+            this.rbResultGrid.Name = "rbResultGrid";
+            this.rbResultGrid.Size = new System.Drawing.Size(70, 17);
+            this.rbResultGrid.TabIndex = 0;
+            this.rbResultGrid.TabStop = true;
+            this.rbResultGrid.Text = "Grid View";
+            this.rbResultGrid.UseVisualStyleBackColor = true;
             // 
             // Execute
             // 
