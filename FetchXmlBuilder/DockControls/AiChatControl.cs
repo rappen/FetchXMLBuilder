@@ -226,6 +226,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         #region Private Methods
 
         private string PromptSystem => model?.Prompts?.System ?? provider?.Prompts?.System ?? OnlineSettings.Instance.AiSupport.Prompts.System;
+        private string PromptFormat => model?.Prompts?.Format ?? provider?.Prompts?.Format ?? OnlineSettings.Instance.AiSupport.Prompts.Format;
         private string PromptMyName => model?.Prompts?.CallMe ?? provider?.Prompts?.CallMe ?? OnlineSettings.Instance.AiSupport.Prompts.CallMe;
         private string PromptUpdate => model?.Prompts?.Update ?? provider?.Prompts?.Update ?? OnlineSettings.Instance.AiSupport.Prompts.Update;
         private string PromptEntityMeta => model?.Prompts?.EntityMeta ?? provider?.Prompts?.EntityMeta ?? OnlineSettings.Instance.AiSupport.Prompts.EntityMeta;
@@ -331,6 +332,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             if (!chatHistory.Initialized)
             {
                 var intro = PromptSystem.Replace("{fetchxml}", fxb.dockControlBuilder?.GetFetchString(true, false));
+                intro += Environment.NewLine + PromptFormat;
                 if (!string.IsNullOrEmpty(fxb.settings.AiSettings.MyName))
                 {
                     intro += Environment.NewLine + PromptMyName.Replace("{callme}", fxb.settings.AiSettings.MyName).Trim();
