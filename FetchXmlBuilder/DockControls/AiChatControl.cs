@@ -171,7 +171,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
             }
             logconversation = model.LogConversation ?? fxb.settings.AiSettings.LogConversation;
-            chatHistory = new ChatMessageHistory(panAiConversation, provider.Name, model.Name, endpoint, apikey, fxb.settings.AiSettings.MyName, OnlineSettings.Instance.AiSupport.OnlyInfoName);
+            chatHistory = new ChatMessageHistory(panAiConversation, provider.Name, model.Name, endpoint, apikey, fxb.settings.AiSettings.MyName, OnlineSettings.Instance.AiSupport.OnlyInfoName, provider.ToString());
             metaAttributes.Clear();
             SetTitle();
             if (provider.Free && !IsFreeAiUser(fxb) && !string.IsNullOrWhiteSpace(OnlineSettings.Instance.AiSupport.TextToRequestFreeAi))
