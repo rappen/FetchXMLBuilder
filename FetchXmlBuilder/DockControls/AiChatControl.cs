@@ -360,21 +360,22 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             callingstopwatch = Stopwatch.StartNew();
             try
             {
-                chatHistory.Add(ChatRole.User, text);
-                chatHistory.IsRunning = false;
-                chatHistory.Add(ChatRole.Assistant, $"Right back to ya!\r\n{text}");
-                HandlingResponseFromAi(new ChatResponse { Messages = new List<ChatMessage> { new ChatMessage(ChatRole.Assistant, $"Right back to ya!\r\n{text}") } });
-                //chatHistory.Messages.Select(ml => (ChatMessage)ml).ToList() });
+                // TESTING UI
+                //chatHistory.Add(ChatRole.User, text);
+                //chatHistory.IsRunning = false;
+                //chatHistory.Add(ChatRole.Assistant, $"Right back to ya!\r\n{text}");
+                //HandlingResponseFromAi(new ChatResponse { Messages = new List<ChatMessage> { new ChatMessage(ChatRole.Assistant, $"Right back to ya!\r\n{text}") } });
+                // END TESTING UI
 
-                //AiCommunication.CallingAIAsync(
-                //    fxb,
-                //    chatHistory,
-                //    text,
-                //    HandlingResponseFromAi,
-                //    ExecuteFetchXMLQuery,
-                //    UpdateCurrentFetchXmlQuery,
-                //    GetMetadataForUnknownEntity,
-                //    GetMetadataForUnknownAttribute);
+                AiCommunication.CallingAIAsync(
+                    fxb,
+                    chatHistory,
+                    text,
+                    HandlingResponseFromAi,
+                    ExecuteFetchXMLQuery,
+                    UpdateCurrentFetchXmlQuery,
+                    GetMetadataForUnknownEntity,
+                    GetMetadataForUnknownAttribute);
             }
             catch (Exception ex)
             {
@@ -683,6 +684,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void btnReset_Click(object sender, EventArgs e)
         {
+            freeusers = null;
             if (provider?.Free == true && !IsFreeAiUser(fxb))
             {
                 OnlineSettings.Reset();
