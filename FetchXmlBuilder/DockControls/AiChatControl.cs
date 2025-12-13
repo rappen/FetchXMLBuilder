@@ -44,14 +44,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         public AiChatControl(FetchXmlBuilder fetchXmlBuilder, bool neverprompt)
         {
+            fxb = fetchXmlBuilder;
+            InitializeComponent();
+
             ChatMessageHistory.UserTextColor = OnlineSettings.Instance.Colors.Bright;
             ChatMessageHistory.UserBackgroundColor = OnlineSettings.Instance.Colors.Medium;
             ChatMessageHistory.AssistansTextColor = OnlineSettings.Instance.Colors.Dark;
             ChatMessageHistory.AssistansBackgroundColor = OnlineSettings.Instance.Colors.Bright;
             ChatMessageHistory.WaitingBackColor = Color.FromArgb(240, 240, 240);
+            ChatMessageHistory.Font = panAiConversation.Font;
 
-            fxb = fetchXmlBuilder;
-            InitializeComponent();
             Initialize(neverprompt);
             AllMetadataLoadedChanged(fxb.AllMetadataLoaded);
             EnableButtons();
@@ -358,15 +360,21 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             callingstopwatch = Stopwatch.StartNew();
             try
             {
-                AiCommunication.CallingAIAsync(
-                    fxb,
-                    chatHistory,
-                    text,
-                    HandlingResponseFromAi,
-                    ExecuteFetchXMLQuery,
-                    UpdateCurrentFetchXmlQuery,
-                    GetMetadataForUnknownEntity,
-                    GetMetadataForUnknownAttribute);
+                chatHistory.Add(ChatRole.User, text);
+                chatHistory.IsRunning = false;
+                chatHistory.Add(ChatRole.Assistant, $"Right back to ya!\r\n{text}");
+                HandlingResponseFromAi(new ChatResponse { Messages = new List<ChatMessage> { new ChatMessage(ChatRole.Assistant, $"Right back to ya!\r\n{text}") } });
+                //chatHistory.Messages.Select(ml => (ChatMessage)ml).ToList() });
+
+                //AiCommunication.CallingAIAsync(
+                //    fxb,
+                //    chatHistory,
+                //    text,
+                //    HandlingResponseFromAi,
+                //    ExecuteFetchXMLQuery,
+                //    UpdateCurrentFetchXmlQuery,
+                //    GetMetadataForUnknownEntity,
+                //    GetMetadataForUnknownAttribute);
             }
             catch (Exception ex)
             {
