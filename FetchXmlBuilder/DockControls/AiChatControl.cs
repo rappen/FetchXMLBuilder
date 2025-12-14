@@ -401,7 +401,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     fxb,
                     $"AiChatControl",
                     $"FetchXML Builder AI Chat has answered!",
-                    $"{provider} {model} was thinking in {callingstopwatch.Elapsed.ToSmartString()}.\n\nClick to read my thoughts!",
+                    $"{provider} {model} was thinking in{Environment.NewLine}{callingstopwatch.Elapsed.ToSmartStringLong()}.{Environment.NewLine}{Environment.NewLine}Click to read my thoughts!",
                     response.Text,
                     logo: "https://rappen.github.io/Tools/Images/Robot100.png");
             }

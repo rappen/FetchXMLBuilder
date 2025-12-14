@@ -373,7 +373,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                             this,
                             $"result-{settings.ExecuteOptions.ResultOutput}",
                             $"FetchXML Builder executed.",
-                            $"Retrieved {queryinfo.Results.Entities.Count} {entitydisplayname} records\nin {queryinfo.Elapsed.ToSmartString()}.\n\nClick to see the results!",
+                            $"Retrieved {queryinfo.Results.Entities.Count} {entitydisplayname} records in{Environment.NewLine}{queryinfo.Elapsed.ToSmartStringLong()}.{Environment.NewLine}{Environment.NewLine}Click to see the results!",
                             logo: "https://rappen.github.io/Tools/Images/FXB150.png");
                     }
                     switch (settings.ExecuteOptions.ResultOutput)
