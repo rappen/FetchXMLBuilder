@@ -10,7 +10,7 @@
 		<iconUrl>https://jonasr.app/wp-content/uploads/2019/09/FXB-2019-2-150-tsp.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>Build queries for Microsoft Dataverse and the Power Platform. Let AI fix what you can't. Investigate data. Fix the layouts. Get code. Empower yourself to achieve more.</summary>
-		<description>Build queries for Microsoft Dataverse and the Power Platform. Investigate data. Fix the layouts. Get code. Let AI fix what you can't. Empower yourself to achieve more.
+		<description>Build queries for Microsoft Dataverse and the Power Platform. Let AI fix what you can't. Investigate data. Fix the layouts. Get code. Let AI fix what you can't. Empower yourself to achieve more.
 
 Read more: https://fetchxmlbuilder.com/
 
@@ -42,18 +42,15 @@ The tool will assist in three major areas:
 The tool reads metadata from Microsoft Dataverse and Dynamics 365 / CRM to assist with selecting entities, attributes, relations and to perform validation of condition values.
 
 To make it even more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.</description>
-		<releaseNotes>Added a few improvements in the latest release, but most new things came out in version 1.2025.9.6.
-Etherway - always get the latest! :)
+		<releaseNotes>TEASERS:
+Autogenerate alias - Your own Microsoft Foundry - Markdown - App Notifications - Excel with links - No self-closing - Reasoning effort - Send by enter - AI Chat history - Sorting related table - plus a bunch of fixes and improvements!
 
-FetchXML Builder AI Chat can now be used / tested by my Free Azure AI Foundry provider!
-No personal account at OpenAI or Anthropic is required (although it is still possible to use one, of course).
-Open the "AI Chat" tab and ask questions about your data, queries, or how to use the tool.
+Request from TARS: 'Humor percent' was unfortunately denied for this release.
+
+Read everything here: https://fetchxmlbuilder.com/releases/1-2025-12/
 
 NOTE: 
-This version of FetchXML Builder needs to have XrmToolBox in version 1.2025.7.* or later!
-
-Full release notes:
-https://fetchxmlbuilder.com/releases/#$versionnumber$</releaseNotes>
+This version of FetchXML Builder needs to have XrmToolBox in version 1.2025.10.* or later!</releaseNotes>
 		<copyright>Copyright Jonas Rapp 2014-2025</copyright>
 		<tags>XrmToolBox Plugins FetchXML Builder</tags>
 		<dependencies>
@@ -63,12 +60,15 @@ https://fetchxmlbuilder.com/releases/#$versionnumber$</releaseNotes>
 	<files>
 		<file src="FetchXMLBuilder\bin\Release\Rappen.XTB.FXB.dll" target="lib\net472\Plugins" />
 		<file src="FetchXMLBuilder\bin\Release\Anthropic.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
+		<file src="FetchXMLBuilder\bin\Release\Azure.AI.OpenAI.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
+		<file src="FetchXMLBuilder\bin\Release\Azure.Core.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
 		<file src="FetchXMLBuilder\bin\Release\CSharpToJsonSchema.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
+		<file src="FetchXMLBuilder\bin\Release\Microsoft.Extensions.AI.Abstractions.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
+		<file src="FetchXMLBuilder\bin\Release\Microsoft.Extensions.AI.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
+		<file src="FetchXMLBuilder\bin\Release\Microsoft.Extensions.AI.OpenAI.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
+		<file src="FetchXMLBuilder\bin\Release\Microsoft.Extensions.Logging.Abstractions.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
 		<file src="FetchXMLBuilder\bin\Release\OpenAI.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
 		<file src="FetchXMLBuilder\bin\Release\System.ClientModel.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
 		<file src="FetchXMLBuilder\bin\Release\System.Memory.Data.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
-		<file src="FetchXMLBuilder\bin\Release\Azure.Core.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
-		<file src="FetchXMLBuilder\bin\Release\Azure.AI.*.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
-		<file src="FetchXMLBuilder\bin\Release\Microsoft.Extensions.AI.*.dll" target="lib\net472\Plugins\Rappen.XTB.FXB" />
 	</files>
 </package>
