@@ -46,6 +46,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         internal FXBSettings settings;
         internal FXBConnectionSettings connectionsettings;
         internal bool working = false;
+        internal readonly Version Version;
         internal Version CDSVersion = new Version();
         internal readonly Version bypasspluginminversion = new Version(9, 2);
 
@@ -73,8 +74,9 @@ namespace Rappen.XTB.FetchXmlBuilder
             // Add the event handler for handling non-UI thread exceptions to the event.
             //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Error_UnhandledException);
 
+            Version = Assembly.GetExecutingAssembly().GetName().Version;
             UrlUtils.TOOL_NAME = "FetchXMLBuilder";
-            tslAbout.ToolTipText = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+            tslAbout.ToolTipText = $"Version: {Version}";
 
             // When my PR https://github.com/MscrmTools/XrmToolBox/pull/1409 is accepted,
             // use constructor that takes my tool as parameter
@@ -576,8 +578,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             LogUse("Load", ai2: true);
             SetupDockControls();
             ApplySettings(true);
-            var ass = Assembly.GetExecutingAssembly().GetName();
-            var version = ass.Version.ToString();
+            var version = Version.ToString();
             if (!version.Equals(settings.CurrentVersion))
             {
                 var oldversion = settings.CurrentVersion;
@@ -951,8 +952,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void tmsiShowReleaseNotes_Click(object sender, EventArgs e)
         {
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
-            OpenUrl(Welcome.GetReleaseNotesUrl(version));
+            OpenUrl(Welcome.GetReleaseNotesUrl(Version));
         }
 
         private void tsbShare_Click(object sender, EventArgs e)

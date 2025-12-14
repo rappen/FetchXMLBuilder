@@ -3,7 +3,6 @@ using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Forms;
 using System;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
@@ -68,7 +67,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 {
                     if (strArgument.ToLowerInvariant().StartsWith("view:"))
                     {
-                        if (!Guid.TryParse(strArgument.Split(':')[1], out Guid id))
+                        if (!Guid.TryParse(strArgument.Split(':')[1], out var id))
                         {
                             MessageBox.Show($"Incorrect Guid: {strArgument}", "Loading Views", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
@@ -217,7 +216,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             LogUse("ShowAbout");
             var about = new About();
             about.StartPosition = FormStartPosition.CenterParent;
-            about.lblVersion.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            about.lblVersion.Text = Version.ToString();
             about.ShowDialog();
         }
 
