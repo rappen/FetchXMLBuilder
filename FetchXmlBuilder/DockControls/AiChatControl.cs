@@ -39,6 +39,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private int manualcalls = 0; // Counts the number of calls made by the user in this session
         private static List<AiUser> freeusers;
         private bool metadataavailable;
+        private List<string> askhistory = new List<string>();
+        private int currentaskhistory = -1;
 
         #region Public Constructor
 
@@ -265,6 +267,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 case Button btn when btn == btnAiChatAsk:
                     text = txtAiChat.Text;
+                    AddHistoryIfNeeded(text);
                     break;
 
                 case Button btn when btn == btnYes:
@@ -284,6 +287,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
                 case string manual:
                     text = manual;
+                    AddHistoryIfNeeded(text);
                     break;
             }
             if (string.IsNullOrWhiteSpace(text))
@@ -611,6 +615,35 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             ai.WriteEvent($"{action}", count ?? msg?.Length, duration, tokensout, tokensin, logconversation ? msg : null);
         }
 
+        private void AddHistoryIfNeeded(string text)
+        {
+            if (currentaskhistory < 0 || currentaskhistory >= askhistory.Count || askhistory[currentaskhistory] != text)
+            {
+                askhistory.Add(text);
+                currentaskhistory = askhistory.Count;
+            }
+        }
+
+        private void CopyFromHistory(int direction)
+        {
+            currentaskhistory += direction;
+            if (currentaskhistory < 0)
+            {
+                currentaskhistory = 0;
+            }
+            else if (currentaskhistory >= askhistory.Count)
+            {
+                currentaskhistory = askhistory.Count;
+                txtAiChat.Text = string.Empty;
+                return;
+            }
+            if (currentaskhistory >= 0 && currentaskhistory < askhistory.Count)
+            {
+                txtAiChat.Text = askhistory[currentaskhistory];
+                txtAiChat.SelectionStart = txtAiChat.Text.Length;
+            }
+        }
+
         #endregion Private Methods
 
         #region Private Event Handlers
@@ -646,6 +679,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 {
                     case Keys.Enter when fxb.settings.AiSettings.SendWithEnter && mnuSendWithEnter.Checked && btnAiChatAsk.Enabled && !string.IsNullOrWhiteSpace(txtAiChat.Text):
                         SendChatToAI(txtAiChat.Text);
+                        break;
+
+                    case Keys.Up:
+                        CopyFromHistory(-1);
+                        break;
+
+                    case Keys.Down:
+                        CopyFromHistory(1);
                         break;
 
                     default:
@@ -752,13 +793,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        #endregion Private Event Handlers
-
         private void mnuSendWithEnter_Click(object sender, EventArgs e)
         {
             fxb.settings.AiSettings.SendWithEnter = mnuSendWithEnter.Checked;
             fxb.settings.Save();
         }
+
+        #endregion Private Event Handlers
     }
 
     public class AiUser
