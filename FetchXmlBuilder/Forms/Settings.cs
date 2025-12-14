@@ -27,7 +27,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.fxb = fxb;
             cmbAiProvider.Items.Clear();
             cmbAiProvider.Items.Add("");
-            cmbAiProvider.Items.AddRange(OnlineSettings.Instance.AiSupport.AiProviders.ToArray());
+            cmbAiProvider.Items.AddRange(OnlineSettings.Instance.AiSupport.SupportedAiProviders(fxb.Version).ToArray());
             PopulateSettings(fxb.settings);
             tabSettings.SelectedTab = tabSettings.TabPages
                 .Cast<TabPage>()

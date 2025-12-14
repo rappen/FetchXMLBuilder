@@ -11,7 +11,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Text.Json;
 using System.Threading;
 using System.Windows.Forms;
@@ -202,19 +201,18 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 u.InstallationId.Equals(InstallationInfo.Instance.InstallationId)) == true;
         }
 
-        internal static void PromptToUseForFree(PluginControlBase tool)
+        internal static void PromptToUseForFree(FetchXmlBuilder tool)
         {
             var install = Installation.Load(null);
             var url = OnlineSettings.Instance.AiSupport.UrlToUseForFree;
             var wpf = OnlineSettings.Instance.AiSupport.WpfToUseForFree;
             var installid = InstallationInfo.Instance.InstallationId;
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
             var fullurl = $"{url}?" +
                 $"wpf{wpf}_1_first={install?.PersonalFirstName}&" +
                 $"wpf{wpf}_1_last={install?.PersonalLastName}&" +
                 $"wpf{wpf}_3={install?.PersonalCountry}&" +
                 $"wpf{wpf}_4={install?.PersonalEmail}&" +
-                $"wpf{wpf}_31={tool.ToolName}&wpf{wpf}_32={version}&wpf{wpf}_33={installid}";
+                $"wpf{wpf}_31={tool.ToolName}&wpf{wpf}_32={tool.Version}&wpf{wpf}_33={installid}";
             Process.Start(fullurl);
         }
 
