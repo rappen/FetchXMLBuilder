@@ -330,11 +330,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             Cursor = Cursors.WaitCursor;
             var fetch = queryinfo.Query is FetchExpression fetchexpr ? fetchexpr.Query : queryinfo.Query.ToString();
             var layout = form.dockControlBuilder?.LayoutXML?.ToXMLString();
-            ExcelHelper.ExportToExcel(form, crmGridView1, fetch, layout, () =>
+            crmGridView1.ExportToExcel(form.settings.Results.ExcelAddLinks, fetch, () =>
             {
                 mnuExcel.Enabled = true;
                 Cursor = Cursors.Default;
-            });
+            }, 500);
         }
 
         #endregion Private Methods
