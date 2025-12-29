@@ -10,6 +10,7 @@ using Rappen.XTB.FetchXmlBuilder.Extensions;
 using Rappen.XTB.FetchXmlBuilder.Forms;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using Rappen.XTB.Helpers;
+using Rappen.XTB.Helpers.RappXTB;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ using Entity = Microsoft.Xrm.Sdk.Entity;
 
 namespace Rappen.XTB.FetchXmlBuilder
 {
-    public partial class FetchXmlBuilder : PluginControlBase
+    public partial class FetchXmlBuilder : RappPluginControlBase
     {
         #region AI to log
 
@@ -110,7 +111,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void Error_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            MessageBox.Show(e.IsTerminating.ToString());
+            MessageBoxEx.Show(this, e.IsTerminating.ToString());
             if (e.ExceptionObject is Exception ex)
             {
                 LogError($"Unhandling error: {ex}");
@@ -119,7 +120,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             else
             {
                 LogError($"Unhandling error: {e}");
-                MessageBox.Show("Unhandeled error:\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBoxEx.Show(this, "Unhandeled error:\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -256,22 +257,17 @@ namespace Rappen.XTB.FetchXmlBuilder
             dockControlMeta?.Close();
             dockControlAiChat?.Close();
             SaveSetting();
-            LogUse("Close", ai2: true);
+            LogUse("Close", newAppInsights: true);
         }
 
-        public override void HandleToastActivation(ToastNotificationActivatedEventArgsCompat args)
+        public override bool HandleToastActivationInternal(string action, string sender, ToastArguments args)
         {
-            if (Supporting.HandleToastActivation(this, args, ai2))
-            {
-                return;
-            }
-            var arguments = ToastArguments.Parse(args.Argument);
-            if (arguments.TryGetValue("action", out var action) && action == "default")
+            if (action == "default")
             {
                 this.BringToolToFront(dockControlBuilder?.tvFetch);
-                return;
+                return true;
             }
-            base.HandleToastActivation(args);
+            return false;
         }
 
         public void ApplyState(object state)
@@ -330,28 +326,6 @@ namespace Rappen.XTB.FetchXmlBuilder
                 warning = null;
             }
             return warning;
-        }
-
-        internal void LogUse(string action, bool forceLog = false, double? count = null, double? duration = null, bool ai1 = true, bool ai2 = false)
-        {
-            // Will be done in the WriteEvent when my PR #1409 is accepted, remove this line then
-            LogInfo($"{action}{(count != null ? $" Count: {count}" : "")}{(duration != null ? $" Duration: {duration}" : "")}");
-            if (ai1)
-            {
-                this.ai1.WriteEvent(action, count, duration, HandleAIResult);
-            }
-            if (ai2)
-            {
-                this.ai2.WriteEvent(action, count, duration, HandleAIResult);
-            }
-        }
-
-        private void HandleAIResult(string result)
-        {
-            if (!string.IsNullOrEmpty(result))
-            {
-                LogError("Failed to write to Application Insights:\n{0}", result);
-            }
         }
 
         internal string GetCSharpCode()
@@ -562,7 +536,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             else
             {
                 LogError("CRM version too old for FXB");
-                MessageBox.Show($"RetrieveMetadataChangesRequest was introduced in\nMicrosoft Dynamics CRM 2011 UR12 (5.0.9690.3218)\nCurrent version is {CDSVersion}\n\nPlease connect to a newer organization to use this cool tool.",
+                MessageBoxEx.Show(this, $"RetrieveMetadataChangesRequest was introduced in\nMicrosoft Dynamics CRM 2011 UR12 (5.0.9690.3218)\nCurrent version is {CDSVersion}\n\nPlease connect to a newer organization to use this cool tool.",
                     "Organization too old", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             EnableControls(orgok && buttonsEnabled);
@@ -575,7 +549,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 return;
             }
             alreadyloaded = true;
-            LogUse("Load", ai2: true);
+            LogUse("Load", newAppInsights: true);
             SetupDockControls();
             ApplySettings(true);
             var version = Version.ToString();
@@ -583,12 +557,12 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 var oldversion = settings.CurrentVersion;
                 settings.Migrate(version);
-                LogUse("ShowWelcome", ai2: true);
+                LogUse("ShowWelcome", newAppInsights: true);
                 Welcome.ShowWelcome(this, oldversion);
             }
             else
             {
-                Supporting.ShowIf(this, ShowItFrom.Open, false, true, ai2);
+                Supporting.ShowIf(this, ShowItFrom.Open, false, true);
             }
             if (Supporting.IsEnabled(this))
             {
@@ -821,7 +795,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 return;
             }
-            if (MessageBox.Show($"Confirm delete query {query.Name} from repository", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK)
+            if (MessageBoxEx.Show(this, $"Confirm delete query {query.Name} from repository", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK)
             {
                 return;
             }
@@ -849,7 +823,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             query.Fetch = dockControlBuilder.GetFetchString(true, false);
             query.Layout = dockControlBuilder.LayoutXML?.ToXMLString();
             SaveRepository();
-            MessageBox.Show($"Query {query.Name} updated in repository", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBoxEx.Show(this, $"Query {query.Name} updated in repository", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void tsmiRepoSaveAs_Click(object sender, EventArgs e)
@@ -860,12 +834,12 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             if (string.IsNullOrEmpty(queryname))
             {
-                MessageBox.Show("No name for query.", "Save Query", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBoxEx.Show(this, "No name for query.", "Save Query", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (repository.Queries.Any(q => q.Name == queryname))
             {
-                if (MessageBox.Show($"Query {queryname} already exists.\nOverwrite?", "Save Query", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) != DialogResult.Yes)
+                if (MessageBoxEx.Show(this, $"Query {queryname} already exists.\nOverwrite?", "Save Query", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) != DialogResult.Yes)
                 {
                     return;
                 }
@@ -878,7 +852,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             repository.SortQueries();
             SaveRepository();
             RebuildRepositoryMenu(query);
-            MessageBox.Show($"Query {query.Name} saved in repository", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBoxEx.Show(this, $"Query {query.Name} saved in repository", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void tsmiRepoExport_Click(object sender, EventArgs e)
@@ -891,7 +865,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 XmlAtomicStore.Serialize(repository, sfd.FileName);
-                MessageBox.Show($"The entire repository has been saved to file\n{sfd.FileName}", "Export repository", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBoxEx.Show(this, $"The entire repository has been saved to file\n{sfd.FileName}", "Export repository", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -909,14 +883,14 @@ namespace Rappen.XTB.FetchXmlBuilder
                 {
                     var repo = XmlAtomicStore.Deserialize<QueryRepository>(ofd.FileName);
                     var reponame = Path.ChangeExtension(Path.GetFileName(ofd.FileName), "").Trim('.');
-                    if (MessageBox.Show($"Confirm importing {repo.Queries.Count} queries into repository folder \"{reponame}\".", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
+                    if (MessageBoxEx.Show(this, $"Confirm importing {repo.Queries.Count} queries into repository folder \"{reponame}\".", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
                     {
                         return;
                     }
                     repo.Queries.ForEach(q => repository.Queries.Add(new QueryDefinition { Name = reponame + "\\" + q.Name, Fetch = q.Fetch }));
                     SaveRepository();
                     RebuildRepositoryMenu(null);
-                    MessageBox.Show($"Repository {reponame} has been imported.", "Import repository", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBoxEx.Show(this, $"Repository {reponame} has been imported.", "Import repository", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
@@ -927,7 +901,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void tsmiRepoDeleteAll_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show($"Confirm deleting all {repository.Queries.Count} queries in the repository!\nThis can not be undone.", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
+            if (MessageBoxEx.Show(this, $"Confirm deleting all {repository.Queries.Count} queries in the repository!\nThis can not be undone.", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
             {
                 return;
             }
@@ -962,7 +936,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void tsbSupporting_Click(object sender, EventArgs e)
         {
-            Supporting.ShowIf(this, ShowItFrom.Button, true, false, ai2, sync: true);
+            Supporting.ShowIf(this, ShowItFrom.Button, true, false, sync: true);
         }
 
         private void reloadBySolutionToolStripMenuItem_Click(object sender, EventArgs e)

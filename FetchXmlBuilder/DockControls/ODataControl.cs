@@ -19,7 +19,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal void DisplayOData(string url)
         {
-            if (Uri.TryCreate(url, UriKind.Absolute, out Uri uri))
+            if (Uri.TryCreate(url, UriKind.Absolute, out var uri))
             {
                 var prefix = version == 4 ? "WebAPI: " : "OData: ";
                 linkOData.Text = prefix + url;
@@ -55,7 +55,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             else
             {
-                MessageBox.Show("No link to execute");
+                MessageBoxEx.Show(this, "No link to execute");
             }
         }
 
@@ -68,7 +68,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             else
             {
-                MessageBox.Show("No link to copy");
+                MessageBoxEx.Show(this, "No link to copy");
             }
         }
 

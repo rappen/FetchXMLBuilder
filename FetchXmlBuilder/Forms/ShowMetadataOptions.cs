@@ -253,7 +253,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void btnEClear_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Reset to default entities.", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
+            if (MessageBoxEx.Show(this, "Reset to default entities.", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
             {
                 PopulateEntitiesSettings(new ShowMetaTypesEntity());
             }
@@ -261,7 +261,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void btnAClear_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Reset to default attributes.", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
+            if (MessageBoxEx.Show(this, "Reset to default attributes.", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
             {
                 PopulateAttributesSettings(new ShowMetaTypesAttribute());
             }

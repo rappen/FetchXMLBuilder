@@ -772,8 +772,8 @@
   <Import Project="..\MarkMpn.XmlSchemaAutocomplete\MarkMpn.XmlSchemaAutocomplete.Scintilla\MarkMpn.XmlSchemaAutocomplete.Scintilla.projitems" Label="Shared" />
   <Import Project="..\MsCrmTools.MetadataBrowser\MsCrmTools.MetadataBrowser\MsCrmTools.MetadataBrowser.Shared.projitems" Label="Shared" />
   <Import Project="..\Rappen.XTB.Helper\Rappen.XRM.Helpers\Rappen.XRM.Helpers.projitems" Label="Shared" />
-  <Import Project="..\Rappen.XTB.Helper\Rappen.XTB.Helpers\Rappen.XTB.Helpers.projitems" Label="Shared" />
   <Import Project="..\Rappen.XTB.Helper\Rappen.AI.WinForm\Rappen.AI.WinForm.projitems" Label="Shared" />
+  <Import Project="..\Rappen.XTB.Helper\Rappen.XTB.Helpers\Rappen.XTB.Helpers.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Debug (

@@ -238,7 +238,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "XML Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBoxEx.Show(this, ex.Message, "XML Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -336,7 +336,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void btnResetAll_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want it to get back default settings?\n\nYes or No...", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+            if (MessageBoxEx.Show(this, "Are you sure you want it to get back default settings?\n\nYes or No...", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
             {
                 PopulateSettings(new FXBSettings());
             }
@@ -344,7 +344,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void btnForceReloadMetadata_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Shall we reload all metadata?\n\nYes or No...", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+            if (MessageBoxEx.Show(this, "Shall we reload all metadata?\n\nYes or No...", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
             {
                 forcereloadingmetadata = true;
                 DialogResult = DialogResult.OK;

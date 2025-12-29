@@ -389,7 +389,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "Invalid XML: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBoxEx.Show(this, "Invalid XML: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             treeChecksum = "";
@@ -397,7 +397,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 fetchDoc.DocumentElement.ChildNodes.Count > 0 &&
                 fetchDoc.DocumentElement.ChildNodes[0].Name == "fetch")
             {
-                MessageBox.Show(this, "Invalid XML: Definition XML root must be fetch!", "Error",
+                MessageBoxEx.Show(this, "Invalid XML: Definition XML root must be fetch!", "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
@@ -510,7 +510,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "FetchXML Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBoxEx.Show(this, ex.Message, "FetchXML Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     result = ex.Message;
                 }
             }
@@ -717,7 +717,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             catch (XmlException ex)
             {
                 var msg = "Clipboard does contain well formatted xml.\nError description:\n\n" + ex.Message;
-                MessageBox.Show(msg, "Paste", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBoxEx.Show(this, msg, "Paste", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -841,7 +841,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 if (deleteToolStripMenuItem.Enabled)
                 {
-                    if (MessageBox.Show(deleteToolStripMenuItem.Text + " ?", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
+                    if (MessageBoxEx.Show(this, deleteToolStripMenuItem.Text + " ?", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
                     {
                         HandleNodeMenuClick(deleteToolStripMenuItem.Tag?.ToString());
                     }
@@ -908,20 +908,20 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             if (fxb.Service == null)
             {
-                MessageBox.Show("Must be connected to CRM", "Select attributes", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBoxEx.Show(this, "Must be connected to CRM", "Select attributes", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             var entityNode = tvFetch.SelectedNode;
             if (entityNode.Name != "entity" &&
                 entityNode.Name != "link-entity")
             {
-                MessageBox.Show("Cannot select attributes for node " + entityNode.Name, "Select attributes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBoxEx.Show(this, "Cannot select attributes for node " + entityNode.Name, "Select attributes", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             var entityName = entityNode.Value("name");
             if (string.IsNullOrWhiteSpace(entityName))
             {
-                MessageBox.Show("Cannot find valid entity name from node " + entityNode.Name, "Select attributes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBoxEx.Show(this, "Cannot find valid entity name from node " + entityNode.Name, "Select attributes", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (fxb.NeedToLoadEntity(entityName))
@@ -1030,7 +1030,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     catch (XmlException ex)
                     {
                         var msg = "Comment does contain well formatted xml.\nError description:\n\n" + ex.Message;
-                        MessageBox.Show(msg, "Uncomment", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBoxEx.Show(this, msg, "Uncomment", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
             }

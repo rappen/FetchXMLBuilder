@@ -140,7 +140,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal static string GetFetchMini(string fetchxml, char quotationchar = '\'', bool removecomments = true)
         {
-            XmlDocument doc = fetchxml.ToXml();
+            var doc = fetchxml.ToXml();
             var comments = doc.SelectNodes("//comment()");
             if (comments.Count > 0 && removecomments)
             {
@@ -153,12 +153,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             string xml;
             using (var stringWriter = new StringWriter())
             {
-                using (var xmlWriter = new XmlFragmentWriter(stringWriter))
-                {
-                    xmlWriter.QuoteChar = quotationchar;
-                    doc.Save(xmlWriter);
-                    xml = stringWriter.ToString();
-                }
+                using var xmlWriter = new XmlFragmentWriter(stringWriter);
+                xmlWriter.QuoteChar = quotationchar;
+                doc.Save(xmlWriter);
+                xml = stringWriter.ToString();
             }
             var result = StripSpaces(xml);
             return result;
@@ -184,7 +182,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 if (!silent)
                 {
-                    MessageBox.Show(ex.Message, "XML Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBoxEx.Show(this, ex.Message, "XML Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -250,7 +248,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 File.WriteAllText(sfd.FileName, txtXML.Text);
-                MessageBox.Show($"{format} saved to {sfd.FileName}");
+                MessageBoxEx.Show(this, $"{format} saved to {sfd.FileName}");
             }
         }
 
@@ -272,7 +270,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
                 else
                 {
-                    if (MessageBox.Show("Unrecognized encoding, unsure what to do with it.\n" +
+                    if (MessageBoxEx.Show(this, "Unrecognized encoding, unsure what to do with it.\n" +
                         "Currently FXB can handle htmlencoded and urlescaped strings.\n\n" +
                         "Would you like to submit an issue to FetchXML Builder to be able to handle this?",
                         "Decode " + Text, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
@@ -287,7 +285,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void FormatAsHtml()
         {
-            var response = MessageBox.Show("Strip spaces from encoded XML?", "Encode XML", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            var response = MessageBoxEx.Show(this, "Strip spaces from encoded XML?", "Encode XML", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (response == DialogResult.Cancel)
             {
                 UpdateButtons();
@@ -320,9 +318,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var removecomm = false;
             if (fetchxml.Contains("<!--"))
             {
-                removecomm = MessageBox.Show("Remove comments?", "Minify XML", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+                removecomm = MessageBoxEx.Show(this, "Remove comments?", "Minify XML", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
             }
-            string result = GetFetchMini(fetchxml, fxb.settings.QueryOptions.UseSingleQuotation ? '\'' : '"', removecomm);
+            var result = GetFetchMini(fetchxml, fxb.settings.QueryOptions.UseSingleQuotation ? '\'' : '"', removecomm);
             txtXML.Text = result;
         }
 
@@ -337,9 +335,21 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private static string StripSpaces(string xml)
         {
-            while (xml.Contains(" <")) xml = xml.Replace(" <", "<");
-            while (xml.Contains(" >")) xml = xml.Replace(" >", ">");
-            while (xml.Contains(" />")) xml = xml.Replace(" />", "/>");
+            while (xml.Contains(" <"))
+            {
+                xml = xml.Replace(" <", "<");
+            }
+
+            while (xml.Contains(" >"))
+            {
+                xml = xml.Replace(" >", ">");
+            }
+
+            while (xml.Contains(" />"))
+            {
+                xml = xml.Replace(" />", "/>");
+            }
+
             return xml.Trim();
         }
 
@@ -612,7 +622,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             helper.Menu.Opening += (sender, e) =>
             {
                 if (_usedAutocomplete)
+                {
                     return;
+                }
 
                 // Log this only once per instance, not per keypress
                 fxb.LogUse("Autocomplete");
@@ -627,7 +639,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 var entityNode = (XmlElement)e.Element.ParentNode;
                 while (entityNode != null && entityNode.Name != "entity" && entityNode.Name != "link-entity")
+                {
                     entityNode = (XmlElement)entityNode.ParentNode;
+                }
 
                 // <condition> and <order> can also override entityname
                 if (!String.IsNullOrEmpty(e.Element.GetAttribute("entityname")))
@@ -673,7 +687,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 var entityNode = (XmlElement)e.Element.ParentNode;
                 while (entityNode != null && entityNode.Name != "entity" && entityNode.Name != "link-entity")
+                {
                     entityNode = (XmlElement)entityNode.ParentNode;
+                }
 
                 // <condition> and <order> can also override entityname
                 if ((e.Element.Name == "condition" || e.Element.Name == "order") && !String.IsNullOrEmpty(e.Element.GetAttribute("entityname")))
@@ -692,7 +708,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                             // Only suggest attributes of the same type
                             var attr = attrs.SingleOrDefault(a => a.LogicalName == e.Element.GetAttribute("attribute"));
                             if (attr != null)
+                            {
                                 attributes = attributes.Where(a => IsCompatibleType(a, attr));
+                            }
                         }
 
                         e.Suggestions.AddRange(attributes.OrderBy(attr => attr.LogicalName).Select(attr => new AttributeMetadataSuggestion(attr, fxb.settings.UseFriendlyNames)));
@@ -705,7 +723,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 var parent = (XmlElement)e.Element.ParentNode;
                 while (parent.Name != "entity" && parent.Name != "link-entity" && parent.ParentNode != null)
+                {
                     parent = (XmlElement)parent.ParentNode;
+                }
 
                 var entityNode = e.Attribute.Name == "from" ? e.Element : parent;
                 var otherEntityNode = e.Attribute.Name == "from" ? parent : e.Element;
@@ -722,9 +742,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                         // Maybe always offer all attributes but highlight the best ones?
                         var attr = otherAttrs.SingleOrDefault(a => a.LogicalName == e.Element.GetAttribute(e.Attribute.Name == "from" ? "to" : "from"));
                         if (attr != null)
+                        {
                             attributes = attributes.Where(a => IsCompatibleType(a, attr));
+                        }
                         else
+                        {
                             attributes = attributes.Where(a => a.LogicalName == entity.PrimaryIdAttribute || a is LookupAttributeMetadata lookup && lookup.Targets.Contains(otherEntity.LogicalName));
+                        }
                     }
 
                     e.Suggestions.AddRange(attributes.OrderBy(attr => attr.LogicalName).Select(attr => new AttributeMetadataSuggestion(attr, fxb.settings.UseFriendlyNames)));
@@ -773,7 +797,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 var entityNode = (XmlElement)e.Element.ParentNode;
                 while (entityNode != null && entityNode.Name != "entity" && entityNode.Name != "link-entity")
+                {
                     entityNode = (XmlElement)entityNode.ParentNode;
+                }
 
                 // <condition> and <order> can also override entityname
                 if ((e.Element.Name == "condition" || e.Element.Name == "order") && !String.IsNullOrEmpty(e.Element.GetAttribute("entityname")))
@@ -842,24 +868,34 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             // For optionset attributes, check they are the same optionset type
             if (a is EnumAttributeMetadata optionsetX && attr is EnumAttributeMetadata optionsetY)
+            {
                 return optionsetX.OptionSet.IsGlobal == true && optionsetY.OptionSet.IsGlobal == true && optionsetX.OptionSet.Name == optionsetY.OptionSet.Name;
+            }
 
             // For lookup/customer/owner/uniqueid attributes, check they can refer to the same entity types
             var lookupX = a as LookupAttributeMetadata;
             var lookupY = attr as LookupAttributeMetadata;
 
             if (a.IsPrimaryId == true)
+            {
                 lookupX = new LookupAttributeMetadata { Targets = new[] { a.EntityLogicalName } };
+            }
 
             if (attr.IsPrimaryId == true)
+            {
                 lookupY = new LookupAttributeMetadata { Targets = new[] { attr.EntityLogicalName } };
+            }
 
             if (lookupX != null && lookupY != null)
+            {
                 return lookupX.Targets.Intersect(lookupY.Targets).Any();
+            }
 
             // For everything else, just check they're the same overall type
             if (a.AttributeType == attr.AttributeType)
+            {
                 return true;
+            }
 
             return false;
         }
@@ -883,7 +919,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             try
             {
-                XmlDocument doc = txtXML.Text.ToXml();
+                var doc = txtXML.Text.ToXml();
                 if (doc.OuterXml != liveUpdateXml)
                 {
                     switch (contenttype)
@@ -990,7 +1026,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                         break;
 
                     case QExStyleEnum.QueryExpressionFactory:
-                        MessageBox.Show(@"This feature is not yet finalized... #sorry
+                        MessageBoxEx.Show(this, @"This feature is not yet finalized... #sorry
 
 Do you like that idea?
 Click the ""Help"" button to vote on this Issue #822 and it will be implemented, one day...!
@@ -1001,7 +1037,7 @@ More votes == released sooner.", "QueryExpressionFactory",
                         break;
 
                     case QExStyleEnum.OrganizationServiceContext:
-                        MessageBox.Show(@"This feature is not yet started implementation.
+                        MessageBoxEx.Show(this, @"This feature is not yet started implementation.
 
 Do you like that idea?
 Click the ""Help"" button to vote on this Issue #859 and it will be implemented, one month...!

@@ -67,7 +67,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         {
             Clipboard.SetText(txtLink.Text);
             Close();
-            MessageBox.Show("Link is copied!", "Share Query via XrmToolBox", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBoxEx.Show(this, "Link is copied!", "Share Query via XrmToolBox", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void settings_CheckedChanged(object sender, EventArgs e)

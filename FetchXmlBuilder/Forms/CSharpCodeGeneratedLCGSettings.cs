@@ -17,18 +17,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         internal static bool GetSettings(FetchXmlBuilder fxb, LCG.Settings settings)
         {
-            using (var settingdlg = new CSharpCodeGeneratedLCGSettings())
+            using var settingdlg = new CSharpCodeGeneratedLCGSettings();
+            settingdlg.SetSettings(settings);
+            if (settingdlg.ShowDialog(fxb) == DialogResult.OK)
             {
-                settingdlg.SetSettings(settings);
-                if (settingdlg.ShowDialog(fxb) == DialogResult.OK)
-                {
-                    settings.ConstantName = (NameType)Math.Max(settingdlg.cmbConstantName.SelectedIndex, 0);
-                    settings.ConstantCamelCased = settingdlg.chkConstCamelCased.Checked;
-                    settings.DoStripPrefix = settingdlg.chkConstStripPrefix.Checked;
-                    settings.StripPrefix = settingdlg.txtConstStripPrefix.Text.ToLowerInvariant().TrimEnd('_') + "_";
-                    settings.SourceFile = settingdlg.sourcefile;
-                    return true;
-                }
+                settings.ConstantName = (NameType)Math.Max(settingdlg.cmbConstantName.SelectedIndex, 0);
+                settings.ConstantCamelCased = settingdlg.chkConstCamelCased.Checked;
+                settings.DoStripPrefix = settingdlg.chkConstStripPrefix.Checked;
+                settings.StripPrefix = settingdlg.txtConstStripPrefix.Text.ToLowerInvariant().TrimEnd('_') + "_";
+                settings.SourceFile = settingdlg.sourcefile;
+                return true;
             }
             return false;
         }
@@ -92,7 +90,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Failed to parse configuration.\n\n{ex.Message}", "Open file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBoxEx.Show(this, $"Failed to parse configuration.\n\n{ex.Message}", "Open file", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

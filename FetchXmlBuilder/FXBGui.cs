@@ -10,6 +10,7 @@ using Rappen.XTB.FetchXmlBuilder.Forms;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using Rappen.XTB.FetchXmlBuilder.Views;
 using Rappen.XTB.FXB.Settings;
+using Rappen.XTB.Helpers.RappXTB;
 using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ using XrmToolBox.Extensibility;
 
 namespace Rappen.XTB.FetchXmlBuilder
 {
-    public partial class FetchXmlBuilder : PluginControlBase
+    public partial class FetchXmlBuilder : RappPluginControlBase
     {
         internal static bool friendlyNames = false;
         internal TreeBuilderControl dockControlBuilder;
@@ -313,10 +314,10 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 return;
             }
-            Entity feed = GetCWPFeed(feedid);
+            var feed = GetCWPFeed(feedid);
             if (feed == null)
             {
-                MessageBox.Show("Feed not found.", "Open CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBoxEx.Show(this, "Feed not found.", "Open CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
             if (feed.Contains("cint_fetchxml"))
@@ -359,7 +360,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                         break;
 
                     default:
-                        MessageBox.Show("The selected file does not contain FetchXML.\nPlease select another one.", "Open File",
+                        MessageBoxEx.Show(this, "The selected file does not contain FetchXML.\nPlease select another one.", "Open File",
                             MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         break;
                 }
@@ -386,7 +387,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 }
                 else
                 {
-                    if (MessageBox.Show("The selected marketing list does not contain any FetchXML.\nPlease select another one.", "Open Marketing List",
+                    if (MessageBoxEx.Show(this, "The selected marketing list does not contain any FetchXML.\nPlease select another one.", "Open Marketing List",
                         MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
                     {
                         OpenML();
@@ -421,7 +422,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     }
                     else
                     {
-                        if (MessageBox.Show("The selected view does not contain any FetchXML.\nPlease select another one.", "Open View",
+                        if (MessageBoxEx.Show(this, "The selected view does not contain any FetchXML.\nPlease select another one.", "Open View",
                             MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
                         {
                             OpenView();
@@ -488,12 +489,12 @@ namespace Rappen.XTB.FetchXmlBuilder
                 }
                 if (string.IsNullOrWhiteSpace(feedid))
                 {
-                    MessageBox.Show("Feed not saved.", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBoxEx.Show(this, "Feed not saved.", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
                 CWPFeed = feedid;
             }
-            Entity feed = GetCWPFeed(CWPFeed);
+            var feed = GetCWPFeed(CWPFeed);
             if (feed == null)
             {
                 feed = new Entity("cint_feed");
@@ -515,7 +516,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 Service.Update(feed);
             }
             LogUse("SaveCWPFeed");
-            MessageBox.Show("CWP Feed " + CWPFeed + " has been " + verb + "!", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBoxEx.Show(this, "CWP Feed " + CWPFeed + " has been " + verb + "!", "Save CWP Feed", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void SaveDockPanels()
@@ -526,7 +527,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private bool SaveFetchXML(bool prompt, bool silent)
         {
-            bool result = false;
+            var result = false;
             var newfile = prompt ? "" : FileName;
             if (prompt || string.IsNullOrEmpty(FileName))
             {
@@ -549,7 +550,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 LogUse("SaveFile");
                 if (!silent)
                 {
-                    MessageBox.Show(this, "FetchXML saved!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBoxEx.Show(this, "FetchXML saved!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 result = true;
                 EnableControls(true);
@@ -563,7 +564,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             var ok = true;
             if (!settings.DoNotPromptToSave && dockControlBuilder?.FetchChanged == true)
             {
-                var result = MessageBox.Show("FetchXML has changed.\nSave changes?", "Confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                var result = MessageBoxEx.Show(this, "FetchXML has changed.\nSave changes?", "Confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                 if (result == DialogResult.Cancel)
                 {
                     ok = false;
@@ -586,7 +587,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 (eventargs) =>
                 {
                     var xml = dockControlBuilder.GetFetchString(false, false);
-                    Entity newView = new Entity(DynML.LogicalName);
+                    var newView = new Entity(DynML.LogicalName);
                     newView.Id = DynML.Id;
                     newView.Attributes.Add("query", xml);
                     Service.Update(newView);
@@ -618,14 +619,14 @@ namespace Rappen.XTB.FetchXmlBuilder
             var entityname = View?["returnedtypecode"].ToString() ?? dockControlBuilder.RootEntityName;
             if (GetEntity(entityname) == null)
             {
-                MessageBox.Show($"Can't set the correct ReturnedTypeCode from the metadata: {entityname}", "Save View",
+                MessageBoxEx.Show(this, $"Can't set the correct ReturnedTypeCode from the metadata: {entityname}", "Save View",
                     MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0,
                     "https://docs.microsoft.com/power-apps/developer/model-driven-apps/customize-entity-views?WT.mc_id=DX-MVP-5002475#create-views");
                 return;
             }
             if (dockControlBuilder.PrimaryIdNode == null)
             {
-                if (MessageBox.Show($"Views should really include the primary id.\nYou should add attribute {dockControlBuilder.PrimaryIdName}.\n\nYes - I will fix it\nNo - I don't care.",
+                if (MessageBoxEx.Show(this, $"Views should really include the primary id.\nYou should add attribute {dockControlBuilder.PrimaryIdName}.\n\nYes - I will fix it\nNo - I don't care.",
                                     "Save View", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.No)
                 {
                     return;
@@ -634,7 +635,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             var includelayout = saveas;
             if (!includelayout && settings.Layout.Enabled)
             {
-                var inclresult = MessageBox.Show("Include the layout of the view?", "Save View",
+                var inclresult = MessageBoxEx.Show(this, "Include the layout of the view?", "Save View",
                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, 0,
                     "https://jonasr.app/fxb-layout/#howto");
                 switch (inclresult)
@@ -656,7 +657,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 var currentAttributes = dockControlBuilder.GetAttributesSignature();
                 if (currentAttributes != attributesChecksum)
                 {
-                    MessageBox.Show("Cannot save view, returned attributes must not be changed.\n\nExpected attributes:\n  " +
+                    MessageBoxEx.Show(this, "Cannot save view, returned attributes must not be changed.\n\nExpected attributes:\n  " +
                         attributesChecksum.Replace("\n", "\n  ") + "\nCurrent attributes:\n  " + currentAttributes.Replace("\n", "\n  "),
                         "Cannot save view", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -666,7 +667,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             var viewtype = View?.LogicalName;
             if (saveas)
             {
-                var typeresult = MessageBox.Show("Save as a System View?\n\nYes - creating a new System View\nNo - creating a new Personal View", "Save View As",
+                var typeresult = MessageBoxEx.Show(this, "Save as a System View?\n\nYes - creating a new System View\nNo - creating a new Personal View", "Save View As",
                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, 0,
                     "https://docs.microsoft.com/power-apps/maker/model-driven-apps/create-edit-views?WT.mc_id=DX-MVP-5002475#types-of-views");
                 switch (typeresult)
@@ -685,19 +686,19 @@ namespace Rappen.XTB.FetchXmlBuilder
                 var newviewname = Prompt.ShowDialog("Enter name for the new view", "Save View As", viewname);
                 if (string.IsNullOrEmpty(newviewname))
                 {
-                    MessageBox.Show("No name for new view.", "Save View As", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBoxEx.Show(this, "No name for new view.", "Save View As", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 if (newviewname.ToLowerInvariant() == viewname?.ToLowerInvariant())
                 {
-                    MessageBox.Show("Enter a new name for this view.", "Save View As", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBoxEx.Show(this, "Enter a new name for this view.", "Save View As", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 viewname = newviewname;
             }
             if (viewtype == "savedquery")
             {
-                if (MessageBox.Show("This will update and publish the saved query in Dataverse.\n\nConfirm!", "Confirm",
+                if (MessageBoxEx.Show(this, "This will update and publish the saved query in Dataverse.\n\nConfirm!", "Confirm",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.Cancel)
                 {
                     return;
@@ -722,7 +723,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 newView.Id = View?.Id ?? Guid.Empty;
                 if (newView.Id.Equals(Guid.Empty))
                 {
-                    MessageBox.Show("Somehow missing the Id for the existing view.\nSorry. Try again, or reboot, or anything else...", "Oops", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBoxEx.Show(this, "Somehow missing the Id for the existing view.\nSorry. Try again, or reboot, or anything else...", "Oops", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
@@ -774,7 +775,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                             View = newview;
                             if (newView.LogicalName == "savedquery")
                             {
-                                MessageBox.Show($"{viewname} is created in the system.\n\nNote that it is now only in the Default solution!\nMake sure you go and add it to your own solutions.",
+                                MessageBoxEx.Show(this, $"{viewname} is created in the system.\n\nNote that it is now only in the Default solution!\nMake sure you go and add it to your own solutions.",
                                     "New View", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             }
                         }
@@ -796,10 +797,8 @@ namespace Rappen.XTB.FetchXmlBuilder
                 if (enabled)
                 {
                     var bytes = Convert.FromBase64String(tool.Metadata.SmallImageBase64);
-                    using (MemoryStream ms = new MemoryStream(bytes))
-                    {
-                        image = Image.FromStream(ms);
-                    }
+                    using var ms = new MemoryStream(bytes);
+                    image = Image.FromStream(ms);
                 }
                 else
                 {
@@ -922,7 +921,7 @@ namespace Rappen.XTB.FetchXmlBuilder
         private void ShowResultControl(string content, ContentType contenttype, SaveFormat save, DockState defaultstate)
         {
             if (content.Length > 100000 &&
-                MessageBox.Show("Huge result, this may take a while!\n" + content.Length.ToString() + " characters.\n\nContinue?", "Huge result",
+                MessageBoxEx.Show(this, "Huge result, this may take a while!\n" + content.Length.ToString() + " characters.\n\nContinue?", "Huge result",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
             {
                 return;
@@ -962,7 +961,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                  string.IsNullOrEmpty(settings.AiSettings?.Model)) &&
                  !dontask)
             {
-                if (MessageBoxEx.Show(this, "The AI Chat feature is missing some settings, please add them now.", "AI Chat", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                if (MessageBoxEx.Show((IWin32Window)this, "The AI Chat feature is missing some settings, please add them now.", "AI Chat", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     ShowSettings("tabAiChat");
                     ShowAiChatControl(true);
@@ -1013,7 +1012,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             var result =
                 sender is ToolStripMenuItem tsmi &&
                 tsmi.Tag is string strtag &&
-                int.TryParse(strtag, out int inttag) ? ResultItemToSettingResult(inttag) : ResultOutput.Grid;
+                int.TryParse(strtag, out var inttag) ? ResultItemToSettingResult(inttag) : ResultOutput.Grid;
             SetResultTypeMenu(result);
             if (settings.ExecuteOptions.ResultOutput != result)
             {

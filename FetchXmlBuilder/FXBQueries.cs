@@ -76,7 +76,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
             if (working)
             {
-                MessageBox.Show("FetchXML Builder is working as fast as possible, but is still in progress.\n\nPlease wait until the current transaction is completed.\n\nTake a break, maybe get a cup of coffee?\nJonas likes coffee, too, you know...\nClick the 'Help'-button to send me a cup virtually!", "Waiting...", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, "https://www.buymeacoffee.com/rappen");
+                MessageBoxEx.Show(this, "FetchXML Builder is working as fast as possible, but is still in progress.\n\nPlease wait until the current transaction is completed.\n\nTake a break, maybe get a cup of coffee?\nJonas likes coffee, too, you know...\nClick the 'Help'-button to send me a cup virtually!", "Waiting...", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, 0, "https://www.buymeacoffee.com/rappen");
                 return;
             }
             if (string.IsNullOrEmpty(fetch))
@@ -101,10 +101,10 @@ namespace Rappen.XTB.FetchXmlBuilder
                     break;
 
                 default:
-                    MessageBox.Show("Select valid output type under Options.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBoxEx.Show(this, "Select valid output type under Options.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
             }
-            Supporting.ShowIf(this, ShowItFrom.Execute, false, false, ai2);
+            Supporting.ShowIf(this, ShowItFrom.Execute, false, false);
         }
 
         internal void LoadViews(Action viewsLoaded)
@@ -199,7 +199,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 }
                 catch (FaultException<OrganizationServiceFault>)
                 {
-                    MessageBox.Show($"Cannot find either a system's or a personal's view with id {id}.", "Loading View", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBoxEx.Show(this, $"Cannot find either a system's or a personal's view with id {id}.", "Loading View", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (Exception ex)
                 {
@@ -320,7 +320,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     }
                     else if (completedargs.Cancelled)
                     {
-                        MessageBox.Show($"Manual abort.", "Execute", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBoxEx.Show(this, $"Manual abort.", "Execute", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                     else
                     {

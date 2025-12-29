@@ -49,7 +49,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             }
 
             callerArgs = message;
-            LogUse("CalledBy." + callerArgs?.SourcePlugin, ai2: true);
+            LogUse("CalledBy." + callerArgs?.SourcePlugin, newAppInsights: true);
 
             var fetchXml = string.Empty;
             var layoutxml = string.Empty;
@@ -69,7 +69,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     {
                         if (!Guid.TryParse(strArgument.Split(':')[1], out var id))
                         {
-                            MessageBox.Show($"Incorrect Guid: {strArgument}", "Loading Views", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBoxEx.Show(this, $"Incorrect Guid: {strArgument}", "Loading Views", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
                         View = GetViewById(id);
@@ -90,7 +90,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
             if (callerArgs.SourcePlugin == "View Designer" && !connectionsettings.TipsAgainstOrViewDesignerToolShown)
             {
-                if (MessageBox.Show("Did you know you can work with the layouts too in the FetchXML Builder?\nClick the Help button to see how!\n\nDon't show again.",
+                if (MessageBoxEx.Show(this, "Did you know you can work with the layouts too in the FetchXML Builder?\nClick the Help button to see how!\n\nDon't show again.",
                     "Called from View Designer", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2, 0,
                     "https://jonasr.app/fxb-layout/") == DialogResult.OK)
                 {
@@ -130,7 +130,7 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         public void SendingToTool(string tool)
         {
-            LogUse("Calling." + tool, ai2: true);
+            LogUse("Calling." + tool, newAppInsights: true);
             try
             {
                 OnOutgoingMessage(this, new MessageBusEventArgs(tool, true) { TargetArgument = dockControlBuilder.GetFetchString(true, false) });
@@ -239,7 +239,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                         var msg = settings.TryMetadataCache ?
                             "It is now trying to retrieve chached metadata in the background, and may take a few or many seconds." :
                             "Metadata is now reloaded in the old fashioned way.";
-                        if (MessageBox.Show("The 'Use cache metadata' flag has been changed.\n\n" + msg + "\n\nClick Cancel to NOT change this.",
+                        if (MessageBoxEx.Show(this, "The 'Use cache metadata' flag has been changed.\n\n" + msg + "\n\nClick Cancel to NOT change this.",
                             "Metadata changed", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.Cancel)
                         {
                             settings.TryMetadataCache = !settings.TryMetadataCache;
@@ -251,7 +251,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                     }
                     else if (settingDlg.forcereloadingmetadata)
                     {
-                        if (MessageBox.Show("Reloading all metadata.\nIt may take a while... (10-300 secs)", "Reload metadata", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
+                        if (MessageBoxEx.Show(this, "Reloading all metadata.\nIt may take a while... (10-300 secs)", "Reload metadata", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
                         {
                             LoadEntities(true);
                         }
@@ -295,7 +295,7 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 return;
             }
-            LogUse("ReturnTo." + callerArgs.SourcePlugin, ai2: true);
+            LogUse("ReturnTo." + callerArgs.SourcePlugin, newAppInsights: true);
             if (callerArgs.SourcePlugin == URLcaller)
             {
                 OpenUrl("https://fetchxmlbuilder.com/sharing-queries/");

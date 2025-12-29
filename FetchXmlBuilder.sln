@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31919.166
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11222.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FetchXMLBuilder", "FetchXmlBuilder\FetchXMLBuilder.csproj", "{D746CBE7-7787-47FC-B773-F089A44DF8C9}"
 EndProject
@@ -19,9 +19,9 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MsCrmTools.MetadataBrowser.
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rappen.XRM.Helpers", "Rappen.XTB.Helper\Rappen.XRM.Helpers\Rappen.XRM.Helpers.shproj", "{2EBF1257-150F-46C8-8BBD-2A9235C0EB45}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rappen.XTB.Helpers", "Rappen.XTB.Helper\Rappen.XTB.Helpers\Rappen.XTB.Helpers.shproj", "{0B88B381-EE9D-41E8-A62C-90152C42DE90}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rappen.AI.WinForm", "Rappen.XTB.Helper\Rappen.AI.WinForm\Rappen.AI.WinForm.shproj", "{8E31698E-1348-41DA-9F9B-8C7518098911}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rappen.XTB.Helpers", "Rappen.XTB.Helper\Rappen.XTB.Helpers\Rappen.XTB.Helpers.shproj", "{0B88B381-EE9D-41E8-A62C-90152C42DE90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

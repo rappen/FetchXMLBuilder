@@ -288,7 +288,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                     }
                     else
                     {
-                        MessageBox.Show("Not a valid relationship. Please enter entity and attributes manually.");
+                        MessageBoxEx.Show(this, "Not a valid relationship. Please enter entity and attributes manually.");
                         return;
                     }
                     intersect = false;
@@ -325,7 +325,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                         }
                         else
                         {
-                            MessageBox.Show("Not a valid M:M-relationship. Please enter entity and attributes manually.");
+                            MessageBoxEx.Show(this, "Not a valid M:M-relationship. Please enter entity and attributes manually.");
                             return;
                         }
                         intersect = true;
@@ -345,7 +345,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                         }
                         else
                         {
-                            MessageBox.Show("Not a valid M:M-relationship. Please enter entity and attributes manually.");
+                            MessageBoxEx.Show(this, "Not a valid M:M-relationship. Please enter entity and attributes manually.");
                             return;
                         }
                         intersect = true;
@@ -353,7 +353,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
                 }
                 else
                 {
-                    MessageBox.Show("Not a valid relationship. Please enter entity and attributes manually.");
+                    MessageBoxEx.Show(this, "Not a valid relationship. Please enter entity and attributes manually.");
                     return;
                 }
 

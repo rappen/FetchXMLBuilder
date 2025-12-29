@@ -5,6 +5,7 @@ using Rappen.XRM.Helpers.Extensions;
 using Rappen.XTB.FetchXmlBuilder.AppCode;
 using Rappen.XTB.FXB.Settings;
 using Rappen.XTB.Helpers;
+using Rappen.XTB.Helpers.RappXTB;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -203,7 +204,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         internal static void PromptToUseForFree(FetchXmlBuilder tool)
         {
-            var install = Installation.Load(null);
+            var install = Installation.Load();
             var url = OnlineSettings.Instance.AiSupport.UrlToUseForFree;
             var wpf = OnlineSettings.Instance.AiSupport.WpfToUseForFree;
             var installid = InstallationInfo.Instance.InstallationId;
@@ -556,7 +557,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 {
                     if (MessageBoxEx.Show(fxb, message, title, MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
                     {
-                        Supporting.ShowIf(fxb, ShowItFrom.Button, true, false, fxb.ai2, sync: true);
+                        Supporting.ShowIf(fxb, ShowItFrom.Button, true, false, sync: true);
                     }
                 }
                 else if (!string.IsNullOrWhiteSpace(popup.HelpUrl))
@@ -771,7 +772,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void mnuSupporting_Click(object sender, EventArgs e)
         {
-            Supporting.ShowIf(fxb, ShowItFrom.Button, true, false, fxb.ai2, sync: true);
+            Supporting.ShowIf(fxb, ShowItFrom.Button, true, false, sync: true);
         }
 
         private void mnuDocs_Click(object sender, EventArgs e)

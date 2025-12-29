@@ -157,7 +157,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             {
                 if (!keyPress)
                 {
-                    MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBoxEx.Show(this, ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 }
 
                 return false;

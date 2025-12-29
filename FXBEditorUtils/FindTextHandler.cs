@@ -34,7 +34,7 @@ namespace Rappen.XTB.XmlEditorUtils
         private static int FindTheText(Scintilla textBox, string text, int start)
         {
             // Initialize the return value to false by default.
-            int returnValue = -1;
+            var returnValue = -1;
 
             // Ensure that a search string has been specified and a valid start point.
             if (text.Length > 0 && start >= 0)
@@ -46,7 +46,7 @@ namespace Rappen.XTB.XmlEditorUtils
                 // Obtain the location of the search string in richTextBox1.
                 textBox.TargetStart = start;
                 textBox.TargetEnd = textBox.TextLength;
-                int indexToText = textBox.SearchInTarget(text);
+                var indexToText = textBox.SearchInTarget(text);
                 // Determine whether the text was found in richTextBox1.
                 if (indexToText >= 0)
                 {
@@ -58,9 +58,9 @@ namespace Rappen.XTB.XmlEditorUtils
             {
                 if (start == 0)
                 {
-                    MessageBox.Show("Text \"" + text + "\" was not found.", "Find text", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBoxEx.Show("Text \"" + text + "\" was not found.", "Find text", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                else if (MessageBox.Show("No more occurence of \"" + text + "\" was found.\nSearch from the beginning?", "Find text", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
+                else if (MessageBoxEx.Show("No more occurence of \"" + text + "\" was found.\nSearch from the beginning?", "Find text", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
                 {
                     FindTheText(textBox, text, 0);
                 }

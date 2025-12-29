@@ -1,6 +1,5 @@
 ﻿using Rappen.XRM.Helpers.FetchXML;
 using Rappen.XTB.FetchXmlBuilder.DockControls;
-using Rappen.XTB.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,21 +36,21 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
         {
             if (control == textTop)
             {
-                if (!string.IsNullOrEmpty(textTop.Text) && !int.TryParse(textTop.Text, out int p))
+                if (!string.IsNullOrEmpty(textTop.Text) && !int.TryParse(textTop.Text, out var p))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Error, "Top must be a whole number");
                 }
             }
             if (control == textPageSize)
             {
-                if (!string.IsNullOrEmpty(textPageSize.Text) && !int.TryParse(textPageSize.Text, out int p))
+                if (!string.IsNullOrEmpty(textPageSize.Text) && !int.TryParse(textPageSize.Text, out var p))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Error, "Page Size must be a whole number");
                 }
             }
             if (control == textPage)
             {
-                if (!string.IsNullOrEmpty(textPage.Text) && !int.TryParse(textPage.Text, out int p))
+                if (!string.IsNullOrEmpty(textPage.Text) && !int.TryParse(textPage.Text, out var p))
                 {
                     return new ControlValidationResult(ControlValidationLevel.Error, "Page must be a whole number");
                 }
@@ -79,7 +78,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Controls
             }
             if (txtOptions.Text.Contains(option))
             {
-                MessageBox.Show($"Options already has {option}. Only one can be added.");
+                MessageBoxEx.Show(this, $"Options already has {option}. Only one can be added.");
                 return;
             }
             var ops = txtOptions.Text.Split(',').ToList();
