@@ -1,4 +1,5 @@
-﻿using ScintillaNET;
+﻿using Rappen.XTB.Helpers;
+using ScintillaNET;
 using System.Windows.Forms;
 
 namespace Rappen.XTB.XmlEditorUtils
@@ -12,7 +13,10 @@ namespace Rappen.XTB.XmlEditorUtils
             if (e.KeyCode == Keys.F && e.Modifiers == Keys.Control)
             {
                 findHandled = true;
-                result = Prompt.ShowDialog("Enter text to find", "Find text", result);
+                if (ControlUtils.PromptDialog("Enter text to find", "Find text", false, ref result) != DialogResult.OK)
+                {
+                    return findtext;
+                }
                 if (!string.IsNullOrWhiteSpace(result))
                 {
                     FindTheText(textBox, result, 0);

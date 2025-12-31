@@ -10,8 +10,8 @@ using Rappen.XTB.FetchXmlBuilder.Forms;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using Rappen.XTB.FetchXmlBuilder.Views;
 using Rappen.XTB.FXB.Settings;
+using Rappen.XTB.Helpers;
 using Rappen.XTB.Helpers.RappXTB;
-using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -309,7 +309,11 @@ namespace Rappen.XTB.FetchXmlBuilder
             {
                 return;
             }
-            var feedid = Prompt.ShowDialog("Enter CWP Feed ID", "Open CWP Feed");
+            var feedid = string.Empty;
+            if (ControlUtils.PromptDialog("Enter CWP Feed ID", "Open CWP Feed", false, ref feedid) != DialogResult.OK)
+            {
+                return;
+            }
             if (string.IsNullOrWhiteSpace(feedid))
             {
                 return;
@@ -482,8 +486,8 @@ namespace Rappen.XTB.FetchXmlBuilder
         {
             if (string.IsNullOrWhiteSpace(CWPFeed))
             {
-                var feedid = Prompt.ShowDialog("Enter CWP Feed ID (enter existing ID to update feed)", "Save CWP Feed");
-                if (feedid == null)
+                var feedid = string.Empty;
+                if (ControlUtils.PromptDialog("Enter CWP Feed ID (enter existing ID to update feed)", "Save CWP Feed", false, ref feedid) != DialogResult.OK)
                 {
                     return;
                 }
@@ -683,7 +687,11 @@ namespace Rappen.XTB.FetchXmlBuilder
                     default:
                         return;
                 }
-                var newviewname = Prompt.ShowDialog("Enter name for the new view", "Save View As", viewname);
+                var newviewname = string.Empty;
+                if (ControlUtils.PromptDialog("Enter name for the new view", "Save View As", false, ref newviewname) != DialogResult.OK)
+                {
+                    return;
+                }
                 if (string.IsNullOrEmpty(newviewname))
                 {
                     MessageBoxEx.Show(this, "No name for new view.", "Save View As", MessageBoxButtons.OK, MessageBoxIcon.Warning);

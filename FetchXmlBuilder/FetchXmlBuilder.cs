@@ -11,7 +11,6 @@ using Rappen.XTB.FetchXmlBuilder.Forms;
 using Rappen.XTB.FetchXmlBuilder.Settings;
 using Rappen.XTB.Helpers;
 using Rappen.XTB.Helpers.RappXTB;
-using Rappen.XTB.XmlEditorUtils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -828,7 +827,8 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         private void tsmiRepoSaveAs_Click(object sender, EventArgs e)
         {
-            if (!(Prompt.ShowDialog("Enter name for the query. Use backslashes \\ to create folder structure.", "Save Query")?.Trim() is string queryname))
+            var queryname = string.Empty;
+            if (ControlUtils.PromptDialog("Enter name for the query. Use backslashes \\ to create folder structure.", "Save Query", false, ref queryname) != DialogResult.OK)
             {
                 return;
             }
