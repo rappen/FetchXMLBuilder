@@ -4,11 +4,11 @@ using System.Windows.Forms;
 
 namespace Rappen.XTB.FetchXmlBuilder.Forms
 {
-    public partial class AISettings : Form
+    public partial class SettingsAI : Form
     {
         private Rappen.AI.WinForm.AiSettings edited;
 
-        public AISettings()
+        public SettingsAI()
         {
             InitializeComponent();
         }
@@ -35,7 +35,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 InstructionsFlavor = settings.InstructionsFlavor
             };
 
-            using var dlg = new AISettings();
+            using var dlg = new SettingsAI();
             dlg.edited = edited;
             dlg.LoadFrom(edited);
 

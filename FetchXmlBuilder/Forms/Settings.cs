@@ -578,7 +578,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void btnAiMyFlavors_Click(object sender, EventArgs e)
         {
-            AISettings.ShowAiSettingsDialog(this, fxb.settings.AiSettings);
+            SettingsAI.ShowAiSettingsDialog(this, fxb.settings.AiSettings);
         }
     }
 }
