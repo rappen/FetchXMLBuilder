@@ -106,6 +106,12 @@
     </Compile>
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\GroupBoxExpanderExtensions.cs" />
+    <Compile Include="Forms\AISettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AISettings.Designer.cs">
+      <DependentUpon>AISettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\CSharpCodeGeneratedLCGSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -390,6 +396,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DockControls\ResultGrid.resx">
       <DependentUpon>ResultGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AISettings.resx">
+      <DependentUpon>AISettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CSharpCodeGeneratedLCGSettings.resx">
       <DependentUpon>CSharpCodeGeneratedLCGSettings.cs</DependentUpon>

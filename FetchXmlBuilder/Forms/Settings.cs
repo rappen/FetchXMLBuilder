@@ -95,9 +95,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             {
                 cmbAiProvider.SelectedIndex = -1;
             }
-            txtAiCallMe.Text = settings.AiSettings.MyName;
-            rbAiPreferLogicalName.Checked = !settings.AiSettings.PreferDisplayName;
-            rbAiPreferDisplayName.Checked = settings.AiSettings.PreferDisplayName;
             chkAiLogConversation.Checked = settings.AiSettings.LogConversation;
             linkAiLogFolder.Text = Path.Combine(Paths.LogsPath, "FXB AI Chat");
 
@@ -191,8 +188,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.AiSettings.Model = cmbAiModel.Text;
             settings.AiSettings.Endpoint = txtAiEndpoint.Enabled ? txtAiEndpoint.Text : "";
             settings.AiSettings.ApiKey = txtAiApiKey.Enabled ? txtAiApiKey.Text : "";
-            settings.AiSettings.MyName = txtAiCallMe.Text;
-            settings.AiSettings.PreferDisplayName = rbAiPreferDisplayName.Checked;
             settings.AiSettings.LogConversation = chkAiLogConversation.Checked;
             UpdateAiSettingsList();
             settings.AiProviders = aiproviders;
@@ -575,6 +570,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private void picNoSelfClosingXml_Click(object sender, EventArgs e)
         {
             UrlUtils.OpenUrl(sender);
+        }
+
+        private void tabAppearance_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void btnAiMyFlavors_Click(object sender, EventArgs e)
+        {
+            AISettings.ShowAiSettingsDialog(this, fxb.settings.AiSettings);
         }
     }
 }
