@@ -699,9 +699,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             this.btnAiMyFlavors.Location = new System.Drawing.Point(84, 177);
             this.btnAiMyFlavors.Name = "btnAiMyFlavors";
-            this.btnAiMyFlavors.Size = new System.Drawing.Size(91, 23);
+            this.btnAiMyFlavors.Size = new System.Drawing.Size(146, 23);
             this.btnAiMyFlavors.TabIndex = 92;
-            this.btnAiMyFlavors.Text = "My Flavors";
+            this.btnAiMyFlavors.Text = "My AI Chat Flavors...";
             this.btnAiMyFlavors.UseVisualStyleBackColor = true;
             this.btnAiMyFlavors.Click += new System.EventHandler(this.btnAiMyFlavors_Click);
             // 

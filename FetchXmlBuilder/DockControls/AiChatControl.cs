@@ -228,12 +228,15 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         #region Private Methods
 
-        private string PromptSystem => model?.Prompts?.System ?? provider?.Prompts?.System ?? OnlineSettings.Instance.AiSupport.Prompts.System;
-        private string PromptFormat => model?.Prompts?.Format ?? provider?.Prompts?.Format ?? OnlineSettings.Instance.AiSupport.Prompts.Format;
-        private string PromptMyName => model?.Prompts?.CallMe ?? provider?.Prompts?.CallMe ?? OnlineSettings.Instance.AiSupport.Prompts.CallMe;
-        private string PromptUpdate => model?.Prompts?.Update ?? provider?.Prompts?.Update ?? OnlineSettings.Instance.AiSupport.Prompts.Update;
-        private string PromptEntityMeta => model?.Prompts?.EntityMeta ?? provider?.Prompts?.EntityMeta ?? OnlineSettings.Instance.AiSupport.Prompts.EntityMeta;
-        private string PromptAttributeMeta => model?.Prompts?.AttributeMeta ?? provider?.Prompts?.AttributeMeta ?? OnlineSettings.Instance.AiSupport.Prompts.AttributeMeta;
+        private string PromptSystem => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.System ?? provider?.Prompts?.System ?? OnlineSettings.Instance.AiSupport.PromptsV2.System, Paths.SettingsPath);
+        private string PromptBehavior => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Behavior ?? provider?.Prompts?.Behavior ?? OnlineSettings.Instance.AiSupport.PromptsV2.Behavior, Paths.SettingsPath);
+        private string PromptStyle => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Style ?? provider?.Prompts?.Style ?? OnlineSettings.Instance.AiSupport.PromptsV2.Style, Paths.SettingsPath);
+        private string PromptPreferences => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Preferences ?? provider?.Prompts?.Preferences ?? OnlineSettings.Instance.AiSupport.PromptsV2.Preferences, Paths.SettingsPath);
+        private string PromptUserFlavors => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.UserFlavors ?? provider?.Prompts?.UserFlavors ?? OnlineSettings.Instance.AiSupport.PromptsV2.UserFlavors, Paths.SettingsPath);
+
+        private string PromptUpdatedQuery => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Updated ?? provider?.Prompts?.Updated ?? OnlineSettings.Instance.AiSupport.PromptsV2.Updated, Paths.SettingsPath);
+        private string PromptEntityMeta => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.EntityMeta ?? provider?.Prompts?.EntityMeta ?? OnlineSettings.Instance.AiSupport.PromptsV2.EntityMeta, Paths.SettingsPath);
+        private string PromptAttributeMeta => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.AttributeMeta ?? provider?.Prompts?.AttributeMeta ?? OnlineSettings.Instance.AiSupport.PromptsV2.AttributeMeta, Paths.SettingsPath);
 
         private void SetTitle()
         {
@@ -336,16 +339,19 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             if (!chatHistory.Initialized)
             {
-                var intro = PromptSystem.Replace("{fetchxml}", fxb.dockControlBuilder?.GetFetchString(true, false));
-                intro += Environment.NewLine + PromptFormat;
-                if (!string.IsNullOrEmpty(fxb.settings.AiSettings.MyName))
+                var intro =
+                    (PromptSystem + Environment.NewLine + "---" + Environment.NewLine +
+                     PromptStyle + Environment.NewLine + "---" + Environment.NewLine +
+                     PromptBehavior + Environment.NewLine + "---" + Environment.NewLine +
+                     PromptPreferences + Environment.NewLine + "---" + Environment.NewLine)
+                    .Replace("{{fetchxml}}", fxb.dockControlBuilder?.GetFetchString(true, false))
+                    .Replace("{{callme}}", !string.IsNullOrWhiteSpace(fxb.settings.AiSettings.MyName) ? fxb.settings.AiSettings.MyName : "you")
+                    .Replace("{{prefer}}", fxb.settings.AiSettings.PreferDisplayName ? "DisplanyName" : "LogicalName");
+                if (!string.IsNullOrWhiteSpace(fxb.settings.AiSettings.InstructionsFlavor))
                 {
-                    intro += Environment.NewLine + PromptMyName.Replace("{callme}", fxb.settings.AiSettings.MyName).Trim();
+                    intro += PromptUserFlavors?.Replace("{{userflavors}}", fxb.settings.AiSettings.InstructionsFlavor) + "---" + Environment.NewLine;
                 }
-                if (!string.IsNullOrWhiteSpace(OnlineSettings.Instance.AiSupport.Prompts.PreferNames))
-                {
-                    intro += Environment.NewLine + OnlineSettings.Instance.AiSupport.Prompts.PreferNames.Replace("{prefer}", fxb.settings.AiSettings.PreferDisplayName ? "DisplanyName" : "LogicalName").Trim();
-                }
+
                 chatHistory.Initialize(intro);
                 Log("Init", count: intro.Length, msg: intro);
                 sessionstopwatch = Stopwatch.StartNew();
@@ -353,7 +359,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             else if (!manualquery.EqualXml(lastquery))
             {
                 lastquery = manualquery;
-                chatHistory.Add(ChatRole.User, PromptUpdate.Replace("{fetchxml}", manualquery), true);
+                chatHistory.Add(ChatRole.User, PromptUpdatedQuery.Replace("{fetchxml}", manualquery), true);
             }
 
             text = text.Trim();
@@ -453,8 +459,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        [Description("Retrieves the logical name and display name of tables/entity that matches a description. The result is returned in a JSON list with entries of the format {\"L\":\"[logical name of entity]\",\"D\":\"[display name of entity]\",\"Desc\":\"[description of the entity]\"}. There may be many results, if a unique table cannot be found.")]
-        private string GetMetadataForUnknownEntity([Description("The name/description of a table.")] string tableDescription)
+        [Description("Find matching Dataverse table(s) by description using ONLY provided metadata. Return JSON ONLY: a JSON array of 0+ ORIGINAL metadata objects from the input list, preserving properties exactly (L, D, Desc and their values). Return [] if no plausible match.")]
+        private string GetMetadataForUnknownEntity([Description("User's table name/description to match against the metadata list.")] string tableDescription)
         {
             var entities = fxb.EntitiesForAi();
             var json = JsonSerializer.Serialize(entities, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
@@ -462,7 +468,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var sw = Stopwatch.StartNew();
             var result = AiCommunication.SamplingAI(
                 chatHistory,
-                PromptEntityMeta.Replace("{metadata}", json),
+                PromptEntityMeta.Replace("{{metadata}}", json),
                 $"Please find entries that match the description {tableDescription}",
                 $"Asking for metadata for table '{tableDescription}'...");
             sw.Stop();
@@ -473,7 +479,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         }
 
         [Description("Returns attributes of a table/entity that matches a description. Information about attributes is returned in a JSON list with entries of the format {\"L\":\"[logical name of attribute]\",\"D\":\"[display name of attribute]\",\"Desc\":\"[description of the attribute]\"}. There may be many results, if a unique attribute cannot be found.")]
-        private string GetMetadataForUnknownAttribute([Description("The logical name of the entity and a name/description of an attribute, separated by '@@'. Example: 'logical name of table@@a description of an attribute'")] string entityNameAndAttributeDescription)
+        private string GetMetadataForUnknownAttribute([Description("Entity logical name and attribute name/description, separated by '@@'. Example: 'account@@primary contact'.")] string entityNameAndAttributeDescription)
         {
             var parts = entityNameAndAttributeDescription.Split(new[] { "@@" }, 2, StringSplitOptions.None);
 
@@ -506,7 +512,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var sw = Stopwatch.StartNew();
             var result = AiCommunication.SamplingAI(
                 chatHistory,
-                PromptAttributeMeta.Replace("{metadata}", json),
+                PromptAttributeMeta
+                    .Replace("{{entityname}}", entityName)
+                    .Replace("{{metadata}}", json),
                 $"Please find attributes that match the name {attributeName}",
                 $"Asking for metadata for column '{attributeName}' in table '{entityName}'...");
             sw.Stop();
