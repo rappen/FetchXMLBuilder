@@ -1,4 +1,5 @@
-﻿using Rappen.XTB.Helpers;
+﻿using Rappen.XRM.Helpers.Extensions;
+using Rappen.XTB.Helpers;
 using System;
 using System.Windows.Forms;
 
@@ -8,7 +9,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
     {
         private Rappen.AI.WinForm.AiSettings edited;
 
-        public SettingsAI()
+        private SettingsAI()
         {
             InitializeComponent();
         }
@@ -70,7 +71,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 return;
             }
 
-            txtMyFlavor.Text = settings.InstructionsFlavor ?? string.Empty;
+            txtMyFlavor.Text = settings.InstructionsFlavor.FixNewLines().Trim();
             txtAiCallMe.Text = settings.MyName ?? string.Empty;
             rbAiPreferDisplayName.Checked = settings.PreferDisplayName;
             rbAiPreferLogicalName.Checked = !settings.PreferDisplayName;
@@ -83,7 +84,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 return;
             }
 
-            settings.InstructionsFlavor = txtMyFlavor.Text?.Trim();
+            settings.InstructionsFlavor = txtMyFlavor.Text.FixNewLines().Trim();
             settings.MyName = txtAiCallMe.Text?.Trim();
             settings.PreferDisplayName = rbAiPreferDisplayName.Checked;
         }

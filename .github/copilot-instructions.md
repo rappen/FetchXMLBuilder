@@ -5,6 +5,7 @@
 - Ensure that all instructions are clear, actionable, and delivered in an informal, flavorful tone to enhance user experience.
 - Keep responses as short summaries; avoid long historical explanations.
 - In AI-facing documentation, avoid internal class names (e.g., MetadataForAIAttribute) and instead use Dataverse terminology (table/entity, column/attribute, choice/option set).
+- Provide very concise responses; avoid long explanations.
 
 ## Code Style
 - Follow specific formatting rules as per project requirements.

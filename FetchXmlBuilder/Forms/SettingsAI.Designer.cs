@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsAI));
             this.txtMyFlavor = new System.Windows.Forms.TextBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
@@ -47,20 +48,22 @@
             this.label11 = new System.Windows.Forms.Label();
             this.txtAiCallMe = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtMyFlavor
             // 
+            this.txtMyFlavor.AcceptsReturn = true;
             this.txtMyFlavor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtMyFlavor.Location = new System.Drawing.Point(10, 36);
+            this.txtMyFlavor.Location = new System.Drawing.Point(19, 40);
             this.txtMyFlavor.Multiline = true;
             this.txtMyFlavor.Name = "txtMyFlavor";
             this.txtMyFlavor.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtMyFlavor.Size = new System.Drawing.Size(480, 103);
+            this.txtMyFlavor.Size = new System.Drawing.Size(438, 137);
             this.txtMyFlavor.TabIndex = 1;
             // 
             // linkLabel1
@@ -123,7 +126,7 @@
             this.groupBox1.Controls.Add(this.linkLabel3);
             this.groupBox1.Location = new System.Drawing.Point(12, 18);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(500, 80);
+            this.groupBox1.Size = new System.Drawing.Size(474, 80);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Fixed Instructions";
@@ -132,7 +135,7 @@
             // 
             this.linkLabel5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabel5.AutoSize = true;
-            this.linkLabel5.Location = new System.Drawing.Point(424, 24);
+            this.linkLabel5.Location = new System.Drawing.Point(398, 24);
             this.linkLabel5.Name = "linkLabel5";
             this.linkLabel5.Size = new System.Drawing.Size(70, 13);
             this.linkLabel5.TabIndex = 8;
@@ -144,12 +147,12 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(11, 44);
+            this.label3.Location = new System.Drawing.Point(17, 45);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(318, 26);
+            this.label3.Size = new System.Drawing.Size(324, 26);
             this.label3.TabIndex = 7;
             this.label3.Text = "These four levels of instructions to the AI are managed by Jonas,\r\nplease go to F" +
-    "eedback if you have any goo thoughts about these.";
+    "eedback if you have any good thoughts about these.";
             // 
             // groupBox2
             // 
@@ -161,7 +164,7 @@
             this.groupBox2.Controls.Add(this.txtMyFlavor);
             this.groupBox2.Location = new System.Drawing.Point(12, 110);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(500, 195);
+            this.groupBox2.Size = new System.Drawing.Size(474, 233);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "My Flavor";
@@ -169,7 +172,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 16);
+            this.label1.Location = new System.Drawing.Point(16, 24);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(198, 13);
             this.label1.TabIndex = 4;
@@ -181,11 +184,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox2.BackColor = System.Drawing.SystemColors.Window;
             this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox2.Location = new System.Drawing.Point(14, 144);
+            this.textBox2.Location = new System.Drawing.Point(19, 182);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(476, 43);
+            this.textBox2.Size = new System.Drawing.Size(449, 43);
             this.textBox2.TabIndex = 3;
             this.textBox2.Text = resources.GetString("textBox2.Text");
             // 
@@ -193,7 +196,7 @@
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOk.Location = new System.Drawing.Point(356, 377);
+            this.btnOk.Location = new System.Drawing.Point(330, 415);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
             this.btnOk.TabIndex = 9;
@@ -204,7 +207,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(437, 377);
+            this.btnCancel.Location = new System.Drawing.Point(411, 415);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 10;
@@ -215,7 +218,7 @@
             // 
             this.rbAiPreferDisplayName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.rbAiPreferDisplayName.AutoSize = true;
-            this.rbAiPreferDisplayName.Location = new System.Drawing.Point(186, 348);
+            this.rbAiPreferDisplayName.Location = new System.Drawing.Point(186, 386);
             this.rbAiPreferDisplayName.Name = "rbAiPreferDisplayName";
             this.rbAiPreferDisplayName.Size = new System.Drawing.Size(87, 17);
             this.rbAiPreferDisplayName.TabIndex = 85;
@@ -227,7 +230,7 @@
             this.rbAiPreferLogicalName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.rbAiPreferLogicalName.AutoSize = true;
             this.rbAiPreferLogicalName.Checked = true;
-            this.rbAiPreferLogicalName.Location = new System.Drawing.Point(93, 348);
+            this.rbAiPreferLogicalName.Location = new System.Drawing.Point(93, 386);
             this.rbAiPreferLogicalName.Name = "rbAiPreferLogicalName";
             this.rbAiPreferLogicalName.Size = new System.Drawing.Size(87, 17);
             this.rbAiPreferLogicalName.TabIndex = 84;
@@ -239,16 +242,16 @@
             // 
             this.label11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(29, 350);
+            this.label11.Location = new System.Drawing.Point(29, 388);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(35, 13);
+            this.label11.Size = new System.Drawing.Size(41, 13);
             this.label11.TabIndex = 82;
-            this.label11.Text = "Prefer";
+            this.label11.Text = "I Prefer";
             // 
             // txtAiCallMe
             // 
             this.txtAiCallMe.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.txtAiCallMe.Location = new System.Drawing.Point(93, 320);
+            this.txtAiCallMe.Location = new System.Drawing.Point(93, 358);
             this.txtAiCallMe.Name = "txtAiCallMe";
             this.txtAiCallMe.Size = new System.Drawing.Size(157, 20);
             this.txtAiCallMe.TabIndex = 83;
@@ -257,20 +260,20 @@
             // 
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(29, 323);
+            this.label9.Location = new System.Drawing.Point(29, 361);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(50, 13);
             this.label9.TabIndex = 81;
             this.label9.Text = "My name";
             // 
-            // AISettings
+            // SettingsAI
             // 
             this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(524, 408);
+            this.ClientSize = new System.Drawing.Size(498, 446);
             this.Controls.Add(this.rbAiPreferDisplayName);
             this.Controls.Add(this.rbAiPreferLogicalName);
             this.Controls.Add(this.label11);
@@ -280,12 +283,13 @@
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(437, 395);
-            this.Name = "AISettings";
+            this.Name = "SettingsAI";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "FXB AI Settings";
+            this.Text = "FetchXML Builder - AI Settings";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AISettings_FormClosing);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -315,5 +319,6 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.LinkLabel linkLabel5;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
