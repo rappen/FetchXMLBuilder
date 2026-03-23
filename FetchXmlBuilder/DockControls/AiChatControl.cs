@@ -24,6 +24,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
     {
         private const string GeneralSettingsURL = "https://rappen.github.io/Tools/";
         private const string AiUsersFileName = "Rappen.XTB.AI.Users.xml";
+        private static readonly string NewSectionMd = Environment.NewLine + Environment.NewLine + "---" + Environment.NewLine;
 
         private FetchXmlBuilder fxb;
         private AIAppInsights ai;
@@ -228,11 +229,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         #region Private Methods
 
-        private string PromptSystem => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.System ?? provider?.Prompts?.System ?? OnlineSettings.Instance.AiSupport.PromptsV2.System, Paths.SettingsPath);
-        private string PromptBehavior => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Behavior ?? provider?.Prompts?.Behavior ?? OnlineSettings.Instance.AiSupport.PromptsV2.Behavior, Paths.SettingsPath);
-        private string PromptStyle => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Style ?? provider?.Prompts?.Style ?? OnlineSettings.Instance.AiSupport.PromptsV2.Style, Paths.SettingsPath);
-        private string PromptPreferences => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Preferences ?? provider?.Prompts?.Preferences ?? OnlineSettings.Instance.AiSupport.PromptsV2.Preferences, Paths.SettingsPath);
-        private string PromptUserFlavors => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.UserFlavors ?? provider?.Prompts?.UserFlavors ?? OnlineSettings.Instance.AiSupport.PromptsV2.UserFlavors, Paths.SettingsPath);
+        private string PromptSystem => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.System ?? provider?.Prompts?.System ?? OnlineSettings.Instance.AiSupport.PromptsV2.System, Paths.SettingsPath).Trim();
+        private string PromptBehavior => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Behavior ?? provider?.Prompts?.Behavior ?? OnlineSettings.Instance.AiSupport.PromptsV2.Behavior, Paths.SettingsPath).Trim();
+        private string PromptStyle => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Style ?? provider?.Prompts?.Style ?? OnlineSettings.Instance.AiSupport.PromptsV2.Style, Paths.SettingsPath).Trim();
+        private string PromptPreferences => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Preferences ?? provider?.Prompts?.Preferences ?? OnlineSettings.Instance.AiSupport.PromptsV2.Preferences, Paths.SettingsPath).Trim();
+        private string PromptUserFlavors => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.UserFlavors ?? provider?.Prompts?.UserFlavors ?? OnlineSettings.Instance.AiSupport.PromptsV2.UserFlavors, Paths.SettingsPath).Trim();
 
         private string PromptUpdatedQuery => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Updated ?? provider?.Prompts?.Updated ?? OnlineSettings.Instance.AiSupport.PromptsV2.Updated, Paths.SettingsPath);
         private string PromptEntityMeta => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.EntityMeta ?? provider?.Prompts?.EntityMeta ?? OnlineSettings.Instance.AiSupport.PromptsV2.EntityMeta, Paths.SettingsPath);
@@ -340,16 +341,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             if (!chatHistory.Initialized)
             {
                 var intro =
-                    (PromptSystem + Environment.NewLine + "---" + Environment.NewLine +
-                     PromptStyle + Environment.NewLine + "---" + Environment.NewLine +
-                     PromptBehavior + Environment.NewLine + "---" + Environment.NewLine +
-                     PromptPreferences + Environment.NewLine + "---" + Environment.NewLine)
+                    (PromptSystem + NewSectionMd +
+                     PromptStyle + NewSectionMd +
+                     PromptBehavior + NewSectionMd +
+                     PromptPreferences + NewSectionMd)
                     .Replace("{{fetchxml}}", fxb.dockControlBuilder?.GetFetchString(true, false))
                     .Replace("{{callme}}", !string.IsNullOrWhiteSpace(fxb.settings.AiSettings.MyName) ? fxb.settings.AiSettings.MyName : "you")
                     .Replace("{{prefer}}", fxb.settings.AiSettings.PreferDisplayName ? "DisplanyName" : "LogicalName");
                 if (!string.IsNullOrWhiteSpace(fxb.settings.AiSettings.InstructionsFlavor))
                 {
-                    intro += PromptUserFlavors?.Replace("{{userflavors}}", fxb.settings.AiSettings.InstructionsFlavor) + "---" + Environment.NewLine;
+                    intro += PromptUserFlavors?.Replace("{{userflavors}}", fxb.settings.AiSettings.InstructionsFlavor) + NewSectionMd;
                 }
 
                 chatHistory.Initialize(intro);
