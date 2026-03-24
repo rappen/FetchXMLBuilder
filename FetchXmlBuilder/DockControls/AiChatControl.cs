@@ -427,6 +427,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 sw.Stop();
                 var records = (result as QueryInfo)?.Results?.Entities?.Count ?? null;
                 Log($"Query-Execute", records, sw.ElapsedMilliseconds);
+                chatHistory.Add(ChatRole.Assistant, $"Retrieved {records} records in {sw.Elapsed.ToSmartStringLong()}.", false, true);
                 fxb.HandleRetrieveMultipleResult(result);
                 chatHistory.Add(ChatRole.User, records == 0 ? "No record returned." : $"Retrieved {records} records.", true);
                 //Commented it out since it exploded, but it might be good to do this after each new query execute
@@ -476,6 +477,20 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             Log($"Meta-Entity-{tableDescription}", result, sw.ElapsedMilliseconds, entities.Count);
 
             chatHistory.Add(result, true);
+            try
+            {
+                var hitentities = JsonSerializer.Deserialize<List<MetadataForAIEntity>>(result.Text);
+                var hits = hitentities.Count > 0 ?
+                    hitentities.Count > 3 ?
+                        $"...found {hitentities.Count} tables." :
+                        $"...found table(s): {string.Join(", ", hitentities.Select(e => e.D + " (" + e.L + ")"))}." :
+                    "...no tables found matching.";
+                chatHistory.Add(ChatRole.Assistant, hits, false, true);
+            }
+            catch
+            {
+                // If the result cannot be deserialized, we just return the text, which might be an error message from the AI.
+            }
             return result.Text;
         }
 
@@ -522,7 +537,20 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             Log($"Meta-Attribute-{entityName}-{attributeName}", result, sw.ElapsedMilliseconds, attributes.Count);
 
             chatHistory.Add(result, true);
-
+            try
+            {
+                var hitattrs = JsonSerializer.Deserialize<List<MetadataForAIAttribute>>(result.Text);
+                var hits = hitattrs.Count > 0 ?
+                    hitattrs.Count > 3 ?
+                        $"...found {hitattrs.Count} attributes." :
+                        $"...found attribute(s): {string.Join(", ", (hitattrs.Select(a => a.D + " (" + a.L + ")")))}." :
+                    "...no attributes found matching.";
+                chatHistory.Add(ChatRole.Assistant, hits, false, true);
+            }
+            catch
+            {
+                // If the result cannot be deserialized, we just return the text, which might be an error message from the AI.
+            }
             return result.Text;
         }
 

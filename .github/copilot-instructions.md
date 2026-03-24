@@ -12,7 +12,7 @@
 - Follow specific formatting rules as per project requirements.
 - Maintain consistent naming conventions throughout the codebase.
 - Prefer precise method names: use `DownloadText*` over `DownloadFile*` when methods return text content.
-- Ensure generated C# compiles for .NET Framework 4.8 / current project language level; avoid syntax that might not be supported (e.g., missing parentheses in conditions).
+- Ensure generated C# compiles for .NET Framework 4.8 / current project language level; avoid syntax that might not be supported (e.g., missing parentheses in conditions). **Never suggest omitting parentheses after 'if'; the target C#/.NET version here requires standard if-condition parentheses for valid compilation.**
 
 ## Project-Specific Rules
 - Implement custom requirements as outlined in the project documentation.
