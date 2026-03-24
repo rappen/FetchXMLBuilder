@@ -460,8 +460,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        [Description("Find matching Dataverse table(s) by description using ONLY provided metadata. Return JSON ONLY: a JSON array of 0+ ORIGINAL metadata objects from the input list, preserving properties exactly (L, D, Desc and their values). Return [] if no plausible match.")]
-        private string GetMetadataForUnknownEntity([Description("User's table name/description to match against the metadata list.")] string tableDescription)
+        [Description("Find matching Dataverse table(s) by one name or description using ONLY the provided metadata list. Use this tool whenever the exact table logical name is unknown, including when the user refers to related records or uses plural wording and the actual table name may be singular. Return JSON ONLY: a JSON array of 0 or more ORIGINAL metadata objects from the provided list, preserving properties and values exactly as given. Return [] if no plausible match is found.")]
+        private string GetMetadataForUnknownEntity([Description("A single table name or table description to match against the available Dataverse tables. This may be singular or plural wording from the user, for example 'mission', 'missions', 'customer account', or 'cases'.")] string tableDescription)
         {
             var entities = fxb.EntitiesForAi();
             var json = JsonSerializer.Serialize(entities, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
@@ -480,7 +480,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         }
 
         [Description("Returns attributes of a table/entity that matches a description. Information about attributes is returned in a JSON list with entries of the format {\"L\":\"[logical name of attribute]\",\"D\":\"[display name of attribute]\",\"Desc\":\"[description of the attribute]\"}. There may be many results, if a unique attribute cannot be found.")]
-        private string GetMetadataForUnknownAttribute([Description("Entity logical name and attribute name/description, separated by '@@'. Example: 'account@@primary contact'.")] string entityNameAndAttributeDescription)
+        private string GetMetadataForUnknownAttribute([Description("Entity logical name and one column name/description, separated by '@@'. Example: 'account@@primary contact'. Use exactly one column request per call. If the user wording is plural or sounds like related records, that may indicate a related table rather than a column on this table.")] string entityNameAndAttributeDescription)
         {
             var parts = entityNameAndAttributeDescription.Split(new[] { "@@" }, 2, StringSplitOptions.None);
 

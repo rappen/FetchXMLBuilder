@@ -4,8 +4,9 @@
 - Use https://fetchxmlbuilder.com as the tool website/doc reference link for future guidance and documentation improvements.
 - Ensure that all instructions are clear, actionable, and delivered in an informal, flavorful tone to enhance user experience.
 - Keep responses as short summaries; avoid long historical explanations.
-- In AI-facing documentation, avoid internal class names (e.g., MetadataForAIAttribute) and instead use Dataverse terminology (table/entity, column/attribute, choice/option set).
+- In AI-facing documentation, avoid internal class names (e.g., MetadataForAIAttribute) and instead use Dataverse terminology (table/entity, column/attribute, choice/option set). Enhance AI-facing tool descriptions while maintaining the current one-at-a-time metadata lookup logic in AiChatControl.
 - Provide very concise responses; avoid long explanations.
+- Prefer AI metadata tools to support resolving multiple entities or multiple attributes in a single call when the AI already knows it needs several matches, while still allowing repeated calls when needed.
 
 ## Code Style
 - Follow specific formatting rules as per project requirements.
