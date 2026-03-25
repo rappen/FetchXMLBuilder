@@ -377,7 +377,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 //HandlingResponseFromAi(new ChatResponse { Messages = new List<ChatMessage> { new ChatMessage(ChatRole.Assistant, $"Right back to ya!\r\n{text}") } });
                 // END TESTING UI
 
-                AiCommunication.CallingAIAsync(
+                AiCommunication.Prompt(
                     fxb,
                     chatHistory,
                     text,
@@ -462,13 +462,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         }
 
         [Description("Find matching Dataverse table(s) by one name or description using ONLY the provided metadata list. Use this tool whenever the exact table logical name is unknown, including when the user refers to related records or uses plural wording and the actual table name may be singular. Return JSON ONLY: a JSON array of 0 or more ORIGINAL metadata objects from the provided list, preserving properties and values exactly as given. Return [] if no plausible match is found.")]
-        private string GetMetadataForUnknownEntity([Description("A single table name or table description to match against the available Dataverse tables. This may be singular or plural wording from the user, for example 'mission', 'missions', 'customer account', or 'cases'.")] string tableDescription)
+        private string GetMetadataForUnknownEntity([Description("A single table name or table description to match against the available Dataverse tables. This may be singular or plural wording from the user, for example 'mission', 'missions', 'customer account', 'or cases'.")] string tableDescription)
         {
             var entities = fxb.EntitiesForAi();
             var json = JsonSerializer.Serialize(entities, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
 
             var sw = Stopwatch.StartNew();
-            var result = AiCommunication.SamplingAI(
+            var result = AiCommunication.PromptStateless(
                 chatHistory,
                 PromptEntityMeta.Replace("{{metadata}}", json),
                 $"Please find entries that match the description {tableDescription}",
@@ -526,7 +526,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             chatHistory.Add(ChatRole.User, $"The tool GetMetadataForUnknownAttribute was called: retrieve attributes for table '{entityName}' that matches the name '{attributeName}'", true);
 
             var sw = Stopwatch.StartNew();
-            var result = AiCommunication.SamplingAI(
+            var result = AiCommunication.PromptStateless(
                 chatHistory,
                 PromptAttributeMeta
                     .Replace("{{entityname}}", entityName)

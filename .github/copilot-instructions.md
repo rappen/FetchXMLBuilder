@@ -7,11 +7,14 @@
 - In AI-facing documentation, avoid internal class names (e.g., MetadataForAIAttribute) and instead use Dataverse terminology (table/entity, column/attribute, choice/option set). Enhance AI-facing tool descriptions while maintaining the current one-at-a-time metadata lookup logic in AiChatControl.
 - Provide very concise responses; avoid long explanations.
 - Prefer AI metadata tools to support resolving multiple entities or multiple attributes in a single call when the AI already knows it needs several matches, while still allowing repeated calls when needed.
+- Backward compatibility is not needed for this shared project as it is currently only used by the user in this project.
 
 ## Code Style
 - Follow specific formatting rules as per project requirements.
 - Maintain consistent naming conventions throughout the codebase.
-- Prefer precise method names: use `DownloadText*` over `DownloadFile*` when methods return text content.
+- Prefer short, soft/human naming in code; use 'Match' over 'Resolve' for metadata naming. However, use more technical naming for AI communication methods when soft/human names become ambiguous; ensure names reflect behavioral differences precisely.
+- Prefer precise method names: use `DownloadText*` over `DownloadFile*` when methods return text content. Use the short Option C style for AI method names.
+- Prefer explicit sync/async symmetry in AI communication naming; if using Prompt*, prefer PromptSync rather than plain Prompt.
 - Ensure generated C# compiles for .NET Framework 4.8 / current project language level; avoid syntax that might not be supported (e.g., missing parentheses in conditions). **Never suggest omitting parentheses after 'if'; the target C#/.NET version here requires standard if-condition parentheses for valid compilation.**
 
 ## Project-Specific Rules
