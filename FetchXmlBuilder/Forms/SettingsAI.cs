@@ -33,7 +33,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 LogConversation = settings.LogConversation,
                 PreferDisplayName = settings.PreferDisplayName,
                 SendWithEnter = settings.SendWithEnter,
-                InstructionsFlavor = settings.InstructionsFlavor
+                InstructionsFlavor = settings.InstructionsFlavor,
+                Strictness = settings.Strictness
             };
 
             using var dlg = new SettingsAI();
@@ -60,6 +61,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.PreferDisplayName = edited.PreferDisplayName;
             settings.SendWithEnter = edited.SendWithEnter;
             settings.InstructionsFlavor = edited.InstructionsFlavor;
+            settings.Strictness = edited.Strictness;
 
             return true;
         }
@@ -75,6 +77,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             txtAiCallMe.Text = settings.MyName ?? string.Empty;
             rbAiPreferDisplayName.Checked = settings.PreferDisplayName;
             rbAiPreferLogicalName.Checked = !settings.PreferDisplayName;
+            trkStrictness.Value = (int)settings.Strictness;
+            SetStrictnessLabel();
         }
 
         private void SaveTo(Rappen.AI.WinForm.AiSettings settings)
@@ -87,6 +91,18 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.InstructionsFlavor = txtMyFlavor.Text.FixNewLines().Trim();
             settings.MyName = txtAiCallMe.Text?.Trim();
             settings.PreferDisplayName = rbAiPreferDisplayName.Checked;
+            settings.Strictness = (Rappen.AI.WinForm.Strictness)trkStrictness.Value;
+        }
+
+        private void SetStrictnessLabel()
+        {
+            lblStrictness.Text = ((Rappen.AI.WinForm.Strictness)trkStrictness.Value) switch
+            {
+                Rappen.AI.WinForm.Strictness.Exact => "Exact: read literally, avoid guessing",
+                Rappen.AI.WinForm.Strictness.Balanced => "Balanced: interpret a bit, but stay careful",
+                Rappen.AI.WinForm.Strictness.Relaxed => "Relaxed: guess more freely and try things",
+                _ => "Balanced: interpret a bit, but stay careful"
+            };
         }
 
         private void any_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -107,6 +123,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 MessageBox.Show(this, "My name is too long.", Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 e.Cancel = true;
             }
+        }
+
+        private void trkStrictness_ValueChanged(object sender, EventArgs e)
+        {
+            SetStrictnessLabel();
         }
     }
 }

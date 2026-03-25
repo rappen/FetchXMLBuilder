@@ -233,6 +233,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private string PromptBehavior => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Behavior ?? provider?.Prompts?.Behavior ?? OnlineSettings.Instance.AiSupport.PromptsV2.Behavior, Paths.SettingsPath).Trim();
         private string PromptStyle => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Style ?? provider?.Prompts?.Style ?? OnlineSettings.Instance.AiSupport.PromptsV2.Style, Paths.SettingsPath).Trim();
         private string PromptPreferences => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Preferences ?? provider?.Prompts?.Preferences ?? OnlineSettings.Instance.AiSupport.PromptsV2.Preferences, Paths.SettingsPath).Trim();
+
+        private string PromptStrictness => OnlineFile.GetTextFromMaybeUrl(
+            (model?.Prompts?.Strictness ??
+             provider?.Prompts?.Strictness ??
+             OnlineSettings.Instance.AiSupport.PromptsV2.Strictness)
+            .Replace("{{strictness}}", fxb.settings.AiSettings.Strictness.ToString()),
+            Paths.SettingsPath).Trim();
+
         private string PromptUserFlavors => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.UserFlavors ?? provider?.Prompts?.UserFlavors ?? OnlineSettings.Instance.AiSupport.PromptsV2.UserFlavors, Paths.SettingsPath).Trim();
 
         private string PromptUpdatedQuery => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Updated ?? provider?.Prompts?.Updated ?? OnlineSettings.Instance.AiSupport.PromptsV2.Updated, Paths.SettingsPath);
@@ -344,6 +352,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     (PromptSystem + NewSectionMd +
                      PromptStyle + NewSectionMd +
                      PromptBehavior + NewSectionMd +
+                     PromptStrictness + NewSectionMd +
                      PromptPreferences + NewSectionMd)
                     .Replace("{{fetchxml}}", fxb.dockControlBuilder?.GetFetchString(true, false))
                     .Replace("{{callme}}", !string.IsNullOrWhiteSpace(fxb.settings.AiSettings.MyName) ? fxb.settings.AiSettings.MyName : "you")

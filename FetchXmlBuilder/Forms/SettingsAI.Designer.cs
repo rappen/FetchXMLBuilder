@@ -49,8 +49,13 @@
             this.txtAiCallMe = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.lblStrictness = new System.Windows.Forms.Label();
+            this.trkStrictness = new System.Windows.Forms.TrackBar();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trkStrictness)).BeginInit();
             this.SuspendLayout();
             // 
             // txtMyFlavor
@@ -59,11 +64,11 @@
             this.txtMyFlavor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtMyFlavor.Location = new System.Drawing.Point(19, 40);
+            this.txtMyFlavor.Location = new System.Drawing.Point(16, 40);
             this.txtMyFlavor.Multiline = true;
             this.txtMyFlavor.Name = "txtMyFlavor";
             this.txtMyFlavor.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtMyFlavor.Size = new System.Drawing.Size(438, 137);
+            this.txtMyFlavor.Size = new System.Drawing.Size(441, 103);
             this.txtMyFlavor.TabIndex = 1;
             // 
             // linkLabel1
@@ -127,7 +132,7 @@
             this.groupBox1.Location = new System.Drawing.Point(12, 18);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(474, 80);
-            this.groupBox1.TabIndex = 7;
+            this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Fixed Instructions";
             // 
@@ -147,7 +152,8 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(17, 45);
+            this.label3.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.label3.Location = new System.Drawing.Point(16, 45);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(324, 26);
             this.label3.TabIndex = 7;
@@ -162,10 +168,10 @@
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.textBox2);
             this.groupBox2.Controls.Add(this.txtMyFlavor);
-            this.groupBox2.Location = new System.Drawing.Point(12, 110);
+            this.groupBox2.Location = new System.Drawing.Point(12, 177);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(474, 233);
-            this.groupBox2.TabIndex = 8;
+            this.groupBox2.Size = new System.Drawing.Size(474, 199);
+            this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "My Flavor";
             // 
@@ -184,7 +190,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox2.BackColor = System.Drawing.SystemColors.Window;
             this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox2.Location = new System.Drawing.Point(19, 182);
+            this.textBox2.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.textBox2.Location = new System.Drawing.Point(16, 148);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
@@ -196,10 +203,10 @@
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOk.Location = new System.Drawing.Point(330, 415);
+            this.btnOk.Location = new System.Drawing.Point(330, 448);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
-            this.btnOk.TabIndex = 9;
+            this.btnOk.TabIndex = 10;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
             // 
@@ -207,10 +214,10 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(411, 415);
+            this.btnCancel.Location = new System.Drawing.Point(411, 448);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 10;
+            this.btnCancel.TabIndex = 11;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
@@ -218,10 +225,10 @@
             // 
             this.rbAiPreferDisplayName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.rbAiPreferDisplayName.AutoSize = true;
-            this.rbAiPreferDisplayName.Location = new System.Drawing.Point(186, 386);
+            this.rbAiPreferDisplayName.Location = new System.Drawing.Point(186, 419);
             this.rbAiPreferDisplayName.Name = "rbAiPreferDisplayName";
             this.rbAiPreferDisplayName.Size = new System.Drawing.Size(87, 17);
-            this.rbAiPreferDisplayName.TabIndex = 85;
+            this.rbAiPreferDisplayName.TabIndex = 6;
             this.rbAiPreferDisplayName.Text = "DisplayName";
             this.rbAiPreferDisplayName.UseVisualStyleBackColor = true;
             // 
@@ -230,10 +237,10 @@
             this.rbAiPreferLogicalName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.rbAiPreferLogicalName.AutoSize = true;
             this.rbAiPreferLogicalName.Checked = true;
-            this.rbAiPreferLogicalName.Location = new System.Drawing.Point(93, 386);
+            this.rbAiPreferLogicalName.Location = new System.Drawing.Point(93, 419);
             this.rbAiPreferLogicalName.Name = "rbAiPreferLogicalName";
             this.rbAiPreferLogicalName.Size = new System.Drawing.Size(87, 17);
-            this.rbAiPreferLogicalName.TabIndex = 84;
+            this.rbAiPreferLogicalName.TabIndex = 5;
             this.rbAiPreferLogicalName.TabStop = true;
             this.rbAiPreferLogicalName.Text = "LogicalName";
             this.rbAiPreferLogicalName.UseVisualStyleBackColor = true;
@@ -242,7 +249,7 @@
             // 
             this.label11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(29, 388);
+            this.label11.Location = new System.Drawing.Point(25, 421);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(41, 13);
             this.label11.TabIndex = 82;
@@ -251,20 +258,56 @@
             // txtAiCallMe
             // 
             this.txtAiCallMe.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.txtAiCallMe.Location = new System.Drawing.Point(93, 358);
+            this.txtAiCallMe.Location = new System.Drawing.Point(93, 391);
             this.txtAiCallMe.Name = "txtAiCallMe";
             this.txtAiCallMe.Size = new System.Drawing.Size(157, 20);
-            this.txtAiCallMe.TabIndex = 83;
+            this.txtAiCallMe.TabIndex = 4;
             // 
             // label9
             // 
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(29, 361);
+            this.label9.Location = new System.Drawing.Point(25, 394);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(50, 13);
             this.label9.TabIndex = 81;
             this.label9.Text = "My name";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.lblStrictness);
+            this.groupBox3.Controls.Add(this.trkStrictness);
+            this.groupBox3.Location = new System.Drawing.Point(12, 104);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(474, 67);
+            this.groupBox3.TabIndex = 2;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Strictness";
+            // 
+            // lblStrictness
+            // 
+            this.lblStrictness.AutoSize = true;
+            this.lblStrictness.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblStrictness.Location = new System.Drawing.Point(16, 41);
+            this.lblStrictness.Name = "lblStrictness";
+            this.lblStrictness.Size = new System.Drawing.Size(55, 13);
+            this.lblStrictness.TabIndex = 1;
+            this.lblStrictness.Text = "Balanced:";
+            // 
+            // trkStrictness
+            // 
+            this.trkStrictness.LargeChange = 1;
+            this.trkStrictness.Location = new System.Drawing.Point(20, 19);
+            this.trkStrictness.Maximum = 3;
+            this.trkStrictness.Minimum = 1;
+            this.trkStrictness.Name = "trkStrictness";
+            this.trkStrictness.Size = new System.Drawing.Size(437, 45);
+            this.trkStrictness.TabIndex = 0;
+            this.trkStrictness.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.trkStrictness.Value = 2;
+            this.trkStrictness.ValueChanged += new System.EventHandler(this.trkStrictness_ValueChanged);
             // 
             // SettingsAI
             // 
@@ -273,7 +316,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(498, 446);
+            this.ClientSize = new System.Drawing.Size(498, 479);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.rbAiPreferDisplayName);
             this.Controls.Add(this.rbAiPreferLogicalName);
             this.Controls.Add(this.label11);
@@ -295,6 +339,9 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trkStrictness)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -320,5 +367,8 @@
         private System.Windows.Forms.LinkLabel linkLabel5;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.TrackBar trkStrictness;
+        private System.Windows.Forms.Label lblStrictness;
     }
 }
