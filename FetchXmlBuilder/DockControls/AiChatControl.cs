@@ -35,6 +35,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private Stopwatch sessionstopwatch;
         private Stopwatch callingstopwatch;
         private Dictionary<string, List<MetadataForAIAttribute>> metaAttributes = new Dictionary<string, List<MetadataForAIAttribute>>();
+        private Dictionary<string, List<MetadataForAIRelationship>> metaRelationships = new Dictionary<string, List<MetadataForAIRelationship>>();
         private string logname = "AI";
         private bool logconversation = false;
         private int manualcalls = 0; // Counts the number of calls made by the user in this session
@@ -178,6 +179,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             logconversation = model.LogConversation ?? fxb.settings.AiSettings.LogConversation;
             chatHistory = new ChatMessageHistory(panAiConversation, provider.Name, model.Name, endpoint, apikey, fxb.settings.AiSettings.MyName, OnlineSettings.Instance.AiSupport.OnlyInfoName, provider.ToString());
             metaAttributes.Clear();
+            metaRelationships.Clear();
             SetTitle();
             if (provider.Free && !IsFreeAiUser(fxb) && !string.IsNullOrWhiteSpace(OnlineSettings.Instance.AiSupport.TextToRequestFreeAi))
             {
@@ -246,6 +248,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private string PromptUpdatedQuery => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Updated ?? provider?.Prompts?.Updated ?? OnlineSettings.Instance.AiSupport.PromptsV2.Updated, Paths.SettingsPath);
         private string PromptEntityMeta => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.EntityMeta ?? provider?.Prompts?.EntityMeta ?? OnlineSettings.Instance.AiSupport.PromptsV2.EntityMeta, Paths.SettingsPath);
         private string PromptAttributeMeta => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.AttributeMeta ?? provider?.Prompts?.AttributeMeta ?? OnlineSettings.Instance.AiSupport.PromptsV2.AttributeMeta, Paths.SettingsPath);
+        private string PromptRelationshipMeta => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.RelationshipMeta ?? provider?.Prompts?.RelationshipMeta ?? OnlineSettings.Instance.AiSupport.PromptsV2.RelationshipMeta, Paths.SettingsPath);
 
         private void SetTitle()
         {
@@ -356,7 +359,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                      PromptPreferences + NewSectionMd)
                     .Replace("{{fetchxml}}", fxb.dockControlBuilder?.GetFetchString(true, false))
                     .Replace("{{callme}}", !string.IsNullOrWhiteSpace(fxb.settings.AiSettings.MyName) ? fxb.settings.AiSettings.MyName : "you")
-                    .Replace("{{prefer}}", fxb.settings.AiSettings.PreferDisplayName ? "DisplanyName" : "LogicalName");
+                    .Replace("{{prefer}}", fxb.settings.AiSettings.PreferDisplayName ? "DisplayName" : "LogicalName");
                 if (!string.IsNullOrWhiteSpace(fxb.settings.AiSettings.InstructionsFlavor))
                 {
                     intro += PromptUserFlavors?.Replace("{{userflavors}}", fxb.settings.AiSettings.InstructionsFlavor) + NewSectionMd;
@@ -394,6 +397,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     ExecuteFetchXMLQuery,
                     UpdateCurrentFetchXmlQuery,
                     GetMetadataForUnknownEntity,
+                    GetMetadataForUnknownRelationship,
                     GetMetadataForUnknownAttribute);
             }
             catch (Exception ex)
@@ -470,7 +474,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        [Description("Find matching Dataverse table(s) by one name or description using ONLY the provided metadata list. Use this tool whenever the exact table logical name is unknown, including when the user refers to related records or uses plural wording and the actual table name may be singular. Return JSON ONLY: a JSON array of 0 or more ORIGINAL metadata objects from the provided list, preserving properties and values exactly as given. Return [] if no plausible match is found.")]
+        [Description("Returns matching Dataverse table candidates from the provided metadata list. Return JSON ONLY: a JSON array of 0 or more ORIGINAL metadata objects from the provided list, preserving properties and values exactly as given. Return [] if no plausible match is found.")]
         private string GetMetadataForUnknownEntity([Description("A single table name or table description to match against the available Dataverse tables. This may be singular or plural wording from the user, for example 'mission', 'missions', 'customer account', 'or cases'.")] string tableDescription)
         {
             var entities = fxb.EntitiesForAi();
@@ -507,6 +511,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private string GetMetadataForUnknownAttribute([Description("Entity logical name and one column name/description, separated by '@@'. Example: 'account@@primary contact'. Use exactly one column request per call. If the user wording is plural or sounds like related records, that may indicate a related table rather than a column on this table.")] string entityNameAndAttributeDescription)
         {
             var parts = entityNameAndAttributeDescription.Split(new[] { "@@" }, 2, StringSplitOptions.None);
+            if (parts.Length != 2 ||
+                 string.IsNullOrWhiteSpace(parts[0]) ||
+                 string.IsNullOrWhiteSpace(parts[1]))
+            {
+                return "Invalid input. Use 'entitylogicalname@@attribute name or attribute description'.";
+            }
 
             var entityName = parts[0];
             var attributeName = parts[1];
@@ -559,6 +569,71 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             catch
             {
                 // If the result cannot be deserialized, we just return the text, which might be an error message from the AI.
+            }
+            return result.Text;
+        }
+
+        [Description("Returns matching relationship candidates for a known table/entity from the provided metadata. Information about relationships is returned in a JSON list with entries of the format {\"L\":\"[logical name of related table]\",\"D\":\"[display name of related table]\",\"Desc\":\"[description of related table]\",\"R\":\"[relationship kind: M:1, 1:M or M:M]\",\"F\":\"[FetchXML link-entity from attribute]\",\"T\":\"[FetchXML link-entity to attribute]\",\"I\":\"[intersect table for M:M if any]\",\"X\":\"[intersect column connected to current table for M:M if any]\",\"Y\":\"[intersect column connected to related table for M:M if any]\",\"S\":\"[relationship schema name]\"}. There may be many results if a unique relationship cannot be found.")]
+        private string GetMetadataForUnknownRelationship([Description("Entity logical name and one related table name/description, separated by '@@'. Example: 'account@@contacts'. Use exactly one related table request per call.")] string entityNameAndRelationshipDescription)
+        {
+            var parts = entityNameAndRelationshipDescription.Split(new[] { "@@" }, 2, StringSplitOptions.None);
+            if (parts.Length != 2 ||
+                string.IsNullOrWhiteSpace(parts[0]) ||
+                string.IsNullOrWhiteSpace(parts[1]))
+            {
+                return "Invalid input. Use 'entitylogicalname@@related table name or relationship description'.";
+            }
+
+            var entityName = parts[0].Trim();
+            var relationshipName = parts[1].Trim();
+
+            if (!metaRelationships.ContainsKey(entityName))
+            {
+                try
+                {
+                    var aimeta = fxb.RelationshipsForAi(entityName);
+                    if (aimeta.Count == 0)
+                    {
+                        return $"There is no table called '{entityName}', or it has no available relationships. Call the GetMetadataForUnknownEntity tool first to get the correct table name.";
+                    }
+
+                    metaRelationships[entityName] = aimeta;
+                }
+                catch (Exception ex)
+                {
+                    return $"Error retrieving relationship metadata: {ex.Message}";
+                }
+            }
+
+            var relationships = metaRelationships[entityName];
+            var json = JsonSerializer.Serialize(relationships, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
+
+            chatHistory.Add(ChatRole.User, $"The tool GetMetadataForUnknownRelationship was called: retrieve relationships for table '{entityName}' that matches the name '{relationshipName}'", true);
+
+            var sw = Stopwatch.StartNew();
+            var result = AiCommunication.PromptStateless(
+                chatHistory,
+                PromptRelationshipMeta
+                    .Replace("{{entityname}}", entityName)
+                    .Replace("{{metadata}}", json),
+                $"Please find relationships that match the description {relationshipName}",
+                $"Asking for relationships for '{relationshipName}' from table '{entityName}'...");
+            sw.Stop();
+            Log($"Meta-Relationship-{entityName}-{relationshipName}", result, sw.ElapsedMilliseconds, relationships.Count);
+
+            chatHistory.Add(result, true);
+            try
+            {
+                var hitrels = JsonSerializer.Deserialize<List<MetadataForAIRelationship>>(result.Text);
+                var hits = hitrels.Count > 0 ?
+                    hitrels.Count > 3 ?
+                        $"...found {hitrels.Count} relationships." :
+                        $"...found relationship(s): {string.Join(", ", hitrels.Select(r => r.D + " (" + r.L + ", " + r.R + ")"))}." :
+                    "...no relationships found matching.";
+                chatHistory.Add(ChatRole.Assistant, hits, false, true);
+            }
+            catch
+            {
             }
             return result.Text;
         }

@@ -3,12 +3,14 @@
 ## General Guidelines
 - Use https://fetchxmlbuilder.com as the tool website/doc reference link for future guidance and documentation improvements.
 - Ensure that all instructions are clear, actionable, and delivered in an informal, flavorful tone to enhance user experience.
-- Keep responses as short summaries; avoid long historical explanations. User prefers very concise responses and may explicitly correct verbosity; keep answers short.
+- Keep responses as short summaries; avoid long historical explanations. User prefers very concise responses and may explicitly correct verbosity; keep answers short and easy to scan.
 - In AI-facing documentation, avoid internal class names (e.g., MetadataForAIAttribute) and instead use Dataverse terminology (table/entity, column/attribute, choice/option set). Enhance AI-facing tool descriptions while maintaining the current one-at-a-time metadata lookup logic in AiChatControl.
 - Provide very concise responses; avoid long explanations.
 - Prefer AI metadata tools to support resolving multiple entities or multiple attributes in a single call when the AI already knows it needs several matches, while still allowing repeated calls when needed.
 - Backward compatibility is not needed for this shared project as it is currently only used by the user in this project.
-- For this UI, avoid triple backtick fences; when a multiline block is needed, use triple double quotes (`"""`) instead.
+- For this UI, avoid triple backtick fences; when sending Markdown file contents for this project, output applicable blocks using standard code fences externally while replacing any internal Markdown triple backticks with triple double quotes (`"""`).
+- In Dataverse, custom schema names require a publisher prefix before the first underscore; this is a hard rule, not merely common or optional.
+- For stateless metadata matching prompts, prioritize the user's configured logical-name/publisher prefix from User's Flavors (for example 'xyz_' or 'new_') when matching custom tables and relationships. Avoid using the real publisher prefix 'rapp_' in examples; use neutral examples instead.
 
 ## Code Style
 - Follow specific formatting rules as per project requirements.
@@ -23,3 +25,4 @@
 - Implement custom requirements as outlined in the project documentation.
 - Regularly update documentation to reflect any changes in project specifications.
 - Move files to the root folder when a folder contains only one file (e.g., OnlineFiles) to avoid unnecessary nesting.
+- For AI prompt design in this project, type-based matching should be general across all Dataverse types, not just date-like types.

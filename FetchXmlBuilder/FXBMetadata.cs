@@ -301,6 +301,8 @@ namespace Rappen.XTB.FetchXmlBuilder
 
         internal List<MetadataForAIAttribute> AttributesForAi(string entityName, bool IncludeType) => MetadataForAIAttribute.FromAttributes(GetDisplayAttributes(entityName)?.ToList(), IncludeType);
 
+        internal List<MetadataForAIRelationship> RelationshipsForAi(string entityName) => MetadataForAIRelationship.FromRelationships(GetEntity(entityName), GetEntity);
+
         #endregion Internal Methods
 
         #region Private Methods
