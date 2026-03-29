@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
@@ -43,12 +44,14 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private bool metadataavailable;
         private List<string> askhistory = new List<string>();
         private int currentaskhistory = -1;
+        private string localFolder;
 
         #region Public Constructor
 
         public AiChatControl(FetchXmlBuilder fetchXmlBuilder, bool neverprompt)
         {
             fxb = fetchXmlBuilder;
+            localFolder = Path.Combine(Paths.SettingsPath, "FXB");
             InitializeComponent();
 
             ChatMessageHistory.UserTextColor = OnlineSettings.Instance.Colors.Bright;
@@ -231,24 +234,24 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         #region Private Methods
 
-        private string PromptSystem => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.System ?? provider?.Prompts?.System ?? OnlineSettings.Instance.AiSupport.PromptsV2.System, Paths.SettingsPath).Trim();
-        private string PromptBehavior => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Behavior ?? provider?.Prompts?.Behavior ?? OnlineSettings.Instance.AiSupport.PromptsV2.Behavior, Paths.SettingsPath).Trim();
-        private string PromptStyle => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Style ?? provider?.Prompts?.Style ?? OnlineSettings.Instance.AiSupport.PromptsV2.Style, Paths.SettingsPath).Trim();
-        private string PromptPreferences => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Preferences ?? provider?.Prompts?.Preferences ?? OnlineSettings.Instance.AiSupport.PromptsV2.Preferences, Paths.SettingsPath).Trim();
+        private string PromptSystem => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.System ?? provider?.Prompts?.System ?? OnlineSettings.Instance.AiSupport.PromptsV2.System, localFolder).Trim();
+        private string PromptBehavior => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Behavior ?? provider?.Prompts?.Behavior ?? OnlineSettings.Instance.AiSupport.PromptsV2.Behavior, localFolder).Trim();
+        private string PromptStyle => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Style ?? provider?.Prompts?.Style ?? OnlineSettings.Instance.AiSupport.PromptsV2.Style, localFolder).Trim();
+        private string PromptPreferences => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Preferences ?? provider?.Prompts?.Preferences ?? OnlineSettings.Instance.AiSupport.PromptsV2.Preferences, localFolder).Trim();
 
         private string PromptStrictness => OnlineFile.GetTextFromMaybeUrl(
             (model?.Prompts?.Strictness ??
              provider?.Prompts?.Strictness ??
              OnlineSettings.Instance.AiSupport.PromptsV2.Strictness)
             .Replace("{{strictness}}", fxb.settings.AiSettings.Strictness.ToString()),
-            Paths.SettingsPath).Trim();
+            localFolder).Trim();
 
-        private string PromptUserFlavors => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.UserFlavors ?? provider?.Prompts?.UserFlavors ?? OnlineSettings.Instance.AiSupport.PromptsV2.UserFlavors, Paths.SettingsPath).Trim();
+        private string PromptUserFlavors => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.UserFlavors ?? provider?.Prompts?.UserFlavors ?? OnlineSettings.Instance.AiSupport.PromptsV2.UserFlavors, localFolder).Trim();
 
-        private string PromptUpdatedQuery => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Updated ?? provider?.Prompts?.Updated ?? OnlineSettings.Instance.AiSupport.PromptsV2.Updated, Paths.SettingsPath);
-        private string PromptEntityMeta => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.EntityMeta ?? provider?.Prompts?.EntityMeta ?? OnlineSettings.Instance.AiSupport.PromptsV2.EntityMeta, Paths.SettingsPath);
-        private string PromptAttributeMeta => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.AttributeMeta ?? provider?.Prompts?.AttributeMeta ?? OnlineSettings.Instance.AiSupport.PromptsV2.AttributeMeta, Paths.SettingsPath);
-        private string PromptRelationshipMeta => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.RelationshipMeta ?? provider?.Prompts?.RelationshipMeta ?? OnlineSettings.Instance.AiSupport.PromptsV2.RelationshipMeta, Paths.SettingsPath);
+        private string PromptUpdatedQuery => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Updated ?? provider?.Prompts?.Updated ?? OnlineSettings.Instance.AiSupport.PromptsV2.Updated, localFolder).Trim();
+        private string PromptEntityMeta => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.EntityMeta ?? provider?.Prompts?.EntityMeta ?? OnlineSettings.Instance.AiSupport.PromptsV2.EntityMeta, localFolder).Trim();
+        private string PromptAttributeMeta => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.AttributeMeta ?? provider?.Prompts?.AttributeMeta ?? OnlineSettings.Instance.AiSupport.PromptsV2.AttributeMeta, localFolder).Trim();
+        private string PromptRelationshipMeta => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.RelationshipMeta ?? provider?.Prompts?.RelationshipMeta ?? OnlineSettings.Instance.AiSupport.PromptsV2.RelationshipMeta, localFolder).Trim();
 
         private void SetTitle()
         {

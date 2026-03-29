@@ -29,14 +29,15 @@ namespace Rappen.XTB.FXB.Settings
             {
                 if (instance == null)
                 {
+                    var folder = Path.Combine(Paths.SettingsPath, "FXB");
 #if DEBUG
-                    var path = Path.Combine(Paths.SettingsPath, FileName);
+                    var path = Path.Combine(folder, FileName);
                     if (!File.Exists(path))
                     {
                         MessageBoxEx.Show($"DEBUG MODE:\n\nSettings file '{path}' not found. Now it's created by default.\nIt can be found here:\n{ToolSettingsURLPath}{FileName}");
                     }
 #endif
-                    instance = XmlAtomicStore.DownloadXml<OnlineSettings>(ToolSettingsURLPath, FileName, Paths.SettingsPath);
+                    instance = XmlAtomicStore.DownloadXml<OnlineSettings>(ToolSettingsURLPath, FileName, folder);
                 }
                 return instance;
             }
@@ -44,7 +45,7 @@ namespace Rappen.XTB.FXB.Settings
 
         public static void Reset() => instance = null;
 
-        public void Save() => XmlAtomicStore.Serialize(this, Path.Combine(Paths.SettingsPath, FileName));
+        public void Save() => XmlAtomicStore.Serialize(this, Path.Combine(Paths.SettingsPath, "FXB", FileName));
     }
 
     public class ToolColors
