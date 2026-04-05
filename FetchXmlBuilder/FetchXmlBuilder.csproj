@@ -450,9 +450,6 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="bin\Debug\Settings\Strictness.Balanced.md" />
-    <None Include="bin\Debug\Settings\Strictness.Exact.md" />
-    <None Include="bin\Debug\Settings\Strictness.Relaxed.md" />
     <None Include="Resources\XSD fetch.cs.cmd" />
     <None Include="XrmToolBox.exe.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

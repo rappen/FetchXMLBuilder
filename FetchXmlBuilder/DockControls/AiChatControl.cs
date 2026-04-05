@@ -26,6 +26,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private const string GeneralSettingsURL = "https://rappen.github.io/Tools/";
         private const string AiUsersFileName = "Rappen.XTB.AI.Users.xml";
         private static readonly string NewSectionMd = Environment.NewLine + Environment.NewLine + "---" + Environment.NewLine;
+        private static readonly string localFolder = Path.Combine(Paths.SettingsPath, "FXB");
 
         private FetchXmlBuilder fxb;
         private AIAppInsights ai;
@@ -44,14 +45,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private bool metadataavailable;
         private List<string> askhistory = new List<string>();
         private int currentaskhistory = -1;
-        private string localFolder;
 
         #region Public Constructor
 
         public AiChatControl(FetchXmlBuilder fetchXmlBuilder, bool neverprompt)
         {
             fxb = fetchXmlBuilder;
-            localFolder = Path.Combine(Paths.SettingsPath, "FXB");
             InitializeComponent();
 
             ChatMessageHistory.UserTextColor = OnlineSettings.Instance.Colors.Bright;
@@ -486,6 +485,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var sw = Stopwatch.StartNew();
             var result = AiCommunication.PromptStateless(
                 chatHistory,
+                PromptStrictness + NewSectionMd +
                 PromptEntityMeta.Replace("{{metadata}}", json),
                 $"Please find entries that match the description {tableDescription}",
                 $"Asking for metadata for table '{tableDescription}'...");
@@ -550,6 +550,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var sw = Stopwatch.StartNew();
             var result = AiCommunication.PromptStateless(
                 chatHistory,
+                PromptStrictness + NewSectionMd +
                 PromptAttributeMeta
                     .Replace("{{entityname}}", entityName)
                     .Replace("{{metadata}}", json),
@@ -616,6 +617,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var sw = Stopwatch.StartNew();
             var result = AiCommunication.PromptStateless(
                 chatHistory,
+                PromptStrictness + NewSectionMd +
                 PromptRelationshipMeta
                     .Replace("{{entityname}}", entityName)
                     .Replace("{{metadata}}", json),
