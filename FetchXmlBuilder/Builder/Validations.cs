@@ -112,13 +112,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
             {
                 return new ControlValidationResult(ControlValidationLevel.Warning, "Link-Entity must include Name, To, From");
             }
+            var type = node.Value("link-type");
             if (fxb.settings.Layout.Enabled &&
                 string.IsNullOrWhiteSpace(alias) &&
+                type != "matchfirstrowusingcrossapply" &&
                 node.Nodes.OfType<TreeNode>().Any(n => n.Name == "attribute"))
             {
                 return new ControlValidationResult(ControlValidationLevel.Warning, "Using Layout: Alias is needed to show these attributes");
             }
-            var type = node.Value("link-type");
             if (node.Parent is TreeNode parent && parent.Name == "filter")
             {
                 if (!type.Equals("any") && !type.Equals("not any") && !type.Equals("all") && !type.Equals("not all"))

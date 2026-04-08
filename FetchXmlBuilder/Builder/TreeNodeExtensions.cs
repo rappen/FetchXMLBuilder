@@ -107,13 +107,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
         internal static bool IsAttributeValidForView(this TreeNode node)
         {
             var entity = node.Parent;
-            return node.Name == "attribute" && (entity?.Name == "entity" || (entity?.Name == "link-entity" && !string.IsNullOrWhiteSpace(entity.Value("alias"))));
+            return node.Name == "attribute" && (entity?.Name == "entity" ||
+                (entity?.Name == "link-entity" && (!string.IsNullOrWhiteSpace(entity.Value("alias")) || entity.Value("link-type") == "matchfirstrowusingcrossapply")));
         }
 
         internal static string GetAttributeLayoutName(this TreeNode node)
         {
             var entity = node.LocalEntityNode();
-            var entityalias = entity.Name == "link-entity" ? entity.Value("alias") : string.Empty;
+            var entityalias = entity.Name == "link-entity" && entity.Value("link-type") != "matchfirstrowusingcrossapply"
+                ? entity.Value("alias")
+                : string.Empty;
             var attribute = node.Value("name");
             var alias = node.Value("alias");
             if (!string.IsNullOrWhiteSpace(alias))
