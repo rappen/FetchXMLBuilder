@@ -27,6 +27,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private const string AiUsersFileName = "Rappen.XTB.AI.Users.xml";
         private static readonly string NewSectionMd = Environment.NewLine + Environment.NewLine + "---" + Environment.NewLine;
         private static readonly string localFolder = Path.Combine(Paths.SettingsPath, "FXB");
+        private const int MaxMetadataMatchesToShow = 10;
 
         private FetchXmlBuilder fxb;
         private AIAppInsights ai;
@@ -497,9 +498,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 var hitentities = JsonSerializer.Deserialize<List<MetadataForAIEntity>>(result.Text);
                 var hits = hitentities.Count > 0 ?
-                    hitentities.Count > 3 ?
+                    hitentities.Count > MaxMetadataMatchesToShow ?
                         $"...found {hitentities.Count} tables." :
-                        $"...found table(s): {string.Join(", ", hitentities.Select(e => e.D + " (" + e.L + ")"))}." :
+                        hitentities.Count > 1 ?
+                            $"...found tables:{Environment.NewLine}* {string.Join(Environment.NewLine + "* ", hitentities.Select(e => e.D + " (" + e.L + ")"))}" :
+                            $"...found table: {hitentities[0].D} ({hitentities[0].L})." :
                     "...no tables found matching.";
                 chatHistory.Add(ChatRole.Assistant, hits, false, true);
             }
@@ -564,9 +567,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 var hitattrs = JsonSerializer.Deserialize<List<MetadataForAIAttribute>>(result.Text);
                 var hits = hitattrs.Count > 0 ?
-                    hitattrs.Count > 3 ?
+                    hitattrs.Count > MaxMetadataMatchesToShow ?
                         $"...found {hitattrs.Count} attributes." :
-                        $"...found attribute(s): {string.Join(", ", (hitattrs.Select(a => a.D + " (" + a.L + ")")))}." :
+                        hitattrs.Count > 1 ?
+                            $"...found attributes:{Environment.NewLine}* {string.Join(Environment.NewLine + "* ", (hitattrs.Select(a => a.D + " (" + a.L + ")")))}." :
+                            $"...found attribute {hitattrs[0].D} ({hitattrs[0].L})" :
                     "...no attributes found matching.";
                 chatHistory.Add(ChatRole.Assistant, hits, false, true);
             }
@@ -631,9 +636,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 var hitrels = JsonSerializer.Deserialize<List<MetadataForAIRelationship>>(result.Text);
                 var hits = hitrels.Count > 0 ?
-                    hitrels.Count > 3 ?
+                    hitrels.Count > MaxMetadataMatchesToShow ?
                         $"...found {hitrels.Count} relationships." :
-                        $"...found relationship(s): {string.Join(", ", hitrels.Select(r => r.D + " (" + r.L + ", " + r.R + ")"))}." :
+                        hitrels.Count > 1 ?
+                            $"...found relationships:{Environment.NewLine}* {string.Join(Environment.NewLine + "* ", (hitrels.Select(r => r.ToRelationshipString())))}." :
+                            $"...found relationship: {hitrels[0].ToRelationshipString()}." :
                     "...no relationships found matching.";
                 chatHistory.Add(ChatRole.Assistant, hits, false, true);
             }
