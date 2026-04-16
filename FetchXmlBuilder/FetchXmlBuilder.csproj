@@ -104,6 +104,7 @@
     <Compile Include="DockControls\AiChatControl.Designer.cs">
       <DependentUpon>AiChatControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="DockControls\AiChatTexts.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\GroupBoxExpanderExtensions.cs" />
     <Compile Include="Forms\SettingsAI.cs">

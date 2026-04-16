@@ -46,6 +46,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private bool metadataavailable;
         private List<string> askhistory = new List<string>();
         private int currentaskhistory = -1;
+        private AiChatTexts texts;
 
         #region Public Constructor
 
@@ -194,6 +195,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 txtAiChat.Focus();
             }
+            texts = new AiChatTexts(provider, model, localFolder, fxb.settings.AiSettings.Strictness);
         }
 
         internal static bool IsFreeAiUser(PluginControlBase tool)
@@ -233,25 +235,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         #endregion Internal Methods
 
         #region Private Methods
-
-        private string PromptSystem => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.System ?? provider?.Prompts?.System ?? OnlineSettings.Instance.AiSupport.PromptsV2.System, localFolder).Trim();
-        private string PromptBehavior => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Behavior ?? provider?.Prompts?.Behavior ?? OnlineSettings.Instance.AiSupport.PromptsV2.Behavior, localFolder).Trim();
-        private string PromptStyle => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Style ?? provider?.Prompts?.Style ?? OnlineSettings.Instance.AiSupport.PromptsV2.Style, localFolder).Trim();
-        private string PromptPreferences => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Preferences ?? provider?.Prompts?.Preferences ?? OnlineSettings.Instance.AiSupport.PromptsV2.Preferences, localFolder).Trim();
-
-        private string PromptStrictness => OnlineFile.GetTextFromMaybeUrl(
-            (model?.Prompts?.Strictness ??
-             provider?.Prompts?.Strictness ??
-             OnlineSettings.Instance.AiSupport.PromptsV2.Strictness)
-            .Replace("{{strictness}}", fxb.settings.AiSettings.Strictness.ToString()),
-            localFolder).Trim();
-
-        private string PromptUserFlavors => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.UserFlavors ?? provider?.Prompts?.UserFlavors ?? OnlineSettings.Instance.AiSupport.PromptsV2.UserFlavors, localFolder).Trim();
-
-        private string PromptUpdatedQuery => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.Updated ?? provider?.Prompts?.Updated ?? OnlineSettings.Instance.AiSupport.PromptsV2.Updated, localFolder).Trim();
-        private string PromptEntityMeta => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.EntityMeta ?? provider?.Prompts?.EntityMeta ?? OnlineSettings.Instance.AiSupport.PromptsV2.EntityMeta, localFolder).Trim();
-        private string PromptAttributeMeta => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.AttributeMeta ?? provider?.Prompts?.AttributeMeta ?? OnlineSettings.Instance.AiSupport.PromptsV2.AttributeMeta, localFolder).Trim();
-        private string PromptRelationshipMeta => OnlineFile.GetTextFromMaybeUrl(model?.Prompts?.RelationshipMeta ?? provider?.Prompts?.RelationshipMeta ?? OnlineSettings.Instance.AiSupport.PromptsV2.RelationshipMeta, localFolder).Trim();
 
         private void SetTitle()
         {
@@ -354,18 +337,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             if (!chatHistory.Initialized)
             {
-                var intro =
-                    (PromptSystem + NewSectionMd +
-                     PromptStyle + NewSectionMd +
-                     PromptBehavior + NewSectionMd +
-                     PromptStrictness + NewSectionMd +
-                     PromptPreferences + NewSectionMd)
-                    .Replace("{{fetchxml}}", fxb.dockControlBuilder?.GetFetchString(true, false))
-                    .Replace("{{callme}}", !string.IsNullOrWhiteSpace(fxb.settings.AiSettings.MyName) ? fxb.settings.AiSettings.MyName : "you")
-                    .Replace("{{prefer}}", fxb.settings.AiSettings.PreferDisplayName ? "DisplayName" : "LogicalName");
+                var intro = PopulateForAi(
+                    texts.System + NewSectionMd +
+                    texts.Style + NewSectionMd +
+                    texts.Behavior + NewSectionMd +
+                    texts.Strictness + NewSectionMd +
+                    texts.Preferences + NewSectionMd);
+
                 if (!string.IsNullOrWhiteSpace(fxb.settings.AiSettings.InstructionsFlavor))
                 {
-                    intro += PromptUserFlavors?.Replace("{{userflavors}}", fxb.settings.AiSettings.InstructionsFlavor) + NewSectionMd;
+                    intro += Environment.NewLine + Environment.NewLine + PopulateForAi(texts.UserFlavors, ("userflavors", fxb.settings.AiSettings.InstructionsFlavor)) + NewSectionMd;
                 }
 
                 chatHistory.Initialize(intro);
@@ -375,7 +356,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             else if (!manualquery.EqualXml(lastquery))
             {
                 lastquery = manualquery;
-                chatHistory.Add(ChatRole.User, PromptUpdatedQuery.Replace("{fetchxml}", manualquery), true);
+                chatHistory.Add(
+                    ChatRole.User,
+                    PopulateForAi(texts.UpdatedQuery, ("fetchxml", manualquery)),
+                    true);
             }
 
             text = text.Trim();
@@ -397,11 +381,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     chatHistory,
                     text,
                     HandlingResponseFromAi,
-                    ExecuteFetchXMLQuery,
-                    UpdateCurrentFetchXmlQuery,
-                    GetMetadataForUnknownEntity,
-                    GetMetadataForUnknownRelationship,
-                    GetMetadataForUnknownAttribute);
+                    GetInternalTools());
             }
             catch (Exception ex)
             {
@@ -431,8 +411,40 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        [Description("Executes FetchXML Query")]
-        private string ExecuteFetchXMLQuery([Description("The FetchXML Query to be Executed. This is the current FetchXML, as specified in the conversation with the assistant.")] string fetchXml)
+        private string PopulateForAi(string text, params (string placeholder, string replacement)[] extraplaceholders)
+        {
+            var placeholders = new Dictionary<string, string>
+            {
+                ["fetchxml"] = fxb.dockControlBuilder?.GetFetchString(true, false) ?? string.Empty,
+                ["callme"] = !string.IsNullOrWhiteSpace(fxb.settings.AiSettings.MyName) ? fxb.settings.AiSettings.MyName : "you",
+                ["prefer"] = fxb.settings.AiSettings.PreferDisplayName ? "DisplayName" : "LogicalName",
+                ["providername"] = provider?.Name ?? string.Empty,
+                ["modelname"] = model?.Name ?? string.Empty,
+                ["hascurrentquery"] = string.IsNullOrWhiteSpace(fxb.dockControlBuilder?.GetFetchString(true, false)) ? "no" : "yes"
+            };
+
+            if (extraplaceholders != null)
+            {
+                foreach (var extra in extraplaceholders)
+                {
+                    placeholders[extra.placeholder] = extra.replacement ?? string.Empty;
+                }
+            }
+
+            var result = text.Populate(placeholders.Select(p => (p.Key, p.Value)));
+            return result;
+        }
+
+        private AiInternalTool[] GetInternalTools() => new[]
+        {
+            new AiInternalTool(ExecuteFetchXMLQuery, "run_query",PopulateForAi(texts.ToolRunQuery)),
+            new AiInternalTool(UpdateCurrentFetchXmlQuery, "update_query", PopulateForAi(texts.ToolUpdateQuery)),
+            new AiInternalTool(GetMetadataForUnknownEntity, "match_table", PopulateForAi(texts.ToolMatchTable)),
+            new AiInternalTool(GetMetadataForUnknownRelationship, "match_relationship", PopulateForAi(texts.ToolMatchRelationship)),
+            new AiInternalTool(GetMetadataForUnknownAttribute, "match_column", PopulateForAi(texts.ToolMatchColumn))
+        };
+
+        private string ExecuteFetchXMLQuery([Description("Full FetchXML query.")] string fetchXml)
         {
             try
             {
@@ -456,8 +468,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        [Description("Updates the current FetchXML Query that we are working on. The assistant should call this tool every time the assistant makes a change to the FetchXml query.")]
-        private string UpdateCurrentFetchXmlQuery([Description("A well formed FetchXml query that is the current query that has been updated by the assistant.")] string fetchXml)
+        private string UpdateCurrentFetchXmlQuery([Description("Full FetchXML query.")] string fetchXml)
         {
             try
             {
@@ -477,8 +488,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        [Description("Returns matching Dataverse table candidates from the provided metadata list. Return JSON ONLY: a JSON array of 0 or more ORIGINAL metadata objects from the provided list, preserving properties and values exactly as given. Return [] if no plausible match is found.")]
-        private string GetMetadataForUnknownEntity([Description("A single table name or table description to match against the available Dataverse tables. This may be singular or plural wording from the user, for example 'mission', 'missions', 'customer account', 'or cases'.")] string tableDescription)
+        private string GetMetadataForUnknownEntity([Description("One table name or description.")] string tableDescription)
         {
             var entities = fxb.EntitiesForAi();
             var json = JsonSerializer.Serialize(entities, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
@@ -486,8 +496,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var sw = Stopwatch.StartNew();
             var result = AiCommunication.PromptStateless(
                 chatHistory,
-                PromptStrictness + NewSectionMd +
-                PromptEntityMeta.Replace("{{metadata}}", json),
+                texts.Strictness + NewSectionMd +
+                texts.EntityMeta.Replace("{{metadata}}", json),
                 $"Please find entries that match the description {tableDescription}",
                 $"Asking for metadata for table '{tableDescription}'...");
             sw.Stop();
@@ -513,7 +523,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             return result.Text;
         }
 
-        [Description("Returns attributes of a table/entity that matches a description. Information about attributes is returned in a JSON list with entries of the format {\"L\":\"[logical name of attribute]\",\"D\":\"[display name of attribute]\",\"Desc\":\"[description of the attribute]\"}. There may be many results, if a unique attribute cannot be found.")]
         private string GetMetadataForUnknownAttribute([Description("Entity logical name and one column name/description, separated by '@@'. Example: 'account@@primary contact'. Use exactly one column request per call. If the user wording is plural or sounds like related records, that may indicate a related table rather than a column on this table.")] string entityNameAndAttributeDescription)
         {
             var parts = entityNameAndAttributeDescription.Split(new[] { "@@" }, 2, StringSplitOptions.None);
@@ -553,8 +562,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var sw = Stopwatch.StartNew();
             var result = AiCommunication.PromptStateless(
                 chatHistory,
-                PromptStrictness + NewSectionMd +
-                PromptAttributeMeta
+                texts.Strictness + NewSectionMd +
+                texts.AttributeMeta
                     .Replace("{{entityname}}", entityName)
                     .Replace("{{metadata}}", json),
                 $"Please find attributes that match the name {attributeName}",
@@ -582,7 +591,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             return result.Text;
         }
 
-        [Description("Returns matching relationship candidates for a known table/entity from the provided metadata. Information about relationships is returned in a JSON list with entries of the format {\"L\":\"[logical name of related table]\",\"D\":\"[display name of related table]\",\"Desc\":\"[description of related table]\",\"R\":\"[relationship kind: M:1, 1:M or M:M]\",\"F\":\"[FetchXML link-entity from attribute]\",\"T\":\"[FetchXML link-entity to attribute]\",\"I\":\"[intersect table for M:M if any]\",\"X\":\"[intersect column connected to current table for M:M if any]\",\"Y\":\"[intersect column connected to related table for M:M if any]\",\"S\":\"[relationship schema name]\"}. There may be many results if a unique relationship cannot be found.")]
         private string GetMetadataForUnknownRelationship([Description("Entity logical name and one related table name/description, separated by '@@'. Example: 'account@@contacts'. Use exactly one related table request per call.")] string entityNameAndRelationshipDescription)
         {
             var parts = entityNameAndRelationshipDescription.Split(new[] { "@@" }, 2, StringSplitOptions.None);
@@ -622,8 +630,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var sw = Stopwatch.StartNew();
             var result = AiCommunication.PromptStateless(
                 chatHistory,
-                PromptStrictness + NewSectionMd +
-                PromptRelationshipMeta
+                texts.Strictness + NewSectionMd +
+                texts.RelationshipMeta
                     .Replace("{{entityname}}", entityName)
                     .Replace("{{metadata}}", json),
                 $"Please find relationships that match the description {relationshipName}",
