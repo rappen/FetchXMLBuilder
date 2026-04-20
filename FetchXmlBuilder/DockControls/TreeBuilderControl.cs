@@ -452,7 +452,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         internal void Save(string fileName)
         {
             BuildAndValidateXml();
-            var fetchDoc = GetFetchDocument();
+            var fetchDoc = GetFetchDocument(true);
             fetchDoc.Save(fileName);
             ClearChanged();
         }
@@ -599,11 +599,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 doc.AppendChild(rootNode);
                 if (includelayout && LayoutXML != null)
                 {
-                    //rootNode.AppendChild(new XmlNode("view"));
-                    //view.AppendChild(LayoutXML.ToXMLString().ToXmlNode());
-                    //view.AppendChild(GetFetchDocument(false));
-                    TreeNodeHelper.AddXmlNode(tvFetch.Nodes[0], rootNode);
+                    var view = doc.CreateElement("view");
+                    view.InnerXml = LayoutXML.ToXMLString();
+                    doc.DocumentElement.AppendChild(view);
+
+                    TreeNodeHelper.AddXmlNode(tvFetch.Nodes[0], view);
                     var xmlbody = doc.SelectSingleNode("root/view").OuterXml;
+
                     doc.LoadXml(xmlbody);
                 }
                 else
