@@ -457,7 +457,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 }
                 else
                 {
-                    cmbAiModel.SelectedIndex = 0;
+                    cmbAiModel.SelectedIndex = -1;
+                    cmbAiModel.Text = fxb.settings.AiSettings.Model;
                 }
             }
             else

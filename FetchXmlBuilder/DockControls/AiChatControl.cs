@@ -33,7 +33,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private AIAppInsights ai;
         private ChatMessageHistory chatHistory;
         private AiProvider provider;
-        private AiModel model;
+        private string model;
         private string lastquery;
         private Stopwatch sessionstopwatch;
         private Stopwatch callingstopwatch;
@@ -97,8 +97,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 return;
             }
             logname = $"AI-{provider.Name}";
-            model = provider.Model(fxb.settings.AiSettings.Model);
-            if (model == null)
+            model = fxb.settings.AiSettings.Model;
+            var knownmodel = provider.Model(model);
+            if (string.IsNullOrWhiteSpace(model))
             {
                 if (neverprompt)
                 {
@@ -115,7 +116,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
                 return;
             }
-            var endpoint = provider.EndpointFixed ? model.Endpoint : fxb.settings.AiSettings.Endpoint;
+            var endpoint = provider.EndpointFixed ? knownmodel?.Endpoint : fxb.settings.AiSettings.Endpoint;
             if (!provider.EndpointFixed && string.IsNullOrWhiteSpace(endpoint))
             {
                 if (neverprompt)
@@ -180,8 +181,8 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     return;
                 }
             }
-            logconversation = model.LogConversation ?? fxb.settings.AiSettings.LogConversation;
-            chatHistory = new ChatMessageHistory(panAiConversation, provider.Name, model.Name, endpoint, apikey, fxb.settings.AiSettings.MyName, OnlineSettings.Instance.AiSupport.OnlyInfoName, provider.ToString());
+            logconversation = knownmodel?.LogConversation ?? fxb.settings.AiSettings.LogConversation;
+            chatHistory = new ChatMessageHistory(panAiConversation, provider.Name, model, endpoint, apikey, fxb.settings.AiSettings.MyName, OnlineSettings.Instance.AiSupport.OnlyInfoName, provider.ToString());
             metaAttributes.Clear();
             metaRelationships.Clear();
             SetTitle();
@@ -195,7 +196,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 txtAiChat.Focus();
             }
-            texts = new AiChatTexts(provider, model, localFolder, fxb.settings.AiSettings.Strictness);
+            texts = new AiChatTexts(provider, knownmodel, localFolder, fxb.settings.AiSettings.Strictness);
         }
 
         internal static bool IsFreeAiUser(PluginControlBase tool)
@@ -238,7 +239,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void SetTitle()
         {
-            Text = $"AI Chat - {provider?.ToString() ?? "<no provider>"} - {model?.Name ?? "<no model>"}";
+            Text = $"AI Chat - {provider?.ToString() ?? "<no provider>"} - {model ?? "<no model>"}";
             TabText = Text;
         }
 
@@ -419,7 +420,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 ["callme"] = !string.IsNullOrWhiteSpace(fxb.settings.AiSettings.MyName) ? fxb.settings.AiSettings.MyName : "you",
                 ["prefer"] = fxb.settings.AiSettings.PreferDisplayName ? "DisplayName" : "LogicalName",
                 ["providername"] = provider?.Name ?? string.Empty,
-                ["modelname"] = model?.Name ?? string.Empty,
+                ["modelname"] = model,
                 ["hascurrentquery"] = string.IsNullOrWhiteSpace(fxb.dockControlBuilder?.GetFetchString(true, false)) ? "no" : "yes"
             };
 
@@ -688,11 +689,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     popup.Title
                         .Replace("{calls}", fxb.settings.AiSettings.Calls.ToString())
                         .Replace("{provider}", provider.ToString())
-                        .Replace("{model}", model.Name);
+                        .Replace("{model}", model);
                 var message = popup.Message
                     .Replace("{calls}", fxb.settings.AiSettings.Calls.ToString())
                     .Replace("{provider}", provider.ToString())
-                    .Replace("{model}", model.Name);
+                    .Replace("{model}", model);
                 Log($"Popup-{title.Replace(" ", "-")}", msg: message);
                 if (popup.SuggestsSupporting)
                 {
@@ -750,7 +751,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             if (ai == null)
             {
-                ai = new AIAppInsights(fxb, OnlineSettings.Instance.AiSupport.AppRegistrationEndpoint, OnlineSettings.Instance.AiSupport.InstrumentationKey, provider.Name, model.Name);
+                ai = new AIAppInsights(fxb, OnlineSettings.Instance.AiSupport.AppRegistrationEndpoint, OnlineSettings.Instance.AiSupport.InstrumentationKey, provider.Name, model);
             }
             ai.WriteEvent($"{action}", count ?? msg?.Length, duration, tokensout, tokensin, logconversation ? msg : null);
         }
