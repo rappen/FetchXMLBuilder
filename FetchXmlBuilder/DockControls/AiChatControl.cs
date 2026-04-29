@@ -27,7 +27,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private const string AiUsersFileName = "Rappen.XTB.AI.Users.xml";
         private static readonly string NewSectionMd = Environment.NewLine + Environment.NewLine + "---" + Environment.NewLine;
         private static readonly string localFolder = Path.Combine(Paths.SettingsPath, "FXB");
-        private const int MaxMetadataMatchesToShow = 10;
 
         private FetchXmlBuilder fxb;
         private AIAppInsights ai;
@@ -509,7 +508,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 var hitentities = JsonSerializer.Deserialize<List<MetadataForAIEntity>>(result.Text);
                 var hits = hitentities.Count > 0 ?
-                    hitentities.Count > MaxMetadataMatchesToShow ?
+                    hitentities.Count > OnlineSettings.Instance.AiSupport.MetadataMatchesToShowMax ?
                         $"...found {hitentities.Count} tables." :
                         hitentities.Count > 1 ?
                             $"...found tables:{Environment.NewLine}* {string.Join(Environment.NewLine + "* ", hitentities.Select(e => e.D + " (" + e.L + ")"))}" :
@@ -577,7 +576,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 var hitattrs = JsonSerializer.Deserialize<List<MetadataForAIAttribute>>(result.Text);
                 var hits = hitattrs.Count > 0 ?
-                    hitattrs.Count > MaxMetadataMatchesToShow ?
+                    hitattrs.Count > OnlineSettings.Instance.AiSupport.MetadataMatchesToShowMax ?
                         $"...found {hitattrs.Count} attributes." :
                         hitattrs.Count > 1 ?
                             $"...found attributes:{Environment.NewLine}* {string.Join(Environment.NewLine + "* ", (hitattrs.Select(a => a.D + " (" + a.L + ")")))}." :
@@ -645,7 +644,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 var hitrels = JsonSerializer.Deserialize<List<MetadataForAIRelationship>>(result.Text);
                 var hits = hitrels.Count > 0 ?
-                    hitrels.Count > MaxMetadataMatchesToShow ?
+                    hitrels.Count > OnlineSettings.Instance.AiSupport.MetadataMatchesToShowMax ?
                         $"...found {hitrels.Count} relationships." :
                         hitrels.Count > 1 ?
                             $"...found relationships:{Environment.NewLine}* {string.Join(Environment.NewLine + "* ", (hitrels.Select(r => r.ToRelationshipString())))}." :
