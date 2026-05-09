@@ -329,7 +329,6 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             mnuExcel.Enabled = false;
             Cursor = Cursors.WaitCursor;
             var fetch = queryinfo.Query is FetchExpression fetchexpr ? fetchexpr.Query : queryinfo.Query.ToString();
-            var layout = form.dockControlBuilder?.LayoutXML?.ToXMLString();
             crmGridView1.ExportToExcel(form.settings.Results.ExcelAddLinks, fetch, () =>
             {
                 mnuExcel.Enabled = true;

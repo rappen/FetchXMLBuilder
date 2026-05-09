@@ -104,8 +104,15 @@
     <Compile Include="DockControls\AiChatControl.Designer.cs">
       <DependentUpon>AiChatControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="DockControls\AiChatTexts.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\GroupBoxExpanderExtensions.cs" />
+    <Compile Include="Forms\SettingsAI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsAI.Designer.cs">
+      <DependentUpon>SettingsAI.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\CSharpCodeGeneratedLCGSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -390,6 +397,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DockControls\ResultGrid.resx">
       <DependentUpon>ResultGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsAI.resx">
+      <DependentUpon>SettingsAI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CSharpCodeGeneratedLCGSettings.resx">
       <DependentUpon>CSharpCodeGeneratedLCGSettings.cs</DependentUpon>

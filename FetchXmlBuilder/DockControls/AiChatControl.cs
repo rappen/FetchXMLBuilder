@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
@@ -24,16 +25,19 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
     {
         private const string GeneralSettingsURL = "https://rappen.github.io/Tools/";
         private const string AiUsersFileName = "Rappen.XTB.AI.Users.xml";
+        private static readonly string NewSectionMd = Environment.NewLine + Environment.NewLine + "---" + Environment.NewLine;
+        private static readonly string localFolder = Path.Combine(Paths.SettingsPath, "FXB");
 
         private FetchXmlBuilder fxb;
         private AIAppInsights ai;
         private ChatMessageHistory chatHistory;
         private AiProvider provider;
-        private AiModel model;
+        private string model;
         private string lastquery;
         private Stopwatch sessionstopwatch;
         private Stopwatch callingstopwatch;
         private Dictionary<string, List<MetadataForAIAttribute>> metaAttributes = new Dictionary<string, List<MetadataForAIAttribute>>();
+        private Dictionary<string, List<MetadataForAIRelationship>> metaRelationships = new Dictionary<string, List<MetadataForAIRelationship>>();
         private string logname = "AI";
         private bool logconversation = false;
         private int manualcalls = 0; // Counts the number of calls made by the user in this session
@@ -41,6 +45,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         private bool metadataavailable;
         private List<string> askhistory = new List<string>();
         private int currentaskhistory = -1;
+        private AiChatTexts texts;
 
         #region Public Constructor
 
@@ -91,8 +96,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 return;
             }
             logname = $"AI-{provider.Name}";
-            model = provider.Model(fxb.settings.AiSettings.Model);
-            if (model == null)
+            model = fxb.settings.AiSettings.Model;
+            var knownmodel = provider.Model(model);
+            if (string.IsNullOrWhiteSpace(model))
             {
                 if (neverprompt)
                 {
@@ -109,7 +115,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
                 return;
             }
-            var endpoint = provider.EndpointFixed ? model.Endpoint : fxb.settings.AiSettings.Endpoint;
+            var endpoint = provider.EndpointFixed ? knownmodel?.Endpoint : fxb.settings.AiSettings.Endpoint;
             if (!provider.EndpointFixed && string.IsNullOrWhiteSpace(endpoint))
             {
                 if (neverprompt)
@@ -174,9 +180,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     return;
                 }
             }
-            logconversation = model.LogConversation ?? fxb.settings.AiSettings.LogConversation;
-            chatHistory = new ChatMessageHistory(panAiConversation, provider.Name, model.Name, endpoint, apikey, fxb.settings.AiSettings.MyName, OnlineSettings.Instance.AiSupport.OnlyInfoName, provider.ToString());
+            logconversation = knownmodel?.LogConversation ?? fxb.settings.AiSettings.LogConversation;
+            chatHistory = new ChatMessageHistory(panAiConversation, provider.Name, model, endpoint, apikey, fxb.settings.AiSettings.MyName, OnlineSettings.Instance.AiSupport.OnlyInfoName, provider.ToString());
             metaAttributes.Clear();
+            metaRelationships.Clear();
             SetTitle();
             if (provider.Free && !IsFreeAiUser(fxb) && !string.IsNullOrWhiteSpace(OnlineSettings.Instance.AiSupport.TextToRequestFreeAi))
             {
@@ -188,6 +195,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             {
                 txtAiChat.Focus();
             }
+            texts = new AiChatTexts(provider, knownmodel, localFolder, fxb.settings.AiSettings.Strictness);
         }
 
         internal static bool IsFreeAiUser(PluginControlBase tool)
@@ -228,16 +236,9 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         #region Private Methods
 
-        private string PromptSystem => model?.Prompts?.System ?? provider?.Prompts?.System ?? OnlineSettings.Instance.AiSupport.Prompts.System;
-        private string PromptFormat => model?.Prompts?.Format ?? provider?.Prompts?.Format ?? OnlineSettings.Instance.AiSupport.Prompts.Format;
-        private string PromptMyName => model?.Prompts?.CallMe ?? provider?.Prompts?.CallMe ?? OnlineSettings.Instance.AiSupport.Prompts.CallMe;
-        private string PromptUpdate => model?.Prompts?.Update ?? provider?.Prompts?.Update ?? OnlineSettings.Instance.AiSupport.Prompts.Update;
-        private string PromptEntityMeta => model?.Prompts?.EntityMeta ?? provider?.Prompts?.EntityMeta ?? OnlineSettings.Instance.AiSupport.Prompts.EntityMeta;
-        private string PromptAttributeMeta => model?.Prompts?.AttributeMeta ?? provider?.Prompts?.AttributeMeta ?? OnlineSettings.Instance.AiSupport.Prompts.AttributeMeta;
-
         private void SetTitle()
         {
-            Text = $"AI Chat - {provider?.ToString() ?? "<no provider>"} - {model?.Name ?? "<no model>"}";
+            Text = $"AI Chat - {provider?.ToString() ?? "<no provider>"} - {model ?? "<no model>"}";
             TabText = Text;
         }
 
@@ -336,16 +337,18 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             if (!chatHistory.Initialized)
             {
-                var intro = PromptSystem.Replace("{fetchxml}", fxb.dockControlBuilder?.GetFetchString(true, false));
-                intro += Environment.NewLine + PromptFormat;
-                if (!string.IsNullOrEmpty(fxb.settings.AiSettings.MyName))
+                var intro = PopulateForAi(
+                    texts.System + NewSectionMd +
+                    texts.Style + NewSectionMd +
+                    texts.Behavior + NewSectionMd +
+                    texts.Strictness + NewSectionMd +
+                    texts.Preferences + NewSectionMd);
+
+                if (!string.IsNullOrWhiteSpace(fxb.settings.AiSettings.InstructionsFlavor))
                 {
-                    intro += Environment.NewLine + PromptMyName.Replace("{callme}", fxb.settings.AiSettings.MyName).Trim();
+                    intro += Environment.NewLine + Environment.NewLine + PopulateForAi(texts.UserFlavors, ("userflavors", fxb.settings.AiSettings.InstructionsFlavor)) + NewSectionMd;
                 }
-                if (!string.IsNullOrWhiteSpace(OnlineSettings.Instance.AiSupport.Prompts.PreferNames))
-                {
-                    intro += Environment.NewLine + OnlineSettings.Instance.AiSupport.Prompts.PreferNames.Replace("{prefer}", fxb.settings.AiSettings.PreferDisplayName ? "DisplanyName" : "LogicalName").Trim();
-                }
+
                 chatHistory.Initialize(intro);
                 Log("Init", count: intro.Length, msg: intro);
                 sessionstopwatch = Stopwatch.StartNew();
@@ -353,7 +356,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             else if (!manualquery.EqualXml(lastquery))
             {
                 lastquery = manualquery;
-                chatHistory.Add(ChatRole.User, PromptUpdate.Replace("{fetchxml}", manualquery), true);
+                chatHistory.Add(
+                    ChatRole.User,
+                    PopulateForAi(texts.UpdatedQuery, ("fetchxml", manualquery)),
+                    true);
             }
 
             text = text.Trim();
@@ -370,15 +376,12 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 //HandlingResponseFromAi(new ChatResponse { Messages = new List<ChatMessage> { new ChatMessage(ChatRole.Assistant, $"Right back to ya!\r\n{text}") } });
                 // END TESTING UI
 
-                AiCommunication.CallingAIAsync(
+                AiCommunication.Prompt(
                     fxb,
                     chatHistory,
                     text,
                     HandlingResponseFromAi,
-                    ExecuteFetchXMLQuery,
-                    UpdateCurrentFetchXmlQuery,
-                    GetMetadataForUnknownEntity,
-                    GetMetadataForUnknownAttribute);
+                    GetInternalTools());
             }
             catch (Exception ex)
             {
@@ -408,8 +411,40 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        [Description("Executes FetchXML Query")]
-        private string ExecuteFetchXMLQuery([Description("The FetchXML Query to be Executed. This is the current FetchXML, as specified in the conversation with the assistant.")] string fetchXml)
+        private string PopulateForAi(string text, params (string placeholder, string replacement)[] extraplaceholders)
+        {
+            var placeholders = new Dictionary<string, string>
+            {
+                ["fetchxml"] = fxb.dockControlBuilder?.GetFetchString(true, false) ?? string.Empty,
+                ["callme"] = !string.IsNullOrWhiteSpace(fxb.settings.AiSettings.MyName) ? fxb.settings.AiSettings.MyName : "you",
+                ["prefer"] = fxb.settings.AiSettings.PreferDisplayName ? "DisplayName" : "LogicalName",
+                ["providername"] = provider?.Name ?? string.Empty,
+                ["modelname"] = model,
+                ["hascurrentquery"] = string.IsNullOrWhiteSpace(fxb.dockControlBuilder?.GetFetchString(true, false)) ? "no" : "yes"
+            };
+
+            if (extraplaceholders != null)
+            {
+                foreach (var extra in extraplaceholders)
+                {
+                    placeholders[extra.placeholder] = extra.replacement ?? string.Empty;
+                }
+            }
+
+            var result = text.Populate(placeholders.Select(p => (p.Key, p.Value)));
+            return result;
+        }
+
+        private AiInternalTool[] GetInternalTools() => new[]
+        {
+            new AiInternalTool(ExecuteFetchXMLQuery, "run_query",PopulateForAi(texts.ToolRunQuery)),
+            new AiInternalTool(UpdateCurrentFetchXmlQuery, "update_query", PopulateForAi(texts.ToolUpdateQuery)),
+            new AiInternalTool(GetMetadataForUnknownEntity, "match_table", PopulateForAi(texts.ToolMatchTable)),
+            new AiInternalTool(GetMetadataForUnknownRelationship, "match_relationship", PopulateForAi(texts.ToolMatchRelationship)),
+            new AiInternalTool(GetMetadataForUnknownAttribute, "match_column", PopulateForAi(texts.ToolMatchColumn))
+        };
+
+        private string ExecuteFetchXMLQuery([Description("Full FetchXML query.")] string fetchXml)
         {
             try
             {
@@ -420,6 +455,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 sw.Stop();
                 var records = (result as QueryInfo)?.Results?.Entities?.Count ?? null;
                 Log($"Query-Execute", records, sw.ElapsedMilliseconds);
+                chatHistory.Add(ChatRole.Assistant, $"Retrieved {records} records in {sw.Elapsed.ToSmartStringLong()}.", false, true);
                 fxb.HandleRetrieveMultipleResult(result);
                 chatHistory.Add(ChatRole.User, records == 0 ? "No record returned." : $"Retrieved {records} records.", true);
                 //Commented it out since it exploded, but it might be good to do this after each new query execute
@@ -432,8 +468,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        [Description("Updates the current FetchXML Query that we are working on. The assistant should call this tool every time the assistant makes a change to the FetchXml query.")]
-        private string UpdateCurrentFetchXmlQuery([Description("A well formed FetchXml query that is the current query that has been updated by the assistant.")] string fetchXml)
+        private string UpdateCurrentFetchXmlQuery([Description("Full FetchXML query.")] string fetchXml)
         {
             try
             {
@@ -453,29 +488,50 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
         }
 
-        [Description("Retrieves the logical name and display name of tables/entity that matches a description. The result is returned in a JSON list with entries of the format {\"L\":\"[logical name of entity]\",\"D\":\"[display name of entity]\",\"Desc\":\"[description of the entity]\"}. There may be many results, if a unique table cannot be found.")]
-        private string GetMetadataForUnknownEntity([Description("The name/description of a table.")] string tableDescription)
+        private string GetMetadataForUnknownEntity([Description("One table name or description.")] string tableDescription)
         {
             var entities = fxb.EntitiesForAi();
             var json = JsonSerializer.Serialize(entities, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
 
             var sw = Stopwatch.StartNew();
-            var result = AiCommunication.SamplingAI(
+            var result = AiCommunication.PromptStateless(
                 chatHistory,
-                PromptEntityMeta.Replace("{metadata}", json),
+                texts.Strictness + NewSectionMd +
+                texts.EntityMeta.Replace("{{metadata}}", json),
                 $"Please find entries that match the description {tableDescription}",
                 $"Asking for metadata for table '{tableDescription}'...");
             sw.Stop();
             Log($"Meta-Entity-{tableDescription}", result, sw.ElapsedMilliseconds, entities.Count);
 
             chatHistory.Add(result, true);
+            try
+            {
+                var hitentities = JsonSerializer.Deserialize<List<MetadataForAIEntity>>(result.Text);
+                var hits = hitentities.Count > 0 ?
+                    hitentities.Count > OnlineSettings.Instance.AiSupport.MetadataMatchesToShowMax ?
+                        $"...found {hitentities.Count} tables." :
+                        hitentities.Count > 1 ?
+                            $"...found tables:{Environment.NewLine}* {string.Join(Environment.NewLine + "* ", hitentities.Select(e => e.D + " (" + e.L + ")"))}" :
+                            $"...found table: {hitentities[0].D} ({hitentities[0].L})." :
+                    "...no tables found matching.";
+                chatHistory.Add(ChatRole.Assistant, hits, false, true);
+            }
+            catch
+            {
+                // If the result cannot be deserialized, we just return the text, which might be an error message from the AI.
+            }
             return result.Text;
         }
 
-        [Description("Returns attributes of a table/entity that matches a description. Information about attributes is returned in a JSON list with entries of the format {\"L\":\"[logical name of attribute]\",\"D\":\"[display name of attribute]\",\"Desc\":\"[description of the attribute]\"}. There may be many results, if a unique attribute cannot be found.")]
-        private string GetMetadataForUnknownAttribute([Description("The logical name of the entity and a name/description of an attribute, separated by '@@'. Example: 'logical name of table@@a description of an attribute'")] string entityNameAndAttributeDescription)
+        private string GetMetadataForUnknownAttribute([Description("Entity logical name and one column name/description, separated by '@@'. Example: 'account@@primary contact'. Use exactly one column request per call. If the user wording is plural or sounds like related records, that may indicate a related table rather than a column on this table.")] string entityNameAndAttributeDescription)
         {
             var parts = entityNameAndAttributeDescription.Split(new[] { "@@" }, 2, StringSplitOptions.None);
+            if (parts.Length != 2 ||
+                 string.IsNullOrWhiteSpace(parts[0]) ||
+                 string.IsNullOrWhiteSpace(parts[1]))
+            {
+                return "Invalid input. Use 'entitylogicalname@@attribute name or attribute description'.";
+            }
 
             var entityName = parts[0];
             var attributeName = parts[1];
@@ -504,16 +560,101 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             chatHistory.Add(ChatRole.User, $"The tool GetMetadataForUnknownAttribute was called: retrieve attributes for table '{entityName}' that matches the name '{attributeName}'", true);
 
             var sw = Stopwatch.StartNew();
-            var result = AiCommunication.SamplingAI(
+            var result = AiCommunication.PromptStateless(
                 chatHistory,
-                PromptAttributeMeta.Replace("{metadata}", json),
+                texts.Strictness + NewSectionMd +
+                texts.AttributeMeta
+                    .Replace("{{entityname}}", entityName)
+                    .Replace("{{metadata}}", json),
                 $"Please find attributes that match the name {attributeName}",
                 $"Asking for metadata for column '{attributeName}' in table '{entityName}'...");
             sw.Stop();
             Log($"Meta-Attribute-{entityName}-{attributeName}", result, sw.ElapsedMilliseconds, attributes.Count);
 
             chatHistory.Add(result, true);
+            try
+            {
+                var hitattrs = JsonSerializer.Deserialize<List<MetadataForAIAttribute>>(result.Text);
+                var hits = hitattrs.Count > 0 ?
+                    hitattrs.Count > OnlineSettings.Instance.AiSupport.MetadataMatchesToShowMax ?
+                        $"...found {hitattrs.Count} attributes." :
+                        hitattrs.Count > 1 ?
+                            $"...found attributes:{Environment.NewLine}* {string.Join(Environment.NewLine + "* ", (hitattrs.Select(a => a.D + " (" + a.L + ")")))}." :
+                            $"...found attribute {hitattrs[0].D} ({hitattrs[0].L})" :
+                    "...no attributes found matching.";
+                chatHistory.Add(ChatRole.Assistant, hits, false, true);
+            }
+            catch
+            {
+                // If the result cannot be deserialized, we just return the text, which might be an error message from the AI.
+            }
+            return result.Text;
+        }
 
+        private string GetMetadataForUnknownRelationship([Description("Entity logical name and one related table name/description, separated by '@@'. Example: 'account@@contacts'. Use exactly one related table request per call.")] string entityNameAndRelationshipDescription)
+        {
+            var parts = entityNameAndRelationshipDescription.Split(new[] { "@@" }, 2, StringSplitOptions.None);
+            if (parts.Length != 2 ||
+                string.IsNullOrWhiteSpace(parts[0]) ||
+                string.IsNullOrWhiteSpace(parts[1]))
+            {
+                return "Invalid input. Use 'entitylogicalname@@related table name or relationship description'.";
+            }
+
+            var entityName = parts[0].Trim();
+            var relationshipName = parts[1].Trim();
+
+            if (!metaRelationships.ContainsKey(entityName))
+            {
+                try
+                {
+                    var aimeta = fxb.RelationshipsForAi(entityName);
+                    if (aimeta.Count == 0)
+                    {
+                        return $"There is no table called '{entityName}', or it has no available relationships. Call the GetMetadataForUnknownEntity tool first to get the correct table name.";
+                    }
+
+                    metaRelationships[entityName] = aimeta;
+                }
+                catch (Exception ex)
+                {
+                    return $"Error retrieving relationship metadata: {ex.Message}";
+                }
+            }
+
+            var relationships = metaRelationships[entityName];
+            var json = JsonSerializer.Serialize(relationships, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
+
+            chatHistory.Add(ChatRole.User, $"The tool GetMetadataForUnknownRelationship was called: retrieve relationships for table '{entityName}' that matches the name '{relationshipName}'", true);
+
+            var sw = Stopwatch.StartNew();
+            var result = AiCommunication.PromptStateless(
+                chatHistory,
+                texts.Strictness + NewSectionMd +
+                texts.RelationshipMeta
+                    .Replace("{{entityname}}", entityName)
+                    .Replace("{{metadata}}", json),
+                $"Please find relationships that match the description {relationshipName}",
+                $"Asking for relationships for '{relationshipName}' from table '{entityName}'...");
+            sw.Stop();
+            Log($"Meta-Relationship-{entityName}-{relationshipName}", result, sw.ElapsedMilliseconds, relationships.Count);
+
+            chatHistory.Add(result, true);
+            try
+            {
+                var hitrels = JsonSerializer.Deserialize<List<MetadataForAIRelationship>>(result.Text);
+                var hits = hitrels.Count > 0 ?
+                    hitrels.Count > OnlineSettings.Instance.AiSupport.MetadataMatchesToShowMax ?
+                        $"...found {hitrels.Count} relationships." :
+                        hitrels.Count > 1 ?
+                            $"...found relationships:{Environment.NewLine}* {string.Join(Environment.NewLine + "* ", (hitrels.Select(r => r.ToRelationshipString())))}." :
+                            $"...found relationship: {hitrels[0].ToRelationshipString()}." :
+                    "...no relationships found matching.";
+                chatHistory.Add(ChatRole.Assistant, hits, false, true);
+            }
+            catch
+            {
+            }
             return result.Text;
         }
 
@@ -547,11 +688,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     popup.Title
                         .Replace("{calls}", fxb.settings.AiSettings.Calls.ToString())
                         .Replace("{provider}", provider.ToString())
-                        .Replace("{model}", model.Name);
+                        .Replace("{model}", model);
                 var message = popup.Message
                     .Replace("{calls}", fxb.settings.AiSettings.Calls.ToString())
                     .Replace("{provider}", provider.ToString())
-                    .Replace("{model}", model.Name);
+                    .Replace("{model}", model);
                 Log($"Popup-{title.Replace(" ", "-")}", msg: message);
                 if (popup.SuggestsSupporting)
                 {
@@ -609,7 +750,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             if (ai == null)
             {
-                ai = new AIAppInsights(fxb, OnlineSettings.Instance.AiSupport.AppRegistrationEndpoint, OnlineSettings.Instance.AiSupport.InstrumentationKey, provider.Name, model.Name);
+                ai = new AIAppInsights(fxb, OnlineSettings.Instance.AiSupport.AppRegistrationEndpoint, OnlineSettings.Instance.AiSupport.InstrumentationKey, provider.Name, model);
             }
             ai.WriteEvent($"{action}", count ?? msg?.Length, duration, tokensout, tokensin, logconversation ? msg : null);
         }
