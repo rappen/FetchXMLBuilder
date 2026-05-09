@@ -358,8 +358,8 @@ namespace Rappen.XTB.FetchXmlBuilder
                         break;
 
                     case "view":
-                        var fetch = fetchDoc.SelectSingleNode("//fetch")?.InnerText;
-                        var layout = fetchDoc.SelectSingleNode("//grid")?.InnerText;
+                        var fetch = fetchDoc.SelectSingleNode("//fetch")?.OuterXml;
+                        var layout = fetchDoc.SelectSingleNode("//grid")?.OuterXml;
                         dockControlBuilder.Init(fetch, layout, true, "open file", true);
                         break;
 

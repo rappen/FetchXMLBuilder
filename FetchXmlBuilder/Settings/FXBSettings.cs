@@ -148,6 +148,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Settings
     {
         public bool Enabled { get; set; } = true;
         public bool UseFixedWidths { get; set; } = false;
+        public bool IncludeWhenSaveToFile { get; set; } = false;
     }
 
     public class DockStates
