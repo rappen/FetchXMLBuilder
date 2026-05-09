@@ -108,6 +108,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // Layout
             chkWorkWithLayout.Checked = settings.Layout.Enabled;
             chkLayoutUseFixedWidths.Checked = settings.Layout.UseFixedWidths;
+            chkLayoutIncludeWhenSaveToFile.Checked = settings.Layout.IncludeWhenSaveToFile;
 
             // Default Query
             txtFetch.ConfigureForXml(settings);
@@ -202,6 +203,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // Layout
             settings.Layout.Enabled = chkWorkWithLayout.Checked;
             settings.Layout.UseFixedWidths = chkLayoutUseFixedWidths.Checked;
+            settings.Layout.IncludeWhenSaveToFile = chkLayoutIncludeWhenSaveToFile.Checked;
 
             // Default Query
             settings.QueryOptions.NewQueryTemplate = txtFetch.Text;

@@ -452,7 +452,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         internal void Save(string fileName)
         {
             BuildAndValidateXml();
-            var fetchDoc = GetFetchDocument(true);
+            var fetchDoc = GetFetchDocument(fxb.settings.Layout.IncludeWhenSaveToFile);
             fetchDoc.Save(fileName);
             ClearChanged();
         }

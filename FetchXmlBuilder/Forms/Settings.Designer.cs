@@ -113,6 +113,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.btnResetAll = new System.Windows.Forms.Button();
             this.chkShowOData2 = new System.Windows.Forms.CheckBox();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
+            this.chkLayoutIncludeWhenSaveToFile = new System.Windows.Forms.CheckBox();
             this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
@@ -943,6 +944,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // tabLayout
             // 
             this.tabLayout.BackColor = System.Drawing.SystemColors.Window;
+            this.tabLayout.Controls.Add(this.chkLayoutIncludeWhenSaveToFile);
             this.tabLayout.Controls.Add(this.panLayout);
             this.tabLayout.Controls.Add(this.linkLayout);
             this.tabLayout.Controls.Add(this.chkWorkWithLayout);
@@ -958,7 +960,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.panLayout.Controls.Add(this.chkLayoutUseFixedWidths);
             this.panLayout.Location = new System.Drawing.Point(11, 37);
             this.panLayout.Name = "panLayout";
-            this.panLayout.Size = new System.Drawing.Size(435, 85);
+            this.panLayout.Size = new System.Drawing.Size(435, 36);
             this.panLayout.TabIndex = 21;
             // 
             // chkLayoutUseFixedWidths
@@ -1099,6 +1101,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tt.SetToolTip(this.chkShowOData2, "OData v2.0 is deprecated and removed from the\r\nplatform at 2023-03-30.\r\nYou can s" +
         "how it anyway, if you which, but checking this one.");
             this.chkShowOData2.UseVisualStyleBackColor = true;
+            // 
+            // chkLayoutIncludeWhenSaveToFile
+            // 
+            this.chkLayoutIncludeWhenSaveToFile.AutoSize = true;
+            this.chkLayoutIncludeWhenSaveToFile.Location = new System.Drawing.Point(20, 76);
+            this.chkLayoutIncludeWhenSaveToFile.Name = "chkLayoutIncludeWhenSaveToFile";
+            this.chkLayoutIncludeWhenSaveToFile.Size = new System.Drawing.Size(236, 17);
+            this.chkLayoutIncludeWhenSaveToFile.TabIndex = 22;
+            this.chkLayoutIncludeWhenSaveToFile.Text = "Include Layout when Save Fetch XML to file";
+            this.chkLayoutIncludeWhenSaveToFile.UseVisualStyleBackColor = true;
             // 
             // propXmlColors
             // 
@@ -1261,5 +1273,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.CheckBox chkNoSelfClosingXml;
         private System.Windows.Forms.PictureBox picNoSelfClosingXml;
         private System.Windows.Forms.Button btnAiMyFlavors;
+        private System.Windows.Forms.CheckBox chkLayoutIncludeWhenSaveToFile;
     }
 }
