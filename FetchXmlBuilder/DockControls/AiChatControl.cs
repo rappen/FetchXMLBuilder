@@ -381,12 +381,13 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     chatHistory,
                     text,
                     HandlingResponseFromAi,
-                    GetInternalTools());
+                    handleError: HandleAiCommunicationError,
+                    throwExceptions: true,
+                    internalTools: GetInternalTools());
             }
             catch (Exception ex)
             {
-                fxb.LogError($"Communicating with {provider}:\n{ex.ExceptionDetails()}\n{ex.StackTrace}");
-                fxb.ShowErrorDialog(ex, "AI Chat", "An error occurred while trying to communicate with the AI.");
+                HandleAiCommunicationError(ex);
             }
             txtAiChat.Clear();
         }
@@ -399,7 +400,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             txtUsage.Text = chatHistory?.Responses?.UsageToString() ?? "?";
             EnableButtons();
             txtAiChat.Focus();
-            if (!fxb.IsShownAndActive())
+            if (!fxb.IsShownAndActive() && response != null)
             {
                 ToastHelper.ToastIt(
                     fxb,
@@ -409,6 +410,16 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     response.Text,
                     logo: "https://rappen.github.io/Tools/Images/Robot100.png");
             }
+        }
+
+        private void HandleAiCommunicationError(Exception ex)
+        {
+            callingstopwatch?.Stop();
+            fxb.LogError($"Communicating with {provider}:\n{ex.ExceptionDetails()}\n{ex.StackTrace}");
+            chatHistory.IsRunning = false;
+            chatHistory.Add(ChatRole.System, $"An error occurred while trying to communicate with the AI:{Environment.NewLine}{ex.Message}");
+            EnableButtons();
+            txtAiChat.Focus();
         }
 
         private string PopulateForAi(string text, params (string placeholder, string replacement)[] extraplaceholders)
@@ -448,7 +459,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
         {
             try
             {
-                chatHistory.Add(ChatRole.Assistant, "Executing the FetchXML query...", false, true);
+                chatHistory.Add(ChatRole.System, "Executing the FetchXML query...", false, true);
                 SetQueryFromAi(fetchXml);
                 var sw = Stopwatch.StartNew();
                 var result = fxb.RetrieveMultipleSync(fetchXml, null, null);
@@ -499,7 +510,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 texts.Strictness + NewSectionMd +
                 texts.EntityMeta.Replace("{{metadata}}", json),
                 $"Please find entries that match the description {tableDescription}",
-                $"Asking for metadata for table '{tableDescription}'...");
+                $"Asking FXB for entity metadata to find table '{tableDescription}'");
             sw.Stop();
             Log($"Meta-Entity-{tableDescription}", result, sw.ElapsedMilliseconds, entities.Count);
 
@@ -509,11 +520,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 var hitentities = JsonSerializer.Deserialize<List<MetadataForAIEntity>>(result.Text);
                 var hits = hitentities.Count > 0 ?
                     hitentities.Count > OnlineSettings.Instance.AiSupport.MetadataMatchesToShowMax ?
-                        $"...found {hitentities.Count} tables." :
+                        $"Found {hitentities.Count} tables." :
                         hitentities.Count > 1 ?
-                            $"...found tables:{Environment.NewLine}* {string.Join(Environment.NewLine + "* ", hitentities.Select(e => e.D + " (" + e.L + ")"))}" :
-                            $"...found table: {hitentities[0].D} ({hitentities[0].L})." :
-                    "...no tables found matching.";
+                            $"Found tables:{Environment.NewLine}* {string.Join(Environment.NewLine + "* ", hitentities.Select(e => e.D + " (" + e.L + ")"))}" :
+                            $"Found table: {hitentities[0].D} ({hitentities[0].L})." :
+                    $"Found no tables matching.";
                 chatHistory.Add(ChatRole.Assistant, hits, false, true);
             }
             catch
@@ -567,7 +578,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     .Replace("{{entityname}}", entityName)
                     .Replace("{{metadata}}", json),
                 $"Please find attributes that match the name {attributeName}",
-                $"Asking for metadata for column '{attributeName}' in table '{entityName}'...");
+                $"Asking FXB for attribute metadata to find '{attributeName}' in table '{entityName}'");
             sw.Stop();
             Log($"Meta-Attribute-{entityName}-{attributeName}", result, sw.ElapsedMilliseconds, attributes.Count);
 
@@ -577,11 +588,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 var hitattrs = JsonSerializer.Deserialize<List<MetadataForAIAttribute>>(result.Text);
                 var hits = hitattrs.Count > 0 ?
                     hitattrs.Count > OnlineSettings.Instance.AiSupport.MetadataMatchesToShowMax ?
-                        $"...found {hitattrs.Count} attributes." :
+                        $"Found {hitattrs.Count} attributes." :
                         hitattrs.Count > 1 ?
-                            $"...found attributes:{Environment.NewLine}* {string.Join(Environment.NewLine + "* ", (hitattrs.Select(a => a.D + " (" + a.L + ")")))}." :
-                            $"...found attribute {hitattrs[0].D} ({hitattrs[0].L})" :
-                    "...no attributes found matching.";
+                            $"Found attributes:{Environment.NewLine}* {string.Join(Environment.NewLine + "* ", (hitattrs.Select(a => a.D + " (" + a.L + ")")))}." :
+                            $"Found attribute {hitattrs[0].D} ({hitattrs[0].L})" :
+                    $"Found no attributes matching.";
                 chatHistory.Add(ChatRole.Assistant, hits, false, true);
             }
             catch
@@ -635,7 +646,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     .Replace("{{entityname}}", entityName)
                     .Replace("{{metadata}}", json),
                 $"Please find relationships that match the description {relationshipName}",
-                $"Asking for relationships for '{relationshipName}' from table '{entityName}'...");
+                $"Asking FXB for relationships metadata to find '{relationshipName}' ino table '{entityName}'");
             sw.Stop();
             Log($"Meta-Relationship-{entityName}-{relationshipName}", result, sw.ElapsedMilliseconds, relationships.Count);
 
@@ -645,11 +656,11 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 var hitrels = JsonSerializer.Deserialize<List<MetadataForAIRelationship>>(result.Text);
                 var hits = hitrels.Count > 0 ?
                     hitrels.Count > OnlineSettings.Instance.AiSupport.MetadataMatchesToShowMax ?
-                        $"...found {hitrels.Count} relationships." :
+                        $"Found {hitrels.Count} relationships." :
                         hitrels.Count > 1 ?
-                            $"...found relationships:{Environment.NewLine}* {string.Join(Environment.NewLine + "* ", (hitrels.Select(r => r.ToRelationshipString())))}." :
-                            $"...found relationship: {hitrels[0].ToRelationshipString()}." :
-                    "...no relationships found matching.";
+                            $"Found relationships:{Environment.NewLine}* {string.Join(Environment.NewLine + "* ", (hitrels.Select(r => r.ToRelationshipString())))}." :
+                            $"Found relationship: {hitrels[0].ToRelationshipString()}." :
+                    $"Found no relationships matching.";
                 chatHistory.Add(ChatRole.Assistant, hits, false, true);
             }
             catch
