@@ -468,7 +468,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 Log($"Query-Execute", records, sw.ElapsedMilliseconds);
                 chatHistory.Add(ChatRole.Assistant, $"Retrieved {records} records in {sw.Elapsed.ToSmartStringLong()}.", false, true);
                 fxb.HandleRetrieveMultipleResult(result);
-                chatHistory.Add(ChatRole.User, records == 0 ? "No record returned." : $"Retrieved {records} records.", true);
+                chatHistory.Add(ChatRole.System, records == 0 ? "No record returned." : $"Retrieved {records} records.", true);
                 //Commented it out since it exploded, but it might be good to do this after each new query execute
                 //fxb.dockControlGrid?.ResetLayout();
                 return "Query executed successfully";
@@ -568,7 +568,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var attributes = metaAttributes[entityName];
             var json = JsonSerializer.Serialize(attributes, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
 
-            chatHistory.Add(ChatRole.User, $"The tool GetMetadataForUnknownAttribute was called: retrieve attributes for table '{entityName}' that matches the name '{attributeName}'", true);
+            chatHistory.Add(ChatRole.System, $"The tool GetMetadataForUnknownAttribute was called: retrieve attributes for table '{entityName}' that matches the name '{attributeName}'", true);
 
             var sw = Stopwatch.StartNew();
             var result = AiCommunication.PromptStateless(
@@ -636,7 +636,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var relationships = metaRelationships[entityName];
             var json = JsonSerializer.Serialize(relationships, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
 
-            chatHistory.Add(ChatRole.User, $"The tool GetMetadataForUnknownRelationship was called: retrieve relationships for table '{entityName}' that matches the name '{relationshipName}'", true);
+            chatHistory.Add(ChatRole.System, $"The tool GetMetadataForUnknownRelationship was called: retrieve relationships for table '{entityName}' that matches the name '{relationshipName}'", true);
 
             var sw = Stopwatch.StartNew();
             var result = AiCommunication.PromptStateless(
@@ -908,7 +908,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             var sfd = new SaveFileDialog
             {
                 Title = "Select a location to save your dialog",
-                Filter = "Text file (*.txt)|*.txt",
+                Filter = "Markdown file (*.md)|*.md|Text file (*.txt)|*.txt",
             };
             if (sfd.ShowDialog() == DialogResult.OK)
             {
