@@ -27,6 +27,7 @@
 - Ensure generated C# compiles for .NET Framework 4.8 / current project language level; avoid syntax that might not be supported (e.g., missing parentheses in conditions). **Never suggest omitting parentheses after 'if'; the target C#/.NET version here requires standard if-condition parentheses for valid compilation.**
 - For WinForms forms, UI event wiring should go in the `.Designer.cs` file rather than the form constructor when the control is designer-owned.
 - Avoid suggesting C# init-only properties; prefer broadly compatible property setters/constructors for this codebase.
+- Prefer WinForms UI layout changes that minimize flicker; only update width, padding, or related layout properties when values actually change.
 
 ## Project-Specific Rules
 - Implement custom requirements as outlined in the project documentation.
