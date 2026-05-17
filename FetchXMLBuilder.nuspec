@@ -43,15 +43,13 @@ The tool reads metadata from Microsoft Dataverse and Dynamics 365 / CRM to assis
 
 To make it even more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.</description>
 		<releaseNotes>TEASERS:
-Autogenerate alias - Your own Microsoft Foundry - Markdown - App Notifications - Excel with links - No self-closing - Reasoning effort - Send by enter - AI Chat history - Sorting related table - plus a bunch of fixes and improvements!
+Better instructions - Your own flavors - Export to Excel improved - AI Model - Error handling - Markdown Markdown - Nicer UI
 
-Request from TARS: 'Humor percent' was unfortunately denied for this release.
-
-Read everything here: https://fetchxmlbuilder.com/releases/1-2025-12/
+Read everything here: https://fetchxmlbuilder.com/releases/1-2026-5/
 
 NOTE: 
 This version of FetchXML Builder needs to have XrmToolBox in version 1.2025.10.* or later!</releaseNotes>
-		<copyright>Copyright Jonas Rapp 2014-2025</copyright>
+		<copyright>Copyright Jonas Rapp 2014-2026</copyright>
 		<tags>XrmToolBox Plugins FetchXML Builder</tags>
 		<dependencies>
 			<dependency id="XrmToolBox" version="1.2025.10.74" />
