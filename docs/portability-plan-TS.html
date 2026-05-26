@@ -1,0 +1,1003 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FetchXML Builder — TypeScript Portability Plan</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #19212a;
+      --muted: #5b6675;
+      --line: #d8dee8;
+      --paper: #f7f8fb;
+      --panel: #ffffff;
+      --blue: #1f6feb;
+      --green: #247a4d;
+      --amber: #a15c00;
+      --red: #b42318;
+      --violet: #6f42c1;
+      --shadow: 0 18px 45px rgba(28, 39, 54, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .shell {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0f1f35 0%, #1a3a5c 52%, #1e4d6b 100%);
+      color: #fff;
+      border-radius: 8px;
+      padding: 38px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -120px -170px auto;
+      width: 380px;
+      height: 380px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 50%;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #b9d8ff;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 820px;
+      font-size: clamp(1.9rem, 5vw, 4rem);
+      line-height: 1.03;
+    }
+
+    .hero p {
+      position: relative;
+      max-width: 780px;
+      margin: 18px 0 0;
+      font-size: 1.1rem;
+      color: #e4f0ff;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 28px;
+      position: relative;
+    }
+
+    .meta {
+      min-height: 92px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+    }
+
+    .meta strong {
+      display: block;
+      font-size: 0.78rem;
+      color: #b9d8ff;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .meta span {
+      display: block;
+      margin-top: 8px;
+      font-weight: 700;
+    }
+
+    section {
+      margin-top: 26px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 26px;
+      box-shadow: 0 8px 24px rgba(28, 39, 54, 0.05);
+    }
+
+    h2 { margin: 0 0 14px; font-size: 1.45rem; }
+    h3 { margin: 0 0 8px; font-size: 1rem; }
+    p { margin: 0 0 14px; }
+    .muted { color: var(--muted); }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #f5f7fa;
+      color: #2b3542;
+      font-size: 0.88rem;
+      font-weight: 650;
+    }
+
+    .diagram {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      align-items: stretch;
+      margin-top: 18px;
+    }
+
+    .node {
+      position: relative;
+      padding: 18px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fbfcfe;
+      min-height: 148px;
+    }
+
+    .node:not(:last-child)::after {
+      content: ">";
+      position: absolute;
+      right: -13px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-weight: 800;
+      background: var(--panel);
+      width: 20px;
+      text-align: center;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: #fff;
+      background: var(--blue);
+    }
+
+    .tag.green  { background: var(--green); }
+    .tag.amber  { background: var(--amber); }
+    .tag.red    { background: var(--red); }
+    .tag.violet { background: var(--violet); }
+    .tag.muted  { background: var(--muted); }
+
+    .heatmap {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .heat {
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      padding: 18px;
+      min-height: 210px;
+      background: #fbfcfe;
+    }
+
+    .heat ul,
+    .matrix ul,
+    .risk-list,
+    .references {
+      margin: 10px 0 0;
+      padding-left: 20px;
+    }
+
+    .heat li,
+    .matrix li,
+    .risk-list li,
+    .references li {
+      margin: 6px 0;
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .matrix-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      background: #fbfcfe;
+    }
+
+    .stack-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 0.93rem;
+    }
+
+    .stack-table th {
+      text-align: left;
+      padding: 9px 12px;
+      background: #f0f3f8;
+      border-bottom: 2px solid var(--line);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+
+    .stack-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    .stack-table tr:last-child td { border-bottom: none; }
+    .stack-table tr:hover td { background: #f7f9fc; }
+
+    .timeline { display: grid; gap: 12px; margin-top: 16px; }
+
+    .phase {
+      display: grid;
+      grid-template-columns: 148px minmax(0, 1fr);
+      gap: 16px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+    }
+
+    .phase-label { display: flex; flex-direction: column; gap: 4px; }
+    .phase-id { font-weight: 800; color: var(--blue); font-size: 0.95rem; }
+    .phase-tag { display: inline-block; }
+
+    .interface-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .interface {
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .interface small {
+      display: block;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-weight: 400;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .callout {
+      margin-top: 16px;
+      padding: 16px;
+      border-left: 5px solid var(--blue);
+      background: #eef4ff;
+      border-radius: 6px;
+    }
+
+    .callout.green {
+      border-color: var(--green);
+      background: #eef8f1;
+    }
+
+    .callout.amber {
+      border-color: var(--amber);
+      background: #fff8ee;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.93em;
+      background: #eef1f6;
+      padding: 2px 5px;
+      border-radius: 5px;
+    }
+
+    .footer {
+      margin-top: 26px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 900px) {
+      .meta-grid,
+      .diagram,
+      .heatmap,
+      .matrix,
+      .two-col,
+      .interface-grid { grid-template-columns: 1fr; }
+
+      .node:not(:last-child)::after {
+        content: "v";
+        right: 18px;
+        top: auto;
+        bottom: -17px;
+        transform: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell { padding: 18px 12px 36px; }
+      .hero, section { padding: 20px; }
+      .phase { grid-template-columns: 1fr; gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+
+    <header class="hero">
+      <p class="eyebrow">FetchXML Builder — TypeScript greenfield roadmap</p>
+      <h1>A modern, web-first FetchXML workbench built on React, TypeScript, and the Dataverse Web API.</h1>
+      <p>
+        Platform-agnostic from day one. The XrmToolBox fork is a reference quarry for domain logic,
+        schema assets, and test cases — not a compatibility target. The first deliverable is the
+        Power Automate parameter converter, built as a pure, fully-tested library function.
+      </p>
+      <div class="meta-grid" aria-label="Plan defaults">
+        <div class="meta">
+          <strong>Framework</strong>
+          <span>React 19 + Vite</span>
+        </div>
+        <div class="meta">
+          <strong>Language</strong>
+          <span>TypeScript (strict)</span>
+        </div>
+        <div class="meta">
+          <strong>Auth</strong>
+          <span>MSAL Browser / PKCE</span>
+        </div>
+        <div class="meta">
+          <strong>Desktop</strong>
+          <span>Tauri (Phase 5)</span>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <h2>Executive Overview</h2>
+      <div class="two-col">
+        <div>
+          <p>
+            The current repository is a .NET Framework 4.8 XrmToolBox plugin. It holds genuine value as
+            a source of domain knowledge: the FetchXML schema, converter algorithms, autocomplete
+            behavior, and integration test ideas. None of that is a reason to stay on .NET.
+          </p>
+          <p>
+            The greenfield approach uses a pnpm workspace monorepo with two packages and one app.
+            <code>packages/core</code> is pure TypeScript with zero framework dependencies.
+            <code>packages/dataverse</code> owns all Dataverse Web API and MSAL concerns.
+            <code>apps/web</code> is the React + Vite front end that consumes both.
+          </p>
+        </div>
+        <div>
+          <div class="callout green">
+            <strong>First deliverable:</strong> the Power Automate parameter converter as a pure
+            function in <code>packages/core</code>, covered by Vitest golden snapshot tests, before
+            any UI work begins.
+          </div>
+          <div class="pill-row">
+            <span class="pill">Legacy code is a quarry</span>
+            <span class="pill">Core has zero deps</span>
+            <span class="pill">Golden tests first</span>
+            <span class="pill">Web API over SDK</span>
+            <span class="pill">Desktop is a wrapper</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Final Stack</h2>
+      <p class="muted">
+        Every choice prioritises long-term maintainability, minimal abstraction cost, and first-class
+        TypeScript support.
+      </p>
+      <table class="stack-table">
+        <thead>
+          <tr>
+            <th>Concern</th>
+            <th>Choice</th>
+            <th>Replaces / why</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Framework</strong></td>
+            <td>React 19 + Vite</td>
+            <td>SPA-native, largest ecosystem, no SSR overhead needed</td>
+          </tr>
+          <tr>
+            <td><strong>Language</strong></td>
+            <td>TypeScript strict mode</td>
+            <td>End-to-end type safety across all packages</td>
+          </tr>
+          <tr>
+            <td><strong>Monorepo</strong></td>
+            <td>pnpm workspaces</td>
+            <td>Lightweight, no Nx/Turborepo ceremony needed at this scale</td>
+          </tr>
+          <tr>
+            <td><strong>Routing</strong></td>
+            <td>TanStack Router</td>
+            <td>Fully type-safe, file-based, SPA-native — better fit than React Router v6</td>
+          </tr>
+          <tr>
+            <td><strong>Styling</strong></td>
+            <td>Tailwind CSS v4</td>
+            <td>Utility-first, CSS-native config, pairs naturally with shadcn/ui</td>
+          </tr>
+          <tr>
+            <td><strong>Components</strong></td>
+            <td>shadcn/ui + Radix UI</td>
+            <td>Copy-owned components, accessible primitives, not a library dependency</td>
+          </tr>
+          <tr>
+            <td><strong>XML editor</strong></td>
+            <td>Monaco Editor (<code>@monaco-editor/react</code>)</td>
+            <td>Native JS, no interop bridge, accepts <code>fetch.xsd</code> directly for autocomplete</td>
+          </tr>
+          <tr>
+            <td><strong>App state</strong></td>
+            <td>Zustand</td>
+            <td>Query builder tree, editor sync state, UI panel state</td>
+          </tr>
+          <tr>
+            <td><strong>Async / cache</strong></td>
+            <td>TanStack Query</td>
+            <td>Metadata fetching, background refresh, stale-while-revalidate</td>
+          </tr>
+          <tr>
+            <td><strong>Results grid</strong></td>
+            <td>TanStack Table</td>
+            <td>Headless, pairs with Tailwind, handles paging and column control</td>
+          </tr>
+          <tr>
+            <td><strong>Auth</strong></td>
+            <td><code>@azure/msal-browser</code></td>
+            <td>Official MS JS SDK, PKCE, no backend required</td>
+          </tr>
+          <tr>
+            <td><strong>HTTP</strong></td>
+            <td>Native <code>fetch</code></td>
+            <td>No extra dependency, Dataverse Web API is REST</td>
+          </tr>
+          <tr>
+            <td><strong>Linting + format</strong></td>
+            <td>Biome</td>
+            <td>Single tool replaces ESLint + Prettier, order-of-magnitude faster</td>
+          </tr>
+          <tr>
+            <td><strong>Unit tests</strong></td>
+            <td>Vitest</td>
+            <td>Vite-native, fast, golden snapshot support</td>
+          </tr>
+          <tr>
+            <td><strong>E2E tests</strong></td>
+            <td>Playwright (TypeScript)</td>
+            <td>Editor, builder, conversion panels, result grid flows</td>
+          </tr>
+          <tr>
+            <td><strong>Desktop (Phase 5)</strong></td>
+            <td>Tauri</td>
+            <td>Wraps existing web app as-is, ~5 MB binary vs ~150 MB Electron</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Architecture</h2>
+      <p class="muted">
+        Three units with clear dependency direction. The web app is a consumer, not the core.
+      </p>
+      <div class="diagram" aria-label="Architecture diagram">
+        <article class="node">
+          <span class="tag red">Reference</span>
+          <h3>Existing Fork</h3>
+          <p>
+            XSD schema, converter algorithms, autocomplete behavior, sample workflows, and test
+            cases to harvest selectively. Never imported at runtime.
+          </p>
+        </article>
+        <article class="node">
+          <span class="tag green">Core</span>
+          <h3><code>packages/core</code></h3>
+          <p>
+            Pure TypeScript. FetchXML parser, formatter, validator, all converters including Power
+            Automate and OData, neutral DTOs. Zero framework dependencies.
+          </p>
+        </article>
+        <article class="node">
+          <span class="tag amber">Dataverse</span>
+          <h3><code>packages/dataverse</code></h3>
+          <p>
+            MSAL browser auth, Dataverse Web API client, metadata cache, saved views, FetchXML
+            execution, paging, and result normalization.
+          </p>
+        </article>
+        <article class="node">
+          <span class="tag violet">Web</span>
+          <h3><code>apps/web</code></h3>
+          <p>
+            React 19 + Vite SPA. Monaco XML editor, visual query builder, metadata browser,
+            converter panels, results grid. Consumes both packages.
+          </p>
+        </article>
+      </div>
+
+      <div class="callout" style="margin-top: 18px;">
+        <strong>Dependency rule:</strong> <code>packages/core</code> imports nothing external.
+        <code>packages/dataverse</code> imports <code>core</code> and MSAL only.
+        <code>apps/web</code> imports both packages and all UI dependencies. This direction never
+        reverses.
+      </div>
+    </section>
+
+    <section>
+      <h2>Monorepo Layout</h2>
+      <div class="two-col">
+        <div>
+          <div class="matrix-card" style="margin-top:0; border:1px solid var(--line);">
+            <span class="tag green">Package</span>
+            <h3><code>packages/core</code></h3>
+            <ul>
+              <li><code>src/models/</code> — neutral FetchXML DTOs</li>
+              <li><code>src/parser/</code> — FetchXML XML → model</li>
+              <li><code>src/formatter/</code> — model → pretty XML</li>
+              <li><code>src/validator/</code> — schema and semantic rules</li>
+              <li><code>src/autocomplete/</code> — XSD-driven suggestions</li>
+              <li><code>src/converters/toPowerAutomate.ts</code></li>
+              <li><code>src/converters/toOData.ts</code></li>
+              <li><code>src/converters/toCSharp.ts</code></li>
+              <li><code>src/converters/toJavaScript.ts</code></li>
+              <li><code>src/schema/fetch.xsd</code> — harvested from fork</li>
+              <li><code>tests/</code> — Vitest golden snapshots</li>
+            </ul>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div class="matrix-card" style="margin-top:0; border:1px solid var(--line);">
+            <span class="tag amber">Package</span>
+            <h3><code>packages/dataverse</code></h3>
+            <ul>
+              <li><code>src/auth/</code> — MSAL config and token helpers</li>
+              <li><code>src/client/</code> — typed Web API fetch wrapper</li>
+              <li><code>src/metadata/</code> — entity, attribute, relationship cache</li>
+              <li><code>src/queries/</code> — execute, page, normalize results</li>
+              <li><code>src/views/</code> — saved view and solution loading</li>
+            </ul>
+          </div>
+          <div class="matrix-card" style="margin-top:0; border:1px solid var(--line);">
+            <span class="tag violet">App</span>
+            <h3><code>apps/web</code></h3>
+            <ul>
+              <li><code>src/routes/</code> — TanStack Router file-based routes</li>
+              <li><code>src/components/editor/</code> — Monaco XML editor</li>
+              <li><code>src/components/builder/</code> — visual query tree</li>
+              <li><code>src/components/metadata/</code> — entity and attribute browser</li>
+              <li><code>src/components/converters/</code> — output panels</li>
+              <li><code>src/components/results/</code> — TanStack Table grid</li>
+              <li><code>src/store/</code> — Zustand slices</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Core Interfaces</h2>
+      <p class="muted">
+        Defined in <code>packages/core</code>. Every converter, parser, and validator is backed by
+        one of these. Mock implementations let the web app and tests run without any live Dataverse
+        connection.
+      </p>
+      <div class="interface-grid" aria-label="Core TypeScript interfaces">
+        <div class="interface">
+          IFetchXmlParser
+          <small>xml string → FetchXmlDocument</small>
+        </div>
+        <div class="interface">
+          IFetchXmlFormatter
+          <small>FetchXmlDocument → pretty xml string</small>
+        </div>
+        <div class="interface">
+          IFetchXmlValidator
+          <small>FetchXmlDocument → ValidationResult[]</small>
+        </div>
+        <div class="interface">
+          IFetchXmlAutocomplete
+          <small>cursor context → CompletionItem[]</small>
+        </div>
+        <div class="interface">
+          ICodeConverter
+          <small>FetchXmlDocument → ConvertedOutput</small>
+        </div>
+        <div class="interface">
+          IMetadataProvider
+          <small>Promise&lt;EntityMetadata[]&gt;</small>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Priority Feature: Power Automate Parameter Converter</h2>
+      <div class="two-col">
+        <div>
+          <p>
+            This is the highest-value converter and the first unit of real logic to ship. It takes a
+            FetchXML document and replaces hardcoded filter values with Power Automate
+            <code>@{parameters('…')}</code> expression tokens, producing a parameterized query
+            ready to drop into a flow action.
+          </p>
+          <p>
+            It lives entirely in <code>packages/core/src/converters/toPowerAutomate.ts</code> and
+            has no UI dependency. The function signature is stable before the first React component
+            is written.
+          </p>
+          <div class="callout green">
+            <strong>Build order:</strong> write the golden snapshot tests first, then implement the
+            converter until tests pass. UI panels come later and simply call this function.
+          </div>
+        </div>
+        <div>
+          <div class="matrix-card" style="margin-top:0; border:1px solid var(--line);">
+            <span class="tag green">Converter shape</span>
+            <h3>What the function covers</h3>
+            <ul>
+              <li>Detect literal values in <code>&lt;condition&gt;</code> elements</li>
+              <li>Infer parameter names from attribute and entity context</li>
+              <li>Emit <code>@{parameters('…')}</code> tokens in place of values</li>
+              <li>Return a parameter manifest alongside the converted XML</li>
+              <li>Support value type hints: string, integer, datetime, guid, boolean</li>
+              <li>Preserve structure and formatting of the source query</li>
+              <li>Accept an optional name override map for custom parameter names</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>What to Harvest from the Fork</h2>
+      <div class="heatmap">
+        <article class="heat">
+          <span class="tag green">Copy or adapt directly</span>
+          <h3>High-value assets</h3>
+          <ul>
+            <li><code>fetch.xsd</code> schema file — drives autocomplete</li>
+            <li>Converter algorithm logic (port to TS)</li>
+            <li>Existing unit test cases and expected outputs</li>
+            <li>FetchXML sample queries for golden test fixtures</li>
+            <li>Known edge cases in filter and link-entity handling</li>
+          </ul>
+        </article>
+        <article class="heat">
+          <span class="tag amber">Study, then rewrite</span>
+          <h3>Logic worth understanding</h3>
+          <ul>
+            <li>Metadata loading and caching patterns</li>
+            <li>Autocomplete trigger and context logic</li>
+            <li>FetchXML to QueryExpression conversion concepts</li>
+            <li>Saved view and solution loading flow</li>
+            <li>Pagination and large result handling</li>
+          </ul>
+        </article>
+        <article class="heat">
+          <span class="tag red">Ignore entirely</span>
+          <h3>Host and UI artifacts</h3>
+          <ul>
+            <li>WinForms controls, forms, and dialogs</li>
+            <li>XrmToolBox message bus and plugin host</li>
+            <li>Scintilla editor integration</li>
+            <li>WinForms tree node state helpers</li>
+            <li>.NET Framework SDK and Xrm metadata types</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Functionality Scope</h2>
+      <div class="matrix">
+        <article class="matrix-card">
+          <span class="tag green">MVP — first web release</span>
+          <h3>Core workbench</h3>
+          <ul>
+            <li>Monaco XML editor with schema-aware autocomplete</li>
+            <li>Visual query tree builder (entity, attributes, filters, links)</li>
+            <li>FetchXML validation with inline error markers</li>
+            <li>Formatting and pretty-print</li>
+            <li><strong>Power Automate parameter converter (first converter to ship)</strong></li>
+            <li>OData / Web API URL converter</li>
+            <li>C# and JavaScript code generation</li>
+            <li>Entra sign-in and org URL setup</li>
+            <li>Entity and attribute metadata browser</li>
+            <li>Live FetchXML execution against Dataverse</li>
+            <li>Result grid with paging, copy, JSON and CSV export</li>
+            <li>Saved view loading and import/export of queries</li>
+          </ul>
+        </article>
+        <article class="matrix-card">
+          <span class="tag amber">Later — follow-on</span>
+          <h3>Expanded capabilities</h3>
+          <ul>
+            <li>AI-assisted query builder and repair suggestions</li>
+            <li>Offline metadata packages (export org metadata locally)</li>
+            <li>Multi-org connection management</li>
+            <li>Query history and favorites</li>
+            <li>Shareable query links</li>
+            <li>PWA install and background sync</li>
+            <li>Dark mode</li>
+            <li>macOS and Linux desktop via Tauri</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Phased Timeline</h2>
+      <div class="timeline">
+        <article class="phase">
+          <div class="phase-label">
+            <span class="phase-id">Phase 0</span>
+            <span class="tag muted phase-tag">Now</span>
+          </div>
+          <div>
+            <h3>Plan and inventory</h3>
+            <p>
+              Commit this roadmap. Classify every file in the fork as copy, adapt, or ignore.
+              Scaffold the pnpm workspace with three empty packages. Configure Biome, Vitest,
+              and TypeScript strict mode.
+            </p>
+          </div>
+        </article>
+        <article class="phase">
+          <div class="phase-label">
+            <span class="phase-id">Phase 1</span>
+            <span class="tag green phase-tag">Core</span>
+          </div>
+          <div>
+            <h3>Power Automate converter and core library</h3>
+            <p>
+              Implement the Power Automate parameter converter first with Vitest golden snapshots.
+              Add the FetchXML parser, formatter, validator, and OData converter. Port the
+              <code>fetch.xsd</code> and autocomplete logic. All covered by golden tests before
+              the web app scaffolding begins.
+            </p>
+          </div>
+        </article>
+        <article class="phase">
+          <div class="phase-label">
+            <span class="phase-id">Phase 2</span>
+            <span class="tag violet phase-tag">Web shell</span>
+          </div>
+          <div>
+            <h3>Offline editor and converter panels</h3>
+            <p>
+              Scaffold <code>apps/web</code> with Vite, Tailwind v4, shadcn/ui layout, and TanStack
+              Router. Wire Monaco editor, visual query builder, validation markers, and all
+              converter output panels. The full offline experience works before any Dataverse
+              connection exists.
+            </p>
+          </div>
+        </article>
+        <article class="phase">
+          <div class="phase-label">
+            <span class="phase-id">Phase 3</span>
+            <span class="tag amber phase-tag">Auth + API</span>
+          </div>
+          <div>
+            <h3>MSAL auth and live Dataverse access</h3>
+            <p>
+              Build <code>packages/dataverse</code>: MSAL PKCE flow, org URL setup, metadata cache,
+              entity and attribute browser, saved view loading, FetchXML execution, paging, and
+              result grid. Add mocked integration tests and keep real-org tests behind environment
+              variables.
+            </p>
+          </div>
+        </article>
+        <article class="phase">
+          <div class="phase-label">
+            <span class="phase-id">Phase 4</span>
+            <span class="tag phase-tag">Polish</span>
+          </div>
+          <div>
+            <h3>Hardening and Playwright E2E coverage</h3>
+            <p>
+              Add Playwright tests for the editor, query builder, converter panels, and result
+              grid flows. Fix rough edges from real usage. Add query history, favorites, and
+              import/export polish. Performance and bundle audits.
+            </p>
+          </div>
+        </article>
+        <article class="phase">
+          <div class="phase-label">
+            <span class="phase-id">Phase 5</span>
+            <span class="tag muted phase-tag">Desktop</span>
+          </div>
+          <div>
+            <h3>Tauri desktop packaging</h3>
+            <p>
+              Wrap the proven web app with Tauri for macOS and Linux. The browser and PWA remain
+              the canonical experience. Desktop adds native file system access for query export
+              and offline metadata packages.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Test Plan</h2>
+      <div class="matrix">
+        <article class="matrix-card">
+          <span class="tag green">Unit tests — Vitest</span>
+          <h3><code>packages/core</code> coverage</h3>
+          <ul>
+            <li>Golden snapshots for Power Automate converter outputs</li>
+            <li>Golden snapshots for OData, C#, and JavaScript converters</li>
+            <li>Parser and formatter round-trip tests</li>
+            <li>Validator rule coverage with known invalid inputs</li>
+            <li>Autocomplete suggestions at known cursor positions</li>
+            <li>Harvest useful cases from the fork's existing test suite</li>
+          </ul>
+        </article>
+        <article class="matrix-card">
+          <span class="tag amber">Integration tests — Vitest + mocks</span>
+          <h3><code>packages/dataverse</code> coverage</h3>
+          <ul>
+            <li>Mock Dataverse Web API metadata and retrieve responses</li>
+            <li>MSAL token acquisition flow with stub responses</li>
+            <li>Metadata cache invalidation and refresh behavior</li>
+            <li>FetchXML execution with paged mock responses</li>
+            <li>Real-org tests gated behind <code>DATAVERSE_TEST_URL</code> env var</li>
+          </ul>
+        </article>
+        <article class="matrix-card">
+          <span class="tag violet">E2E tests — Playwright</span>
+          <h3><code>apps/web</code> flows</h3>
+          <ul>
+            <li>XML editor loads, validates, and formats a query</li>
+            <li>Visual builder produces correct FetchXML output</li>
+            <li>Power Automate panel renders parameterized output</li>
+            <li>OData URL converter renders expected string</li>
+            <li>Result grid renders mocked rows with paging</li>
+          </ul>
+        </article>
+        <article class="matrix-card">
+          <span class="tag muted">Rule</span>
+          <h3>Golden tests gate converter changes</h3>
+          <p>
+            Any change to converter output requires a deliberate snapshot update. This protects
+            important behavior without requiring identical output to the legacy fork — intentional
+            differences are accepted but must be explicit.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Risks and Controls</h2>
+      <ul class="risk-list">
+        <li>
+          <strong>Metadata shape differences:</strong> Dataverse Web API metadata is not identical
+          to the .NET SDK types. Build fixture files from real org responses early and use them
+          in all metadata-dependent tests.
+        </li>
+        <li>
+          <strong>MSAL and CORS configuration:</strong> requires an Entra app registration,
+          correct redirect URIs, and org URL validation. Set this up in Phase 3 before any
+          live data work begins.
+        </li>
+        <li>
+          <strong>Monaco autocomplete integration:</strong> feeding the XSD to Monaco's XML
+          language service requires a configuration step that is not straightforward. Spike this
+          early in Phase 2 before building the full editor panel.
+        </li>
+        <li>
+          <strong>Converter behavior drift from the fork:</strong> intentional differences are
+          acceptable. Golden snapshot tests make every divergence visible and explicit rather
+          than silent.
+        </li>
+        <li>
+          <strong>Scope creep on the visual builder:</strong> the query tree is the most
+          complex UI component. Keep it read-only in Phase 2 if needed — formatting and
+          converters ship first.
+        </li>
+        <li>
+          <strong>Tauri compatibility:</strong> MSAL PKCE redirect flow needs custom URI scheme
+          handling in Tauri. This is solved but not trivial. Confirm the approach before
+          committing to Phase 5.
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Assumptions and References</h2>
+      <div class="two-col">
+        <div>
+          <h3>Assumptions</h3>
+          <ul class="risk-list">
+            <li>No compatibility obligation to the XrmToolBox plugin format or its host.</li>
+            <li>No server-side component. All auth uses MSAL PKCE browser flows.</li>
+            <li>Dataverse access targets the Web API only — no .NET SDK at runtime.</li>
+            <li>The XrmToolBox fork is maintained separately and is not part of this product's release.</li>
+            <li>Desktop packaging is optional and comes only after the web experience is stable.</li>
+            <li>The Power Automate parameter converter is the highest-priority deliverable in Phase 1.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>References</h3>
+          <ul class="references">
+            <li><a href="https://react.dev">React 19 documentation</a></li>
+            <li><a href="https://vitejs.dev">Vite documentation</a></li>
+            <li><a href="https://tanstack.com/router">TanStack Router</a></li>
+            <li><a href="https://tanstack.com/query">TanStack Query</a></li>
+            <li><a href="https://tanstack.com/table">TanStack Table</a></li>
+            <li><a href="https://ui.shadcn.com">shadcn/ui</a></li>
+            <li><a href="https://biomejs.dev">Biome</a></li>
+            <li><a href="https://vitest.dev">Vitest</a></li>
+            <li><a href="https://tauri.app">Tauri</a></li>
+            <li><a href="https://learn.microsoft.com/en-us/powerapps/developer/data-platform/webapi/overview">Dataverse Web API overview</a></li>
+            <li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/authenticate-web-api">Dataverse Web API authentication</a></li>
+            <li><a href="https://github.com/AzureAD/microsoft-authentication-library-for-js">MSAL Browser (GitHub)</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <p class="footer">
+      FetchXML Builder — TypeScript portability plan. Generated as the primary architecture
+      artifact for the greenfield implementation.
+    </p>
+
+  </main>
+</body>
+</html>

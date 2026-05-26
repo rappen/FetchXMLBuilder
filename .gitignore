@@ -197,3 +197,5 @@ ModelManifest.xml
 # Temporary files /JR
 **/tmp
 /MigrationBackup
+src/.DS_Store
+.DS_Store
