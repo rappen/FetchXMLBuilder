@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "baseUrl": ".",
+    "jsx": "react-jsx",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "noEmit": true,
+    "paths": {
+      "@fetchxmlbuilder/core": ["../../packages/core/src/index.ts"],
+      "@fetchxmlbuilder/dataverse": ["../../packages/dataverse/src/index.ts"]
+    }
+  },
+  "include": ["src"]
+}

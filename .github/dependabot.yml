@@ -1,21 +1,8 @@
 version: 2
 updates:
-- package-ecosystem: nuget
-  directory: "/FetchXmlBuilder"
-  schedule:
-    interval: daily
-    time: "04:00"
-  open-pull-requests-limit: 10
-- package-ecosystem: nuget
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "04:00"
-  open-pull-requests-limit: 10
-- package-ecosystem: gitsubmodule
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "04:00"
-  open-pull-requests-limit: 10
-  
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      time: "04:00"
+    open-pull-requests-limit: 10

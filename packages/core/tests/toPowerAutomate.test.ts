@@ -1,0 +1,89 @@
+import { describe, expect, it } from "vitest";
+import {
+  formatFetchXml,
+  readFetchQueryModel,
+  toCSharpFetchXml,
+  toJavaScriptFetchXml,
+  toODataUrl,
+  toPowerAutomateParameters,
+  validateFetchXml,
+  writeFetchQueryModel,
+} from "../src";
+
+const accountQuery = `<fetch>
+  <entity name="account">
+    <attribute name="name" />
+    <attribute name="accountid" />
+    <filter type="and">
+      <condition attribute="name" operator="like" value="%Contoso%" />
+      <condition attribute="statecode" operator="eq" value="0" />
+      <condition attribute="createdon" operator="on-or-after" value="2024-01-01" />
+    </filter>
+  </entity>
+</fetch>`;
+
+describe("toPowerAutomateParameters", () => {
+  it("replaces condition value attributes with Power Automate parameter tokens", () => {
+    expect(toPowerAutomateParameters(accountQuery)).toMatchSnapshot();
+  });
+
+  it("supports nested condition value elements and duplicate attributes", () => {
+    const query = `<fetch><entity name="contact"><filter><condition attribute="emailaddress1" operator="in"><value>a@example.com</value><value>b@example.com</value></condition></filter></entity></fetch>`;
+
+    expect(toPowerAutomateParameters(query)).toMatchSnapshot();
+  });
+
+  it("accepts custom parameter names", () => {
+    const result = toPowerAutomateParameters(accountQuery, {
+      parameterNames: {
+        name: "accountName",
+        statecode: "state",
+      },
+    });
+
+    expect(result.parameters.map((parameter) => parameter.name)).toEqual([
+      "accountName",
+      "state",
+      "createdon",
+    ]);
+  });
+});
+
+describe("core offline workbench functions", () => {
+  it("formats and validates FetchXML", () => {
+    expect(
+      formatFetchXml(
+        `<fetch><entity name="account"><attribute name="name"/></entity></fetch>`,
+      ),
+    ).toMatchSnapshot();
+    expect(validateFetchXml(accountQuery)).toEqual([]);
+  });
+
+  it("generates first-release converter outputs", () => {
+    expect(toODataUrl(accountQuery)).toMatchInlineSnapshot(
+      `"/account?$select=name,accountid&$filter=contains(name,%20'Contoso')%20and%20statecode%20eq%200"`,
+    );
+    expect(toJavaScriptFetchXml(accountQuery)).toContain("const fetchXml");
+    expect(toCSharpFetchXml(accountQuery)).toContain("var fetchXml");
+  });
+
+  it("round-trips the visual builder query model", () => {
+    const model = readFetchQueryModel(accountQuery);
+    expect(model).toMatchObject({
+      entity: "account",
+      top: "",
+      attributes: [{ name: "name" }, { name: "accountid" }],
+      conditions: [
+        { attribute: "name", operator: "like", value: "%Contoso%" },
+        { attribute: "statecode", operator: "eq", value: "0" },
+        {
+          attribute: "createdon",
+          operator: "on-or-after",
+          value: "2024-01-01",
+        },
+      ],
+    });
+
+    expect(writeFetchQueryModel(model)).toContain('<entity name="account">');
+  });
+});

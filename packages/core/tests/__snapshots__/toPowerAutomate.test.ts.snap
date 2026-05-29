@@ -1,0 +1,76 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`core offline workbench functions > formats and validates FetchXML 1`] = `
+"<fetch>
+  <entity name="account">
+    <attribute name="name" />
+  </entity>
+</fetch>"
+`;
+
+exports[`toPowerAutomateParameters > replaces condition value attributes with Power Automate parameter tokens 1`] = `
+{
+  "diagnostics": [],
+  "parameters": [
+    {
+      "attribute": "name",
+      "inferredType": "string",
+      "name": "name",
+      "originalValue": "%Contoso%",
+    },
+    {
+      "attribute": "statecode",
+      "inferredType": "integer",
+      "name": "statecode",
+      "originalValue": "0",
+    },
+    {
+      "attribute": "createdon",
+      "inferredType": "datetime",
+      "name": "createdon",
+      "originalValue": "2024-01-01",
+    },
+  ],
+  "xml": "<fetch>
+  <entity name="account">
+    <attribute name="name" />
+    <attribute name="accountid" />
+    <filter type="and">
+      <condition attribute="name" operator="like" value="@{parameters('name')}" />
+      <condition attribute="statecode" operator="eq" value="@{parameters('statecode')}" />
+      <condition attribute="createdon" operator="on-or-after" value="@{parameters('createdon')}" />
+    </filter>
+  </entity>
+</fetch>",
+}
+`;
+
+exports[`toPowerAutomateParameters > supports nested condition value elements and duplicate attributes 1`] = `
+{
+  "diagnostics": [],
+  "parameters": [
+    {
+      "attribute": "emailaddress1",
+      "inferredType": "string",
+      "name": "emailaddress1",
+      "originalValue": "a@example.com",
+    },
+    {
+      "attribute": "emailaddress1",
+      "inferredType": "string",
+      "name": "emailaddress12",
+      "originalValue": "b@example.com",
+    },
+  ],
+  "xml": "<fetch>
+  <entity name="contact">
+    <filter>
+      <condition attribute="emailaddress1" operator="in">
+        <value>@{parameters('emailaddress1')}</value>
+        <value>@{parameters('emailaddress12')}</value>
+      </condition>
+    </filter>
+  </entity>
+</fetch>",
+}
+`;

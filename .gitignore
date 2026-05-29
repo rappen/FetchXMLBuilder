@@ -104,6 +104,13 @@ AutoTest.Net/
 # Web workbench (sass)
 .sass-cache/
 
+# Node / TypeScript web port
+node_modules/
+dist/
+**/dist/
+**/*.tsbuildinfo
+*.tsbuildinfo
+
 # Installshield output folder
 [Ee]xpress/
 
@@ -130,6 +137,12 @@ publish/
 
 # NuGet Packages Directory
 packages/*
+!packages/core/
+!packages/core/**
+packages/core/dist/
+!packages/dataverse/
+!packages/dataverse/**
+packages/dataverse/dist/
 ## TODO: If the tool you use requires repositories.config
 ## uncomment the next line
 #!packages/repositories.config

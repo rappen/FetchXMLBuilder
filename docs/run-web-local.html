@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FetchXML Builder Web - Pruebas locales</title>
+    <style>
+      :root {
+        color: #17202a;
+        background: #f4f6f8;
+        font:
+          16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Arial, sans-serif;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      main {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 32px 18px 48px;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: 2rem;
+      }
+
+      h2 {
+        margin-top: 28px;
+        font-size: 1.1rem;
+      }
+
+      code,
+      pre {
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      }
+
+      pre {
+        overflow: auto;
+        padding: 14px;
+        border: 1px solid #d5dde6;
+        border-radius: 8px;
+        background: #ffffff;
+      }
+
+      .panel {
+        margin-top: 18px;
+        padding: 18px;
+        border: 1px solid #d5dde6;
+        border-radius: 8px;
+        background: #ffffff;
+      }
+
+      li {
+        margin: 7px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>FetchXML Builder Web</h1>
+      <p>Guía rápida para ejecutar la app web localmente y hacer pruebas de usuario.</p>
+
+      <section class="panel">
+        <h2>Requisitos</h2>
+        <ul>
+          <li>Node.js 20 o superior.</li>
+          <li>npm incluido con Node.js.</li>
+          <li>Terminal ubicada en la raíz del repositorio.</li>
+        </ul>
+      </section>
+
+      <section class="panel">
+        <h2>Instalación</h2>
+        <pre><code>npm install</code></pre>
+      </section>
+
+      <section class="panel">
+        <h2>Ejecutar en modo local</h2>
+        <pre><code>npm run dev</code></pre>
+        <p>Abre <code>http://127.0.0.1:5173/</code> en el navegador.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Validación antes de entregar</h2>
+        <pre><code>npm test
+npm run lint
+npm run build</code></pre>
+      </section>
+
+      <section class="panel">
+        <h2>Flujos cubiertos</h2>
+        <ul>
+          <li>Editar, formatear, importar y exportar FetchXML.</li>
+          <li>Construir una query desde la vista Builder.</li>
+          <li>Revisar metadata mock de entidades y columnas.</li>
+          <li>Convertir a Power Automate, OData, C# y JavaScript.</li>
+          <li>Ejecutar contra datos mock y exportar resultados CSV/JSON.</li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>

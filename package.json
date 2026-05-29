@@ -1,0 +1,22 @@
+{
+  "name": "fetchxmlbuilder-web-port",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "packageManager": "npm@11.12.1",
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "dev": "npm --workspace @fetchxmlbuilder/web run dev",
+    "format": "biome format --write .",
+    "lint": "biome check .",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@vitejs/plugin-react": "^5.1.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4",
+    "vitest": "^4.0.14"
+  }
+}
