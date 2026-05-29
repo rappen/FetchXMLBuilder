@@ -11,6 +11,7 @@ export type OutputTab =
   | "javascript"
   | "validation";
 
+export type AppModule = "workbench" | "credentials";
 export type WorkbenchPane = "editor" | "builder" | "metadata" | "results";
 export type ConnectionStatus =
   | "local"
@@ -19,13 +20,28 @@ export type ConnectionStatus =
   | "loadingMetadata"
   | "error";
 
+export interface DataverseCredential {
+  id: string;
+  name: string;
+  orgUrl: string;
+  clientId: string;
+  tenantId: string;
+  lastTestedAt?: string;
+  lastTestStatus?: "success" | "error";
+  lastTestMessage?: string;
+  updatedAt: string;
+}
+
 interface WorkbenchState {
   fetchXml: string;
   outputTab: OutputTab;
+  activeModule: AppModule;
   activePane: WorkbenchPane;
   orgUrl: string;
   clientId: string;
   tenantId: string;
+  credentials: DataverseCredential[];
+  activeCredentialId: string;
   resultRows: Record<string, unknown>[];
   connectionStatus: ConnectionStatus;
   connectionError: string;
@@ -35,11 +51,24 @@ interface WorkbenchState {
   loadingAttributeEntity: string;
   setFetchXml: (fetchXml: string) => void;
   setOutputTab: (outputTab: OutputTab) => void;
+  setActiveModule: (activeModule: AppModule) => void;
   setActivePane: (activePane: WorkbenchPane) => void;
   setConnectionField: (
     field: "orgUrl" | "clientId" | "tenantId",
     value: string,
   ) => void;
+  upsertCredential: (
+    credential: Omit<DataverseCredential, "updatedAt"> & {
+      updatedAt?: string;
+    },
+  ) => void;
+  deleteCredential: (credentialId: string) => void;
+  setCredentialTestResult: (
+    credentialId: string,
+    status: "success" | "error",
+    message: string,
+  ) => void;
+  useCredential: (credentialId: string) => void;
   setResultRows: (resultRows: Record<string, unknown>[]) => void;
   setConnectionStatus: (
     connectionStatus: ConnectionStatus,
@@ -75,10 +104,13 @@ export const sampleFetchXml = `<fetch top="50">
 export const useWorkbenchStore = create<WorkbenchState>((set) => ({
   fetchXml: sampleFetchXml,
   outputTab: "powerAutomate",
+  activeModule: "workbench",
   activePane: "editor",
   orgUrl: "",
   clientId: "",
   tenantId: "common",
+  credentials: readStoredCredentials(),
+  activeCredentialId: "",
   resultRows: [],
   connectionStatus: "local",
   connectionError: "",
@@ -88,8 +120,71 @@ export const useWorkbenchStore = create<WorkbenchState>((set) => ({
   loadingAttributeEntity: "",
   setFetchXml: (fetchXml) => set({ fetchXml }),
   setOutputTab: (outputTab) => set({ outputTab }),
+  setActiveModule: (activeModule) => set({ activeModule }),
   setActivePane: (activePane) => set({ activePane }),
   setConnectionField: (field, value) => set({ [field]: value }),
+  upsertCredential: (credential) =>
+    set((state) => {
+      const savedCredential = {
+        ...credential,
+        updatedAt: credential.updatedAt ?? new Date().toISOString(),
+      };
+      const exists = state.credentials.some(
+        (existingCredential) => existingCredential.id === credential.id,
+      );
+      const credentials = exists
+        ? state.credentials.map((existingCredential) =>
+            existingCredential.id === credential.id
+              ? savedCredential
+              : existingCredential,
+          )
+        : [savedCredential, ...state.credentials];
+      writeStoredCredentials(credentials);
+      return { credentials, activeCredentialId: credential.id };
+    }),
+  deleteCredential: (credentialId) =>
+    set((state) => {
+      const credentials = state.credentials.filter(
+        (credential) => credential.id !== credentialId,
+      );
+      writeStoredCredentials(credentials);
+      return {
+        credentials,
+        activeCredentialId:
+          state.activeCredentialId === credentialId
+            ? ""
+            : state.activeCredentialId,
+      };
+    }),
+  setCredentialTestResult: (credentialId, status, message) =>
+    set((state) => {
+      const credentials = state.credentials.map((credential) =>
+        credential.id === credentialId
+          ? {
+              ...credential,
+              lastTestedAt: new Date().toISOString(),
+              lastTestStatus: status,
+              lastTestMessage: message,
+              updatedAt: new Date().toISOString(),
+            }
+          : credential,
+      );
+      writeStoredCredentials(credentials);
+      return { credentials };
+    }),
+  useCredential: (credentialId) =>
+    set((state) => {
+      const credential = state.credentials.find(
+        (savedCredential) => savedCredential.id === credentialId,
+      );
+      if (!credential) return {};
+      return {
+        activeCredentialId: credential.id,
+        orgUrl: credential.orgUrl,
+        clientId: credential.clientId,
+        tenantId: credential.tenantId,
+      };
+    }),
   setResultRows: (resultRows) => set({ resultRows }),
   setConnectionStatus: (connectionStatus, connectionError = "") =>
     set({ connectionStatus, connectionError }),
@@ -115,3 +210,27 @@ export const useWorkbenchStore = create<WorkbenchState>((set) => ({
       resultRows: [],
     }),
 }));
+
+const credentialsStorageKey = "fetchxmlbuilder.dataverseCredentials.v1";
+
+function readStoredCredentials(): DataverseCredential[] {
+  if (typeof globalThis.localStorage === "undefined") return [];
+  try {
+    const rawCredentials = globalThis.localStorage.getItem(
+      credentialsStorageKey,
+    );
+    if (!rawCredentials) return [];
+    const credentials = JSON.parse(rawCredentials) as DataverseCredential[];
+    return Array.isArray(credentials) ? credentials : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeStoredCredentials(credentials: DataverseCredential[]) {
+  if (typeof globalThis.localStorage === "undefined") return;
+  globalThis.localStorage.setItem(
+    credentialsStorageKey,
+    JSON.stringify(credentials),
+  );
+}

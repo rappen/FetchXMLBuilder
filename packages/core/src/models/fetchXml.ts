@@ -78,11 +78,16 @@ export interface FetchLinkEntitySelection {
   alias: string;
   linkType: "inner" | "outer";
   attributes: FetchAttributeSelection[];
+  filterType: "and" | "or";
+  conditions: FetchConditionSelection[];
+  orders: FetchOrderSelection[];
 }
 
 export interface FetchQueryModel {
   entity: string;
   top: string;
+  distinct: boolean;
+  filterType: "and" | "or";
   attributes: FetchAttributeSelection[];
   conditions: FetchConditionSelection[];
   orders: FetchOrderSelection[];

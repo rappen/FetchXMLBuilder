@@ -10,6 +10,8 @@ import { escapeXml, parseFetchXml } from "../parser/parseFetchXml";
 export const emptyFetchQueryModel: FetchQueryModel = {
   entity: "account",
   top: "50",
+  distinct: false,
+  filterType: "and",
   attributes: [{ name: "name" }],
   conditions: [],
   orders: [],
@@ -34,11 +36,12 @@ export function readFetchQueryModel(xml: string): FetchQueryModel {
       descending: node.attributes.descending === "true",
     }));
 
-  const conditions = directChildren(entity, "filter").flatMap((filter) =>
-    directChildren(filter, "condition")
-      .filter((condition) => condition.attributes.attribute)
-      .map((condition, index) => conditionFromNode(condition, index)),
-  );
+  const filter = directChildren(entity, "filter").at(0);
+  const conditions = filter
+    ? directChildren(filter, "condition")
+        .filter((condition) => condition.attributes.attribute)
+        .map((condition, index) => conditionFromNode(condition, index))
+    : [];
 
   const links = directChildren(entity, "link-entity").map((node, index) =>
     linkFromNode(node, index),
@@ -47,6 +50,8 @@ export function readFetchQueryModel(xml: string): FetchQueryModel {
   return {
     entity: entity.attributes.name ?? "account",
     top: document.root.attributes.top ?? "",
+    distinct: document.root.attributes.distinct === "true",
+    filterType: filter?.attributes.type === "or" ? "or" : "and",
     attributes,
     conditions,
     orders,
@@ -55,7 +60,13 @@ export function readFetchQueryModel(xml: string): FetchQueryModel {
 }
 
 export function writeFetchQueryModel(model: FetchQueryModel): string {
-  const lines = [`<fetch${model.top ? ` top="${escapeXml(model.top)}"` : ""}>`];
+  const fetchAttributes = [
+    model.top ? `top="${escapeXml(model.top)}"` : "",
+    model.distinct ? 'distinct="true"' : "",
+  ].filter(Boolean);
+  const lines = [
+    `<fetch${fetchAttributes.length ? ` ${fetchAttributes.join(" ")}` : ""}>`,
+  ];
   lines.push(`  <entity name="${escapeXml(model.entity)}">`);
 
   for (const attribute of model.attributes) {
@@ -73,7 +84,7 @@ export function writeFetchQueryModel(model: FetchQueryModel): string {
   }
 
   if (model.conditions.length > 0) {
-    lines.push('    <filter type="and">');
+    lines.push(`    <filter type="${model.filterType ?? "and"}">`);
     for (const condition of model.conditions) {
       if (!condition.attribute || !condition.operator) continue;
       const value = condition.value
@@ -95,6 +106,26 @@ export function writeFetchQueryModel(model: FetchQueryModel): string {
       if (attribute.name) {
         lines.push(`      <attribute name="${escapeXml(attribute.name)}" />`);
       }
+    }
+    for (const order of link.orders ?? []) {
+      if (order.attribute) {
+        lines.push(
+          `      <order attribute="${escapeXml(order.attribute)}"${order.descending ? ' descending="true"' : ""} />`,
+        );
+      }
+    }
+    if ((link.conditions ?? []).length > 0) {
+      lines.push(`      <filter type="${link.filterType ?? "and"}">`);
+      for (const condition of link.conditions ?? []) {
+        if (!condition.attribute || !condition.operator) continue;
+        const value = condition.value
+          ? ` value="${escapeXml(condition.value)}"`
+          : "";
+        lines.push(
+          `        <condition attribute="${escapeXml(condition.attribute)}" operator="${escapeXml(condition.operator)}"${value} />`,
+        );
+      }
+      lines.push("      </filter>");
     }
     lines.push("    </link-entity>");
   }
@@ -137,6 +168,23 @@ function linkFromNode(
     attributes: directChildren(node, "attribute")
       .map((attribute) => attribute.attributes.name)
       .flatMap((name) => (name ? [{ name }] : [])),
+    orders: directChildren(node, "order")
+      .filter((order) => order.attributes.attribute)
+      .map((order) => ({
+        attribute: order.attributes.attribute ?? "",
+        descending: order.attributes.descending === "true",
+      })),
+    filterType:
+      directChildren(node, "filter").at(0)?.attributes.type === "or"
+        ? "or"
+        : "and",
+    conditions: directChildren(node, "filter").flatMap((filter, filterIndex) =>
+      directChildren(filter, "condition")
+        .filter((condition) => condition.attributes.attribute)
+        .map((condition, conditionIndex) =>
+          conditionFromNode(condition, filterIndex * 100 + conditionIndex),
+        ),
+    ),
   };
 }
 

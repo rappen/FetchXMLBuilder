@@ -1,23 +1,33 @@
 import {
+  type FetchQueryModel,
   readFetchQueryModel,
   writeFetchQueryModel,
 } from "@fetchxmlbuilder/core";
 import {
   DEFAULT_DATAVERSE_CLIENT_ID,
+  type DataverseConnectionConfig,
   type DataverseSession,
   createDataverseSession,
 } from "@fetchxmlbuilder/dataverse";
 import {
+  AlertCircle,
   Blocks,
+  CheckCircle2,
+  ChevronsLeft,
+  ChevronsRight,
   Database,
   Download,
   FileUp,
+  KeyRound,
+  LogOut,
   Play,
+  PlugZap,
   RotateCcw,
   Sparkles,
+  UserRound,
 } from "lucide-react";
-import { useCallback, useEffect, useRef } from "react";
-import { ConnectionPanel } from "./components/ConnectionPanel";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { CredentialsManager } from "./components/CredentialsManager";
 import { MetadataBrowser } from "./components/MetadataBrowser";
 import { OutputPanel, getFormattedXml } from "./components/OutputPanel";
 import { QueryBuilderPanel } from "./components/QueryBuilderPanel";
@@ -25,10 +35,22 @@ import { ResultGrid } from "./components/ResultGrid";
 import { XmlEditor } from "./components/XmlEditor";
 import { makeMockRows } from "./data/mockMetadata";
 import {
+  type AppModule,
+  type ConnectionStatus,
+  type DataverseCredential,
   type WorkbenchPane,
   sampleFetchXml,
   useWorkbenchStore,
 } from "./store/workbenchStore";
+
+const modules: Array<{
+  id: AppModule;
+  label: string;
+  icon: typeof Sparkles;
+}> = [
+  { id: "workbench", label: "Workbench", icon: Sparkles },
+  { id: "credentials", label: "Credentials", icon: KeyRound },
+];
 
 const panes: Array<{
   id: WorkbenchPane;
@@ -45,10 +67,13 @@ export function App() {
   const {
     fetchXml,
     outputTab,
+    activeModule,
     activePane,
     orgUrl,
     clientId,
     tenantId,
+    credentials,
+    activeCredentialId,
     resultRows,
     connectionStatus,
     connectionError,
@@ -58,8 +83,12 @@ export function App() {
     loadingAttributeEntity,
     setFetchXml,
     setOutputTab,
+    setActiveModule,
     setActivePane,
-    setConnectionField,
+    upsertCredential,
+    deleteCredential,
+    setCredentialTestResult,
+    useCredential,
     setResultRows,
     setConnectionStatus,
     setConnectedUser,
@@ -70,7 +99,12 @@ export function App() {
   } = useWorkbenchStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dataverseSessionRef = useRef<DataverseSession | null>(null);
+  const [testingCredentialId, setTestingCredentialId] = useState("");
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const selectedEntity = safeReadModel(fetchXml).entity;
+  const activeCredential = credentials.find(
+    (credential) => credential.id === activeCredentialId,
+  );
 
   const loadEntityAttributes = useCallback(
     async (
@@ -138,6 +172,31 @@ export function App() {
       dataverseSessionRef.current = null;
       setConnectionStatus("error", getErrorMessage(error));
     }
+  }
+
+  async function testCredential(credential: DataverseCredential) {
+    setTestingCredentialId(credential.id);
+    upsertCredential(credential);
+    try {
+      const session = await createDataverseSession(
+        getConnectionConfig(credential),
+      );
+      const entities = await session.client.listEntities();
+      setCredentialTestResult(
+        credential.id,
+        "success",
+        `${entities.length} entities loaded`,
+      );
+    } catch (error) {
+      setCredentialTestResult(credential.id, "error", getErrorMessage(error));
+    } finally {
+      setTestingCredentialId("");
+    }
+  }
+
+  function useSavedCredential(credentialId: string) {
+    useCredential(credentialId);
+    setActiveModule("workbench");
   }
 
   function disconnectFromDataverse() {
@@ -258,95 +317,237 @@ export function App() {
         </div>
       </header>
 
-      <nav className="pane-tabs" aria-label="Workbench views">
-        {panes.map((pane) => {
-          const Icon = pane.icon;
-          return (
-            <button
-              className={activePane === pane.id ? "active" : ""}
-              key={pane.id}
-              type="button"
-              onClick={() => setActivePane(pane.id)}
-            >
-              <Icon size={16} />
-              <span>{pane.label}</span>
-            </button>
-          );
-        })}
-      </nav>
+      <div
+        className={
+          isSidebarCollapsed ? "app-body sidebar-collapsed" : "app-body"
+        }
+      >
+        <aside className="app-sidebar" aria-label="Application modules">
+          <button
+            className="sidebar-toggle"
+            type="button"
+            title={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+          >
+            {isSidebarCollapsed ? (
+              <ChevronsRight size={18} />
+            ) : (
+              <ChevronsLeft size={18} />
+            )}
+            <span>Collapse</span>
+          </button>
+          <nav>
+            {modules.map((module) => {
+              const Icon = module.icon;
+              return (
+                <button
+                  className={activeModule === module.id ? "active" : ""}
+                  key={module.id}
+                  title={module.label}
+                  type="button"
+                  onClick={() => setActiveModule(module.id)}
+                >
+                  <Icon size={18} />
+                  <span>{module.label}</span>
+                </button>
+              );
+            })}
+          </nav>
+        </aside>
 
-      <div className="workspace">
-        <div className="left-stack">
-          <ConnectionPanel
-            clientId={clientId}
-            error={connectionError}
-            orgUrl={orgUrl}
-            redirectUri={globalThis.location.origin}
-            status={connectionStatus}
-            tenantId={tenantId}
-            userName={userName}
-            onFieldChange={setConnectionField}
-            onConnect={connectToDataverse}
-            onDisconnect={disconnectFromDataverse}
-          />
-          {activePane === "editor" ? (
-            <section
-              className="panel editor-panel"
-              aria-label="FetchXML editor"
-            >
-              <XmlEditor value={fetchXml} onChange={setFetchXml} />
-            </section>
-          ) : null}
-          {activePane === "builder" ? (
-            <QueryBuilderPanel
-              attributesByEntity={metadataAttributesByEntity}
-              entities={metadataEntities}
-              fetchXml={fetchXml}
-              loadingAttributeEntity={loadingAttributeEntity}
-              onChange={setFetchXml}
-              onEntitySelected={(entityName) =>
-                void loadEntityAttributes(entityName)
+        {activeModule === "workbench" ? (
+          <div className="module-body">
+            <ConnectionStrip
+              activeCredential={activeCredential}
+              error={connectionError}
+              orgUrl={orgUrl}
+              status={connectionStatus}
+              userName={userName}
+              onConnect={connectToDataverse}
+              onDisconnect={disconnectFromDataverse}
+              onManageCredentials={() => setActiveModule("credentials")}
+            />
+            <nav className="pane-tabs" aria-label="Workbench views">
+              {panes.map((pane) => {
+                const Icon = pane.icon;
+                return (
+                  <button
+                    className={activePane === pane.id ? "active" : ""}
+                    key={pane.id}
+                    type="button"
+                    onClick={() => setActivePane(pane.id)}
+                  >
+                    <Icon size={16} />
+                    <span>{pane.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
+
+            <div
+              className={
+                activePane === "builder"
+                  ? "workspace builder-focused"
+                  : "workspace"
               }
-            />
-          ) : null}
-          {activePane === "metadata" ? (
-            <MetadataBrowser
-              attributesByEntity={metadataAttributesByEntity}
-              entities={metadataEntities}
-              loadingAttributeEntity={loadingAttributeEntity}
-              selectedEntity={selectedEntity}
-              onEntitySelected={selectEntity}
-            />
-          ) : null}
-          {activePane === "results" ? (
-            <ResultGrid
-              fetchXml={fetchXml}
-              rows={resultRows}
-              onRowsChange={setResultRows}
-            />
-          ) : null}
-        </div>
-        <OutputPanel
-          fetchXml={fetchXml}
-          outputTab={outputTab}
-          setOutputTab={setOutputTab}
-        />
+            >
+              <div className="left-stack">
+                {activePane === "editor" ? (
+                  <section
+                    className="panel editor-panel"
+                    aria-label="FetchXML editor"
+                  >
+                    <XmlEditor value={fetchXml} onChange={setFetchXml} />
+                  </section>
+                ) : null}
+                {activePane === "builder" ? (
+                  <QueryBuilderPanel
+                    attributesByEntity={metadataAttributesByEntity}
+                    entities={metadataEntities}
+                    fetchXml={fetchXml}
+                    loadingAttributeEntity={loadingAttributeEntity}
+                    onChange={setFetchXml}
+                    onEntitySelected={(entityName) =>
+                      void loadEntityAttributes(entityName)
+                    }
+                  />
+                ) : null}
+                {activePane === "metadata" ? (
+                  <MetadataBrowser
+                    attributesByEntity={metadataAttributesByEntity}
+                    entities={metadataEntities}
+                    loadingAttributeEntity={loadingAttributeEntity}
+                    selectedEntity={selectedEntity}
+                    onEntitySelected={selectEntity}
+                  />
+                ) : null}
+                {activePane === "results" ? (
+                  <ResultGrid
+                    fetchXml={fetchXml}
+                    rows={resultRows}
+                    onRowsChange={setResultRows}
+                  />
+                ) : null}
+              </div>
+              <OutputPanel
+                fetchXml={fetchXml}
+                outputTab={outputTab}
+                setOutputTab={setOutputTab}
+              />
+            </div>
+          </div>
+        ) : (
+          <CredentialsManager
+            activeCredentialId={activeCredentialId}
+            credentials={credentials}
+            testingCredentialId={testingCredentialId}
+            onDelete={deleteCredential}
+            onSave={upsertCredential}
+            onTest={(credential) => void testCredential(credential)}
+            onUse={useSavedCredential}
+          />
+        )}
       </div>
     </main>
   );
+}
+
+function ConnectionStrip({
+  activeCredential,
+  error,
+  orgUrl,
+  status,
+  userName,
+  onConnect,
+  onDisconnect,
+  onManageCredentials,
+}: {
+  activeCredential: DataverseCredential | undefined;
+  error: string;
+  orgUrl: string;
+  status: ConnectionStatus;
+  userName: string;
+  onConnect: () => void;
+  onDisconnect: () => void;
+  onManageCredentials: () => void;
+}) {
+  const isBusy = status === "connecting" || status === "loadingMetadata";
+  const isConnected = status === "connected" || status === "loadingMetadata";
+  const hasConnectionConfig = Boolean(orgUrl.trim());
+  const StatusIcon = status === "error" ? AlertCircle : CheckCircle2;
+  const summary =
+    userName ||
+    activeCredential?.name ||
+    activeCredential?.orgUrl ||
+    orgUrl ||
+    "Local mock data";
+
+  return (
+    <section
+      className={
+        status === "error"
+          ? "connection-strip error"
+          : isConnected
+            ? "connection-strip ready"
+            : "connection-strip"
+      }
+      aria-label="Connection status"
+    >
+      <div className="connection-strip-status">
+        <StatusIcon size={16} />
+        <span className="status-pill-label">{statusLabel(status)}</span>
+      </div>
+      <div className="connection-strip-summary">
+        <UserRound size={15} />
+        <span>{error || summary}</span>
+      </div>
+      <div className="connection-strip-actions">
+        <button type="button" onClick={onManageCredentials}>
+          <KeyRound size={15} />
+          <span>Credentials</span>
+        </button>
+        {isConnected ? (
+          <button type="button" onClick={onDisconnect}>
+            <LogOut size={15} />
+            <span>Disconnect</span>
+          </button>
+        ) : (
+          <button
+            className="primary-action"
+            type="button"
+            disabled={isBusy || !hasConnectionConfig}
+            onClick={onConnect}
+          >
+            <PlugZap size={15} />
+            <span>{isBusy ? "Connecting" : "Connect"}</span>
+          </button>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function statusLabel(status: ConnectionStatus) {
+  if (status === "connecting") return "Signing in";
+  if (status === "loadingMetadata") return "Loading metadata";
+  if (status === "connected") return "Connected";
+  if (status === "error") return "Connection error";
+  return "Local";
 }
 
 function getErrorMessage(error: unknown) {
   return error instanceof Error ? error.message : "Unexpected Dataverse error.";
 }
 
-function safeReadModel(fetchXml: string) {
+function safeReadModel(fetchXml: string): FetchQueryModel {
   try {
     return readFetchQueryModel(fetchXml);
   } catch {
     return {
       entity: "account",
       top: "50",
+      distinct: false,
+      filterType: "and",
       attributes: [{ name: "name" }],
       conditions: [],
       orders: [],
@@ -371,4 +572,14 @@ function getDataverseClientId(clientId: string) {
     import.meta.env.VITE_DATAVERSE_CLIENT_ID?.trim() ||
     DEFAULT_DATAVERSE_CLIENT_ID
   );
+}
+
+function getConnectionConfig(
+  credential: DataverseCredential,
+): DataverseConnectionConfig {
+  return {
+    organizationUrl: credential.orgUrl,
+    clientId: getDataverseClientId(credential.clientId),
+    tenantId: credential.tenantId,
+  };
 }

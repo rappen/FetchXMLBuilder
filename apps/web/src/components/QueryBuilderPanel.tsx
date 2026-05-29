@@ -1,6 +1,7 @@
 import {
   type FetchConditionSelection,
   type FetchLinkEntitySelection,
+  type FetchOrderSelection,
   type FetchQueryModel,
   readFetchQueryModel,
   writeFetchQueryModel,
@@ -9,8 +10,23 @@ import type {
   AttributeSummary,
   EntitySummary,
 } from "@fetchxmlbuilder/dataverse";
-import { Plus, Trash2 } from "lucide-react";
-import { useMemo } from "react";
+import {
+  ArrowDownAZ,
+  ArrowUpAZ,
+  BadgeCheck,
+  Boxes,
+  Filter,
+  GitBranch,
+  GitFork,
+  Layers3,
+  ListChecks,
+  Plus,
+  Search,
+  Settings2,
+  Trash2,
+  X,
+} from "lucide-react";
+import { type ReactNode, useEffect, useMemo, useState } from "react";
 import { getEntity, mockEntities } from "../data/mockMetadata";
 
 interface QueryBuilderPanelProps {
@@ -22,7 +38,21 @@ interface QueryBuilderPanelProps {
   onEntitySelected: (entityName: string) => void;
 }
 
-const operators = [
+type SelectedNode =
+  | { type: "fetch" }
+  | { type: "entity"; linkId?: string }
+  | { type: "attributes"; linkId?: string }
+  | { type: "filters"; linkId?: string }
+  | { type: "orders"; linkId?: string };
+
+interface BuilderEntity {
+  logicalName: string;
+  displayName: string;
+  entitySetName: string;
+  attributes: AttributeSummary[];
+}
+
+const defaultOperators = [
   "eq",
   "ne",
   "like",
@@ -31,12 +61,49 @@ const operators = [
   "ge",
   "lt",
   "le",
-  "on-or-after",
-  "on-or-before",
   "null",
   "not-null",
   "in",
 ];
+
+const operatorsByType: Record<string, string[]> = {
+  String: [
+    "eq",
+    "ne",
+    "like",
+    "not-like",
+    "begins-with",
+    "ends-with",
+    "null",
+    "not-null",
+    "in",
+  ],
+  Memo: ["eq", "ne", "like", "not-like", "null", "not-null"],
+  DateTime: [
+    "on",
+    "on-or-after",
+    "on-or-before",
+    "today",
+    "yesterday",
+    "last-x-days",
+    "next-x-days",
+    "null",
+    "not-null",
+  ],
+  Integer: ["eq", "ne", "gt", "ge", "lt", "le", "null", "not-null", "in"],
+  BigInt: ["eq", "ne", "gt", "ge", "lt", "le", "null", "not-null", "in"],
+  Decimal: ["eq", "ne", "gt", "ge", "lt", "le", "null", "not-null", "in"],
+  Double: ["eq", "ne", "gt", "ge", "lt", "le", "null", "not-null", "in"],
+  Money: ["eq", "ne", "gt", "ge", "lt", "le", "null", "not-null", "in"],
+  Boolean: ["eq", "ne", "null", "not-null"],
+  Picklist: ["eq", "ne", "in", "not-in", "null", "not-null"],
+  State: ["eq", "ne", "in", "not-in"],
+  Status: ["eq", "ne", "in", "not-in"],
+  Lookup: ["eq", "ne", "null", "not-null", "in"],
+  Customer: ["eq", "ne", "null", "not-null", "in"],
+  Owner: ["eq", "ne", "null", "not-null", "in"],
+  Guid: ["eq", "ne", "null", "not-null", "in"],
+};
 
 export function QueryBuilderPanel({
   fetchXml,
@@ -46,22 +113,58 @@ export function QueryBuilderPanel({
   onChange,
   onEntitySelected,
 }: QueryBuilderPanelProps) {
-  const model = useMemo(() => safeReadModel(fetchXml), [fetchXml]);
+  const model = useMemo(
+    () => normalizeModel(safeReadModel(fetchXml)),
+    [fetchXml],
+  );
   const entityOptions = entities.length > 0 ? entities : mockEntities;
-  const entity = getBuilderEntity(model.entity, entities, attributesByEntity);
-  const isLoadingAttributes = loadingAttributeEntity === entity.logicalName;
+  const primaryEntity = getBuilderEntity(
+    model.entity,
+    entities,
+    attributesByEntity,
+  );
+  const [selectedNode, setSelectedNode] = useState<SelectedNode>({
+    type: "fetch",
+  });
+  const [entitySearch, setEntitySearch] = useState("");
+  const [attributeSearch, setAttributeSearch] = useState("");
+  const [attributePicker, setAttributePicker] = useState<null | {
+    linkId?: string;
+  }>(null);
+
+  const selectedLink =
+    selectedNode.type !== "fetch" && selectedNode.linkId
+      ? model.links.find((link) => link.id === selectedNode.linkId)
+      : undefined;
+  const selectedEntityName = selectedLink?.name ?? model.entity;
+  const selectedEntity = getBuilderEntity(
+    selectedEntityName,
+    entities,
+    attributesByEntity,
+  );
+  const isLoadingAttributes =
+    loadingAttributeEntity === selectedEntity.logicalName;
+
+  useEffect(() => {
+    if (selectedNode.type !== "fetch" && selectedNode.linkId) {
+      const exists = model.links.some(
+        (link) => link.id === selectedNode.linkId,
+      );
+      if (!exists) setSelectedNode({ type: "fetch" });
+    }
+  }, [model.links, selectedNode]);
 
   function update(nextModel: FetchQueryModel) {
-    onChange(writeFetchQueryModel(nextModel));
+    onChange(writeFetchQueryModel(normalizeModel(nextModel)));
   }
 
-  function setEntity(entityName: string) {
+  function setPrimaryEntity(entityName: string) {
+    onEntitySelected(entityName);
     const nextEntity = getBuilderEntity(
       entityName,
       entities,
       attributesByEntity,
     );
-    onEntitySelected(nextEntity.logicalName);
     update({
       ...model,
       entity: nextEntity.logicalName,
@@ -74,7 +177,53 @@ export function QueryBuilderPanel({
     });
   }
 
-  function toggleAttribute(attributeName: string) {
+  function updateLink(
+    linkId: string,
+    patch: Partial<FetchLinkEntitySelection>,
+  ) {
+    update({
+      ...model,
+      links: model.links.map((link) =>
+        link.id === linkId ? normalizeLink({ ...link, ...patch }) : link,
+      ),
+    });
+  }
+
+  function setLinkEntity(linkId: string, entityName: string) {
+    onEntitySelected(entityName);
+    const nextEntity = getBuilderEntity(
+      entityName,
+      entities,
+      attributesByEntity,
+    );
+    updateLink(linkId, {
+      name: nextEntity.logicalName,
+      alias: nextEntity.logicalName,
+      attributes: nextEntity.attributes.slice(0, 2).map((attribute) => ({
+        name: attribute.logicalName,
+      })),
+      conditions: [],
+      orders: [],
+    });
+  }
+
+  function toggleAttribute(attributeName: string, linkId?: string) {
+    if (linkId) {
+      const link = model.links.find((item) => item.id === linkId);
+      if (!link) return;
+      const exists = link.attributes.some(
+        (attribute) => attribute.name === attributeName,
+      );
+      updateLink(linkId, {
+        attributes: exists
+          ? link.attributes.filter(
+              (attribute) => attribute.name !== attributeName,
+            )
+          : [...link.attributes, { name: attributeName }],
+      });
+      return;
+    }
+
     const exists = model.attributes.some(
       (attribute) => attribute.name === attributeName,
     );
@@ -88,295 +237,975 @@ export function QueryBuilderPanel({
     });
   }
 
+  function addCondition(linkId?: string) {
+    const attributes = getBuilderEntity(
+      linkId
+        ? (model.links.find((link) => link.id === linkId)?.name ?? model.entity)
+        : model.entity,
+      entities,
+      attributesByEntity,
+    ).attributes;
+    const condition = makeCondition(attributes[0]?.logicalName ?? "name");
+
+    if (linkId) {
+      const link = model.links.find((item) => item.id === linkId);
+      if (!link) return;
+      updateLink(linkId, {
+        conditions: [...(link.conditions ?? []), condition],
+      });
+      setSelectedNode(makeSelectedNode("filters", linkId));
+      return;
+    }
+
+    update({ ...model, conditions: [...model.conditions, condition] });
+    setSelectedNode({ type: "filters" });
+  }
+
   function updateCondition(
-    id: string,
+    conditionId: string,
     patch: Partial<FetchConditionSelection>,
+    linkId?: string,
   ) {
+    if (linkId) {
+      const link = model.links.find((item) => item.id === linkId);
+      if (!link) return;
+      updateLink(linkId, {
+        conditions: (link.conditions ?? []).map((condition) =>
+          condition.id === conditionId ? { ...condition, ...patch } : condition,
+        ),
+      });
+      return;
+    }
+
     update({
       ...model,
       conditions: model.conditions.map((condition) =>
-        condition.id === id ? { ...condition, ...patch } : condition,
+        condition.id === conditionId ? { ...condition, ...patch } : condition,
       ),
     });
   }
 
-  function updateLink(id: string, patch: Partial<FetchLinkEntitySelection>) {
+  function removeCondition(conditionId: string, linkId?: string) {
+    if (linkId) {
+      const link = model.links.find((item) => item.id === linkId);
+      if (!link) return;
+      updateLink(linkId, {
+        conditions: (link.conditions ?? []).filter(
+          (condition) => condition.id !== conditionId,
+        ),
+      });
+      return;
+    }
+
     update({
       ...model,
-      links: model.links.map((link) =>
-        link.id === id ? { ...link, ...patch } : link,
+      conditions: model.conditions.filter(
+        (condition) => condition.id !== conditionId,
       ),
     });
+  }
+
+  function addOrder(linkId?: string) {
+    const attribute = selectedEntity.attributes[0]?.logicalName ?? "name";
+    const order: FetchOrderSelection = { attribute, descending: false };
+    if (linkId) {
+      const link = model.links.find((item) => item.id === linkId);
+      if (!link) return;
+      updateLink(linkId, { orders: [...(link.orders ?? []), order] });
+      setSelectedNode(makeSelectedNode("orders", linkId));
+      return;
+    }
+    update({ ...model, orders: [...model.orders, order] });
+    setSelectedNode({ type: "orders" });
+  }
+
+  function addLink() {
+    const fallback =
+      entityOptions.find((entity) => entity.logicalName !== model.entity) ??
+      entityOptions[0];
+    const linkEntity = fallback?.logicalName ?? "contact";
+    onEntitySelected(linkEntity);
+    const nextLink = normalizeLink({
+      id: crypto.randomUUID(),
+      name: linkEntity,
+      from: "parentcustomerid",
+      to: model.attributes[0]?.name ?? `${model.entity}id`,
+      alias: linkEntity,
+      linkType: "outer",
+      attributes: [],
+      filterType: "and",
+      conditions: [],
+      orders: [],
+    });
+    update({ ...model, links: [...model.links, nextLink] });
+    setSelectedNode({ type: "entity", linkId: nextLink.id });
   }
 
   return (
-    <section className="panel side-panel" aria-label="Visual query builder">
-      <div className="panel-heading">
-        <h2>Builder</h2>
-        <button
-          type="button"
-          title="Add condition"
-          onClick={() =>
-            update({
-              ...model,
-              conditions: [
-                ...model.conditions,
-                {
-                  id: crypto.randomUUID(),
-                  attribute: entity.attributes[0]?.logicalName ?? "name",
-                  operator: "eq",
-                  value: "",
-                },
-              ],
-            })
-          }
-        >
-          <Plus size={16} />
-          <span>Condition</span>
-        </button>
-      </div>
-
-      <div className="form-grid">
-        <label>
-          <span>Entity</span>
-          <select
-            value={model.entity}
-            onChange={(event) => setEntity(event.target.value)}
-          >
-            {entityOptions.map((item) => (
-              <option key={item.logicalName} value={item.logicalName}>
-                {item.displayName}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          <span>Top</span>
-          <input
-            inputMode="numeric"
-            value={model.top}
-            onChange={(event) =>
-              update({ ...model, top: event.target.value.replace(/\D/g, "") })
-            }
-          />
-        </label>
-      </div>
-
-      <div className="builder-section">
-        <div className="section-title-row">
-          <h3>Attributes</h3>
-          {isLoadingAttributes ? <small>Loading...</small> : null}
-        </div>
-        <div className="check-grid">
-          {entity.attributes.map((attribute) => (
-            <label className="check-row" key={attribute.logicalName}>
-              <input
-                type="checkbox"
-                checked={model.attributes.some(
-                  (item) => item.name === attribute.logicalName,
-                )}
-                onChange={() => toggleAttribute(attribute.logicalName)}
-              />
-              <span>{attribute.logicalName}</span>
-              <small>{attribute.type}</small>
-            </label>
-          ))}
-          {entity.attributes.length === 0 ? (
-            <p className="empty-state">No attributes loaded for this entity.</p>
-          ) : null}
-        </div>
-      </div>
-
-      <div className="builder-section">
-        <h3>Filters</h3>
-        <div className="stack">
-          {model.conditions.map((condition) => (
-            <div className="condition-row" key={condition.id}>
-              <select
-                value={condition.attribute}
-                onChange={(event) =>
-                  updateCondition(condition.id, {
-                    attribute: event.target.value,
-                  })
-                }
-              >
-                {entity.attributes.map((attribute) => (
-                  <option
-                    key={attribute.logicalName}
-                    value={attribute.logicalName}
-                  >
-                    {attribute.logicalName}
-                  </option>
-                ))}
-              </select>
-              <select
-                value={condition.operator}
-                onChange={(event) =>
-                  updateCondition(condition.id, {
-                    operator: event.target.value,
-                  })
-                }
-              >
-                {operators.map((operator) => (
-                  <option key={operator} value={operator}>
-                    {operator}
-                  </option>
-                ))}
-              </select>
-              <input
-                value={condition.value}
-                onChange={(event) =>
-                  updateCondition(condition.id, { value: event.target.value })
-                }
-              />
-              <button
-                className="icon-button"
-                type="button"
-                title="Remove condition"
-                onClick={() =>
-                  update({
-                    ...model,
-                    conditions: model.conditions.filter(
-                      (item) => item.id !== condition.id,
-                    ),
-                  })
-                }
-              >
-                <Trash2 size={15} />
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="builder-section">
-        <h3>Order</h3>
-        <div className="condition-row order-row">
-          <select
-            value={model.orders[0]?.attribute ?? ""}
-            onChange={(event) =>
-              update({
-                ...model,
-                orders: event.target.value
-                  ? [
-                      {
-                        attribute: event.target.value,
-                        descending: model.orders[0]?.descending ?? false,
-                      },
-                    ]
-                  : [],
-              })
-            }
-          >
-            <option value="">None</option>
-            {entity.attributes.map((attribute) => (
-              <option key={attribute.logicalName} value={attribute.logicalName}>
-                {attribute.logicalName}
-              </option>
-            ))}
-          </select>
-          <label className="toggle-row">
-            <input
-              type="checkbox"
-              checked={model.orders[0]?.descending ?? false}
-              onChange={(event) =>
-                update({
-                  ...model,
-                  orders: model.orders[0]
-                    ? [
-                        {
-                          ...model.orders[0],
-                          descending: event.target.checked,
-                        },
-                      ]
-                    : [],
-                })
-              }
-            />
-            <span>Desc</span>
-          </label>
-        </div>
-      </div>
-
-      <div className="builder-section">
-        <div className="section-title-row">
-          <h3>Links</h3>
-          <button
-            type="button"
-            title="Add link"
-            onClick={() =>
-              update({
-                ...model,
-                links: [
-                  ...model.links,
-                  {
-                    id: crypto.randomUUID(),
-                    name: "contact",
-                    from: "parentcustomerid",
-                    to: "accountid",
-                    alias: "contact",
-                    linkType: "outer",
-                    attributes: [{ name: "fullname" }],
-                  },
-                ],
-              })
-            }
-          >
-            <Plus size={16} />
+    <section className="builder-workbench" aria-label="Visual query builder">
+      <div className="composition-panel panel">
+        <div className="panel-heading builder-heading">
+          <div>
+            <h2>Composition</h2>
+            <span>Graphic map of what the FetchXML will do</span>
+          </div>
+          <button type="button" title="Add linked entity" onClick={addLink}>
+            <GitBranch size={16} />
             <span>Link</span>
           </button>
         </div>
-        <div className="stack">
-          {model.links.map((link) => (
-            <div className="link-row" key={link.id}>
-              <select
-                value={link.name}
-                onChange={(event) =>
-                  updateLink(link.id, { name: event.target.value })
+        <div className="query-tree" role="tree">
+          <TreeButton
+            active={selectedNode.type === "fetch"}
+            icon={<Settings2 size={17} />}
+            label="Fetch"
+            meta={`${model.top ? `Top ${model.top}` : "All rows"}${model.distinct ? " · distinct" : ""}`}
+            tone="fetch"
+            onClick={() => setSelectedNode({ type: "fetch" })}
+          />
+          <div className="tree-children">
+            <EntityBranch
+              entityName={model.entity}
+              displayName={primaryEntity.displayName}
+              attributes={model.attributes.length}
+              conditions={model.conditions.length}
+              filterType={model.filterType}
+              orders={model.orders.length}
+              selectedNode={selectedNode}
+              onSelect={setSelectedNode}
+            />
+            {model.links.map((link) => {
+              const linkEntity = getBuilderEntity(
+                link.name,
+                entities,
+                attributesByEntity,
+              );
+              return (
+                <EntityBranch
+                  key={link.id}
+                  entityName={link.name}
+                  displayName={linkEntity.displayName}
+                  alias={link.alias}
+                  linkType={link.linkType}
+                  linkId={link.id}
+                  attributes={link.attributes.length}
+                  conditions={(link.conditions ?? []).length}
+                  filterType={link.filterType ?? "and"}
+                  orders={(link.orders ?? []).length}
+                  selectedNode={selectedNode}
+                  onSelect={setSelectedNode}
+                />
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      <aside
+        className="inspector-panel panel"
+        aria-label="Selected builder controls"
+      >
+        <InspectorHeader
+          selectedNode={selectedNode}
+          entity={selectedEntity}
+          {...(selectedLink ? { link: selectedLink } : {})}
+        />
+        <div className="inspector-body">
+          {selectedNode.type === "fetch" ? (
+            <FetchInspector model={model} onUpdate={update} />
+          ) : null}
+          {selectedNode.type === "entity" ? (
+            <EntityInspector
+              entity={selectedEntity}
+              entityOptions={entityOptions}
+              entitySearch={entitySearch}
+              isPrimary={!selectedNode.linkId}
+              isLoadingAttributes={isLoadingAttributes}
+              model={model}
+              {...(selectedLink ? { link: selectedLink } : {})}
+              onAddFilter={() => addCondition(selectedNode.linkId)}
+              onAddLink={addLink}
+              onAddOrder={() => addOrder(selectedNode.linkId)}
+              onOpenAttributes={() =>
+                setAttributePicker(
+                  selectedNode.linkId ? { linkId: selectedNode.linkId } : {},
+                )
+              }
+              onRemoveLink={() => {
+                if (!selectedNode.linkId) return;
+                update({
+                  ...model,
+                  links: model.links.filter(
+                    (link) => link.id !== selectedNode.linkId,
+                  ),
+                });
+              }}
+              onSearchChange={setEntitySearch}
+              onSelectEntity={(entityName) =>
+                selectedNode.linkId
+                  ? setLinkEntity(selectedNode.linkId, entityName)
+                  : setPrimaryEntity(entityName)
+              }
+              onUpdateLink={(patch) =>
+                selectedNode.linkId && updateLink(selectedNode.linkId, patch)
+              }
+            />
+          ) : null}
+          {selectedNode.type === "attributes" ? (
+            <AttributesInspector
+              attributes={selectedEntity.attributes}
+              selectedAttributes={
+                selectedNode.linkId
+                  ? (selectedLink?.attributes ?? [])
+                  : model.attributes
+              }
+              onOpenPicker={() =>
+                setAttributePicker(
+                  selectedNode.linkId ? { linkId: selectedNode.linkId } : {},
+                )
+              }
+              onToggle={(attributeName) =>
+                toggleAttribute(attributeName, selectedNode.linkId)
+              }
+            />
+          ) : null}
+          {selectedNode.type === "filters" ? (
+            <FilterInspector
+              attributes={selectedEntity.attributes}
+              conditions={
+                selectedNode.linkId
+                  ? (selectedLink?.conditions ?? [])
+                  : model.conditions
+              }
+              filterType={
+                selectedNode.linkId
+                  ? (selectedLink?.filterType ?? "and")
+                  : model.filterType
+              }
+              {...(selectedNode.linkId ? { linkId: selectedNode.linkId } : {})}
+              onAdd={() => addCondition(selectedNode.linkId)}
+              onFilterTypeChange={(filterType) =>
+                selectedNode.linkId
+                  ? updateLink(selectedNode.linkId, { filterType })
+                  : update({ ...model, filterType })
+              }
+              onRemove={removeCondition}
+              onUpdate={updateCondition}
+            />
+          ) : null}
+          {selectedNode.type === "orders" ? (
+            <OrderInspector
+              attributes={selectedEntity.attributes}
+              orders={
+                selectedNode.linkId
+                  ? (selectedLink?.orders ?? [])
+                  : model.orders
+              }
+              onAdd={() => addOrder(selectedNode.linkId)}
+              onRemove={(index) => {
+                if (selectedNode.linkId) {
+                  updateLink(selectedNode.linkId, {
+                    orders: (selectedLink?.orders ?? []).filter(
+                      (_, orderIndex) => orderIndex !== index,
+                    ),
+                  });
+                  return;
                 }
-              >
-                {entityOptions.map((item) => (
-                  <option key={item.logicalName} value={item.logicalName}>
-                    {item.logicalName}
-                  </option>
-                ))}
-              </select>
-              <input
-                value={link.from}
-                onChange={(event) =>
-                  updateLink(link.id, { from: event.target.value })
+                update({
+                  ...model,
+                  orders: model.orders.filter(
+                    (_, orderIndex) => orderIndex !== index,
+                  ),
+                });
+              }}
+              onUpdate={(index, patch) => {
+                if (selectedNode.linkId) {
+                  updateLink(selectedNode.linkId, {
+                    orders: (selectedLink?.orders ?? []).map(
+                      (order, orderIndex) =>
+                        orderIndex === index ? { ...order, ...patch } : order,
+                    ),
+                  });
+                  return;
                 }
-              />
-              <input
-                value={link.to}
-                onChange={(event) =>
-                  updateLink(link.id, { to: event.target.value })
-                }
-              />
-              <input
-                value={link.alias}
-                onChange={(event) =>
-                  updateLink(link.id, { alias: event.target.value })
-                }
-              />
+                update({
+                  ...model,
+                  orders: model.orders.map((order, orderIndex) =>
+                    orderIndex === index ? { ...order, ...patch } : order,
+                  ),
+                });
+              }}
+            />
+          ) : null}
+        </div>
+      </aside>
+
+      {attributePicker ? (
+        <AttributePickerDialog
+          attributes={
+            getBuilderEntity(
+              attributePicker.linkId
+                ? (model.links.find(
+                    (link) => link.id === attributePicker.linkId,
+                  )?.name ?? model.entity)
+                : model.entity,
+              entities,
+              attributesByEntity,
+            ).attributes
+          }
+          query={attributeSearch}
+          selectedAttributes={
+            attributePicker.linkId
+              ? (model.links.find((link) => link.id === attributePicker.linkId)
+                  ?.attributes ?? [])
+              : model.attributes
+          }
+          onClose={() => {
+            setAttributePicker(null);
+            setAttributeSearch("");
+          }}
+          onQueryChange={setAttributeSearch}
+          onToggle={(attributeName) =>
+            toggleAttribute(attributeName, attributePicker.linkId)
+          }
+        />
+      ) : null}
+    </section>
+  );
+}
+
+function EntityBranch({
+  entityName,
+  displayName,
+  alias,
+  linkType,
+  linkId,
+  attributes,
+  conditions,
+  filterType,
+  orders,
+  selectedNode,
+  onSelect,
+}: {
+  entityName: string;
+  displayName: string;
+  alias?: string;
+  linkType?: "inner" | "outer";
+  linkId?: string;
+  attributes: number;
+  conditions: number;
+  filterType: "and" | "or";
+  orders: number;
+  selectedNode: SelectedNode;
+  onSelect: (node: SelectedNode) => void;
+}) {
+  return (
+    <div className="entity-branch">
+      <TreeButton
+        active={
+          selectedNode.type === "entity" && selectedNode.linkId === linkId
+        }
+        icon={linkId ? <GitFork size={17} /> : <Boxes size={17} />}
+        label={displayName || entityName}
+        meta={[
+          entityName,
+          alias ? `alias ${alias}` : "",
+          linkType ? `${linkType} join` : "primary",
+        ]
+          .filter(Boolean)
+          .join(" · ")}
+        tone={linkId ? "link" : "entity"}
+        onClick={() => onSelect(makeSelectedNode("entity", linkId))}
+      />
+      <div className="tree-children slim">
+        <TreeButton
+          active={
+            selectedNode.type === "attributes" && selectedNode.linkId === linkId
+          }
+          icon={<ListChecks size={16} />}
+          label="Attributes"
+          meta={`${attributes} selected`}
+          tone="leaf"
+          onClick={() => onSelect(makeSelectedNode("attributes", linkId))}
+        />
+        <TreeButton
+          active={
+            selectedNode.type === "filters" && selectedNode.linkId === linkId
+          }
+          icon={<Filter size={16} />}
+          label="Filters"
+          meta={
+            conditions
+              ? `${filterType.toUpperCase()} · ${conditions} condition${conditions === 1 ? "" : "s"}`
+              : "No filters"
+          }
+          tone="leaf"
+          onClick={() => onSelect(makeSelectedNode("filters", linkId))}
+        />
+        <TreeButton
+          active={
+            selectedNode.type === "orders" && selectedNode.linkId === linkId
+          }
+          icon={orders ? <ArrowDownAZ size={16} /> : <ArrowUpAZ size={16} />}
+          label="Orders"
+          meta={
+            orders ? `${orders} sort${orders === 1 ? "" : "s"}` : "Unsorted"
+          }
+          tone="leaf"
+          onClick={() => onSelect(makeSelectedNode("orders", linkId))}
+        />
+      </div>
+    </div>
+  );
+}
+
+function TreeButton({
+  active,
+  icon,
+  label,
+  meta,
+  tone,
+  onClick,
+}: {
+  active: boolean;
+  icon: ReactNode;
+  label: string;
+  meta: string;
+  tone: "fetch" | "entity" | "link" | "leaf";
+  onClick: () => void;
+}) {
+  return (
+    <button
+      className={`tree-node ${tone}${active ? " active" : ""}`}
+      type="button"
+      onClick={onClick}
+    >
+      <span className="tree-node-icon">{icon}</span>
+      <span className="tree-node-copy">
+        <strong>{label}</strong>
+        <small>{meta}</small>
+      </span>
+    </button>
+  );
+}
+
+function InspectorHeader({
+  selectedNode,
+  link,
+  entity,
+}: {
+  selectedNode: SelectedNode;
+  link?: FetchLinkEntitySelection;
+  entity: BuilderEntity;
+}) {
+  const title =
+    selectedNode.type === "fetch"
+      ? "Fetch properties"
+      : selectedNode.type === "entity"
+        ? link
+          ? "Linked entity"
+          : "Primary entity"
+        : selectedNode.type === "attributes"
+          ? "Attributes"
+          : selectedNode.type === "filters"
+            ? "Filters"
+            : "Orders";
+  return (
+    <div className="panel-heading builder-heading">
+      <div>
+        <h2>{title}</h2>
+        <span>
+          {selectedNode.type === "fetch"
+            ? "Result set behavior"
+            : entity.logicalName}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function FetchInspector({
+  model,
+  onUpdate,
+}: {
+  model: FetchQueryModel;
+  onUpdate: (model: FetchQueryModel) => void;
+}) {
+  return (
+    <div className="inspector-stack">
+      <label>
+        <span>Top count</span>
+        <input
+          inputMode="numeric"
+          placeholder="All rows"
+          value={model.top}
+          onChange={(event) =>
+            onUpdate({ ...model, top: event.target.value.replace(/\D/g, "") })
+          }
+        />
+      </label>
+      <label className="switch-row">
+        <input
+          type="checkbox"
+          checked={model.distinct}
+          onChange={(event) =>
+            onUpdate({ ...model, distinct: event.target.checked })
+          }
+        />
+        <span>Distinct rows</span>
+      </label>
+    </div>
+  );
+}
+
+function EntityInspector({
+  entity,
+  entityOptions,
+  entitySearch,
+  isPrimary,
+  isLoadingAttributes,
+  link,
+  model,
+  onAddFilter,
+  onAddLink,
+  onAddOrder,
+  onOpenAttributes,
+  onRemoveLink,
+  onSearchChange,
+  onSelectEntity,
+  onUpdateLink,
+}: {
+  entity: BuilderEntity;
+  entityOptions: EntitySummary[];
+  entitySearch: string;
+  isPrimary: boolean;
+  isLoadingAttributes: boolean;
+  link?: FetchLinkEntitySelection;
+  model: FetchQueryModel;
+  onAddFilter: () => void;
+  onAddLink: () => void;
+  onAddOrder: () => void;
+  onOpenAttributes: () => void;
+  onRemoveLink: () => void;
+  onSearchChange: (value: string) => void;
+  onSelectEntity: (entityName: string) => void;
+  onUpdateLink: (patch: Partial<FetchLinkEntitySelection>) => void;
+}) {
+  const matches = filterEntities(entityOptions, entitySearch).slice(0, 18);
+  return (
+    <div className="inspector-stack">
+      <label>
+        <span>{isPrimary ? "Primary entity" : "Linked entity"}</span>
+        <div className="search-box inspector-search">
+          <Search size={15} />
+          <input
+            value={entitySearch}
+            placeholder="Search logical or display name"
+            onChange={(event) => onSearchChange(event.target.value)}
+          />
+        </div>
+      </label>
+      <div className="dynamic-results">
+        {matches.map((item) => (
+          <button
+            className={
+              item.logicalName === entity.logicalName
+                ? "entity-result active"
+                : "entity-result"
+            }
+            key={item.logicalName}
+            type="button"
+            onClick={() => onSelectEntity(item.logicalName)}
+          >
+            <strong>{item.displayName || item.logicalName}</strong>
+            <small>{item.logicalName}</small>
+          </button>
+        ))}
+      </div>
+
+      {!isPrimary && link ? (
+        <div className="form-grid compact-form">
+          <label>
+            <span>Alias</span>
+            <input
+              value={link.alias}
+              onChange={(event) => onUpdateLink({ alias: event.target.value })}
+            />
+          </label>
+          <label>
+            <span>Link type</span>
+            <select
+              value={link.linkType}
+              onChange={(event) =>
+                onUpdateLink({
+                  linkType: event.target.value as "inner" | "outer",
+                })
+              }
+            >
+              <option value="inner">Inner</option>
+              <option value="outer">Outer</option>
+            </select>
+          </label>
+          <label>
+            <span>From</span>
+            <input
+              value={link.from}
+              onChange={(event) => onUpdateLink({ from: event.target.value })}
+            />
+          </label>
+          <label>
+            <span>To</span>
+            <input
+              value={link.to}
+              onChange={(event) => onUpdateLink({ to: event.target.value })}
+            />
+          </label>
+        </div>
+      ) : null}
+
+      <div className="action-grid">
+        <button type="button" onClick={onOpenAttributes}>
+          <ListChecks size={16} />
+          <span>Attributes</span>
+        </button>
+        <button type="button" onClick={onAddFilter}>
+          <Filter size={16} />
+          <span>Create filter</span>
+        </button>
+        <button type="button" onClick={onAddOrder}>
+          <ArrowDownAZ size={16} />
+          <span>Set order</span>
+        </button>
+        <button type="button" onClick={onAddLink}>
+          <GitBranch size={16} />
+          <span>Link entity</span>
+        </button>
+      </div>
+
+      <div className="selection-summary">
+        <BadgeCheck size={16} />
+        <span>
+          {entity.attributes.length} attributes available
+          {isLoadingAttributes ? " · loading metadata" : ""}
+          {isPrimary ? ` · ${model.links.length} linked` : ""}
+        </span>
+      </div>
+
+      {!isPrimary ? (
+        <button className="danger-action" type="button" onClick={onRemoveLink}>
+          <Trash2 size={16} />
+          <span>Remove link</span>
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
+function AttributesInspector({
+  attributes,
+  selectedAttributes,
+  onOpenPicker,
+  onToggle,
+}: {
+  attributes: AttributeSummary[];
+  selectedAttributes: Array<{ name: string }>;
+  onOpenPicker: () => void;
+  onToggle: (attributeName: string) => void;
+}) {
+  return (
+    <div className="inspector-stack">
+      <button className="primary-action" type="button" onClick={onOpenPicker}>
+        <ListChecks size={16} />
+        <span>Select attributes</span>
+      </button>
+      <div className="selected-chip-list">
+        {selectedAttributes.map((attribute) => (
+          <button
+            key={attribute.name}
+            type="button"
+            onClick={() => onToggle(attribute.name)}
+          >
+            <span>{attribute.name}</span>
+            <X size={14} />
+          </button>
+        ))}
+        {selectedAttributes.length === 0 ? (
+          <p className="empty-state compact">No attributes selected.</p>
+        ) : null}
+      </div>
+      <small className="inspector-note">
+        {attributes.length} attributes in metadata for this entity.
+      </small>
+    </div>
+  );
+}
+
+function FilterInspector({
+  attributes,
+  conditions,
+  filterType,
+  linkId,
+  onAdd,
+  onFilterTypeChange,
+  onRemove,
+  onUpdate,
+}: {
+  attributes: AttributeSummary[];
+  conditions: FetchConditionSelection[];
+  filterType: "and" | "or";
+  linkId?: string;
+  onAdd: () => void;
+  onFilterTypeChange: (filterType: "and" | "or") => void;
+  onRemove: (conditionId: string, linkId?: string) => void;
+  onUpdate: (
+    conditionId: string,
+    patch: Partial<FetchConditionSelection>,
+    linkId?: string,
+  ) => void;
+}) {
+  return (
+    <div className="inspector-stack">
+      <div className="segmented filter-type-toggle">
+        <button
+          className={filterType === "and" ? "active" : ""}
+          type="button"
+          onClick={() => onFilterTypeChange("and")}
+        >
+          AND group
+        </button>
+        <button
+          className={filterType === "or" ? "active" : ""}
+          type="button"
+          onClick={() => onFilterTypeChange("or")}
+        >
+          OR group
+        </button>
+      </div>
+      <div className="filter-list">
+        {conditions.map((condition) => {
+          const attribute = attributes.find(
+            (item) => item.logicalName === condition.attribute,
+          );
+          const operators = attribute
+            ? (operatorsByType[attribute.type] ?? defaultOperators)
+            : defaultOperators;
+          const operatorNeedsValue = ![
+            "null",
+            "not-null",
+            "today",
+            "yesterday",
+          ].includes(condition.operator);
+          return (
+            <div className="filter-card" key={condition.id}>
+              <label>
+                <span>Attribute</span>
+                <select
+                  value={condition.attribute}
+                  onChange={(event) => {
+                    const nextAttribute = attributes.find(
+                      (item) => item.logicalName === event.target.value,
+                    );
+                    const nextOperator = nextAttribute
+                      ? (operatorsByType[nextAttribute.type]?.[0] ?? "eq")
+                      : "eq";
+                    onUpdate(
+                      condition.id,
+                      { attribute: event.target.value, operator: nextOperator },
+                      linkId,
+                    );
+                  }}
+                >
+                  {attributes.map((item) => (
+                    <option key={item.logicalName} value={item.logicalName}>
+                      {item.displayName || item.logicalName}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                <span>Operation</span>
+                <select
+                  value={condition.operator}
+                  onChange={(event) =>
+                    onUpdate(
+                      condition.id,
+                      { operator: event.target.value },
+                      linkId,
+                    )
+                  }
+                >
+                  {operators.map((operator) => (
+                    <option key={operator} value={operator}>
+                      {operator}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              {operatorNeedsValue ? (
+                <label>
+                  <span>Value</span>
+                  <input
+                    value={condition.value}
+                    onChange={(event) =>
+                      onUpdate(
+                        condition.id,
+                        { value: event.target.value },
+                        linkId,
+                      )
+                    }
+                  />
+                </label>
+              ) : null}
               <button
-                className="icon-button"
+                className="icon-button danger-action"
                 type="button"
-                title="Remove link"
-                onClick={() =>
-                  update({
-                    ...model,
-                    links: model.links.filter((item) => item.id !== link.id),
-                  })
-                }
+                title="Remove condition"
+                onClick={() => onRemove(condition.id, linkId)}
               >
                 <Trash2 size={15} />
               </button>
             </div>
-          ))}
-        </div>
+          );
+        })}
       </div>
-    </section>
+      <button type="button" onClick={onAdd}>
+        <Plus size={16} />
+        <span>Add condition</span>
+      </button>
+    </div>
+  );
+}
+
+function OrderInspector({
+  attributes,
+  orders,
+  onAdd,
+  onRemove,
+  onUpdate,
+}: {
+  attributes: AttributeSummary[];
+  orders: FetchOrderSelection[];
+  onAdd: () => void;
+  onRemove: (index: number) => void;
+  onUpdate: (index: number, patch: Partial<FetchOrderSelection>) => void;
+}) {
+  return (
+    <div className="inspector-stack">
+      {orders.map((order, index) => (
+        <div className="order-card" key={`${order.attribute}-${index}`}>
+          <select
+            value={order.attribute}
+            onChange={(event) =>
+              onUpdate(index, { attribute: event.target.value })
+            }
+          >
+            {attributes.map((attribute) => (
+              <option key={attribute.logicalName} value={attribute.logicalName}>
+                {attribute.displayName || attribute.logicalName}
+              </option>
+            ))}
+          </select>
+          <label className="switch-row">
+            <input
+              type="checkbox"
+              checked={order.descending}
+              onChange={(event) =>
+                onUpdate(index, { descending: event.target.checked })
+              }
+            />
+            <span>{order.descending ? "Descending" : "Ascending"}</span>
+          </label>
+          <button
+            className="icon-button danger-action"
+            type="button"
+            title="Remove order"
+            onClick={() => onRemove(index)}
+          >
+            <Trash2 size={15} />
+          </button>
+        </div>
+      ))}
+      {orders.length === 0 ? (
+        <p className="empty-state compact">No order selected.</p>
+      ) : null}
+      <button type="button" onClick={onAdd}>
+        <Plus size={16} />
+        <span>Add order</span>
+      </button>
+    </div>
+  );
+}
+
+function AttributePickerDialog({
+  attributes,
+  query,
+  selectedAttributes,
+  onClose,
+  onQueryChange,
+  onToggle,
+}: {
+  attributes: AttributeSummary[];
+  query: string;
+  selectedAttributes: Array<{ name: string }>;
+  onClose: () => void;
+  onQueryChange: (value: string) => void;
+  onToggle: (attributeName: string) => void;
+}) {
+  const selectedNames = new Set(
+    selectedAttributes.map((attribute) => attribute.name),
+  );
+  const visibleAttributes = filterAttributes(attributes, query).slice(0, 80);
+
+  return (
+    <div className="modal-backdrop" role="presentation">
+      <dialog className="attribute-dialog" aria-label="Select attributes" open>
+        <div className="panel-heading builder-heading">
+          <div>
+            <h2>Select attributes</h2>
+            <span>{selectedAttributes.length} selected</span>
+          </div>
+          <button
+            className="icon-button"
+            type="button"
+            title="Close"
+            onClick={onClose}
+          >
+            <X size={17} />
+          </button>
+        </div>
+        <div className="attribute-dialog-search">
+          <div className="search-box">
+            <Search size={15} />
+            <input
+              value={query}
+              placeholder="Search attributes"
+              onChange={(event) => onQueryChange(event.target.value)}
+            />
+          </div>
+        </div>
+        <div className="attribute-picker-list">
+          {visibleAttributes.map((attribute) => (
+            <label className="attribute-picker-row" key={attribute.logicalName}>
+              <input
+                type="checkbox"
+                checked={selectedNames.has(attribute.logicalName)}
+                onChange={() => onToggle(attribute.logicalName)}
+              />
+              <span>
+                <strong>
+                  {attribute.displayName || attribute.logicalName}
+                </strong>
+                <small>{attribute.logicalName}</small>
+              </span>
+              <em>{attribute.type}</em>
+            </label>
+          ))}
+          {visibleAttributes.length === 0 ? (
+            <p className="empty-state compact">No matching attributes.</p>
+          ) : null}
+        </div>
+      </dialog>
+    </div>
   );
 }
 
@@ -384,7 +1213,7 @@ function getBuilderEntity(
   logicalName: string,
   entities: EntitySummary[],
   attributesByEntity: Record<string, AttributeSummary[]>,
-) {
+): BuilderEntity {
   const liveEntity = entities.find(
     (entity) => entity.logicalName === logicalName,
   );
@@ -397,16 +1226,80 @@ function getBuilderEntity(
     };
   }
 
-  return getEntity(logicalName);
+  const mockEntity = getEntity(logicalName);
+  return {
+    logicalName: mockEntity.logicalName,
+    displayName: mockEntity.displayName,
+    entitySetName: mockEntity.entitySetName,
+    attributes: mockEntity.attributes,
+  };
 }
 
-function safeReadModel(fetchXml: string) {
+function filterEntities(entities: EntitySummary[], query: string) {
+  const normalizedQuery = query.trim().toLowerCase();
+  if (!normalizedQuery) return entities;
+  return entities.filter((entity) =>
+    [entity.logicalName, entity.displayName].some((value) =>
+      (value ?? "").toLowerCase().includes(normalizedQuery),
+    ),
+  );
+}
+
+function filterAttributes(attributes: AttributeSummary[], query: string) {
+  const normalizedQuery = query.trim().toLowerCase();
+  if (!normalizedQuery) return attributes;
+  return attributes.filter((attribute) =>
+    [attribute.logicalName, attribute.displayName, attribute.type].some(
+      (value) => (value ?? "").toLowerCase().includes(normalizedQuery),
+    ),
+  );
+}
+
+function makeCondition(attribute: string): FetchConditionSelection {
+  return {
+    id: crypto.randomUUID(),
+    attribute,
+    operator: "eq",
+    value: "",
+  };
+}
+
+function makeSelectedNode(
+  type: "entity" | "attributes" | "filters" | "orders",
+  linkId?: string,
+): SelectedNode {
+  return linkId ? { type, linkId } : { type };
+}
+
+function normalizeLink(
+  link: FetchLinkEntitySelection,
+): FetchLinkEntitySelection {
+  return {
+    ...link,
+    filterType: link.filterType ?? "and",
+    conditions: link.conditions ?? [],
+    orders: link.orders ?? [],
+  };
+}
+
+function normalizeModel(model: FetchQueryModel): FetchQueryModel {
+  return {
+    ...model,
+    distinct: model.distinct ?? false,
+    filterType: model.filterType ?? "and",
+    links: (model.links ?? []).map(normalizeLink),
+  };
+}
+
+function safeReadModel(fetchXml: string): FetchQueryModel {
   try {
     return readFetchQueryModel(fetchXml);
   } catch {
     return {
       entity: "account",
       top: "50",
+      distinct: false,
+      filterType: "and",
       attributes: [{ name: "name" }],
       conditions: [],
       orders: [],
