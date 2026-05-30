@@ -4,7 +4,6 @@ import type {
 } from "@fetchxmlbuilder/dataverse";
 import { Search } from "lucide-react";
 import { useMemo, useState } from "react";
-import { type MockEntity, mockEntities } from "../data/mockMetadata";
 
 interface MetadataBrowserProps {
   selectedEntity: string;
@@ -22,15 +21,12 @@ export function MetadataBrowser({
   onEntitySelected,
 }: MetadataBrowserProps) {
   const [query, setQuery] = useState("");
-  const entityOptions = entities.length > 0 ? entities : mockEntities;
   const activeEntity =
-    entityOptions.find((entity) => entity.logicalName === selectedEntity) ??
-    entityOptions[0];
-  const activeAttributes: AttributeSummary[] = isMockEntity(activeEntity)
-    ? activeEntity.attributes
-    : activeEntity
-      ? (attributesByEntity[activeEntity.logicalName] ?? [])
-      : [];
+    entities.find((entity) => entity.logicalName === selectedEntity) ??
+    entities[0];
+  const activeAttributes: AttributeSummary[] = activeEntity
+    ? (attributesByEntity[activeEntity.logicalName] ?? [])
+    : [];
   const attributes = useMemo(() => {
     const needle = query.trim().toLowerCase();
     if (!needle) return activeAttributes;
@@ -60,7 +56,12 @@ export function MetadataBrowser({
 
       <div className="metadata-layout">
         <div className="entity-list">
-          {entityOptions.map((entity) => (
+          {entities.length === 0 ? (
+            <p className="empty-state">
+              Connect to Dataverse to load metadata.
+            </p>
+          ) : null}
+          {entities.map((entity) => (
             <button
               className={
                 entity.logicalName === activeEntity?.logicalName
@@ -77,6 +78,9 @@ export function MetadataBrowser({
           ))}
         </div>
         <div className="attribute-list">
+          {!activeEntity ? (
+            <p className="empty-state">No entity selected.</p>
+          ) : null}
           {isLoadingAttributes ? (
             <p className="empty-state">Loading...</p>
           ) : null}
@@ -94,10 +98,4 @@ export function MetadataBrowser({
       </div>
     </section>
   );
-}
-
-function isMockEntity(
-  entity: EntitySummary | MockEntity | undefined,
-): entity is MockEntity {
-  return Boolean(entity && "relationships" in entity);
 }

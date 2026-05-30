@@ -27,7 +27,6 @@ import {
   X,
 } from "lucide-react";
 import { type ReactNode, useEffect, useMemo, useState } from "react";
-import { getEntity, mockEntities } from "../data/mockMetadata";
 
 interface QueryBuilderPanelProps {
   fetchXml: string;
@@ -117,11 +116,12 @@ export function QueryBuilderPanel({
     () => normalizeModel(safeReadModel(fetchXml)),
     [fetchXml],
   );
-  const entityOptions = entities.length > 0 ? entities : mockEntities;
+  const entityOptions = entities;
   const primaryEntity = getBuilderEntity(
     model.entity,
     entities,
     attributesByEntity,
+    model.attributes.map((attribute) => attribute.name),
   );
   const [selectedNode, setSelectedNode] = useState<SelectedNode>({
     type: "fetch",
@@ -141,6 +141,9 @@ export function QueryBuilderPanel({
     selectedEntityName,
     entities,
     attributesByEntity,
+    selectedLink
+      ? selectedLink.attributes.map((attribute) => attribute.name)
+      : model.attributes.map((attribute) => attribute.name),
   );
   const isLoadingAttributes =
     loadingAttributeEntity === selectedEntity.logicalName;
@@ -379,6 +382,7 @@ export function QueryBuilderPanel({
                 link.name,
                 entities,
                 attributesByEntity,
+                link.attributes.map((attribute) => attribute.name),
               );
               return (
                 <EntityBranch
@@ -551,6 +555,11 @@ export function QueryBuilderPanel({
                 : model.entity,
               entities,
               attributesByEntity,
+              attributePicker.linkId
+                ? (model.links
+                    .find((link) => link.id === attributePicker.linkId)
+                    ?.attributes.map((attribute) => attribute.name) ?? [])
+                : model.attributes.map((attribute) => attribute.name),
             ).attributes
           }
           query={attributeSearch}
@@ -1213,6 +1222,7 @@ function getBuilderEntity(
   logicalName: string,
   entities: EntitySummary[],
   attributesByEntity: Record<string, AttributeSummary[]>,
+  selectedAttributeNames: string[] = [],
 ): BuilderEntity {
   const liveEntity = entities.find(
     (entity) => entity.logicalName === logicalName,
@@ -1226,12 +1236,15 @@ function getBuilderEntity(
     };
   }
 
-  const mockEntity = getEntity(logicalName);
   return {
-    logicalName: mockEntity.logicalName,
-    displayName: mockEntity.displayName,
-    entitySetName: mockEntity.entitySetName,
-    attributes: mockEntity.attributes,
+    logicalName,
+    displayName: logicalName,
+    entitySetName: "",
+    attributes: selectedAttributeNames.map((attributeName) => ({
+      logicalName: attributeName,
+      displayName: attributeName,
+      type: "Unknown",
+    })),
   };
 }
 

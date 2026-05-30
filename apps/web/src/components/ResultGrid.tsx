@@ -1,30 +1,32 @@
-import { readFetchQueryModel } from "@fetchxmlbuilder/core";
 import { Copy, Download } from "lucide-react";
-import { useMemo } from "react";
-import { makeMockRows } from "../data/mockMetadata";
 
 interface ResultGridProps {
-  fetchXml: string;
+  canExecute: boolean;
+  isExecuting: boolean;
   rows: Record<string, unknown>[];
-  onRowsChange: (rows: Record<string, unknown>[]) => void;
+  onExecute: () => void;
 }
 
-export function ResultGrid({ fetchXml, rows, onRowsChange }: ResultGridProps) {
-  const model = useMemo(() => safeReadModel(fetchXml), [fetchXml]);
+export function ResultGrid({
+  canExecute,
+  isExecuting,
+  rows,
+  onExecute,
+}: ResultGridProps) {
   const columns = Object.keys(rows[0] ?? {});
-
-  function execute() {
-    const attributes = model.attributes.map((attribute) => attribute.name);
-    onRowsChange(makeMockRows(model.entity, attributes));
-  }
 
   return (
     <section className="panel side-panel results-panel" aria-label="Results">
       <div className="panel-heading">
         <h2>Results</h2>
         <div className="button-row">
-          <button type="button" title="Run" onClick={execute}>
-            Run
+          <button
+            type="button"
+            title="Run"
+            disabled={!canExecute || isExecuting}
+            onClick={onExecute}
+          >
+            {isExecuting ? "Running" : "Run"}
           </button>
           <button
             className="icon-button"
@@ -73,14 +75,6 @@ export function ResultGrid({ fetchXml, rows, onRowsChange }: ResultGridProps) {
       )}
     </section>
   );
-}
-
-function safeReadModel(fetchXml: string) {
-  try {
-    return readFetchQueryModel(fetchXml);
-  } catch {
-    return { entity: "account", attributes: [{ name: "name" }] };
-  }
 }
 
 function toCsv(rows: Record<string, unknown>[]) {

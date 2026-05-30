@@ -12,9 +12,19 @@ export default defineConfig({
       "@fetchxmlbuilder/dataverse": fileURLToPath(
         new URL("../../packages/dataverse/src/index.ts", import.meta.url),
       ),
+      "@fetchxmlbuilder/storage": fileURLToPath(
+        new URL("../../packages/storage/src/index.ts", import.meta.url),
+      ),
     },
   },
   server: {
+    host: "localhost",
     port: 5173,
+    strictPort: true,
+  },
+  preview: {
+    host: "localhost",
+    port: 5173,
+    strictPort: true,
   },
 });

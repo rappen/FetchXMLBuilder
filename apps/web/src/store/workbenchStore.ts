@@ -2,6 +2,14 @@ import type {
   AttributeSummary,
   EntitySummary,
 } from "@fetchxmlbuilder/dataverse";
+import {
+  type AppPreferences,
+  type DataverseConnectionProfile,
+  clearLegacyConnectionProfiles,
+  createWebStorageProvider,
+  defaultPreferences,
+  readLegacyConnectionProfiles,
+} from "@fetchxmlbuilder/storage";
 import { create } from "zustand";
 
 export type OutputTab =
@@ -20,28 +28,18 @@ export type ConnectionStatus =
   | "loadingMetadata"
   | "error";
 
-export interface DataverseCredential {
-  id: string;
-  name: string;
-  orgUrl: string;
-  clientId: string;
-  tenantId: string;
-  lastTestedAt?: string;
-  lastTestStatus?: "success" | "error";
-  lastTestMessage?: string;
-  updatedAt: string;
-}
-
 interface WorkbenchState {
   fetchXml: string;
   outputTab: OutputTab;
   activeModule: AppModule;
   activePane: WorkbenchPane;
+  sidebarCollapsed: boolean;
+  storageHydrated: boolean;
   orgUrl: string;
   clientId: string;
   tenantId: string;
-  credentials: DataverseCredential[];
-  activeCredentialId: string;
+  connectionProfiles: DataverseConnectionProfile[];
+  activeConnectionProfileId: string;
   resultRows: Record<string, unknown>[];
   connectionStatus: ConnectionStatus;
   connectionError: string;
@@ -53,22 +51,26 @@ interface WorkbenchState {
   setOutputTab: (outputTab: OutputTab) => void;
   setActiveModule: (activeModule: AppModule) => void;
   setActivePane: (activePane: WorkbenchPane) => void;
+  setSidebarCollapsed: (sidebarCollapsed: boolean) => void;
   setConnectionField: (
     field: "orgUrl" | "clientId" | "tenantId",
     value: string,
   ) => void;
-  upsertCredential: (
-    credential: Omit<DataverseCredential, "updatedAt"> & {
+  hydrateStoredState: () => Promise<void>;
+  savePreferencesPatch: (update: Partial<AppPreferences>) => Promise<void>;
+  loadCachedMetadata: (orgUrl: string, entityName?: string) => Promise<void>;
+  upsertConnectionProfile: (
+    profile: Omit<DataverseConnectionProfile, "updatedAt"> & {
       updatedAt?: string;
     },
   ) => void;
-  deleteCredential: (credentialId: string) => void;
-  setCredentialTestResult: (
-    credentialId: string,
+  deleteConnectionProfile: (profileId: string) => void;
+  setConnectionProfileTestResult: (
+    profileId: string,
     status: "success" | "error",
     message: string,
   ) => void;
-  useCredential: (credentialId: string) => void;
+  useConnectionProfile: (profileId: string) => void;
   setResultRows: (resultRows: Record<string, unknown>[]) => void;
   setConnectionStatus: (
     connectionStatus: ConnectionStatus,
@@ -101,16 +103,20 @@ export const sampleFetchXml = `<fetch top="50">
   </entity>
 </fetch>`;
 
-export const useWorkbenchStore = create<WorkbenchState>((set) => ({
+const storageProvider = createWebStorageProvider();
+
+export const useWorkbenchStore = create<WorkbenchState>((set, get) => ({
   fetchXml: sampleFetchXml,
-  outputTab: "powerAutomate",
-  activeModule: "workbench",
-  activePane: "editor",
-  orgUrl: "",
-  clientId: "",
-  tenantId: "common",
-  credentials: readStoredCredentials(),
-  activeCredentialId: "",
+  outputTab: defaultPreferences.outputTab,
+  activeModule: defaultPreferences.activeModule,
+  activePane: defaultPreferences.activePane,
+  sidebarCollapsed: defaultPreferences.sidebarCollapsed,
+  storageHydrated: false,
+  orgUrl: defaultPreferences.orgUrl,
+  clientId: defaultPreferences.clientId,
+  tenantId: defaultPreferences.tenantId,
+  connectionProfiles: [],
+  activeConnectionProfileId: defaultPreferences.activeConnectionProfileId,
   resultRows: [],
   connectionStatus: "local",
   connectionError: "",
@@ -119,84 +125,213 @@ export const useWorkbenchStore = create<WorkbenchState>((set) => ({
   metadataAttributesByEntity: {},
   loadingAttributeEntity: "",
   setFetchXml: (fetchXml) => set({ fetchXml }),
-  setOutputTab: (outputTab) => set({ outputTab }),
-  setActiveModule: (activeModule) => set({ activeModule }),
-  setActivePane: (activePane) => set({ activePane }),
-  setConnectionField: (field, value) => set({ [field]: value }),
-  upsertCredential: (credential) =>
-    set((state) => {
-      const savedCredential = {
-        ...credential,
-        updatedAt: credential.updatedAt ?? new Date().toISOString(),
-      };
-      const exists = state.credentials.some(
-        (existingCredential) => existingCredential.id === credential.id,
-      );
-      const credentials = exists
-        ? state.credentials.map((existingCredential) =>
-            existingCredential.id === credential.id
-              ? savedCredential
-              : existingCredential,
+  setOutputTab: (outputTab) => {
+    set({ outputTab });
+    void get().savePreferencesPatch({ outputTab });
+  },
+  setActiveModule: (activeModule) => {
+    set({ activeModule });
+    void get().savePreferencesPatch({ activeModule });
+  },
+  setActivePane: (activePane) => {
+    set({ activePane });
+    void get().savePreferencesPatch({ activePane });
+  },
+  setSidebarCollapsed: (sidebarCollapsed) => {
+    set({ sidebarCollapsed });
+    void get().savePreferencesPatch({ sidebarCollapsed });
+  },
+  setConnectionField: (field, value) => {
+    set({ [field]: value });
+    void get().savePreferencesPatch({ [field]: value });
+  },
+  hydrateStoredState: async () => {
+    try {
+      const preferences = await storageProvider.preferences.load();
+      const legacyProfiles = readLegacyConnectionProfiles();
+      const connectionProfiles = legacyProfiles.length
+        ? await storageProvider.connectionProfiles.migrateFromLegacyProfiles(
+            legacyProfiles,
           )
-        : [savedCredential, ...state.credentials];
-      writeStoredCredentials(credentials);
-      return { credentials, activeCredentialId: credential.id };
-    }),
-  deleteCredential: (credentialId) =>
-    set((state) => {
-      const credentials = state.credentials.filter(
-        (credential) => credential.id !== credentialId,
+        : await storageProvider.connectionProfiles.list();
+      if (legacyProfiles.length) clearLegacyConnectionProfiles();
+
+      const activeConnectionProfile = connectionProfiles.find(
+        (profile) => profile.id === preferences.activeConnectionProfileId,
       );
-      writeStoredCredentials(credentials);
+
+      set({
+        outputTab: preferences.outputTab,
+        activeModule: preferences.activeModule,
+        activePane: preferences.activePane,
+        sidebarCollapsed: preferences.sidebarCollapsed,
+        orgUrl: activeConnectionProfile?.orgUrl ?? preferences.orgUrl,
+        clientId: activeConnectionProfile?.clientId ?? preferences.clientId,
+        tenantId: activeConnectionProfile?.tenantId ?? preferences.tenantId,
+        connectionProfiles,
+        activeConnectionProfileId: activeConnectionProfile
+          ? activeConnectionProfile.id
+          : "",
+        storageHydrated: true,
+      });
+    } catch {
+      set({ storageHydrated: true });
+    }
+  },
+  savePreferencesPatch: async (update) => {
+    await ignoreStorageErrors(storageProvider.preferences.patch(update));
+  },
+  loadCachedMetadata: async (orgUrl, entityName) => {
+    try {
+      const [cachedEntities, cachedAttributes] = await Promise.all([
+        storageProvider.metadataCache.getEntities(orgUrl),
+        entityName
+          ? storageProvider.metadataCache.getAttributes(orgUrl, entityName)
+          : Promise.resolve(null),
+      ]);
+      set((state) => ({
+        ...(cachedEntities
+          ? { metadataEntities: cachedEntities.entities }
+          : {}),
+        ...(cachedAttributes
+          ? {
+              metadataAttributesByEntity: {
+                ...state.metadataAttributesByEntity,
+                [entityName ?? cachedAttributes.entityName]:
+                  cachedAttributes.attributes,
+              },
+            }
+          : {}),
+      }));
+    } catch {
+      return;
+    }
+  },
+  upsertConnectionProfile: (profile) =>
+    set((state) => {
+      const savedProfile = {
+        ...profile,
+        updatedAt: profile.updatedAt ?? new Date().toISOString(),
+      };
+      const exists = state.connectionProfiles.some(
+        (existingProfile) => existingProfile.id === profile.id,
+      );
+      const connectionProfiles = exists
+        ? state.connectionProfiles.map((existingProfile) =>
+            existingProfile.id === profile.id ? savedProfile : existingProfile,
+          )
+        : [savedProfile, ...state.connectionProfiles];
+      void ignoreStorageErrors(
+        storageProvider.connectionProfiles.upsert(savedProfile),
+      );
+      void get().savePreferencesPatch({
+        activeConnectionProfileId: profile.id,
+        orgUrl: savedProfile.orgUrl,
+        clientId: savedProfile.clientId,
+        tenantId: savedProfile.tenantId,
+      });
       return {
-        credentials,
-        activeCredentialId:
-          state.activeCredentialId === credentialId
-            ? ""
-            : state.activeCredentialId,
+        connectionProfiles,
+        activeConnectionProfileId: profile.id,
+        orgUrl: savedProfile.orgUrl,
+        clientId: savedProfile.clientId,
+        tenantId: savedProfile.tenantId,
       };
     }),
-  setCredentialTestResult: (credentialId, status, message) =>
+  deleteConnectionProfile: (profileId) =>
     set((state) => {
-      const credentials = state.credentials.map((credential) =>
-        credential.id === credentialId
+      const connectionProfiles = state.connectionProfiles.filter(
+        (profile) => profile.id !== profileId,
+      );
+      const activeConnectionProfileId =
+        state.activeConnectionProfileId === profileId
+          ? ""
+          : state.activeConnectionProfileId;
+      void ignoreStorageErrors(
+        storageProvider.connectionProfiles.delete(profileId),
+      );
+      void get().savePreferencesPatch({ activeConnectionProfileId });
+      return {
+        connectionProfiles,
+        activeConnectionProfileId,
+      };
+    }),
+  setConnectionProfileTestResult: (profileId, status, message) =>
+    set((state) => {
+      const connectionProfiles = state.connectionProfiles.map((profile) =>
+        profile.id === profileId
           ? {
-              ...credential,
+              ...profile,
               lastTestedAt: new Date().toISOString(),
               lastTestStatus: status,
               lastTestMessage: message,
               updatedAt: new Date().toISOString(),
             }
-          : credential,
+          : profile,
       );
-      writeStoredCredentials(credentials);
-      return { credentials };
+      const updatedProfile = connectionProfiles.find(
+        (profile) => profile.id === profileId,
+      );
+      if (updatedProfile) {
+        void ignoreStorageErrors(
+          storageProvider.connectionProfiles.upsert(updatedProfile),
+        );
+      }
+      return { connectionProfiles };
     }),
-  useCredential: (credentialId) =>
+  useConnectionProfile: (profileId) =>
     set((state) => {
-      const credential = state.credentials.find(
-        (savedCredential) => savedCredential.id === credentialId,
+      const profile = state.connectionProfiles.find(
+        (savedProfile) => savedProfile.id === profileId,
       );
-      if (!credential) return {};
+      if (!profile) return {};
+      void get().savePreferencesPatch({
+        activeConnectionProfileId: profile.id,
+        orgUrl: profile.orgUrl,
+        clientId: profile.clientId,
+        tenantId: profile.tenantId,
+      });
       return {
-        activeCredentialId: credential.id,
-        orgUrl: credential.orgUrl,
-        clientId: credential.clientId,
-        tenantId: credential.tenantId,
+        activeConnectionProfileId: profile.id,
+        orgUrl: profile.orgUrl,
+        clientId: profile.clientId,
+        tenantId: profile.tenantId,
       };
     }),
   setResultRows: (resultRows) => set({ resultRows }),
   setConnectionStatus: (connectionStatus, connectionError = "") =>
     set({ connectionStatus, connectionError }),
   setConnectedUser: (userName) => set({ userName }),
-  setMetadataEntities: (metadataEntities) => set({ metadataEntities }),
+  setMetadataEntities: (metadataEntities) =>
+    set((state) => {
+      if (state.orgUrl) {
+        void ignoreStorageErrors(
+          storageProvider.metadataCache.saveEntities(
+            state.orgUrl,
+            metadataEntities,
+          ),
+        );
+      }
+      return { metadataEntities };
+    }),
   setEntityAttributes: (entityName, attributes) =>
-    set((state) => ({
-      metadataAttributesByEntity: {
-        ...state.metadataAttributesByEntity,
-        [entityName]: attributes,
-      },
-    })),
+    set((state) => {
+      if (state.orgUrl) {
+        void ignoreStorageErrors(
+          storageProvider.metadataCache.saveAttributes(
+            state.orgUrl,
+            entityName,
+            attributes,
+          ),
+        );
+      }
+      return {
+        metadataAttributesByEntity: {
+          ...state.metadataAttributesByEntity,
+          [entityName]: attributes,
+        },
+      };
+    }),
   setLoadingAttributeEntity: (entityName) =>
     set({ loadingAttributeEntity: entityName }),
   clearLiveConnection: () =>
@@ -211,26 +346,10 @@ export const useWorkbenchStore = create<WorkbenchState>((set) => ({
     }),
 }));
 
-const credentialsStorageKey = "fetchxmlbuilder.dataverseCredentials.v1";
-
-function readStoredCredentials(): DataverseCredential[] {
-  if (typeof globalThis.localStorage === "undefined") return [];
+async function ignoreStorageErrors(operation: Promise<unknown>) {
   try {
-    const rawCredentials = globalThis.localStorage.getItem(
-      credentialsStorageKey,
-    );
-    if (!rawCredentials) return [];
-    const credentials = JSON.parse(rawCredentials) as DataverseCredential[];
-    return Array.isArray(credentials) ? credentials : [];
+    await operation;
   } catch {
-    return [];
+    return;
   }
-}
-
-function writeStoredCredentials(credentials: DataverseCredential[]) {
-  if (typeof globalThis.localStorage === "undefined") return;
-  globalThis.localStorage.setItem(
-    credentialsStorageKey,
-    JSON.stringify(credentials),
-  );
 }

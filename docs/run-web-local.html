@@ -81,7 +81,11 @@
       <section class="panel">
         <h2>Ejecutar en modo local</h2>
         <pre><code>npm run dev</code></pre>
-        <p>Abre <code>http://127.0.0.1:5173/</code> en el navegador.</p>
+        <p>Abre <code>http://localhost:5173/</code> en el navegador.</p>
+        <p>
+          Registra <code>http://localhost:5173</code> como Redirect URI en Entra. La app usa un
+          puerto fijo y no cambia a otro puerto si 5173 está ocupado.
+        </p>
       </section>
 
       <section class="panel">
@@ -96,7 +100,7 @@ npm run build</code></pre>
         <ul>
           <li>Editar, formatear, importar y exportar FetchXML.</li>
           <li>Construir una query desde la vista Builder.</li>
-          <li>Revisar metadata mock de entidades y columnas.</li>
+          <li>Revisar metadata de entidades y columnas.</li>
           <li>Convertir a Power Automate, OData, C# y JavaScript.</li>
           <li>Ejecutar contra datos mock y exportar resultados CSV/JSON.</li>
         </ul>

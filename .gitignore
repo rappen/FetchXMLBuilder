@@ -143,6 +143,9 @@ packages/core/dist/
 !packages/dataverse/
 !packages/dataverse/**
 packages/dataverse/dist/
+!packages/storage/
+!packages/storage/**
+packages/storage/dist/
 ## TODO: If the tool you use requires repositories.config
 ## uncomment the next line
 #!packages/repositories.config

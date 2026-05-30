@@ -8,7 +8,8 @@
     "noEmit": true,
     "paths": {
       "@fetchxmlbuilder/core": ["../../packages/core/src/index.ts"],
-      "@fetchxmlbuilder/dataverse": ["../../packages/dataverse/src/index.ts"]
+      "@fetchxmlbuilder/dataverse": ["../../packages/dataverse/src/index.ts"],
+      "@fetchxmlbuilder/storage": ["../../packages/storage/src/index.ts"]
     }
   },
   "include": ["src"]

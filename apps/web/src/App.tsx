@@ -9,6 +9,7 @@ import {
   type DataverseSession,
   createDataverseSession,
 } from "@fetchxmlbuilder/dataverse";
+import type { DataverseConnectionProfile } from "@fetchxmlbuilder/storage";
 import {
   AlertCircle,
   Blocks,
@@ -33,11 +34,9 @@ import { OutputPanel, getFormattedXml } from "./components/OutputPanel";
 import { QueryBuilderPanel } from "./components/QueryBuilderPanel";
 import { ResultGrid } from "./components/ResultGrid";
 import { XmlEditor } from "./components/XmlEditor";
-import { makeMockRows } from "./data/mockMetadata";
 import {
   type AppModule,
   type ConnectionStatus,
-  type DataverseCredential,
   type WorkbenchPane,
   sampleFetchXml,
   useWorkbenchStore,
@@ -49,7 +48,7 @@ const modules: Array<{
   icon: typeof Sparkles;
 }> = [
   { id: "workbench", label: "Workbench", icon: Sparkles },
-  { id: "credentials", label: "Credentials", icon: KeyRound },
+  { id: "credentials", label: "Connections", icon: KeyRound },
 ];
 
 const panes: Array<{
@@ -69,11 +68,12 @@ export function App() {
     outputTab,
     activeModule,
     activePane,
+    sidebarCollapsed,
     orgUrl,
     clientId,
     tenantId,
-    credentials,
-    activeCredentialId,
+    connectionProfiles,
+    activeConnectionProfileId,
     resultRows,
     connectionStatus,
     connectionError,
@@ -85,10 +85,13 @@ export function App() {
     setOutputTab,
     setActiveModule,
     setActivePane,
-    upsertCredential,
-    deleteCredential,
-    setCredentialTestResult,
-    useCredential,
+    setSidebarCollapsed,
+    hydrateStoredState,
+    loadCachedMetadata,
+    upsertConnectionProfile,
+    deleteConnectionProfile,
+    setConnectionProfileTestResult,
+    useConnectionProfile,
     setResultRows,
     setConnectionStatus,
     setConnectedUser,
@@ -100,11 +103,17 @@ export function App() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dataverseSessionRef = useRef<DataverseSession | null>(null);
   const [testingCredentialId, setTestingCredentialId] = useState("");
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [hasLiveSession, setHasLiveSession] = useState(false);
+  const [isExecutingQuery, setIsExecutingQuery] = useState(false);
+  const [queryError, setQueryError] = useState("");
   const selectedEntity = safeReadModel(fetchXml).entity;
-  const activeCredential = credentials.find(
-    (credential) => credential.id === activeCredentialId,
+  const activeConnectionProfile = connectionProfiles.find(
+    (profile) => profile.id === activeConnectionProfileId,
   );
+
+  useEffect(() => {
+    void hydrateStoredState();
+  }, [hydrateStoredState]);
 
   const loadEntityAttributes = useCallback(
     async (
@@ -148,12 +157,15 @@ export function App() {
   async function connectToDataverse() {
     try {
       setConnectionStatus("connecting");
+      await loadCachedMetadata(orgUrl, selectedEntity);
       const session = await createDataverseSession({
         organizationUrl: orgUrl,
         clientId: getDataverseClientId(clientId),
         tenantId,
       });
       dataverseSessionRef.current = session;
+      setHasLiveSession(true);
+      setQueryError("");
       setConnectedUser(session.account.username || session.account.name || "");
       setConnectionStatus("loadingMetadata");
 
@@ -170,37 +182,50 @@ export function App() {
       setActivePane("metadata");
     } catch (error) {
       dataverseSessionRef.current = null;
+      setHasLiveSession(false);
       setConnectionStatus("error", getErrorMessage(error));
     }
   }
 
-  async function testCredential(credential: DataverseCredential) {
-    setTestingCredentialId(credential.id);
-    upsertCredential(credential);
+  async function testCredential(profile: DataverseConnectionProfile) {
+    setTestingCredentialId(profile.id);
+    upsertConnectionProfile(profile);
     try {
       const session = await createDataverseSession(
-        getConnectionConfig(credential),
+        getConnectionConfig(profile),
       );
       const entities = await session.client.listEntities();
-      setCredentialTestResult(
-        credential.id,
+      setConnectionProfileTestResult(
+        profile.id,
         "success",
         `${entities.length} entities loaded`,
       );
     } catch (error) {
-      setCredentialTestResult(credential.id, "error", getErrorMessage(error));
+      setConnectionProfileTestResult(
+        profile.id,
+        "error",
+        getErrorMessage(error),
+      );
     } finally {
       setTestingCredentialId("");
     }
   }
 
-  function useSavedCredential(credentialId: string) {
-    useCredential(credentialId);
+  function useSavedCredential(profileId: string) {
+    const profile = connectionProfiles.find(
+      (connectionProfile) => connectionProfile.id === profileId,
+    );
+    useConnectionProfile(profileId);
+    if (profile) {
+      void loadCachedMetadata(profile.orgUrl, selectedEntity);
+    }
     setActiveModule("workbench");
   }
 
   function disconnectFromDataverse() {
     dataverseSessionRef.current = null;
+    setHasLiveSession(false);
+    setQueryError("");
     clearLiveConnection();
   }
 
@@ -223,32 +248,42 @@ export function App() {
 
   async function executeQuery() {
     const model = safeReadModel(fetchXml);
+    setQueryError("");
+    if (!dataverseSessionRef.current?.client) {
+      setConnectionStatus(
+        "error",
+        "Connect to Dataverse before executing FetchXML.",
+      );
+      return;
+    }
+
     const liveEntity = metadataEntities.find(
       (entity) => entity.logicalName === model.entity,
     );
     const entitySetName = liveEntity?.entitySetName;
 
-    if (dataverseSessionRef.current?.client && entitySetName) {
-      try {
-        const result = await dataverseSessionRef.current.client.executeFetchXml(
-          entitySetName,
-          fetchXml,
-        );
-        setResultRows(result.rows);
-        setActivePane("results");
-      } catch (error) {
-        setConnectionStatus("error", getErrorMessage(error));
-      }
+    if (!entitySetName) {
+      setQueryError(
+        `Entity "${model.entity}" was not found in loaded Dataverse metadata.`,
+      );
       return;
     }
 
-    setResultRows(
-      makeMockRows(
-        model.entity,
-        model.attributes.map((attribute) => attribute.name),
-      ),
-    );
-    setActivePane("results");
+    setIsExecutingQuery(true);
+    try {
+      const result = await dataverseSessionRef.current.client.executeFetchXml(
+        entitySetName,
+        fetchXml,
+      );
+      setResultRows(result.rows);
+      setConnectionStatus("connected");
+      setActivePane("results");
+    } catch (error) {
+      setQueryError(getErrorMessage(error));
+      setConnectionStatus("connected");
+    } finally {
+      setIsExecutingQuery(false);
+    }
   }
 
   return (
@@ -309,27 +344,26 @@ export function App() {
             type="button"
             className="primary-action"
             title="Execute"
+            disabled={!hasLiveSession || isExecutingQuery}
             onClick={executeQuery}
           >
             <Play size={17} />
-            <span>Execute</span>
+            <span>{isExecutingQuery ? "Running" : "Execute"}</span>
           </button>
         </div>
       </header>
 
       <div
-        className={
-          isSidebarCollapsed ? "app-body sidebar-collapsed" : "app-body"
-        }
+        className={sidebarCollapsed ? "app-body sidebar-collapsed" : "app-body"}
       >
         <aside className="app-sidebar" aria-label="Application modules">
           <button
             className="sidebar-toggle"
             type="button"
-            title={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+            title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
           >
-            {isSidebarCollapsed ? (
+            {sidebarCollapsed ? (
               <ChevronsRight size={18} />
             ) : (
               <ChevronsLeft size={18} />
@@ -358,8 +392,8 @@ export function App() {
         {activeModule === "workbench" ? (
           <div className="module-body">
             <ConnectionStrip
-              activeCredential={activeCredential}
-              error={connectionError}
+              activeConnectionProfile={activeConnectionProfile}
+              error={connectionError || queryError}
               orgUrl={orgUrl}
               status={connectionStatus}
               userName={userName}
@@ -423,9 +457,10 @@ export function App() {
                 ) : null}
                 {activePane === "results" ? (
                   <ResultGrid
-                    fetchXml={fetchXml}
+                    canExecute={hasLiveSession}
+                    isExecuting={isExecutingQuery}
                     rows={resultRows}
-                    onRowsChange={setResultRows}
+                    onExecute={executeQuery}
                   />
                 ) : null}
               </div>
@@ -438,11 +473,11 @@ export function App() {
           </div>
         ) : (
           <CredentialsManager
-            activeCredentialId={activeCredentialId}
-            credentials={credentials}
+            activeConnectionProfileId={activeConnectionProfileId}
+            connectionProfiles={connectionProfiles}
             testingCredentialId={testingCredentialId}
-            onDelete={deleteCredential}
-            onSave={upsertCredential}
+            onDelete={deleteConnectionProfile}
+            onSave={upsertConnectionProfile}
             onTest={(credential) => void testCredential(credential)}
             onUse={useSavedCredential}
           />
@@ -453,7 +488,7 @@ export function App() {
 }
 
 function ConnectionStrip({
-  activeCredential,
+  activeConnectionProfile,
   error,
   orgUrl,
   status,
@@ -462,7 +497,7 @@ function ConnectionStrip({
   onDisconnect,
   onManageCredentials,
 }: {
-  activeCredential: DataverseCredential | undefined;
+  activeConnectionProfile: DataverseConnectionProfile | undefined;
   error: string;
   orgUrl: string;
   status: ConnectionStatus;
@@ -477,10 +512,10 @@ function ConnectionStrip({
   const StatusIcon = status === "error" ? AlertCircle : CheckCircle2;
   const summary =
     userName ||
-    activeCredential?.name ||
-    activeCredential?.orgUrl ||
+    activeConnectionProfile?.name ||
+    activeConnectionProfile?.orgUrl ||
     orgUrl ||
-    "Local mock data";
+    "Not connected";
 
   return (
     <section
@@ -504,7 +539,7 @@ function ConnectionStrip({
       <div className="connection-strip-actions">
         <button type="button" onClick={onManageCredentials}>
           <KeyRound size={15} />
-          <span>Credentials</span>
+          <span>Connections</span>
         </button>
         {isConnected ? (
           <button type="button" onClick={onDisconnect}>
@@ -575,7 +610,7 @@ function getDataverseClientId(clientId: string) {
 }
 
 function getConnectionConfig(
-  credential: DataverseCredential,
+  credential: DataverseConnectionProfile,
 ): DataverseConnectionConfig {
   return {
     organizationUrl: credential.orgUrl,

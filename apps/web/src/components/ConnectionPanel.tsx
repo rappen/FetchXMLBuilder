@@ -73,7 +73,7 @@ export function ConnectionPanel({
         </div>
         <div className="connection-summary">
           <UserRound size={16} />
-          <span>{userName || normalizedUrl || "mock://dataverse"}</span>
+          <span>{userName || normalizedUrl || "Not connected"}</span>
         </div>
         <div className="connection-actions">
           <button
