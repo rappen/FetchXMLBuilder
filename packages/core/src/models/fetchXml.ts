@@ -70,6 +70,13 @@ export interface FetchOrderSelection {
   descending: boolean;
 }
 
+export interface FetchFilterGroup {
+  id: string;
+  type: "and" | "or";
+  conditions: FetchConditionSelection[];
+  filters: FetchFilterGroup[];
+}
+
 export interface FetchLinkEntitySelection {
   id: string;
   name: string;
@@ -80,6 +87,7 @@ export interface FetchLinkEntitySelection {
   attributes: FetchAttributeSelection[];
   filterType: "and" | "or";
   conditions: FetchConditionSelection[];
+  filters: FetchFilterGroup[];
   orders: FetchOrderSelection[];
   links: FetchLinkEntitySelection[];
 }
@@ -88,9 +96,15 @@ export interface FetchQueryModel {
   entity: string;
   top: string;
   distinct: boolean;
+  returnTotalRecordCount: boolean;
+  orderByRawValue: boolean;
+  count: string;
+  page: string;
+  pagingCookie: string;
   filterType: "and" | "or";
   attributes: FetchAttributeSelection[];
   conditions: FetchConditionSelection[];
+  filters: FetchFilterGroup[];
   orders: FetchOrderSelection[];
   links: FetchLinkEntitySelection[];
 }

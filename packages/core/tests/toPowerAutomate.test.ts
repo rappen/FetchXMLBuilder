@@ -87,6 +87,30 @@ describe("core offline workbench functions", () => {
     expect(writeFetchQueryModel(model)).toContain('<entity name="account">');
   });
 
+  it("round-trips fetch root properties in the visual builder query model", () => {
+    const model =
+      readFetchQueryModel(`<fetch top="25" distinct="true" returntotalrecordcount="true" useraworderby="true" count="10" page="2" paging-cookie="cookie-value">
+  <entity name="account" />
+</fetch>`);
+
+    expect(model).toMatchObject({
+      top: "25",
+      distinct: true,
+      returnTotalRecordCount: true,
+      orderByRawValue: true,
+      count: "10",
+      page: "2",
+      pagingCookie: "cookie-value",
+    });
+
+    const xml = writeFetchQueryModel(model);
+    expect(xml).toContain('returntotalrecordcount="true"');
+    expect(xml).toContain('useraworderby="true"');
+    expect(xml).toContain('count="10"');
+    expect(xml).toContain('page="2"');
+    expect(xml).toContain('paging-cookie="cookie-value"');
+  });
+
   it("preserves nested linked entities in the visual builder query model", () => {
     const model = readFetchQueryModel(`<fetch>
   <entity name="account">
@@ -104,6 +128,31 @@ describe("core offline workbench functions", () => {
     });
     expect(writeFetchQueryModel(model)).toContain(
       '<link-entity name="aaduser" from="systemuserid" to="ownerid"',
+    );
+  });
+
+  it("round-trips nested filter groups in the visual builder query model", () => {
+    const model = readFetchQueryModel(`<fetch>
+  <entity name="account">
+    <filter type="and">
+      <condition attribute="name" operator="like" value="%Contoso%" />
+      <filter type="or">
+        <condition attribute="statecode" operator="eq" value="0" />
+      </filter>
+    </filter>
+  </entity>
+</fetch>`);
+
+    expect(model.conditions).toHaveLength(1);
+    expect(model.filters[0]).toMatchObject({
+      type: "or",
+      conditions: [{ attribute: "statecode", operator: "eq", value: "0" }],
+    });
+
+    const xml = writeFetchQueryModel(model);
+    expect(xml).toContain('<filter type="or">');
+    expect(xml).toContain(
+      '<condition attribute="statecode" operator="eq" value="0" />',
     );
   });
 });

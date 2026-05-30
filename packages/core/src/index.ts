@@ -10,6 +10,7 @@ export type {
   XmlTextNode,
   FetchAttributeSelection,
   FetchConditionSelection,
+  FetchFilterGroup,
   FetchLinkEntitySelection,
   FetchOrderSelection,
   FetchQueryModel,

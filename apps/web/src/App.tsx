@@ -89,8 +89,10 @@ export function App() {
     userName,
     metadataEntities,
     metadataAttributesByEntity,
+    metadataRelationshipsByEntity,
     metadataUpdatedAt,
     loadingAttributeEntity,
+    loadingRelationshipEntity,
     setFetchXml,
     setOutputTab,
     setActiveModule,
@@ -107,7 +109,9 @@ export function App() {
     setConnectedUser,
     setMetadataEntities,
     setEntityAttributes,
+    setEntityRelationships,
     setLoadingAttributeEntity,
+    setLoadingRelationshipEntity,
     clearLiveConnection,
   } = useWorkbenchStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -163,10 +167,48 @@ export function App() {
     ],
   );
 
+  const loadEntityRelationships = useCallback(
+    async (
+      entityName: string,
+      client = dataverseSessionRef.current?.client,
+    ) => {
+      if (metadataRelationshipsByEntity[entityName]) {
+        return metadataRelationshipsByEntity[entityName];
+      }
+      if (orgUrl) await loadCachedMetadata(orgUrl, entityName);
+      if (!client) return [];
+      setLoadingRelationshipEntity(entityName);
+      try {
+        const relationships = await client.listRelationships(entityName);
+        setEntityRelationships(entityName, relationships);
+        return relationships;
+      } catch (error) {
+        setConnectionStatus("error", getErrorMessage(error));
+        return [];
+      } finally {
+        setLoadingRelationshipEntity("");
+      }
+    },
+    [
+      loadCachedMetadata,
+      metadataRelationshipsByEntity,
+      orgUrl,
+      setConnectionStatus,
+      setEntityRelationships,
+      setLoadingRelationshipEntity,
+    ],
+  );
+
   useEffect(() => {
     if (connectionStatus !== "connected") return;
     void loadEntityAttributes(selectedEntity);
-  }, [connectionStatus, loadEntityAttributes, selectedEntity]);
+    void loadEntityRelationships(selectedEntity);
+  }, [
+    connectionStatus,
+    loadEntityAttributes,
+    loadEntityRelationships,
+    selectedEntity,
+  ]);
 
   async function connectToDataverse() {
     try {
@@ -192,6 +234,7 @@ export function App() {
           ),
       );
       await loadEntityAttributes(selectedEntity, session.client);
+      await loadEntityRelationships(selectedEntity, session.client);
       setConnectionStatus("connected");
       setActivePane("metadata");
     } catch (error) {
@@ -254,6 +297,7 @@ export function App() {
           name: attribute.logicalName,
         })),
         conditions: [],
+        filters: [],
         orders: [],
         links: [],
       }),
@@ -325,6 +369,7 @@ export function App() {
           ),
       );
       await loadEntityAttributes(selectedEntity, client);
+      await loadEntityRelationships(selectedEntity, client);
       setConnectionStatus("connected");
     } catch (error) {
       setConnectionStatus("error", getErrorMessage(error));
@@ -510,9 +555,14 @@ export function App() {
                     entities={metadataEntities}
                     fetchXml={fetchXml}
                     loadingAttributeEntity={loadingAttributeEntity}
+                    loadingRelationshipEntity={loadingRelationshipEntity}
+                    relationshipsByEntity={metadataRelationshipsByEntity}
                     onChange={setFetchXml}
                     onEntitySelected={(entityName) =>
                       void loadEntityAttributes(entityName)
+                    }
+                    onRelationshipsNeeded={(entityName) =>
+                      void loadEntityRelationships(entityName)
                     }
                     onWarningsChange={setBuilderWarningCount}
                   />
@@ -814,9 +864,15 @@ function safeReadModel(fetchXml: string): FetchQueryModel {
       entity: "account",
       top: "50",
       distinct: false,
+      returnTotalRecordCount: false,
+      orderByRawValue: false,
+      count: "",
+      page: "",
+      pagingCookie: "",
       filterType: "and",
       attributes: [{ name: "name" }],
       conditions: [],
+      filters: [],
       orders: [],
       links: [],
     };

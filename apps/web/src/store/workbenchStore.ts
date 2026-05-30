@@ -1,6 +1,7 @@
 import type {
   AttributeSummary,
   EntitySummary,
+  RelationshipSummary,
 } from "@fetchxmlbuilder/dataverse";
 import {
   type AppPreferences,
@@ -46,9 +47,11 @@ interface WorkbenchState {
   userName: string;
   metadataEntities: EntitySummary[];
   metadataAttributesByEntity: Record<string, AttributeSummary[]>;
+  metadataRelationshipsByEntity: Record<string, RelationshipSummary[]>;
   metadataUpdatedAt: string;
   selectedEntityMetadataUpdatedAt: string;
   loadingAttributeEntity: string;
+  loadingRelationshipEntity: string;
   setFetchXml: (fetchXml: string) => void;
   setOutputTab: (outputTab: OutputTab) => void;
   setActiveModule: (activeModule: AppModule) => void;
@@ -84,7 +87,12 @@ interface WorkbenchState {
     entityName: string,
     attributes: AttributeSummary[],
   ) => void;
+  setEntityRelationships: (
+    entityName: string,
+    relationships: RelationshipSummary[],
+  ) => void;
   setLoadingAttributeEntity: (entityName: string) => void;
+  setLoadingRelationshipEntity: (entityName: string) => void;
   clearLiveConnection: () => void;
 }
 
@@ -125,9 +133,11 @@ export const useWorkbenchStore = create<WorkbenchState>((set, get) => ({
   userName: "",
   metadataEntities: [],
   metadataAttributesByEntity: {},
+  metadataRelationshipsByEntity: {},
   metadataUpdatedAt: "",
   selectedEntityMetadataUpdatedAt: "",
   loadingAttributeEntity: "",
+  loadingRelationshipEntity: "",
   setFetchXml: (fetchXml) => set({ fetchXml }),
   setOutputTab: (outputTab) => {
     set({ outputTab });
@@ -187,12 +197,16 @@ export const useWorkbenchStore = create<WorkbenchState>((set, get) => ({
   },
   loadCachedMetadata: async (orgUrl, entityName) => {
     try {
-      const [cachedEntities, cachedAttributes] = await Promise.all([
-        storageProvider.metadataCache.getEntities(orgUrl),
-        entityName
-          ? storageProvider.metadataCache.getAttributes(orgUrl, entityName)
-          : Promise.resolve(null),
-      ]);
+      const [cachedEntities, cachedAttributes, cachedRelationships] =
+        await Promise.all([
+          storageProvider.metadataCache.getEntities(orgUrl),
+          entityName
+            ? storageProvider.metadataCache.getAttributes(orgUrl, entityName)
+            : Promise.resolve(null),
+          entityName
+            ? storageProvider.metadataCache.getRelationships(orgUrl, entityName)
+            : Promise.resolve(null),
+        ]);
       set((state) => ({
         ...(cachedEntities
           ? {
@@ -207,6 +221,15 @@ export const useWorkbenchStore = create<WorkbenchState>((set, get) => ({
                 ...state.metadataAttributesByEntity,
                 [entityName ?? cachedAttributes.entityName]:
                   cachedAttributes.attributes,
+              },
+            }
+          : {}),
+        ...(cachedRelationships
+          ? {
+              metadataRelationshipsByEntity: {
+                ...state.metadataRelationshipsByEntity,
+                [entityName ?? cachedRelationships.entityName]:
+                  cachedRelationships.relationships,
               },
             }
           : {}),
@@ -343,8 +366,28 @@ export const useWorkbenchStore = create<WorkbenchState>((set, get) => ({
         },
       };
     }),
+  setEntityRelationships: (entityName, relationships) =>
+    set((state) => {
+      if (state.orgUrl) {
+        void ignoreStorageErrors(
+          storageProvider.metadataCache.saveRelationships(
+            state.orgUrl,
+            entityName,
+            relationships,
+          ),
+        );
+      }
+      return {
+        metadataRelationshipsByEntity: {
+          ...state.metadataRelationshipsByEntity,
+          [entityName]: relationships,
+        },
+      };
+    }),
   setLoadingAttributeEntity: (entityName) =>
     set({ loadingAttributeEntity: entityName }),
+  setLoadingRelationshipEntity: (entityName) =>
+    set({ loadingRelationshipEntity: entityName }),
   clearLiveConnection: () =>
     set({
       connectionStatus: "local",
@@ -352,9 +395,11 @@ export const useWorkbenchStore = create<WorkbenchState>((set, get) => ({
       userName: "",
       metadataEntities: [],
       metadataAttributesByEntity: {},
+      metadataRelationshipsByEntity: {},
       metadataUpdatedAt: "",
       selectedEntityMetadataUpdatedAt: "",
       loadingAttributeEntity: "",
+      loadingRelationshipEntity: "",
       resultRows: [],
     }),
 }));

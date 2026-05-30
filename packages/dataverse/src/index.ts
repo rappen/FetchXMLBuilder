@@ -25,6 +25,14 @@ export interface AttributeSummary {
   type: string;
 }
 
+export interface RelationshipSummary {
+  schemaName: string;
+  referencedEntity: string;
+  referencedAttribute: string;
+  referencingEntity: string;
+  referencingAttribute: string;
+}
+
 export interface FetchXmlExecutionResult {
   rows: Record<string, unknown>[];
   nextLink?: string;
@@ -33,6 +41,7 @@ export interface FetchXmlExecutionResult {
 export interface DataverseClient {
   listEntities(): Promise<EntitySummary[]>;
   listAttributes(entityLogicalName: string): Promise<AttributeSummary[]>;
+  listRelationships(entityLogicalName: string): Promise<RelationshipSummary[]>;
   executeFetchXml(
     entitySetName: string,
     fetchXml: string,
@@ -106,6 +115,26 @@ export function createDataverseClient(
           String(attribute.LogicalName ?? ""),
         type: String(attribute.AttributeType ?? "Unknown"),
       }));
+    },
+    async listRelationships(entityLogicalName) {
+      const escapedEntityName = entityLogicalName.replace(/'/g, "''");
+      const select =
+        "$select=SchemaName,ReferencedEntity,ReferencedAttribute,ReferencingEntity,ReferencingAttribute";
+      const result = await request<{
+        OneToManyRelationships?: Array<Record<string, unknown>>;
+        ManyToOneRelationships?: Array<Record<string, unknown>>;
+      }>(
+        `EntityDefinitions(LogicalName='${escapedEntityName}')?$select=LogicalName&$expand=OneToManyRelationships(${select}),ManyToOneRelationships(${select})`,
+      );
+      const relationships = [
+        ...(result.OneToManyRelationships ?? []),
+        ...(result.ManyToOneRelationships ?? []),
+      ]
+        .map(readRelationship)
+        .filter((relationship) => relationship.schemaName);
+      return dedupeRelationships(relationships).sort((left, right) =>
+        left.schemaName.localeCompare(right.schemaName),
+      );
     },
     async executeFetchXml(entitySetName, fetchXml) {
       const encoded = encodeURIComponent(fetchXml);
@@ -181,6 +210,32 @@ export async function acquireDataverseToken(
 
 export function getDataverseScopes(organizationUrl: string) {
   return [`${normalizeOrganizationUrl(organizationUrl)}/user_impersonation`];
+}
+
+function readRelationship(value: Record<string, unknown>): RelationshipSummary {
+  return {
+    schemaName: String(value.SchemaName ?? ""),
+    referencedEntity: String(value.ReferencedEntity ?? ""),
+    referencedAttribute: String(value.ReferencedAttribute ?? ""),
+    referencingEntity: String(value.ReferencingEntity ?? ""),
+    referencingAttribute: String(value.ReferencingAttribute ?? ""),
+  };
+}
+
+function dedupeRelationships(relationships: RelationshipSummary[]) {
+  const seen = new Set<string>();
+  return relationships.filter((relationship) => {
+    const key = [
+      relationship.schemaName,
+      relationship.referencedEntity,
+      relationship.referencedAttribute,
+      relationship.referencingEntity,
+      relationship.referencingAttribute,
+    ].join(":");
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 function readLabel(value: unknown) {

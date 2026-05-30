@@ -1,6 +1,7 @@
 import { formatFetchXml } from "../formatter/formatFetchXml";
 import type {
   FetchConditionSelection,
+  FetchFilterGroup,
   FetchLinkEntitySelection,
   FetchQueryModel,
   XmlElementNode,
@@ -11,9 +12,15 @@ export const emptyFetchQueryModel: FetchQueryModel = {
   entity: "account",
   top: "50",
   distinct: false,
+  returnTotalRecordCount: false,
+  orderByRawValue: false,
+  count: "",
+  page: "",
+  pagingCookie: "",
   filterType: "and",
   attributes: [{ name: "name" }],
   conditions: [],
+  filters: [],
   orders: [],
   links: [],
 };
@@ -42,6 +49,11 @@ export function readFetchQueryModel(xml: string): FetchQueryModel {
         .filter((condition) => condition.attributes.attribute)
         .map((condition, index) => conditionFromNode(condition, index))
     : [];
+  const filters = filter
+    ? directChildren(filter, "filter").map((childFilter, index) =>
+        filterFromNode(childFilter, `${index + 1}`),
+      )
+    : [];
 
   const links = directChildren(entity, "link-entity").map((node, index) =>
     linkFromNode(node, `${index + 1}`),
@@ -51,9 +63,16 @@ export function readFetchQueryModel(xml: string): FetchQueryModel {
     entity: entity.attributes.name ?? "account",
     top: document.root.attributes.top ?? "",
     distinct: document.root.attributes.distinct === "true",
+    returnTotalRecordCount:
+      document.root.attributes.returntotalrecordcount === "true",
+    orderByRawValue: document.root.attributes.useraworderby === "true",
+    count: document.root.attributes.count ?? "",
+    page: document.root.attributes.page ?? "",
+    pagingCookie: document.root.attributes["paging-cookie"] ?? "",
     filterType: filter?.attributes.type === "or" ? "or" : "and",
     attributes,
     conditions,
+    filters,
     orders,
     links,
   };
@@ -63,6 +82,13 @@ export function writeFetchQueryModel(model: FetchQueryModel): string {
   const fetchAttributes = [
     model.top ? `top="${escapeXml(model.top)}"` : "",
     model.distinct ? 'distinct="true"' : "",
+    model.returnTotalRecordCount ? 'returntotalrecordcount="true"' : "",
+    model.orderByRawValue ? 'useraworderby="true"' : "",
+    model.count ? `count="${escapeXml(model.count)}"` : "",
+    model.page ? `page="${escapeXml(model.page)}"` : "",
+    model.pagingCookie
+      ? `paging-cookie="${escapeXml(model.pagingCookie)}"`
+      : "",
   ].filter(Boolean);
   const lines = [
     `<fetch${fetchAttributes.length ? ` ${fetchAttributes.join(" ")}` : ""}>`,
@@ -83,18 +109,17 @@ export function writeFetchQueryModel(model: FetchQueryModel): string {
     }
   }
 
-  if (model.conditions.length > 0) {
-    lines.push(`    <filter type="${model.filterType ?? "and"}">`);
-    for (const condition of model.conditions) {
-      if (!condition.attribute || !condition.operator) continue;
-      const value = condition.value
-        ? ` value="${escapeXml(condition.value)}"`
-        : "";
-      lines.push(
-        `      <condition attribute="${escapeXml(condition.attribute)}" operator="${escapeXml(condition.operator)}"${value} />`,
-      );
-    }
-    lines.push("    </filter>");
+  if (model.conditions.length > 0 || model.filters.length > 0) {
+    writeFilterGroup(
+      lines,
+      {
+        id: "root-filter",
+        type: model.filterType ?? "and",
+        conditions: model.conditions,
+        filters: model.filters,
+      },
+      4,
+    );
   }
 
   for (const link of model.links) writeLinkEntity(lines, link, 4);
@@ -123,6 +148,24 @@ function conditionFromNode(
   };
 }
 
+function filterFromNode(node: XmlElementNode, path: string): FetchFilterGroup {
+  return {
+    id: `filter-${path}`,
+    type: node.attributes.type === "or" ? "or" : "and",
+    conditions: directChildren(node, "condition")
+      .filter((condition) => condition.attributes.attribute)
+      .map((condition, index) =>
+        conditionFromNode(
+          condition,
+          Number(`${path.replace(/\D/g, "")}${index + 1}`),
+        ),
+      ),
+    filters: directChildren(node, "filter").map((filter, index) =>
+      filterFromNode(filter, `${path}-${index + 1}`),
+    ),
+  };
+}
+
 function linkFromNode(
   node: XmlElementNode,
   path: string,
@@ -147,16 +190,30 @@ function linkFromNode(
       directChildren(node, "filter").at(0)?.attributes.type === "or"
         ? "or"
         : "and",
-    conditions: directChildren(node, "filter").flatMap((filter, filterIndex) =>
-      directChildren(filter, "condition")
-        .filter((condition) => condition.attributes.attribute)
-        .map((condition, conditionIndex) =>
-          conditionFromNode(
-            condition,
-            Number(`${path.replace(/\D/g, "")}${filterIndex}${conditionIndex}`),
+    conditions: directChildren(node, "filter")
+      .slice(0, 1)
+      .flatMap((filter, filterIndex) =>
+        directChildren(filter, "condition")
+          .filter((condition) => condition.attributes.attribute)
+          .map((condition, conditionIndex) =>
+            conditionFromNode(
+              condition,
+              Number(
+                `${path.replace(/\D/g, "")}${filterIndex}${conditionIndex}`,
+              ),
+            ),
           ),
-        ),
-    ),
+      ),
+    filters:
+      directChildren(node, "filter")
+        .at(0)
+        ?.children.filter(
+          (child): child is XmlElementNode =>
+            child.type === "element" && child.name === "filter",
+        )
+        .map((filter, index) =>
+          filterFromNode(filter, `${path}-${index + 1}`),
+        ) ?? [],
     links: directChildren(node, "link-entity").map((child, index) =>
       linkFromNode(child, `${path}-${index + 1}`),
     ),
@@ -172,7 +229,6 @@ function writeLinkEntity(
 
   const indent = " ".repeat(indentSize);
   const childIndent = " ".repeat(indentSize + 2);
-  const grandchildIndent = " ".repeat(indentSize + 4);
 
   lines.push(
     `${indent}<link-entity name="${escapeXml(link.name)}" from="${escapeXml(link.from)}" to="${escapeXml(link.to)}" link-type="${link.linkType}"${link.alias ? ` alias="${escapeXml(link.alias)}"` : ""}>`,
@@ -191,23 +247,46 @@ function writeLinkEntity(
       );
     }
   }
-  if ((link.conditions ?? []).length > 0) {
-    lines.push(`${childIndent}<filter type="${link.filterType ?? "and"}">`);
-    for (const condition of link.conditions ?? []) {
-      if (!condition.attribute || !condition.operator) continue;
-      const value = condition.value
-        ? ` value="${escapeXml(condition.value)}"`
-        : "";
-      lines.push(
-        `${grandchildIndent}<condition attribute="${escapeXml(condition.attribute)}" operator="${escapeXml(condition.operator)}"${value} />`,
-      );
-    }
-    lines.push(`${childIndent}</filter>`);
+  if ((link.conditions ?? []).length > 0 || (link.filters ?? []).length > 0) {
+    writeFilterGroup(
+      lines,
+      {
+        id: `${link.id}-filter`,
+        type: link.filterType ?? "and",
+        conditions: link.conditions ?? [],
+        filters: link.filters ?? [],
+      },
+      indentSize + 2,
+    );
   }
   for (const childLink of link.links ?? []) {
     writeLinkEntity(lines, childLink, indentSize + 2);
   }
   lines.push(`${indent}</link-entity>`);
+}
+
+function writeFilterGroup(
+  lines: string[],
+  filter: Pick<FetchFilterGroup, "type" | "conditions" | "filters" | "id">,
+  indentSize: number,
+) {
+  const indent = " ".repeat(indentSize);
+  const childIndent = " ".repeat(indentSize + 2);
+
+  lines.push(`${indent}<filter type="${filter.type ?? "and"}">`);
+  for (const condition of filter.conditions ?? []) {
+    if (!condition.attribute || !condition.operator) continue;
+    const value = condition.value
+      ? ` value="${escapeXml(condition.value)}"`
+      : "";
+    lines.push(
+      `${childIndent}<condition attribute="${escapeXml(condition.attribute)}" operator="${escapeXml(condition.operator)}"${value} />`,
+    );
+  }
+  for (const childFilter of filter.filters ?? []) {
+    writeFilterGroup(lines, childFilter, indentSize + 2);
+  }
+  lines.push(`${indent}</filter>`);
 }
 
 function readFirstValue(node: XmlElementNode) {

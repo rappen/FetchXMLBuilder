@@ -1,6 +1,7 @@
 import type {
   AttributeSummary,
   EntitySummary,
+  RelationshipSummary,
 } from "@fetchxmlbuilder/dataverse";
 
 export type StoredAppModule = "workbench" | "credentials";
@@ -49,6 +50,13 @@ export interface CachedAttributes {
   updatedAt: string;
 }
 
+export interface CachedRelationships {
+  orgUrl: string;
+  entityName: string;
+  relationships: RelationshipSummary[];
+  updatedAt: string;
+}
+
 export interface SchemaCacheEntry {
   cacheKey: string;
   orgUrl: string;
@@ -92,6 +100,15 @@ export interface MetadataCacheStore {
     entityName: string,
     attributes: AttributeSummary[],
   ): Promise<void>;
+  getRelationships(
+    orgUrl: string,
+    entityName: string,
+  ): Promise<CachedRelationships | null>;
+  saveRelationships(
+    orgUrl: string,
+    entityName: string,
+    relationships: RelationshipSummary[],
+  ): Promise<void>;
   getSchema(cacheKey: string): Promise<SchemaCacheEntry | null>;
   saveSchema(entry: SchemaCacheEntry): Promise<void>;
   getCompletionIndex(cacheKey: string): Promise<CompletionIndexEntry | null>;
@@ -118,11 +135,12 @@ export const defaultPreferences: AppPreferences = {
 };
 
 const databaseName = "fetchxmlbuilder";
-const databaseVersion = 1;
+const databaseVersion = 2;
 const preferencesStoreName = "preferences";
 const connectionProfilesStoreName = "connectionProfiles";
 const metadataEntitiesStoreName = "metadataEntities";
 const metadataAttributesStoreName = "metadataAttributes";
+const metadataRelationshipsStoreName = "metadataRelationships";
 const schemaCacheStoreName = "schemaCache";
 const completionIndexesStoreName = "completionIndexes";
 const preferencesId = "app";
@@ -134,6 +152,7 @@ type StoreName =
   | typeof connectionProfilesStoreName
   | typeof metadataEntitiesStoreName
   | typeof metadataAttributesStoreName
+  | typeof metadataRelationshipsStoreName
   | typeof schemaCacheStoreName
   | typeof completionIndexesStoreName;
 
@@ -278,6 +297,13 @@ export function getMetadataAttributesCacheKey(
   return `${normalizeCacheOrgUrl(orgUrl)}::${entityName.toLowerCase()}`;
 }
 
+export function getMetadataRelationshipsCacheKey(
+  orgUrl: string,
+  entityName: string,
+) {
+  return `${normalizeCacheOrgUrl(orgUrl)}::${entityName.toLowerCase()}`;
+}
+
 class IndexedDbPreferencesStore implements PreferencesStore {
   async load() {
     const record = await getValue<{ id: string; value: unknown }>(
@@ -382,6 +408,29 @@ class IndexedDbMetadataCacheStore implements MetadataCacheStore {
     });
   }
 
+  async getRelationships(orgUrl: string, entityName: string) {
+    return (
+      (await getValue<CachedRelationships>(
+        metadataRelationshipsStoreName,
+        getMetadataRelationshipsCacheKey(orgUrl, entityName),
+      )) ?? null
+    );
+  }
+
+  async saveRelationships(
+    orgUrl: string,
+    entityName: string,
+    relationships: RelationshipSummary[],
+  ) {
+    await putValue(metadataRelationshipsStoreName, {
+      cacheKey: getMetadataRelationshipsCacheKey(orgUrl, entityName),
+      orgUrl: normalizeCacheOrgUrl(orgUrl),
+      entityName,
+      relationships,
+      updatedAt: new Date().toISOString(),
+    });
+  }
+
   async getSchema(cacheKey: string) {
     return (
       (await getValue<SchemaCacheEntry>(schemaCacheStoreName, cacheKey)) ?? null
@@ -419,6 +468,11 @@ class IndexedDbMetadataCacheStore implements MetadataCacheStore {
       "orgUrl",
       normalizedOrgUrl,
     );
+    await deleteByIndex(
+      metadataRelationshipsStoreName,
+      "orgUrl",
+      normalizedOrgUrl,
+    );
     await deleteByIndex(schemaCacheStoreName, "orgUrl", normalizedOrgUrl);
     await deleteByIndex(completionIndexesStoreName, "orgUrl", normalizedOrgUrl);
   }
@@ -446,6 +500,17 @@ async function openDatabase() {
         if (!database.objectStoreNames.contains(metadataAttributesStoreName)) {
           const store = database.createObjectStore(
             metadataAttributesStoreName,
+            {
+              keyPath: "cacheKey",
+            },
+          );
+          store.createIndex("orgUrl", "orgUrl", { unique: false });
+        }
+        if (
+          !database.objectStoreNames.contains(metadataRelationshipsStoreName)
+        ) {
+          const store = database.createObjectStore(
+            metadataRelationshipsStoreName,
             {
               keyPath: "cacheKey",
             },
