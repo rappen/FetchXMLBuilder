@@ -81,6 +81,7 @@ export interface FetchLinkEntitySelection {
   filterType: "and" | "or";
   conditions: FetchConditionSelection[];
   orders: FetchOrderSelection[];
+  links: FetchLinkEntitySelection[];
 }
 
 export interface FetchQueryModel {

@@ -86,4 +86,24 @@ describe("core offline workbench functions", () => {
 
     expect(writeFetchQueryModel(model)).toContain('<entity name="account">');
   });
+
+  it("preserves nested linked entities in the visual builder query model", () => {
+    const model = readFetchQueryModel(`<fetch>
+  <entity name="account">
+    <link-entity name="contact" from="parentcustomerid" to="accountid" link-type="outer" alias="primarycontact">
+      <link-entity name="aaduser" from="systemuserid" to="ownerid" link-type="inner" alias="owner" />
+    </link-entity>
+  </entity>
+</fetch>`);
+
+    expect(model.links[0]?.links[0]).toMatchObject({
+      name: "aaduser",
+      from: "systemuserid",
+      to: "ownerid",
+      alias: "owner",
+    });
+    expect(writeFetchQueryModel(model)).toContain(
+      '<link-entity name="aaduser" from="systemuserid" to="ownerid"',
+    );
+  });
 });

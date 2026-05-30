@@ -108,7 +108,7 @@ export interface WebStorageProvider {
 export const defaultPreferences: AppPreferences = {
   schemaVersion: 1,
   activeModule: "workbench",
-  activePane: "editor",
+  activePane: "builder",
   outputTab: "powerAutomate",
   activeConnectionProfileId: "",
   sidebarCollapsed: false,

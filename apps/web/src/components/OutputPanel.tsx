@@ -24,7 +24,11 @@ interface OutputPanelProps {
   setOutputTab: (tab: OutputTab) => void;
 }
 
-const tabs: Array<{ id: OutputTab; label: string; icon: typeof Wand2 }> = [
+export const outputTabs: Array<{
+  id: OutputTab;
+  label: string;
+  icon: typeof Wand2;
+}> = [
   { id: "powerAutomate", label: "Power Automate", icon: Wand2 },
   { id: "odata", label: "OData", icon: Link },
   { id: "csharp", label: "C#", icon: Code2 },
@@ -43,7 +47,7 @@ export function OutputPanel({
     <section className="panel output-panel" aria-label="Converter output">
       <div className="panel-toolbar">
         <div className="segmented" role="tablist" aria-label="Outputs">
-          {tabs.map((tab) => {
+          {outputTabs.map((tab) => {
             const Icon = tab.icon;
             return (
               <button
@@ -106,7 +110,7 @@ export function OutputPanel({
   );
 }
 
-function getOutput(fetchXml: string, tab: OutputTab) {
+export function getOutput(fetchXml: string, tab: OutputTab) {
   try {
     if (tab === "powerAutomate") {
       const converted = toPowerAutomateParameters(fetchXml);

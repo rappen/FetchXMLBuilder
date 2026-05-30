@@ -44,7 +44,7 @@ export function readFetchQueryModel(xml: string): FetchQueryModel {
     : [];
 
   const links = directChildren(entity, "link-entity").map((node, index) =>
-    linkFromNode(node, index),
+    linkFromNode(node, `${index + 1}`),
   );
 
   return {
@@ -97,38 +97,7 @@ export function writeFetchQueryModel(model: FetchQueryModel): string {
     lines.push("    </filter>");
   }
 
-  for (const link of model.links) {
-    if (!link.name || !link.from || !link.to) continue;
-    lines.push(
-      `    <link-entity name="${escapeXml(link.name)}" from="${escapeXml(link.from)}" to="${escapeXml(link.to)}" link-type="${link.linkType}"${link.alias ? ` alias="${escapeXml(link.alias)}"` : ""}>`,
-    );
-    for (const attribute of link.attributes) {
-      if (attribute.name) {
-        lines.push(`      <attribute name="${escapeXml(attribute.name)}" />`);
-      }
-    }
-    for (const order of link.orders ?? []) {
-      if (order.attribute) {
-        lines.push(
-          `      <order attribute="${escapeXml(order.attribute)}"${order.descending ? ' descending="true"' : ""} />`,
-        );
-      }
-    }
-    if ((link.conditions ?? []).length > 0) {
-      lines.push(`      <filter type="${link.filterType ?? "and"}">`);
-      for (const condition of link.conditions ?? []) {
-        if (!condition.attribute || !condition.operator) continue;
-        const value = condition.value
-          ? ` value="${escapeXml(condition.value)}"`
-          : "";
-        lines.push(
-          `        <condition attribute="${escapeXml(condition.attribute)}" operator="${escapeXml(condition.operator)}"${value} />`,
-        );
-      }
-      lines.push("      </filter>");
-    }
-    lines.push("    </link-entity>");
-  }
+  for (const link of model.links) writeLinkEntity(lines, link, 4);
 
   lines.push("  </entity>");
   lines.push("</fetch>");
@@ -156,10 +125,10 @@ function conditionFromNode(
 
 function linkFromNode(
   node: XmlElementNode,
-  index: number,
+  path: string,
 ): FetchLinkEntitySelection {
   return {
-    id: `link-${index + 1}`,
+    id: `link-${path}`,
     name: node.attributes.name ?? "",
     from: node.attributes.from ?? "",
     to: node.attributes.to ?? "",
@@ -182,10 +151,63 @@ function linkFromNode(
       directChildren(filter, "condition")
         .filter((condition) => condition.attributes.attribute)
         .map((condition, conditionIndex) =>
-          conditionFromNode(condition, filterIndex * 100 + conditionIndex),
+          conditionFromNode(
+            condition,
+            Number(`${path.replace(/\D/g, "")}${filterIndex}${conditionIndex}`),
+          ),
         ),
     ),
+    links: directChildren(node, "link-entity").map((child, index) =>
+      linkFromNode(child, `${path}-${index + 1}`),
+    ),
   };
+}
+
+function writeLinkEntity(
+  lines: string[],
+  link: FetchLinkEntitySelection,
+  indentSize: number,
+) {
+  if (!link.name || !link.from || !link.to) return;
+
+  const indent = " ".repeat(indentSize);
+  const childIndent = " ".repeat(indentSize + 2);
+  const grandchildIndent = " ".repeat(indentSize + 4);
+
+  lines.push(
+    `${indent}<link-entity name="${escapeXml(link.name)}" from="${escapeXml(link.from)}" to="${escapeXml(link.to)}" link-type="${link.linkType}"${link.alias ? ` alias="${escapeXml(link.alias)}"` : ""}>`,
+  );
+  for (const attribute of link.attributes) {
+    if (attribute.name) {
+      lines.push(
+        `${childIndent}<attribute name="${escapeXml(attribute.name)}" />`,
+      );
+    }
+  }
+  for (const order of link.orders ?? []) {
+    if (order.attribute) {
+      lines.push(
+        `${childIndent}<order attribute="${escapeXml(order.attribute)}"${order.descending ? ' descending="true"' : ""} />`,
+      );
+    }
+  }
+  if ((link.conditions ?? []).length > 0) {
+    lines.push(`${childIndent}<filter type="${link.filterType ?? "and"}">`);
+    for (const condition of link.conditions ?? []) {
+      if (!condition.attribute || !condition.operator) continue;
+      const value = condition.value
+        ? ` value="${escapeXml(condition.value)}"`
+        : "";
+      lines.push(
+        `${grandchildIndent}<condition attribute="${escapeXml(condition.attribute)}" operator="${escapeXml(condition.operator)}"${value} />`,
+      );
+    }
+    lines.push(`${childIndent}</filter>`);
+  }
+  for (const childLink of link.links ?? []) {
+    writeLinkEntity(lines, childLink, indentSize + 2);
+  }
+  lines.push(`${indent}</link-entity>`);
 }
 
 function readFirstValue(node: XmlElementNode) {

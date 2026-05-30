@@ -16,56 +16,65 @@ import {
   CheckCircle2,
   ChevronsLeft,
   ChevronsRight,
+  Copy,
   Database,
   Download,
+  FileJson2,
   FileUp,
   KeyRound,
   LogOut,
   Play,
   PlugZap,
+  RefreshCw,
   RotateCcw,
   Sparkles,
-  UserRound,
+  Wand2,
+  X,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CredentialsManager } from "./components/CredentialsManager";
 import { MetadataBrowser } from "./components/MetadataBrowser";
-import { OutputPanel, getFormattedXml } from "./components/OutputPanel";
+import {
+  getFormattedXml,
+  getOutput,
+  outputTabs,
+} from "./components/OutputPanel";
 import { QueryBuilderPanel } from "./components/QueryBuilderPanel";
 import { ResultGrid } from "./components/ResultGrid";
 import { XmlEditor } from "./components/XmlEditor";
 import {
   type AppModule,
   type ConnectionStatus,
+  type OutputTab,
   type WorkbenchPane,
   sampleFetchXml,
   useWorkbenchStore,
 } from "./store/workbenchStore";
 
-const modules: Array<{
-  id: AppModule;
-  label: string;
-  icon: typeof Sparkles;
-}> = [
-  { id: "workbench", label: "Workbench", icon: Sparkles },
-  { id: "credentials", label: "Connections", icon: KeyRound },
-];
-
-const panes: Array<{
-  id: WorkbenchPane;
-  label: string;
-  icon: typeof Sparkles;
-}> = [
-  { id: "editor", label: "Editor", icon: Sparkles },
-  { id: "builder", label: "Builder", icon: Blocks },
-  { id: "metadata", label: "Metadata", icon: Database },
-  { id: "results", label: "Results", icon: Play },
+const sidebarItems: Array<
+  | {
+      type: "pane";
+      id: WorkbenchPane;
+      label: string;
+      icon: typeof Sparkles;
+    }
+  | {
+      type: "module";
+      id: AppModule;
+      label: string;
+      icon: typeof Sparkles;
+    }
+> = [
+  { type: "pane", id: "builder", label: "Builder", icon: Blocks },
+  { type: "pane", id: "editor", label: "Editor", icon: Sparkles },
+  { type: "pane", id: "metadata", label: "Metadata", icon: Database },
+  { type: "pane", id: "results", label: "Results", icon: Play },
+  { type: "module", id: "credentials", label: "Connections", icon: KeyRound },
 ];
 
 export function App() {
   const {
     fetchXml,
-    outputTab,
     activeModule,
     activePane,
     sidebarCollapsed,
@@ -80,6 +89,7 @@ export function App() {
     userName,
     metadataEntities,
     metadataAttributesByEntity,
+    metadataUpdatedAt,
     loadingAttributeEntity,
     setFetchXml,
     setOutputTab,
@@ -106,6 +116,10 @@ export function App() {
   const [hasLiveSession, setHasLiveSession] = useState(false);
   const [isExecutingQuery, setIsExecutingQuery] = useState(false);
   const [queryError, setQueryError] = useState("");
+  const [isTransformMenuOpen, setIsTransformMenuOpen] = useState(false);
+  const [transformDialogTab, setTransformDialogTab] =
+    useState<OutputTab | null>(null);
+  const [builderWarningCount, setBuilderWarningCount] = useState(0);
   const selectedEntity = safeReadModel(fetchXml).entity;
   const activeConnectionProfile = connectionProfiles.find(
     (profile) => profile.id === activeConnectionProfileId,
@@ -249,6 +263,10 @@ export function App() {
   async function executeQuery() {
     const model = safeReadModel(fetchXml);
     setQueryError("");
+    if (builderWarningCount > 0) {
+      setQueryError("Resolve builder warnings before executing FetchXML.");
+      return;
+    }
     if (!dataverseSessionRef.current?.client) {
       setConnectionStatus(
         "error",
@@ -283,6 +301,33 @@ export function App() {
       setConnectionStatus("connected");
     } finally {
       setIsExecutingQuery(false);
+    }
+  }
+
+  async function reloadMetadata() {
+    const client = dataverseSessionRef.current?.client;
+    if (!client) {
+      setConnectionStatus(
+        "error",
+        "Connect to Dataverse before reloading metadata.",
+      );
+      return;
+    }
+
+    setConnectionStatus("loadingMetadata");
+    try {
+      const entities = await client.listEntities();
+      setMetadataEntities(
+        entities
+          .filter((entity) => entity.logicalName)
+          .sort((left, right) =>
+            left.logicalName.localeCompare(right.logicalName),
+          ),
+      );
+      await loadEntityAttributes(selectedEntity, client);
+      setConnectionStatus("connected");
+    } catch (error) {
+      setConnectionStatus("error", getErrorMessage(error));
     }
   }
 
@@ -323,6 +368,47 @@ export function App() {
             <Sparkles size={17} />
             <span>Format</span>
           </button>
+          <div className="topbar-menu">
+            <button
+              type="button"
+              title="Transform"
+              onClick={() => setIsTransformMenuOpen(!isTransformMenuOpen)}
+            >
+              <Wand2 size={17} />
+              <span>Transform</span>
+            </button>
+            {isTransformMenuOpen ? (
+              <div className="transform-menu" role="menu">
+                {outputTabs.map((tab) => {
+                  const Icon = tab.icon;
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      role="menuitem"
+                      onClick={() => {
+                        setOutputTab(tab.id);
+                        setTransformDialogTab(tab.id);
+                        setIsTransformMenuOpen(false);
+                      }}
+                    >
+                      <Icon size={16} />
+                      <span>{tab.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
+          <button
+            type="button"
+            title="Reload metadata"
+            disabled={!hasLiveSession || connectionStatus === "loadingMetadata"}
+            onClick={() => void reloadMetadata()}
+          >
+            <RefreshCw size={17} />
+            <span>Reload</span>
+          </button>
           <button
             type="button"
             title="Reset"
@@ -343,8 +429,14 @@ export function App() {
           <button
             type="button"
             className="primary-action"
-            title="Execute"
-            disabled={!hasLiveSession || isExecutingQuery}
+            title={
+              builderWarningCount
+                ? "Resolve builder warnings before executing"
+                : "Execute"
+            }
+            disabled={
+              !hasLiveSession || isExecutingQuery || builderWarningCount > 0
+            }
             onClick={executeQuery}
           >
             <Play size={17} />
@@ -371,18 +463,29 @@ export function App() {
             <span>Collapse</span>
           </button>
           <nav>
-            {modules.map((module) => {
-              const Icon = module.icon;
+            {sidebarItems.map((item) => {
+              const Icon = item.icon;
+              const isActive =
+                item.type === "module"
+                  ? activeModule === item.id
+                  : activeModule === "workbench" && activePane === item.id;
               return (
                 <button
-                  className={activeModule === module.id ? "active" : ""}
-                  key={module.id}
-                  title={module.label}
+                  className={isActive ? "active" : ""}
+                  key={`${item.type}-${item.id}`}
+                  title={item.label}
                   type="button"
-                  onClick={() => setActiveModule(module.id)}
+                  onClick={() => {
+                    if (item.type === "module") {
+                      setActiveModule(item.id);
+                      return;
+                    }
+                    setActiveModule("workbench");
+                    setActivePane(item.id);
+                  }}
                 >
                   <Icon size={18} />
-                  <span>{module.label}</span>
+                  <span>{item.label}</span>
                 </button>
               );
             })}
@@ -391,40 +494,7 @@ export function App() {
 
         {activeModule === "workbench" ? (
           <div className="module-body">
-            <ConnectionStrip
-              activeConnectionProfile={activeConnectionProfile}
-              error={connectionError || queryError}
-              orgUrl={orgUrl}
-              status={connectionStatus}
-              userName={userName}
-              onConnect={connectToDataverse}
-              onDisconnect={disconnectFromDataverse}
-              onManageCredentials={() => setActiveModule("credentials")}
-            />
-            <nav className="pane-tabs" aria-label="Workbench views">
-              {panes.map((pane) => {
-                const Icon = pane.icon;
-                return (
-                  <button
-                    className={activePane === pane.id ? "active" : ""}
-                    key={pane.id}
-                    type="button"
-                    onClick={() => setActivePane(pane.id)}
-                  >
-                    <Icon size={16} />
-                    <span>{pane.label}</span>
-                  </button>
-                );
-              })}
-            </nav>
-
-            <div
-              className={
-                activePane === "builder"
-                  ? "workspace builder-focused"
-                  : "workspace"
-              }
-            >
+            <div className="workspace">
               <div className="left-stack">
                 {activePane === "editor" ? (
                   <section
@@ -444,6 +514,7 @@ export function App() {
                     onEntitySelected={(entityName) =>
                       void loadEntityAttributes(entityName)
                     }
+                    onWarningsChange={setBuilderWarningCount}
                   />
                 ) : null}
                 {activePane === "metadata" ? (
@@ -457,18 +528,13 @@ export function App() {
                 ) : null}
                 {activePane === "results" ? (
                   <ResultGrid
-                    canExecute={hasLiveSession}
+                    canExecute={hasLiveSession && builderWarningCount === 0}
                     isExecuting={isExecutingQuery}
                     rows={resultRows}
                     onExecute={executeQuery}
                   />
                 ) : null}
               </div>
-              <OutputPanel
-                fetchXml={fetchXml}
-                outputTab={outputTab}
-                setOutputTab={setOutputTab}
-              />
             </div>
           </div>
         ) : (
@@ -483,13 +549,150 @@ export function App() {
           />
         )}
       </div>
+      <ConnectionStrip
+        activeConnectionProfile={activeConnectionProfile}
+        entityCount={metadataEntities.length}
+        error={connectionError || queryError}
+        metadataUpdatedAt={metadataUpdatedAt}
+        orgUrl={orgUrl}
+        status={connectionStatus}
+        userName={userName}
+        onConnect={connectToDataverse}
+        onDisconnect={disconnectFromDataverse}
+        onManageCredentials={() => setActiveModule("credentials")}
+      />
+      {transformDialogTab ? (
+        <TransformDialog
+          fetchXml={fetchXml}
+          selectedTab={transformDialogTab}
+          onClose={() => setTransformDialogTab(null)}
+          onSelect={(tab) => {
+            setOutputTab(tab);
+            setTransformDialogTab(tab);
+          }}
+        />
+      ) : null}
     </main>
+  );
+}
+
+function TransformDialog({
+  fetchXml,
+  selectedTab,
+  onClose,
+  onSelect,
+}: {
+  fetchXml: string;
+  selectedTab: OutputTab;
+  onClose: () => void;
+  onSelect: (tab: OutputTab) => void;
+}) {
+  const selected = outputTabs.find((tab) => tab.id === selectedTab);
+  const output = getOutput(fetchXml, selectedTab);
+  const copyText =
+    output.kind === "issues"
+      ? output.issues
+          .map((issue) => `${issue.severity}: ${issue.message} (${issue.path})`)
+          .join("\n")
+      : output.text;
+
+  return (
+    <div className="modal-backdrop" role="presentation">
+      <dialog
+        className="transform-dialog"
+        aria-label="Transformation result"
+        open
+      >
+        <div className="panel-heading builder-heading">
+          <div>
+            <h2>{selected?.label ?? "Transformation"}</h2>
+            <span>Generated from the current FetchXML</span>
+          </div>
+          <div className="dialog-actions">
+            <button
+              className="icon-button"
+              type="button"
+              title="Copy"
+              onClick={() => navigator.clipboard.writeText(copyText)}
+            >
+              <Copy size={17} />
+            </button>
+            <button
+              className="icon-button"
+              type="button"
+              title="Close"
+              onClick={onClose}
+            >
+              <X size={17} />
+            </button>
+          </div>
+        </div>
+        <div className="panel-toolbar">
+          <div
+            className="segmented"
+            role="tablist"
+            aria-label="Transformations"
+          >
+            {outputTabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  className={tab.id === selectedTab ? "active" : ""}
+                  key={tab.id}
+                  type="button"
+                  title={tab.label}
+                  onClick={() => onSelect(tab.id)}
+                >
+                  <Icon size={16} />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+        {output.kind === "parameters" ? (
+          <div className="parameter-layout">
+            <pre>{output.text}</pre>
+            <div className="manifest">
+              {output.parameters.map((parameter) => (
+                <div className="manifest-row" key={parameter.name}>
+                  <FileJson2 size={15} />
+                  <span>{parameter.name}</span>
+                  <small>{parameter.inferredType}</small>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : output.kind === "issues" ? (
+          <div className="issues">
+            {output.issues.length === 0 ? (
+              <div className="empty-state">No validation issues</div>
+            ) : (
+              output.issues.map((issue) => (
+                <div
+                  className={`issue ${issue.severity}`}
+                  key={`${issue.path}-${issue.message}`}
+                >
+                  <AlertCircle size={16} />
+                  <span>{issue.message}</span>
+                  <small>{issue.path}</small>
+                </div>
+              ))
+            )}
+          </div>
+        ) : (
+          <pre>{output.text}</pre>
+        )}
+      </dialog>
+    </div>
   );
 }
 
 function ConnectionStrip({
   activeConnectionProfile,
+  entityCount,
   error,
+  metadataUpdatedAt,
   orgUrl,
   status,
   userName,
@@ -498,7 +701,9 @@ function ConnectionStrip({
   onManageCredentials,
 }: {
   activeConnectionProfile: DataverseConnectionProfile | undefined;
+  entityCount: number;
   error: string;
+  metadataUpdatedAt: string;
   orgUrl: string;
   status: ConnectionStatus;
   userName: string;
@@ -516,6 +721,7 @@ function ConnectionStrip({
     activeConnectionProfile?.orgUrl ||
     orgUrl ||
     "Not connected";
+  const profileName = activeConnectionProfile?.name || "Unsaved connection";
 
   return (
     <section
@@ -533,13 +739,29 @@ function ConnectionStrip({
         <span className="status-pill-label">{statusLabel(status)}</span>
       </div>
       <div className="connection-strip-summary">
-        <UserRound size={15} />
-        <span>{error || summary}</span>
+        <div className="connection-property">
+          <span>Connection</span>
+          <strong>{error || summary}</strong>
+        </div>
+        <div className="connection-property">
+          <span>Profile</span>
+          <strong>{profileName}</strong>
+        </div>
+        <div className="connection-property metadata-property">
+          <span>Metadata</span>
+          <strong>
+            {entityCount
+              ? `${entityCount.toLocaleString()} entities cached. Last updated ${formatTimestamp(
+                  metadataUpdatedAt,
+                )}.`
+              : "No metadata cached"}
+          </strong>
+        </div>
       </div>
       <div className="connection-strip-actions">
         <button type="button" onClick={onManageCredentials}>
           <KeyRound size={15} />
-          <span>Connections</span>
+          <span>Change</span>
         </button>
         {isConnected ? (
           <button type="button" onClick={onDisconnect}>
@@ -568,6 +790,16 @@ function statusLabel(status: ConnectionStatus) {
   if (status === "connected") return "Connected";
   if (status === "error") return "Connection error";
   return "Local";
+}
+
+function formatTimestamp(value: string) {
+  if (!value) return "never";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "unknown";
+  return new Intl.DateTimeFormat(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(date);
 }
 
 function getErrorMessage(error: unknown) {

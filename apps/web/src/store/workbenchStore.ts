@@ -46,6 +46,8 @@ interface WorkbenchState {
   userName: string;
   metadataEntities: EntitySummary[];
   metadataAttributesByEntity: Record<string, AttributeSummary[]>;
+  metadataUpdatedAt: string;
+  selectedEntityMetadataUpdatedAt: string;
   loadingAttributeEntity: string;
   setFetchXml: (fetchXml: string) => void;
   setOutputTab: (outputTab: OutputTab) => void;
@@ -123,6 +125,8 @@ export const useWorkbenchStore = create<WorkbenchState>((set, get) => ({
   userName: "",
   metadataEntities: [],
   metadataAttributesByEntity: {},
+  metadataUpdatedAt: "",
+  selectedEntityMetadataUpdatedAt: "",
   loadingAttributeEntity: "",
   setFetchXml: (fetchXml) => set({ fetchXml }),
   setOutputTab: (outputTab) => {
@@ -191,10 +195,14 @@ export const useWorkbenchStore = create<WorkbenchState>((set, get) => ({
       ]);
       set((state) => ({
         ...(cachedEntities
-          ? { metadataEntities: cachedEntities.entities }
+          ? {
+              metadataEntities: cachedEntities.entities,
+              metadataUpdatedAt: cachedEntities.updatedAt,
+            }
           : {}),
         ...(cachedAttributes
           ? {
+              selectedEntityMetadataUpdatedAt: cachedAttributes.updatedAt,
               metadataAttributesByEntity: {
                 ...state.metadataAttributesByEntity,
                 [entityName ?? cachedAttributes.entityName]:
@@ -304,6 +312,7 @@ export const useWorkbenchStore = create<WorkbenchState>((set, get) => ({
   setConnectedUser: (userName) => set({ userName }),
   setMetadataEntities: (metadataEntities) =>
     set((state) => {
+      const metadataUpdatedAt = new Date().toISOString();
       if (state.orgUrl) {
         void ignoreStorageErrors(
           storageProvider.metadataCache.saveEntities(
@@ -312,10 +321,11 @@ export const useWorkbenchStore = create<WorkbenchState>((set, get) => ({
           ),
         );
       }
-      return { metadataEntities };
+      return { metadataEntities, metadataUpdatedAt };
     }),
   setEntityAttributes: (entityName, attributes) =>
     set((state) => {
+      const selectedEntityMetadataUpdatedAt = new Date().toISOString();
       if (state.orgUrl) {
         void ignoreStorageErrors(
           storageProvider.metadataCache.saveAttributes(
@@ -326,6 +336,7 @@ export const useWorkbenchStore = create<WorkbenchState>((set, get) => ({
         );
       }
       return {
+        selectedEntityMetadataUpdatedAt,
         metadataAttributesByEntity: {
           ...state.metadataAttributesByEntity,
           [entityName]: attributes,
@@ -341,6 +352,8 @@ export const useWorkbenchStore = create<WorkbenchState>((set, get) => ({
       userName: "",
       metadataEntities: [],
       metadataAttributesByEntity: {},
+      metadataUpdatedAt: "",
+      selectedEntityMetadataUpdatedAt: "",
       loadingAttributeEntity: "",
       resultRows: [],
     }),

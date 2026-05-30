@@ -11,6 +11,7 @@ import type {
   EntitySummary,
 } from "@fetchxmlbuilder/dataverse";
 import {
+  AlertTriangle,
   ArrowDownAZ,
   ArrowUpAZ,
   BadgeCheck,
@@ -27,6 +28,7 @@ import {
   X,
 } from "lucide-react";
 import { type ReactNode, useEffect, useMemo, useState } from "react";
+import { XmlEditor } from "./XmlEditor";
 
 interface QueryBuilderPanelProps {
   fetchXml: string;
@@ -35,6 +37,7 @@ interface QueryBuilderPanelProps {
   loadingAttributeEntity: string;
   onChange: (fetchXml: string) => void;
   onEntitySelected: (entityName: string) => void;
+  onWarningsChange?: (warningCount: number) => void;
 }
 
 type SelectedNode =
@@ -111,6 +114,7 @@ export function QueryBuilderPanel({
   loadingAttributeEntity,
   onChange,
   onEntitySelected,
+  onWarningsChange,
 }: QueryBuilderPanelProps) {
   const model = useMemo(
     () => normalizeModel(safeReadModel(fetchXml)),
@@ -131,10 +135,16 @@ export function QueryBuilderPanel({
   const [attributePicker, setAttributePicker] = useState<null | {
     linkId?: string;
   }>(null);
+  const [draftRuleNodes, setDraftRuleNodes] = useState<Set<string>>(
+    () => new Set(),
+  );
+  const [warningRuleNodes, setWarningRuleNodes] = useState<Set<string>>(
+    () => new Set(),
+  );
 
   const selectedLink =
     selectedNode.type !== "fetch" && selectedNode.linkId
-      ? model.links.find((link) => link.id === selectedNode.linkId)
+      ? findLinkById(model.links, selectedNode.linkId)
       : undefined;
   const selectedEntityName = selectedLink?.name ?? model.entity;
   const selectedEntity = getBuilderEntity(
@@ -150,15 +160,108 @@ export function QueryBuilderPanel({
 
   useEffect(() => {
     if (selectedNode.type !== "fetch" && selectedNode.linkId) {
-      const exists = model.links.some(
-        (link) => link.id === selectedNode.linkId,
-      );
+      const exists = Boolean(findLinkById(model.links, selectedNode.linkId));
       if (!exists) setSelectedNode({ type: "fetch" });
     }
   }, [model.links, selectedNode]);
 
+  const visibleWarningRuleNodes = useMemo(
+    () =>
+      Array.from(warningRuleNodes).filter((key) => {
+        const node = parseRuleNodeKey(key);
+        if (!node) return false;
+        if (node.linkId && !findLinkById(model.links, node.linkId)) {
+          return false;
+        }
+        return getRuleNodeCount(model, node.type, node.linkId) === 0;
+      }),
+    [model, warningRuleNodes],
+  );
+  const visibleWarningRuleNodeSet = useMemo(
+    () => new Set(visibleWarningRuleNodes),
+    [visibleWarningRuleNodes],
+  );
+  const blockingRuleNodes = useMemo(() => {
+    const keys = new Set(visibleWarningRuleNodes);
+    for (const key of draftRuleNodes) {
+      const node = parseRuleNodeKey(key);
+      if (!node) continue;
+      if (node.linkId && !findLinkById(model.links, node.linkId)) {
+        continue;
+      }
+      if (getRuleNodeCount(model, node.type, node.linkId) === 0) {
+        keys.add(key);
+      }
+    }
+    if (
+      isRuleNode(selectedNode) &&
+      getRuleNodeCount(model, selectedNode.type, selectedNode.linkId) === 0
+    ) {
+      keys.add(makeRuleNodeKey(selectedNode.type, selectedNode.linkId));
+    }
+    return keys;
+  }, [draftRuleNodes, model, selectedNode, visibleWarningRuleNodes]);
+
+  useEffect(() => {
+    onWarningsChange?.(blockingRuleNodes.size);
+  }, [blockingRuleNodes.size, onWarningsChange]);
+
+  function selectNode(nextNode: SelectedNode) {
+    setSelectedNode((currentNode) => {
+      if (isSameSelectedNode(currentNode, nextNode)) return nextNode;
+      if (
+        isRuleNode(currentNode) &&
+        getRuleNodeCount(model, currentNode.type, currentNode.linkId) === 0
+      ) {
+        const key = makeRuleNodeKey(currentNode.type, currentNode.linkId);
+        setWarningRuleNodes((current) => new Set(current).add(key));
+      }
+      return nextNode;
+    });
+  }
+
   function update(nextModel: FetchQueryModel) {
     onChange(writeFetchQueryModel(normalizeModel(nextModel)));
+  }
+
+  function focusDraftRuleNode(type: "filters" | "orders", linkId?: string) {
+    const key = makeRuleNodeKey(type, linkId);
+    setDraftRuleNodes((current) => new Set(current).add(key));
+    setWarningRuleNodes((current) => {
+      const next = new Set(current);
+      next.delete(key);
+      return next;
+    });
+    selectNode(makeSelectedNode(type, linkId));
+  }
+
+  function clearRuleNodeWarning(type: "filters" | "orders", linkId?: string) {
+    const key = makeRuleNodeKey(type, linkId);
+    setDraftRuleNodes((current) => {
+      const next = new Set(current);
+      next.delete(key);
+      return next;
+    });
+    setWarningRuleNodes((current) => {
+      const next = new Set(current);
+      next.delete(key);
+      return next;
+    });
+  }
+
+  function clearLinkRuleNodeState(linkId: string) {
+    setDraftRuleNodes((current) => {
+      const next = new Set(current);
+      next.delete(makeRuleNodeKey("filters", linkId));
+      next.delete(makeRuleNodeKey("orders", linkId));
+      return next;
+    });
+    setWarningRuleNodes((current) => {
+      const next = new Set(current);
+      next.delete(makeRuleNodeKey("filters", linkId));
+      next.delete(makeRuleNodeKey("orders", linkId));
+      return next;
+    });
   }
 
   function setPrimaryEntity(entityName: string) {
@@ -186,8 +289,8 @@ export function QueryBuilderPanel({
   ) {
     update({
       ...model,
-      links: model.links.map((link) =>
-        link.id === linkId ? normalizeLink({ ...link, ...patch }) : link,
+      links: updateLinkById(model.links, linkId, (link) =>
+        normalizeLink({ ...link, ...patch }),
       ),
     });
   }
@@ -212,7 +315,7 @@ export function QueryBuilderPanel({
 
   function toggleAttribute(attributeName: string, linkId?: string) {
     if (linkId) {
-      const link = model.links.find((item) => item.id === linkId);
+      const link = findLinkById(model.links, linkId);
       if (!link) return;
       const exists = link.attributes.some(
         (attribute) => attribute.name === attributeName,
@@ -240,10 +343,21 @@ export function QueryBuilderPanel({
     });
   }
 
+  function clearAttributes(linkId?: string) {
+    if (linkId) {
+      updateLink(linkId, { attributes: [] });
+      selectNode({ type: "entity", linkId });
+      return;
+    }
+
+    update({ ...model, attributes: [] });
+    selectNode({ type: "entity" });
+  }
+
   function addCondition(linkId?: string) {
     const attributes = getBuilderEntity(
       linkId
-        ? (model.links.find((link) => link.id === linkId)?.name ?? model.entity)
+        ? (findLinkById(model.links, linkId)?.name ?? model.entity)
         : model.entity,
       entities,
       attributesByEntity,
@@ -251,17 +365,19 @@ export function QueryBuilderPanel({
     const condition = makeCondition(attributes[0]?.logicalName ?? "name");
 
     if (linkId) {
-      const link = model.links.find((item) => item.id === linkId);
+      const link = findLinkById(model.links, linkId);
       if (!link) return;
       updateLink(linkId, {
         conditions: [...(link.conditions ?? []), condition],
       });
-      setSelectedNode(makeSelectedNode("filters", linkId));
+      clearRuleNodeWarning("filters", linkId);
+      selectNode(makeSelectedNode("filters", linkId));
       return;
     }
 
     update({ ...model, conditions: [...model.conditions, condition] });
-    setSelectedNode({ type: "filters" });
+    clearRuleNodeWarning("filters");
+    selectNode({ type: "filters" });
   }
 
   function updateCondition(
@@ -270,7 +386,7 @@ export function QueryBuilderPanel({
     linkId?: string,
   ) {
     if (linkId) {
-      const link = model.links.find((item) => item.id === linkId);
+      const link = findLinkById(model.links, linkId);
       if (!link) return;
       updateLink(linkId, {
         conditions: (link.conditions ?? []).map((condition) =>
@@ -290,7 +406,7 @@ export function QueryBuilderPanel({
 
   function removeCondition(conditionId: string, linkId?: string) {
     if (linkId) {
-      const link = model.links.find((item) => item.id === linkId);
+      const link = findLinkById(model.links, linkId);
       if (!link) return;
       updateLink(linkId, {
         conditions: (link.conditions ?? []).filter(
@@ -308,18 +424,57 @@ export function QueryBuilderPanel({
     });
   }
 
+  function clearFilters(linkId?: string) {
+    if (linkId) {
+      updateLink(linkId, { conditions: [] });
+      clearRuleNodeWarning("filters", linkId);
+      selectNode({ type: "entity", linkId });
+      return;
+    }
+
+    update({ ...model, conditions: [] });
+    clearRuleNodeWarning("filters");
+    selectNode({ type: "entity" });
+  }
+
   function addOrder(linkId?: string) {
     const attribute = selectedEntity.attributes[0]?.logicalName ?? "name";
     const order: FetchOrderSelection = { attribute, descending: false };
     if (linkId) {
-      const link = model.links.find((item) => item.id === linkId);
+      const link = findLinkById(model.links, linkId);
       if (!link) return;
       updateLink(linkId, { orders: [...(link.orders ?? []), order] });
-      setSelectedNode(makeSelectedNode("orders", linkId));
+      clearRuleNodeWarning("orders", linkId);
+      selectNode(makeSelectedNode("orders", linkId));
       return;
     }
     update({ ...model, orders: [...model.orders, order] });
-    setSelectedNode({ type: "orders" });
+    clearRuleNodeWarning("orders");
+    selectNode({ type: "orders" });
+  }
+
+  function clearOrders(linkId?: string) {
+    if (linkId) {
+      updateLink(linkId, { orders: [] });
+      clearRuleNodeWarning("orders", linkId);
+      selectNode({ type: "entity", linkId });
+      return;
+    }
+
+    update({ ...model, orders: [] });
+    clearRuleNodeWarning("orders");
+    selectNode({ type: "entity" });
+  }
+
+  function removeLink(linkId: string) {
+    update({
+      ...model,
+      links: removeLinkById(model.links, linkId),
+    });
+    clearLinkRuleNodeState(linkId);
+    if ("linkId" in selectedNode && selectedNode.linkId === linkId) {
+      selectNode({ type: "entity" });
+    }
   }
 
   function addLink() {
@@ -327,84 +482,41 @@ export function QueryBuilderPanel({
       entityOptions.find((entity) => entity.logicalName !== model.entity) ??
       entityOptions[0];
     const linkEntity = fallback?.logicalName ?? "contact";
+    const parentEntityName = selectedLink?.name ?? model.entity;
+    const parentJoinAttribute =
+      selectedLink?.attributes[0]?.name ??
+      model.attributes[0]?.name ??
+      `${parentEntityName}id`;
     onEntitySelected(linkEntity);
     const nextLink = normalizeLink({
       id: crypto.randomUUID(),
       name: linkEntity,
       from: "parentcustomerid",
-      to: model.attributes[0]?.name ?? `${model.entity}id`,
+      to: parentJoinAttribute,
       alias: linkEntity,
       linkType: "outer",
       attributes: [],
       filterType: "and",
       conditions: [],
       orders: [],
+      links: [],
     });
-    update({ ...model, links: [...model.links, nextLink] });
-    setSelectedNode({ type: "entity", linkId: nextLink.id });
+    if (selectedLink) {
+      update({
+        ...model,
+        links: updateLinkById(model.links, selectedLink.id, (link) => ({
+          ...link,
+          links: [...(link.links ?? []), nextLink],
+        })),
+      });
+    } else {
+      update({ ...model, links: [...model.links, nextLink] });
+    }
+    selectNode({ type: "entity", linkId: nextLink.id });
   }
 
   return (
     <section className="builder-workbench" aria-label="Visual query builder">
-      <div className="composition-panel panel">
-        <div className="panel-heading builder-heading">
-          <div>
-            <h2>Composition</h2>
-            <span>Graphic map of what the FetchXML will do</span>
-          </div>
-          <button type="button" title="Add linked entity" onClick={addLink}>
-            <GitBranch size={16} />
-            <span>Link</span>
-          </button>
-        </div>
-        <div className="query-tree" role="tree">
-          <TreeButton
-            active={selectedNode.type === "fetch"}
-            icon={<Settings2 size={17} />}
-            label="Fetch"
-            meta={`${model.top ? `Top ${model.top}` : "All rows"}${model.distinct ? " · distinct" : ""}`}
-            tone="fetch"
-            onClick={() => setSelectedNode({ type: "fetch" })}
-          />
-          <div className="tree-children">
-            <EntityBranch
-              entityName={model.entity}
-              displayName={primaryEntity.displayName}
-              attributes={model.attributes.length}
-              conditions={model.conditions.length}
-              filterType={model.filterType}
-              orders={model.orders.length}
-              selectedNode={selectedNode}
-              onSelect={setSelectedNode}
-            />
-            {model.links.map((link) => {
-              const linkEntity = getBuilderEntity(
-                link.name,
-                entities,
-                attributesByEntity,
-                link.attributes.map((attribute) => attribute.name),
-              );
-              return (
-                <EntityBranch
-                  key={link.id}
-                  entityName={link.name}
-                  displayName={linkEntity.displayName}
-                  alias={link.alias}
-                  linkType={link.linkType}
-                  linkId={link.id}
-                  attributes={link.attributes.length}
-                  conditions={(link.conditions ?? []).length}
-                  filterType={link.filterType ?? "and"}
-                  orders={(link.orders ?? []).length}
-                  selectedNode={selectedNode}
-                  onSelect={setSelectedNode}
-                />
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
       <aside
         className="inspector-panel panel"
         aria-label="Selected builder controls"
@@ -427,9 +539,13 @@ export function QueryBuilderPanel({
               isLoadingAttributes={isLoadingAttributes}
               model={model}
               {...(selectedLink ? { link: selectedLink } : {})}
-              onAddFilter={() => addCondition(selectedNode.linkId)}
+              onCreateFilter={() =>
+                focusDraftRuleNode("filters", selectedNode.linkId)
+              }
               onAddLink={addLink}
-              onAddOrder={() => addOrder(selectedNode.linkId)}
+              onCreateOrder={() =>
+                focusDraftRuleNode("orders", selectedNode.linkId)
+              }
               onOpenAttributes={() =>
                 setAttributePicker(
                   selectedNode.linkId ? { linkId: selectedNode.linkId } : {},
@@ -437,12 +553,7 @@ export function QueryBuilderPanel({
               }
               onRemoveLink={() => {
                 if (!selectedNode.linkId) return;
-                update({
-                  ...model,
-                  links: model.links.filter(
-                    (link) => link.id !== selectedNode.linkId,
-                  ),
-                });
+                removeLink(selectedNode.linkId);
               }}
               onSearchChange={setEntitySearch}
               onSelectEntity={(entityName) =>
@@ -544,28 +655,82 @@ export function QueryBuilderPanel({
         </div>
       </aside>
 
+      <div className="composition-panel panel">
+        <div className="panel-heading builder-heading">
+          <div>
+            <h2>Composition</h2>
+            <span>Graphic map of what the FetchXML will do</span>
+          </div>
+          <button type="button" title="Add linked entity" onClick={addLink}>
+            <GitBranch size={16} />
+            <span>Link</span>
+          </button>
+        </div>
+        <div className="query-tree" role="tree">
+          <TreeButton
+            active={selectedNode.type === "fetch"}
+            icon={<Settings2 size={17} />}
+            label="Fetch"
+            meta={`${model.top ? `Top ${model.top}` : "All rows"}${model.distinct ? " · distinct" : ""}`}
+            tone="fetch"
+            onClick={() => selectNode({ type: "fetch" })}
+          />
+          <div className="tree-children">
+            <EntityBranch
+              entityName={model.entity}
+              displayName={primaryEntity.displayName}
+              attributes={model.attributes.length}
+              conditions={model.conditions.length}
+              filterType={model.filterType}
+              links={model.links}
+              orders={model.orders.length}
+              entities={entities}
+              attributesByEntity={attributesByEntity}
+              selectedNode={selectedNode}
+              draftRuleNodes={draftRuleNodes}
+              warningRuleNodes={visibleWarningRuleNodeSet}
+              onClearAttributes={clearAttributes}
+              onClearFilters={clearFilters}
+              onClearOrders={clearOrders}
+              onRemoveEntity={removeLink}
+              onSelect={selectNode}
+            />
+          </div>
+        </div>
+      </div>
+
+      <section className="fetch-preview-panel panel" aria-label="FetchXML">
+        <div className="panel-heading builder-heading">
+          <div>
+            <h2>FetchXML</h2>
+            <span>Live result</span>
+          </div>
+        </div>
+        <XmlEditor value={fetchXml} onChange={onChange} />
+      </section>
+
       {attributePicker ? (
         <AttributePickerDialog
           attributes={
             getBuilderEntity(
               attributePicker.linkId
-                ? (model.links.find(
-                    (link) => link.id === attributePicker.linkId,
-                  )?.name ?? model.entity)
+                ? (findLinkById(model.links, attributePicker.linkId)?.name ??
+                    model.entity)
                 : model.entity,
               entities,
               attributesByEntity,
               attributePicker.linkId
-                ? (model.links
-                    .find((link) => link.id === attributePicker.linkId)
-                    ?.attributes.map((attribute) => attribute.name) ?? [])
+                ? (findLinkById(
+                    model.links,
+                    attributePicker.linkId,
+                  )?.attributes.map((attribute) => attribute.name) ?? [])
                 : model.attributes.map((attribute) => attribute.name),
             ).attributes
           }
           query={attributeSearch}
           selectedAttributes={
             attributePicker.linkId
-              ? (model.links.find((link) => link.id === attributePicker.linkId)
+              ? (findLinkById(model.links, attributePicker.linkId)
                   ?.attributes ?? [])
               : model.attributes
           }
@@ -592,8 +757,17 @@ function EntityBranch({
   attributes,
   conditions,
   filterType,
+  links,
   orders,
+  entities,
+  attributesByEntity,
   selectedNode,
+  draftRuleNodes,
+  warningRuleNodes,
+  onClearAttributes,
+  onClearFilters,
+  onClearOrders,
+  onRemoveEntity,
   onSelect,
 }: {
   entityName: string;
@@ -604,10 +778,41 @@ function EntityBranch({
   attributes: number;
   conditions: number;
   filterType: "and" | "or";
+  links: FetchLinkEntitySelection[];
   orders: number;
+  entities: EntitySummary[];
+  attributesByEntity: Record<string, AttributeSummary[]>;
   selectedNode: SelectedNode;
+  draftRuleNodes: Set<string>;
+  warningRuleNodes: Set<string>;
+  onClearAttributes: (linkId?: string) => void;
+  onClearFilters: (linkId?: string) => void;
+  onClearOrders: (linkId?: string) => void;
+  onRemoveEntity?: (linkId: string) => void;
   onSelect: (node: SelectedNode) => void;
 }) {
+  const attributesNode = makeSelectedNode("attributes", linkId);
+  const filtersNode = makeSelectedNode("filters", linkId);
+  const ordersNode = makeSelectedNode("orders", linkId);
+  const isAttributesActive = isSameSelectedNode(selectedNode, attributesNode);
+  const isFiltersActive = isSameSelectedNode(selectedNode, filtersNode);
+  const isOrdersActive = isSameSelectedNode(selectedNode, ordersNode);
+  const filterKey = makeRuleNodeKey("filters", linkId);
+  const orderKey = makeRuleNodeKey("orders", linkId);
+  const showAttributes = attributes > 0 || isAttributesActive;
+  const showFilters =
+    conditions > 0 ||
+    isFiltersActive ||
+    draftRuleNodes.has(filterKey) ||
+    warningRuleNodes.has(filterKey);
+  const showOrders =
+    orders > 0 ||
+    isOrdersActive ||
+    draftRuleNodes.has(orderKey) ||
+    warningRuleNodes.has(orderKey);
+  const showChildren =
+    showAttributes || showFilters || showOrders || links.length > 0;
+
   return (
     <div className="entity-branch">
       <TreeButton
@@ -624,46 +829,113 @@ function EntityBranch({
           .filter(Boolean)
           .join(" · ")}
         tone={linkId ? "link" : "entity"}
+        {...(linkId && onRemoveEntity
+          ? {
+              deleteTitle: "Remove linked entity",
+              onDelete: () => onRemoveEntity(linkId),
+            }
+          : {})}
         onClick={() => onSelect(makeSelectedNode("entity", linkId))}
       />
-      <div className="tree-children slim">
-        <TreeButton
-          active={
-            selectedNode.type === "attributes" && selectedNode.linkId === linkId
-          }
-          icon={<ListChecks size={16} />}
-          label="Attributes"
-          meta={`${attributes} selected`}
-          tone="leaf"
-          onClick={() => onSelect(makeSelectedNode("attributes", linkId))}
-        />
-        <TreeButton
-          active={
-            selectedNode.type === "filters" && selectedNode.linkId === linkId
-          }
-          icon={<Filter size={16} />}
-          label="Filters"
-          meta={
-            conditions
-              ? `${filterType.toUpperCase()} · ${conditions} condition${conditions === 1 ? "" : "s"}`
-              : "No filters"
-          }
-          tone="leaf"
-          onClick={() => onSelect(makeSelectedNode("filters", linkId))}
-        />
-        <TreeButton
-          active={
-            selectedNode.type === "orders" && selectedNode.linkId === linkId
-          }
-          icon={orders ? <ArrowDownAZ size={16} /> : <ArrowUpAZ size={16} />}
-          label="Orders"
-          meta={
-            orders ? `${orders} sort${orders === 1 ? "" : "s"}` : "Unsorted"
-          }
-          tone="leaf"
-          onClick={() => onSelect(makeSelectedNode("orders", linkId))}
-        />
-      </div>
+      {showChildren ? (
+        <div className="tree-children slim">
+          {showAttributes ? (
+            <TreeButton
+              active={isAttributesActive}
+              icon={<ListChecks size={16} />}
+              label="Attributes"
+              meta={`${attributes} selected`}
+              tone="leaf"
+              deleteTitle="Clear attributes"
+              onDelete={() => onClearAttributes(linkId)}
+              onClick={() => onSelect(attributesNode)}
+            />
+          ) : null}
+          {showFilters ? (
+            <TreeButton
+              active={isFiltersActive}
+              icon={
+                warningRuleNodes.has(filterKey) ? (
+                  <AlertTriangle size={16} />
+                ) : (
+                  <Filter size={16} />
+                )
+              }
+              label="Filters"
+              meta={
+                conditions
+                  ? `${filterType.toUpperCase()} · ${conditions} condition${conditions === 1 ? "" : "s"}`
+                  : warningRuleNodes.has(filterKey)
+                    ? "Missing conditions"
+                    : "New filter"
+              }
+              tone={warningRuleNodes.has(filterKey) ? "warning" : "leaf"}
+              deleteTitle="Remove filter node"
+              onDelete={() => onClearFilters(linkId)}
+              onClick={() => onSelect(filtersNode)}
+            />
+          ) : null}
+          {showOrders ? (
+            <TreeButton
+              active={isOrdersActive}
+              icon={
+                warningRuleNodes.has(orderKey) ? (
+                  <AlertTriangle size={16} />
+                ) : orders ? (
+                  <ArrowDownAZ size={16} />
+                ) : (
+                  <ArrowUpAZ size={16} />
+                )
+              }
+              label="Orders"
+              meta={
+                orders
+                  ? `${orders} sort${orders === 1 ? "" : "s"}`
+                  : warningRuleNodes.has(orderKey)
+                    ? "Missing sort rules"
+                    : "New order"
+              }
+              tone={warningRuleNodes.has(orderKey) ? "warning" : "leaf"}
+              deleteTitle="Remove order node"
+              onDelete={() => onClearOrders(linkId)}
+              onClick={() => onSelect(ordersNode)}
+            />
+          ) : null}
+          {links.map((link) => {
+            const linkEntity = getBuilderEntity(
+              link.name,
+              entities,
+              attributesByEntity,
+              link.attributes.map((attribute) => attribute.name),
+            );
+            return (
+              <EntityBranch
+                key={link.id}
+                entityName={link.name}
+                displayName={linkEntity.displayName}
+                alias={link.alias}
+                linkType={link.linkType}
+                linkId={link.id}
+                attributes={link.attributes.length}
+                conditions={(link.conditions ?? []).length}
+                filterType={link.filterType ?? "and"}
+                links={link.links ?? []}
+                orders={(link.orders ?? []).length}
+                entities={entities}
+                attributesByEntity={attributesByEntity}
+                selectedNode={selectedNode}
+                draftRuleNodes={draftRuleNodes}
+                warningRuleNodes={warningRuleNodes}
+                onClearAttributes={onClearAttributes}
+                onClearFilters={onClearFilters}
+                onClearOrders={onClearOrders}
+                {...(onRemoveEntity ? { onRemoveEntity } : {})}
+                onSelect={onSelect}
+              />
+            );
+          })}
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -674,27 +946,46 @@ function TreeButton({
   label,
   meta,
   tone,
+  deleteTitle,
   onClick,
+  onDelete,
 }: {
   active: boolean;
   icon: ReactNode;
   label: string;
   meta: string;
-  tone: "fetch" | "entity" | "link" | "leaf";
+  tone: "fetch" | "entity" | "link" | "leaf" | "warning";
+  deleteTitle?: string;
   onClick: () => void;
+  onDelete?: () => void;
 }) {
   return (
-    <button
-      className={`tree-node ${tone}${active ? " active" : ""}`}
-      type="button"
-      onClick={onClick}
-    >
-      <span className="tree-node-icon">{icon}</span>
-      <span className="tree-node-copy">
-        <strong>{label}</strong>
-        <small>{meta}</small>
-      </span>
-    </button>
+    <div className="tree-node-frame">
+      <button
+        className={`tree-node ${tone}${active ? " active" : ""}${onDelete ? " has-delete" : ""}`}
+        type="button"
+        onClick={onClick}
+      >
+        <span className="tree-node-icon">{icon}</span>
+        <span className="tree-node-copy">
+          <strong>{label}</strong>
+          <small>{meta}</small>
+        </span>
+      </button>
+      {onDelete ? (
+        <button
+          className="tree-node-delete"
+          type="button"
+          title={deleteTitle ?? "Delete node"}
+          onClick={(event) => {
+            event.stopPropagation();
+            onDelete();
+          }}
+        >
+          <Trash2 size={14} />
+        </button>
+      ) : null}
+    </div>
   );
 }
 
@@ -775,9 +1066,9 @@ function EntityInspector({
   isLoadingAttributes,
   link,
   model,
-  onAddFilter,
   onAddLink,
-  onAddOrder,
+  onCreateFilter,
+  onCreateOrder,
   onOpenAttributes,
   onRemoveLink,
   onSearchChange,
@@ -791,9 +1082,9 @@ function EntityInspector({
   isLoadingAttributes: boolean;
   link?: FetchLinkEntitySelection;
   model: FetchQueryModel;
-  onAddFilter: () => void;
   onAddLink: () => void;
-  onAddOrder: () => void;
+  onCreateFilter: () => void;
+  onCreateOrder: () => void;
   onOpenAttributes: () => void;
   onRemoveLink: () => void;
   onSearchChange: (value: string) => void;
@@ -877,11 +1168,11 @@ function EntityInspector({
           <ListChecks size={16} />
           <span>Attributes</span>
         </button>
-        <button type="button" onClick={onAddFilter}>
+        <button type="button" onClick={onCreateFilter}>
           <Filter size={16} />
           <span>Create filter</span>
         </button>
-        <button type="button" onClick={onAddOrder}>
+        <button type="button" onClick={onCreateOrder}>
           <ArrowDownAZ size={16} />
           <span>Set order</span>
         </button>
@@ -991,6 +1282,11 @@ function FilterInspector({
         </button>
       </div>
       <div className="filter-list">
+        {conditions.length === 0 ? (
+          <p className="empty-state compact warning-empty">
+            Add at least one condition before leaving this filter.
+          </p>
+        ) : null}
         {conditions.map((condition) => {
           const attribute = attributes.find(
             (item) => item.logicalName === condition.attribute,
@@ -1135,7 +1431,9 @@ function OrderInspector({
         </div>
       ))}
       {orders.length === 0 ? (
-        <p className="empty-state compact">No order selected.</p>
+        <p className="empty-state compact warning-empty">
+          Add at least one sort rule before leaving this order.
+        </p>
       ) : null}
       <button type="button" onClick={onAdd}>
         <Plus size={16} />
@@ -1284,6 +1582,87 @@ function makeSelectedNode(
   return linkId ? { type, linkId } : { type };
 }
 
+function isRuleNode(
+  node: SelectedNode,
+): node is { type: "filters" | "orders"; linkId?: string } {
+  return node.type === "filters" || node.type === "orders";
+}
+
+function isSameSelectedNode(left: SelectedNode, right: SelectedNode) {
+  const leftLinkId = "linkId" in left ? left.linkId : undefined;
+  const rightLinkId = "linkId" in right ? right.linkId : undefined;
+  return left.type === right.type && leftLinkId === rightLinkId;
+}
+
+function makeRuleNodeKey(type: "filters" | "orders", linkId?: string) {
+  return `${type}:${linkId ?? "primary"}`;
+}
+
+function parseRuleNodeKey(key: string):
+  | {
+      type: "filters" | "orders";
+      linkId?: string;
+    }
+  | undefined {
+  const [type, id] = key.split(":");
+  if (type !== "filters" && type !== "orders") return undefined;
+  return id && id !== "primary" ? { type, linkId: id } : { type };
+}
+
+function getRuleNodeCount(
+  model: FetchQueryModel,
+  type: "filters" | "orders",
+  linkId?: string,
+) {
+  if (linkId) {
+    const link = findLinkById(model.links, linkId);
+    if (!link) return 0;
+    return type === "filters"
+      ? (link.conditions ?? []).length
+      : (link.orders ?? []).length;
+  }
+
+  return type === "filters" ? model.conditions.length : model.orders.length;
+}
+
+function findLinkById(
+  links: FetchLinkEntitySelection[],
+  linkId: string,
+): FetchLinkEntitySelection | undefined {
+  for (const link of links) {
+    if (link.id === linkId) return link;
+    const child = findLinkById(link.links ?? [], linkId);
+    if (child) return child;
+  }
+  return undefined;
+}
+
+function updateLinkById(
+  links: FetchLinkEntitySelection[],
+  linkId: string,
+  updater: (link: FetchLinkEntitySelection) => FetchLinkEntitySelection,
+): FetchLinkEntitySelection[] {
+  return links.map((link) => {
+    if (link.id === linkId) return updater(link);
+    return {
+      ...link,
+      links: updateLinkById(link.links ?? [], linkId, updater),
+    };
+  });
+}
+
+function removeLinkById(
+  links: FetchLinkEntitySelection[],
+  linkId: string,
+): FetchLinkEntitySelection[] {
+  return links
+    .filter((link) => link.id !== linkId)
+    .map((link) => ({
+      ...link,
+      links: removeLinkById(link.links ?? [], linkId),
+    }));
+}
+
 function normalizeLink(
   link: FetchLinkEntitySelection,
 ): FetchLinkEntitySelection {
@@ -1292,6 +1671,7 @@ function normalizeLink(
     filterType: link.filterType ?? "and",
     conditions: link.conditions ?? [],
     orders: link.orders ?? [],
+    links: (link.links ?? []).map(normalizeLink),
   };
 }
 
