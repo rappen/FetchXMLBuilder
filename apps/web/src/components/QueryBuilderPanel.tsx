@@ -65,6 +65,14 @@ interface BuilderEntity {
   attributes: AttributeSummary[];
 }
 
+interface XmlElementRange {
+  name: string;
+  start: number;
+  end: number;
+  parent?: XmlElementRange;
+  children: XmlElementRange[];
+}
+
 const defaultOperators = [
   "eq",
   "ne",
@@ -173,6 +181,9 @@ export function QueryBuilderPanel({
   const [showCompositor, setShowCompositor] = useState(true);
   const [showInspector, setShowInspector] = useState(true);
   const [isFetchCopied, setIsFetchCopied] = useState(false);
+  const [editorCursorOffset, setEditorCursorOffset] = useState<number | null>(
+    null,
+  );
 
   const selectedLink =
     selectedNode.type !== "fetch" && selectedNode.linkId
@@ -303,6 +314,20 @@ export function QueryBuilderPanel({
     const timeout = window.setTimeout(() => setIsFetchCopied(false), 1600);
     return () => window.clearTimeout(timeout);
   }, [isFetchCopied]);
+
+  useEffect(() => {
+    if (!showInspector || showCompositor || editorCursorOffset === null) {
+      return;
+    }
+    const nextNode = getSelectedNodeForFetchXmlOffset(
+      fetchXml,
+      editorCursorOffset,
+    );
+    if (!nextNode) return;
+    setSelectedNode((currentNode) =>
+      isSameSelectedNode(currentNode, nextNode) ? currentNode : nextNode,
+    );
+  }, [editorCursorOffset, fetchXml, showCompositor, showInspector]);
 
   function selectNode(nextNode: SelectedNode) {
     setSelectedNode((currentNode) => {
@@ -708,7 +733,11 @@ export function QueryBuilderPanel({
             </button>
           </div>
         </div>
-        <XmlEditor value={fetchXml} onChange={onChange} />
+        <XmlEditor
+          value={fetchXml}
+          onChange={onChange}
+          onCursorOffsetChange={setEditorCursorOffset}
+        />
       </section>
 
       {showCompositor ? (
@@ -2714,6 +2743,219 @@ function getOrderAttributeType(attribute?: AttributeSummary) {
   }
   if (name === "name" || name.endsWith("name")) return "String";
   return "Unknown";
+}
+
+function getSelectedNodeForFetchXmlOffset(
+  fetchXml: string,
+  offset: number,
+): SelectedNode | undefined {
+  const element = findDeepestElementAtOffset(parseXmlElementRanges(fetchXml), {
+    offset,
+  });
+  if (!element) return undefined;
+
+  switch (element.name) {
+    case "fetch":
+      return { type: "fetch" };
+    case "entity":
+      return { type: "entity" };
+    case "link-entity":
+      return makeSelectedNode("entity", getLinkIdForElement(element));
+    case "attribute":
+      return makeSelectedNode("attributes", getOwnerLinkId(element));
+    case "condition":
+      return makeSelectedNode(
+        "filters",
+        getOwnerLinkId(element),
+        getFilterIdForElement(findAncestorElement(element, "filter")),
+      );
+    case "filter":
+      return makeSelectedNode(
+        "filters",
+        getOwnerLinkId(element),
+        getFilterIdForElement(element),
+      );
+    case "order":
+      return makeSelectedNode("orders", getOwnerLinkId(element));
+    default:
+      return getSelectedNodeForFetchXmlElementContext(element);
+  }
+}
+
+function getSelectedNodeForFetchXmlElementContext(
+  element: XmlElementRange,
+): SelectedNode | undefined {
+  const filter = findAncestorElement(element, "filter");
+  if (filter) {
+    return makeSelectedNode(
+      "filters",
+      getOwnerLinkId(element),
+      getFilterIdForElement(filter),
+    );
+  }
+
+  const link = findAncestorElement(element, "link-entity");
+  if (link) return makeSelectedNode("entity", getLinkIdForElement(link));
+
+  const entity = findAncestorElement(element, "entity");
+  if (entity) return { type: "entity" };
+
+  return { type: "fetch" };
+}
+
+function parseXmlElementRanges(fetchXml: string): XmlElementRange[] {
+  const roots: XmlElementRange[] = [];
+  const stack: XmlElementRange[] = [];
+  const tagPattern = /<\s*(\/?)([A-Za-z][\w:-]*)([^<>]*?)(\/?)\s*>/g;
+  let match: RegExpExecArray | null;
+
+  while ((match = tagPattern.exec(fetchXml))) {
+    const [tag, closingSlash, name, rawAttributes = "", selfClosingSlash] =
+      match;
+    if (!name) continue;
+    if (tag.startsWith("<?") || tag.startsWith("<!")) continue;
+    if (closingSlash) {
+      closeXmlElementRange(stack, name, tagPattern.lastIndex);
+      continue;
+    }
+
+    const parent = stack.at(-1);
+    const element: XmlElementRange = {
+      name,
+      start: match.index,
+      end: tagPattern.lastIndex,
+      ...(parent ? { parent } : {}),
+      children: [],
+    };
+
+    if (parent) {
+      parent.children.push(element);
+    } else {
+      roots.push(element);
+    }
+
+    const isSelfClosing =
+      Boolean(selfClosingSlash) || rawAttributes.trimEnd().endsWith("/");
+    if (!isSelfClosing) stack.push(element);
+  }
+
+  for (const element of stack) {
+    element.end = fetchXml.length;
+  }
+
+  return roots;
+}
+
+function closeXmlElementRange(
+  stack: XmlElementRange[],
+  name: string,
+  end: number,
+) {
+  for (let index = stack.length - 1; index >= 0; index -= 1) {
+    const element = stack[index];
+    if (element?.name !== name) continue;
+    element.end = end;
+    stack.splice(index);
+    return;
+  }
+}
+
+function findDeepestElementAtOffset(
+  elements: XmlElementRange[],
+  { offset }: { offset: number },
+): XmlElementRange | undefined {
+  for (const element of elements) {
+    if (offset < element.start || offset > element.end) continue;
+    return (
+      findDeepestElementAtOffset(element.children, { offset }) ?? element
+    );
+  }
+  return undefined;
+}
+
+function findAncestorElement(
+  element: XmlElementRange | undefined,
+  name: string,
+) {
+  let current = element;
+  while (current) {
+    if (current.name === name) return current;
+    current = current.parent;
+  }
+  return undefined;
+}
+
+function getOwnerLinkId(element: XmlElementRange) {
+  const link = findAncestorElement(element, "link-entity");
+  return link ? getLinkIdForElement(link) : undefined;
+}
+
+function getLinkIdForElement(element: XmlElementRange | undefined) {
+  if (!element || element.name !== "link-entity") return undefined;
+  const path = getXmlElementSiblingPath(element, "link-entity");
+  return path ? `link-${path}` : undefined;
+}
+
+function getFilterIdForElement(filter: XmlElementRange | undefined) {
+  if (!filter || filter.name !== "filter") return undefined;
+  const owner = findFilterOwnerElement(filter);
+  if (!owner || filter.parent === owner) return undefined;
+
+  const ownerLinkPath =
+    owner.name === "link-entity"
+      ? getXmlElementSiblingPath(owner, "link-entity")
+      : "";
+  const filterPath = getNestedFilterPath(filter, owner);
+  if (!filterPath) return undefined;
+
+  return `filter-${[ownerLinkPath, filterPath].filter(Boolean).join("-")}`;
+}
+
+function findFilterOwnerElement(filter: XmlElementRange) {
+  let current = filter.parent;
+  while (current) {
+    if (current.name === "entity" || current.name === "link-entity") {
+      return current;
+    }
+    current = current.parent;
+  }
+  return undefined;
+}
+
+function getNestedFilterPath(
+  filter: XmlElementRange,
+  owner: XmlElementRange,
+) {
+  const parts: number[] = [];
+  let current: XmlElementRange | undefined = filter;
+
+  while (current?.parent && current.parent !== owner) {
+    parts.unshift(getElementSiblingIndex(current, "filter") + 1);
+    current = current.parent;
+  }
+
+  return parts.join("-");
+}
+
+function getXmlElementSiblingPath(element: XmlElementRange, name: string) {
+  const parts: number[] = [];
+  let current: XmlElementRange | undefined = element;
+
+  while (current?.name === name) {
+    parts.unshift(getElementSiblingIndex(current, name) + 1);
+    current = findAncestorElement(current.parent, name);
+  }
+
+  return parts.join("-");
+}
+
+function getElementSiblingIndex(element: XmlElementRange, name: string) {
+  const siblings = element.parent
+    ? element.parent.children
+    : [element];
+  return siblings
+    .filter((sibling) => sibling.name === name)
+    .findIndex((sibling) => sibling === element);
 }
 
 function isCompleteLink(link: FetchLinkEntitySelection) {
