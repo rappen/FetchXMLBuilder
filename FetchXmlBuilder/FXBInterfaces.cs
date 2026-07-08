@@ -231,6 +231,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 LogUse("SaveOptions");
                 var oldtrycachemetadata = settings.TryMetadataCache;
                 var oldaisetting = settings.AiSettings.ToString();
+                var oldaitoken = settings.AiSettings.GitHubTokenProtected;
                 settings = settingDlg.GetSettings();
                 if (Service != null)
                 {
@@ -271,8 +272,11 @@ namespace Rappen.XTB.FetchXmlBuilder
                 {
                     dockControlAiChat?.Close();
                 }
-                else if (oldaisetting != settings.AiSettings.ToString())
+                else if (oldaisetting != settings.AiSettings.ToString() ||
+                         oldaitoken != settings.AiSettings.GitHubTokenProtected)
                 {
+                    // Re-init the open chat when AI settings change, including a sign-in/out where only
+                    // the token changed (GitHubTokenProtected is not part of AiSettings.ToString()).
                     dockControlAiChat?.Initialize();
                 }
                 EnableControls();

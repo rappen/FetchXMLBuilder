@@ -146,6 +146,7 @@
     <Compile Include="AutocompleteTests.cs" />
     <Compile Include="QueryExpressionTests.cs" />
     <Compile Include="TestUrls.cs" />
+    <Compile Include="GitHubCopilotAuthTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

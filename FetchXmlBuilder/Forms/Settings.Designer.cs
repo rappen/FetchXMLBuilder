@@ -92,6 +92,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.label8 = new System.Windows.Forms.Label();
             this.cmbAiModel = new System.Windows.Forms.ComboBox();
             this.txtAiApiKey = new System.Windows.Forms.TextBox();
+            this.btnAiSignIn = new System.Windows.Forms.Button();
+            this.lblAiSignInStatus = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.tabResults = new System.Windows.Forms.TabPage();
             this.label5 = new System.Windows.Forms.Label();
@@ -689,6 +691,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabAiChat.Controls.Add(this.label8);
             this.tabAiChat.Controls.Add(this.cmbAiModel);
             this.tabAiChat.Controls.Add(this.txtAiApiKey);
+            this.tabAiChat.Controls.Add(this.btnAiSignIn);
+            this.tabAiChat.Controls.Add(this.lblAiSignInStatus);
             this.tabAiChat.Controls.Add(this.label7);
             this.tabAiChat.Location = new System.Drawing.Point(4, 22);
             this.tabAiChat.Name = "tabAiChat";
@@ -873,6 +877,26 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.txtAiApiKey.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtAiApiKey.Size = new System.Drawing.Size(387, 20);
             this.txtAiApiKey.TabIndex = 40;
+            // 
+            // btnAiSignIn
+            // 
+            this.btnAiSignIn.Location = new System.Drawing.Point(84, 96);
+            this.btnAiSignIn.Name = "btnAiSignIn";
+            this.btnAiSignIn.Size = new System.Drawing.Size(140, 23);
+            this.btnAiSignIn.TabIndex = 41;
+            this.btnAiSignIn.Text = "Sign in with GitHub";
+            this.btnAiSignIn.UseVisualStyleBackColor = true;
+            this.btnAiSignIn.Visible = false;
+            this.btnAiSignIn.Click += new System.EventHandler(this.btnAiSignIn_Click);
+            // 
+            // lblAiSignInStatus
+            // 
+            this.lblAiSignInStatus.AutoSize = true;
+            this.lblAiSignInStatus.Location = new System.Drawing.Point(232, 101);
+            this.lblAiSignInStatus.Name = "lblAiSignInStatus";
+            this.lblAiSignInStatus.Size = new System.Drawing.Size(0, 13);
+            this.lblAiSignInStatus.TabIndex = 42;
+            this.lblAiSignInStatus.Visible = false;
             // 
             // label7
             // 
@@ -1244,6 +1268,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox cmbAiProvider;
         private System.Windows.Forms.TextBox txtAiApiKey;
+        private System.Windows.Forms.Button btnAiSignIn;
+        private System.Windows.Forms.Label lblAiSignInStatus;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ComboBox cmbAiModel;
         private System.Windows.Forms.Label label7;
