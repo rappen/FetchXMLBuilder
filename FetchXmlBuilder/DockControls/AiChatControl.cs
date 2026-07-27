@@ -134,7 +134,31 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 return;
             }
             var apikey = "";
-            if (provider.Free)
+            Func<string> apikeyresolver = null;
+            if (provider.OAuth)
+            {
+                logname = $"AI-{provider.Name}";
+                var githubtoken = GitHubCopilotAuth.Unprotect(fxb.settings.AiSettings.GitHubTokenProtected);
+                if (string.IsNullOrWhiteSpace(githubtoken))
+                {
+                    if (neverprompt)
+                    {
+                        txtAiChat.Text = $"Not signed in to {provider}.{Environment.NewLine}Please open the Setting for AI Chat.";
+                    }
+                    else
+                    {
+                        MessageBoxEx.Show(fxb, $"You are not signed in to {provider}.\nGo check the setting!", "AI Chat", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        fxb.ShowSettings("tabAiChat");
+                        if (!string.IsNullOrWhiteSpace(GitHubCopilotAuth.Unprotect(fxb.settings.AiSettings.GitHubTokenProtected)))
+                        {
+                            Initialize();
+                        }
+                    }
+                    return;
+                }
+                apikeyresolver = () => GitHubCopilotAuth.GetCopilotToken(githubtoken);
+            }
+            else if (provider.Free)
             {
                 logname = "AI-Free";
                 if (IsFreeAiUser(fxb))
@@ -182,6 +206,10 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
             }
             logconversation = knownmodel?.LogConversation ?? fxb.settings.AiSettings.LogConversation;
             chatHistory = new ChatMessageHistory(panAiConversation, provider.Name, model, endpoint, apikey, fxb.settings.AiSettings.MyName, OnlineSettings.Instance.AiSupport.OnlyInfoName, provider.ToString());
+            if (apikeyresolver != null)
+            {
+                chatHistory.ApiKeyResolver = apikeyresolver;
+            }
             metaAttributes.Clear();
             metaRelationships.Clear();
             SetTitle();
@@ -244,7 +272,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
 
         private void EnableButtons()
         {
-            var cancall = chatHistory != null && !string.IsNullOrWhiteSpace(chatHistory.ApiKey) && metadataavailable;
+            var cancall = chatHistory != null && chatHistory.HasApiAccess && metadataavailable;
             btnAiChatAsk.Enabled = cancall && !string.IsNullOrWhiteSpace(txtAiChat.Text);
             btnYes.Enabled = cancall && chatHistory?.HasDialog == true;
             btnExecute.Enabled = cancall;
@@ -316,7 +344,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                 }
                 return;
             }
-            if (string.IsNullOrWhiteSpace(chatHistory.ApiKey))
+            if (!chatHistory.HasApiAccess)
             {
                 if (MessageBoxEx.Show(fxb, "No API Key found.\nAdd it in the setting!", "AI Chat", MessageBoxButtons.OKCancel, MessageBoxIcon.Error) == DialogResult.OK)
                 {

@@ -20,6 +20,9 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private bool validateinfo;
         internal bool forcereloadingmetadata = false;
         private List<AiSettings> aiproviders;
+        // Name of the OAuth provider whose live model list has already been fetched this dialog
+        // session, so we don't re-hit the /models endpoint on every provider re-selection.
+        private string oauthModelsLoadedFor;
 
         public Settings(FetchXmlBuilder fxb, string tab)
         {
@@ -86,7 +89,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                     txtAiEndpoint.Enabled = true;
                     txtAiEndpoint.Text = settings.AiSettings.Endpoint;
                 }
-                if (!provider.Free)
+                if (!provider.Free && !provider.OAuth)
                 {
                     txtAiApiKey.Text = settings.AiSettings.ApiKey;
                 }
@@ -192,6 +195,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             settings.AiSettings.LogConversation = chkAiLogConversation.Checked;
             UpdateAiSettingsList();
             settings.AiProviders = aiproviders;
+            // Look up the token by the provider's Name (aiproviders key), not cmbAiProvider.Text
+            // which is the display name (FullName) and won't match for providers like GitHub Copilot.
+            var selectedaiprovider = (cmbAiProvider.SelectedItem as AiProvider)?.Name ?? cmbAiProvider.Text;
+            settings.AiSettings.GitHubTokenProtected =
+                aiproviders.FirstOrDefault(a => a.Provider == selectedaiprovider)?.GitHubTokenProtected ?? "";
 
             // Results
             settings.ExecuteOptions.ResultOutput = FetchXmlBuilder.ResultItemToSettingResult(cmbResult.SelectedIndex);
@@ -447,11 +455,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 {
                     HandlingFreeAI(provider);
                 }
-                else
+                else if (!provider.OAuth)
                 {
                     LoadAiSettingsApiKey(provider);
                 }
-                txtAiApiKey.Enabled = !provider.Free;
+                txtAiApiKey.Enabled = !provider.Free && !provider.OAuth;
+                UpdateAiOAuthUi(provider);
                 cmbAiModel.Items.AddRange(provider.Models.ToArray());
                 if (provider.Models.FirstOrDefault(m => m.Name == fxb.settings.AiSettings.Model) is AiModel model)
                 {
@@ -468,9 +477,148 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 picAiProvider.Tag = null;
                 txtAiApiKey.Text = "";
                 txtAiApiKey.Enabled = false;
+                UpdateAiOAuthUi(null);
             }
             HideShowApiKey(txtAiApiKey.Enabled);
             cmbAiModel_SelectedIndexChanged();
+        }
+
+        private AiSettings CurrentProviderSetting(AiProvider provider, bool create)
+        {
+            if (provider == null)
+            {
+                return null;
+            }
+            if (aiproviders == null)
+            {
+                aiproviders = new List<AiSettings>();
+            }
+            var setting = aiproviders.FirstOrDefault(a => a.Provider == provider.Name);
+            if (setting == null && create)
+            {
+                setting = new AiSettings { Provider = provider.Name };
+                aiproviders.Add(setting);
+            }
+            return setting;
+        }
+
+        private void UpdateAiOAuthUi(AiProvider provider)
+        {
+            var oauth = provider != null && provider.OAuth;
+            btnAiSignIn.Visible = oauth;
+            lblAiSignInStatus.Visible = oauth;
+            txtAiApiKey.Visible = !oauth;
+            picAiApikey.Visible = !oauth;
+            label8.Visible = !oauth;
+            if (!oauth)
+            {
+                return;
+            }
+            var setting = CurrentProviderSetting(provider, false);
+            var signedIn = setting != null && !string.IsNullOrEmpty(setting.GitHubTokenProtected);
+            if (signedIn)
+            {
+                EnsureOAuthModels(provider, setting.GitHubTokenProtected, false);
+            }
+            btnAiSignIn.Text = signedIn ? "Sign out" : "Sign in with GitHub";
+            lblAiSignInStatus.Text = signedIn ? "Signed in" : "Not signed in";
+            lblAiSignInStatus.ForeColor = signedIn ? System.Drawing.Color.Green : System.Drawing.Color.Firebrick;
+        }
+
+        private void btnAiSignIn_Click(object sender, EventArgs e)
+        {
+            if (!(cmbAiProvider.SelectedItem is AiProvider provider) || !provider.OAuth)
+            {
+                return;
+            }
+            var existing = CurrentProviderSetting(provider, false);
+            var signedIn = existing != null && !string.IsNullOrEmpty(existing.GitHubTokenProtected);
+            if (signedIn)
+            {
+                if (MessageBoxEx.Show(this, $"Sign out of {provider}?", "GitHub Copilot", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    CurrentProviderSetting(provider, true).GitHubTokenProtected = "";
+                    GitHubCopilotAuth.ClearCache();
+                    oauthModelsLoadedFor = null;
+                    UpdateAiOAuthUi(provider);
+                }
+                return;
+            }
+            using (var dlg = new GitHubDeviceAuthForm())
+            {
+                if (dlg.ShowDialog(this) == DialogResult.OK && !string.IsNullOrEmpty(dlg.GitHubToken))
+                {
+                    var saved = CurrentProviderSetting(provider, true);
+                    saved.GitHubTokenProtected = GitHubCopilotAuth.Protect(dlg.GitHubToken);
+                    EnsureOAuthModels(provider, saved.GitHubTokenProtected, true);
+                    UpdateAiOAuthUi(provider);
+                    RepopulateModelCombo(provider);
+                }
+            }
+        }
+
+        /// <summary>
+        /// For OAuth providers (GitHub Copilot), replaces the provider's model list with the live
+        /// list the signed-in account can actually use. Falls back to the existing list on failure.
+        /// </summary>
+        /// <param name="provider">The selected AI provider; ignored unless it is an OAuth provider.</param>
+        /// <param name="gitHubTokenProtected">The DPAPI-protected GitHub token for the provider.</param>
+        /// <param name="force">When false, skips the fetch if this provider's models were already
+        /// loaded this session; pass true right after sign-in to force a refresh.</param>
+        private void EnsureOAuthModels(AiProvider provider, string gitHubTokenProtected, bool force)
+        {
+            if (provider == null || !provider.OAuth)
+            {
+                return;
+            }
+            if (!force && oauthModelsLoadedFor == provider.Name)
+            {
+                return;
+            }
+            var token = GitHubCopilotAuth.Unprotect(gitHubTokenProtected);
+            if (string.IsNullOrEmpty(token))
+            {
+                return;
+            }
+            var oldcursor = Cursor.Current;
+            Cursor.Current = Cursors.WaitCursor;
+            try
+            {
+                var models = GitHubCopilotAuth.GetModels(token);
+                if (models != null && models.Count > 0)
+                {
+                    provider.Models = models;
+                    oauthModelsLoadedFor = provider.Name;
+                }
+            }
+            finally
+            {
+                Cursor.Current = oldcursor;
+            }
+        }
+
+        /// <summary>
+        /// Refills the model dropdown from the provider's (possibly just-refreshed) model list,
+        /// preserving the currently selected/typed model when it still exists in the new list.
+        /// </summary>
+        private void RepopulateModelCombo(AiProvider provider)
+        {
+            if (provider == null)
+            {
+                return;
+            }
+            var current = cmbAiModel.Text;
+            cmbAiModel.Items.Clear();
+            cmbAiModel.Items.AddRange(provider.Models.ToArray());
+            if (provider.Models.FirstOrDefault(m => m.Name == current) is AiModel model)
+            {
+                cmbAiModel.SelectedItem = model;
+            }
+            else
+            {
+                cmbAiModel.SelectedIndex = -1;
+                cmbAiModel.Text = current;
+            }
         }
 
         private void cmbAiModel_SelectedIndexChanged(object sender = null, EventArgs e = null)

@@ -3,6 +3,7 @@ using Rappen.XTB.Helpers;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
@@ -38,8 +39,25 @@ namespace Rappen.XTB.FXB.Settings
                     }
 #endif
                     instance = XmlAtomicStore.DownloadXml<OnlineSettings>(ToolSettingsURLPath, FileName, folder);
+                    instance.EnsureLocalProviders();
                 }
                 return instance;
+            }
+        }
+
+        /// <summary>
+        /// Injects locally-defined AI providers that are not (yet) in the online configuration.
+        /// Idempotent. Currently adds GitHub Copilot (device-code sign-in).
+        /// </summary>
+        private void EnsureLocalProviders()
+        {
+            if (AiSupport?.AiProviders == null)
+            {
+                return;
+            }
+            if (!AiSupport.AiProviders.Any(p => p.Name == GitHubCopilotAuth.ProviderName))
+            {
+                AiSupport.AiProviders.Add(GitHubCopilotAuth.CreateProvider());
             }
         }
 
