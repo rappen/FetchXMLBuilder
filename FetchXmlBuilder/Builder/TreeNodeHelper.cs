@@ -325,7 +325,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Builder
 
         private static string GetLinkDirection(TreeNode node, FetchXmlBuilder fxb)
         {
-            if (fxb.entities == null)
+            if (fxb == null || fxb.entities == null || node == null || node.Parent == null)
             {
                 return string.Empty;
             }
