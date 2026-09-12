@@ -17,6 +17,10 @@
 - For AI prompt/tool-description design in this project, prefer online-file-driven templates with generic placeholder replacement rather than hardcoded token replacement logic.
 - Prefer extracting bloated prompt/template-loading members into a separate class-like abstraction when they clutter the main code.
 - Prefer a cleaner templating call style over verbose KeyValuePair construction when adding extra placeholder values, as long as safety remains reasonable.
+- For Foundry integrations, keep GPT and Claude model routing under the same provider and distinguish them by model rather than creating separate provider values.
+- For AI Chat integrations in FetchXML Builder, minimize dependencies and keep provider-specific protocol adapters isolated from the AI Chat core.
+- For AI model selection, show token/price information to users and provide an opt-in checkbox to include preview/experimental models.
+- In FetchXML Builder AI settings, 'Free' means providers free to the user (FXB-hosted/shared access), identified by 'Free' in their provider name—not free tiers offered by commercial providers such as Gemini. Dynamic model discovery should exclude only those FXB-free providers.
 
 ## Code Style
 - Follow specific formatting rules as per project requirements.
