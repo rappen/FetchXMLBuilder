@@ -431,6 +431,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             cmbAiModel.Items.Clear();
             if (cmbAiProvider.SelectedItem is AiProvider provider)
             {
+                cmbAiModel.DropDownStyle = provider.Free ? ComboBoxStyle.DropDownList : ComboBoxStyle.DropDown;
+
                 tt.SetToolTip(picAiProvider, $"Read about {provider} at {provider.Url}");
                 picAiProvider.Tag = provider.Url;
                 if (provider.EndpointFixed)
