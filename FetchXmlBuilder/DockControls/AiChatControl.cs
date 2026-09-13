@@ -646,7 +646,7 @@ namespace Rappen.XTB.FetchXmlBuilder.DockControls
                     .Replace("{{entityname}}", entityName)
                     .Replace("{{metadata}}", json),
                 $"Please find relationships that match the description {relationshipName}",
-                $"Asking FXB for relationships metadata to find '{relationshipName}' ino table '{entityName}'");
+                $"Asking FXB for relationships metadata to find '{relationshipName}' into table '{entityName}'");
             sw.Stop();
             Log($"Meta-Relationship-{entityName}-{relationshipName}", result, sw.ElapsedMilliseconds, relationships.Count);
 
