@@ -99,6 +99,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.label2 = new System.Windows.Forms.Label();
             this.panResultView = new System.Windows.Forms.Panel();
             this.tabLayout = new System.Windows.Forms.TabPage();
+            this.chkLayoutIncludeWhenSaveToFile = new System.Windows.Forms.CheckBox();
             this.panLayout = new System.Windows.Forms.Panel();
             this.chkLayoutUseFixedWidths = new System.Windows.Forms.CheckBox();
             this.linkLayout = new System.Windows.Forms.LinkLabel();
@@ -113,7 +114,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.btnResetAll = new System.Windows.Forms.Button();
             this.chkShowOData2 = new System.Windows.Forms.CheckBox();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
-            this.chkLayoutIncludeWhenSaveToFile = new System.Windows.Forms.CheckBox();
+            this.chkAiIncludePreview = new System.Windows.Forms.CheckBox();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
@@ -135,6 +137,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabDefaultQuery.SuspendLayout();
             this.tabXmlScheme.SuspendLayout();
             this.tabAdvanced.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmbResult
@@ -673,6 +676,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // tabAiChat
             // 
             this.tabAiChat.BackColor = System.Drawing.SystemColors.Window;
+            this.tabAiChat.Controls.Add(this.panel3);
             this.tabAiChat.Controls.Add(this.btnAiMyFlavors);
             this.tabAiChat.Controls.Add(this.picAiApikey);
             this.tabAiChat.Controls.Add(this.label12);
@@ -687,7 +691,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabAiChat.Controls.Add(this.label6);
             this.tabAiChat.Controls.Add(this.cmbAiProvider);
             this.tabAiChat.Controls.Add(this.label8);
-            this.tabAiChat.Controls.Add(this.cmbAiModel);
             this.tabAiChat.Controls.Add(this.txtAiApiKey);
             this.tabAiChat.Controls.Add(this.label7);
             this.tabAiChat.Location = new System.Drawing.Point(4, 22);
@@ -852,14 +855,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             // cmbAiModel
             // 
+            this.cmbAiModel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cmbAiModel.FormattingEnabled = true;
             this.cmbAiModel.Items.AddRange(new object[] {
             "Anthropic",
             "ChatGTP",
             "xyz"});
-            this.cmbAiModel.Location = new System.Drawing.Point(84, 44);
+            this.cmbAiModel.Location = new System.Drawing.Point(0, 0);
             this.cmbAiModel.Name = "cmbAiModel";
-            this.cmbAiModel.Size = new System.Drawing.Size(387, 21);
+            this.cmbAiModel.Size = new System.Drawing.Size(317, 21);
             this.cmbAiModel.TabIndex = 20;
             this.tt.SetToolTip(this.cmbAiModel, "Select an existing model that we know FXB can\r\ncommunicate with.\r\nWe can also ent" +
         "er a custom model, just make\r\nsure you know it\'s available!");
@@ -954,6 +958,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabLayout.Size = new System.Drawing.Size(505, 209);
             this.tabLayout.TabIndex = 1;
             this.tabLayout.Text = "Layout";
+            // 
+            // chkLayoutIncludeWhenSaveToFile
+            // 
+            this.chkLayoutIncludeWhenSaveToFile.AutoSize = true;
+            this.chkLayoutIncludeWhenSaveToFile.Location = new System.Drawing.Point(20, 76);
+            this.chkLayoutIncludeWhenSaveToFile.Name = "chkLayoutIncludeWhenSaveToFile";
+            this.chkLayoutIncludeWhenSaveToFile.Size = new System.Drawing.Size(236, 17);
+            this.chkLayoutIncludeWhenSaveToFile.TabIndex = 22;
+            this.chkLayoutIncludeWhenSaveToFile.Text = "Include Layout when Save Fetch XML to file";
+            this.chkLayoutIncludeWhenSaveToFile.UseVisualStyleBackColor = true;
             // 
             // panLayout
             // 
@@ -1102,15 +1116,27 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         "how it anyway, if you which, but checking this one.");
             this.chkShowOData2.UseVisualStyleBackColor = true;
             // 
-            // chkLayoutIncludeWhenSaveToFile
+            // chkAiIncludePreview
             // 
-            this.chkLayoutIncludeWhenSaveToFile.AutoSize = true;
-            this.chkLayoutIncludeWhenSaveToFile.Location = new System.Drawing.Point(20, 76);
-            this.chkLayoutIncludeWhenSaveToFile.Name = "chkLayoutIncludeWhenSaveToFile";
-            this.chkLayoutIncludeWhenSaveToFile.Size = new System.Drawing.Size(236, 17);
-            this.chkLayoutIncludeWhenSaveToFile.TabIndex = 22;
-            this.chkLayoutIncludeWhenSaveToFile.Text = "Include Layout when Save Fetch XML to file";
-            this.chkLayoutIncludeWhenSaveToFile.UseVisualStyleBackColor = true;
+            this.chkAiIncludePreview.AutoSize = true;
+            this.chkAiIncludePreview.Dock = System.Windows.Forms.DockStyle.Right;
+            this.chkAiIncludePreview.Location = new System.Drawing.Point(317, 0);
+            this.chkAiIncludePreview.Name = "chkAiIncludePreview";
+            this.chkAiIncludePreview.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.chkAiIncludePreview.Size = new System.Drawing.Size(70, 23);
+            this.chkAiIncludePreview.TabIndex = 25;
+            this.chkAiIncludePreview.Text = "Preview";
+            this.chkAiIncludePreview.UseVisualStyleBackColor = true;
+            this.chkAiIncludePreview.CheckedChanged += new System.EventHandler(this.chkAiIncludePreview_CheckedChanged);
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.cmbAiModel);
+            this.panel3.Controls.Add(this.chkAiIncludePreview);
+            this.panel3.Location = new System.Drawing.Point(84, 44);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(387, 23);
+            this.panel3.TabIndex = 93;
             // 
             // propXmlColors
             // 
@@ -1187,6 +1213,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabXmlScheme.PerformLayout();
             this.tabAdvanced.ResumeLayout(false);
             this.tabAdvanced.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1274,5 +1302,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private System.Windows.Forms.PictureBox picNoSelfClosingXml;
         private System.Windows.Forms.Button btnAiMyFlavors;
         private System.Windows.Forms.CheckBox chkLayoutIncludeWhenSaveToFile;
+        private System.Windows.Forms.CheckBox chkAiIncludePreview;
+        private System.Windows.Forms.Panel panel3;
     }
 }

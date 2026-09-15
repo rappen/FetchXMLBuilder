@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
@@ -426,15 +427,25 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
         }
 
-        private void cmbAiProvider_SelectedIndexChanged(object sender = null, EventArgs e = null)
+        private async void cmbAiProvider_SelectedIndexChanged(object sender = null, EventArgs e = null)
         {
             cmbAiModel.Items.Clear();
+
             if (cmbAiProvider.SelectedItem is AiProvider provider)
             {
-                cmbAiModel.DropDownStyle = provider.Free ? ComboBoxStyle.DropDownList : ComboBoxStyle.DropDown;
+                var canLoadDynamicModels =
+                    provider.DynamicModels &&
+                    AiModelCatalog.CanDiscover(provider.Name, provider.Free);
+
+                chkAiIncludePreview.Visible = canLoadDynamicModels;
+
+                cmbAiModel.DropDownStyle = provider.DynamicModels || provider.Free
+                    ? ComboBoxStyle.DropDownList
+                    : ComboBoxStyle.DropDown;
 
                 tt.SetToolTip(picAiProvider, $"Read about {provider} at {provider.Url}");
                 picAiProvider.Tag = provider.Url;
+
                 if (provider.EndpointFixed)
                 {
                     txtAiEndpoint.Text = "";
@@ -445,6 +456,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                     txtAiEndpoint.Enabled = true;
                     LoadAiSettingEndpoint(provider);
                 }
+
                 if (provider.Free)
                 {
                     HandlingFreeAI(provider);
@@ -453,49 +465,70 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 {
                     LoadAiSettingsApiKey(provider);
                 }
+
                 txtAiApiKey.Enabled = !provider.Free;
-                cmbAiModel.Items.AddRange(provider.Models.ToArray());
-                if (provider.Models.FirstOrDefault(m => m.Name == fxb.settings.AiSettings.Model) is AiModel model)
+
+                if (provider.DynamicModels)
                 {
-                    cmbAiModel.SelectedItem = model;
+                    await LoadDynamicAiModelsAsync(provider, false);
                 }
                 else
                 {
-                    cmbAiModel.SelectedIndex = -1;
-                    cmbAiModel.Text = fxb.settings.AiSettings.Model;
+                    cmbAiModel.Items.AddRange(provider.Models.ToArray());
+                    SelectConfiguredAiModel();
                 }
             }
             else
             {
                 picAiProvider.Tag = null;
+                chkAiIncludePreview.Visible = false;
                 txtAiApiKey.Text = "";
                 txtAiApiKey.Enabled = false;
             }
+
             HideShowApiKey(txtAiApiKey.Enabled);
             cmbAiModel_SelectedIndexChanged();
         }
 
         private void cmbAiModel_SelectedIndexChanged(object sender = null, EventArgs e = null)
         {
-            if (cmbAiProvider.SelectedItem is AiProvider provider && cmbAiModel.SelectedItem is AiModel model)
+            if (cmbAiProvider.SelectedItem is AiProvider provider &&
+                cmbAiModel.SelectedItem is AiModel model)
             {
-                picAiUrl.Tag = OnlineSettings.Instance.AiSupport.Provider(cmbAiProvider.Text)?.Models.FirstOrDefault(m => m.Name == cmbAiModel.Text)?.Url;
+                picAiUrl.Tag = model.Url;
+
                 if (model.LogConversation != null)
                 {
                     chkAiLogConversation.Checked = model.LogConversation.Value;
                     chkAiLogConversation.Enabled = false;
-                    tt.SetToolTip(picAiLogConversation, $"The setting for logging conversations is determined by{Environment.NewLine}Provider: {provider}{Environment.NewLine}Model: {model}{Environment.NewLine}This cannot be changed manually.");
+                    tt.SetToolTip(
+                        picAiLogConversation,
+                        $"The setting for logging conversations is determined by{Environment.NewLine}" +
+                        $"Provider: {provider}{Environment.NewLine}" +
+                        $"Model: {model}{Environment.NewLine}" +
+                        "This cannot be changed manually.");
                 }
                 else
                 {
                     chkAiLogConversation.Enabled = true;
-                    tt.SetToolTip(picAiLogConversation, $"If checked, the conversation will be logged to Application Insights.");
+                    tt.SetToolTip(
+                        picAiLogConversation,
+                        "If checked, the conversation will be logged to Application Insights.");
                 }
+            }
+            else if (cmbAiModel.SelectedItem is AiModel availableModel)
+            {
+                picAiUrl.Tag = availableModel.Url;
+                chkAiLogConversation.Enabled = true;
+                tt.SetToolTip(
+                    picAiLogConversation,
+                    "If checked, the conversation will be logged to Application Insights.");
             }
             else
             {
                 picAiUrl.Tag = null;
             }
+
             picAiProvider.Visible = picAiProvider.Tag != null;
             picAiUrl.Visible = picAiUrl.Tag != null;
         }
@@ -584,6 +617,107 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private void btnAiMyFlavors_Click(object sender, EventArgs e)
         {
             SettingsAI.ShowAiSettingsDialog(this, fxb.settings.AiSettings);
+        }
+
+        private async Task LoadDynamicAiModelsAsync(AiProvider provider, bool showErrors)
+        {
+            if (!provider.DynamicModels ||
+                !AiModelCatalog.CanDiscover(provider.Name, provider.Free))
+            {
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtAiApiKey.Text))
+            {
+                return;
+            }
+
+            try
+            {
+                chkAiIncludePreview.Enabled = false;
+                Cursor = Cursors.WaitCursor;
+
+                var selectedModel = fxb.settings.AiSettings.Model;
+
+                var models = await AiModelCatalog.GetAsync(
+                    provider,
+                    txtAiEndpoint.Text,
+                    txtAiApiKey.Text,
+                    chkAiIncludePreview.Checked);
+
+                cmbAiModel.BeginUpdate();
+                try
+                {
+                    cmbAiModel.Items.Clear();
+                    cmbAiModel.Items.AddRange(models.Cast<object>().ToArray());
+
+                    var selected = models.FirstOrDefault(model =>
+                        string.Equals(
+                            model.Name,
+                            selectedModel,
+                            StringComparison.OrdinalIgnoreCase));
+
+                    cmbAiModel.SelectedItem = selected ?? models.FirstOrDefault();
+                }
+                finally
+                {
+                    cmbAiModel.EndUpdate();
+                }
+
+                if (showErrors && models.Count == 0)
+                {
+                    MessageBoxEx.Show(
+                        this,
+                        "No compatible chat models were returned for this provider, key, and endpoint.",
+                        "AI Chat Models",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (showErrors)
+                {
+                    MessageBoxEx.Show(
+                        this,
+                        ex.Message,
+                        "AI Chat Models",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+                chkAiIncludePreview.Enabled = true;
+            }
+        }
+
+        private void SelectConfiguredAiModel()
+        {
+            if (cmbAiProvider.SelectedItem is AiProvider provider &&
+                provider.Models.FirstOrDefault(model =>
+                    string.Equals(
+                        model.Name,
+                        fxb.settings.AiSettings.Model,
+                        StringComparison.OrdinalIgnoreCase)) is AiModel model)
+            {
+                cmbAiModel.SelectedItem = model;
+            }
+            else
+            {
+                cmbAiModel.SelectedIndex = -1;
+                cmbAiModel.Text = fxb.settings.AiSettings.Model;
+            }
+        }
+
+        private async void chkAiIncludePreview_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cmbAiProvider.SelectedItem is AiProvider provider &&
+                provider.DynamicModels)
+            {
+                await LoadDynamicAiModelsAsync(provider, true);
+            }
         }
     }
 }
