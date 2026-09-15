@@ -113,6 +113,7 @@
             this.panAiConversation.Name = "panAiConversation";
             this.panAiConversation.Size = new System.Drawing.Size(499, 281);
             this.panAiConversation.TabIndex = 0;
+            this.panAiConversation.Tag = "FXB";
             // 
             // txtAiChat
             // 
