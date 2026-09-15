@@ -640,6 +640,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 var selectedModel = fxb.settings.AiSettings.Model;
 
                 var models = await AiModelCatalog.GetAsync(
+                    OnlineSettings.Instance.AiSupport,
                     provider,
                     txtAiEndpoint.Text,
                     txtAiApiKey.Text,
