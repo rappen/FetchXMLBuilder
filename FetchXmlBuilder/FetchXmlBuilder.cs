@@ -27,21 +27,8 @@ namespace Rappen.XTB.FetchXmlBuilder
 {
     public partial class FetchXmlBuilder : RappPluginControlBase
     {
-        #region AI to log
-
-        private const string aiEndpoint = "https://dc.services.visualstudio.com/v2/track";
-        private const string aiKey1 = "eed73022-2444-45fd-928b-5eebd8fa46a6";    // jonas@rappen.net tenant, XrmToolBox
-
-        //private const string aiKey = "b6a4ec7c-ab43-4780-97cd-021e99506337";   // jonas@jonasr.app, XrmToolBoxInsights
-        private const string aiKey2 = "d46e9c12-ee8b-4b28-9643-dae62ae7d3d4";    // jonas@jonasr.app, XrmToolBoxTools
-
-        private readonly AppInsights ai1;
-
-        #endregion AI to log
-
         #region Internal Fields
 
-        internal readonly AppInsights ai2;
         internal Dictionary<string, List<Entity>> views;
         internal FXBSettings settings;
         internal FXBConnectionSettings connectionsettings;
@@ -77,11 +64,6 @@ namespace Rappen.XTB.FetchXmlBuilder
             Version = Assembly.GetExecutingAssembly().GetName().Version;
             UrlUtils.TOOL_NAME = "FetchXMLBuilder";
             tslAbout.ToolTipText = $"Version: {Version}";
-
-            // When my PR https://github.com/MscrmTools/XrmToolBox/pull/1409 is accepted,
-            // use constructor that takes my tool as parameter
-            ai1 = new AppInsights(aiEndpoint, aiKey1, Assembly.GetExecutingAssembly(), "FetchXML Builder");
-            ai2 = new AppInsights(aiEndpoint, aiKey2, Assembly.GetExecutingAssembly(), "FetchXML Builder");
 
             var theme = new VS2015LightTheme();
             dockContainer.Theme = theme;
