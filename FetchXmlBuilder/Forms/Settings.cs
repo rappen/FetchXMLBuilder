@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
@@ -21,11 +20,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private bool validateinfo;
         internal bool forcereloadingmetadata = false;
         private List<AiSettings> aiproviders;
+        private AiProvider loadingDynamicModelsProvider;
 
         public Settings(FetchXmlBuilder fxb, string tab)
         {
             InitializeComponent();
             this.fxb = fxb;
+
             cmbAiProvider.Items.Clear();
             cmbAiProvider.Items.Add("");
             cmbAiProvider.Items.AddRange(OnlineSettings.Instance.AiSupport.SupportedAiProviders(fxb.Version).ToArray());
@@ -34,9 +35,16 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 .Cast<TabPage>()
                 .FirstOrDefault(t => t.Name == tab)
                 ?? tabSettings.TabPages
-                .Cast<TabPage>()
-                .FirstOrDefault(t => t.Text == tab)
+                    .Cast<TabPage>()
+                    .FirstOrDefault(t => t.Text == tab)
                 ?? tabAppearance;
+
+            if (tabSettings.SelectedTab == tabAiChat &&
+                cmbAiProvider.SelectedItem is AiProvider provider &&
+                provider.DynamicModels)
+            {
+                LoadDynamicAiModels(provider, false);
+            }
         }
 
         private void PopulateSettings(FXBSettings settings)
@@ -427,7 +435,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
         }
 
-        private async void cmbAiProvider_SelectedIndexChanged(object sender = null, EventArgs e = null)
+        private void cmbAiProvider_SelectedIndexChanged(object sender = null, EventArgs e = null)
         {
             cmbAiModel.Items.Clear();
 
@@ -470,7 +478,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
                 if (provider.DynamicModels)
                 {
-                    await LoadDynamicAiModelsAsync(provider, false);
+                    if (tabSettings.SelectedTab == tabAiChat)
+                    {
+                        LoadDynamicAiModels(provider, false);
+                    }
                 }
                 else
                 {
@@ -619,79 +630,122 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             SettingsAI.ShowAiSettingsDialog(this, fxb.settings.AiSettings);
         }
 
-        private async Task LoadDynamicAiModelsAsync(AiProvider provider, bool showErrors)
+        private void LoadDynamicAiModels(AiProvider provider, bool showErrors)
         {
             if (!provider.DynamicModels ||
-                !AiModelCatalog.CanDiscover(provider.Name, provider.Free))
+                !AiModelCatalog.CanDiscover(provider.Name, provider.Free) ||
+                string.IsNullOrWhiteSpace(txtAiApiKey.Text) ||
+                ReferenceEquals(loadingDynamicModelsProvider, provider))
             {
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(txtAiApiKey.Text))
-            {
-                return;
-            }
+            var aiSupport = OnlineSettings.Instance.AiSupport;
+            var selectedModel = fxb.settings.AiSettings.Model;
+            var endpoint = txtAiEndpoint.Text;
+            var apiKey = txtAiApiKey.Text;
+            var includePreviewExperimental = chkAiIncludePreview.Checked;
 
-            try
-            {
-                chkAiIncludePreview.Enabled = false;
-                Cursor = Cursors.WaitCursor;
+            loadingDynamicModelsProvider = provider;
 
-                var selectedModel = fxb.settings.AiSettings.Model;
+            cmbAiModel.Items.Clear();
+            cmbAiModel.DropDownStyle = ComboBoxStyle.DropDown;
+            cmbAiModel.Text = $"Loading {provider.Name} models...";
+            cmbAiModel.Enabled = false;
+            chkAiIncludePreview.Enabled = false;
 
-                var models = await AiModelCatalog.GetAsync(
-                    OnlineSettings.Instance.AiSupport,
-                    provider,
-                    txtAiEndpoint.Text,
-                    txtAiApiKey.Text,
-                    chkAiIncludePreview.Checked);
-
-                cmbAiModel.BeginUpdate();
-                try
+            fxb.WorkAsync(new WorkAsyncInfo(
+                $"Loading {provider.Name} AI models...",
+                workArgs =>
                 {
-                    cmbAiModel.Items.Clear();
-                    cmbAiModel.Items.AddRange(models.Cast<object>().ToArray());
-
-                    var selected = models.FirstOrDefault(model =>
-                        string.Equals(
-                            model.Name,
-                            selectedModel,
-                            StringComparison.OrdinalIgnoreCase));
-
-                    cmbAiModel.SelectedItem = selected ?? models.FirstOrDefault();
-                }
-                finally
-                {
-                    cmbAiModel.EndUpdate();
-                }
-
-                if (showErrors && models.Count == 0)
-                {
-                    MessageBoxEx.Show(
-                        this,
-                        "No compatible chat models were returned for this provider, key, and endpoint.",
-                        "AI Chat Models",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-                }
-            }
-            catch (Exception ex)
+                    workArgs.Result = AiModelCatalog.GetAsync(
+                            aiSupport,
+                            provider,
+                            endpoint,
+                            apiKey,
+                            includePreviewExperimental)
+                        .GetAwaiter()
+                        .GetResult();
+                })
             {
-                if (showErrors)
+                PostWorkCallBack = completedArgs =>
                 {
-                    MessageBoxEx.Show(
-                        this,
-                        ex.Message,
-                        "AI Chat Models",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
+                    try
+                    {
+                        if (!ReferenceEquals(cmbAiProvider.SelectedItem, provider))
+                        {
+                            return;
+                        }
+
+                        if (completedArgs.Error != null)
+                        {
+                            cmbAiModel.Items.Clear();
+                            cmbAiModel.Text = string.Empty;
+
+                            if (showErrors)
+                            {
+                                MessageBoxEx.Show(
+                                    this,
+                                    completedArgs.Error.Message,
+                                    "AI Chat Models",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                            }
+
+                            return;
+                        }
+
+                        var models = completedArgs.Result as IReadOnlyList<AiModel>;
+                        if (models == null)
+                        {
+                            return;
+                        }
+
+                        cmbAiModel.BeginUpdate();
+                        try
+                        {
+                            cmbAiModel.Items.Clear();
+                            cmbAiModel.Items.AddRange(models.Cast<object>().ToArray());
+
+                            var selected = models.FirstOrDefault(model =>
+                                string.Equals(
+                                    model.Name,
+                                    selectedModel,
+                                    StringComparison.OrdinalIgnoreCase));
+
+                            cmbAiModel.SelectedItem = selected ?? models.FirstOrDefault();
+                        }
+                        finally
+                        {
+                            cmbAiModel.EndUpdate();
+                        }
+
+                        if (showErrors && models.Count == 0)
+                        {
+                            MessageBoxEx.Show(
+                                this,
+                                "No compatible chat models were returned for this provider, key, and endpoint.",
+                                "AI Chat Models",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                        }
+                    }
+                    finally
+                    {
+                        if (ReferenceEquals(loadingDynamicModelsProvider, provider))
+                        {
+                            loadingDynamicModelsProvider = null;
+                        }
+
+                        if (ReferenceEquals(cmbAiProvider.SelectedItem, provider))
+                        {
+                            cmbAiModel.DropDownStyle = ComboBoxStyle.DropDownList;
+                            cmbAiModel.Enabled = true;
+                            chkAiIncludePreview.Enabled = true;
+                        }
+                    }
                 }
-            }
-            finally
-            {
-                Cursor = Cursors.Default;
-                chkAiIncludePreview.Enabled = true;
-            }
+            });
         }
 
         private void SelectConfiguredAiModel()
@@ -712,12 +766,23 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             }
         }
 
-        private async void chkAiIncludePreview_CheckedChanged(object sender, EventArgs e)
+        private void chkAiIncludePreview_CheckedChanged(object sender, EventArgs e)
         {
             if (cmbAiProvider.SelectedItem is AiProvider provider &&
                 provider.DynamicModels)
             {
-                await LoadDynamicAiModelsAsync(provider, true);
+                LoadDynamicAiModels(provider, true);
+            }
+        }
+
+        private void tabSettings_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabSettings.SelectedTab == tabAiChat &&
+                cmbAiProvider.SelectedItem is AiProvider provider &&
+                provider.DynamicModels &&
+                cmbAiModel.Items.Count == 0)
+            {
+                LoadDynamicAiModels(provider, false);
             }
         }
     }
