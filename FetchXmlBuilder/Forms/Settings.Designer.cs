@@ -111,12 +111,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabXmlScheme = new System.Windows.Forms.TabPage();
             this.label4 = new System.Windows.Forms.Label();
             this.btnResetXmlColors = new System.Windows.Forms.Button();
-            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             this.tabAdvanced = new System.Windows.Forms.TabPage();
             this.btnForceReloadMetadata = new System.Windows.Forms.Button();
             this.btnResetAll = new System.Windows.Forms.Button();
             this.chkShowOData2 = new System.Windows.Forms.CheckBox();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
+            this.propXmlColors = new System.Windows.Forms.PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxColumnWidth)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -525,7 +525,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             this.tabAppearance.Size = new System.Drawing.Size(505, 209);
             this.tabAppearance.TabIndex = 0;
             this.tabAppearance.Text = "Appearance";
-            this.tabAppearance.Click += new System.EventHandler(this.tabAppearance_Click);
             // 
             // picNoSelfClosingXml
             // 
@@ -704,10 +703,10 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             this.panel3.Controls.Add(this.cmbAiModel);
             this.panel3.Controls.Add(this.chkAiIncludePreview);
-            this.panel3.Location = new System.Drawing.Point(84, 44);
+            this.panel3.Location = new System.Drawing.Point(84, 98);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(387, 23);
-            this.panel3.TabIndex = 93;
+            this.panel3.TabIndex = 45;
             // 
             // cmbAiModel
             // 
@@ -752,7 +751,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             this.picAiApikey.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picAiApikey.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_eye_16;
-            this.picAiApikey.Location = new System.Drawing.Point(477, 100);
+            this.picAiApikey.Location = new System.Drawing.Point(477, 73);
             this.picAiApikey.Name = "picAiApikey";
             this.picAiApikey.Size = new System.Drawing.Size(16, 16);
             this.picAiApikey.TabIndex = 91;
@@ -763,7 +762,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(20, 74);
+            this.label12.Location = new System.Drawing.Point(20, 47);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(49, 13);
             this.label12.TabIndex = 21;
@@ -771,12 +770,13 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             // txtAiEndpoint
             // 
-            this.txtAiEndpoint.Location = new System.Drawing.Point(84, 71);
+            this.txtAiEndpoint.Location = new System.Drawing.Point(84, 44);
             this.txtAiEndpoint.Name = "txtAiEndpoint";
             this.txtAiEndpoint.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtAiEndpoint.Size = new System.Drawing.Size(387, 20);
             this.txtAiEndpoint.TabIndex = 30;
             this.tt.SetToolTip(this.txtAiEndpoint, "The Endpoint might be needed, depending on type of \r\nprovider and model.");
+            this.txtAiEndpoint.Leave += new System.EventHandler(this.txtAiEndpoint_Leave);
             // 
             // picAiLogConversation
             // 
@@ -838,7 +838,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             this.picAiUrl.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picAiUrl.Image = global::Cinteros.Xrm.FetchXmlBuilder.Properties.Resources.icon_link_16;
-            this.picAiUrl.Location = new System.Drawing.Point(477, 46);
+            this.picAiUrl.Location = new System.Drawing.Point(477, 100);
             this.picAiUrl.Name = "picAiUrl";
             this.picAiUrl.Size = new System.Drawing.Size(16, 16);
             this.picAiUrl.TabIndex = 10;
@@ -886,7 +886,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(20, 101);
+            this.label8.Location = new System.Drawing.Point(20, 74);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(45, 13);
             this.label8.TabIndex = 5;
@@ -894,7 +894,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // 
             // txtAiApiKey
             // 
-            this.txtAiApiKey.Location = new System.Drawing.Point(84, 98);
+            this.txtAiApiKey.Location = new System.Drawing.Point(84, 71);
             this.txtAiApiKey.Name = "txtAiApiKey";
             this.txtAiApiKey.PasswordChar = '●';
             this.txtAiApiKey.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -904,7 +904,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(20, 47);
+            this.label7.Location = new System.Drawing.Point(20, 101);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(36, 13);
             this.label7.TabIndex = 3;

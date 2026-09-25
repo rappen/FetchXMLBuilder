@@ -438,6 +438,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private void cmbAiProvider_SelectedIndexChanged(object sender = null, EventArgs e = null)
         {
             cmbAiModel.Items.Clear();
+            cmbAiModel.Text = string.Empty;
 
             if (cmbAiProvider.SelectedItem is AiProvider provider)
             {
@@ -621,10 +622,6 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             UrlUtils.OpenUrl(sender);
         }
 
-        private void tabAppearance_Click(object sender, EventArgs e)
-        {
-        }
-
         private void btnAiMyFlavors_Click(object sender, EventArgs e)
         {
             SettingsAI.ShowAiSettingsDialog(this, fxb.settings.AiSettings);
@@ -635,6 +632,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             if (!provider.DynamicModels ||
                 !AiModelCatalog.CanDiscover(provider.Name, provider.Free) ||
                 string.IsNullOrWhiteSpace(txtAiApiKey.Text) ||
+                (!provider.EndpointFixed && string.IsNullOrWhiteSpace(txtAiEndpoint.Text)) ||
                 ReferenceEquals(loadingDynamicModelsProvider, provider))
             {
                 return;
@@ -782,6 +780,19 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 provider.DynamicModels &&
                 cmbAiModel.Items.Count == 0)
             {
+                LoadDynamicAiModels(provider, false);
+            }
+        }
+
+        private void txtAiEndpoint_Leave(object sender, EventArgs e)
+        {
+            if (tabSettings.SelectedTab == tabAiChat &&
+                cmbAiProvider.SelectedItem is AiProvider provider &&
+                provider.DynamicModels &&
+                !provider.EndpointFixed)
+            {
+                cmbAiModel.Items.Clear();
+                cmbAiModel.Text = string.Empty;
                 LoadDynamicAiModels(provider, false);
             }
         }
