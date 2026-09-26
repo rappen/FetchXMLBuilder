@@ -21,6 +21,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         internal bool forcereloadingmetadata = false;
         private List<AiSettings> aiproviders;
         private AiProvider loadingDynamicModelsProvider;
+        private bool foundryProjectEndpointPrompted;
 
         public Settings(FetchXmlBuilder fxb, string tab)
         {
@@ -444,7 +445,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             {
                 var canLoadDynamicModels =
                     provider.DynamicModels &&
-                    AiModelCatalog.CanDiscover(provider.Name, provider.Free);
+                    AiModelCatalog.CanDiscover(provider);
 
                 chkAiIncludePreview.Visible = canLoadDynamicModels;
 
@@ -630,13 +631,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
         private void LoadDynamicAiModels(AiProvider provider, bool showErrors)
         {
             if (!provider.DynamicModels ||
-                !AiModelCatalog.CanDiscover(provider.Name, provider.Free) ||
+                !AiModelCatalog.CanDiscover(provider) ||
                 string.IsNullOrWhiteSpace(txtAiApiKey.Text) ||
                 (!provider.EndpointFixed && string.IsNullOrWhiteSpace(txtAiEndpoint.Text)) ||
                 ReferenceEquals(loadingDynamicModelsProvider, provider))
             {
                 return;
             }
+
+            PromptForFoundryProjectEndpoint(provider);
 
             var aiSupport = OnlineSettings.Instance.AiSupport;
             var selectedModel = fxb.settings.AiSettings.Model;
@@ -646,6 +649,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
             loadingDynamicModelsProvider = provider;
 
+            Cursor = Cursors.WaitCursor;
             cmbAiModel.Items.Clear();
             cmbAiModel.DropDownStyle = ComboBoxStyle.DropDown;
             cmbAiModel.Text = $"Loading {provider.Name} models...";
@@ -741,6 +745,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                             cmbAiModel.Enabled = true;
                             chkAiIncludePreview.Enabled = true;
                         }
+
+                        Cursor = Cursors.Default;
                     }
                 }
             });
@@ -795,6 +801,32 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 cmbAiModel.Text = string.Empty;
                 LoadDynamicAiModels(provider, false);
             }
+        }
+
+        private void PromptForFoundryProjectEndpoint(AiProvider provider)
+        {
+            if (foundryProjectEndpointPrompted ||
+                provider?.Type != AiProviderType.MicrosoftFoundryOpenAI ||
+                string.IsNullOrWhiteSpace(txtAiEndpoint.Text) ||
+                txtAiEndpoint.Text.IndexOf(
+                    ".services.ai.azure.com/api/projects/",
+                    StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                return;
+            }
+
+            foundryProjectEndpointPrompted = true;
+
+            MessageBoxEx.Show(
+                this,
+                "For Microsoft Foundry, paste the Project endpoint from the Foundry portal " +
+                "to enable dynamic model loading.\n\n" +
+                "Existing endpoints continue to work for chat, but use the configured model list.\n\n" +
+                "Example:\n" +
+                "https://<resource>.services.ai.azure.com/api/projects/<project>",
+                "Microsoft Foundry Project endpoint",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
         }
     }
 }

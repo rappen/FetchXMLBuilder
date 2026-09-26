@@ -10,6 +10,7 @@
 - Preserve backward compatibility for older released FetchXML Builder versions. The platform cannot force updates, so online settings, configuration schemas, protocols, and services must safely support clients that do not recognize new fields or features.
 - Keep existing online-settings model entries when adding dynamic model discovery. Older releases depend on the static model lists, and newer releases can use them as known-model overrides or fallbacks.
 - Do not create or save task-specific memories. Only record durable, broadly applicable preferences or instructions that are explicitly requested or clearly stated.
+- Phrase remembered coding guidance generally, rather than tying it to narrow implementation details.
 
 ## AI Chat and Provider Integration
 
