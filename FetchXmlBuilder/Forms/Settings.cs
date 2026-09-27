@@ -863,5 +863,17 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
         }
+
+        private void txtAiApiKey_Leave(object sender, EventArgs e)
+        {
+            if (tabSettings.SelectedTab == tabAiChat &&
+                cmbAiProvider.SelectedItem is AiProvider provider &&
+                provider.DynamicModels)
+            {
+                cmbAiModel.Items.Clear();
+                cmbAiModel.Text = string.Empty;
+                LoadDynamicAiModels(provider, false);
+            }
+        }
     }
 }
