@@ -42,10 +42,10 @@ The tool will assist in three major areas:
 The tool reads metadata from Microsoft Dataverse and Dynamics 365 / CRM to assist with selecting entities, attributes, relations and to perform validation of condition values.
 
 To make it even more appealing, there is also the possibility to have it show "Friendly names", which will replace the technical names of entities and attributes with their display names in the users' currently selected language, much like Advanced Find does.</description>
-		<releaseNotes>TEASERS:
-Better instructions - Your own flavors - Export to Excel improved - AI Model - Error handling - Markdown Markdown - Nicer UI
+		<releaseNotes>Introduced Google Gemini in FetchXML Builder AI Chat!
+AI Models are now loaded dynamically to allow all the newest coolest models.
 
-Read everything here: https://fetchxmlbuilder.com/releases/1-2026-5/
+Read everything here: https://fetchxmlbuilder.com/releases/1-2026-9/
 
 NOTE: 
 This version of FetchXML Builder needs to have XrmToolBox in version 1.2025.10.* or later!</releaseNotes>
