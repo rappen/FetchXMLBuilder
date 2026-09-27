@@ -395,11 +395,14 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             {
                 if (aiproviders.FirstOrDefault(a => a.Provider == provider.Name) is AiSettings existing)
                 {
+                    existing.Model = cmbAiModel.Text;
                     existing.Endpoint = !provider.EndpointFixed ? txtAiEndpoint.Text : "";
+
                     if (!provider.Free && !string.IsNullOrWhiteSpace(txtAiApiKey.Text))
                     {
                         existing.ApiKey = txtAiApiKey.Text;
                     }
+
                     existing.LogConversation = chkAiLogConversation.Checked;
                 }
                 else
@@ -407,6 +410,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
                     aiproviders.Add(new AiSettings
                     {
                         Provider = provider.Name,
+                        Model = cmbAiModel.Text,
                         Endpoint = !provider.EndpointFixed ? txtAiEndpoint.Text : "",
                         ApiKey = !provider.Free ? txtAiApiKey.Text : "",
                         LogConversation = chkAiLogConversation.Checked,
@@ -449,7 +453,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
                 chkAiIncludePreview.Visible = canLoadDynamicModels;
 
-                cmbAiModel.DropDownStyle = provider.DynamicModels || provider.Free
+                cmbAiModel.DropDownStyle = provider.Free
                     ? ComboBoxStyle.DropDownList
                     : ComboBoxStyle.DropDown;
 
@@ -642,7 +646,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
             PromptForFoundryProjectEndpoint(provider);
 
             var aiSupport = OnlineSettings.Instance.AiSupport;
-            var selectedModel = fxb.settings.AiSettings.Model;
+            var providerSettings = aiproviders.FirstOrDefault(setting => setting.Provider == provider.Name);
+            var selectedModel = providerSettings?.Model ??
+                (string.Equals(fxb.settings.AiSettings.Provider, provider.Name, StringComparison.OrdinalIgnoreCase)
+                    ? fxb.settings.AiSettings.Model
+                    : null);
             var endpoint = txtAiEndpoint.Text;
             var apiKey = txtAiApiKey.Text;
             var includePreviewExperimental = chkAiIncludePreview.Checked;
@@ -741,7 +749,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
                         if (ReferenceEquals(cmbAiProvider.SelectedItem, provider))
                         {
-                            cmbAiModel.DropDownStyle = ComboBoxStyle.DropDownList;
+                            var modelsLoaded = completedArgs.Error == null &&
+                                               completedArgs.Result is IReadOnlyList<AiModel>;
+
+                            cmbAiModel.DropDownStyle = modelsLoaded
+                                ? ComboBoxStyle.DropDownList
+                                : ComboBoxStyle.DropDown;
                             cmbAiModel.Enabled = true;
                             chkAiIncludePreview.Enabled = true;
                         }
@@ -754,19 +767,41 @@ namespace Rappen.XTB.FetchXmlBuilder.Forms
 
         private void SelectConfiguredAiModel()
         {
-            if (cmbAiProvider.SelectedItem is AiProvider provider &&
-                provider.Models.FirstOrDefault(model =>
-                    string.Equals(
-                        model.Name,
-                        fxb.settings.AiSettings.Model,
-                        StringComparison.OrdinalIgnoreCase)) is AiModel model)
+            if (!(cmbAiProvider.SelectedItem is AiProvider provider))
+            {
+                cmbAiModel.SelectedIndex = -1;
+                return;
+            }
+
+            var providerSettings = aiproviders.FirstOrDefault(
+                setting => setting.Provider == provider.Name);
+
+            var selectedModel = providerSettings?.Model ??
+                (string.Equals(
+                    fxb.settings.AiSettings.Provider,
+                    provider.Name,
+                    StringComparison.OrdinalIgnoreCase)
+                    ? fxb.settings.AiSettings.Model
+                    : null);
+
+            var model = provider.Models.FirstOrDefault(configuredModel =>
+                string.Equals(
+                    configuredModel.Name,
+                    selectedModel,
+                    StringComparison.OrdinalIgnoreCase));
+
+            if (model != null)
             {
                 cmbAiModel.SelectedItem = model;
+            }
+            else if (provider.Free && cmbAiModel.Items.Count > 0)
+            {
+                cmbAiModel.SelectedIndex = 0;
             }
             else
             {
                 cmbAiModel.SelectedIndex = -1;
-                cmbAiModel.Text = fxb.settings.AiSettings.Model;
+                cmbAiModel.Text = selectedModel ?? string.Empty;
             }
         }
 
