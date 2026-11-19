@@ -131,7 +131,7 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
         {
             var result = $@"<grid name='resultset' object='{EntityMeta?.ObjectTypeCode}' jump='{EntityMeta?.PrimaryNameAttribute}' select='1' icon='1' preview='1'>
   <row name='result' id='{EntityMeta?.PrimaryIdAttribute}'>
-    {string.Join("\n    ", Cells?.Select(c => c.ToXML()))}
+    {string.Join("\n    ", Cells?.Where(c => !c.IsAutoAddedAndHidden).Select(c => c.ToXML()))}
   </row>
 </grid>";
             return result;
@@ -161,7 +161,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             {
                 Attribute = attribute,
                 Name = attribute.GetAttributeLayoutName(),
-                Width = createdfromaview ? 0 : 100
+                Width = createdfromaview ? 0 : 100,
+                AutoAdded = createdfromaview
             };
             if (attribute.NextNode != null &&
                 attribute.NextNode.Name == "attribute" &&
