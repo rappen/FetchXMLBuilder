@@ -363,7 +363,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 connectionsettings = new FXBConnectionSettings();
             }
             connectionsettings.FetchXML = dockControlBuilder.GetFetchString(false, false);
-            connectionsettings.LayoutXML = dockControlBuilder.LayoutXML?.ToXMLString();
+            connectionsettings.LayoutXML = dockControlBuilder.LayoutXML?.ToXMLString(true);
             SettingsManager.Instance.Save(typeof(FetchXmlBuilder), connectionsettings, ConnectionDetail?.ConnectionName);
         }
 
@@ -802,7 +802,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 return;
             }
             query.Fetch = dockControlBuilder.GetFetchString(true, false);
-            query.Layout = dockControlBuilder.LayoutXML?.ToXMLString();
+            query.Layout = dockControlBuilder.LayoutXML?.ToXMLString(true);
             SaveRepository();
             MessageBoxEx.Show(this, $"Query {query.Name} updated in repository", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -828,7 +828,7 @@ namespace Rappen.XTB.FetchXmlBuilder
                 repository.Queries.Remove(repository.Queries.FirstOrDefault(q => q.Name == queryname));
             }
             var fetch = dockControlBuilder.GetFetchString(true, false);
-            var layout = dockControlBuilder.LayoutXML?.ToXMLString();
+            var layout = dockControlBuilder.LayoutXML?.ToXMLString(true);
             var query = new QueryDefinition { Name = queryname, Fetch = fetch, Layout = layout };
             repository.Queries.Add(query);
             repository.SortQueries();
