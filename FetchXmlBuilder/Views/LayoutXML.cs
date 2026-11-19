@@ -127,11 +127,15 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             }
         }
 
-        public string ToXMLString()
+        /// <summary>
+        /// Returns the LayoutXML as a string.
+        /// </summary>
+        /// <param name="includeautoadded">Include hidden cells that FXB added by itself, used when FXB saves the layout to read it back later without the view.</param>
+        public string ToXMLString(bool includeautoadded = false)
         {
             var result = $@"<grid name='resultset' object='{EntityMeta?.ObjectTypeCode}' jump='{EntityMeta?.PrimaryNameAttribute}' select='1' icon='1' preview='1'>
   <row name='result' id='{EntityMeta?.PrimaryIdAttribute}'>
-    {string.Join("\n    ", Cells?.Select(c => c.ToXML()))}
+    {string.Join("\n    ", Cells?.Where(c => includeautoadded || !c.IsAutoAddedAndHidden).Select(c => c.ToXML()))}
   </row>
 </grid>";
             return result;
@@ -161,7 +165,8 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
             {
                 Attribute = attribute,
                 Name = attribute.GetAttributeLayoutName(),
-                Width = createdfromaview ? 0 : 100
+                Width = createdfromaview ? 0 : 100,
+                AutoAdded = createdfromaview
             };
             if (attribute.NextNode != null &&
                 attribute.NextNode.Name == "attribute" &&

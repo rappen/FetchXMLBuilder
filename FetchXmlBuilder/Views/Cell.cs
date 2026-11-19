@@ -9,6 +9,12 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
         public string Name;
         public int Width;
         public bool IsHidden;
+
+        /// <summary>
+        /// True when FXB created this cell by itself, for an attribute that had no cell in the layout of the opened view.
+        /// </summary>
+        public bool AutoAdded;
+
         public bool disableSorting;
         public string imageproviderwebresource;
         public string imageproviderfunctionname;
@@ -66,5 +72,11 @@ namespace Rappen.XTB.FetchXmlBuilder.Views
         }
 
         public int DisplayIndex => (Parent?.Cells.IndexOf(this) ?? 0) + 1;
+
+        /// <summary>
+        /// A cell that FXB added by itself and that still is hidden shall not be written to the LayoutXML,
+        /// to keep the layout of the view as it was stored.
+        /// </summary>
+        internal bool IsAutoAddedAndHidden => AutoAdded && (IsHidden || Width < 1);
     }
 }
